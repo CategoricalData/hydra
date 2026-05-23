@@ -5,6 +5,7 @@ module Hydra.Sources.Test.Unification where
 
 -- Standard imports for tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
@@ -32,14 +33,14 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Sources.Kernel.Terms.Unification as UnificationModule
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.unification"
+ns :: ModuleName
+ns = ModuleName "hydra.test.unification"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [UnificationModule.ns, Lexical.ns, ShowCore.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([UnificationModule.ns, Lexical.ns, ShowCore.ns] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for type unification operations")}
   where
     definitions = [Phantoms.toDefinition allTests]

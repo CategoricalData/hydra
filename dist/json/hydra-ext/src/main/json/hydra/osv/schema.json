@@ -227,4 +227,4 @@
           "variables": []}}}],
   "dependencies": [],
   "description": "See https://ossf.github.io/osv-schema",
-  "namespace": "hydra.osv.schema"}
+  "name": "hydra.osv.schema"}

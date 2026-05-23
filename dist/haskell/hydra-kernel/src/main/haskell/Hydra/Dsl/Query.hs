@@ -76,7 +76,7 @@ edgeIn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-        Core.projectionField = (Core.Name "in")})),
+        Core.projectionFieldName = (Core.Name "in")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the out field of hydra.query.Edge
 edgeOut :: Phantoms.TTerm Query.Edge -> Phantoms.TTerm (Maybe Core.Name)
@@ -84,7 +84,7 @@ edgeOut x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-        Core.projectionField = (Core.Name "out")})),
+        Core.projectionFieldName = (Core.Name "out")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.query.Edge
 edgeType :: Phantoms.TTerm Query.Edge -> Phantoms.TTerm Core.Name
@@ -92,7 +92,7 @@ edgeType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the in field of hydra.query.Edge
 edgeWithIn :: Phantoms.TTerm Query.Edge -> Phantoms.TTerm (Maybe Core.Name) -> Phantoms.TTerm Query.Edge
@@ -105,14 +105,14 @@ edgeWithIn original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "out"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-              Core.projectionField = (Core.Name "out")})),
+              Core.projectionFieldName = (Core.Name "out")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
@@ -128,7 +128,7 @@ edgeWithOut original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "out"),
@@ -138,7 +138,7 @@ edgeWithOut original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-              Core.projectionField = (Core.Name "in")})),
+              Core.projectionFieldName = (Core.Name "in")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.query.Edge
 edgeWithType :: Phantoms.TTerm Query.Edge -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Query.Edge
@@ -154,14 +154,14 @@ edgeWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-              Core.projectionField = (Core.Name "out")})),
+              Core.projectionFieldName = (Core.Name "out")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-              Core.projectionField = (Core.Name "in")})),
+              Core.projectionFieldName = (Core.Name "in")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.query.GraphPattern
 graphPattern :: Phantoms.TTerm Core.Name -> Phantoms.TTerm [Query.Pattern] -> Phantoms.TTerm Query.GraphPattern
@@ -181,7 +181,7 @@ graphPatternGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.GraphPattern"),
-        Core.projectionField = (Core.Name "graph")})),
+        Core.projectionFieldName = (Core.Name "graph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the patterns field of hydra.query.GraphPattern
 graphPatternPatterns :: Phantoms.TTerm Query.GraphPattern -> Phantoms.TTerm [Query.Pattern]
@@ -189,7 +189,7 @@ graphPatternPatterns x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.GraphPattern"),
-        Core.projectionField = (Core.Name "patterns")})),
+        Core.projectionFieldName = (Core.Name "patterns")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the graph field of hydra.query.GraphPattern
 graphPatternWithGraph :: Phantoms.TTerm Query.GraphPattern -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Query.GraphPattern
@@ -205,7 +205,7 @@ graphPatternWithGraph original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.GraphPattern"),
-              Core.projectionField = (Core.Name "patterns")})),
+              Core.projectionFieldName = (Core.Name "patterns")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the patterns field of hydra.query.GraphPattern
 graphPatternWithPatterns :: Phantoms.TTerm Query.GraphPattern -> Phantoms.TTerm [Query.Pattern] -> Phantoms.TTerm Query.GraphPattern
@@ -218,7 +218,7 @@ graphPatternWithPatterns original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.GraphPattern"),
-              Core.projectionField = (Core.Name "graph")})),
+              Core.projectionFieldName = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
@@ -265,7 +265,7 @@ pathEquationLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.PathEquation"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the right field of hydra.query.PathEquation
 pathEquationRight :: Phantoms.TTerm Query.PathEquation -> Phantoms.TTerm Query.Path
@@ -273,7 +273,7 @@ pathEquationRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.PathEquation"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the left field of hydra.query.PathEquation
 pathEquationWithLeft :: Phantoms.TTerm Query.PathEquation -> Phantoms.TTerm Query.Path -> Phantoms.TTerm Query.PathEquation
@@ -289,7 +289,7 @@ pathEquationWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.PathEquation"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the right field of hydra.query.PathEquation
 pathEquationWithRight :: Phantoms.TTerm Query.PathEquation -> Phantoms.TTerm Query.Path -> Phantoms.TTerm Query.PathEquation
@@ -302,7 +302,7 @@ pathEquationWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.PathEquation"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -373,7 +373,7 @@ patternImplicationAntecedent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.PatternImplication"),
-        Core.projectionField = (Core.Name "antecedent")})),
+        Core.projectionFieldName = (Core.Name "antecedent")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the consequent field of hydra.query.PatternImplication
 patternImplicationConsequent :: Phantoms.TTerm Query.PatternImplication -> Phantoms.TTerm Query.Pattern
@@ -381,7 +381,7 @@ patternImplicationConsequent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.PatternImplication"),
-        Core.projectionField = (Core.Name "consequent")})),
+        Core.projectionFieldName = (Core.Name "consequent")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the antecedent field of hydra.query.PatternImplication
 patternImplicationWithAntecedent :: Phantoms.TTerm Query.PatternImplication -> Phantoms.TTerm Query.Pattern -> Phantoms.TTerm Query.PatternImplication
@@ -397,7 +397,7 @@ patternImplicationWithAntecedent original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.PatternImplication"),
-              Core.projectionField = (Core.Name "consequent")})),
+              Core.projectionFieldName = (Core.Name "consequent")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the consequent field of hydra.query.PatternImplication
 patternImplicationWithConsequent :: Phantoms.TTerm Query.PatternImplication -> Phantoms.TTerm Query.Pattern -> Phantoms.TTerm Query.PatternImplication
@@ -410,7 +410,7 @@ patternImplicationWithConsequent original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.PatternImplication"),
-              Core.projectionField = (Core.Name "antecedent")})),
+              Core.projectionFieldName = (Core.Name "antecedent")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "consequent"),
@@ -449,7 +449,7 @@ queryPatterns x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.Query"),
-        Core.projectionField = (Core.Name "patterns")})),
+        Core.projectionFieldName = (Core.Name "patterns")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the variables field of hydra.query.Query
 queryVariables :: Phantoms.TTerm Query.Query -> Phantoms.TTerm [Query.Variable]
@@ -457,7 +457,7 @@ queryVariables x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.Query"),
-        Core.projectionField = (Core.Name "variables")})),
+        Core.projectionFieldName = (Core.Name "variables")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the patterns field of hydra.query.Query
 queryWithPatterns :: Phantoms.TTerm Query.Query -> Phantoms.TTerm [Query.Pattern] -> Phantoms.TTerm Query.Query
@@ -470,7 +470,7 @@ queryWithPatterns original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.Query"),
-              Core.projectionField = (Core.Name "variables")})),
+              Core.projectionFieldName = (Core.Name "variables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
@@ -489,7 +489,7 @@ queryWithVariables original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.Query"),
-              Core.projectionField = (Core.Name "patterns")})),
+              Core.projectionFieldName = (Core.Name "patterns")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.query.Range
 range :: Phantoms.TTerm Int -> Phantoms.TTerm Int -> Phantoms.TTerm Query.Range
@@ -509,7 +509,7 @@ rangeMax x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.Range"),
-        Core.projectionField = (Core.Name "max")})),
+        Core.projectionFieldName = (Core.Name "max")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the min field of hydra.query.Range
 rangeMin :: Phantoms.TTerm Query.Range -> Phantoms.TTerm Int
@@ -517,7 +517,7 @@ rangeMin x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.Range"),
-        Core.projectionField = (Core.Name "min")})),
+        Core.projectionFieldName = (Core.Name "min")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the max field of hydra.query.Range
 rangeWithMax :: Phantoms.TTerm Query.Range -> Phantoms.TTerm Int -> Phantoms.TTerm Query.Range
@@ -530,7 +530,7 @@ rangeWithMax original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.Range"),
-              Core.projectionField = (Core.Name "min")})),
+              Core.projectionFieldName = (Core.Name "min")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "max"),
@@ -549,7 +549,7 @@ rangeWithMin original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.Range"),
-              Core.projectionField = (Core.Name "max")})),
+              Core.projectionFieldName = (Core.Name "max")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL injection for the atLeast variant of hydra.query.RegexQuantifier
 regexQuantifierAtLeast :: Phantoms.TTerm Int -> Phantoms.TTerm Query.RegexQuantifier
@@ -625,7 +625,7 @@ regexSequencePath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.RegexSequence"),
-        Core.projectionField = (Core.Name "path")})),
+        Core.projectionFieldName = (Core.Name "path")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the quantifier field of hydra.query.RegexSequence
 regexSequenceQuantifier :: Phantoms.TTerm Query.RegexSequence -> Phantoms.TTerm Query.RegexQuantifier
@@ -633,7 +633,7 @@ regexSequenceQuantifier x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.RegexSequence"),
-        Core.projectionField = (Core.Name "quantifier")})),
+        Core.projectionFieldName = (Core.Name "quantifier")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the path field of hydra.query.RegexSequence
 regexSequenceWithPath :: Phantoms.TTerm Query.RegexSequence -> Phantoms.TTerm Query.Path -> Phantoms.TTerm Query.RegexSequence
@@ -649,7 +649,7 @@ regexSequenceWithPath original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.RegexSequence"),
-              Core.projectionField = (Core.Name "quantifier")})),
+              Core.projectionFieldName = (Core.Name "quantifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the quantifier field of hydra.query.RegexSequence
 regexSequenceWithQuantifier :: Phantoms.TTerm Query.RegexSequence -> Phantoms.TTerm Query.RegexQuantifier -> Phantoms.TTerm Query.RegexSequence
@@ -662,7 +662,7 @@ regexSequenceWithQuantifier original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.RegexSequence"),
-              Core.projectionField = (Core.Name "path")})),
+              Core.projectionFieldName = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "quantifier"),
@@ -712,7 +712,7 @@ triplePatternObject x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-        Core.projectionField = (Core.Name "object")})),
+        Core.projectionFieldName = (Core.Name "object")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the predicate field of hydra.query.TriplePattern
 triplePatternPredicate :: Phantoms.TTerm Query.TriplePattern -> Phantoms.TTerm Query.Path
@@ -720,7 +720,7 @@ triplePatternPredicate x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-        Core.projectionField = (Core.Name "predicate")})),
+        Core.projectionFieldName = (Core.Name "predicate")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the subject field of hydra.query.TriplePattern
 triplePatternSubject :: Phantoms.TTerm Query.TriplePattern -> Phantoms.TTerm Query.Node
@@ -728,7 +728,7 @@ triplePatternSubject x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-        Core.projectionField = (Core.Name "subject")})),
+        Core.projectionFieldName = (Core.Name "subject")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the object field of hydra.query.TriplePattern
 triplePatternWithObject :: Phantoms.TTerm Query.TriplePattern -> Phantoms.TTerm Query.Node -> Phantoms.TTerm Query.TriplePattern
@@ -741,14 +741,14 @@ triplePatternWithObject original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-              Core.projectionField = (Core.Name "subject")})),
+              Core.projectionFieldName = (Core.Name "subject")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-              Core.projectionField = (Core.Name "predicate")})),
+              Core.projectionFieldName = (Core.Name "predicate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "object"),
@@ -764,7 +764,7 @@ triplePatternWithPredicate original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-              Core.projectionField = (Core.Name "subject")})),
+              Core.projectionFieldName = (Core.Name "subject")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
@@ -774,7 +774,7 @@ triplePatternWithPredicate original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-              Core.projectionField = (Core.Name "object")})),
+              Core.projectionFieldName = (Core.Name "object")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the subject field of hydra.query.TriplePattern
 triplePatternWithSubject :: Phantoms.TTerm Query.TriplePattern -> Phantoms.TTerm Query.Node -> Phantoms.TTerm Query.TriplePattern
@@ -790,14 +790,14 @@ triplePatternWithSubject original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-              Core.projectionField = (Core.Name "predicate")})),
+              Core.projectionFieldName = (Core.Name "predicate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "object"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-              Core.projectionField = (Core.Name "object")})),
+              Core.projectionFieldName = (Core.Name "object")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL accessor for the body of hydra.query.Variable
 unVariable :: Phantoms.TTerm Query.Variable -> Phantoms.TTerm String

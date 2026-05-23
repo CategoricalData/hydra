@@ -118,8 +118,8 @@ showInvalidTermErrorRef :: TTerm (InvalidTermError -> String)
 showInvalidTermErrorRef = TTerm $ TermVariable $ Name "hydra.show.error.core.invalidTermError"
 
 -- | Refs for hydra.validate.packaging validators and their show functions.
-checkConflictingModuleNamespacesRef :: TTerm (Package -> Maybe InvalidPackageError)
-checkConflictingModuleNamespacesRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkConflictingModuleNamespaces"
+checkConflictingModuleNamesRef :: TTerm (Package -> Maybe InvalidPackageError)
+checkConflictingModuleNamesRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkConflictingModuleNames"
 
 checkConflictingVariantNamesRef :: TTerm (Module -> Maybe InvalidModuleError)
 checkConflictingVariantNamesRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkConflictingVariantNames"
@@ -130,8 +130,8 @@ checkDefinitionDocumentationRef = TTerm $ TermVariable $ Name "hydra.validate.pa
 checkDefinitionNameConventionRef :: TTerm (Module -> Maybe InvalidModuleError)
 checkDefinitionNameConventionRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkDefinitionNameConvention"
 
-checkDefinitionNamespacesRef :: TTerm (Module -> Maybe InvalidModuleError)
-checkDefinitionNamespacesRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkDefinitionNamespaces"
+checkDefinitionModuleNamesRef :: TTerm (Module -> Maybe InvalidModuleError)
+checkDefinitionModuleNamesRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkDefinitionModuleNames"
 
 checkDefinitionOrderingRef :: TTerm (Module -> Maybe InvalidModuleError)
 checkDefinitionOrderingRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkDefinitionOrdering"
@@ -139,11 +139,11 @@ checkDefinitionOrderingRef = TTerm $ TermVariable $ Name "hydra.validate.packagi
 checkDuplicateDefinitionNamesRef :: TTerm (Module -> Maybe InvalidModuleError)
 checkDuplicateDefinitionNamesRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkDuplicateDefinitionNames"
 
-checkDuplicateModuleNamespacesRef :: TTerm (Package -> Maybe InvalidPackageError)
-checkDuplicateModuleNamespacesRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkDuplicateModuleNamespaces"
+checkDuplicateModuleNamesRef :: TTerm (Package -> Maybe InvalidPackageError)
+checkDuplicateModuleNamesRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkDuplicateModuleNames"
 
-checkModuleNamespaceConventionRef :: TTerm (Module -> Maybe InvalidModuleError)
-checkModuleNamespaceConventionRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkModuleNamespaceConvention"
+checkModuleNameConventionRef :: TTerm (Module -> Maybe InvalidModuleError)
+checkModuleNameConventionRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkModuleNameConvention"
 
 checkPackageNameConventionRef :: TTerm (Package -> Maybe InvalidPackageError)
 checkPackageNameConventionRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkPackageNameConvention"
@@ -294,7 +294,7 @@ tgroup name mdesc subgroups cases = testGroup (Phantoms.string name) (opt (Phant
 
 ----------------------------------------
 
-encodedTestGroupToBinding :: Namespace -> String -> TTerm TestGroup -> Binding
+encodedTestGroupToBinding :: ModuleName -> String -> TTerm TestGroup -> Binding
 encodedTestGroupToBinding ns lname group = Binding name (unTTerm group)
     $ Just $ TypeScheme [] typ Nothing
   where

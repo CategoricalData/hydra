@@ -53,14 +53,14 @@ import qualified Data.Maybe                  as Y
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 
-ns :: Namespace
-ns = Namespace "hydra.show.graph"
+ns :: ModuleName
+ns = ModuleName "hydra.show.graph"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ShowCore.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([ShowCore.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "String representations of hydra.graph types"}
   where
    definitions = [

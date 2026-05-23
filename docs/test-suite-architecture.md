@@ -18,8 +18,8 @@ The **test kernel** or **test graph** (`Hydra/Sources/Test/TestGraph.hs`) define
 
 - **Test Types** - Common type definitions used across tests (e.g., `Person`, `Triple`, `UnionMonomorphic`)
 - **Test Terms** - Shared term definitions and test data
-- **Test Namespace** - The namespace for test resources
-- **Test Schema Namespace** - The namespace for test schemas
+- **Test Module Name** - The module name for test resources
+- **Test Schema Module Name** - The module name for test schemas
 
 The test kernel provides a centralized repository of test resources that can be referenced from any test module
 using `ref`. This ensures consistency and eliminates duplication across test cases.
@@ -27,10 +27,13 @@ using `ref`. This ensures consistency and eliminates duplication across test cas
 **Example from TestGraph.hs:**
 ```haskell
 module_ :: Module
-module_ = Module (Namespace "hydra.test.testGraph") definitions
-    [TestTerms.module_, TestTypes.module_]
-    kernelTypesModules $
-    Just "A module defining the graph used in the test suite."
+module_ = Module {
+    moduleName = ModuleName "hydra.test.testGraph",
+    moduleDefinitions = definitions,
+    moduleDependencies = unqualifiedDep <$>
+      ([moduleName TestTerms.module_, moduleName TestTypes.module_]
+       L.++ kernelTypesModuleNames),
+    moduleDescription = Just "A module defining the graph used in the test suite."}
   where
    definitions = [
      toDefinition testTermsDef,
@@ -51,14 +54,14 @@ testTypesDef = define "testTypes" $
 
 Tests are organized as proper Hydra modules with:
 
-1. **Namespace** - Determines the generated file location
+1. **Module Name** - Determines the generated file location
 2. **Elements** - Named test group bindings exported from the module
-3. **Module Dependencies** - References to other test modules
-4. **Schema Dependencies** - Type schemas needed for test construction
+3. **Module Dependencies** - References to other modules (term + type), as a single
+   `moduleDependencies :: [ModuleDependency]` list
 
 When you run `writeHaskell "../../dist/haskell/hydra-kernel/src/test/haskell" allModules baseTestModules`
 (where `allModules = mainModules ++ testModules`),
-each module generates a separate file based on its namespace:
+each module generates a separate file based on its module name:
 - `hydra.test.checking.fundamentals` → `Hydra/Test/Checking/Fundamentals.hs`
 - `hydra.test.inference.algebraicTypes` → `Hydra/Test/Inference/AlgebraicTypes.hs`
 - `hydra.test.etaExpansion` → `Hydra/Test/EtaExpansion.hs`
@@ -79,10 +82,12 @@ import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 
 module_ :: Module
-module_ = Module (Namespace "hydra.test.myTest") elements
-    [TestGraph.module_]           -- Module dependencies
-    kernelTypesModules           -- Schema dependencies
-    (Just "Description of this test module")
+module_ = Module {
+    moduleName = ModuleName "hydra.test.myTest",
+    moduleDefinitions = definitions,
+    moduleDependencies = unqualifiedDep <$>
+      ([moduleName TestGraph.module_] L.++ kernelTypesModuleNames),
+    moduleDescription = Just "Description of this test module"}
   where
     definitions = [
       Phantoms.toDefinition allTestsDef]
@@ -103,7 +108,7 @@ allTestsDef = define "allTests" $
 
 ### Key Components
 
-1. **`module_`** - The module definition with namespace, elements, dependencies, and description
+1. **`module_`** - The module definition with module name, elements, dependencies, and description
 
 2. **`define`** - Helper function using `Phantoms.definitionInModule` to create bindings
 
@@ -286,11 +291,15 @@ Aggregator modules group related test modules:
 ```haskell
 -- Hydra/Sources/Test/Checking/All.hs
 module_ :: Module
-module_ = Module (Namespace "hydra.test.checking.all") elements modules kernelTypesModules $
-    Just "All type checking tests"
+module_ = Module {
+    moduleName = ModuleName "hydra.test.checking.all",
+    moduleDefinitions = definitions,
+    moduleDependencies = unqualifiedDep <$>
+      ((moduleName <$> dependentModules) L.++ kernelTypesModuleNames),
+    moduleDescription = Just "All type checking tests"}
   where
     definitions = [Phantoms.toDefinition allTestsDef]
-    modules = [
+    dependentModules = [
       Fundamentals.module_,
       AlgebraicTypes.module_,
       NominalTypes.module_,
@@ -319,11 +328,14 @@ The top-level `TestSuite` module aggregates all test categories:
 ```haskell
 -- Hydra/Sources/Test/TestSuite.hs (simplified)
 module_ :: Module
-module_ = Module ns definitions namespaces kernelTypesNamespaces $
-    Just "Hydra's common test suite..."
+module_ = Module {
+    moduleName = ns,
+    moduleDefinitions = definitions,
+    moduleDependencies = unqualifiedDep <$>
+      ((fst <$> testPairs) L.++ kernelTypesModuleNames),
+    moduleDescription = Just "Hydra's common test suite..."}
   where
     definitions = [Phantoms.toDefinition allTests]
-    namespaces = fst <$> testPairs
 
 allTests :: TTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
@@ -333,7 +345,7 @@ allTests = definitionInModule module_ "allTests" $
     subgroups = snd <$> testPairs
 
 -- Test pairs organized into library and other categories
-libPairs :: [(Namespace, TTermDefinition TestGroup)]
+libPairs :: [(ModuleName, TTermDefinition TestGroup)]
 libPairs = [
   (Chars.ns, Chars.allTests),
   (Eithers.ns, Eithers.allTests),
@@ -342,7 +354,7 @@ libPairs = [
   -- ... plus Equality, Flows, Literals, Logic, Maps, Math, Maybes, Pairs, Sets
   ]
 
-otherPairs :: [(Namespace, TTermDefinition TestGroup)]
+otherPairs :: [(ModuleName, TTermDefinition TestGroup)]
 otherPairs = [
   (CheckingAll.ns, CheckingAll.allTests),
   (InferenceAll.ns, InferenceAll.allTests),
@@ -459,7 +471,7 @@ definitions), define them locally in the test module instead of importing them.
 - Test modules: `Hydra.Sources.Test.CategoryName`
 - Root binding: Always `allTestsDef`
 - Helper function: Always `define`
-- Namespace: `hydra.test.categoryName` (camelCase)
+- Module name: `hydra.test.categoryName` (camelCase)
 
 ### 4. Use Meta-Level Functions for Structure
 
@@ -499,10 +511,12 @@ To add a new test module:
 2. **Define the module structure**:
    ```haskell
    module_ :: Module
-   module_ = Module (Namespace "hydra.test.yourTest") elements
-       [TestGraph.module_]
-       kernelTypesModules
-       (Just "Description")
+   module_ = Module {
+       moduleName = ModuleName "hydra.test.yourTest",
+       moduleDefinitions = definitions,
+       moduleDependencies = unqualifiedDep <$>
+         ([moduleName TestGraph.module_] L.++ kernelTypesModuleNames),
+       moduleDescription = Just "Description"}
      where
        definitions = [Phantoms.toDefinition allTestsDef]
    ```

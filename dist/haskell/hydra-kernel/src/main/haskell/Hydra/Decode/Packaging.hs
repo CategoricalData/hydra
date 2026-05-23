@@ -51,17 +51,27 @@ module_ cx raw =
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2))) fieldMap cx) (\field_description -> Eithers.bind (ExtractCore.requireField "namespace" namespace fieldMap cx) (\field_namespace -> Eithers.bind (ExtractCore.requireField "dependencies" (ExtractCore.decodeList namespace) fieldMap cx) (\field_dependencies -> Eithers.bind (ExtractCore.requireField "definitions" (ExtractCore.decodeList definition) fieldMap cx) (\field_definitions -> Right (Packaging.Module {
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2))) fieldMap cx) (\field_description -> Eithers.bind (ExtractCore.requireField "name" moduleName fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "dependencies" (ExtractCore.decodeList moduleDependency) fieldMap cx) (\field_dependencies -> Eithers.bind (ExtractCore.requireField "definitions" (ExtractCore.decodeList definition) fieldMap cx) (\field_definitions -> Right (Packaging.Module {
           Packaging.moduleDescription = field_description,
-          Packaging.moduleNamespace = field_namespace,
+          Packaging.moduleName = field_name,
           Packaging.moduleDependencies = field_dependencies,
           Packaging.moduleDefinitions = field_definitions}))))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
--- | Decoder for hydra.packaging.Namespace
-namespace :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.Namespace
-namespace cx raw =
+-- | Decoder for hydra.packaging.ModuleDependency
+moduleDependency :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.ModuleDependency
+moduleDependency cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermWrap v0 -> Eithers.map (\b -> Packaging.Namespace b) ((\raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+      Core.TermRecord v0 ->
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "module" moduleName fieldMap cx) (\field_module -> Eithers.bind (ExtractCore.requireField "package" (ExtractCore.decodeMaybe packageName) fieldMap cx) (\field_package -> Right (Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = field_module,
+          Packaging.moduleDependencyPackage = field_package}))))
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.packaging.ModuleName
+moduleName :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.ModuleName
+moduleName cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Packaging.ModuleName b) ((\raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
         Core.TermLiteral v1 -> case v1 of
           Core.LiteralString v2 -> Right v2
           _ -> Left (Errors.DecodingError "expected string literal")
@@ -125,12 +135,12 @@ qualifiedName cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "namespace" (ExtractCore.decodeMaybe namespace) fieldMap cx) (\field_namespace -> Eithers.bind (ExtractCore.requireField "local" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+        in (Eithers.bind (ExtractCore.requireField "moduleName" (ExtractCore.decodeMaybe moduleName) fieldMap cx) (\field_moduleName -> Eithers.bind (ExtractCore.requireField "local" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_local -> Right (Packaging.QualifiedName {
-          Packaging.qualifiedNameNamespace = field_namespace,
+          Packaging.qualifiedNameModuleName = field_moduleName,
           Packaging.qualifiedNameLocal = field_local}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.packaging.TermDefinition

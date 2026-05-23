@@ -83,9 +83,9 @@ define = definitionInModule module_
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = (Namespace "hydra.wasm.language"),
+            moduleName = (ModuleName "hydra.wasm.language"),
             moduleDefinitions = [toDefinition wasmLanguage, toDefinition wasmReservedWords],
-            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints and reserved words for WebAssembly (WAT text format)"}
 wasmLanguage :: TTermDefinition Language
 wasmLanguage = define "wasmLanguage" $

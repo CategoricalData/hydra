@@ -37,6 +37,6 @@
                             "value": {"literal": {"string": "A map of string keys to arbitrary terms as values, for application-specific use"}}}],
                         "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core"],
+  "dependencies": [{"module": "hydra.core"}],
   "description": "Execution context for tracing and diagnostics",
-  "namespace": "hydra.context"}
+  "name": "hydra.context"}

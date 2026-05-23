@@ -85,8 +85,8 @@ generateTestFileWithPythonCodec :: Packaging.Module -> Testing.TestGroup -> Eith
 generateTestFileWithPythonCodec testModule testGroup =
     Eithers.map (\testBody ->
       let testModuleContent = buildPythonTestModule testModule testGroup testBody
-          ns_ = Packaging.moduleNamespace testModule
-          parts = Strings.splitOn "." (Packaging.unNamespace ns_)
+          ns_ = Packaging.moduleName testModule
+          parts = Strings.splitOn "." (Packaging.unModuleName ns_)
           dirParts = Maybes.fromMaybe [] (Lists.maybeInit parts)
           fileName =
                   Strings.cat [

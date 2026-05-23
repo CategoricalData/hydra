@@ -95,14 +95,14 @@ import qualified Hydra.Sources.Json.Model as JsonModel
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.pg.utils"
+ns :: ModuleName
+ns = ModuleName "hydra.pg.utils"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ExtractCore.ns, PgCoder.ns, Namespace "hydra.show.core"] L.++ (PgModel.ns:PgMapping.ns:JsonModel.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([ExtractCore.ns, PgCoder.ns] L.++ (PgModel.ns:PgMapping.ns:JsonModel.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Utility functions for property graph operations"}
   where
     definitions = [

@@ -15,7 +15,7 @@ import hydra.lib.Libraries;
 import hydra.packaging.Definition;
 import hydra.packaging.Module;
 import hydra.packaging.TermDefinition;
-import hydra.packaging.Namespace;
+import hydra.packaging.ModuleName;
 import hydra.Rewriting;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Either;
@@ -321,10 +321,10 @@ public class Generation {
      * Load modules from JSON files using a pre-built schema map (from Bootstrap.typesByName()).
      */
     public static List<Module> loadModulesFromJson(String basePath,
-            Map<Name, hydra.core.Type> schemaMap, List<Namespace> namespaces) throws IOException {
+            Map<Name, hydra.core.Type> schemaMap, List<ModuleName> namespaces) throws IOException {
         Graph bsGraph = bootstrapGraph();
         List<Module> modules = new ArrayList<>();
-        for (Namespace ns : namespaces) {
+        for (ModuleName ns : namespaces) {
             String filePath = basePath + File.separator
                     + Codegen.namespaceToPath(ns) + ".json";
             Value jsonVal = parseJsonFile(filePath);
@@ -361,14 +361,14 @@ public class Generation {
      * Read the manifest.json file from a JSON base directory and extract a named
      * field (e.g. "kernelModules", "mainModules", "testModules") as a list of Namespaces.
      */
-    public static List<Namespace> readManifestField(String basePath, String fieldName) throws IOException {
+    public static List<ModuleName> readManifestField(String basePath, String fieldName) throws IOException {
         String manifestPath = basePath + File.separator + "manifest.json";
         Value manifestVal = parseJsonFile(manifestPath);
         Map<String, Value> obj = expectObject(manifestVal, "manifest.json");
         List<Value> arr = expectArray(obj.get(fieldName), "manifest." + fieldName);
-        List<Namespace> result = new ArrayList<>(arr.size());
+        List<ModuleName> result = new ArrayList<>(arr.size());
         for (Value v : arr) {
-            result.add(new Namespace(expectString(v, fieldName + " entry")));
+            result.add(new ModuleName(expectString(v, fieldName + " entry")));
         }
         return result;
     }
@@ -490,7 +490,7 @@ public class Generation {
                             hydra.Serialization.parenthesize(
                                     hydra.lisp.Serde.programToExpr(program)));
                     String filePath = hydra.Names.namespaceToFilePath(
-                            cc, new hydra.packaging.FileExtension(fileExt), mod.namespace);
+                            cc, new hydra.packaging.FileExtension(fileExt), mod.name);
                     Map<String, String> fileMap = new java.util.TreeMap<>();
                     fileMap.put(filePath, code);
                     return new hydra.util.Either.Right(fileMap);
@@ -503,7 +503,7 @@ public class Generation {
     /**
      * Convert a namespace to a file path.
      */
-    public static String namespaceToPath(Namespace ns) {
+    public static String namespaceToPath(ModuleName ns) {
         return Codegen.namespaceToPath(ns);
     }
 
@@ -532,7 +532,7 @@ public class Generation {
                 }
             });
         }
-        return new Module(m.description, m.namespace, m.dependencies, stripped);
+        return new Module(m.description, m.name, m.dependencies, stripped);
     }
 
     /**
@@ -552,7 +552,7 @@ public class Generation {
     public static List<Module> filterKernelModules(List<Module> modules) {
         List<Module> result = new ArrayList<>();
         for (Module m : modules) {
-            if (!m.namespace.value.startsWith("hydra.") && !m.namespace.value.startsWith("hydra.json.yaml.")) {
+            if (!m.name.value.startsWith("hydra.") && !m.name.value.startsWith("hydra.json.yaml.")) {
                 result.add(m);
             }
         }
@@ -707,11 +707,11 @@ public class Generation {
     );
 
     /**
-     * Map a Namespace to its owning package name. Mirrors
+     * Map a ModuleName to its owning package name. Mirrors
      * {@code Hydra.PackageRouting.namespaceToPackage}. Falls back to
      * {@code "hydra-kernel"} if no prefix matches.
      */
-    public static String namespaceToPackage(Namespace ns) {
+    public static String namespaceToPackage(ModuleName ns) {
         String s = ns.value;
         for (Pair<String, String> p : PACKAGE_PREFIXES) {
             if (s.startsWith(p.first)) {
@@ -729,7 +729,7 @@ public class Generation {
     public static List<Pair<String, List<Module>>> groupByPackage(List<Module> mods) {
         Map<String, List<Module>> byPkg = new java.util.TreeMap<>();
         for (Module m : mods) {
-            byPkg.computeIfAbsent(namespaceToPackage(m.namespace), k -> new ArrayList<>()).add(m);
+            byPkg.computeIfAbsent(namespaceToPackage(m.name), k -> new ArrayList<>()).add(m);
         }
         List<Pair<String, List<Module>>> out = new ArrayList<>();
         for (Map.Entry<String, List<Module>> e : byPkg.entrySet()) {
@@ -798,15 +798,15 @@ public class Generation {
             List<Module> mods,
             List<Module> seedAcc) throws IOException {
         java.util.Set<String> seedNs = new HashSet<>();
-        for (Module m : seedAcc) seedNs.add(m.namespace.value);
+        for (Module m : seedAcc) seedNs.add(m.name.value);
 
         List<Module> groupingUniverse = new ArrayList<>();
         for (Module m : universeMods) {
-            if (!seedNs.contains(m.namespace.value)) groupingUniverse.add(m);
+            if (!seedNs.contains(m.name.value)) groupingUniverse.add(m);
         }
         List<Module> groupingTargets = new ArrayList<>();
         for (Module m : mods) {
-            if (!seedNs.contains(m.namespace.value)) groupingTargets.add(m);
+            if (!seedNs.contains(m.name.value)) groupingTargets.add(m);
         }
 
         List<Pair<String, List<Module>>> universeGroups = groupByPackage(groupingUniverse);
@@ -860,7 +860,7 @@ public class Generation {
             List<Module> pkgTargets  = pkgToMods.getOrDefault(pkg, java.util.Collections.emptyList());
             List<Module> pkgUniverse = pkgToUniverse.getOrDefault(pkg, java.util.Collections.emptyList());
             java.util.Set<String> targetNs = new HashSet<>();
-            for (Module m : pkgTargets) targetNs.add(m.namespace.value);
+            for (Module m : pkgTargets) targetNs.add(m.name.value);
             List<Module> inferTargets = pkgTargets.isEmpty() ? pkgUniverse : pkgTargets;
             List<Module> typedUniverse = new ArrayList<>(acc);
             typedUniverse.addAll(pkgUniverse);
@@ -880,7 +880,7 @@ public class Generation {
             }
             List<Module> toWrite = new ArrayList<>();
             for (Module m : inferred) {
-                if (targetNs.contains(m.namespace.value)) toWrite.add(m);
+                if (targetNs.contains(m.name.value)) toWrite.add(m);
             }
             if (!toWrite.isEmpty()) {
                 writePackageSplitJson(distJsonRoot, typedUniverse, inferred, toWrite);
@@ -917,10 +917,10 @@ public class Generation {
                         ((Either.Left<hydra.errors.Error_, String>) encoded).value;
                     throw new RuntimeException(
                         "writePackageSplitJson: encode failed for "
-                        + m.namespace.value + ": " + err);
+                        + m.name.value + ": " + err);
                 }
                 String jsonStr = ((Either.Right<hydra.errors.Error_, String>) encoded).value;
-                Path filePath = pkgDir.resolve(namespaceToPath(m.namespace) + ".json");
+                Path filePath = pkgDir.resolve(namespaceToPath(m.name) + ".json");
                 Files.createDirectories(filePath.getParent());
                 String newContent = jsonStr + "\n";
                 if (Files.exists(filePath)) {

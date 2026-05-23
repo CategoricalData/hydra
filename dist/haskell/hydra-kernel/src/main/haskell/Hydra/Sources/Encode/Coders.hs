@@ -11,19 +11,26 @@ module_ :: Packaging.Module
 module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term encoders for hydra.coders"),
-      Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.coders"),
+      Packaging.moduleName = (Packaging.ModuleName "hydra.encode.coders"),
       Packaging.moduleDependencies = [
-        Packaging.Namespace "hydra.encode.context",
-        (Packaging.Namespace "hydra.encode.errors"),
-        (Packaging.Namespace "hydra.encode.graph"),
-        (Packaging.Namespace "hydra.encode.variants"),
-        (Packaging.Namespace "hydra.encode.core"),
-        (Packaging.Namespace "hydra.context"),
-        (Packaging.Namespace "hydra.errors"),
-        (Packaging.Namespace "hydra.graph"),
-        (Packaging.Namespace "hydra.variants"),
-        (Packaging.Namespace "hydra.core"),
-        (Packaging.Namespace "hydra.coders")],
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.context"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.errors"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.graph"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.variants"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.core"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.coders"),
+          Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.coders.coderDirection"),

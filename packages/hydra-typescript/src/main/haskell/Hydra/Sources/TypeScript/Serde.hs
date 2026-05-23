@@ -92,14 +92,14 @@ import qualified Hydra.Sources.TypeScript.Operators as TypeScriptOperators
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.typeScript.serde"
+ns :: ModuleName
+ns = ModuleName "hydra.typeScript.serde"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Constants.ns, Serialization.ns, TypeScriptOperators.ns] L.++ (TypeScriptSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns, TypeScriptOperators.ns] L.++ (TypeScriptSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Serialization functions for converting TypeScript AST to abstract expressions"}
   where
     definitions = [

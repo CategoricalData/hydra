@@ -83,9 +83,9 @@ define = definitionInModule module_
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = (Namespace "hydra.scala.language"),
+            moduleName = (ModuleName "hydra.scala.language"),
             moduleDefinitions = [toDefinition scalaLanguage, toDefinition scalaReservedWords],
-            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints and reserved words for Scala"}
 scalaLanguage :: TTermDefinition Language
 scalaLanguage = define "scalaLanguage" $

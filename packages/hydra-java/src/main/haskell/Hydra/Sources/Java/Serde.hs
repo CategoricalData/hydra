@@ -88,14 +88,14 @@ import qualified Hydra.Sources.Java.Syntax as JavaSyntax
 def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.java.serde"
+ns :: ModuleName
+ns = ModuleName "hydra.java.serde"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Constants.ns, Serialization.ns] L.++ (JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns] L.++ (JavaSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Java serializer: converts Java AST to concrete syntax"}
   where
     definitions = [

@@ -57,14 +57,14 @@ import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 
 
-ns :: Namespace
-ns = Namespace "hydra.extract.util"
+ns :: ModuleName
+ns = ModuleName "hydra.extract.util"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ExtractCore.ns, ShowError.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([ExtractCore.ns, ShowError.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just ("Extraction and validation for hydra.util types")}
   where
    definitions = [

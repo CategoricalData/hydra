@@ -18,7 +18,7 @@
                                 "argument": {
                                   "application": {
                                     "argument": {"variable": "andExpr"},
-                                    "function": {"project": {"field": "expressions", "typeName": "hydra.lisp.syntax.AndExpression"}}}},
+                                    "function": {"project": {"fieldName": "expressions", "typeName": "hydra.lisp.syntax.AndExpression"}}}},
                                 "function": {
                                   "application": {
                                     "argument": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}},
@@ -58,7 +58,7 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "app"},
-                            "function": {"project": {"field": "function", "typeName": "hydra.lisp.syntax.Application"}}}},
+                            "function": {"project": {"fieldName": "function", "typeName": "hydra.lisp.syntax.Application"}}}},
                         "typeScheme": {"body": {"variable": "hydra.lisp.syntax.Expression"}, "variables": []}},
                       {
                         "name": "fun",
@@ -74,7 +74,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "app"},
-                                "function": {"project": {"field": "arguments", "typeName": "hydra.lisp.syntax.Application"}}}},
+                                "function": {"project": {"fieldName": "arguments", "typeName": "hydra.lisp.syntax.Application"}}}},
                             "function": {
                               "application": {
                                 "argument": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}},
@@ -175,7 +175,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "caseExpr"},
-                                "function": {"project": {"field": "scrutinee", "typeName": "hydra.lisp.syntax.CaseExpression"}}}},
+                                "function": {"project": {"fieldName": "scrutinee", "typeName": "hydra.lisp.syntax.CaseExpression"}}}},
                             "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}},
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
@@ -183,14 +183,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "caseExpr"},
-                            "function": {"project": {"field": "clauses", "typeName": "hydra.lisp.syntax.CaseExpression"}}}},
+                            "function": {"project": {"fieldName": "clauses", "typeName": "hydra.lisp.syntax.CaseExpression"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.lisp.syntax.CaseClause"}}, "variables": []}},
                       {
                         "name": "dflt",
                         "term": {
                           "application": {
                             "argument": {"variable": "caseExpr"},
-                            "function": {"project": {"field": "default", "typeName": "hydra.lisp.syntax.CaseExpression"}}}},
+                            "function": {"project": {"fieldName": "default", "typeName": "hydra.lisp.syntax.CaseExpression"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}, "variables": []}},
                       {
                         "name": "clauseExprs",
@@ -214,7 +214,9 @@
                                                         "argument": {
                                                           "application": {
                                                             "argument": {
-                                                              "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "keys", "typeName": "hydra.lisp.syntax.CaseClause"}}}},
+                                                              "application": {
+                                                                "argument": {"variable": "c"},
+                                                                "function": {"project": {"fieldName": "keys", "typeName": "hydra.lisp.syntax.CaseClause"}}}},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}},
@@ -227,7 +229,9 @@
                                                 {
                                                   "application": {
                                                     "argument": {
-                                                      "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.CaseClause"}}}},
+                                                      "application": {
+                                                        "argument": {"variable": "c"},
+                                                        "function": {"project": {"fieldName": "body", "typeName": "hydra.lisp.syntax.CaseClause"}}}},
                                                     "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                             "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
@@ -310,7 +314,7 @@
                   {
                     "name": "text",
                     "term": {
-                      "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "text", "typeName": "hydra.lisp.syntax.Comment"}}}},
+                      "application": {"argument": {"variable": "c"}, "function": {"project": {"fieldName": "text", "typeName": "hydra.lisp.syntax.Comment"}}}},
                     "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                 "body": {
                   "application": {
@@ -354,14 +358,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "condExpr"},
-                            "function": {"project": {"field": "clauses", "typeName": "hydra.lisp.syntax.CondExpression"}}}},
+                            "function": {"project": {"fieldName": "clauses", "typeName": "hydra.lisp.syntax.CondExpression"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.lisp.syntax.CondClause"}}, "variables": []}},
                       {
                         "name": "dflt",
                         "term": {
                           "application": {
                             "argument": {"variable": "condExpr"},
-                            "function": {"project": {"field": "default", "typeName": "hydra.lisp.syntax.CondExpression"}}}},
+                            "function": {"project": {"fieldName": "default", "typeName": "hydra.lisp.syntax.CondExpression"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -394,12 +398,14 @@
                                                                     "argument": {
                                                                       "application": {
                                                                         "argument": {"variable": "c"},
-                                                                        "function": {"project": {"field": "condition", "typeName": "hydra.lisp.syntax.CondClause"}}}},
+                                                                        "function": {"project": {"fieldName": "condition", "typeName": "hydra.lisp.syntax.CondClause"}}}},
                                                                     "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}},
                                                                 {
                                                                   "application": {
                                                                     "argument": {
-                                                                      "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.CondClause"}}}},
+                                                                      "application": {
+                                                                        "argument": {"variable": "c"},
+                                                                        "function": {"project": {"fieldName": "body", "typeName": "hydra.lisp.syntax.CondClause"}}}},
                                                                     "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                                             "domain": {"variable": "hydra.lisp.syntax.CondClause"},
                                                             "parameter": "c"}},
@@ -479,12 +485,14 @@
                                                                         "argument": {
                                                                           "application": {
                                                                             "argument": {"variable": "c"},
-                                                                            "function": {"project": {"field": "condition", "typeName": "hydra.lisp.syntax.CondClause"}}}},
+                                                                            "function": {"project": {"fieldName": "condition", "typeName": "hydra.lisp.syntax.CondClause"}}}},
                                                                         "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}},
                                                                     {
                                                                       "application": {
                                                                         "argument": {
-                                                                          "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.CondClause"}}}},
+                                                                          "application": {
+                                                                            "argument": {"variable": "c"},
+                                                                            "function": {"project": {"fieldName": "body", "typeName": "hydra.lisp.syntax.CondClause"}}}},
                                                                         "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                                                 "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                             "function": {"variable": "hydra.serialization.parens"}}},
@@ -573,12 +581,14 @@
                                                                         "argument": {
                                                                           "application": {
                                                                             "argument": {"variable": "c"},
-                                                                            "function": {"project": {"field": "condition", "typeName": "hydra.lisp.syntax.CondClause"}}}},
+                                                                            "function": {"project": {"fieldName": "condition", "typeName": "hydra.lisp.syntax.CondClause"}}}},
                                                                         "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}},
                                                                     {
                                                                       "application": {
                                                                         "argument": {
-                                                                          "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.CondClause"}}}},
+                                                                          "application": {
+                                                                            "argument": {"variable": "c"},
+                                                                            "function": {"project": {"fieldName": "body", "typeName": "hydra.lisp.syntax.CondClause"}}}},
                                                                         "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                                                 "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                             "function": {"variable": "hydra.serialization.parens"}}},
@@ -667,12 +677,14 @@
                                                                         "argument": {
                                                                           "application": {
                                                                             "argument": {"variable": "c"},
-                                                                            "function": {"project": {"field": "condition", "typeName": "hydra.lisp.syntax.CondClause"}}}},
+                                                                            "function": {"project": {"fieldName": "condition", "typeName": "hydra.lisp.syntax.CondClause"}}}},
                                                                         "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}},
                                                                     {
                                                                       "application": {
                                                                         "argument": {
-                                                                          "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.CondClause"}}}},
+                                                                          "application": {
+                                                                            "argument": {"variable": "c"},
+                                                                            "function": {"project": {"fieldName": "body", "typeName": "hydra.lisp.syntax.CondClause"}}}},
                                                                         "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                                                 "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                             "function": {"variable": "hydra.serialization.parens"}}},
@@ -762,7 +774,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "cdef"},
-                                "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.ConstantDefinition"}}}},
+                                "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.ConstantDefinition"}}}},
                             "function": {"variable": "hydra.lisp.serde.symbolToExpr"}}},
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
@@ -772,7 +784,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "cdef"},
-                                "function": {"project": {"field": "value", "typeName": "hydra.lisp.syntax.ConstantDefinition"}}}},
+                                "function": {"project": {"fieldName": "value", "typeName": "hydra.lisp.syntax.ConstantDefinition"}}}},
                             "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}},
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                     "body": {
@@ -959,7 +971,7 @@
                                     "argument": {
                                       "application": {
                                         "argument": {"variable": "doExpr"},
-                                        "function": {"project": {"field": "expressions", "typeName": "hydra.lisp.syntax.DoExpression"}}}},
+                                        "function": {"project": {"fieldName": "expressions", "typeName": "hydra.lisp.syntax.DoExpression"}}}},
                                     "function": {
                                       "application": {
                                         "argument": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}},
@@ -1039,7 +1051,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "edecl"},
-                                "function": {"project": {"field": "symbols", "typeName": "hydra.lisp.syntax.ExportDeclaration"}}}},
+                                "function": {"project": {"fieldName": "symbols", "typeName": "hydra.lisp.syntax.ExportDeclaration"}}}},
                             "function": {
                               "application": {
                                 "argument": {"variable": "hydra.lisp.serde.symbolToExpr"},
@@ -1298,7 +1310,7 @@
                                                 "argument": {
                                                   "application": {
                                                     "argument": {"variable": "e"},
-                                                    "function": {"project": {"field": "expressions", "typeName": "hydra.lisp.syntax.BeginExpression"}}}},
+                                                    "function": {"project": {"fieldName": "expressions", "typeName": "hydra.lisp.syntax.BeginExpression"}}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}},
@@ -1391,14 +1403,14 @@
                                                 "argument": {
                                                   "application": {
                                                     "argument": {"variable": "c"},
-                                                    "function": {"project": {"field": "head", "typeName": "hydra.lisp.syntax.ConsExpression"}}}},
+                                                    "function": {"project": {"fieldName": "head", "typeName": "hydra.lisp.syntax.ConsExpression"}}}},
                                                 "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}},
                                             {
                                               "application": {
                                                 "argument": {
                                                   "application": {
                                                     "argument": {"variable": "c"},
-                                                    "function": {"project": {"field": "tail", "typeName": "hydra.lisp.syntax.ConsExpression"}}}},
+                                                    "function": {"project": {"fieldName": "tail", "typeName": "hydra.lisp.syntax.ConsExpression"}}}},
                                                 "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                         "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                     "function": {"variable": "hydra.serialization.parens"}}},
@@ -1417,13 +1429,17 @@
                                             {
                                               "application": {
                                                 "argument": {
-                                                  "application": {"argument": {"variable": "p"}, "function": {"project": {"field": "car", "typeName": "hydra.lisp.syntax.DottedPair"}}}},
+                                                  "application": {
+                                                    "argument": {"variable": "p"},
+                                                    "function": {"project": {"fieldName": "car", "typeName": "hydra.lisp.syntax.DottedPair"}}}},
                                                 "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}},
                                             {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.serialization.cst"}}},
                                             {
                                               "application": {
                                                 "argument": {
-                                                  "application": {"argument": {"variable": "p"}, "function": {"project": {"field": "cdr", "typeName": "hydra.lisp.syntax.DottedPair"}}}},
+                                                  "application": {
+                                                    "argument": {"variable": "p"},
+                                                    "function": {"project": {"fieldName": "cdr", "typeName": "hydra.lisp.syntax.DottedPair"}}}},
                                                 "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                         "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                     "function": {"variable": "hydra.serialization.parens"}}},
@@ -1448,7 +1464,7 @@
                                     "argument": {
                                       "application": {
                                         "argument": {"variable": "ta"},
-                                        "function": {"project": {"field": "expression", "typeName": "hydra.lisp.syntax.TypeAnnotation"}}}},
+                                        "function": {"project": {"fieldName": "expression", "typeName": "hydra.lisp.syntax.TypeAnnotation"}}}},
                                     "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}},
                                 "domain": {"variable": "hydra.lisp.syntax.TypeAnnotation"},
                                 "parameter": "ta"}}},
@@ -1466,7 +1482,7 @@
                                             "argument": {
                                               "application": {
                                                 "argument": {"variable": "q"},
-                                                "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.QuoteExpression"}}}},
+                                                "function": {"project": {"fieldName": "body", "typeName": "hydra.lisp.syntax.QuoteExpression"}}}},
                                             "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                 "domain": {"variable": "hydra.lisp.syntax.QuoteExpression"},
@@ -1485,7 +1501,7 @@
                                             "argument": {
                                               "application": {
                                                 "argument": {"variable": "q"},
-                                                "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.QuasiquoteExpression"}}}},
+                                                "function": {"project": {"fieldName": "body", "typeName": "hydra.lisp.syntax.QuasiquoteExpression"}}}},
                                             "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                 "domain": {"variable": "hydra.lisp.syntax.QuasiquoteExpression"},
@@ -1514,7 +1530,7 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "u"},
-                                                                "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.UnquoteExpression"}}}},
+                                                                "function": {"project": {"fieldName": "body", "typeName": "hydra.lisp.syntax.UnquoteExpression"}}}},
                                                             "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                                 "domain": {"unit": {}},
@@ -1533,7 +1549,7 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "u"},
-                                                                "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.UnquoteExpression"}}}},
+                                                                "function": {"project": {"fieldName": "body", "typeName": "hydra.lisp.syntax.UnquoteExpression"}}}},
                                                             "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                                 "domain": {"unit": {}},
@@ -1552,7 +1568,7 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "u"},
-                                                                "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.UnquoteExpression"}}}},
+                                                                "function": {"project": {"fieldName": "body", "typeName": "hydra.lisp.syntax.UnquoteExpression"}}}},
                                                             "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                                 "domain": {"unit": {}},
@@ -1571,7 +1587,7 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "u"},
-                                                                "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.UnquoteExpression"}}}},
+                                                                "function": {"project": {"fieldName": "body", "typeName": "hydra.lisp.syntax.UnquoteExpression"}}}},
                                                             "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                                 "domain": {"unit": {}},
@@ -1603,7 +1619,7 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "su"},
-                                                                "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.SplicingUnquoteExpression"}}}},
+                                                                "function": {"project": {"fieldName": "body", "typeName": "hydra.lisp.syntax.SplicingUnquoteExpression"}}}},
                                                             "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                                 "domain": {"unit": {}},
@@ -1622,7 +1638,7 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "su"},
-                                                                "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.SplicingUnquoteExpression"}}}},
+                                                                "function": {"project": {"fieldName": "body", "typeName": "hydra.lisp.syntax.SplicingUnquoteExpression"}}}},
                                                             "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                                 "domain": {"unit": {}},
@@ -1641,7 +1657,7 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "su"},
-                                                                "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.SplicingUnquoteExpression"}}}},
+                                                                "function": {"project": {"fieldName": "body", "typeName": "hydra.lisp.syntax.SplicingUnquoteExpression"}}}},
                                                             "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                                 "domain": {"unit": {}},
@@ -1660,7 +1676,7 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "su"},
-                                                                "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.SplicingUnquoteExpression"}}}},
+                                                                "function": {"project": {"fieldName": "body", "typeName": "hydra.lisp.syntax.SplicingUnquoteExpression"}}}},
                                                             "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                                 "domain": {"unit": {}},
@@ -1748,7 +1764,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "fa"},
-                                "function": {"project": {"field": "recordType", "typeName": "hydra.lisp.syntax.FieldAccess"}}}},
+                                "function": {"project": {"fieldName": "recordType", "typeName": "hydra.lisp.syntax.FieldAccess"}}}},
                             "function": {"variable": "hydra.lisp.serde.symbolToExpr"}}},
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
@@ -1758,7 +1774,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "fa"},
-                                "function": {"project": {"field": "field", "typeName": "hydra.lisp.syntax.FieldAccess"}}}},
+                                "function": {"project": {"fieldName": "field", "typeName": "hydra.lisp.syntax.FieldAccess"}}}},
                             "function": {"variable": "hydra.lisp.serde.symbolToExpr"}}},
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
@@ -1768,7 +1784,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "fa"},
-                                "function": {"project": {"field": "target", "typeName": "hydra.lisp.syntax.FieldAccess"}}}},
+                                "function": {"project": {"fieldName": "target", "typeName": "hydra.lisp.syntax.FieldAccess"}}}},
                             "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}},
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                     "body": {
@@ -2020,7 +2036,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "fdef"},
-                                "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.FunctionDefinition"}}}},
+                                "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.FunctionDefinition"}}}},
                             "function": {"variable": "hydra.lisp.serde.symbolToExpr"}}},
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
@@ -2030,7 +2046,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "fdef"},
-                                "function": {"project": {"field": "params", "typeName": "hydra.lisp.syntax.FunctionDefinition"}}}},
+                                "function": {"project": {"fieldName": "params", "typeName": "hydra.lisp.syntax.FunctionDefinition"}}}},
                             "function": {
                               "application": {
                                 "argument": {"variable": "hydra.lisp.serde.symbolToExpr"},
@@ -2046,7 +2062,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "fdef"},
-                                "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.FunctionDefinition"}}}},
+                                "function": {"project": {"fieldName": "body", "typeName": "hydra.lisp.syntax.FunctionDefinition"}}}},
                             "function": {
                               "application": {
                                 "argument": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}},
@@ -2215,7 +2231,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "ifExpr"},
-                                "function": {"project": {"field": "condition", "typeName": "hydra.lisp.syntax.IfExpression"}}}},
+                                "function": {"project": {"fieldName": "condition", "typeName": "hydra.lisp.syntax.IfExpression"}}}},
                             "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}},
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
@@ -2225,7 +2241,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "ifExpr"},
-                                "function": {"project": {"field": "then", "typeName": "hydra.lisp.syntax.IfExpression"}}}},
+                                "function": {"project": {"fieldName": "then", "typeName": "hydra.lisp.syntax.IfExpression"}}}},
                             "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}},
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
@@ -2233,7 +2249,7 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "ifExpr"},
-                            "function": {"project": {"field": "else", "typeName": "hydra.lisp.syntax.IfExpression"}}}},
+                            "function": {"project": {"fieldName": "else", "typeName": "hydra.lisp.syntax.IfExpression"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}, "variables": []}},
                       {
                         "name": "elsePart",
@@ -2304,7 +2320,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "idecl"},
-                                "function": {"project": {"field": "module", "typeName": "hydra.lisp.syntax.ImportDeclaration"}}}},
+                                "function": {"project": {"fieldName": "module", "typeName": "hydra.lisp.syntax.ImportDeclaration"}}}},
                             "function": {"unwrap": "hydra.lisp.syntax.NamespaceName"}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
@@ -2429,14 +2445,14 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "k"}, "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.Keyword"}}}},
+                          "application": {"argument": {"variable": "k"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.Keyword"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "ns",
                         "term": {
                           "application": {
                             "argument": {"variable": "k"},
-                            "function": {"project": {"field": "namespace", "typeName": "hydra.lisp.syntax.Keyword"}}}},
+                            "function": {"project": {"fieldName": "namespace", "typeName": "hydra.lisp.syntax.Keyword"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -2538,7 +2554,9 @@
                         "term": {
                           "application": {
                             "argument": {
-                              "application": {"argument": {"variable": "lam"}, "function": {"project": {"field": "params", "typeName": "hydra.lisp.syntax.Lambda"}}}},
+                              "application": {
+                                "argument": {"variable": "lam"},
+                                "function": {"project": {"fieldName": "params", "typeName": "hydra.lisp.syntax.Lambda"}}}},
                             "function": {
                               "application": {
                                 "argument": {"variable": "hydra.lisp.serde.symbolToExpr"},
@@ -2552,7 +2570,9 @@
                         "term": {
                           "application": {
                             "argument": {
-                              "application": {"argument": {"variable": "lam"}, "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.Lambda"}}}},
+                              "application": {
+                                "argument": {"variable": "lam"},
+                                "function": {"project": {"fieldName": "body", "typeName": "hydra.lisp.syntax.Lambda"}}}},
                             "function": {
                               "application": {
                                 "argument": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}},
@@ -2564,7 +2584,9 @@
                       {
                         "name": "mname",
                         "term": {
-                          "application": {"argument": {"variable": "lam"}, "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.Lambda"}}}},
+                          "application": {
+                            "argument": {"variable": "lam"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.Lambda"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}, "variables": []}},
                       {
                         "name": "kw",
@@ -2751,14 +2773,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "letExpr"},
-                            "function": {"project": {"field": "kind", "typeName": "hydra.lisp.syntax.LetExpression"}}}},
+                            "function": {"project": {"fieldName": "kind", "typeName": "hydra.lisp.syntax.LetExpression"}}}},
                         "typeScheme": {"body": {"variable": "hydra.lisp.syntax.LetKind"}, "variables": []}},
                       {
                         "name": "bindings",
                         "term": {
                           "application": {
                             "argument": {"variable": "letExpr"},
-                            "function": {"project": {"field": "bindings", "typeName": "hydra.lisp.syntax.LetExpression"}}}},
+                            "function": {"project": {"fieldName": "bindings", "typeName": "hydra.lisp.syntax.LetExpression"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.lisp.syntax.LetBinding"}}, "variables": []}},
                       {
                         "name": "body",
@@ -2767,7 +2789,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "letExpr"},
-                                "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.LetExpression"}}}},
+                                "function": {"project": {"fieldName": "body", "typeName": "hydra.lisp.syntax.LetExpression"}}}},
                             "function": {
                               "application": {
                                 "argument": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}},
@@ -2806,14 +2828,14 @@
                                                                     "argument": {
                                                                       "application": {
                                                                         "argument": {"variable": "sb"},
-                                                                        "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.SimpleBinding"}}}},
+                                                                        "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.SimpleBinding"}}}},
                                                                     "function": {"variable": "hydra.lisp.serde.symbolToExpr"}}},
                                                                 "second": {
                                                                   "application": {
                                                                     "argument": {
                                                                       "application": {
                                                                         "argument": {"variable": "sb"},
-                                                                        "function": {"project": {"field": "value", "typeName": "hydra.lisp.syntax.SimpleBinding"}}}},
+                                                                        "function": {"project": {"fieldName": "value", "typeName": "hydra.lisp.syntax.SimpleBinding"}}}},
                                                                     "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}}},
                                                             "type": {"variable": "hydra.ast.Expr"}}},
                                                         "type": {"variable": "hydra.ast.Expr"}}},
@@ -2899,7 +2921,7 @@
                                                                                                     "argument": {
                                                                                                       "application": {
                                                                                                         "argument": {"variable": "sb"},
-                                                                                                        "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.SimpleBinding"}}}},
+                                                                                                        "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.SimpleBinding"}}}},
                                                                                                     "function": {"variable": "hydra.lisp.serde.symbolToExpr"}}},
                                                                                                 "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                                                                                               {
@@ -2907,7 +2929,7 @@
                                                                                                 "term": {
                                                                                                   "application": {
                                                                                                     "argument": {"variable": "sb"},
-                                                                                                    "function": {"project": {"field": "value", "typeName": "hydra.lisp.syntax.SimpleBinding"}}}},
+                                                                                                    "function": {"project": {"fieldName": "value", "typeName": "hydra.lisp.syntax.SimpleBinding"}}}},
                                                                                                 "typeScheme": {"body": {"variable": "hydra.lisp.syntax.Expression"}, "variables": []}}],
                                                                                             "body": {
                                                                                               "application": {
@@ -2927,7 +2949,9 @@
                                                                                                                     "term": {
                                                                                                                       "application": {
                                                                                                                         "argument": {
-                                                                                                                          "application": {"argument": {"variable": "lam"}, "function": {"project": {"field": "params", "typeName": "hydra.lisp.syntax.Lambda"}}}},
+                                                                                                                          "application": {
+                                                                                                                            "argument": {"variable": "lam"},
+                                                                                                                            "function": {"project": {"fieldName": "params", "typeName": "hydra.lisp.syntax.Lambda"}}}},
                                                                                                                         "function": {
                                                                                                                           "application": {
                                                                                                                             "argument": {"variable": "hydra.lisp.serde.symbolToExpr"},
@@ -2941,7 +2965,9 @@
                                                                                                                     "term": {
                                                                                                                       "application": {
                                                                                                                         "argument": {
-                                                                                                                          "application": {"argument": {"variable": "lam"}, "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.Lambda"}}}},
+                                                                                                                          "application": {
+                                                                                                                            "argument": {"variable": "lam"},
+                                                                                                                            "function": {"project": {"fieldName": "body", "typeName": "hydra.lisp.syntax.Lambda"}}}},
                                                                                                                         "function": {
                                                                                                                           "application": {
                                                                                                                             "argument": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}},
@@ -3502,7 +3528,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "ll"},
-                                "function": {"project": {"field": "elements", "typeName": "hydra.lisp.syntax.ListLiteral"}}}},
+                                "function": {"project": {"fieldName": "elements", "typeName": "hydra.lisp.syntax.ListLiteral"}}}},
                             "function": {
                               "application": {
                                 "argument": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}},
@@ -3516,7 +3542,7 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "ll"},
-                            "function": {"project": {"field": "quoted", "typeName": "hydra.lisp.syntax.ListLiteral"}}}},
+                            "function": {"project": {"fieldName": "quoted", "typeName": "hydra.lisp.syntax.ListLiteral"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -3588,7 +3614,7 @@
                                         "argument": {
                                           "application": {
                                             "argument": {"variable": "i"},
-                                            "function": {"project": {"field": "value", "typeName": "hydra.lisp.syntax.IntegerLiteral"}}}},
+                                            "function": {"project": {"fieldName": "value", "typeName": "hydra.lisp.syntax.IntegerLiteral"}}}},
                                         "function": {"variable": "hydra.lib.literals.showBigint"}}},
                                     "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"variable": "hydra.lisp.syntax.IntegerLiteral"},
@@ -3604,7 +3630,7 @@
                                         "argument": {
                                           "application": {
                                             "argument": {"variable": "f"},
-                                            "function": {"project": {"field": "value", "typeName": "hydra.lisp.syntax.FloatLiteral"}}}},
+                                            "function": {"project": {"fieldName": "value", "typeName": "hydra.lisp.syntax.FloatLiteral"}}}},
                                         "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.formatLispFloat"}}}}},
                                     "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"variable": "hydra.lisp.syntax.FloatLiteral"},
@@ -3921,7 +3947,7 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "c"},
-                                            "function": {"project": {"field": "value", "typeName": "hydra.lisp.syntax.CharacterLiteral"}}}},
+                                            "function": {"project": {"fieldName": "value", "typeName": "hydra.lisp.syntax.CharacterLiteral"}}}},
                                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -4058,7 +4084,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "mdef"},
-                                "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.MacroDefinition"}}}},
+                                "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.MacroDefinition"}}}},
                             "function": {"variable": "hydra.lisp.serde.symbolToExpr"}}},
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
@@ -4068,7 +4094,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "mdef"},
-                                "function": {"project": {"field": "params", "typeName": "hydra.lisp.syntax.MacroDefinition"}}}},
+                                "function": {"project": {"fieldName": "params", "typeName": "hydra.lisp.syntax.MacroDefinition"}}}},
                             "function": {
                               "application": {
                                 "argument": {"variable": "hydra.lisp.serde.symbolToExpr"},
@@ -4084,7 +4110,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "mdef"},
-                                "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.MacroDefinition"}}}},
+                                "function": {"project": {"fieldName": "body", "typeName": "hydra.lisp.syntax.MacroDefinition"}}}},
                             "function": {
                               "application": {
                                 "argument": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}},
@@ -4238,7 +4264,7 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "ml"},
-                            "function": {"project": {"field": "entries", "typeName": "hydra.lisp.syntax.MapLiteral"}}}},
+                            "function": {"project": {"fieldName": "entries", "typeName": "hydra.lisp.syntax.MapLiteral"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.lisp.syntax.MapEntry"}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -4268,12 +4294,14 @@
                                                                 {
                                                                   "application": {
                                                                     "argument": {
-                                                                      "application": {"argument": {"variable": "e"}, "function": {"project": {"field": "key", "typeName": "hydra.lisp.syntax.MapEntry"}}}},
+                                                                      "application": {"argument": {"variable": "e"}, "function": {"project": {"fieldName": "key", "typeName": "hydra.lisp.syntax.MapEntry"}}}},
                                                                     "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}},
                                                                 {
                                                                   "application": {
                                                                     "argument": {
-                                                                      "application": {"argument": {"variable": "e"}, "function": {"project": {"field": "value", "typeName": "hydra.lisp.syntax.MapEntry"}}}},
+                                                                      "application": {
+                                                                        "argument": {"variable": "e"},
+                                                                        "function": {"project": {"fieldName": "value", "typeName": "hydra.lisp.syntax.MapEntry"}}}},
                                                                     "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                                             "domain": {"variable": "hydra.lisp.syntax.MapEntry"},
                                                             "parameter": "e"}},
@@ -4319,13 +4347,15 @@
                                                                             {
                                                                               "application": {
                                                                                 "argument": {
-                                                                                  "application": {"argument": {"variable": "e"}, "function": {"project": {"field": "key", "typeName": "hydra.lisp.syntax.MapEntry"}}}},
+                                                                                  "application": {"argument": {"variable": "e"}, "function": {"project": {"fieldName": "key", "typeName": "hydra.lisp.syntax.MapEntry"}}}},
                                                                                 "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}},
                                                                             {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.serialization.cst"}}},
                                                                             {
                                                                               "application": {
                                                                                 "argument": {
-                                                                                  "application": {"argument": {"variable": "e"}, "function": {"project": {"field": "value", "typeName": "hydra.lisp.syntax.MapEntry"}}}},
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "e"},
+                                                                                    "function": {"project": {"fieldName": "value", "typeName": "hydra.lisp.syntax.MapEntry"}}}},
                                                                                 "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                                                         "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                                     "function": {"variable": "hydra.serialization.parens"}}},
@@ -4369,13 +4399,15 @@
                                                                             {
                                                                               "application": {
                                                                                 "argument": {
-                                                                                  "application": {"argument": {"variable": "e"}, "function": {"project": {"field": "key", "typeName": "hydra.lisp.syntax.MapEntry"}}}},
+                                                                                  "application": {"argument": {"variable": "e"}, "function": {"project": {"fieldName": "key", "typeName": "hydra.lisp.syntax.MapEntry"}}}},
                                                                                 "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}},
                                                                             {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.serialization.cst"}}},
                                                                             {
                                                                               "application": {
                                                                                 "argument": {
-                                                                                  "application": {"argument": {"variable": "e"}, "function": {"project": {"field": "value", "typeName": "hydra.lisp.syntax.MapEntry"}}}},
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "e"},
+                                                                                    "function": {"project": {"fieldName": "value", "typeName": "hydra.lisp.syntax.MapEntry"}}}},
                                                                                 "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                                                         "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                                     "function": {"variable": "hydra.serialization.parens"}}},
@@ -4417,12 +4449,14 @@
                                                                         {
                                                                           "application": {
                                                                             "argument": {
-                                                                              "application": {"argument": {"variable": "e"}, "function": {"project": {"field": "key", "typeName": "hydra.lisp.syntax.MapEntry"}}}},
+                                                                              "application": {"argument": {"variable": "e"}, "function": {"project": {"fieldName": "key", "typeName": "hydra.lisp.syntax.MapEntry"}}}},
                                                                             "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}},
                                                                         {
                                                                           "application": {
                                                                             "argument": {
-                                                                              "application": {"argument": {"variable": "e"}, "function": {"project": {"field": "value", "typeName": "hydra.lisp.syntax.MapEntry"}}}},
+                                                                              "application": {
+                                                                                "argument": {"variable": "e"},
+                                                                                "function": {"project": {"fieldName": "value", "typeName": "hydra.lisp.syntax.MapEntry"}}}},
                                                                             "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                                                                     "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                                 "function": {"variable": "hydra.serialization.parens"}}},
@@ -4469,7 +4503,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "mdecl"},
-                                "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.ModuleDeclaration"}}}},
+                                "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.ModuleDeclaration"}}}},
                             "function": {"unwrap": "hydra.lisp.syntax.NamespaceName"}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
@@ -4678,7 +4712,7 @@
                                 "argument": {
                                   "application": {
                                     "argument": {"variable": "notExpr"},
-                                    "function": {"project": {"field": "expression", "typeName": "hydra.lisp.syntax.NotExpression"}}}},
+                                    "function": {"project": {"fieldName": "expression", "typeName": "hydra.lisp.syntax.NotExpression"}}}},
                                 "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
                         "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                     "function": {"variable": "hydra.serialization.parens"}}},
@@ -4710,7 +4744,7 @@
                                 "argument": {
                                   "application": {
                                     "argument": {"variable": "orExpr"},
-                                    "function": {"project": {"field": "expressions", "typeName": "hydra.lisp.syntax.OrExpression"}}}},
+                                    "function": {"project": {"fieldName": "expressions", "typeName": "hydra.lisp.syntax.OrExpression"}}}},
                                 "function": {
                                   "application": {
                                     "argument": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}},
@@ -4748,33 +4782,35 @@
                     "term": {
                       "application": {
                         "argument": {"variable": "prog"},
-                        "function": {"project": {"field": "dialect", "typeName": "hydra.lisp.syntax.Program"}}}},
+                        "function": {"project": {"fieldName": "dialect", "typeName": "hydra.lisp.syntax.Program"}}}},
                     "typeScheme": {"body": {"variable": "hydra.lisp.syntax.Dialect"}, "variables": []}},
                   {
                     "name": "modDecl",
                     "term": {
                       "application": {
                         "argument": {"variable": "prog"},
-                        "function": {"project": {"field": "module", "typeName": "hydra.lisp.syntax.Program"}}}},
+                        "function": {"project": {"fieldName": "module", "typeName": "hydra.lisp.syntax.Program"}}}},
                     "typeScheme": {"body": {"maybe": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}, "variables": []}},
                   {
                     "name": "imports",
                     "term": {
                       "application": {
                         "argument": {"variable": "prog"},
-                        "function": {"project": {"field": "imports", "typeName": "hydra.lisp.syntax.Program"}}}},
+                        "function": {"project": {"fieldName": "imports", "typeName": "hydra.lisp.syntax.Program"}}}},
                     "typeScheme": {"body": {"list": {"variable": "hydra.lisp.syntax.ImportDeclaration"}}, "variables": []}},
                   {
                     "name": "exports",
                     "term": {
                       "application": {
                         "argument": {"variable": "prog"},
-                        "function": {"project": {"field": "exports", "typeName": "hydra.lisp.syntax.Program"}}}},
+                        "function": {"project": {"fieldName": "exports", "typeName": "hydra.lisp.syntax.Program"}}}},
                     "typeScheme": {"body": {"list": {"variable": "hydra.lisp.syntax.ExportDeclaration"}}, "variables": []}},
                   {
                     "name": "forms",
                     "term": {
-                      "application": {"argument": {"variable": "prog"}, "function": {"project": {"field": "forms", "typeName": "hydra.lisp.syntax.Program"}}}},
+                      "application": {
+                        "argument": {"variable": "prog"},
+                        "function": {"project": {"fieldName": "forms", "typeName": "hydra.lisp.syntax.Program"}}}},
                     "typeScheme": {"body": {"list": {"variable": "hydra.lisp.syntax.TopLevelFormWithComments"}}, "variables": []}},
                   {
                     "name": "formPart",
@@ -4805,7 +4841,7 @@
                                     "argument": {
                                       "application": {
                                         "argument": {"variable": "idecl"},
-                                        "function": {"project": {"field": "module", "typeName": "hydra.lisp.syntax.ImportDeclaration"}}}},
+                                        "function": {"project": {"fieldName": "module", "typeName": "hydra.lisp.syntax.ImportDeclaration"}}}},
                                     "function": {"unwrap": "hydra.lisp.syntax.NamespaceName"}}},
                                 "domain": {"variable": "hydra.lisp.syntax.ImportDeclaration"},
                                 "parameter": "idecl"}},
@@ -4831,7 +4867,7 @@
                                         "argument": {
                                           "application": {
                                             "argument": {"variable": "edecl"},
-                                            "function": {"project": {"field": "symbols", "typeName": "hydra.lisp.syntax.ExportDeclaration"}}}},
+                                            "function": {"project": {"fieldName": "symbols", "typeName": "hydra.lisp.syntax.ExportDeclaration"}}}},
                                         "function": {
                                           "application": {
                                             "argument": {"variable": "hydra.lisp.serde.symbolToExpr"},
@@ -4875,7 +4911,7 @@
                                                         "argument": {
                                                           "application": {
                                                             "argument": {"variable": "m"},
-                                                            "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.ModuleDeclaration"}}}},
+                                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.ModuleDeclaration"}}}},
                                                         "function": {"unwrap": "hydra.lisp.syntax.NamespaceName"}}},
                                                     "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                                   {
@@ -4986,7 +5022,7 @@
                                                                                 "term": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "fwc"},
-                                                                                    "function": {"project": {"field": "form", "typeName": "hydra.lisp.syntax.TopLevelFormWithComments"}}}},
+                                                                                    "function": {"project": {"fieldName": "form", "typeName": "hydra.lisp.syntax.TopLevelFormWithComments"}}}},
                                                                                 "typeScheme": {"body": {"variable": "hydra.lisp.syntax.TopLevelForm"}, "variables": []}}],
                                                                             "body": {
                                                                               "application": {
@@ -5005,7 +5041,7 @@
                                                                                                     "argument": {
                                                                                                       "application": {
                                                                                                         "argument": {"variable": "vd"},
-                                                                                                        "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.VariableDefinition"}}}},
+                                                                                                        "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.VariableDefinition"}}}},
                                                                                                     "function": {"variable": "hydra.lisp.serde.symbolToExpr"}}}]},
                                                                                             "domain": {"variable": "hydra.lisp.syntax.VariableDefinition"},
                                                                                             "parameter": "vd"}}},
@@ -5020,7 +5056,7 @@
                                                                                                     "argument": {
                                                                                                       "application": {
                                                                                                         "argument": {"variable": "fd"},
-                                                                                                        "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.FunctionDefinition"}}}},
+                                                                                                        "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.FunctionDefinition"}}}},
                                                                                                     "function": {"variable": "hydra.lisp.serde.symbolToExpr"}}}]},
                                                                                             "domain": {"variable": "hydra.lisp.syntax.FunctionDefinition"},
                                                                                             "parameter": "fd"}}}],
@@ -5109,7 +5145,7 @@
                                                         "argument": {
                                                           "application": {
                                                             "argument": {"variable": "m"},
-                                                            "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.ModuleDeclaration"}}}},
+                                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.ModuleDeclaration"}}}},
                                                         "function": {"unwrap": "hydra.lisp.syntax.NamespaceName"}}},
                                                     "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                                   {
@@ -5227,7 +5263,7 @@
                                                         "argument": {
                                                           "application": {
                                                             "argument": {"variable": "m"},
-                                                            "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.ModuleDeclaration"}}}},
+                                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.ModuleDeclaration"}}}},
                                                         "function": {"unwrap": "hydra.lisp.syntax.NamespaceName"}}},
                                                     "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                                   {
@@ -5405,7 +5441,7 @@
                                                         "argument": {
                                                           "application": {
                                                             "argument": {"variable": "m"},
-                                                            "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.ModuleDeclaration"}}}},
+                                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.ModuleDeclaration"}}}},
                                                         "function": {"unwrap": "hydra.lisp.syntax.NamespaceName"}}},
                                                     "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                                   {
@@ -5471,7 +5507,7 @@
                                                                             "argument": {
                                                                               "application": {
                                                                                 "argument": {"variable": "idecl"},
-                                                                                "function": {"project": {"field": "module", "typeName": "hydra.lisp.syntax.ImportDeclaration"}}}},
+                                                                                "function": {"project": {"fieldName": "module", "typeName": "hydra.lisp.syntax.ImportDeclaration"}}}},
                                                                             "function": {"unwrap": "hydra.lisp.syntax.NamespaceName"}}},
                                                                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                                                       {
@@ -5660,7 +5696,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "rdef"},
-                                "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.RecordTypeDefinition"}}}},
+                                "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.RecordTypeDefinition"}}}},
                             "function": {"variable": "hydra.lisp.serde.symbolToExpr"}}},
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
@@ -5670,7 +5706,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "rdef"},
-                                "function": {"project": {"field": "fields", "typeName": "hydra.lisp.syntax.RecordTypeDefinition"}}}},
+                                "function": {"project": {"fieldName": "fields", "typeName": "hydra.lisp.syntax.RecordTypeDefinition"}}}},
                             "function": {
                               "application": {
                                 "argument": {
@@ -5680,7 +5716,7 @@
                                         "argument": {
                                           "application": {
                                             "argument": {"variable": "f"},
-                                            "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.FieldDefinition"}}}},
+                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.FieldDefinition"}}}},
                                         "function": {"variable": "hydra.lisp.serde.symbolToExpr"}}},
                                     "domain": {"variable": "hydra.lisp.syntax.FieldDefinition"},
                                     "parameter": "f"}},
@@ -5710,7 +5746,7 @@
                                                 "argument": {
                                                   "application": {
                                                     "argument": {"variable": "rdef"},
-                                                    "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.RecordTypeDefinition"}}}},
+                                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.RecordTypeDefinition"}}}},
                                                 "function": {"unwrap": "hydra.lisp.syntax.Symbol"}}},
                                             "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                           {
@@ -5720,7 +5756,7 @@
                                                 "argument": {
                                                   "application": {
                                                     "argument": {"variable": "rdef"},
-                                                    "function": {"project": {"field": "fields", "typeName": "hydra.lisp.syntax.RecordTypeDefinition"}}}},
+                                                    "function": {"project": {"fieldName": "fields", "typeName": "hydra.lisp.syntax.RecordTypeDefinition"}}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {
@@ -5730,7 +5766,7 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "f"},
-                                                                "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.FieldDefinition"}}}},
+                                                                "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.FieldDefinition"}}}},
                                                             "function": {"unwrap": "hydra.lisp.syntax.Symbol"}}},
                                                         "domain": {"variable": "hydra.lisp.syntax.FieldDefinition"},
                                                         "parameter": "f"}},
@@ -5901,7 +5937,7 @@
                                                 "argument": {
                                                   "application": {
                                                     "argument": {"variable": "rdef"},
-                                                    "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.RecordTypeDefinition"}}}},
+                                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.RecordTypeDefinition"}}}},
                                                 "function": {"unwrap": "hydra.lisp.syntax.Symbol"}}},
                                             "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                           {
@@ -5911,7 +5947,7 @@
                                                 "argument": {
                                                   "application": {
                                                     "argument": {"variable": "rdef"},
-                                                    "function": {"project": {"field": "fields", "typeName": "hydra.lisp.syntax.RecordTypeDefinition"}}}},
+                                                    "function": {"project": {"fieldName": "fields", "typeName": "hydra.lisp.syntax.RecordTypeDefinition"}}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {
@@ -5921,7 +5957,7 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "f"},
-                                                                "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.FieldDefinition"}}}},
+                                                                "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.FieldDefinition"}}}},
                                                             "function": {"unwrap": "hydra.lisp.syntax.Symbol"}}},
                                                         "domain": {"variable": "hydra.lisp.syntax.FieldDefinition"},
                                                         "parameter": "f"}},
@@ -6107,7 +6143,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "sl"},
-                                "function": {"project": {"field": "elements", "typeName": "hydra.lisp.syntax.SetLiteral"}}}},
+                                "function": {"project": {"fieldName": "elements", "typeName": "hydra.lisp.syntax.SetLiteral"}}}},
                             "function": {
                               "application": {
                                 "argument": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}},
@@ -6327,21 +6363,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "fwc"},
-                            "function": {"project": {"field": "doc", "typeName": "hydra.lisp.syntax.TopLevelFormWithComments"}}}},
+                            "function": {"project": {"fieldName": "doc", "typeName": "hydra.lisp.syntax.TopLevelFormWithComments"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}, "variables": []}},
                       {
                         "name": "mcomment",
                         "term": {
                           "application": {
                             "argument": {"variable": "fwc"},
-                            "function": {"project": {"field": "comment", "typeName": "hydra.lisp.syntax.TopLevelFormWithComments"}}}},
+                            "function": {"project": {"fieldName": "comment", "typeName": "hydra.lisp.syntax.TopLevelFormWithComments"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.lisp.syntax.Comment"}}, "variables": []}},
                       {
                         "name": "form",
                         "term": {
                           "application": {
                             "argument": {"variable": "fwc"},
-                            "function": {"project": {"field": "form", "typeName": "hydra.lisp.syntax.TopLevelFormWithComments"}}}},
+                            "function": {"project": {"fieldName": "form", "typeName": "hydra.lisp.syntax.TopLevelFormWithComments"}}}},
                         "typeScheme": {"body": {"variable": "hydra.lisp.syntax.TopLevelForm"}, "variables": []}},
                       {
                         "name": "docPart",
@@ -6471,7 +6507,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "vdef"},
-                                "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.VariableDefinition"}}}},
+                                "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.VariableDefinition"}}}},
                             "function": {"variable": "hydra.lisp.serde.symbolToExpr"}}},
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
@@ -6481,7 +6517,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "vdef"},
-                                "function": {"project": {"field": "value", "typeName": "hydra.lisp.syntax.VariableDefinition"}}}},
+                                "function": {"project": {"fieldName": "value", "typeName": "hydra.lisp.syntax.VariableDefinition"}}}},
                             "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}},
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                     "body": {
@@ -6526,7 +6562,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "vref"},
-                                "function": {"project": {"field": "name", "typeName": "hydra.lisp.syntax.VariableReference"}}}},
+                                "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.VariableReference"}}}},
                             "function": {"variable": "hydra.lisp.serde.symbolToExpr"}}},
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
@@ -6534,7 +6570,7 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "vref"},
-                            "function": {"project": {"field": "functionNamespace", "typeName": "hydra.lisp.syntax.VariableReference"}}}},
+                            "function": {"project": {"fieldName": "functionNamespace", "typeName": "hydra.lisp.syntax.VariableReference"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -6596,7 +6632,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "vl"},
-                                "function": {"project": {"field": "elements", "typeName": "hydra.lisp.syntax.VectorLiteral"}}}},
+                                "function": {"project": {"fieldName": "elements", "typeName": "hydra.lisp.syntax.VectorLiteral"}}}},
                             "function": {
                               "application": {
                                 "argument": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}},
@@ -6687,33 +6723,33 @@
               "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
           "variables": []}}}],
   "dependencies": [
-    "hydra.constants",
-    "hydra.formatting",
-    "hydra.serialization",
-    "hydra.lisp.syntax",
-    "hydra.paths",
-    "hydra.ast",
-    "hydra.classes",
-    "hydra.coders",
-    "hydra.context",
-    "hydra.core",
-    "hydra.error.checking",
-    "hydra.error.core",
-    "hydra.error.packaging",
-    "hydra.errors",
-    "hydra.graph",
-    "hydra.json.model",
-    "hydra.packaging",
-    "hydra.parsing",
-    "hydra.phantoms",
-    "hydra.query",
-    "hydra.relational",
-    "hydra.tabular",
-    "hydra.testing",
-    "hydra.topology",
-    "hydra.typing",
-    "hydra.util",
-    "hydra.validation",
-    "hydra.variants"],
+    {"module": "hydra.constants"},
+    {"module": "hydra.formatting"},
+    {"module": "hydra.serialization"},
+    {"module": "hydra.lisp.syntax"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.classes"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
   "description": "Lisp serializer: converts Lisp AST to concrete syntax for Clojure, Emacs Lisp, Common Lisp, or Scheme",
-  "namespace": "hydra.lisp.serde"}
+  "name": "hydra.lisp.serde"}

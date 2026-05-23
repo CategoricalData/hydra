@@ -59,7 +59,7 @@ collectStructuralTypes_collectFromType typ =
 constructModule :: Context.Context -> Graph.Graph -> Packaging.Module -> [Packaging.TypeDefinition] -> Either Errors.Error Proto3.ProtoFile
 constructModule cx g mod typeDefs =
 
-      let ns_ = Packaging.moduleNamespace mod
+      let ns_ = Packaging.moduleName mod
           desc = Packaging.moduleDescription mod
           toDef =
                   \td ->
@@ -121,7 +121,7 @@ constructModule cx g mod typeDefs =
               definitions]),
             Proto3.protoFileOptions = (Lists.cons descOption javaOptions)})))))))
 -- | Encode a Hydra type as a Protobuf definition
-encodeDefinition :: Context.Context -> Graph.Graph -> Packaging.Namespace -> Core.Name -> Core.Type -> Either Errors.Error Proto3.Definition
+encodeDefinition :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> Core.Name -> Core.Type -> Either Errors.Error Proto3.Definition
 encodeDefinition cx g localNs name typ =
 
       let cx1 = Annotations.resetCount key_proto_field_index cx
@@ -175,7 +175,7 @@ encodeFieldName :: Bool -> Core.Name -> Proto3.FieldName
 encodeFieldName preserve name =
     Proto3.FieldName (Logic.ifElse preserve (Core.unName name) (Formatting.convertCaseCamelToLowerSnake (Core.unName name)))
 -- | Encode a Hydra field type as a Protobuf field
-encodeFieldType :: Context.Context -> Graph.Graph -> Packaging.Namespace -> Core.FieldType -> Either Errors.Error (Proto3.Field, Context.Context)
+encodeFieldType :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> Core.FieldType -> Either Errors.Error (Proto3.Field, Context.Context)
 encodeFieldType cx g localNs ft =
 
       let fname = Core.fieldTypeName ft
@@ -225,7 +225,7 @@ encodeFieldType cx g localNs ft =
             Proto3.fieldOptions = options},
           cx1))))))
 -- | Encode a Hydra record type as a Protobuf message definition
-encodeRecordType :: Context.Context -> Graph.Graph -> Packaging.Namespace -> [Proto3.Option] -> Core.Name -> [Core.FieldType] -> Either Errors.Error Proto3.MessageDefinition
+encodeRecordType :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> [Proto3.Option] -> Core.Name -> [Core.FieldType] -> Either Errors.Error Proto3.MessageDefinition
 encodeRecordType cx g localNs options tname fts =
     Eithers.bind (mapAccumResult (\cx_ -> \f -> encodeFieldType cx_ g localNs f) cx fts) (\result ->
       let pfields = Pairs.first result
@@ -276,7 +276,7 @@ encodeScalarTypeWrapped cx lt =
         Core.LiteralTypeString -> toType "String"
         _ -> unexpectedE cx "supported literal type" (ShowCore.literalType lt)
 -- | Encode a simple type for helper message fields
-encodeSimpleTypeForHelper :: t0 -> Packaging.Namespace -> Core.Type -> Either Errors.Error Proto3.SimpleType
+encodeSimpleTypeForHelper :: t0 -> Packaging.ModuleName -> Core.Type -> Either Errors.Error Proto3.SimpleType
 encodeSimpleTypeForHelper cx localNs typ =
 
       let forNominal = \name -> Right (Proto3.SimpleTypeReference (encodeTypeReference localNs name))
@@ -291,15 +291,15 @@ encodeSimpleTypeForHelper cx localNs typ =
 encodeTypeName :: Core.Name -> Proto3.TypeName
 encodeTypeName name = Proto3.TypeName (Names.localNameOf name)
 -- | Encode a Hydra name as a Protobuf type reference
-encodeTypeReference :: Packaging.Namespace -> Core.Name -> Proto3.TypeName
+encodeTypeReference :: Packaging.ModuleName -> Core.Name -> Proto3.TypeName
 encodeTypeReference localNs name =
 
       let qn = Names.qualifyName name
           local = Packaging.qualifiedNameLocal qn
-          ns_ = Packaging.qualifiedNameNamespace qn
-          localNsParts = Maybes.fromMaybe [] (Lists.maybeInit (Strings.splitOn "." (Packaging.unNamespace localNs)))
+          ns_ = Packaging.qualifiedNameModuleName qn
+          localNsParts = Maybes.fromMaybe [] (Lists.maybeInit (Strings.splitOn "." (Packaging.unModuleName localNs)))
       in (Proto3.TypeName (Maybes.maybe local (\nsVal ->
-        let nsParts = Maybes.fromMaybe [] (Lists.maybeInit (Strings.splitOn "." (Packaging.unNamespace nsVal)))
+        let nsParts = Maybes.fromMaybe [] (Lists.maybeInit (Strings.splitOn "." (Packaging.unModuleName nsVal)))
         in (Logic.ifElse (Equality.equal nsParts localNsParts) local (Strings.intercalate "." (Lists.concat [
           nsParts,
           [
@@ -331,7 +331,7 @@ flattenType typ =
 fromEitherString :: t0 -> Either String t1 -> Either Errors.Error t1
 fromEitherString cx e = Eithers.bimap (\msg -> Errors.ErrorOther (Errors.OtherError msg)) (\a -> a) e
 -- | Generate a helper message definition for a structural type
-generateStructuralTypeMessage :: Context.Context -> t0 -> Packaging.Namespace -> ProtobufEnvironment.StructuralTypeRef -> Either Errors.Error (Proto3.Definition, Context.Context)
+generateStructuralTypeMessage :: Context.Context -> t0 -> Packaging.ModuleName -> ProtobufEnvironment.StructuralTypeRef -> Either Errors.Error (Proto3.Definition, Context.Context)
 generateStructuralTypeMessage cx g localNs ref =
 
       let cx1 = Annotations.resetCount key_proto_field_index cx
@@ -416,7 +416,7 @@ mapAccumResult f cx0 xs =
 moduleToProtobuf :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either Errors.Error (M.Map String String)
 moduleToProtobuf mod defs cx g =
 
-      let ns_ = Packaging.moduleNamespace mod
+      let ns_ = Packaging.moduleName mod
           partitioned = Environment.partitionDefinitions defs
           typeDefs = Pairs.first partitioned
       in (Eithers.bind (constructModule cx g mod typeDefs) (\pfile ->
@@ -424,16 +424,16 @@ moduleToProtobuf mod defs cx g =
             path = Proto3.unFileReference (namespaceToFileReference ns_)
         in (Right (Maps.singleton path content))))
 -- | Convert a Hydra namespace to a Protobuf file reference
-namespaceToFileReference :: Packaging.Namespace -> Proto3.FileReference
+namespaceToFileReference :: Packaging.ModuleName -> Proto3.FileReference
 namespaceToFileReference ns_ =
 
       let pns =
-              Strings.intercalate "/" (Lists.map (\s -> Formatting.convertCaseCamelToLowerSnake s) (Strings.splitOn "." (Packaging.unNamespace ns_)))
+              Strings.intercalate "/" (Lists.map (\s -> Formatting.convertCaseCamelToLowerSnake s) (Strings.splitOn "." (Packaging.unModuleName ns_)))
       in (Proto3.FileReference (Strings.cat2 pns ".proto"))
 -- | Convert a Hydra namespace to a Protobuf package name
-namespaceToPackageName :: Packaging.Namespace -> Proto3.PackageName
+namespaceToPackageName :: Packaging.ModuleName -> Proto3.PackageName
 namespaceToPackageName ns_ =
-    Proto3.PackageName (Strings.intercalate "." (Lists.map (\s -> Formatting.convertCaseCamelToLowerSnake s) (Maybes.fromMaybe [] (Lists.maybeInit (Strings.splitOn "." (Packaging.unNamespace ns_))))))
+    Proto3.PackageName (Strings.intercalate "." (Lists.map (\s -> Formatting.convertCaseCamelToLowerSnake s) (Maybes.fromMaybe [] (Lists.maybeInit (Strings.splitOn "." (Packaging.unModuleName ns_))))))
 -- | Read a boolean annotation from a type
 readBooleanAnnotation :: t0 -> Graph.Graph -> Core.Name -> Core.Type -> Either Errors.Error Bool
 readBooleanAnnotation cx g key typ =

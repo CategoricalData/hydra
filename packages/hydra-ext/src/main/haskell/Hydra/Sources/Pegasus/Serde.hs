@@ -86,14 +86,14 @@ import qualified Hydra.Sources.Pegasus.Pdl as PdlSyntax
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.pegasus.serde"
+ns :: ModuleName
+ns = ModuleName "hydra.pegasus.serde"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Formatting.ns, Serialization.ns] L.++ (PdlSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Serialization.ns] L.++ (PdlSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Serialization functions for converting Pegasus PDL AST to abstract expressions"}
   where
     definitions = [

@@ -7,12 +7,12 @@ demonstrating how to use the Hydra Types DSL in Python.
 from hydra.core import Binding, Name, TypeScheme, Type
 from hydra.dsl.annotations import doc
 from hydra.dsl.python import Just, Nothing
-from hydra.packaging import Module, Namespace
+from hydra.packaging import Module, ModuleName
 import hydra.dsl.types as T
 
 
 # Namespace for this module
-ns = Namespace("org.example.lispy")
+ns = ModuleName("org.example.lispy")
 
 
 def qualified_name(local: str) -> Name:

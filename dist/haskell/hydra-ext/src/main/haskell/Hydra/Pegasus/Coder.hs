@@ -31,7 +31,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 -- | Construct PDL schema files from type definitions, with topological sorting and cycle detection
-constructModule :: t0 -> Graph.Graph -> M.Map Packaging.Namespace String -> Packaging.Module -> [Packaging.TypeDefinition] -> Either Errors.Error (M.Map String Pdl.SchemaFile)
+constructModule :: t0 -> Graph.Graph -> M.Map Packaging.ModuleName String -> Packaging.Module -> [Packaging.TypeDefinition] -> Either Errors.Error (M.Map String Pdl.SchemaFile)
 constructModule cx g aliases mod typeDefs =
 
       let groups = Dependencies.topologicalSortTypeDefinitions typeDefs
@@ -44,7 +44,7 @@ doc s =
     Pdl.Annotations {
       Pdl.annotationsDoc = s,
       Pdl.annotationsDeprecated = False}
-encode :: t0 -> Graph.Graph -> M.Map Packaging.Namespace String -> Core.Type -> Either Errors.Error Pdl.Schema
+encode :: t0 -> Graph.Graph -> M.Map Packaging.ModuleName String -> Core.Type -> Either Errors.Error Pdl.Schema
 encode cx g aliases t =
     case (Strip.deannotateType t) of
       Core.TypeRecord v0 -> Logic.ifElse (Lists.null v0) (encode cx g aliases (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) (Eithers.bind (encodeType cx g aliases t) (\res -> Eithers.either (\schema -> Right schema) (\_ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "type resolved to an unsupported nested named schema: " (ShowCore.type_ t))))) res))
@@ -57,7 +57,7 @@ encodeEnumField cx g ft =
       in (Eithers.bind (getAnns cx g typ) (\anns -> Right (Pdl.EnumField {
         Pdl.enumFieldName = (Pdl.EnumFieldName (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake (Core.unName name))),
         Pdl.enumFieldAnnotations = anns})))
-encodePossiblyOptionalType :: t0 -> Graph.Graph -> M.Map Packaging.Namespace String -> Core.Type -> Either Errors.Error (Pdl.Schema, Bool)
+encodePossiblyOptionalType :: t0 -> Graph.Graph -> M.Map Packaging.ModuleName String -> Core.Type -> Either Errors.Error (Pdl.Schema, Bool)
 encodePossiblyOptionalType cx g aliases typ =
     case (Strip.deannotateType typ) of
       Core.TypeMaybe v0 -> Eithers.bind (encode cx g aliases v0) (\t -> Right (t, True))
@@ -73,7 +73,7 @@ encodePossiblyOptionalType cx g aliases typ =
       Core.TypePair _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
       Core.TypeVoid -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
       Core.TypeAnnotated v0 -> encodePossiblyOptionalType cx g aliases (Core.annotatedTypeBody v0)
-encodeRecordField :: t0 -> Graph.Graph -> M.Map Packaging.Namespace String -> Core.FieldType -> Either Errors.Error Pdl.RecordField
+encodeRecordField :: t0 -> Graph.Graph -> M.Map Packaging.ModuleName String -> Core.FieldType -> Either Errors.Error Pdl.RecordField
 encodeRecordField cx g aliases ft =
 
       let name = Core.fieldTypeName ft
@@ -88,7 +88,7 @@ encodeRecordField cx g aliases ft =
           Pdl.recordFieldDefault = Nothing,
           Pdl.recordFieldAnnotations = anns})))))
 -- | Encode a Hydra type as either a PDL Schema (Left) or a PDL NamedSchemaType (Right)
-encodeType :: t0 -> Graph.Graph -> M.Map Packaging.Namespace String -> Core.Type -> Either Errors.Error (Either Pdl.Schema Pdl.NamedSchemaType)
+encodeType :: t0 -> Graph.Graph -> M.Map Packaging.ModuleName String -> Core.Type -> Either Errors.Error (Either Pdl.Schema Pdl.NamedSchemaType)
 encodeType cx g aliases typ =
     case typ of
       Core.TypeAnnotated v0 -> encodeType cx g aliases (Core.annotatedTypeBody v0)
@@ -151,7 +151,7 @@ encodeType cx g aliases typ =
       Core.TypeUnion v0 -> Logic.ifElse (Lists.foldl (\b -> \t -> Logic.and b (Equality.equal (Strip.deannotateType t) Core.TypeUnit)) True (Lists.map (\f -> Core.fieldTypeType f) v0)) (Eithers.bind (Eithers.mapList (encodeEnumField cx g) v0) (\fs -> Right (Right (Pdl.NamedSchemaTypeEnum (Pdl.EnumSchema {
         Pdl.enumSchemaFields = fs}))))) (Eithers.bind (Eithers.mapList (encodeUnionField cx g aliases) v0) (\members -> Right (Left (Pdl.SchemaUnion (Pdl.UnionSchema members)))))
       _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected " (Strings.cat2 "PDL-supported type" (Strings.cat2 ", found: " (ShowCore.type_ typ))))))
-encodeUnionField :: t0 -> Graph.Graph -> M.Map Packaging.Namespace String -> Core.FieldType -> Either Errors.Error Pdl.UnionMember
+encodeUnionField :: t0 -> Graph.Graph -> M.Map Packaging.ModuleName String -> Core.FieldType -> Either Errors.Error Pdl.UnionMember
 encodeUnionField cx g aliases ft =
 
       let name = Core.fieldTypeName ft
@@ -170,9 +170,9 @@ encodeUnionField cx g aliases ft =
 getAnns :: t0 -> Graph.Graph -> Core.Type -> Either Errors.Error Pdl.Annotations
 getAnns cx g typ = Eithers.bind (Annotations.getTypeDescription cx g typ) (\r -> Right (doc r))
 -- | Compute import aliases for a module's dependencies
-importAliasesForModule :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error (M.Map Packaging.Namespace String)
+importAliasesForModule :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error (M.Map Packaging.ModuleName String)
 importAliasesForModule cx g mod =
-    Eithers.bind (Analysis.moduleDependencyNamespaces cx g False True True False mod) (\nss -> Right (Maps.fromList (Lists.map (\ns_ -> (ns_, (slashesToDots (Packaging.unNamespace ns_)))) (Sets.toList nss))))
+    Eithers.bind (Analysis.moduleDependencyNamespaces cx g False True True False mod) (\nss -> Right (Maps.fromList (Lists.map (\ns_ -> (ns_, (slashesToDots (Packaging.unModuleName ns_)))) (Sets.toList nss))))
 -- | Convert a Hydra module to a map of file paths to PDL schema strings
 moduleToPdl :: Packaging.Module -> [Packaging.Definition] -> t0 -> Graph.Graph -> Either Errors.Error (M.Map String String)
 moduleToPdl mod defs cx g =
@@ -191,11 +191,11 @@ noAnnotations =
       Pdl.annotationsDoc = Nothing,
       Pdl.annotationsDeprecated = False}
 -- | Convert a Hydra element name to a PDL qualified name
-pdlNameForElement :: M.Map Packaging.Namespace String -> Bool -> Core.Name -> Pdl.QualifiedName
+pdlNameForElement :: M.Map Packaging.ModuleName String -> Bool -> Core.Name -> Pdl.QualifiedName
 pdlNameForElement aliases withNs name =
 
       let qn = Names.qualifyName name
-          ns_ = Packaging.qualifiedNameNamespace qn
+          ns_ = Packaging.qualifiedNameModuleName qn
           local = Packaging.qualifiedNameLocal qn
           alias = Maybes.bind ns_ (\n -> Maps.lookup n aliases)
       in Pdl.QualifiedName {
@@ -203,7 +203,7 @@ pdlNameForElement aliases withNs name =
         Pdl.qualifiedNameNamespace = (Logic.ifElse withNs (Maybes.map (\a -> Pdl.Namespace a) alias) Nothing)}
 -- | Convert a module's namespace to a PDL namespace
 pdlNameForModule :: Packaging.Module -> Pdl.Namespace
-pdlNameForModule mod = Pdl.Namespace (slashesToDots (Packaging.unNamespace (Packaging.moduleNamespace mod)))
+pdlNameForModule mod = Pdl.Namespace (slashesToDots (Packaging.unModuleName (Packaging.moduleName mod)))
 -- | Create a simple union member without an alias
 simpleUnionMember :: Pdl.Schema -> Pdl.UnionMember
 simpleUnionMember schema =
@@ -222,7 +222,7 @@ toPair mod aliases schemaPair =
           ns_ = pdlNameForModule mod
           local = Pdl.unName (Pdl.qualifiedNameName (Pdl.namedSchemaQualifiedName schema))
           path =
-                  Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "pdl") (Packaging.Namespace (Strings.cat2 (Packaging.unNamespace (Packaging.moduleNamespace mod)) (Strings.cat2 "/" local)))
+                  Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "pdl") (Packaging.ModuleName (Strings.cat2 (Packaging.unModuleName (Packaging.moduleName mod)) (Strings.cat2 "/" local)))
       in (
         path,
         Pdl.SchemaFile {
@@ -231,7 +231,7 @@ toPair mod aliases schemaPair =
           Pdl.schemaFileImports = imports,
           Pdl.schemaFileSchemas = [
             schema]})
-typeToSchema :: t0 -> Graph.Graph -> M.Map Packaging.Namespace String -> t1 -> Packaging.TypeDefinition -> Either Errors.Error (Pdl.NamedSchema, [t2])
+typeToSchema :: t0 -> Graph.Graph -> M.Map Packaging.ModuleName String -> t1 -> Packaging.TypeDefinition -> Either Errors.Error (Pdl.NamedSchema, [t2])
 typeToSchema cx g aliases mod typeDef =
 
       let typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme typeDef)

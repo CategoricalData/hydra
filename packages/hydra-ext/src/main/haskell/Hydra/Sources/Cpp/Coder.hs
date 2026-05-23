@@ -4,6 +4,7 @@ module Hydra.Sources.Cpp.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -59,18 +60,18 @@ def = definitionInModule module_
 emptyList :: TTerm [a]
 emptyList = TTerm $ TermList []
 
-ns :: Namespace
-ns = Namespace "hydra.cpp.coder"
+ns :: ModuleName
+ns = ModuleName "hydra.cpp.coder"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [moduleNamespace CppLanguageSource.module_,
+            moduleDependencies = unqualifiedDep <$> ([moduleName CppLanguageSource.module_,
       CppSerde.ns,
       Formatting.ns, Names.ns, Dependencies.ns, Strip.ns, Environment.ns, Predicates.ns, Resolution.ns, Lexical.ns,
       ShowCore.ns, Annotations.ns, Sorting.ns, SerializationSource.ns,
-      moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_] L.++ (CppSyntax.ns:KernelTypes.kernelTypesNamespaces),
+      moduleName DecodeCore.module_, moduleName EncodeCore.module_] L.++ (CppSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "C++ code generator: converts Hydra modules to C++ header files"}
   where
     definitions = [
@@ -392,13 +393,13 @@ encodeName = def "encodeName" $
     sanitizeCppName @@ (Names.localNameOf @@ var "name")
 
 -- | Encode a namespace as a C++ namespace string (e.g., "hydra.cpp" -> "hydra::ext::cpp")
-encodeNamespace :: TTermDefinition (Namespace -> String)
+encodeNamespace :: TTermDefinition (ModuleName -> String)
 encodeNamespace = def "encodeNamespace" $
   lambda "ns" $
     Strings.intercalate (string "::")
       (Lists.map
         (lambda "seg" $ Formatting.convertCaseCamelToLowerSnake @@ var "seg")
-        (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))))
+        (Strings.splitOn (string ".") (Packaging.unModuleName (var "ns"))))
 
 -- | Encode a field name in lower_snake_case
 encodeFieldName :: TTermDefinition (Name -> String)
@@ -445,16 +446,16 @@ partialVisitorName = def "partialVisitorName" $
     sanitizeCppName @@ ((Names.localNameOf @@ var "name") ++ string "PartialVisitor")
 
 -- | Construct the forward-declaration header name for a namespace
-fwdHeaderName :: TTermDefinition (Namespace -> Name)
+fwdHeaderName :: TTermDefinition (ModuleName -> Name)
 fwdHeaderName = def "fwdHeaderName" $
   lambda "ns" $
     Names.unqualifyName @@
       (record _QualifiedName [
-        _QualifiedName_namespace>>: just (var "ns"),
+        _QualifiedName_moduleName>>: just (var "ns"),
         _QualifiedName_local>>: string "Fwd"])
 
 -- | Create a namespace declaration wrapping declarations
-namespaceDecl :: TTermDefinition (Namespace -> [Cpp.Declaration] -> Cpp.Declaration)
+namespaceDecl :: TTermDefinition (ModuleName -> [Cpp.Declaration] -> Cpp.Declaration)
 namespaceDecl = def "namespaceDecl" $
   lambda "ns" $ lambda "decls" $
     inject Cpp._Declaration Cpp._Declaration_namespace $
@@ -1100,7 +1101,7 @@ bindingNameToFilePath = def "bindingNameToFilePath" $
       @@ var "name"
 
 -- | Find includes for a set of type definitions
-findIncludes :: TTermDefinition (Bool -> Namespace -> [TypeDefinition] -> [Cpp.IncludeDirective])
+findIncludes :: TTermDefinition (Bool -> ModuleName -> [TypeDefinition] -> [Cpp.IncludeDirective])
 findIncludes = def "findIncludes" $
   lambda "withFwd" $ lambda "ns" $ lambda "defs" $
     -- System includes based on metadata, plus domain includes for cross-namespace dependencies
@@ -1127,14 +1128,14 @@ findIncludes = def "findIncludes" $
         (list ([] :: [TTerm Cpp.IncludeDirective]))])
 
 -- | Find type dependencies that are in other namespaces
-findTypeDependencies :: TTermDefinition (Namespace -> [TypeDefinition] -> [Name])
+findTypeDependencies :: TTermDefinition (ModuleName -> [TypeDefinition] -> [Name])
 findTypeDependencies = def "findTypeDependencies" $
   lambda "ns" $ lambda "defs" $
     Lists.filter
       (lambda "n" $
         Logic.not (Equality.equal
-          (Maybes.map (reify Packaging.unNamespace) (Names.namespaceOf @@ var "n"))
-          (just (Packaging.unNamespace (var "ns")))))
+          (Maybes.map (reify Packaging.unModuleName) (Names.namespaceOf @@ var "n"))
+          (just (Packaging.unModuleName (var "ns")))))
       (Sets.toList (Lists.foldl
         (lambda "acc" $ lambda "d" $
           Sets.union (var "acc") (Dependencies.typeDependencyNames @@ boolean True @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "d"))))
@@ -1188,7 +1189,7 @@ isTemplateType = def "isTemplateType" $
 -- ============================================================================
 
 -- | Generate a single type header file
-generateTypeFile :: TTermDefinition (Namespace -> TypeDefinition -> Context -> Graph -> Either Error (FilePath, String))
+generateTypeFile :: TTermDefinition (ModuleName -> TypeDefinition -> Context -> Graph -> Either Error (FilePath, String))
 generateTypeFile = def "generateTypeFile" $
   lambda "ns" $ lambda "def_" $ "cx" ~> lambda "g" $
     "name" <~ Packaging.typeDefinitionName (var "def_") $
@@ -1199,7 +1200,7 @@ generateTypeFile = def "generateTypeFile" $
         @@ list [namespaceDecl @@ var "ns" @@ var "decls"])
 
 -- | Generate all type header files for a module (fwd file + individual class files)
-generateTypeFiles :: TTermDefinition (Namespace -> [TypeDefinition] -> Context -> Graph -> Either Error [(FilePath, String)])
+generateTypeFiles :: TTermDefinition (ModuleName -> [TypeDefinition] -> Context -> Graph -> Either Error [(FilePath, String)])
 generateTypeFiles = def "generateTypeFiles" $
   lambda "ns" $ lambda "defs" $ "cx" ~> lambda "g" $
     "classFiles" <<~ (Eithers.mapList
@@ -1211,7 +1212,7 @@ generateTypeFiles = def "generateTypeFiles" $
 moduleToCpp :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
 moduleToCpp = def "moduleToCpp" $
   lambda "mod" $ lambda "defs" $ "cx" ~> lambda "g" $
-    "ns" <~ Packaging.moduleNamespace (var "mod") $
+    "ns" <~ Packaging.moduleName (var "mod") $
     "typeDefs" <~ Pairs.first (Environment.partitionDefinitions @@ var "defs") $
     "typeFiles" <<~ (generateTypeFiles @@ var "ns" @@ var "typeDefs" @@ var "cx" @@ var "g") $
       right (Maps.fromList (var "typeFiles"))

@@ -57,7 +57,7 @@ namespaces n cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "focus" (ExtractCore.decodePair Packaging.namespace n) fieldMap cx) (\field_focus -> Eithers.bind (ExtractCore.requireField "mapping" (ExtractCore.decodeMap Packaging.namespace n) fieldMap cx) (\field_mapping -> Right (Util.Namespaces {
+        in (Eithers.bind (ExtractCore.requireField "focus" (ExtractCore.decodePair Packaging.moduleName n) fieldMap cx) (\field_focus -> Eithers.bind (ExtractCore.requireField "mapping" (ExtractCore.decodeMap Packaging.moduleName n) fieldMap cx) (\field_mapping -> Right (Util.Namespaces {
           Util.namespacesFocus = field_focus,
           Util.namespacesMapping = field_mapping}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)

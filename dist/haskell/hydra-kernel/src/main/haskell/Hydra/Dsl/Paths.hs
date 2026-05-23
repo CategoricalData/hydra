@@ -28,7 +28,7 @@ subtermEdgePath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-        Core.projectionField = (Core.Name "path")})),
+        Core.projectionFieldName = (Core.Name "path")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the source field of hydra.paths.SubtermEdge
 subtermEdgeSource :: Phantoms.TTerm Paths.SubtermEdge -> Phantoms.TTerm Paths.SubtermNode
@@ -36,7 +36,7 @@ subtermEdgeSource x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-        Core.projectionField = (Core.Name "source")})),
+        Core.projectionFieldName = (Core.Name "source")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the target field of hydra.paths.SubtermEdge
 subtermEdgeTarget :: Phantoms.TTerm Paths.SubtermEdge -> Phantoms.TTerm Paths.SubtermNode
@@ -44,7 +44,7 @@ subtermEdgeTarget x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-        Core.projectionField = (Core.Name "target")})),
+        Core.projectionFieldName = (Core.Name "target")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the path field of hydra.paths.SubtermEdge
 subtermEdgeWithPath :: Phantoms.TTerm Paths.SubtermEdge -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Paths.SubtermEdge
@@ -57,7 +57,7 @@ subtermEdgeWithPath original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "path"),
@@ -67,7 +67,7 @@ subtermEdgeWithPath original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-              Core.projectionField = (Core.Name "target")})),
+              Core.projectionFieldName = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the source field of hydra.paths.SubtermEdge
 subtermEdgeWithSource :: Phantoms.TTerm Paths.SubtermEdge -> Phantoms.TTerm Paths.SubtermNode -> Phantoms.TTerm Paths.SubtermEdge
@@ -83,14 +83,14 @@ subtermEdgeWithSource original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-              Core.projectionField = (Core.Name "path")})),
+              Core.projectionFieldName = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-              Core.projectionField = (Core.Name "target")})),
+              Core.projectionFieldName = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the target field of hydra.paths.SubtermEdge
 subtermEdgeWithTarget :: Phantoms.TTerm Paths.SubtermEdge -> Phantoms.TTerm Paths.SubtermNode -> Phantoms.TTerm Paths.SubtermEdge
@@ -103,14 +103,14 @@ subtermEdgeWithTarget original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-              Core.projectionField = (Core.Name "path")})),
+              Core.projectionFieldName = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "target"),
@@ -133,7 +133,7 @@ subtermGraphEdges x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtermGraph"),
-        Core.projectionField = (Core.Name "edges")})),
+        Core.projectionFieldName = (Core.Name "edges")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the nodes field of hydra.paths.SubtermGraph
 subtermGraphNodes :: Phantoms.TTerm Paths.SubtermGraph -> Phantoms.TTerm [Paths.SubtermNode]
@@ -141,7 +141,7 @@ subtermGraphNodes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtermGraph"),
-        Core.projectionField = (Core.Name "nodes")})),
+        Core.projectionFieldName = (Core.Name "nodes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the edges field of hydra.paths.SubtermGraph
 subtermGraphWithEdges :: Phantoms.TTerm Paths.SubtermGraph -> Phantoms.TTerm [Paths.SubtermEdge] -> Phantoms.TTerm Paths.SubtermGraph
@@ -154,7 +154,7 @@ subtermGraphWithEdges original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermGraph"),
-              Core.projectionField = (Core.Name "nodes")})),
+              Core.projectionFieldName = (Core.Name "nodes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "edges"),
@@ -173,7 +173,7 @@ subtermGraphWithNodes original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermGraph"),
-              Core.projectionField = (Core.Name "edges")})),
+              Core.projectionFieldName = (Core.Name "edges")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.paths.SubtermNode
 subtermNode :: Phantoms.TTerm Core.Name -> Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm Paths.SubtermNode
@@ -196,7 +196,7 @@ subtermNodeId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-        Core.projectionField = (Core.Name "id")})),
+        Core.projectionFieldName = (Core.Name "id")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the label field of hydra.paths.SubtermNode
 subtermNodeLabel :: Phantoms.TTerm Paths.SubtermNode -> Phantoms.TTerm String
@@ -204,7 +204,7 @@ subtermNodeLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-        Core.projectionField = (Core.Name "label")})),
+        Core.projectionFieldName = (Core.Name "label")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.paths.SubtermNode
 subtermNodeName :: Phantoms.TTerm Paths.SubtermNode -> Phantoms.TTerm Core.Name
@@ -212,7 +212,7 @@ subtermNodeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the id field of hydra.paths.SubtermNode
 subtermNodeWithId :: Phantoms.TTerm Paths.SubtermNode -> Phantoms.TTerm String -> Phantoms.TTerm Paths.SubtermNode
@@ -225,14 +225,14 @@ subtermNodeWithId original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
@@ -248,7 +248,7 @@ subtermNodeWithLabel original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
@@ -258,7 +258,7 @@ subtermNodeWithLabel original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-              Core.projectionField = (Core.Name "id")})),
+              Core.projectionFieldName = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.paths.SubtermNode
 subtermNodeWithName :: Phantoms.TTerm Paths.SubtermNode -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Paths.SubtermNode
@@ -274,14 +274,14 @@ subtermNodeWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-              Core.projectionField = (Core.Name "id")})),
+              Core.projectionFieldName = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for the hydra.paths.SubtermPath wrapper
 subtermPath :: Phantoms.TTerm [Paths.SubtermStep] -> Phantoms.TTerm Paths.SubtermPath
@@ -470,7 +470,7 @@ subtypeEdgePath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-        Core.projectionField = (Core.Name "path")})),
+        Core.projectionFieldName = (Core.Name "path")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the source field of hydra.paths.SubtypeEdge
 subtypeEdgeSource :: Phantoms.TTerm Paths.SubtypeEdge -> Phantoms.TTerm Paths.SubtypeNode
@@ -478,7 +478,7 @@ subtypeEdgeSource x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-        Core.projectionField = (Core.Name "source")})),
+        Core.projectionFieldName = (Core.Name "source")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the target field of hydra.paths.SubtypeEdge
 subtypeEdgeTarget :: Phantoms.TTerm Paths.SubtypeEdge -> Phantoms.TTerm Paths.SubtypeNode
@@ -486,7 +486,7 @@ subtypeEdgeTarget x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-        Core.projectionField = (Core.Name "target")})),
+        Core.projectionFieldName = (Core.Name "target")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the path field of hydra.paths.SubtypeEdge
 subtypeEdgeWithPath :: Phantoms.TTerm Paths.SubtypeEdge -> Phantoms.TTerm Paths.SubtypePath -> Phantoms.TTerm Paths.SubtypeEdge
@@ -499,7 +499,7 @@ subtypeEdgeWithPath original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "path"),
@@ -509,7 +509,7 @@ subtypeEdgeWithPath original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-              Core.projectionField = (Core.Name "target")})),
+              Core.projectionFieldName = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the source field of hydra.paths.SubtypeEdge
 subtypeEdgeWithSource :: Phantoms.TTerm Paths.SubtypeEdge -> Phantoms.TTerm Paths.SubtypeNode -> Phantoms.TTerm Paths.SubtypeEdge
@@ -525,14 +525,14 @@ subtypeEdgeWithSource original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-              Core.projectionField = (Core.Name "path")})),
+              Core.projectionFieldName = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-              Core.projectionField = (Core.Name "target")})),
+              Core.projectionFieldName = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the target field of hydra.paths.SubtypeEdge
 subtypeEdgeWithTarget :: Phantoms.TTerm Paths.SubtypeEdge -> Phantoms.TTerm Paths.SubtypeNode -> Phantoms.TTerm Paths.SubtypeEdge
@@ -545,14 +545,14 @@ subtypeEdgeWithTarget original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-              Core.projectionField = (Core.Name "path")})),
+              Core.projectionFieldName = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "target"),
@@ -575,7 +575,7 @@ subtypeGraphEdges x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeGraph"),
-        Core.projectionField = (Core.Name "edges")})),
+        Core.projectionFieldName = (Core.Name "edges")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the nodes field of hydra.paths.SubtypeGraph
 subtypeGraphNodes :: Phantoms.TTerm Paths.SubtypeGraph -> Phantoms.TTerm [Paths.SubtypeNode]
@@ -583,7 +583,7 @@ subtypeGraphNodes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeGraph"),
-        Core.projectionField = (Core.Name "nodes")})),
+        Core.projectionFieldName = (Core.Name "nodes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the edges field of hydra.paths.SubtypeGraph
 subtypeGraphWithEdges :: Phantoms.TTerm Paths.SubtypeGraph -> Phantoms.TTerm [Paths.SubtypeEdge] -> Phantoms.TTerm Paths.SubtypeGraph
@@ -596,7 +596,7 @@ subtypeGraphWithEdges original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeGraph"),
-              Core.projectionField = (Core.Name "nodes")})),
+              Core.projectionFieldName = (Core.Name "nodes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "edges"),
@@ -615,7 +615,7 @@ subtypeGraphWithNodes original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeGraph"),
-              Core.projectionField = (Core.Name "edges")})),
+              Core.projectionFieldName = (Core.Name "edges")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.paths.SubtypeNode
 subtypeNode :: Phantoms.TTerm Core.Name -> Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm Paths.SubtypeNode
@@ -638,7 +638,7 @@ subtypeNodeId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-        Core.projectionField = (Core.Name "id")})),
+        Core.projectionFieldName = (Core.Name "id")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the label field of hydra.paths.SubtypeNode
 subtypeNodeLabel :: Phantoms.TTerm Paths.SubtypeNode -> Phantoms.TTerm String
@@ -646,7 +646,7 @@ subtypeNodeLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-        Core.projectionField = (Core.Name "label")})),
+        Core.projectionFieldName = (Core.Name "label")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.paths.SubtypeNode
 subtypeNodeName :: Phantoms.TTerm Paths.SubtypeNode -> Phantoms.TTerm Core.Name
@@ -654,7 +654,7 @@ subtypeNodeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the id field of hydra.paths.SubtypeNode
 subtypeNodeWithId :: Phantoms.TTerm Paths.SubtypeNode -> Phantoms.TTerm String -> Phantoms.TTerm Paths.SubtypeNode
@@ -667,14 +667,14 @@ subtypeNodeWithId original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
@@ -690,7 +690,7 @@ subtypeNodeWithLabel original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
@@ -700,7 +700,7 @@ subtypeNodeWithLabel original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-              Core.projectionField = (Core.Name "id")})),
+              Core.projectionFieldName = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.paths.SubtypeNode
 subtypeNodeWithName :: Phantoms.TTerm Paths.SubtypeNode -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Paths.SubtypeNode
@@ -716,14 +716,14 @@ subtypeNodeWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-              Core.projectionField = (Core.Name "id")})),
+              Core.projectionFieldName = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for the hydra.paths.SubtypePath wrapper
 subtypePath :: Phantoms.TTerm [Paths.SubtypeStep] -> Phantoms.TTerm Paths.SubtypePath

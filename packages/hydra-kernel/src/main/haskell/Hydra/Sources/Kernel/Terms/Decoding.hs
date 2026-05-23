@@ -71,14 +71,14 @@ import qualified Hydra.Dsl.Meta.DeepCore as DeepCore
 import           Hydra.Dsl.Meta.DeepCore ((@@@))
 
 
-ns :: Namespace
-ns = Namespace "hydra.decoding"
+ns :: ModuleName
+ns = ModuleName "hydra.decoding"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Annotations.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, ShowCore.ns, Namespace "hydra.constants", Namespace "hydra.decode.core", Namespace "hydra.encode.core"] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, ShowCore.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "Functions for generating term decoders from type modules"}
   where
     definitions = [
@@ -485,33 +485,23 @@ decodeModule = define "decodeModule" $
           (decodeBinding @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
         -- Decoder modules need:
         -- 1. hydra.extract.core, hydra.lexical, hydra.rewriting (for decoding utilities)
-        -- 2. The kernel baseline (hydra.core, hydra.errors, hydra.graph): decoder
-        --    bodies build Core.Bindings, raise Errors.DecodingError, and accept a
-        --    Graph.Graph argument.
-        -- 3. The original module's namespace (the schema being decoded) and hydra.util.
-        -- 4. The original module's declared dependencies, BOTH verbatim AND
-        --    decoded-namespace-prefixed: verbatim because decoder bodies reference
-        --    constructors of the dep types when pattern-matching encoded terms;
-        --    prefixed because if type A references type B, the decoder for A
-        --    calls the decoder for B.
-        "originalDeps" <~ Packaging.moduleDependencies (var "mod") $
-        "allDecodedDeps" <~ (primitive _lists_nub @@ (Lists.map decodeNamespace (var "originalDeps"))) $
+        -- 2. Decoded versions of source dependencies (e.g., hydra.core -> hydra.decode.core).
+        --    If type A references type B, the decoder for A needs to call the decoder for B.
+        -- 3. The original module's namespace (the schema being decoded) and hydra.util
+        "allDecodedDeps" <~ (primitive _lists_nub @@ (Lists.map decodeNamespace (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))) $
         right (just (Packaging.module_
           (just (Strings.cat $ list [
             string "Term decoders for ",
-            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))]))
-          (decodeNamespace @@ (Packaging.moduleNamespace (var "mod")))
-          (Lists.concat2
+            Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
+          (decodeNamespace @@ (Packaging.moduleName (var "mod")))
+          (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.concat2
             (list [
-              (Packaging.namespace $ string "hydra.extract.core"),
-              (Packaging.namespace $ string "hydra.lexical"),
-              (Packaging.namespace $ string "hydra.rewriting"),
-              (Packaging.namespace $ string "hydra.core"),
-              (Packaging.namespace $ string "hydra.errors"),
-              (Packaging.namespace $ string "hydra.graph"),
-              Packaging.moduleNamespace (var "mod"),
-              Packaging.namespace $ string "hydra.util"])
-            (Lists.concat2 (var "originalDeps") (var "allDecodedDeps")))
+              (Packaging.moduleName2 $ string "hydra.extract.core"),
+              (Packaging.moduleName2 $ string "hydra.lexical"),
+              (Packaging.moduleName2 $ string "hydra.rewriting"),
+              Packaging.moduleName (var "mod"),
+              Packaging.moduleName2 $ string "hydra.util"])
+            (var "allDecodedDeps")))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
             (Core.bindingTypeScheme $ var "b")))
@@ -521,16 +511,16 @@ decodeModule = define "decodeModule" $
 -- For example, "hydra.util" -> "hydra.decode.util"
 -- | Generate a decoder module namespace from a source module namespace
 -- For example, "hydra.util" -> "hydra.decode.util"
-decodeNamespace :: TTermDefinition (Namespace -> Namespace)
+decodeNamespace :: TTermDefinition (ModuleName -> ModuleName)
 decodeNamespace = define "decodeNamespace" $
   doc "Generate a decoder module namespace from a source module namespace" $
   "ns" ~>
-  "parts" <~ Strings.splitOn (string ".") (Packaging.unNamespace (var "ns")) $
-  "fallback" <~ Packaging.namespace (Packaging.unNamespace (var "ns")) $
+  "parts" <~ Strings.splitOn (string ".") (Packaging.unModuleName (var "ns")) $
+  "fallback" <~ Packaging.moduleName2 (Packaging.unModuleName (var "ns")) $
   Maybes.maybe
     (var "fallback")
     ("uc" ~>
-      Packaging.namespace (
+      Packaging.moduleName2 (
         Strings.cat $ list [
           string "hydra.decode.",
           Strings.intercalate (string ".") (Pairs.second $ var "uc")]))

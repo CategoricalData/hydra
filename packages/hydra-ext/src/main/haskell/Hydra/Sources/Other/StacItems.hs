@@ -17,8 +17,8 @@ import qualified Hydra.Sources.Other.GeoJson       as GeoJson
 import qualified Hydra.Sources.Other.IanaRelations as IanaRelations
 
 
-ns :: Namespace
-ns = Namespace "hydra.stac.items"
+ns :: ModuleName
+ns = ModuleName "hydra.stac.items"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -34,9 +34,9 @@ stac = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [GeoJson.ns, IanaRelations.ns, Core.ns],
+            moduleDependencies = unqualifiedDep <$> [GeoJson.ns, IanaRelations.ns, Core.ns],
             moduleDescription = Just ("A model for SpatioTemporal Asset Catalog (STAC) Items. " ++
           "See https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md")}
   where

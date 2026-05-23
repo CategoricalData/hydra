@@ -650,9 +650,9 @@ import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
 
--- Define a namespace-scoped 'define' helper
-ns :: Namespace
-ns = Namespace "myapp.types"
+-- Define a module-scoped 'define' helper
+ns :: ModuleName
+ns = ModuleName "myapp.types"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -702,9 +702,13 @@ greet = lambda "person" $
 
 ```haskell
 module_ :: Module
-module_ = Module ns definitions [] [] (Just "My application module")
+module_ = Module {
+    moduleName = ns,
+    moduleDefinitions = definitions,
+    moduleDependencies = [],
+    moduleDescription = Just "My application module"}
   where
-    ns = Namespace "myapp"
+    ns = ModuleName "myapp"
     definitions = [
       toDefinition $ def "addOne" $
         doc "Adds one to a number" $
@@ -1350,9 +1354,13 @@ Create Hydra modules:
 
 ```haskell
 myModule :: Module
-myModule = Module ns definitions [mathNs] [coreNs] (Just "Utility functions")
+myModule = Module {
+    moduleName = ns,
+    moduleDefinitions = definitions,
+    moduleDependencies = unqualifiedDep <$> [mathNs, coreNs],
+    moduleDescription = Just "Utility functions"}
   where
-    ns = Namespace "myapp.utils"
+    ns = ModuleName "myapp.utils"
     definitions = [
       toDefinition $ def "addOne" $ lambda "x" (Math.add (var "x") (int32 1)),
       toDefinition $ def "double" $ lambda "x" (Math.mul (var "x") (int32 2))]
@@ -1372,9 +1380,13 @@ Example:
 ```haskell
 -- In Hydra/Sources/MyApp/Types.hs
 module_ :: Module
-module_ = Module ns definitions [] [] (Just "User-defined types")
+module_ = Module {
+    moduleName = ns,
+    moduleDefinitions = definitions,
+    moduleDependencies = [],
+    moduleDescription = Just "User-defined types"}
   where
-    ns = Namespace "myapp.types"
+    ns = ModuleName "myapp.types"
     definitions = [
       toDefinition $ def "Person" $ record [
         "name">: string,

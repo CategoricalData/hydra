@@ -93,22 +93,22 @@ import qualified Hydra.Sources.Json.Schema.Serde as JsonSchemaSerde
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-jsonSchemaPhantomNs :: Namespace
-jsonSchemaPhantomNs = Namespace "hydra.json.schema"
+jsonSchemaPhantomNs :: ModuleName
+jsonSchemaPhantomNs = ModuleName "hydra.json.schema"
 
-jsonModelNs :: Namespace
-jsonModelNs = Namespace "hydra.json.model"
+jsonModelNs :: ModuleName
+jsonModelNs = ModuleName "hydra.json.model"
 
-ns :: Namespace
-ns = Namespace "hydra.json.schema.coder"
+ns :: ModuleName
+ns = ModuleName "hydra.json.schema.coder"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Annotations.ns, Constants.ns, Dependencies.ns, Environment.ns,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Constants.ns, Dependencies.ns, Environment.ns,
               Formatting.ns, Names.ns, Predicates.ns, Reflect.ns,
-              ShowVariants.ns, Strip.ns, Variables.ns, JsonSchemaSerde.ns] L.++ (moduleNamespace JsonSchema.module_:jsonModelNs:KernelTypes.kernelTypesNamespaces),
+              ShowVariants.ns, Strip.ns, Variables.ns, JsonSchemaSerde.ns] L.++ (moduleName JsonSchema.module_:jsonModelNs:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "JSON Schema code generator: converts Hydra modules to JSON Schema documents"}
   where
     definitions = [
@@ -295,15 +295,15 @@ nameToPath = define "nameToPath" $
   doc "Compute the JSON Schema output file path for a named type" $
   lambda "name" $ lets [
     "qn">: Names.qualifyName @@ var "name",
-    "mns">: Packaging.qualifiedNameNamespace (var "qn"),
+    "mns">: Packaging.qualifiedNameModuleName (var "qn"),
     "local">: Packaging.qualifiedNameLocal (var "qn"),
     "nsPart">: Maybes.maybe (string "")
-      ("ns" ~> Strings.cat2 (Packaging.unNamespace (var "ns")) (string "."))
+      ("ns" ~> Strings.cat2 (Packaging.unModuleName (var "ns")) (string "."))
       (var "mns")] $
     Names.namespaceToFilePath
       @@ Util.caseConventionCamel
       @@ wrap _FileExtension (string "json")
-      @@ wrap _Namespace (Strings.cat2 (var "nsPart") (var "local"))
+      @@ wrap _ModuleName (Strings.cat2 (var "nsPart") (var "local"))
 
 pairRestrictions :: TTermDefinition (Bool -> [JS.Restriction] -> [JS.Restriction] -> [JS.Restriction])
 pairRestrictions = define "pairRestrictions" $

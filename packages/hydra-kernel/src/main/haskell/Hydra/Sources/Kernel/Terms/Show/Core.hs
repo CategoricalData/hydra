@@ -54,14 +54,14 @@ import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.show.core"
+ns :: ModuleName
+ns = ModuleName "hydra.show.core"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
             moduleDescription = Just "String representations of hydra.core types"}
   where
    definitions = [
@@ -318,7 +318,7 @@ projection = define "projection" $
   doc "Show a projection as a string" $
   "proj" ~>
   "tname" <~ unwrap _Name @@ (Core.projectionTypeName $ var "proj") $
-  "fname" <~ unwrap _Name @@ (Core.projectionField $ var "proj") $
+  "fname" <~ unwrap _Name @@ (Core.projectionFieldName $ var "proj") $
   Strings.cat $ list [
     string "project(",
     var "tname",

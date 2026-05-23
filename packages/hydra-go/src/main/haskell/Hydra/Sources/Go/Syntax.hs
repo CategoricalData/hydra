@@ -13,8 +13,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.go.syntax"
+ns :: ModuleName
+ns = ModuleName "hydra.go.syntax"
 
 define :: String -> Type -> Binding
 define = datatype ns
@@ -24,9 +24,9 @@ go = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A Go syntax model, based on the Go Language Specification retrieved on 2025-02-05"
       ++ " from https://go.dev/ref/spec")}
   where

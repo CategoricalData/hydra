@@ -68,17 +68,17 @@ import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 
 
-ns :: Namespace
-ns = Namespace "hydra.hoisting"
+ns :: ModuleName
+ns = ModuleName "hydra.hoisting"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Lexical.ns, Rewriting.ns, Environment.ns, Resolution.ns, Scoping.ns, Sorting.ns, Strip.ns, Substitution.ns, Variables.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, Rewriting.ns, Environment.ns, Resolution.ns, Scoping.ns, Sorting.ns, Strip.ns, Substitution.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "Functions for deep term rewriting operations involving hoisting subterms or bindings into enclosing let terms."}
   where
    definitions = [

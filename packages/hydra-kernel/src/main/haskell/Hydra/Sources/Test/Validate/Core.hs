@@ -4,6 +4,7 @@ module Hydra.Sources.Test.Validate.Core where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -23,14 +24,14 @@ import Hydra.Testing
 import Hydra.Sources.Libraries
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.validate.core"
+ns :: ModuleName
+ns = ModuleName "hydra.test.validate.core"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Namespace "hydra.validate.core", Namespace "hydra.show.error.core", Namespace "hydra.test.testGraph"] ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.validate.core", ModuleName "hydra.show.error.core", ModuleName "hydra.test.testGraph"] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for core term and type validation")}
   where
     definitions = [

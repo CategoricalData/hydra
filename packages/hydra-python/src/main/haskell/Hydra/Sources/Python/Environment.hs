@@ -18,8 +18,8 @@ import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 import qualified Hydra.Sources.Python.Syntax as Syntax
 
 
-ns :: Namespace
-ns = Namespace "hydra.python.environment"
+ns :: ModuleName
+ns = ModuleName "hydra.python.environment"
 
 def :: String -> Type -> Binding
 def = datatype ns
@@ -47,9 +47,9 @@ typing = typeref Typing.ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Syntax.ns, Util.ns, Core.ns, Graph.ns, Module.ns, Typing.ns],
+            moduleDependencies = unqualifiedDep <$> [Syntax.ns, Util.ns, Core.ns, Graph.ns, Module.ns, Typing.ns],
             moduleDescription = Just "Environment types for Python code generation"}
   where
     definitions = [
@@ -72,7 +72,7 @@ pythonEnvironment = def "PythonEnvironment" $
   doc "Environment for Python code generation" $
   T.record [
     "namespaces">:
-      doc "Namespace mapping for imports" $
+      doc "ModuleName mapping for imports" $
       util "Namespaces" @@ syntax "DottedName",
     "boundTypeVariables">:
       doc "Type variables in scope, with their Python names" $
@@ -99,7 +99,7 @@ pythonModuleMetadata = def "PythonModuleMetadata" $
   doc "Temporary metadata used to create the header section of a Python file" $
   T.record [
     "namespaces">:
-      doc "Namespace mapping for imports" $
+      doc "ModuleName mapping for imports" $
       util "Namespaces" @@ syntax "DottedName",
     "typeVariables">:
       doc "Type variables used in the module" $

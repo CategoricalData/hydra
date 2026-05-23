@@ -39,7 +39,7 @@ descriptionGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Description"),
-        Core.projectionField = (Core.Name "graph")})),
+        Core.projectionFieldName = (Core.Name "graph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the subject field of hydra.rdf.syntax.Description
 descriptionSubject :: Phantoms.TTerm Syntax.Description -> Phantoms.TTerm Syntax.Node
@@ -47,7 +47,7 @@ descriptionSubject x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Description"),
-        Core.projectionField = (Core.Name "subject")})),
+        Core.projectionFieldName = (Core.Name "subject")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the graph field of hydra.rdf.syntax.Description
 descriptionWithGraph :: Phantoms.TTerm Syntax.Description -> Phantoms.TTerm Syntax.Graph -> Phantoms.TTerm Syntax.Description
@@ -60,7 +60,7 @@ descriptionWithGraph original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Description"),
-              Core.projectionField = (Core.Name "subject")})),
+              Core.projectionFieldName = (Core.Name "subject")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
@@ -79,7 +79,7 @@ descriptionWithSubject original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Description"),
-              Core.projectionField = (Core.Name "graph")})),
+              Core.projectionFieldName = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for the hydra.rdf.syntax.Graph wrapper
 graph :: Phantoms.TTerm (S.Set Syntax.Triple) -> Phantoms.TTerm Syntax.Graph
@@ -142,7 +142,7 @@ literalDatatypeIri x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Literal"),
-        Core.projectionField = (Core.Name "datatypeIri")})),
+        Core.projectionFieldName = (Core.Name "datatypeIri")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the languageTag field of hydra.rdf.syntax.Literal
 literalLanguageTag :: Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm (Maybe Syntax.LanguageTag)
@@ -150,7 +150,7 @@ literalLanguageTag x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Literal"),
-        Core.projectionField = (Core.Name "languageTag")})),
+        Core.projectionFieldName = (Core.Name "languageTag")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the lexicalForm field of hydra.rdf.syntax.Literal
 literalLexicalForm :: Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm String
@@ -158,7 +158,7 @@ literalLexicalForm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Literal"),
-        Core.projectionField = (Core.Name "lexicalForm")})),
+        Core.projectionFieldName = (Core.Name "lexicalForm")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the datatypeIri field of hydra.rdf.syntax.Literal
 literalWithDatatypeIri :: Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm Syntax.Iri -> Phantoms.TTerm Syntax.Literal
@@ -171,7 +171,7 @@ literalWithDatatypeIri original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Literal"),
-              Core.projectionField = (Core.Name "lexicalForm")})),
+              Core.projectionFieldName = (Core.Name "lexicalForm")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "datatypeIri"),
@@ -181,7 +181,7 @@ literalWithDatatypeIri original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Literal"),
-              Core.projectionField = (Core.Name "languageTag")})),
+              Core.projectionFieldName = (Core.Name "languageTag")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the languageTag field of hydra.rdf.syntax.Literal
 literalWithLanguageTag :: Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm (Maybe Syntax.LanguageTag) -> Phantoms.TTerm Syntax.Literal
@@ -194,14 +194,14 @@ literalWithLanguageTag original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Literal"),
-              Core.projectionField = (Core.Name "lexicalForm")})),
+              Core.projectionFieldName = (Core.Name "lexicalForm")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "datatypeIri"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Literal"),
-              Core.projectionField = (Core.Name "datatypeIri")})),
+              Core.projectionFieldName = (Core.Name "datatypeIri")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "languageTag"),
@@ -220,14 +220,14 @@ literalWithLexicalForm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Literal"),
-              Core.projectionField = (Core.Name "datatypeIri")})),
+              Core.projectionFieldName = (Core.Name "datatypeIri")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "languageTag"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Literal"),
-              Core.projectionField = (Core.Name "languageTag")})),
+              Core.projectionFieldName = (Core.Name "languageTag")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL injection for the bnode variant of hydra.rdf.syntax.Node
 nodeBnode :: Phantoms.TTerm Syntax.BlankNode -> Phantoms.TTerm Syntax.Node
@@ -274,7 +274,7 @@ propertyDomain x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Property"),
-        Core.projectionField = (Core.Name "domain")})),
+        Core.projectionFieldName = (Core.Name "domain")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the range field of hydra.rdf.syntax.Property
 propertyRange :: Phantoms.TTerm Syntax.Property -> Phantoms.TTerm (S.Set Syntax.RdfsClass)
@@ -282,7 +282,7 @@ propertyRange x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Property"),
-        Core.projectionField = (Core.Name "range")})),
+        Core.projectionFieldName = (Core.Name "range")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the subPropertyOf field of hydra.rdf.syntax.Property
 propertySubPropertyOf :: Phantoms.TTerm Syntax.Property -> Phantoms.TTerm (S.Set Syntax.Property)
@@ -290,7 +290,7 @@ propertySubPropertyOf x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Property"),
-        Core.projectionField = (Core.Name "subPropertyOf")})),
+        Core.projectionFieldName = (Core.Name "subPropertyOf")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the domain field of hydra.rdf.syntax.Property
 propertyWithDomain :: Phantoms.TTerm Syntax.Property -> Phantoms.TTerm (S.Set Syntax.RdfsClass) -> Phantoms.TTerm Syntax.Property
@@ -306,14 +306,14 @@ propertyWithDomain original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Property"),
-              Core.projectionField = (Core.Name "range")})),
+              Core.projectionFieldName = (Core.Name "range")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "subPropertyOf"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Property"),
-              Core.projectionField = (Core.Name "subPropertyOf")})),
+              Core.projectionFieldName = (Core.Name "subPropertyOf")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the range field of hydra.rdf.syntax.Property
 propertyWithRange :: Phantoms.TTerm Syntax.Property -> Phantoms.TTerm (S.Set Syntax.RdfsClass) -> Phantoms.TTerm Syntax.Property
@@ -326,7 +326,7 @@ propertyWithRange original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Property"),
-              Core.projectionField = (Core.Name "domain")})),
+              Core.projectionFieldName = (Core.Name "domain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "range"),
@@ -336,7 +336,7 @@ propertyWithRange original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Property"),
-              Core.projectionField = (Core.Name "subPropertyOf")})),
+              Core.projectionFieldName = (Core.Name "subPropertyOf")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the subPropertyOf field of hydra.rdf.syntax.Property
 propertyWithSubPropertyOf :: Phantoms.TTerm Syntax.Property -> Phantoms.TTerm (S.Set Syntax.Property) -> Phantoms.TTerm Syntax.Property
@@ -349,14 +349,14 @@ propertyWithSubPropertyOf original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Property"),
-              Core.projectionField = (Core.Name "domain")})),
+              Core.projectionFieldName = (Core.Name "domain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Property"),
-              Core.projectionField = (Core.Name "range")})),
+              Core.projectionFieldName = (Core.Name "range")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "subPropertyOf"),
@@ -385,7 +385,7 @@ quadGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Quad"),
-        Core.projectionField = (Core.Name "graph")})),
+        Core.projectionFieldName = (Core.Name "graph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the object field of hydra.rdf.syntax.Quad
 quadObject :: Phantoms.TTerm Syntax.Quad -> Phantoms.TTerm Syntax.Node
@@ -393,7 +393,7 @@ quadObject x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Quad"),
-        Core.projectionField = (Core.Name "object")})),
+        Core.projectionFieldName = (Core.Name "object")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the predicate field of hydra.rdf.syntax.Quad
 quadPredicate :: Phantoms.TTerm Syntax.Quad -> Phantoms.TTerm Syntax.Iri
@@ -401,7 +401,7 @@ quadPredicate x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Quad"),
-        Core.projectionField = (Core.Name "predicate")})),
+        Core.projectionFieldName = (Core.Name "predicate")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the subject field of hydra.rdf.syntax.Quad
 quadSubject :: Phantoms.TTerm Syntax.Quad -> Phantoms.TTerm Syntax.Resource
@@ -409,7 +409,7 @@ quadSubject x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Quad"),
-        Core.projectionField = (Core.Name "subject")})),
+        Core.projectionFieldName = (Core.Name "subject")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the graph field of hydra.rdf.syntax.Quad
 quadWithGraph :: Phantoms.TTerm Syntax.Quad -> Phantoms.TTerm (Maybe Syntax.Iri) -> Phantoms.TTerm Syntax.Quad
@@ -422,21 +422,21 @@ quadWithGraph original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Quad"),
-              Core.projectionField = (Core.Name "subject")})),
+              Core.projectionFieldName = (Core.Name "subject")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Quad"),
-              Core.projectionField = (Core.Name "predicate")})),
+              Core.projectionFieldName = (Core.Name "predicate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "object"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Quad"),
-              Core.projectionField = (Core.Name "object")})),
+              Core.projectionFieldName = (Core.Name "object")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
@@ -452,14 +452,14 @@ quadWithObject original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Quad"),
-              Core.projectionField = (Core.Name "subject")})),
+              Core.projectionFieldName = (Core.Name "subject")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Quad"),
-              Core.projectionField = (Core.Name "predicate")})),
+              Core.projectionFieldName = (Core.Name "predicate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "object"),
@@ -469,7 +469,7 @@ quadWithObject original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Quad"),
-              Core.projectionField = (Core.Name "graph")})),
+              Core.projectionFieldName = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the predicate field of hydra.rdf.syntax.Quad
 quadWithPredicate :: Phantoms.TTerm Syntax.Quad -> Phantoms.TTerm Syntax.Iri -> Phantoms.TTerm Syntax.Quad
@@ -482,7 +482,7 @@ quadWithPredicate original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Quad"),
-              Core.projectionField = (Core.Name "subject")})),
+              Core.projectionFieldName = (Core.Name "subject")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
@@ -492,14 +492,14 @@ quadWithPredicate original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Quad"),
-              Core.projectionField = (Core.Name "object")})),
+              Core.projectionFieldName = (Core.Name "object")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Quad"),
-              Core.projectionField = (Core.Name "graph")})),
+              Core.projectionFieldName = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the subject field of hydra.rdf.syntax.Quad
 quadWithSubject :: Phantoms.TTerm Syntax.Quad -> Phantoms.TTerm Syntax.Resource -> Phantoms.TTerm Syntax.Quad
@@ -515,21 +515,21 @@ quadWithSubject original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Quad"),
-              Core.projectionField = (Core.Name "predicate")})),
+              Core.projectionFieldName = (Core.Name "predicate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "object"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Quad"),
-              Core.projectionField = (Core.Name "object")})),
+              Core.projectionFieldName = (Core.Name "object")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Quad"),
-              Core.projectionField = (Core.Name "graph")})),
+              Core.projectionFieldName = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for the hydra.rdf.syntax.RdfsClass wrapper
 rdfsClass :: Phantoms.TTerm () -> Phantoms.TTerm Syntax.RdfsClass
@@ -574,7 +574,7 @@ tripleObject x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Triple"),
-        Core.projectionField = (Core.Name "object")})),
+        Core.projectionFieldName = (Core.Name "object")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the predicate field of hydra.rdf.syntax.Triple
 triplePredicate :: Phantoms.TTerm Syntax.Triple -> Phantoms.TTerm Syntax.Iri
@@ -582,7 +582,7 @@ triplePredicate x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Triple"),
-        Core.projectionField = (Core.Name "predicate")})),
+        Core.projectionFieldName = (Core.Name "predicate")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the subject field of hydra.rdf.syntax.Triple
 tripleSubject :: Phantoms.TTerm Syntax.Triple -> Phantoms.TTerm Syntax.Resource
@@ -590,7 +590,7 @@ tripleSubject x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Triple"),
-        Core.projectionField = (Core.Name "subject")})),
+        Core.projectionFieldName = (Core.Name "subject")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the object field of hydra.rdf.syntax.Triple
 tripleWithObject :: Phantoms.TTerm Syntax.Triple -> Phantoms.TTerm Syntax.Node -> Phantoms.TTerm Syntax.Triple
@@ -603,14 +603,14 @@ tripleWithObject original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Triple"),
-              Core.projectionField = (Core.Name "subject")})),
+              Core.projectionFieldName = (Core.Name "subject")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Triple"),
-              Core.projectionField = (Core.Name "predicate")})),
+              Core.projectionFieldName = (Core.Name "predicate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "object"),
@@ -626,7 +626,7 @@ tripleWithPredicate original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Triple"),
-              Core.projectionField = (Core.Name "subject")})),
+              Core.projectionFieldName = (Core.Name "subject")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
@@ -636,7 +636,7 @@ tripleWithPredicate original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Triple"),
-              Core.projectionField = (Core.Name "object")})),
+              Core.projectionFieldName = (Core.Name "object")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the subject field of hydra.rdf.syntax.Triple
 tripleWithSubject :: Phantoms.TTerm Syntax.Triple -> Phantoms.TTerm Syntax.Resource -> Phantoms.TTerm Syntax.Triple
@@ -652,14 +652,14 @@ tripleWithSubject original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Triple"),
-              Core.projectionField = (Core.Name "predicate")})),
+              Core.projectionFieldName = (Core.Name "predicate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "object"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rdf.syntax.Triple"),
-              Core.projectionField = (Core.Name "object")})),
+              Core.projectionFieldName = (Core.Name "object")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL accessor for the body of hydra.rdf.syntax.BlankNode
 unBlankNode :: Phantoms.TTerm Syntax.BlankNode -> Phantoms.TTerm String

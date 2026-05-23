@@ -40,7 +40,7 @@ addNamespacesToNamespaces ns0 names =
 
       let newNamespaces = Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList names)))
           toModuleName =
-                  \namespace -> Syntax.ModuleName (Formatting.capitalize (Maybes.fromMaybe (Packaging.unNamespace namespace) (Lists.maybeLast (Strings.splitOn "." (Packaging.unNamespace namespace)))))
+                  \namespace -> Syntax.ModuleName (Formatting.capitalize (Maybes.fromMaybe (Packaging.unModuleName namespace) (Lists.maybeLast (Strings.splitOn "." (Packaging.unModuleName namespace)))))
           newMappings = Maps.fromList (Lists.map (\ns_ -> (ns_, (toModuleName ns_))) (Sets.toList newNamespaces))
       in Util.Namespaces {
         Util.namespacesFocus = (Util.namespacesFocus ns0),
@@ -59,7 +59,7 @@ buildNamespacesForTestGroup mod tgroup graph_ =
           tempModule =
                   Packaging.Module {
                     Packaging.moduleDescription = (Packaging.moduleDescription mod),
-                    Packaging.moduleNamespace = (Packaging.moduleNamespace mod),
+                    Packaging.moduleName = (Packaging.moduleName mod),
                     Packaging.moduleDependencies = (Packaging.moduleDependencies mod),
                     Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
                       Packaging.termDefinitionName = (Core.bindingName b),
@@ -72,8 +72,8 @@ buildNamespacesForTestGroup mod tgroup graph_ =
 buildTestModule :: Packaging.Module -> Testing.TestGroup -> String -> Util.Namespaces Syntax.ModuleName -> String
 buildTestModule testModule testGroup testBody namespaces =
 
-      let ns_ = Packaging.moduleNamespace testModule
-          specNs = Packaging.Namespace (Strings.cat2 (Packaging.unNamespace ns_) "Spec")
+      let ns_ = Packaging.moduleName testModule
+          specNs = Packaging.ModuleName (Strings.cat2 (Packaging.unModuleName ns_) "Spec")
           moduleNameString = namespaceToModuleName specNs
           groupName_ = Testing.testGroupName testGroup
           domainImports = findHaskellImports namespaces Sets.empty
@@ -132,10 +132,10 @@ findHaskellImports namespaces names_ =
 
       let mapping_ = Util.namespacesMapping namespaces
           filtered =
-                  Maps.filterWithKey (\ns_ -> \_v -> Logic.not (Equality.equal (Maybes.fromMaybe "" (Lists.maybeHead (Strings.splitOn "hydra.test." (Packaging.unNamespace ns_)))) "")) mapping_
+                  Maps.filterWithKey (\ns_ -> \_v -> Logic.not (Equality.equal (Maybes.fromMaybe "" (Lists.maybeHead (Strings.splitOn "hydra.test." (Packaging.unModuleName ns_)))) "")) mapping_
       in (Lists.map (\entry -> Strings.cat [
         "import qualified ",
-        (Strings.intercalate "." (Lists.map Formatting.capitalize (Strings.splitOn "." (Packaging.unNamespace (Pairs.first entry))))),
+        (Strings.intercalate "." (Lists.map Formatting.capitalize (Strings.splitOn "." (Packaging.unModuleName (Pairs.first entry))))),
         " as ",
         (Syntax.unModuleName (Pairs.second entry))]) (Maps.toList filtered))
 -- | Generate a Haskell test file for a test group, with type inference and namespace building
@@ -171,8 +171,8 @@ generateTestFile :: Packaging.Module -> Testing.TestGroup -> Util.Namespaces Syn
 generateTestFile testModule testGroup namespaces =
     Eithers.map (\testBody ->
       let testModuleContent = buildTestModule testModule testGroup testBody namespaces
-          ns_ = Packaging.moduleNamespace testModule
-          specNs = Packaging.Namespace (Strings.cat2 (Packaging.unNamespace ns_) "Spec")
+          ns_ = Packaging.moduleName testModule
+          specNs = Packaging.ModuleName (Strings.cat2 (Packaging.unModuleName ns_) "Spec")
           filePath = Names.namespaceToFilePath Util.CaseConventionPascal (Packaging.FileExtension "hs") specNs
       in (filePath, testModuleContent)) (generateTestGroupHierarchy 1 testGroup)
 -- | Generate test hierarchy preserving the structure with H.describe blocks for subgroups
@@ -197,6 +197,6 @@ generateTestGroupHierarchy depth testGroup =
             " $ do\n",
             content]) (generateTestGroupHierarchy (Math.add depth 1) subgroup))) subgroups)))))
 -- | Convert namespace to Haskell module name
-namespaceToModuleName :: Packaging.Namespace -> String
+namespaceToModuleName :: Packaging.ModuleName -> String
 namespaceToModuleName ns_ =
-    Strings.intercalate "." (Lists.map Formatting.capitalize (Strings.splitOn "." (Packaging.unNamespace ns_)))
+    Strings.intercalate "." (Lists.map Formatting.capitalize (Strings.splitOn "." (Packaging.unModuleName ns_)))

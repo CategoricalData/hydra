@@ -83,9 +83,9 @@ define = definitionInModule module_
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = (Namespace "hydra.java.language"),
+            moduleName = (ModuleName "hydra.java.language"),
             moduleDefinitions = [toDefinition javaMaxTupleLength, toDefinition javaLanguage, toDefinition reservedWords],
-            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints and reserved words for Java"}
 javaMaxTupleLength :: TTermDefinition Int
 javaMaxTupleLength = define "javaMaxTupleLength" $

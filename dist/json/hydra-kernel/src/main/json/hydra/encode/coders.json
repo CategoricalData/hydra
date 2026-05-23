@@ -207,16 +207,11 @@
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.coders.TraversalOrder"}}},
           "variables": []}}}],
   "dependencies": [
-    "hydra.encode.context",
-    "hydra.encode.errors",
-    "hydra.encode.graph",
-    "hydra.encode.variants",
-    "hydra.encode.core",
-    "hydra.context",
-    "hydra.errors",
-    "hydra.graph",
-    "hydra.variants",
-    "hydra.core",
-    "hydra.coders"],
+    {"module": "hydra.encode.context"},
+    {"module": "hydra.encode.errors"},
+    {"module": "hydra.encode.graph"},
+    {"module": "hydra.encode.variants"},
+    {"module": "hydra.encode.core"},
+    {"module": "hydra.coders"}],
   "description": "Term encoders for hydra.coders",
-  "namespace": "hydra.encode.coders"}
+  "name": "hydra.encode.coders"}

@@ -98,14 +98,14 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 
-ns :: Namespace
-ns = Namespace "hydra.java.testing"
+ns :: ModuleName
+ns = ModuleName "hydra.java.testing"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [SerializationSource.ns, TestUtils.ns, Formatting.ns, Names.ns, Constants.ns] L.++ (JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([SerializationSource.ns, TestUtils.ns, Formatting.ns, Names.ns, Constants.ns] L.++ (JavaSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Java test code generation codec for JUnit-based generation tests"}
   where
     definitions = [
@@ -124,8 +124,8 @@ buildJavaTestModule :: TTermDefinition (Module -> TestGroup -> String -> String)
 buildJavaTestModule = define "buildJavaTestModule" $
   doc "Build the complete Java test module content" $
   lambda "testModule" $ lambda "testGroup" $ lambda "testBody" $ lets [
-    "ns_">: Packaging.moduleNamespace (var "testModule"),
-    "parts">: Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns_"),
+    "ns_">: Packaging.moduleName (var "testModule"),
+    "parts">: Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns_"),
     "packageName">: Strings.intercalate (string ".") (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts"))),
     "className_">: Strings.cat2 (Formatting.capitalize @@ (Maybes.fromMaybe (string "") (Lists.maybeLast (var "parts")))) (string "Test"),
     "groupName_">: project _TestGroup _TestGroup_name @@ var "testGroup",
@@ -251,8 +251,8 @@ generateTestFileWithJavaCodec = define "generateTestFileWithJavaCodec" $
     Eithers.map
       (lambda "testBody" $ lets [
         "testModuleContent">: buildJavaTestModule @@ var "testModule" @@ var "testGroup" @@ var "testBody",
-        "ns_">: Packaging.moduleNamespace (var "testModule"),
-        "parts">: Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns_"),
+        "ns_">: Packaging.moduleName (var "testModule"),
+        "parts">: Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns_"),
         "dirParts">: Lists.drop (int32 1) (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts"))),
         "className_">: Strings.cat2 (Formatting.capitalize @@ (Maybes.fromMaybe (string "") (Lists.maybeLast (var "parts")))) (string "Test"),
         "fileName">: Strings.cat2 (var "className_") (string ".java"),
@@ -262,10 +262,10 @@ generateTestFileWithJavaCodec = define "generateTestFileWithJavaCodec" $
 
 
 -- | Convert namespace to Java class name
-namespaceToJavaClassName :: TTermDefinition (Namespace -> String)
+namespaceToJavaClassName :: TTermDefinition (ModuleName -> String)
 namespaceToJavaClassName = define "namespaceToJavaClassName" $
   doc "Convert namespace to Java class name" $
   lambda "ns_" $
     Strings.intercalate (string ".")
       (Lists.map Formatting.capitalize
-        (Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns_")))
+        (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns_")))

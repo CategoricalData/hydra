@@ -85,14 +85,14 @@ import Hydra.Json.Model
 import qualified Hydra.Sources.Json.Model as JsonModel
 
 
-ns :: Namespace
-ns = Namespace "hydra.json.decoding"
+ns :: ModuleName
+ns = ModuleName "hydra.json.decoding"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Decoding functions for JSON data"}
   where
    definitions = [

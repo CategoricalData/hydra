@@ -64,14 +64,14 @@ import qualified Data.Maybe                  as Y
 import Hydra.Ast
 
 
-ns :: Namespace
-ns = Namespace "hydra.serialization"
+ns :: ModuleName
+ns = ModuleName "hydra.serialization"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
             moduleDescription = Just ("Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation.")}
   where
    definitions = [

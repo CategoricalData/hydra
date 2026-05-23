@@ -12,17 +12,17 @@ import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
-ns :: Namespace
-ns = Namespace "hydra.haskell.syntax"
+ns :: ModuleName
+ns = ModuleName "hydra.haskell.syntax"
 
 define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "A Haskell syntax model for Hydra. Originally inspired by Language.Haskell.Tools.AST, but now diverges freely to suit Hydra's needs."}
   where
     definitions = [
@@ -63,7 +63,7 @@ module_ = Module {
       localBindings,
       module',
       moduleHead,
-      moduleName,
+      moduleNameDef,
       name,
       namePart,
       operator,
@@ -257,7 +257,7 @@ export = define "Export" $
       namedImportExport,
     "module">:
       doc "An exported module"
-      moduleName]
+      moduleNameDef]
 
 expression :: Binding
 expression = define "Expression" $
@@ -468,10 +468,10 @@ import_ = define "Import" $
       T.boolean,
     "module">:
       doc "The module being imported"
-      moduleName,
+      moduleNameDef,
     "as">:
       doc "Optional alias for the module" $
-      T.maybe moduleName,
+      T.maybe moduleNameDef,
     "spec">:
       doc "Optional import specification" $
       T.maybe importSpec]
@@ -583,13 +583,13 @@ moduleHead = define "ModuleHead" $
       T.maybe T.string,
     "name">:
       doc "The module name"
-      moduleName,
+      moduleNameDef,
     "exports">:
       doc "Export list" $
       T.list export]
 
-moduleName :: Binding
-moduleName = define "ModuleName" $
+moduleNameDef :: Binding
+moduleNameDef = define "ModuleName" $
   doc "A module name" $
   T.wrap T.string
 

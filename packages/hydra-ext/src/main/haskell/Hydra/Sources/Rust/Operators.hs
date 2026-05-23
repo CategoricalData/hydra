@@ -88,14 +88,14 @@ import Hydra.Ast
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.rust.operators"
+ns :: ModuleName
+ns = ModuleName "hydra.rust.operators"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Serialization.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "AST operators for Rust serialization"}
   where
     definitions = [

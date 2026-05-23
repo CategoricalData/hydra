@@ -16,14 +16,14 @@ import qualified Data.Maybe                      as Y
 import qualified Hydra.Sources.Json.Model        as JsonModel
 
 
-ns :: Namespace
-ns = Namespace "hydra.json.schema"
+ns :: ModuleName
+ns = ModuleName "hydra.json.schema"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [JsonModel.ns, Core.ns],
+            moduleDependencies = unqualifiedDep <$> [JsonModel.ns, Core.ns],
             moduleDescription = Just ("A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar")}
   where
     def = datatype ns

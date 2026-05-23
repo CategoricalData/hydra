@@ -83,9 +83,9 @@ define = definitionInModule module_
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = (Namespace "hydra.shacl.language"),
+            moduleName = (ModuleName "hydra.shacl.language"),
             moduleDefinitions = [toDefinition shaclLanguage],
-            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints for W3C SHACL"}
 shaclLanguage :: TTermDefinition Language
 shaclLanguage = define "shaclLanguage" $

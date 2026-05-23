@@ -6,7 +6,7 @@ Serializes the Python syntax model into properly formatted Python source code.
 
 from hydra.core import Name
 from hydra.dsl.python import Just, Nothing
-from hydra.packaging import Module, Namespace
+from hydra.packaging import Module, ModuleName
 
 import hydra.dsl.meta.lib.equality as Equality
 import hydra.dsl.meta.lib.lists as Lists
@@ -42,21 +42,22 @@ from hydra.sources.python._kernel_refs import (
 # Module setup
 # ----------------------------------------------------------------------
 
-NS = Namespace("hydra.python.serde")
+NS = ModuleName("hydra.python.serde")
 
 from hydra.sources.python._source_dsl import (
     KERNEL_TYPES_NAMESPACES,
     make_def,
     make_local,
     proj as _proj_fq,
+    unqualified_dep,
 )
 
 # Mirror Haskell:
 #   [Constants.ns, Serialization.ns] L.++ (PySyntax.ns:KernelTypes.kernelTypesNamespaces)
 DEPENDENCIES = [
-    Namespace("hydra.constants"),
-    Namespace("hydra.serialization"),
-    Namespace("hydra.python.syntax"),
+    unqualified_dep(ModuleName("hydra.constants")),
+    unqualified_dep(ModuleName("hydra.serialization")),
+    unqualified_dep(ModuleName("hydra.python.syntax")),
 ] + KERNEL_TYPES_NAMESPACES
 
 
@@ -2398,7 +2399,7 @@ def _to_python_comments():
 def _build_module() -> Module:
     return Module(
         _PLACEHOLDER.description,
-        _PLACEHOLDER.namespace,
+        _PLACEHOLDER.name,
         _PLACEHOLDER.dependencies,
         (
             to_definition(_annotated_rhs_to_expr()),

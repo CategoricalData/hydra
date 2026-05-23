@@ -82,15 +82,15 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph  as ShowGraph
 
 
-ns :: Namespace
-ns = Namespace "hydra.adapt"
+ns :: ModuleName
+ns = ModuleName "hydra.adapt"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Dependencies.ns, Hoisting.ns, Inference.ns, Lexical.ns, Literals.ns, Names.ns, Reduction.ns, Reflect.ns, Rewriting.ns,
-      Scoping.ns, Environment.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowGraph.ns, Strip.ns, Variables.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Dependencies.ns, Hoisting.ns, Inference.ns, Lexical.ns, Literals.ns, Names.ns, Reduction.ns, Reflect.ns, Rewriting.ns,
+      Scoping.ns, Environment.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowGraph.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "Simple, one-way adapters for types and terms"}
   where
     definitions = [
@@ -511,7 +511,7 @@ composeCoders = define "composeCoders" $
       "b2" <<~ Coders.coderDecode (var "c2") @@ var "cx" @@ var "c" $
       Coders.coderDecode (var "c1") @@ var "cx" @@ var "b2")
 
-dataGraphToDefinitions :: TTermDefinition (LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Graph -> [Namespace] -> Context -> Prelude.Either Error (Graph, [[TermDefinition]]))
+dataGraphToDefinitions :: TTermDefinition (LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Graph -> [ModuleName] -> Context -> Prelude.Either Error (Graph, [[TermDefinition]]))
 dataGraphToDefinitions = define "dataGraphToDefinitions" $
   doc ("Given a data graph along with language constraints, original ordered bindings, and a designated list of namespaces,"
     <> " adapt the graph to the language constraints,"

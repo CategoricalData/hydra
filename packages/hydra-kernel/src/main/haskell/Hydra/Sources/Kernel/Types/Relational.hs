@@ -10,17 +10,17 @@ import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
-ns :: Namespace
-ns = Namespace "hydra.relational"
+ns :: ModuleName
+ns = ModuleName "hydra.relational"
 
 define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("An interpretation of Codd's Relational Model, " ++
       "as described in 'A Relational Model of Data for Large Shared Data Banks' (1970). " ++
       "Types ('domains') and values are parameterized so as to allow for application-specific implementations. " ++

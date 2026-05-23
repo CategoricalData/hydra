@@ -17,10 +17,10 @@ testContext :: Context.Context
 testContext = TestEnv.testContext
 testGraph :: Graph.Graph
 testGraph = TestEnv.testGraph testTypes testTerms
-testNamespace :: Packaging.Namespace
-testNamespace = Packaging.Namespace "testGraph"
-testSchemaNamespace :: Packaging.Namespace
-testSchemaNamespace = Packaging.Namespace "testSchemaGraph"
+testNamespace :: Packaging.ModuleName
+testNamespace = Packaging.ModuleName "testGraph"
+testSchemaNamespace :: Packaging.ModuleName
+testSchemaNamespace = Packaging.ModuleName "testSchemaGraph"
 testTerms :: M.Map Core.Name Core.Term
 testTerms = Maps.fromList [
   (Core.Name "testDataArthur", TestTerms.testDataArthur)]
