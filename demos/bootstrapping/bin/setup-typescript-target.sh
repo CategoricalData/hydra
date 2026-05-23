@@ -39,20 +39,24 @@ cp "$TS_RESOURCES/package.json" "$OUTPUT_DIR/"
 cp "$TS_RESOURCES/tsconfig.json" "$OUTPUT_DIR/"
 cp "$TS_RESOURCES/vitest.config.ts" "$OUTPUT_DIR/"
 
-# Hand-written runtime: core, primitives, lib/* (including libraries.ts).
-# These are copied here so the layout is complete after setup; the
-# haskell host's invoke-host step will OVERWRITE the few overlapping
-# files (core.ts, primitives.ts) with generated kernel versions that
-# lack the runtime helpers (Just/Nothing/Maybe/Either etc.). The
-# test-typescript-target.sh script restores those overlapping files
-# from heads/typescript/ before running vitest, mirroring how
-# heads/typescript/bin/copy-kernel-runtime.sh post-processes the dist
-# tree after a sync.
+# Hand-written runtime: runtime.ts (formerly core.ts; renamed in #126 to
+# avoid clobbering the generated kernel `core.ts`), primitives.ts,
+# lib/* (including libraries.ts). These are copied so the demo layout
+# matches the in-tree heads/typescript layout. The host invoker writes
+# generated kernel files alongside; `runtime.ts` does not collide.
 echo "  Copying hand-written runtime..."
 mkdir -p "$OUTPUT_DIR/src/main/typescript/hydra/lib"
-cp "$HYDRA_TS_HEAD/src/main/typescript/hydra/core.ts" "$OUTPUT_DIR/src/main/typescript/hydra/"
+cp "$HYDRA_TS_HEAD/src/main/typescript/hydra/runtime.ts" "$OUTPUT_DIR/src/main/typescript/hydra/"
 cp "$HYDRA_TS_HEAD/src/main/typescript/hydra/primitives.ts" "$OUTPUT_DIR/src/main/typescript/hydra/"
 cp -r "$HYDRA_TS_HEAD/src/main/typescript/hydra/lib/." "$OUTPUT_DIR/src/main/typescript/hydra/lib/"
+
+# Mark the bootstrap target tree as ESM so `import.meta` works under
+# NodeNext (same as dist/typescript/hydra-kernel/package.json written by
+# copy-kernel-runtime.sh). Without it, tsc walks up to the user's home
+# package.json (CommonJS) and rejects import.meta in jsonBindings.ts.
+if ! grep -q '"type"[[:space:]]*:[[:space:]]*"module"' "$OUTPUT_DIR/package.json"; then
+    python3 -c "import json,sys; p='$OUTPUT_DIR/package.json'; d=json.load(open(p)); d['type']='module'; json.dump(d, open(p,'w'), indent=2)"
+fi
 
 # Hand-written test runtime: test runner + testEnv + jsonBindings
 echo "  Copying hand-written test runtime..."
@@ -71,7 +75,7 @@ done
 RUNNER="$OUTPUT_DIR/src/test/typescript/test-suite-runner.test.ts"
 if [ -f "$RUNNER" ]; then
     # Use a stable Perl one-liner that works on both BSD and GNU.
-    perl -i -pe 's{from "\.\./\.\./\.\./\.\./\.\./dist/typescript/hydra-kernel/src/test/typescript/hydra/test/testSuite\.ts"}{from "./hydra/test/testSuite.ts"}g' "$RUNNER"
+    perl -i -pe 's{from "\.\./\.\./\.\./\.\./\.\./dist/typescript/hydra-kernel/src/test/typescript/hydra/test/testSuite\.[jt]s"}{from "./hydra/test/testSuite.js"}g' "$RUNNER"
 fi
 
 # npm install for vitest + typescript. Use --no-audit/--no-fund to keep

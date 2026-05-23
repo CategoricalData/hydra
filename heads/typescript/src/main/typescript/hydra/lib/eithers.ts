@@ -85,3 +85,16 @@ export const partitionEithers = <L, R>(es: readonly Either<L, R>[]): readonly [r
   for (const e of es) (e.tag === "left" ? ls : rs).push(e.value as never);
   return [ls, rs] as const;
 };
+
+// Left-fold over a list with an Either-returning function, short-
+// circuiting on Left. Mirrors Python's `eithers.foldl`. The kernel
+// emits `f` curried (`(acc) => (x) => Either<L, A>`); call accordingly.
+export const foldl = (f: (acc: any) => (x: any) => any, acc: any, xs: readonly any[]): any => {
+  let r = acc;
+  for (const x of xs) {
+    const e = f(r)(x);
+    if (e.tag === "left") return e;
+    r = e.value;
+  }
+  return Right(r);
+};

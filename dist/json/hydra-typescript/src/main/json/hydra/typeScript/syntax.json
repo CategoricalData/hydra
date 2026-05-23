@@ -1999,13 +1999,16 @@
                     "name": "block",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A block comment (/* ... */)"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A block comment, delimited by slash-star and star-slash"}}}],
                         "body": {"literal": {"string": {}}}}}},
                   {
                     "name": "documentation",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A documentation comment (/** ... */, i.e. JSDoc)"}}}],
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "A documentation comment, delimited by slash-double-star and star-slash (JSDoc)"}}}],
                         "body": {"variable": "hydra.typeScript.syntax.DocumentationComment"}}}}]}}},
           "variables": []}}},
     {
