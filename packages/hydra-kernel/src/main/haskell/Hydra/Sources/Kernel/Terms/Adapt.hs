@@ -684,7 +684,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       ("ts" ~> Packaging.termDefinition
         (Core.bindingName $ var "el")
         (Core.bindingTerm $ var "el")
-        (just $ var "ts"))
+        (just $ Scoping.typeSchemeToTermSignature @@ var "ts"))
       (Core.bindingTypeScheme $ var "el")) $
   -- Filter to elements in the requested namespaces
   "selectedElements" <~ Lists.filter
