@@ -38,8 +38,7 @@ in Hydra, programs are graphs, and graphs are programs
   [RDF](https://www.w3.org/RDF) formats including N-Triples,
   [GraphQL](https://graphql.org/),
   and simple tabular data (CSV/TSV).
-* **Computational graphs**. Unusually among graph data models and query languages,
-  Hydra has deep support for [polymorphism](https://en.wikipedia.org/wiki/Parametric_polymorphism),
+* **Computational graphs**. As an ontology language, Hydra has deep support for [parametirc polymorphism](https://en.wikipedia.org/wiki/Parametric_polymorphism),
   as well as embedding of computational elements within a graph
   (sometimes called *computational knowledge graphs*).
   This follows naturally from the programs-are-graphs framing.
@@ -48,8 +47,8 @@ in Hydra, programs are graphs, and graphs are programs
 ## Translingual features
 
 Hydra's most distinctive properties come from its graph foundations, and from being a single programming language kernel that
-runs natively in multiple host languages. Its unusual ability to translate any valid program -- including its own kernel --
-into any supported language distinguishes it from conventional polyglot tooling:
+runs natively in multiple host languages. Its ability to translate any valid program -- including its own kernel --
+into any supported language distinguishes it from conventional polyglot tooling.
 
 Hydra is *mutually self-hosting*: starting from any one of its current implementations,
 the kernel can be regenerated into another host language, and that regenerated
@@ -78,7 +77,7 @@ The latest Hydra release is **0.15.0**. Published artifacts:
 | Channel | Packages |
 |---|---|
 | Hackage (Haskell) | [`hydra`](https://hackage.haskell.org/package/hydra) |
-| Maven Central (Java) | [`net.fortytwo.hydra:hydra-kernel`](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-kernel), [`hydra-java`](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-java), [`hydra-pg`](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-pg), [`hydra-rdf`](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-rdf) |
+| Maven Central (Java) | [`hydra-kernel`](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-kernel), [`hydra-java`](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-java), [`hydra-pg`](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-pg), [`hydra-rdf`](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-rdf) |
 | PyPI (Python) | [`hydra-kernel`](https://pypi.org/project/hydra-kernel/), [`hydra-python`](https://pypi.org/project/hydra-python/), [`hydra-pg`](https://pypi.org/project/hydra-pg/), [`hydra-rdf`](https://pypi.org/project/hydra-rdf/) |
 | conda-forge (Python) | [`hydra-kernel`](https://prefix.dev/channels/conda-forge/packages/hydra-kernel), [`hydra-python`](https://prefix.dev/channels/conda-forge/packages/hydra-python), [`hydra-pg`](https://prefix.dev/channels/conda-forge/packages/hydra-pg), [`hydra-rdf`](https://prefix.dev/channels/conda-forge/packages/hydra-rdf) |
 
