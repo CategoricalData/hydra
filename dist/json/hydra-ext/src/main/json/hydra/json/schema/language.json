@@ -98,6 +98,7 @@
         "typeScheme": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}}],
   "dependencies": [
     "hydra.reflect",
+    "hydra.json.schema",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",

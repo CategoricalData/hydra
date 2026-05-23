@@ -4,9 +4,9 @@
 // matching Hydra's `Int` for characters.
 
 export const cat = (xs: readonly string[]): string => xs.join("");
-export const cat2 = (a: string) => (b: string): string => a + b;
+export const cat2 = (a: string, b: string): string => a + b;
 
-export const intercalate = (sep: string) => (xs: readonly string[]): string => xs.join(sep);
+export const intercalate = (sep: string, xs: readonly string[]): string => xs.join(sep);
 
 // Counts Unicode code points (not UTF-16 code units), matching the
 // kernel test fixtures' "length of string" expectation.
@@ -16,7 +16,7 @@ export const length = (s: string): number => [...s].length;
 // separator case is special: it yields `["", c0, c1, ..., cN-1, ""]` —
 // the input split between every code point with empty boundary strings.
 // For non-empty seps we delegate to JS's String.split.
-export const splitOn = (sep: string) => (s: string): readonly string[] => {
+export const splitOn = (sep: string, s: string): readonly string[] => {
   if (sep === "") {
     if (s === "") return [""];
     return ["", ...s.split("")];
@@ -52,10 +52,10 @@ export const lines = (s: string): readonly string[] => {
 // matching Haskell's `Data.List.unlines`.
 export const unlines = (xs: readonly string[]): string => xs.map((x) => x + "\n").join("");
 
-export const maybeCharAt = (i: number) => (s: string): import("../core.js").Maybe<number> => {
+export const maybeCharAt = (i: number, s: string): import("../runtime.js").Maybe<number> => {
   const cp = s.codePointAt(i);
   return cp === undefined ? { tag: "nothing" } : { tag: "just", value: cp };
 };
 
-export const isPrefix = (pre: string) => (s: string): boolean => s.startsWith(pre);
-export const isSuffix = (suf: string) => (s: string): boolean => s.endsWith(suf);
+export const isPrefix = (pre: string, s: string): boolean => s.startsWith(pre);
+export const isSuffix = (suf: string, s: string): boolean => s.endsWith(suf);

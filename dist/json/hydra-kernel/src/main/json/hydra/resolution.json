@@ -2229,6 +2229,7 @@
     "hydra.strip",
     "hydra.substitution",
     "hydra.variables",
+    "hydra.decode.core",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",

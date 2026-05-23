@@ -62,7 +62,7 @@ module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
             moduleDependencies = [moduleNamespace LispLanguageSource.module_,
-      Formatting.ns, Names.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Sorting.ns, Lexical.ns] L.++ (LispSyntax.ns:KernelTypes.kernelTypesNamespaces),
+      Formatting.ns, Names.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Sorting.ns, Lexical.ns, Namespace "hydra.show.core"] L.++ (LispSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Lisp code generator: converts Hydra type and term modules to Lisp AST"}
   where
     definitions = [

@@ -243,6 +243,6 @@
                   "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.parsing.ParseSuccess"}}}}},
               "domain": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "t0"}}}}},
           "variables": ["t0"]}}}],
-  "dependencies": ["hydra.encode.core", "hydra.parsing"],
+  "dependencies": ["hydra.encode.core", "hydra.core", "hydra.parsing"],
   "description": "Term encoders for hydra.parsing",
   "namespace": "hydra.encode.parsing"}

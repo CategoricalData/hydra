@@ -102,7 +102,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ExtractCore.ns, PgCoder.ns] L.++ (PgModel.ns:PgMapping.ns:JsonModel.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [ExtractCore.ns, PgCoder.ns, Namespace "hydra.show.core"] L.++ (PgModel.ns:PgMapping.ns:JsonModel.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Utility functions for property graph operations"}
   where
     definitions = [

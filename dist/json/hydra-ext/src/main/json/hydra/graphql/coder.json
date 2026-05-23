@@ -2937,6 +2937,7 @@
     "hydra.serialization",
     "hydra.graphql.language",
     "hydra.graphql.serde",
+    "hydra.show.core",
     "hydra.graphql.syntax",
     "hydra.paths",
     "hydra.ast",
