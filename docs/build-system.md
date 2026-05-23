@@ -325,17 +325,23 @@ This is a small, well-scoped change — one function body — gated on #370.
 
 ### 3. `modulesToGraph` realloc per Phase 1 iteration
 
-The per-package iteration in `inferAndWriteByPackage` (see
-[Phase 1's memory envelope](#phase-1s-memory-envelope)) calls `inferModulesGiven` once
-per package, and `inferModulesGiven` internally rebuilds `modulesToGraph` over its
-`universeMods` argument every time. Across ~13 packages that means ~13 graph builds,
-each over a slightly larger accumulator. This is acceptable today (Phase 1 wall time is
-within budget on CI), but if the package count grows it could become the dominant cost.
+The per-package iteration originally called `inferModulesGiven` (kernel) per package,
+which rebuilds `modulesToGraph` over its `universeMods` argument every time. Across
+~13 packages that meant ~13 graph builds, each over a `[Module]` accumulator that grew
+linearly — retaining every prior package's full term bodies, annotations, and
+dependencies. Acceptable for small dirty sets but OOM at -M6G on a kernel-wide rename
+(#369-style) that dirtied ~250 modules in one shot.
 
-The targeted fix is to thread an accumulated `Map Name TypeScheme` directly into a
-variant of `inferModulesGiven` that skips the `modulesToGraph` rebuild — i.e. pass the
-incremental delta, not the full universe. Out of scope for #381; flagged here as the
-next bottleneck the per-package design might run into.
+`inferAndWriteByPackageSeeded` now threads a `Map Name TypeScheme` accumulator instead
+of `[Module]`. After each package writes its JSON, only the inferred bindings'
+`(Name, TypeScheme)` pairs are folded into the accumulator; the inferred Module values
+themselves are dropped, so GC reclaims their term bodies. A Generation-side wrapper
+`inferModulesGivenSchemes` augments `Graph.graphBoundTypes` and `graphSchemaTypes`
+with the seed Map directly, bypassing the per-iteration `[Module]` reload. The
+JSON-write `schemaMap` is built ONCE up front from the full input universe (including
+the JSON-loaded clean modules in the warm-incremental path) so the encoder has
+hydra.packaging.Module and other cross-package schema types available — without this,
+`Maybe String` fields mis-serialize as single-element arrays.
 
 ### 4. Java and Python self-host pipelines
 
