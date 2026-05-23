@@ -502,7 +502,8 @@
                                                                                     "list": [
                                                                                       {
                                                                                         "application": {"argument": {"variable": "mod"}, "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
-                                                                                      {"wrap": {"body": {"literal": {"string": "hydra.phantoms"}}, "typeName": "hydra.packaging.Namespace"}}]},
+                                                                                      {"wrap": {"body": {"literal": {"string": "hydra.phantoms"}}, "typeName": "hydra.packaging.Namespace"}},
+                                                                                      {"wrap": {"body": {"literal": {"string": "hydra.core"}}, "typeName": "hydra.packaging.Namespace"}}]},
                                                                                   "function": {
                                                                                     "typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.packaging.Namespace"}}}}}}},
                                                                           "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.nub"}, "type": {"variable": "hydra.packaging.Namespace"}}}}}},
@@ -3837,6 +3838,9 @@
     "hydra.lexical",
     "hydra.names",
     "hydra.strip",
+    "hydra.constants",
+    "hydra.decode.core",
+    "hydra.encode.core",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",

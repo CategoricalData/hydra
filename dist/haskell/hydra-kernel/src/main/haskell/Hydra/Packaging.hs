@@ -56,7 +56,7 @@ data Package =
     -- | The modules in this package
     packageModules :: [Module],
     -- | The packages which this package depends on
-    packageDependencies :: [PackageName],
+    packageDependencies :: [PackageDependency],
     -- | An optional human-readable description of the package
     packageDescription :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
@@ -65,12 +65,30 @@ _Package_name = Core.Name "name"
 _Package_modules = Core.Name "modules"
 _Package_dependencies = Core.Name "dependencies"
 _Package_description = Core.Name "description"
+-- | A dependency on another package, identified by name and constrained by an optional version specifier
+data PackageDependency =
+  PackageDependency {
+    -- | The name of the depended-on package
+    packageDependencyName :: PackageName,
+    -- | The version-range constraint on the depended-on package
+    packageDependencyVersion :: PackageVersionSpecifier}
+  deriving (Eq, Ord, Read, Show)
+_PackageDependency = Core.Name "hydra.packaging.PackageDependency"
+_PackageDependency_name = Core.Name "name"
+_PackageDependency_version = Core.Name "version"
 -- | The unique name of a package, e.g. "hydra-kernel" or "hydra-python"
 newtype PackageName =
   PackageName {
     unPackageName :: String}
   deriving (Eq, Ord, Read, Show)
 _PackageName = Core.Name "hydra.packaging.PackageName"
+-- | A specifier constraining acceptable versions of a depended-on package. Currently only the `any` (unit) specifier is defined; future variants such as `exact`, `caret`, and `range` may be added without breaking consumers of the `any` form.
+data PackageVersionSpecifier =
+  -- | Any version of the package satisfies the dependency
+  PackageVersionSpecifierAny
+  deriving (Eq, Ord, Read, Show)
+_PackageVersionSpecifier = Core.Name "hydra.packaging.PackageVersionSpecifier"
+_PackageVersionSpecifier_any = Core.Name "any"
 -- | A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, description, signature, totality and purity flags, and an optional default implementation expressed as a Hydra term.
 data PrimitiveDefinition =
   PrimitiveDefinition {

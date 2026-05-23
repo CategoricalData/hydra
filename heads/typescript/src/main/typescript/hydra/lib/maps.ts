@@ -1,5 +1,7 @@
 // Hand-written runtime: hydra.lib.maps primitives.
 //
+// Signatures are flat (positional), matching Python's heads/python/lib/maps.py.
+//
 // Backed by JavaScript's `Map`, but with a value-equality wrapper for
 // non-primitive keys. Hydra map keys are often wrapped values like
 // `Name = { value: "..." }` — two structurally-equal Name objects from
@@ -9,8 +11,8 @@
 //
 // All operations are non-mutating: each modifier returns a fresh map.
 
-import type { Maybe } from "../core.js";
-import { Just, Nothing } from "../core.js";
+import type { Maybe } from "../runtime.js";
+import { Just, Nothing } from "../runtime.js";
 
 const canon = (k: unknown): string => {
   switch (typeof k) {
@@ -48,7 +50,7 @@ const mkCanon = <K, V>(internal: InternalMap<K, V>): CanonMap<K, V> =>
   ({ [TAG]: true as const, _internal: internal });
 
 // Convert any ReadonlyMap to a CanonMap (preserving entry order).
-const toCanon = <K, V>(m: ReadonlyMap<K, V> | CanonMap<K, V>): CanonMap<K, V> => {
+const toCanon = <K, V>(m: any | CanonMap<K, V>): CanonMap<K, V> => {
   if (isCanon<K, V>(m)) return m;
   const internal: InternalMap<K, V> = new Map();
   for (const [k, v] of (m as ReadonlyMap<K, V>).entries()) {
@@ -60,9 +62,9 @@ const toCanon = <K, V>(m: ReadonlyMap<K, V> | CanonMap<K, V>): CanonMap<K, V> =>
 // ===== Hydra-facing API. Inputs may be plain ReadonlyMap or CanonMap; outputs are always CanonMap. =====
 
 // Hydra exposes `empty` as a value, not a function.
-export const empty: ReadonlyMap<never, never> = mkCanon<never, never>(new Map()) as unknown as ReadonlyMap<never, never>;
+export const empty: any = mkCanon<never, never>(new Map()) as unknown as ReadonlyMap<never, never>;
 
-export const fromList = <K, V>(pairs: readonly (readonly [K, V])[]): ReadonlyMap<K, V> => {
+export const fromList = <K, V>(pairs: readonly (readonly [K, V])[]): any => {
   const internal: InternalMap<K, V> = new Map();
   for (const [k, v] of pairs) internal.set(canon(k), { key: k, value: v });
   return mkCanon(internal) as unknown as ReadonlyMap<K, V>;
@@ -81,119 +83,123 @@ const compareKeys = (a: unknown, b: unknown): number => {
   return ca < cb ? -1 : ca > cb ? 1 : 0;
 };
 
-export const toList = <K, V>(m: ReadonlyMap<K, V>): readonly (readonly [K, V])[] => {
+export const toList = (m: any): readonly (readonly [any, any])[] => {
   const c = toCanon(m);
   const entries = [...c._internal.entries()];
   entries.sort((a, b) => compareKeys(a[1].key, b[1].key));
   return entries.map((e) => [e[1].key, e[1].value] as const);
 };
 
-export const insert = <K, V>(k: K) => (v: V) => (m: ReadonlyMap<K, V>): ReadonlyMap<K, V> => {
+export const insert = <K, V>(k: K, v: V, m: any): any => {
   const c = toCanon(m);
-  const next: InternalMap<K, V> = new Map(c._internal);
+  const next: any = new Map(c._internal);
   next.set(canon(k), { key: k, value: v });
   return mkCanon(next) as unknown as ReadonlyMap<K, V>;
 };
 
-export const delete_ = <K, V>(k: K) => (m: ReadonlyMap<K, V>): ReadonlyMap<K, V> => {
+export const delete_ = <K, V>(k: K, m: any): any => {
   const c = toCanon(m);
-  const next: InternalMap<K, V> = new Map(c._internal);
+  const next: any = new Map(c._internal);
   next.delete(canon(k));
   return mkCanon(next) as unknown as ReadonlyMap<K, V>;
 };
 
-export const lookup = <K, V>(k: K) => (m: ReadonlyMap<K, V>): Maybe<V> => {
+export const lookup = (k: any, m: any): Maybe<any> => {
   const c = toCanon(m);
   const e = c._internal.get(canon(k));
   return e === undefined ? Nothing : Just(e.value);
 };
 
-export const member = <K, V>(k: K) => (m: ReadonlyMap<K, V>): boolean =>
+export const member = <K, V>(k: K, m: any): boolean =>
   toCanon(m)._internal.has(canon(k));
 
-export const size = <K, V>(m: ReadonlyMap<K, V>): number => toCanon(m)._internal.size;
+export const size = <K, V>(m: any): number => toCanon(m)._internal.size;
 
-export const keys = <K, V>(m: ReadonlyMap<K, V>): readonly K[] =>
+export const keys = (m: any): readonly any[] =>
   toList(m).map((p) => p[0]);
 
-export const values = <K, V>(m: ReadonlyMap<K, V>): readonly V[] =>
+export const values = (m: any): readonly any[] =>
   toList(m).map((p) => p[1]);
 
 // Left-biased union (Haskell Data.Map.union): on key collision, the
 // value from `a` is kept.
-export const union = <K, V>(a: ReadonlyMap<K, V>) => (b: ReadonlyMap<K, V>): ReadonlyMap<K, V> => {
+export const union = (a: any, b: any): any => {
   const ca = toCanon(a);
   const cb = toCanon(b);
-  const next: InternalMap<K, V> = new Map(cb._internal);
+  const next: any = new Map(cb._internal);
   for (const [ck, e] of ca._internal) next.set(ck, e);
-  return mkCanon(next) as unknown as ReadonlyMap<K, V>;
+  return mkCanon(next);
 };
 
-export const filter = <K, V>(p: (v: V) => boolean) => (m: ReadonlyMap<K, V>): ReadonlyMap<K, V> => {
+export const filter = (p: (v: any) => boolean, m: any): any => {
   const c = toCanon(m);
-  const next: InternalMap<K, V> = new Map();
+  const next: any = new Map();
   for (const [ck, e] of c._internal) if (p(e.value)) next.set(ck, e);
-  return mkCanon(next) as unknown as ReadonlyMap<K, V>;
+  return mkCanon(next);
 };
 
-export const filterWithKey = <K, V>(p: (k: K) => (v: V) => boolean) => (m: ReadonlyMap<K, V>): ReadonlyMap<K, V> => {
+export const filterWithKey = (p: (k: any, v: any) => boolean, m: any): any => {
   const c = toCanon(m);
-  const next: InternalMap<K, V> = new Map();
-  for (const [ck, e] of c._internal) if (p(e.key)(e.value)) next.set(ck, e);
-  return mkCanon(next) as unknown as ReadonlyMap<K, V>;
+  const next: any = new Map();
+  for (const [ck, e] of c._internal) if (p(e.key, e.value)) next.set(ck, e);
+  return mkCanon(next);
 };
 
-export const map = <K, V, W>(f: (v: V) => W) => (m: ReadonlyMap<K, V>): ReadonlyMap<K, W> => {
+export const map = (f: (v: any) => any, m: any): any => {
   const c = toCanon(m);
-  const next: InternalMap<K, W> = new Map();
+  const next: any = new Map();
   for (const [ck, e] of c._internal) next.set(ck, { key: e.key, value: f(e.value) });
-  return mkCanon(next) as unknown as ReadonlyMap<K, W>;
+  return mkCanon(next);
 };
 
-export const singleton = <K, V>(k: K) => (v: V): ReadonlyMap<K, V> => {
-  const next: InternalMap<K, V> = new Map();
+export const singleton = <K, V>(k: K, v: V): any => {
+  const next: any = new Map();
   next.set(canon(k), { key: k, value: v });
   return mkCanon(next) as unknown as ReadonlyMap<K, V>;
 };
 
-export const alter = <K, V>(f: (m: Maybe<V>) => Maybe<V>) => (k: K) => (m: ReadonlyMap<K, V>): ReadonlyMap<K, V> => {
+// `f` is typed `(m: any) => any` (not `(Maybe<any>) => Maybe<any>`) so
+// kernel-generated callsites that wrap an unknown value back into a
+// Maybe-shaped object literal pass type-check; the runtime only reads
+// `f(cur).tag`, which works for any object-shaped return value.
+export const alter = (f: (m: any) => any, k: any, m: any): any => {
   const c = toCanon(m);
   const ck = canon(k);
-  const cur: Maybe<V> = c._internal.has(ck) ? Just(c._internal.get(ck)!.value) : Nothing;
+  const cur: Maybe<any> = c._internal.has(ck) ? Just(c._internal.get(ck)!.value) : Nothing;
   const nextVal = f(cur);
-  const next: InternalMap<K, V> = new Map(c._internal);
+  const next: any = new Map(c._internal);
   if (nextVal.tag === "just") next.set(ck, { key: k, value: nextVal.value }); else next.delete(ck);
-  return mkCanon(next) as unknown as ReadonlyMap<K, V>;
+  return mkCanon(next);
 };
 
-export const bimap = <K1, V1, K2, V2>(fk: (k: K1) => K2) => (fv: (v: V1) => V2) => (m: ReadonlyMap<K1, V1>): ReadonlyMap<K2, V2> => {
+export const bimap = (fk: (k: any) => any, fv: (v: any) => any, m: any): any => {
   const c = toCanon(m);
-  const next: InternalMap<K2, V2> = new Map();
+  const next: any = new Map();
   for (const [, e] of c._internal) {
     const nk = fk(e.key);
     next.set(canon(nk), { key: nk, value: fv(e.value) });
   }
-  return mkCanon(next) as unknown as ReadonlyMap<K2, V2>;
+  return mkCanon(next);
 };
 
-export const elems = <K, V>(m: ReadonlyMap<K, V>): readonly V[] => values(m);
+export const elems = (m: any): readonly any[] => values(m);
 
 // `findWithDefault` is lazy in its default position — see
 // docs/recipes/new-implementation.md "Lazy evaluation and thunking".
-export const findWithDefault = <K, V>(d: V | (() => V)) => (k: K) => (m: ReadonlyMap<K, V>): V => {
+export const findWithDefault = (d: any, k: any, m: any): any => {
   const c = toCanon(m);
   const e = c._internal.get(canon(k));
-  return e === undefined ? (typeof d === "function" ? (d as () => V)() : d) : e.value;
+  return e === undefined ? (typeof d === "function" ? (d as () => any)() : d) : e.value;
 };
 
-export const mapKeys = <K1, K2, V>(f: (k: K1) => K2) => (m: ReadonlyMap<K1, V>): ReadonlyMap<K2, V> => {
+export const mapKeys = (f: (k: any) => any, m: any): any => {
   const c = toCanon(m);
-  const next: InternalMap<K2, V> = new Map();
+  const next: any = new Map();
   for (const [, e] of c._internal) {
     const nk = f(e.key);
     next.set(canon(nk), { key: nk, value: e.value });
   }
-  return mkCanon(next) as unknown as ReadonlyMap<K2, V>;
+  return mkCanon(next);
 };
 
-export const null_ = <K, V>(m: ReadonlyMap<K, V>): boolean => toCanon(m)._internal.size === 0;
+export const null_ = (m: any): boolean => toCanon(m)._internal.size === 0;

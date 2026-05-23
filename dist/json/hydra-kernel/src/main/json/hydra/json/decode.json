@@ -3438,6 +3438,7 @@
     "hydra.strip",
     "hydra.literals",
     "hydra.extract.core",
+    "hydra.show.core",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",

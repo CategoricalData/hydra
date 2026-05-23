@@ -76,6 +76,33 @@ is invoked (via `sync-haskell.sh`'s Step 6). To validate a target's runtime, run
 head's own `bin/run-tests.sh` or `bin/test-distribution.sh`, or use
 `bin/sync-packages.sh` which adds a Phase 3 test gate.
 
+### Phase 1's memory envelope
+
+Phase 1 ran a single universe-wide inference until [#381](https://github.com/CategoricalData/hydra/issues/381):
+`inferModules` loaded every binding from every module into one giant `let` and unified
+the whole thing. At ~10 packages and ~280 modules, peak Haskell heap exceeded 7 GB —
+larger than GitHub Actions' `ubuntu-latest` (7 GB), so the cold-CI path silently
+overflowed the heap.
+
+Phase 1 now iterates **packages** instead. The driver
+(`Hydra.Generation.inferAndWriteByPackage`) topologically sorts the package dep graph
+from each `packages/<pkg>/package.json`'s `dependencies` field, then for each package
+in order calls `inferModulesGiven` with the typed-so-far universe (deps that finished
+in earlier iterations) plus that package's own modules as the focus subset. Each
+iteration writes the focus package's JSON to disk immediately, which forces the inferred
+TypeSchemes through serialization and breaks any lazy thunk chain across iterations.
+
+Peak memory per iteration is bounded by ≈ *type-schemes of transitive deps + bindings of
+the focus package*, not by the universe-wide
+*bindings of every module + full substitution map + constraint set*. Trade-off: each
+iteration rebuilds `modulesToGraph` over an accumulator that grows linearly, so wall
+time goes up roughly 2× on a roomy host (≈5 min → ≈13 min). On `ubuntu-latest` the
+old path doesn't fit at all, so this is the only path that runs there.
+
+The committed CI heap cap is `RTS_FLAGS=-M6G`. Local syncs are free to raise it; CI
+must surface a heap-overflow diagnostic if the per-package cap is ever exceeded, not
+silently cancel.
+
 ## The cache model
 
 Every layer of the pipeline caches its work. All caches are content-hash based
@@ -90,11 +117,25 @@ The caches form a hierarchy: a hit at a coarser layer skips a finer one.
 | Cache | Location | Granularity | What it gates |
 |-------|----------|-------------|---------------|
 | Phase 1 input cache | `heads/haskell/.stack-work/phase1-input-cache.txt` | Universe-wide | Skips all of Phase 1 (no stack startup, no JSON regen) |
-| Universe digest | `dist/json/digest.main.json` | Per-namespace | Drives `check-dsl-fresh.py`; per-module skip inside `bootstrap-from-json` |
-| Per-package input digest | `dist/json/<pkg>/src/<set>/digest.json` | Per-namespace, scoped to one package | Source-of-truth for Layer 2 freshness comparison |
-| Per-package output digest | `dist/<lang>/<pkg>/src/<set>/digest.json` | Per-namespace + per-target generator stamp | Compared against input digest to skip Layer 1 + Layer 2 for one package |
+| Universe digest | `dist/json/build/digest.json` | Per-namespace | Drives `check-dsl-fresh.py`; per-module skip inside `bootstrap-from-json` |
+| Per-package input digest | `dist/json/<pkg>/build/<set>/digest.json` | Per-namespace, scoped to one package | Source-of-truth for Layer 2 freshness comparison |
+| Per-package output digest | `dist/<lang>/<pkg>/build/<set>/digest.json` | Per-namespace + per-target generator stamp | Compared against input digest to skip Layer 1 + Layer 2 for one package |
 | Step caches | `heads/haskell/.stack-work/{verify-json-kernel,bootstrap-from-json,haskell-test}-cache.txt` | Universe-wide hash of inputs + exec source | Skips `verify-json-kernel`, `bootstrap-from-json`, or `stack test` |
 | Per-target test cache | `dist/<lang>/test-cache.json` | Universe of generated sources + test infra + runner | Skips the target's `test-distribution.sh` |
+
+### Cache files are not tracked
+
+Every `dist/<lang>/<pkg>/build/` directory holds derived freshness state: input digests,
+output digests, generator stamps. The entire `dist/**/build/` subtree is gitignored.
+The same applies to `dist/json/build/` (the universe digest). See
+[#379](https://github.com/CategoricalData/hydra/issues/379) for the rationale —
+in short, hashes diverge on every branch by construction, so committing them produced
+merge conflicts on every multi-branch merge while providing no value (the post-merge
+hashes are stale anyway, so the next build re-derives them).
+
+A missing or stale digest is always a cache miss, never a correctness problem. The
+first build after a fresh clone or after a merge runs without cache hits and rebuilds
+the digests as it goes; subsequent runs hit the cache normally.
 
 ### What invalidates what
 
@@ -161,8 +202,10 @@ the field. They'll naturally fade out the next time any source change triggers a
 refresh.
 
 If you ever need to manually invalidate a per-target cache without editing real source,
-delete `dist/<lang>/<pkg>/src/<set>/digest.json` — the next assemble will report a missing
-output digest and regenerate.
+delete `dist/<lang>/<pkg>/build/<set>/digest.json` — the next assemble will report a missing
+output digest and regenerate. The entire `dist/**/build/` subtree is gitignored (see
+[#379](https://github.com/CategoricalData/hydra/issues/379)); each `build/` directory holds
+only derived freshness state, so deleting it is always safe and never affects shared history.
 
 ## What the cache currently keys on
 
@@ -233,6 +276,28 @@ version in this build's manifest, return that version string; otherwise fall bac
 current content hash (the migration-shim case).
 
 This is a small, well-scoped change — one function body — gated on #370.
+
+### 3. `modulesToGraph` realloc per Phase 1 iteration
+
+The per-package iteration in `inferAndWriteByPackage` (see
+[Phase 1's memory envelope](#phase-1s-memory-envelope)) calls `inferModulesGiven` once
+per package, and `inferModulesGiven` internally rebuilds `modulesToGraph` over its
+`universeMods` argument every time. Across ~13 packages that means ~13 graph builds,
+each over a slightly larger accumulator. This is acceptable today (Phase 1 wall time is
+within budget on CI), but if the package count grows it could become the dominant cost.
+
+The targeted fix is to thread an accumulated `Map Name TypeScheme` directly into a
+variant of `inferModulesGiven` that skips the `modulesToGraph` rebuild — i.e. pass the
+incremental delta, not the full universe. Out of scope for #381; flagged here as the
+next bottleneck the per-package design might run into.
+
+### 4. Java and Python self-host pipelines
+
+Phase 5 (native DSL → JSON for hydra-java and hydra-python) still runs whole-universe
+inference via `bin/generate-hydra-java-from-java.sh` and
+`bin/generate-hydra-python-from-python.sh`. The same per-package treatment that landed
+in Phase 1 applies. Out of scope for #381; will land separately once the Haskell side
+is stable.
 
 ## The end-state design
 

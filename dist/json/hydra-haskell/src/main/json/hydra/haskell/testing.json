@@ -1529,6 +1529,7 @@
     "hydra.show.errors",
     "hydra.lexical",
     "hydra.strip",
+    "hydra.decode.core",
     "hydra.haskell.syntax",
     "hydra.paths",
     "hydra.ast",
