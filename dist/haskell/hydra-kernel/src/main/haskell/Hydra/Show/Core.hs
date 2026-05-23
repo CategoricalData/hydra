@@ -453,12 +453,10 @@ typeScheme ts =
                     "forall ",
                     (Strings.intercalate "," varNames),
                     ". "])
-          tccName =
-                  \tcc -> case tcc of
-                    Core.TypeClassConstraintSimple n -> n
           toConstraintPair =
                   \v -> \c -> Strings.cat [
-                    Core.unName (tccName c),
+                    case c of
+                      Core.TypeClassConstraintSimple v0 -> Core.unName v0,
                     " ",
                     (Core.unName v)]
           toConstraintPairs =

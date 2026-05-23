@@ -3,6 +3,24 @@
     {
       "term": {
         "name": "hydra.yaml.coder.decodeRecord",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "list": {
+                  "pair": {
+                    "first": {"variable": "hydra.core.FieldType"},
+                    "second": {
+                      "application": {
+                        "argument": {"variable": "hydra.yaml.model.Node"},
+                        "function": {"application": {"argument": {"variable": "hydra.core.Term"}, "function": {"variable": "hydra.coders.Coder"}}}}}}}}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.yaml.model.Node"}}],
+          "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a YAML value to a record term"}}}],
@@ -275,32 +293,28 @@
                               "function": {"application": {"argument": {"variable": "hydra.core.Term"}, "function": {"variable": "hydra.coders.Coder"}}}}}}}},
                     "parameter": "coders"}},
                 "domain": {"variable": "hydra.core.Name"},
-                "parameter": "tname"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
-                          "domain": {"variable": "hydra.yaml.model.Node"}}},
-                      "domain": {"variable": "hydra.context.Context"}}},
-                  "domain": {
-                    "list": {
-                      "pair": {
-                        "first": {"variable": "hydra.core.FieldType"},
-                        "second": {
-                          "application": {
-                            "argument": {"variable": "hydra.yaml.model.Node"},
-                            "function": {"application": {"argument": {"variable": "hydra.core.Term"}, "function": {"variable": "hydra.coders.Coder"}}}}}}}}}},
-              "domain": {"variable": "hydra.core.Name"}}},
-          "variables": []}}},
+                "parameter": "tname"}}}}}},
     {
       "term": {
         "name": "hydra.yaml.coder.encodeRecord",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "list": {
+                  "pair": {
+                    "first": {"variable": "hydra.core.FieldType"},
+                    "second": {
+                      "application": {
+                        "argument": {"variable": "hydra.yaml.model.Node"},
+                        "function": {"application": {"argument": {"variable": "hydra.core.Term"}, "function": {"variable": "hydra.coders.Coder"}}}}}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.yaml.model.Node"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a record term to YAML"}}}],
@@ -729,32 +743,21 @@
                         "application": {
                           "argument": {"variable": "hydra.yaml.model.Node"},
                           "function": {"application": {"argument": {"variable": "hydra.core.Term"}, "function": {"variable": "hydra.coders.Coder"}}}}}}}},
-                "parameter": "coders"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.yaml.model.Node"}}},
-                          "domain": {"variable": "hydra.core.Term"}}},
-                      "domain": {"variable": "hydra.graph.Graph"}}},
-                  "domain": {"variable": "hydra.context.Context"}}},
-              "domain": {
-                "list": {
-                  "pair": {
-                    "first": {"variable": "hydra.core.FieldType"},
-                    "second": {
-                      "application": {
-                        "argument": {"variable": "hydra.yaml.model.Node"},
-                        "function": {"application": {"argument": {"variable": "hydra.core.Term"}, "function": {"variable": "hydra.coders.Coder"}}}}}}}}}},
-          "variables": []}}},
+                "parameter": "coders"}}}}}},
     {
       "term": {
         "name": "hydra.yaml.coder.literalYamlCoder",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.LiteralType"}}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "t0"},
+                "right": {
+                  "application": {
+                    "argument": {"variable": "hydra.yaml.model.Scalar"},
+                    "function": {"application": {"argument": {"variable": "hydra.core.Literal"}, "function": {"variable": "hydra.coders.Coder"}}}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -1539,22 +1542,25 @@
                                                     "function": {"application": {"argument": {"variable": "hydra.core.Literal"}, "function": {"variable": "hydra.coders.Coder"}}}}}}}}}}}}}}}}}}},
                     "domain": {"variable": "hydra.core.LiteralType"},
                     "parameter": "lt"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "either": {
-                  "left": {"variable": "t0"},
-                  "right": {
-                    "application": {
-                      "argument": {"variable": "hydra.yaml.model.Scalar"},
-                      "function": {"application": {"argument": {"variable": "hydra.core.Literal"}, "function": {"variable": "hydra.coders.Coder"}}}}}}},
-              "domain": {"variable": "hydra.core.LiteralType"}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.yaml.coder.recordCoder",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.core.FieldType"}}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.graph.Graph"}}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "hydra.errors.Error"},
+                "right": {
+                  "application": {
+                    "argument": {"variable": "hydra.yaml.model.Node"},
+                    "function": {"application": {"argument": {"variable": "hydra.core.Term"}, "function": {"variable": "hydra.coders.Coder"}}}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -1774,31 +1780,14 @@
                         "parameter": "rt"}},
                     "domain": {"variable": "hydra.core.Name"},
                     "parameter": "tname"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "either": {
-                              "left": {"variable": "hydra.errors.Error"},
-                              "right": {
-                                "application": {
-                                  "argument": {"variable": "hydra.yaml.model.Node"},
-                                  "function": {"application": {"argument": {"variable": "hydra.core.Term"}, "function": {"variable": "hydra.coders.Coder"}}}}}}},
-                          "domain": {"variable": "hydra.graph.Graph"}}},
-                      "domain": {"variable": "t0"}}},
-                  "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
-              "domain": {"variable": "hydra.core.Name"}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.yaml.coder.requiresYamlStringSentinel",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -1851,13 +1840,24 @@
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}}}}}},
                         "function": {"variable": "hydra.lib.logic.or"}}}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+                "parameter": "s"}}}}}},
     {
       "term": {
         "name": "hydra.yaml.coder.termCoder",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.graph.Graph"}}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "hydra.errors.Error"},
+                "right": {
+                  "application": {
+                    "argument": {"variable": "hydra.yaml.model.Node"},
+                    "function": {"application": {"argument": {"variable": "hydra.core.Term"}, "function": {"variable": "hydra.coders.Coder"}}}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -3458,28 +3458,18 @@
                         "parameter": "cx"}},
                     "domain": {"variable": "hydra.core.Type"},
                     "parameter": "typ"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "either": {
-                          "left": {"variable": "hydra.errors.Error"},
-                          "right": {
-                            "application": {
-                              "argument": {"variable": "hydra.yaml.model.Node"},
-                              "function": {"application": {"argument": {"variable": "hydra.core.Term"}, "function": {"variable": "hydra.coders.Coder"}}}}}}},
-                      "domain": {"variable": "hydra.graph.Graph"}}},
-                  "domain": {"variable": "t0"}}},
-              "domain": {"variable": "hydra.core.Type"}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.yaml.coder.unitCoder",
+        "signature": {
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.yaml.model.Node"},
+                "function": {"application": {"argument": {"variable": "hydra.core.Term"}, "function": {"variable": "hydra.coders.Coder"}}}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "YAML coder for unit values"}}}],
@@ -3659,16 +3649,24 @@
                                     "term": {"typeApplication": {"body": {"variable": "decodeUnit"}, "type": {"variable": "hydra.context.Context"}}}}],
                                 "typeName": "hydra.coders.Coder"}},
                             "type": {"variable": "hydra.core.Term"}}},
-                        "type": {"variable": "hydra.yaml.model.Node"}}}}}}}}},
-        "typeScheme": {
-          "body": {
-            "application": {
-              "argument": {"variable": "hydra.yaml.model.Node"},
-              "function": {"application": {"argument": {"variable": "hydra.core.Term"}, "function": {"variable": "hydra.coders.Coder"}}}}},
-          "variables": []}}},
+                        "type": {"variable": "hydra.yaml.model.Node"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.yaml.coder.yamlCoder",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.graph.Graph"}}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "hydra.errors.Error"},
+                "right": {
+                  "application": {
+                    "argument": {"variable": "hydra.yaml.model.Node"},
+                    "function": {"application": {"argument": {"variable": "hydra.core.Term"}, "function": {"variable": "hydra.coders.Coder"}}}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -3848,25 +3846,7 @@
                         "parameter": "cx"}},
                     "domain": {"variable": "hydra.core.Type"},
                     "parameter": "typ"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "either": {
-                          "left": {"variable": "hydra.errors.Error"},
-                          "right": {
-                            "application": {
-                              "argument": {"variable": "hydra.yaml.model.Node"},
-                              "function": {"application": {"argument": {"variable": "hydra.core.Term"}, "function": {"variable": "hydra.coders.Coder"}}}}}}},
-                      "domain": {"variable": "hydra.graph.Graph"}}},
-                  "domain": {"variable": "t0"}}},
-              "domain": {"variable": "hydra.core.Type"}}},
-          "variables": ["t0"]}}}],
+            "parameter": "t0"}}}}],
   "dependencies": [
     {"module": "hydra.adapt"},
     {"module": "hydra.extract.core"},

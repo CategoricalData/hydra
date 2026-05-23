@@ -824,8 +824,8 @@ typeSchemeConstraintsToClassMap maybeConstraints =
 
       let constraintToTypeClass =
               \tcc -> case tcc of
-                Core.TypeClassConstraintSimple className ->
-                  let classNameStr = Core.unName className
+                Core.TypeClassConstraintSimple v0 ->
+                  let classNameStr = Core.unName v0
                       isEq = Equality.equal classNameStr (Core.unName (Core.Name "equality"))
                       isOrd = Equality.equal classNameStr (Core.unName (Core.Name "ordering"))
                   in (Logic.ifElse isEq (Just Classes.TypeClassEquality) (Logic.ifElse isOrd (Just Classes.TypeClassOrdering) Nothing))

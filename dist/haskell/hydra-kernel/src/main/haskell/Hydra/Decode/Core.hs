@@ -519,6 +519,22 @@ typeApplicationTerm cx raw =
           Core.typeApplicationTermBody = field_body,
           Core.typeApplicationTermType = field_type}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.TypeClassConstraint
+typeClassConstraint :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeClassConstraint
+typeClassConstraint cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermInject v0 ->
+        let field = Core.injectionField v0
+            fname = Core.fieldName field
+            fterm = Core.fieldTerm field
+            variantMap =
+                    Maps.fromList [
+                      (Core.Name "simple", (\input -> Eithers.map (\t -> Core.TypeClassConstraintSimple t) (name cx input)))]
+        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+          "no such field ",
+          (Core.unName fname),
+          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+      _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.TypeLambda
 typeLambda :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeLambda
 typeLambda cx raw =
@@ -540,18 +556,6 @@ typeScheme cx raw =
           Core.typeSchemeBody = field_body,
           Core.typeSchemeConstraints = field_constraints})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
--- | Decoder for hydra.core.TypeClassConstraint
-typeClassConstraint :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeClassConstraint
-typeClassConstraint cx raw =
-    Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermInject v0 ->
-        let field = Core.injectionField v0
-            fname = Core.fieldName field
-            fterm = Core.fieldTerm field
-        in if fname == Core.Name "simple"
-           then Eithers.map (\n -> Core.TypeClassConstraintSimple n) (name cx fterm)
-           else Left (Errors.DecodingError ("unexpected variant for TypeClassConstraint: " Prelude.++ Core.unName fname))
-      _ -> Left (Errors.DecodingError "expected injection for TypeClassConstraint")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.TypeVariableMetadata
 typeVariableMetadata :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeVariableMetadata
 typeVariableMetadata cx raw =

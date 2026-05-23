@@ -3,6 +3,14 @@
     {
       "term": {
         "name": "hydra.wasm.coder.buildFieldOffsets",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graph.Graph"}}],
+          "result": {
+            "type": {
+              "map": {
+                "keys": {"variable": "hydra.core.Name"},
+                "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -331,19 +339,24 @@
                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
                                     "type": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}}}}}}},
             "domain": {"variable": "hydra.graph.Graph"},
-            "parameter": "g"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "map": {
-                  "keys": {"variable": "hydra.core.Name"},
-                  "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}},
-              "domain": {"variable": "hydra.graph.Graph"}}},
-          "variables": []}}},
+            "parameter": "g"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.buildFunctionSignatures",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg2", "type": {"list": {"variable": "hydra.packaging.TermDefinition"}}}],
+          "result": {
+            "type": {
+              "map": {
+                "keys": {"literal": {"string": {}}},
+                "values": {
+                  "pair": {
+                    "first": {"list": {"variable": "hydra.wasm.syntax.ValType"}},
+                    "second": {"list": {"variable": "hydra.wasm.syntax.ValType"}}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -540,12 +553,18 @@
                                                                       "application": {
                                                                         "argument": {
                                                                           "application": {
-                                                                            "argument": {"variable": "kv"},
-                                                                            "function": {
-                                                                              "typeApplication": {
-                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                "type": {"variable": "hydra.graph.Primitive"}}}}},
-                                                                        "function": {"project": {"fieldName": "typeScheme", "typeName": "hydra.graph.Primitive"}}}}}},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "kv"},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                        "type": {"variable": "hydra.graph.Primitive"}}}}},
+                                                                                "function": {"project": {"fieldName": "definition", "typeName": "hydra.graph.Primitive"}}}},
+                                                                            "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.PrimitiveDefinition"}}}},
+                                                                        "function": {"variable": "hydra.scoping.termSignatureToTypeScheme"}}}}},
                                                                 "type": {"variable": "hydra.core.Name"}}},
                                                             "type": {"variable": "hydra.core.TypeScheme"}}},
                                                         "function": {"variable": "toSigEntry"}}},
@@ -683,8 +702,17 @@
                                                                   "application": {
                                                                     "argument": {
                                                                       "application": {
-                                                                        "argument": {"variable": "td"},
-                                                                        "function": {"project": {"fieldName": "typeScheme", "typeName": "hydra.packaging.TermDefinition"}}}},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "td"},
+                                                                            "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.TermDefinition"}}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "hydra.scoping.termSignatureToTypeScheme"},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                                "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.bind"}, "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -757,28 +785,18 @@
                     "parameter": "g"}},
                 "domain": {"variable": "t0"},
                 "parameter": "cx"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "map": {
-                          "keys": {"literal": {"string": {}}},
-                          "values": {
-                            "pair": {
-                              "first": {"list": {"variable": "hydra.wasm.syntax.ValType"}},
-                              "second": {"list": {"variable": "hydra.wasm.syntax.ValType"}}}}}},
-                      "domain": {"list": {"variable": "hydra.packaging.TermDefinition"}}}},
-                  "domain": {"variable": "hydra.graph.Graph"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.buildStringOffsets",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"literal": {"string": {}}}}}],
+          "result": {
+            "type": {
+              "pair": {
+                "first": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"integer": {"int32": {}}}}}},
+                "second": {"literal": {"integer": {"int32": {}}}}}}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -988,19 +1006,18 @@
                                     "type": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
                                 "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}},
             "domain": {"list": {"literal": {"string": {}}}},
-            "parameter": "strs"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "pair": {
-                  "first": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"integer": {"int32": {}}}}}},
-                  "second": {"literal": {"integer": {"int32": {}}}}}},
-              "domain": {"list": {"literal": {"string": {}}}}}},
-          "variables": []}}},
+            "parameter": "strs"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.buildVariantIndexes",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graph.Graph"}}],
+          "result": {
+            "type": {
+              "map": {
+                "keys": {"variable": "hydra.core.Name"},
+                "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -1326,19 +1343,14 @@
                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
                                     "type": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}}}}}}},
             "domain": {"variable": "hydra.graph.Graph"},
-            "parameter": "g"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "map": {
-                  "keys": {"variable": "hydra.core.Name"},
-                  "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}},
-              "domain": {"variable": "hydra.graph.Graph"}}},
-          "variables": []}}},
+            "parameter": "g"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.clampValTypesToI32",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "t0"}}}],
+          "result": {"type": {"list": {"variable": "hydra.wasm.syntax.ValType"}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -1359,13 +1371,14 @@
                             "type": {"variable": "hydra.wasm.syntax.ValType"}}}}}}},
                 "domain": {"list": {"variable": "t0"}},
                 "parameter": "vts"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"list": {"variable": "hydra.wasm.syntax.ValType"}}, "domain": {"list": {"variable": "t0"}}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.collectCallTargets",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}],
+          "result": {"type": {"set": {"literal": {"string": {}}}}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -1479,14 +1492,14 @@
                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"set": {"literal": {"string": {}}}}}},
                             "type": {"variable": "hydra.wasm.syntax.Instruction"}}}}}}}}},
             "domain": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
-            "parameter": "instrs"}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"set": {"literal": {"string": {}}}}, "domain": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
-          "variables": []}}},
+            "parameter": "instrs"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.collectInstructionLocals",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}],
+          "result": {"type": {"set": {"literal": {"string": {}}}}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -1626,14 +1639,14 @@
                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"set": {"literal": {"string": {}}}}}},
                             "type": {"variable": "hydra.wasm.syntax.Instruction"}}}}}}}}},
             "domain": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
-            "parameter": "instrs"}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"set": {"literal": {"string": {}}}}, "domain": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
-          "variables": []}}},
+            "parameter": "instrs"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.collectStrings",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.packaging.TermDefinition"}}}],
+          "result": {"type": {"list": {"literal": {"string": {}}}}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -1738,14 +1751,48 @@
                         "argument": {"variable": "allStrings"},
                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"literal": {"string": {}}}}}}}}}}},
             "domain": {"list": {"variable": "hydra.packaging.TermDefinition"}},
-            "parameter": "termDefs"}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"list": {"literal": {"string": {}}}}, "domain": {"list": {"variable": "hydra.packaging.TermDefinition"}}}},
-          "variables": []}}},
+            "parameter": "termDefs"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.encodeApplication",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"integer": {"int32": {}}}}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {
+                "map": {
+                  "keys": {"variable": "hydra.core.Name"},
+                  "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}},
+            {
+              "isLazy": false,
+              "name": "arg4",
+              "type": {
+                "map": {
+                  "keys": {"variable": "hydra.core.Name"},
+                  "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}},
+            {
+              "isLazy": false,
+              "name": "arg5",
+              "type": {
+                "map": {
+                  "keys": {"literal": {"string": {}}},
+                  "values": {"pair": {"first": {"list": {"variable": "t2"}}, "second": {"variable": "t3"}}}}}},
+            {"isLazy": false, "name": "arg6", "type": {"variable": "hydra.core.Term"}}],
+          "result": {
+            "type": {
+              "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}},
+          "typeParameters": [
+            {"constraints": [], "name": "t0"},
+            {"constraints": [], "name": "t1"},
+            {"constraints": [], "name": "t2"},
+            {"constraints": [], "name": "t3"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -2822,44 +2869,49 @@
                         "parameter": "t3"}},
                     "parameter": "t2"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {
-                                "function": {
-                                  "codomain": {
-                                    "function": {
-                                      "codomain": {
-                                        "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
-                                      "domain": {"variable": "hydra.core.Term"}}},
-                                  "domain": {
-                                    "map": {
-                                      "keys": {"literal": {"string": {}}},
-                                      "values": {"pair": {"first": {"list": {"variable": "t2"}}, "second": {"variable": "t3"}}}}}}},
-                              "domain": {
-                                "map": {
-                                  "keys": {"variable": "hydra.core.Name"},
-                                  "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}}},
-                          "domain": {
-                            "map": {
-                              "keys": {"variable": "hydra.core.Name"},
-                              "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}}},
-                      "domain": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1", "t2", "t3"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.encodeCases",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"integer": {"int32": {}}}}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {
+                "map": {
+                  "keys": {"variable": "hydra.core.Name"},
+                  "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}},
+            {
+              "isLazy": false,
+              "name": "arg4",
+              "type": {
+                "map": {
+                  "keys": {"variable": "hydra.core.Name"},
+                  "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}},
+            {
+              "isLazy": false,
+              "name": "arg5",
+              "type": {
+                "map": {
+                  "keys": {"literal": {"string": {}}},
+                  "values": {"pair": {"first": {"list": {"variable": "t2"}}, "second": {"variable": "t3"}}}}}},
+            {"isLazy": false, "name": "arg6", "type": {"variable": "hydra.core.CaseStatement"}},
+            {"isLazy": false, "name": "arg7", "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}],
+          "result": {
+            "type": {
+              "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}},
+          "typeParameters": [
+            {"constraints": [], "name": "t0"},
+            {"constraints": [], "name": "t1"},
+            {"constraints": [], "name": "t2"},
+            {"constraints": [], "name": "t3"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -3621,47 +3673,14 @@
                         "parameter": "t3"}},
                     "parameter": "t2"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {
-                                "function": {
-                                  "codomain": {
-                                    "function": {
-                                      "codomain": {
-                                        "function": {
-                                          "codomain": {
-                                            "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
-                                          "domain": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
-                                      "domain": {"variable": "hydra.core.CaseStatement"}}},
-                                  "domain": {
-                                    "map": {
-                                      "keys": {"literal": {"string": {}}},
-                                      "values": {"pair": {"first": {"list": {"variable": "t2"}}, "second": {"variable": "t3"}}}}}}},
-                              "domain": {
-                                "map": {
-                                  "keys": {"variable": "hydra.core.Name"},
-                                  "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}}},
-                          "domain": {
-                            "map": {
-                              "keys": {"variable": "hydra.core.Name"},
-                              "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}}},
-                      "domain": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1", "t2", "t3"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.encodeLiteral",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Literal"}}],
+          "result": {"type": {"variable": "hydra.wasm.syntax.Instruction"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -3888,13 +3907,14 @@
                             "parameter": "iv"}}}],
                     "typeName": "hydra.core.Literal"}}}},
             "domain": {"variable": "hydra.core.Literal"},
-            "parameter": "lit"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.wasm.syntax.Instruction"}, "domain": {"variable": "hydra.core.Literal"}}},
-          "variables": []}}},
+            "parameter": "lit"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.encodeLiteralType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.LiteralType"}}],
+          "result": {"type": {"variable": "hydra.wasm.syntax.ValType"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -4029,13 +4049,25 @@
                             "parameter": "_"}}}],
                     "typeName": "hydra.core.LiteralType"}}}},
             "domain": {"variable": "hydra.core.LiteralType"},
-            "parameter": "lt"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.wasm.syntax.ValType"}, "domain": {"variable": "hydra.core.LiteralType"}}},
-          "variables": []}}},
+            "parameter": "lt"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.encodeProjection",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "map": {
+                  "keys": {"variable": "hydra.core.Name"},
+                  "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Projection"}},
+            {"isLazy": false, "name": "arg4", "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}],
+          "result": {"type": {"either": {"left": {"variable": "t2"}, "right": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}, {"constraints": [], "name": "t2"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -4298,31 +4330,48 @@
                         "parameter": "cx"}},
                     "parameter": "t2"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {"either": {"left": {"variable": "t2"}, "right": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
-                              "domain": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
-                          "domain": {"variable": "hydra.core.Projection"}}},
-                      "domain": {
-                        "map": {
-                          "keys": {"variable": "hydra.core.Name"},
-                          "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1", "t2"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.encodeTerm",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"integer": {"int32": {}}}}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {
+                "map": {
+                  "keys": {"variable": "hydra.core.Name"},
+                  "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}},
+            {
+              "isLazy": false,
+              "name": "arg4",
+              "type": {
+                "map": {
+                  "keys": {"variable": "hydra.core.Name"},
+                  "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}},
+            {
+              "isLazy": false,
+              "name": "arg5",
+              "type": {
+                "map": {
+                  "keys": {"literal": {"string": {}}},
+                  "values": {"pair": {"first": {"list": {"variable": "t2"}}, "second": {"variable": "t3"}}}}}},
+            {"isLazy": false, "name": "arg6", "type": {"variable": "hydra.core.Term"}}],
+          "result": {
+            "type": {
+              "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}},
+          "typeParameters": [
+            {"constraints": [], "name": "t0"},
+            {"constraints": [], "name": "t1"},
+            {"constraints": [], "name": "t2"},
+            {"constraints": [], "name": "t3"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -7194,44 +7243,47 @@
                         "parameter": "t3"}},
                     "parameter": "t2"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {
-                                "function": {
-                                  "codomain": {
-                                    "function": {
-                                      "codomain": {
-                                        "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
-                                      "domain": {"variable": "hydra.core.Term"}}},
-                                  "domain": {
-                                    "map": {
-                                      "keys": {"literal": {"string": {}}},
-                                      "values": {"pair": {"first": {"list": {"variable": "t2"}}, "second": {"variable": "t3"}}}}}}},
-                              "domain": {
-                                "map": {
-                                  "keys": {"variable": "hydra.core.Name"},
-                                  "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}}},
-                          "domain": {
-                            "map": {
-                              "keys": {"variable": "hydra.core.Name"},
-                              "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}}},
-                      "domain": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1", "t2", "t3"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.encodeTermDefinition",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"integer": {"int32": {}}}}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {
+                "map": {
+                  "keys": {"variable": "hydra.core.Name"},
+                  "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}},
+            {
+              "isLazy": false,
+              "name": "arg4",
+              "type": {
+                "map": {
+                  "keys": {"variable": "hydra.core.Name"},
+                  "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}},
+            {
+              "isLazy": false,
+              "name": "arg5",
+              "type": {
+                "map": {
+                  "keys": {"literal": {"string": {}}},
+                  "values": {"pair": {"first": {"list": {"variable": "t2"}}, "second": {"variable": "t3"}}}}}},
+            {"isLazy": false, "name": "arg6", "type": {"variable": "hydra.packaging.TermDefinition"}}],
+          "result": {
+            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.wasm.syntax.ModuleField"}}}},
+          "typeParameters": [
+            {"constraints": [], "name": "t0"},
+            {"constraints": [], "name": "t1"},
+            {"constraints": [], "name": "t2"},
+            {"constraints": [], "name": "t3"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -7293,8 +7345,17 @@
                                                                           "application": {
                                                                             "argument": {
                                                                               "application": {
-                                                                                "argument": {"variable": "tdef"},
-                                                                                "function": {"project": {"fieldName": "typeScheme", "typeName": "hydra.packaging.TermDefinition"}}}},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "tdef"},
+                                                                                    "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.TermDefinition"}}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "hydra.scoping.termSignatureToTypeScheme"},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                                        "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {"project": {"fieldName": "body", "typeName": "hydra.core.TypeScheme"}},
@@ -7859,43 +7920,17 @@
                         "parameter": "t3"}},
                     "parameter": "t2"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {
-                                "function": {
-                                  "codomain": {
-                                    "function": {
-                                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.wasm.syntax.ModuleField"}}},
-                                      "domain": {"variable": "hydra.packaging.TermDefinition"}}},
-                                  "domain": {
-                                    "map": {
-                                      "keys": {"literal": {"string": {}}},
-                                      "values": {"pair": {"first": {"list": {"variable": "t2"}}, "second": {"variable": "t3"}}}}}}},
-                              "domain": {
-                                "map": {
-                                  "keys": {"variable": "hydra.core.Name"},
-                                  "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}}},
-                          "domain": {
-                            "map": {
-                              "keys": {"variable": "hydra.core.Name"},
-                              "values": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}}},
-                      "domain": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1", "t2", "t3"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.encodeType",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"either": {"left": {"variable": "t2"}, "right": {"list": {"variable": "hydra.wasm.syntax.ValType"}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}, {"constraints": [], "name": "t2"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -8052,22 +8087,17 @@
                         "parameter": "cx"}},
                     "parameter": "t2"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "t2"}, "right": {"list": {"variable": "hydra.wasm.syntax.ValType"}}}},
-                      "domain": {"variable": "hydra.core.Type"}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1", "t2"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.encodeTypeDefinition",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.packaging.TypeDefinition"}}],
+          "result": {"type": {"either": {"left": {"variable": "t2"}, "right": {"list": {"variable": "hydra.wasm.syntax.ModuleField"}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}, {"constraints": [], "name": "t2"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -8237,22 +8267,17 @@
                         "parameter": "cx"}},
                     "parameter": "t2"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "t2"}, "right": {"list": {"variable": "hydra.wasm.syntax.ModuleField"}}}},
-                      "domain": {"variable": "hydra.packaging.TypeDefinition"}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1", "t2"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.encodeValType",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.wasm.syntax.ValType"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}, {"constraints": [], "name": "t2"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -8409,22 +8434,14 @@
                         "parameter": "cx"}},
                     "parameter": "t2"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.wasm.syntax.ValType"}}},
-                      "domain": {"variable": "hydra.core.Type"}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1", "t2"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.extractLambdaParams",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"pair": {"first": {"list": {"variable": "hydra.core.Name"}}, "second": {"variable": "hydra.core.Term"}}}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -8583,16 +8600,16 @@
                             "type": {"variable": "hydra.core.Term"}}},
                         "typeName": "hydra.core.Term"}}}}}},
             "domain": {"variable": "hydra.core.Term"},
-            "parameter": "term"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"pair": {"first": {"list": {"variable": "hydra.core.Name"}}, "second": {"variable": "hydra.core.Term"}}},
-              "domain": {"variable": "hydra.core.Term"}}},
-          "variables": []}}},
+            "parameter": "term"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.peelLambdaApp",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Term"}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "t0"}}}],
+          "result": {"type": {"pair": {"first": {"list": {"variable": "hydra.core.Name"}}, "second": {"variable": "hydra.core.Term"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -8732,19 +8749,17 @@
                     "parameter": "args"}},
                 "domain": {"variable": "hydra.core.Term"},
                 "parameter": "term"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"pair": {"first": {"list": {"variable": "hydra.core.Name"}}, "second": {"variable": "hydra.core.Term"}}},
-                  "domain": {"list": {"variable": "t0"}}}},
-              "domain": {"variable": "hydra.core.Term"}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.extractParamTypes",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"either": {"left": {"variable": "t2"}, "right": {"list": {"variable": "hydra.wasm.syntax.ValType"}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}, {"constraints": [], "name": "t2"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -8898,22 +8913,24 @@
                         "parameter": "cx"}},
                     "parameter": "t2"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "t2"}, "right": {"list": {"variable": "hydra.wasm.syntax.ValType"}}}},
-                      "domain": {"variable": "hydra.core.Type"}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1", "t2"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.extractSignature",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Type"}}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "t2"},
+                "right": {
+                  "pair": {
+                    "first": {"list": {"variable": "hydra.wasm.syntax.ValType"}},
+                    "second": {"list": {"variable": "hydra.wasm.syntax.ValType"}}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}, {"constraints": [], "name": "t2"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -9031,28 +9048,14 @@
                         "parameter": "cx"}},
                     "parameter": "t2"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "either": {
-                          "left": {"variable": "t2"},
-                          "right": {
-                            "pair": {
-                              "first": {"list": {"variable": "hydra.wasm.syntax.ValType"}},
-                              "second": {"list": {"variable": "hydra.wasm.syntax.ValType"}}}}}},
-                      "domain": {"variable": "hydra.core.Type"}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1", "t2"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.hexEscapeString",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -9151,13 +9154,22 @@
                                 "function": {"variable": "digitToHex"}}}]},
                         "function": {"variable": "hydra.lib.strings.cat"}}}}}}},
             "domain": {"literal": {"integer": {"int32": {}}}},
-            "parameter": "b"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"integer": {"int32": {}}}}}},
-          "variables": []}}},
+            "parameter": "b"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.moduleToWasm",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.packaging.Definition"}}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.graph.Graph"}}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "hydra.errors.Error"},
+                "right": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"string": {}}}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -10123,28 +10135,15 @@
                     "parameter": "defs"}},
                 "domain": {"variable": "hydra.packaging.Module"},
                 "parameter": "mod"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "either": {
-                              "left": {"variable": "hydra.errors.Error"},
-                              "right": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"string": {}}}}}}},
-                          "domain": {"variable": "hydra.graph.Graph"}}},
-                      "domain": {"variable": "t0"}}},
-                  "domain": {"list": {"variable": "hydra.packaging.Definition"}}}},
-              "domain": {"variable": "hydra.packaging.Module"}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.wasm.coder.stringDataSegment",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "t0"}}}}],
+          "result": {"type": {"variable": "hydra.wasm.syntax.ModuleField"}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -10396,14 +10395,7 @@
                                 "typeName": "hydra.wasm.syntax.ModuleField"}}}}}}}},
                 "domain": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "t0"}}},
                 "parameter": "offsets"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.wasm.syntax.ModuleField"},
-              "domain": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "t0"}}}}},
-          "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
-          "variables": ["t0"]}}}],
+            "parameter": "t0"}}}}],
   "dependencies": [
     {"module": "hydra.wasm.serde"},
     {"module": "hydra.wasm.language"},
