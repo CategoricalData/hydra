@@ -245,7 +245,7 @@ def _encode_name_qualified():
                             formatting_convert_case(util_case_convention_camel, util_case_convention_lower_snake),
                             Strings.split_on(
                                 string("."),
-                                packaging_un_namespace(var("nsVal")),
+                                packaging_un_module_name(var("nsVal")),
                             ),
                         ),
                     ),
