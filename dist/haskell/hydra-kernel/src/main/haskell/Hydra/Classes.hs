@@ -1,15 +1,16 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | Type classes
+-- | Registry of Hydra's built-in type classes.
 
 module Hydra.Classes where
-import qualified Hydra.Core as Core
+import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
--- | Any of a small number of built-in type classes
-data TypeClass =
-  TypeClassEquality |
-  TypeClassOrdering
-  deriving (Eq, Ord, Read, Show)
-_TypeClass = Core.Name "hydra.classes.TypeClass"
-_TypeClass_equality = Core.Name "equality"
-_TypeClass_ordering = Core.Name "ordering"
+-- | The equality type class: instances support structural equality.
+equality :: Typing.TypeClass
+equality = Typing.TypeClass {
+  Typing.typeClassDescription = "Equality: instances support structural equality."}
+-- | The ordering type class: instances support total ordering (and equality).
+ordering :: Typing.TypeClass
+ordering =
+    Typing.TypeClass {
+      Typing.typeClassDescription = "Ordering: instances support total ordering (and equality)."}
