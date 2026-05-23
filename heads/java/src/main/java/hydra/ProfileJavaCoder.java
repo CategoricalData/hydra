@@ -7,7 +7,7 @@ import hydra.errors.Error_;
 import hydra.graph.Graph;
 import hydra.packaging.Definition;
 import hydra.packaging.Module;
-import hydra.packaging.Namespace;
+import hydra.packaging.ModuleName;
 import hydra.packaging.TermDefinition;
 import hydra.util.Either;
 import hydra.util.Maybe;
@@ -53,13 +53,13 @@ public class ProfileJavaCoder {
 
         System.err.println("Loading kernel from " + kernelDir + " ...");
         Map<Name, hydra.core.Type> schemaMap = Generation.bootstrapSchemaMap();
-        List<Namespace> kernelNs = Generation.readManifestField(kernelDir, "mainModules");
+        List<ModuleName> kernelNs = Generation.readManifestField(kernelDir, "mainModules");
         List<Module> universe = new ArrayList<>(
             Generation.loadModulesFromJson(kernelDir, schemaMap, kernelNs));
         System.err.println("  loaded " + universe.size() + " kernel modules");
 
         System.err.println("Loading hydra-java from " + javaDir + " ...");
-        List<Namespace> javaNs = Generation.readManifestField(javaDir, "mainModules");
+        List<ModuleName> javaNs = Generation.readManifestField(javaDir, "mainModules");
         List<Module> javaMods = new ArrayList<>(
             Generation.loadModulesFromJson(javaDir, schemaMap, javaNs));
         for (Module m : javaMods) universe.add(m);
@@ -67,7 +67,7 @@ public class ProfileJavaCoder {
 
         Module target = null;
         for (Module m : javaMods) {
-            if (ns.equals(m.namespace.value)) { target = m; break; }
+            if (ns.equals(m.name.value)) { target = m; break; }
         }
         if (target == null) { System.err.println("Module " + ns + " not found"); System.exit(2); }
         System.err.println("Target " + ns + ": " + target.definitions.size() + " defs total");
@@ -79,7 +79,7 @@ public class ProfileJavaCoder {
         Module strippedTarget = null;
         List<Module> universeStripped = new ArrayList<>();
         for (Module m : universe) {
-            if (m.namespace.value.equals(ns)) {
+            if (m.name.value.equals(ns)) {
                 List<Definition> stripped = new ArrayList<>();
                 for (Definition d : m.definitions) {
                     if (d instanceof Definition.Term) {
@@ -88,7 +88,7 @@ public class ProfileJavaCoder {
                             new TermDefinition(td.name, td.term, Maybe.<hydra.core.TypeScheme>nothing())));
                     } else stripped.add(d);
                 }
-                strippedTarget = new Module(m.description, m.namespace, m.dependencies, stripped);
+                strippedTarget = new Module(m.description, m.name, m.dependencies, stripped);
                 universeStripped.add(strippedTarget);
             } else {
                 universeStripped.add(m);
@@ -103,12 +103,12 @@ public class ProfileJavaCoder {
         for (int n : sizes) {
             n = Math.min(n, strippedTarget.definitions.size());
             List<Definition> prefix = new ArrayList<>(strippedTarget.definitions.subList(0, n));
-            Module prefixMod = new Module(strippedTarget.description, strippedTarget.namespace,
+            Module prefixMod = new Module(strippedTarget.description, strippedTarget.name,
                 strippedTarget.dependencies, prefix);
             // Universe = stripped, with target replaced by prefix.
             List<Module> universeForCall = new ArrayList<>();
             for (Module m : universeStripped) {
-                universeForCall.add(m.namespace.value.equals(ns) ? prefixMod : m);
+                universeForCall.add(m.name.value.equals(ns) ? prefixMod : m);
             }
             long t0 = System.currentTimeMillis();
             Either<Error_, List<Module>> result =

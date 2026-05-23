@@ -84,17 +84,17 @@ import qualified Hydra.Sources.Kernel.Terms.Variables    as Variables
 import qualified Hydra.Sources.Kernel.Terms.Predicates   as Predicates
 
 
-ns :: Namespace
-ns = Namespace "hydra.analysis"
+ns :: ModuleName
+ns = ModuleName "hydra.analysis"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Annotations.ns, Arity.ns, Checking.ns, Dependencies.ns, moduleNamespace DecodeCore.module_, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, Scoping.ns, Strip.ns, Variables.ns, Namespace "hydra.constants", Namespace "hydra.encode.core"] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Arity.ns, Checking.ns, Dependencies.ns, moduleName DecodeCore.module_, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, Scoping.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just ("Module dependency namespace analysis")}
   where
     definitions = [
@@ -116,7 +116,7 @@ module_ = Module {
       toDefinition moduleDependencyNamespaces,
       toDefinition namespacesForDefinitions]
 
-addNamesToNamespaces :: TTermDefinition ((Namespace -> a) -> S.Set Name -> Namespaces a -> Namespaces a)
+addNamesToNamespaces :: TTermDefinition ((ModuleName -> a) -> S.Set Name -> Namespaces a -> Namespaces a)
 addNamesToNamespaces = define "addNamesToNamespaces" $
   doc "Add names to existing namespaces mapping" $
   "encodeNamespace" ~> "names" ~> "ns0" ~>
@@ -249,7 +249,7 @@ analyzeFunctionTermWithGather = define "analyzeFunctionTermWithGather" $
         @@ var "tapps"
         @@ var "tlBody"]
 
-definitionDependencyNamespaces :: TTermDefinition ([Definition] -> S.Set Namespace)
+definitionDependencyNamespaces :: TTermDefinition ([Definition] -> S.Set ModuleName)
 definitionDependencyNamespaces = define "definitionDependencyNamespaces" $
   doc "Get dependency namespaces from definitions" $
   "defs" ~>
@@ -262,7 +262,7 @@ definitionDependencyNamespaces = define "definitionDependencyNamespaces" $
   "allNames" <~ Sets.unions (Lists.map (var "defNames") (var "defs")) $
   Sets.fromList (Maybes.cat (Lists.map (Names.namespaceOf) (Sets.toList (var "allNames"))))
 
-dependencyNamespaces :: TTermDefinition (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Either Error (S.Set Namespace))
+dependencyNamespaces :: TTermDefinition (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Either Error (S.Set ModuleName))
 dependencyNamespaces = define "dependencyNamespaces" $
   doc "Find dependency namespaces in all of a set of terms (Either version)" $
   "cx" ~> "graph" ~> "binds" ~> "withPrims" ~> "withNoms" ~> "withSchema" ~> "els" ~>
@@ -497,7 +497,7 @@ moduleContainsDecimalLiterals = define "moduleContainsDecimalLiterals" $
     false
     (var "defTerms")
 
-moduleDependencyNamespaces :: TTermDefinition (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> Module -> Either Error (S.Set Namespace))
+moduleDependencyNamespaces :: TTermDefinition (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> Module -> Either Error (S.Set ModuleName))
 moduleDependencyNamespaces = define "moduleDependencyNamespaces" $
   doc "Find dependency namespaces in all elements of a module, excluding the module's own namespace (Either version)" $
   "cx" ~> "graph" ~> "binds" ~> "withPrims" ~> "withNoms" ~> "withSchema" ~> "mod" ~>
@@ -510,11 +510,11 @@ moduleDependencyNamespaces = define "moduleDependencyNamespaces" $
           (Packaging.termDefinitionTypeScheme $ var "td"))])
     (Packaging.moduleDefinitions (var "mod"))) $
   Eithers.map
-    ("deps" ~> Sets.delete (Packaging.moduleNamespace (var "mod")) (var "deps"))
+    ("deps" ~> Sets.delete (Packaging.moduleName (var "mod")) (var "deps"))
     (dependencyNamespaces @@ var "cx" @@ var "graph" @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "withSchema" @@
       (var "allBindings"))
 
-namespacesForDefinitions :: TTermDefinition ((Namespace -> a) -> Namespace -> [Definition] -> Namespaces a)
+namespacesForDefinitions :: TTermDefinition ((ModuleName -> a) -> ModuleName -> [Definition] -> Namespaces a)
 namespacesForDefinitions = define "namespacesForDefinitions" $
   doc "Create namespaces mapping for definitions" $
   "encodeNamespace" ~> "focusNs" ~> "defs" ~>

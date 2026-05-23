@@ -1059,33 +1059,32 @@ decodeModule cx graph mod =
             Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
             Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (decodeBinding cx graph b)) typeBindings) (\decodedBindings ->
-      let originalDeps = Packaging.moduleDependencies mod
-          allDecodedDeps = Lists.nub (Lists.map decodeNamespace originalDeps)
+      let allDecodedDeps =
+              Lists.nub (Lists.map decodeNamespace (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)))
       in (Right (Just (Packaging.Module {
         Packaging.moduleDescription = (Just (Strings.cat [
           "Term decoders for ",
-          (Packaging.unNamespace (Packaging.moduleNamespace mod))])),
-        Packaging.moduleNamespace = (decodeNamespace (Packaging.moduleNamespace mod)),
-        Packaging.moduleDependencies = (Lists.concat2 [
-          Packaging.Namespace "hydra.extract.core",
-          (Packaging.Namespace "hydra.lexical"),
-          (Packaging.Namespace "hydra.rewriting"),
-          (Packaging.Namespace "hydra.core"),
-          (Packaging.Namespace "hydra.errors"),
-          (Packaging.Namespace "hydra.graph"),
-          (Packaging.moduleNamespace mod),
-          (Packaging.Namespace "hydra.util")] (Lists.concat2 originalDeps allDecodedDeps)),
+          (Packaging.unModuleName (Packaging.moduleName mod))])),
+        Packaging.moduleName = (decodeNamespace (Packaging.moduleName mod)),
+        Packaging.moduleDependencies = (Lists.map (\ns -> Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = ns,
+          Packaging.moduleDependencyPackage = Nothing}) (Lists.concat2 [
+          Packaging.ModuleName "hydra.extract.core",
+          (Packaging.ModuleName "hydra.lexical"),
+          (Packaging.ModuleName "hydra.rewriting"),
+          (Packaging.moduleName mod),
+          (Packaging.ModuleName "hydra.util")] allDecodedDeps)),
         Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.bindingName b),
           Packaging.termDefinitionTerm = (Core.bindingTerm b),
           Packaging.termDefinitionTypeScheme = (Core.bindingTypeScheme b)})) decodedBindings)}))))))
 -- | Generate a decoder module namespace from a source module namespace
-decodeNamespace :: Packaging.Namespace -> Packaging.Namespace
+decodeNamespace :: Packaging.ModuleName -> Packaging.ModuleName
 decodeNamespace ns =
 
-      let parts = Strings.splitOn "." (Packaging.unNamespace ns)
-          fallback = Packaging.Namespace (Packaging.unNamespace ns)
-      in (Maybes.maybe fallback (\uc -> Packaging.Namespace (Strings.cat [
+      let parts = Strings.splitOn "." (Packaging.unModuleName ns)
+          fallback = Packaging.ModuleName (Packaging.unModuleName ns)
+      in (Maybes.maybe fallback (\uc -> Packaging.ModuleName (Strings.cat [
         "hydra.decode.",
         (Strings.intercalate "." (Pairs.second uc))])) (Lists.uncons parts))
 -- | Generate a decoder for a pair type
@@ -1322,7 +1321,7 @@ decodeUnionTypeNamed ename rt =
                                 Core.bindingTerm = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermProject (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
-                                    Core.projectionField = (Core.Name "field")})),
+                                    Core.projectionFieldName = (Core.Name "field")})),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
                                 Core.bindingTypeScheme = Nothing},
                               Core.Binding {
@@ -1330,7 +1329,7 @@ decodeUnionTypeNamed ename rt =
                                 Core.bindingTerm = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermProject (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.core.Field"),
-                                    Core.projectionField = (Core.Name "name")})),
+                                    Core.projectionFieldName = (Core.Name "name")})),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
                                 Core.bindingTypeScheme = Nothing},
                               Core.Binding {
@@ -1338,7 +1337,7 @@ decodeUnionTypeNamed ename rt =
                                 Core.bindingTerm = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermProject (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.core.Field"),
-                                    Core.projectionField = (Core.Name "term")})),
+                                    Core.projectionFieldName = (Core.Name "term")})),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
                                 Core.bindingTypeScheme = Nothing},
                               Core.Binding {
@@ -1445,7 +1444,7 @@ decodeWrappedTypeNamed ename wt =
                               Core.applicationArgument = (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = (Core.TermProject (Core.Projection {
                                   Core.projectionTypeName = (Core.Name "hydra.core.WrappedTerm"),
-                                  Core.projectionField = (Core.Name "body")})),
+                                  Core.projectionFieldName = (Core.Name "body")})),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "wrappedTerm"))}))}))}))}))}]})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))}))})),
             Core.applicationArgument = (Core.TermApplication (Core.Application {

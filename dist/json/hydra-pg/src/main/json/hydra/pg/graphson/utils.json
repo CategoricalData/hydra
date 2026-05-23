@@ -236,7 +236,7 @@
                                                                       "application": {
                                                                         "argument": {"variable": "v"},
                                                                         "function": {
-                                                                          "typeApplication": {"body": {"project": {"field": "id", "typeName": "hydra.pg.model.Vertex"}}, "type": {"variable": "t0"}}}}},
+                                                                          "typeApplication": {"body": {"project": {"fieldName": "id", "typeName": "hydra.pg.model.Vertex"}}, "type": {"variable": "t0"}}}}},
                                                                     "second": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -307,7 +307,7 @@
                                                                           "application": {
                                                                             "argument": {"variable": "edge"},
                                                                             "function": {
-                                                                              "typeApplication": {"body": {"project": {"field": "label", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "t0"}}}}},
+                                                                              "typeApplication": {"body": {"project": {"fieldName": "label", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "t0"}}}}},
                                                                         "typeScheme": {"body": {"variable": "hydra.pg.model.EdgeLabel"}, "variables": []}}],
                                                                     "body": {
                                                                       "let": {
@@ -318,7 +318,7 @@
                                                                               "application": {
                                                                                 "argument": {"variable": "edge"},
                                                                                 "function": {
-                                                                                  "typeApplication": {"body": {"project": {"field": "id", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "t0"}}}}},
+                                                                                  "typeApplication": {"body": {"project": {"fieldName": "id", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "t0"}}}}},
                                                                             "typeScheme": {"body": {"variable": "t0"}, "variables": []}}],
                                                                         "body": {
                                                                           "let": {
@@ -329,7 +329,7 @@
                                                                                   "application": {
                                                                                     "argument": {"variable": "edge"},
                                                                                     "function": {
-                                                                                      "typeApplication": {"body": {"project": {"field": "out", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "t0"}}}}},
+                                                                                      "typeApplication": {"body": {"project": {"fieldName": "out", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "t0"}}}}},
                                                                                 "typeScheme": {"body": {"variable": "t0"}, "variables": []}}],
                                                                             "body": {
                                                                               "let": {
@@ -340,7 +340,7 @@
                                                                                       "application": {
                                                                                         "argument": {"variable": "edge"},
                                                                                         "function": {
-                                                                                          "typeApplication": {"body": {"project": {"field": "in", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "t0"}}}}},
+                                                                                          "typeApplication": {"body": {"project": {"fieldName": "in", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "t0"}}}}},
                                                                                     "typeScheme": {"body": {"variable": "t0"}, "variables": []}}],
                                                                                 "body": {
                                                                                   "let": {
@@ -351,7 +351,7 @@
                                                                                           "application": {
                                                                                             "argument": {"variable": "edge"},
                                                                                             "function": {
-                                                                                              "typeApplication": {"body": {"project": {"field": "properties", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "t0"}}}}},
+                                                                                              "typeApplication": {"body": {"project": {"fieldName": "properties", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "t0"}}}}},
                                                                                         "typeScheme": {"body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}}, "variables": []}}],
                                                                                     "body": {
                                                                                       "let": {
@@ -429,7 +429,7 @@
                                                                                                                                         "argument": {"variable": "vae"},
                                                                                                                                         "function": {
                                                                                                                                           "typeApplication": {
-                                                                                                                                            "body": {"project": {"field": "vertex", "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
+                                                                                                                                            "body": {"project": {"fieldName": "vertex", "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
                                                                                                                                             "type": {"variable": "t0"}}}}}},
                                                                                                                                   {
                                                                                                                                     "name": "ins",
@@ -438,7 +438,7 @@
                                                                                                                                         "argument": {"variable": "vae"},
                                                                                                                                         "function": {
                                                                                                                                           "typeApplication": {
-                                                                                                                                            "body": {"project": {"field": "ins", "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
+                                                                                                                                            "body": {"project": {"fieldName": "ins", "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
                                                                                                                                             "type": {"variable": "t0"}}}}}},
                                                                                                                                   {
                                                                                                                                     "name": "outs",
@@ -449,7 +449,7 @@
                                                                                                                                             "argument": {"variable": "vae"},
                                                                                                                                             "function": {
                                                                                                                                               "typeApplication": {
-                                                                                                                                                "body": {"project": {"field": "outs", "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
+                                                                                                                                                "body": {"project": {"fieldName": "outs", "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
                                                                                                                                                 "type": {"variable": "t0"}}}}},
                                                                                                                                         "function": {
                                                                                                                                           "application": {
@@ -521,7 +521,7 @@
                                                                                                                                     "argument": {"variable": "vae"},
                                                                                                                                     "function": {
                                                                                                                                       "typeApplication": {
-                                                                                                                                        "body": {"project": {"field": "vertex", "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
+                                                                                                                                        "body": {"project": {"fieldName": "vertex", "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
                                                                                                                                         "type": {"variable": "t0"}}}}}},
                                                                                                                               {
                                                                                                                                 "name": "ins",
@@ -532,7 +532,7 @@
                                                                                                                                         "argument": {"variable": "vae"},
                                                                                                                                         "function": {
                                                                                                                                           "typeApplication": {
-                                                                                                                                            "body": {"project": {"field": "ins", "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
+                                                                                                                                            "body": {"project": {"fieldName": "ins", "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
                                                                                                                                             "type": {"variable": "t0"}}}}},
                                                                                                                                     "function": {
                                                                                                                                       "application": {
@@ -548,7 +548,7 @@
                                                                                                                                     "argument": {"variable": "vae"},
                                                                                                                                     "function": {
                                                                                                                                       "typeApplication": {
-                                                                                                                                        "body": {"project": {"field": "outs", "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
+                                                                                                                                        "body": {"project": {"fieldName": "outs", "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
                                                                                                                                         "type": {"variable": "t0"}}}}}}],
                                                                                                                             "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
                                                                                                                         "type": {"variable": "t0"}}},
@@ -986,34 +986,34 @@
           "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
           "variables": ["t0", "t1"]}}}],
   "dependencies": [
-    "hydra.pg.graphson.construct",
-    "hydra.strip",
-    "hydra.paths",
-    "hydra.ast",
-    "hydra.classes",
-    "hydra.coders",
-    "hydra.context",
-    "hydra.core",
-    "hydra.error.checking",
-    "hydra.error.core",
-    "hydra.error.packaging",
-    "hydra.errors",
-    "hydra.graph",
-    "hydra.json.model",
-    "hydra.packaging",
-    "hydra.parsing",
-    "hydra.phantoms",
-    "hydra.query",
-    "hydra.relational",
-    "hydra.tabular",
-    "hydra.testing",
-    "hydra.topology",
-    "hydra.typing",
-    "hydra.util",
-    "hydra.validation",
-    "hydra.variants",
-    "hydra.pg.graphson.syntax",
-    "hydra.pg.model",
-    "hydra.json.model"],
+    {"module": "hydra.pg.graphson.construct"},
+    {"module": "hydra.strip"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.classes"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"},
+    {"module": "hydra.pg.graphson.syntax"},
+    {"module": "hydra.pg.model"},
+    {"module": "hydra.json.model"}],
   "description": "Utility functions for GraphSON encoding and property graph conversion.",
-  "namespace": "hydra.pg.graphson.utils"}
+  "name": "hydra.pg.graphson.utils"}

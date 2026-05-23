@@ -1,6 +1,6 @@
 package hydra.sources.java;
-
 import hydra.core.Field;
+import static hydra.dsl.meta.Defs.unqualifiedDeps;
 import hydra.core.Name;
 import hydra.core.Type;
 import hydra.dsl.Core;
@@ -22,7 +22,8 @@ import hydra.dsl.meta.lib.Sets;
 import hydra.dsl.meta.lib.Strings;
 import hydra.packaging.Definition;
 import hydra.packaging.Module;
-import hydra.packaging.Namespace;
+import hydra.packaging.ModuleName;
+import hydra.packaging.ModuleDependency;
 import hydra.phantoms.TTerm;
 import hydra.util.Maybe;
 
@@ -39,7 +40,7 @@ import static hydra.dsl.java.Helpers.termDef;
  * {@code packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Testing.hs}.</p>
  */
 public class Testing {
-    public static final Namespace NS = new Namespace("hydra.java.testing");
+    public static final ModuleName NS = new ModuleName("hydra.java.testing");
 
     // ---- Primitive references ----
     private static TTerm<?> prim(String fqName) { return var(fqName); }
@@ -109,11 +110,11 @@ public class Testing {
     }
     private static TTerm<?> packagingModuleNamespace(TTerm<?> m) {
         return apply(
-            project("hydra.packaging.Module", "namespace"),
+            project("hydra.packaging.Module", "name"),
             m);
     }
     private static TTerm<?> unwrapNamespace(TTerm<?> ns) {
-        return Packaging.unNamespace(tterm(ns.value));
+        return Packaging.unModuleName(tterm(ns.value));
     }
     private static TTerm<?> caseConventionLowerSnake() {
         return injectUnit("hydra.util.CaseConvention", "lowerSnake");
@@ -369,37 +370,37 @@ public class Testing {
 
     // Haskell: [SerializationSource.ns, TestUtils.ns, Formatting.ns, Names.ns, Constants.ns]
     //         ++ (JavaSyntax.ns : kernelTypesNamespaces)
-    private static final List<Namespace> DEPENDENCIES = Arrays.asList(
-        new Namespace("hydra.serialization"),
-        new Namespace("hydra.test.utils"),
-        new Namespace("hydra.formatting"),
-        new Namespace("hydra.names"),
-        new Namespace("hydra.constants"),
-        new Namespace("hydra.java.syntax"),
-        new Namespace("hydra.paths"),
-        new Namespace("hydra.ast"),
-        new Namespace("hydra.classes"),
-        new Namespace("hydra.coders"),
-        new Namespace("hydra.context"),
-        new Namespace("hydra.core"),
-        new Namespace("hydra.error.checking"),
-        new Namespace("hydra.error.core"),
-        new Namespace("hydra.error.packaging"),
-        new Namespace("hydra.errors"),
-        new Namespace("hydra.graph"),
-        new Namespace("hydra.json.model"),
-        new Namespace("hydra.packaging"),
-        new Namespace("hydra.parsing"),
-        new Namespace("hydra.phantoms"),
-        new Namespace("hydra.query"),
-        new Namespace("hydra.relational"),
-        new Namespace("hydra.tabular"),
-        new Namespace("hydra.testing"),
-        new Namespace("hydra.topology"),
-        new Namespace("hydra.typing"),
-        new Namespace("hydra.util"),
-        new Namespace("hydra.validation"),
-        new Namespace("hydra.variants"));
+    private static final List<ModuleDependency> DEPENDENCIES = unqualifiedDeps(
+        new ModuleName("hydra.serialization"),
+        new ModuleName("hydra.test.utils"),
+        new ModuleName("hydra.formatting"),
+        new ModuleName("hydra.names"),
+        new ModuleName("hydra.constants"),
+        new ModuleName("hydra.java.syntax"),
+        new ModuleName("hydra.paths"),
+        new ModuleName("hydra.ast"),
+        new ModuleName("hydra.classes"),
+        new ModuleName("hydra.coders"),
+        new ModuleName("hydra.context"),
+        new ModuleName("hydra.core"),
+        new ModuleName("hydra.error.checking"),
+        new ModuleName("hydra.error.core"),
+        new ModuleName("hydra.error.packaging"),
+        new ModuleName("hydra.errors"),
+        new ModuleName("hydra.graph"),
+        new ModuleName("hydra.json.model"),
+        new ModuleName("hydra.packaging"),
+        new ModuleName("hydra.parsing"),
+        new ModuleName("hydra.phantoms"),
+        new ModuleName("hydra.query"),
+        new ModuleName("hydra.relational"),
+        new ModuleName("hydra.tabular"),
+        new ModuleName("hydra.testing"),
+        new ModuleName("hydra.topology"),
+        new ModuleName("hydra.typing"),
+        new ModuleName("hydra.util"),
+        new ModuleName("hydra.validation"),
+        new ModuleName("hydra.variants"));
 
     public static final Module module_ = new Module(
         Maybe.just("Java test code generation codec for JUnit-based generation tests"),

@@ -7,7 +7,7 @@ path produces JSON byte-equivalent to the Haskell-generated language.json.
 
 from hydra.core import Name
 from hydra.dsl.python import Just
-from hydra.packaging import Module, Namespace
+from hydra.packaging import Module, ModuleName
 
 import hydra.dsl.meta.lib.lists as Lists
 import hydra.dsl.meta.lib.sets as Sets
@@ -21,8 +21,8 @@ import hydra.dsl.coders as Coders
 #   moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces
 # kernelTypesNamespaces is the list of all hydra.* type module namespaces in the
 # canonical order from packages/hydra-kernel/.../Hydra/Sources/Kernel/Types/All.hs.
-LEXICAL_NS = Namespace("hydra.lexical")
-from hydra.sources.python._source_dsl import KERNEL_TYPES_NAMESPACES
+LEXICAL_NS = ModuleName("hydra.lexical")
+from hydra.sources.python._source_dsl import KERNEL_TYPES_NAMESPACES, unqualified_dep
 
 
 def _python_language_term():
@@ -159,7 +159,7 @@ def _python_reserved_words_term():
 
 
 # Build the module value. We construct definitions first, then the module.
-_NS = Namespace("hydra.python.language")
+_NS = ModuleName("hydra.python.language")
 
 
 def _build_module() -> Module:
@@ -169,7 +169,7 @@ def _build_module() -> Module:
     placeholder = Module(
         Just("Language constraints and reserved words for Python 3"),
         _NS,
-        [LEXICAL_NS] + KERNEL_TYPES_NAMESPACES,
+        [unqualified_dep(LEXICAL_NS)] + KERNEL_TYPES_NAMESPACES,
         (),  # filled in below
     )
     python_language = definition_in_module(
@@ -178,7 +178,7 @@ def _build_module() -> Module:
         placeholder, "pythonReservedWords", _python_reserved_words_term())
     return Module(
         placeholder.description,
-        placeholder.namespace,
+        placeholder.name,
         placeholder.dependencies,
         (
             to_definition(python_language),

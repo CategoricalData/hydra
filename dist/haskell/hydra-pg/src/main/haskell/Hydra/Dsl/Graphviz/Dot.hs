@@ -33,7 +33,7 @@ attrStmtAttributes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.AttrStmt"),
-        Core.projectionField = (Core.Name "attributes")})),
+        Core.projectionFieldName = (Core.Name "attributes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 attrStmtType :: Phantoms.TTerm Dot.AttrStmt -> Phantoms.TTerm Dot.AttrType
@@ -41,7 +41,7 @@ attrStmtType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.AttrStmt"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 attrStmtWithAttributes :: Phantoms.TTerm Dot.AttrStmt -> Phantoms.TTerm Dot.AttrList -> Phantoms.TTerm Dot.AttrStmt
@@ -54,7 +54,7 @@ attrStmtWithAttributes original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.AttrStmt"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "attributes"),
@@ -73,7 +73,7 @@ attrStmtWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.AttrStmt"),
-              Core.projectionField = (Core.Name "attributes")})),
+              Core.projectionFieldName = (Core.Name "attributes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 attrTypeEdge :: Phantoms.TTerm Dot.AttrType
@@ -200,7 +200,7 @@ edgeStmtAttributes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.EdgeStmt"),
-        Core.projectionField = (Core.Name "attributes")})),
+        Core.projectionFieldName = (Core.Name "attributes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeStmtLeft :: Phantoms.TTerm Dot.EdgeStmt -> Phantoms.TTerm Dot.NodeOrSubgraph
@@ -208,7 +208,7 @@ edgeStmtLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.EdgeStmt"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeStmtRight :: Phantoms.TTerm Dot.EdgeStmt -> Phantoms.TTerm [Dot.NodeOrSubgraph]
@@ -216,7 +216,7 @@ edgeStmtRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.EdgeStmt"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeStmtWithAttributes :: Phantoms.TTerm Dot.EdgeStmt -> Phantoms.TTerm (Maybe Dot.AttrList) -> Phantoms.TTerm Dot.EdgeStmt
@@ -229,14 +229,14 @@ edgeStmtWithAttributes original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.EdgeStmt"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.EdgeStmt"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "attributes"),
@@ -255,14 +255,14 @@ edgeStmtWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.EdgeStmt"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "attributes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.EdgeStmt"),
-              Core.projectionField = (Core.Name "attributes")})),
+              Core.projectionFieldName = (Core.Name "attributes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeStmtWithRight :: Phantoms.TTerm Dot.EdgeStmt -> Phantoms.TTerm [Dot.NodeOrSubgraph] -> Phantoms.TTerm Dot.EdgeStmt
@@ -275,7 +275,7 @@ edgeStmtWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.EdgeStmt"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -285,7 +285,7 @@ edgeStmtWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.EdgeStmt"),
-              Core.projectionField = (Core.Name "attributes")})),
+              Core.projectionFieldName = (Core.Name "attributes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 equalityPair :: Phantoms.TTerm Dot.Id -> Phantoms.TTerm Dot.Id -> Phantoms.TTerm Dot.EqualityPair
@@ -305,7 +305,7 @@ equalityPairLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.EqualityPair"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 equalityPairRight :: Phantoms.TTerm Dot.EqualityPair -> Phantoms.TTerm Dot.Id
@@ -313,7 +313,7 @@ equalityPairRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.EqualityPair"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 equalityPairWithLeft :: Phantoms.TTerm Dot.EqualityPair -> Phantoms.TTerm Dot.Id -> Phantoms.TTerm Dot.EqualityPair
@@ -329,7 +329,7 @@ equalityPairWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.EqualityPair"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 equalityPairWithRight :: Phantoms.TTerm Dot.EqualityPair -> Phantoms.TTerm Dot.Id -> Phantoms.TTerm Dot.EqualityPair
@@ -342,7 +342,7 @@ equalityPairWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.EqualityPair"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -371,7 +371,7 @@ graphDirected x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Graph"),
-        Core.projectionField = (Core.Name "directed")})),
+        Core.projectionFieldName = (Core.Name "directed")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphId :: Phantoms.TTerm Dot.Graph -> Phantoms.TTerm (Maybe Dot.Id)
@@ -379,7 +379,7 @@ graphId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Graph"),
-        Core.projectionField = (Core.Name "id")})),
+        Core.projectionFieldName = (Core.Name "id")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphStatements :: Phantoms.TTerm Dot.Graph -> Phantoms.TTerm [Dot.Stmt]
@@ -387,7 +387,7 @@ graphStatements x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Graph"),
-        Core.projectionField = (Core.Name "statements")})),
+        Core.projectionFieldName = (Core.Name "statements")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphStrict :: Phantoms.TTerm Dot.Graph -> Phantoms.TTerm Bool
@@ -395,7 +395,7 @@ graphStrict x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Graph"),
-        Core.projectionField = (Core.Name "strict")})),
+        Core.projectionFieldName = (Core.Name "strict")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphWithDirected :: Phantoms.TTerm Dot.Graph -> Phantoms.TTerm Bool -> Phantoms.TTerm Dot.Graph
@@ -408,7 +408,7 @@ graphWithDirected original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Graph"),
-              Core.projectionField = (Core.Name "strict")})),
+              Core.projectionFieldName = (Core.Name "strict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "directed"),
@@ -418,14 +418,14 @@ graphWithDirected original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Graph"),
-              Core.projectionField = (Core.Name "id")})),
+              Core.projectionFieldName = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "statements"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Graph"),
-              Core.projectionField = (Core.Name "statements")})),
+              Core.projectionFieldName = (Core.Name "statements")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 graphWithId :: Phantoms.TTerm Dot.Graph -> Phantoms.TTerm (Maybe Dot.Id) -> Phantoms.TTerm Dot.Graph
@@ -438,14 +438,14 @@ graphWithId original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Graph"),
-              Core.projectionField = (Core.Name "strict")})),
+              Core.projectionFieldName = (Core.Name "strict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "directed"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Graph"),
-              Core.projectionField = (Core.Name "directed")})),
+              Core.projectionFieldName = (Core.Name "directed")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
@@ -455,7 +455,7 @@ graphWithId original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Graph"),
-              Core.projectionField = (Core.Name "statements")})),
+              Core.projectionFieldName = (Core.Name "statements")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 graphWithStatements :: Phantoms.TTerm Dot.Graph -> Phantoms.TTerm [Dot.Stmt] -> Phantoms.TTerm Dot.Graph
@@ -468,21 +468,21 @@ graphWithStatements original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Graph"),
-              Core.projectionField = (Core.Name "strict")})),
+              Core.projectionFieldName = (Core.Name "strict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "directed"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Graph"),
-              Core.projectionField = (Core.Name "directed")})),
+              Core.projectionFieldName = (Core.Name "directed")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Graph"),
-              Core.projectionField = (Core.Name "id")})),
+              Core.projectionFieldName = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "statements"),
@@ -501,21 +501,21 @@ graphWithStrict original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Graph"),
-              Core.projectionField = (Core.Name "directed")})),
+              Core.projectionFieldName = (Core.Name "directed")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Graph"),
-              Core.projectionField = (Core.Name "id")})),
+              Core.projectionFieldName = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "statements"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Graph"),
-              Core.projectionField = (Core.Name "statements")})),
+              Core.projectionFieldName = (Core.Name "statements")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 id :: Phantoms.TTerm String -> Phantoms.TTerm Dot.Id
@@ -541,7 +541,7 @@ nodeIdId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.NodeId"),
-        Core.projectionField = (Core.Name "id")})),
+        Core.projectionFieldName = (Core.Name "id")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeIdPort :: Phantoms.TTerm Dot.NodeId -> Phantoms.TTerm (Maybe Dot.Port)
@@ -549,7 +549,7 @@ nodeIdPort x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.NodeId"),
-        Core.projectionField = (Core.Name "port")})),
+        Core.projectionFieldName = (Core.Name "port")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeIdWithId :: Phantoms.TTerm Dot.NodeId -> Phantoms.TTerm Dot.Id -> Phantoms.TTerm Dot.NodeId
@@ -565,7 +565,7 @@ nodeIdWithId original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.NodeId"),
-              Core.projectionField = (Core.Name "port")})),
+              Core.projectionFieldName = (Core.Name "port")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 nodeIdWithPort :: Phantoms.TTerm Dot.NodeId -> Phantoms.TTerm (Maybe Dot.Port) -> Phantoms.TTerm Dot.NodeId
@@ -578,7 +578,7 @@ nodeIdWithPort original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.NodeId"),
-              Core.projectionField = (Core.Name "id")})),
+              Core.projectionFieldName = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "port"),
@@ -617,7 +617,7 @@ nodeStmtAttributes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.NodeStmt"),
-        Core.projectionField = (Core.Name "attributes")})),
+        Core.projectionFieldName = (Core.Name "attributes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeStmtId :: Phantoms.TTerm Dot.NodeStmt -> Phantoms.TTerm Dot.NodeId
@@ -625,7 +625,7 @@ nodeStmtId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.NodeStmt"),
-        Core.projectionField = (Core.Name "id")})),
+        Core.projectionFieldName = (Core.Name "id")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeStmtWithAttributes :: Phantoms.TTerm Dot.NodeStmt -> Phantoms.TTerm (Maybe Dot.AttrList) -> Phantoms.TTerm Dot.NodeStmt
@@ -638,7 +638,7 @@ nodeStmtWithAttributes original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.NodeStmt"),
-              Core.projectionField = (Core.Name "id")})),
+              Core.projectionFieldName = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "attributes"),
@@ -657,7 +657,7 @@ nodeStmtWithId original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.NodeStmt"),
-              Core.projectionField = (Core.Name "attributes")})),
+              Core.projectionFieldName = (Core.Name "attributes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 port :: Phantoms.TTerm (Maybe Dot.Id) -> Phantoms.TTerm (Maybe Dot.CompassPt) -> Phantoms.TTerm Dot.Port
@@ -677,7 +677,7 @@ portId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Port"),
-        Core.projectionField = (Core.Name "id")})),
+        Core.projectionFieldName = (Core.Name "id")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 portPosition :: Phantoms.TTerm Dot.Port -> Phantoms.TTerm (Maybe Dot.CompassPt)
@@ -685,7 +685,7 @@ portPosition x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Port"),
-        Core.projectionField = (Core.Name "position")})),
+        Core.projectionFieldName = (Core.Name "position")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 portWithId :: Phantoms.TTerm Dot.Port -> Phantoms.TTerm (Maybe Dot.Id) -> Phantoms.TTerm Dot.Port
@@ -701,7 +701,7 @@ portWithId original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Port"),
-              Core.projectionField = (Core.Name "position")})),
+              Core.projectionFieldName = (Core.Name "position")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 portWithPosition :: Phantoms.TTerm Dot.Port -> Phantoms.TTerm (Maybe Dot.CompassPt) -> Phantoms.TTerm Dot.Port
@@ -714,7 +714,7 @@ portWithPosition original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Port"),
-              Core.projectionField = (Core.Name "id")})),
+              Core.projectionFieldName = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "position"),
@@ -783,7 +783,7 @@ subgraphStatements x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Subgraph"),
-        Core.projectionField = (Core.Name "statements")})),
+        Core.projectionFieldName = (Core.Name "statements")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subgraphSubgraphId :: Phantoms.TTerm Dot.Subgraph -> Phantoms.TTerm (Maybe Dot.SubgraphId)
@@ -791,7 +791,7 @@ subgraphSubgraphId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Subgraph"),
-        Core.projectionField = (Core.Name "subgraphId")})),
+        Core.projectionFieldName = (Core.Name "subgraphId")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subgraphWithStatements :: Phantoms.TTerm Dot.Subgraph -> Phantoms.TTerm [Dot.Stmt] -> Phantoms.TTerm Dot.Subgraph
@@ -804,7 +804,7 @@ subgraphWithStatements original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Subgraph"),
-              Core.projectionField = (Core.Name "subgraphId")})),
+              Core.projectionFieldName = (Core.Name "subgraphId")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "statements"),
@@ -823,7 +823,7 @@ subgraphWithSubgraphId original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graphviz.dot.Subgraph"),
-              Core.projectionField = (Core.Name "statements")})),
+              Core.projectionFieldName = (Core.Name "statements")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unAttrList :: Phantoms.TTerm Dot.AttrList -> Phantoms.TTerm [[Dot.EqualityPair]]

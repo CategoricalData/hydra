@@ -58,17 +58,17 @@ import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 
 
-ns :: Namespace
-ns = Namespace "hydra.differentiation"
+ns :: ModuleName
+ns = ModuleName "hydra.differentiation"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Strip.ns, Variables.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "Source-to-source automatic differentiation for Float64 terms."}
   where
     definitions = [

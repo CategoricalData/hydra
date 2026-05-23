@@ -1,5 +1,4 @@
 package hydra.dsl.meta;
-
 import hydra.core.Binding;
 import hydra.core.Field;
 import hydra.core.Name;
@@ -10,7 +9,7 @@ import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.packaging.Definition;
 import hydra.packaging.Module;
-import hydra.packaging.Namespace;
+import hydra.packaging.ModuleName;
 import hydra.packaging.TermDefinition;
 import hydra.phantoms.TBinding;
 import hydra.phantoms.TTerm;
@@ -461,7 +460,7 @@ public final class Phantoms {
 
     /** Build a TBinding for a definition in a module. */
     public static <A> TBinding<A> definitionInModule(Module mod, String localName, TTerm<A> term) {
-        Name fqName = new Name(mod.namespace.value + "." + localName);
+        Name fqName = new Name(mod.name.value + "." + localName);
         return new TBinding<A>(fqName, term);
     }
 
@@ -474,7 +473,7 @@ public final class Phantoms {
     }
 
     /** Build a Definition directly: namespace + localName + term, no TBinding. */
-    public static <A> Definition def(Namespace ns, String localName, TTerm<A> term) {
+    public static <A> Definition def(ModuleName ns, String localName, TTerm<A> term) {
         Name fqName = new Name(ns.value + "." + localName);
         return new Definition.Term(new TermDefinition(
             fqName,
@@ -483,7 +482,7 @@ public final class Phantoms {
     }
 
     /** Build a Definition with a pre-computed TypeScheme (used for hydra.java.coder). */
-    public static <A> Definition defTyped(Namespace ns, String localName, TTerm<A> term,
+    public static <A> Definition defTyped(ModuleName ns, String localName, TTerm<A> term,
                                             TypeScheme ts) {
         Name fqName = new Name(ns.value + "." + localName);
         return new Definition.Term(new TermDefinition(

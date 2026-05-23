@@ -11,8 +11,8 @@ import qualified Hydra.Encode.Core as EncodeCore
 import qualified Data.Map as M
 
 
-ns :: Namespace
-ns = Namespace "hydra.core"
+ns :: ModuleName
+ns = ModuleName "hydra.core"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -32,9 +32,9 @@ hydraCoreGraph = elementsToGraph bootstrapGraph M.empty
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [ns],
+            moduleDependencies = unqualifiedDep <$> [ns],
             moduleDescription = Just "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies."}
   where
     definitions = [
@@ -140,7 +140,8 @@ caseStatement = define "CaseStatement" $
       doc "An optional default case, used if none of the explicit cases match" $
       T.maybe term,
     "cases">:
-      doc "A list of case alternatives, one per union field" $
+      doc ("A list of case alternatives, one per union field. Each Field's name is the variant"
+        ++ " tag being matched and term is the handler applied to the variant's payload.") $
       T.list field]
 
 eitherType :: Binding
@@ -381,7 +382,7 @@ projection = define "Projection" $
     "typeName">:
       doc "The name of the record type"
       name,
-    "field">:
+    "fieldName">:
       doc "The name of the projected field"
       name]
 
@@ -455,7 +456,8 @@ term = define "Term" $
       doc "A unit value; a term with no value" $
       T.unit,
     "unwrap">:
-      doc "An unwrap elimination; the inverse of a wrap"
+      doc ("An unwrap elimination; the inverse of a wrap. Given the name of a wrapper type,"
+        ++ " unwraps an instance of that type to its underlying body value.")
       name,
     "variable">:
       doc "A variable reference"
@@ -517,7 +519,9 @@ type_ = define "Type" $
       doc "The void (uninhabited, or bottom) type" $
       T.unit,
     "wrap">:
-      doc "A wrapped type (newtype)"
+      doc ("A wrapped type (newtype). There is no corresponding `unwrap` variant at the type"
+        ++ " level: wrap is the introduction form, and a wrapper type's underlying body type"
+        ++ " is given by the `wrap` variant's argument.")
       type_]
 
 typeApplicationTerm :: Binding

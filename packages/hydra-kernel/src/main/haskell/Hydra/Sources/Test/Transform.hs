@@ -60,15 +60,15 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.transform"
+ns :: ModuleName
+ns = ModuleName "hydra.test.transform"
 
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Formatting.ns, Sorting.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Sorting.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Transform test cases for code generation, filtering to tests that can be compiled to target languages"}
   where
     definitions = [
@@ -89,11 +89,11 @@ module_ = Module {
 
 
 -- | Add "generation" namespace prefix
-addGenerationPrefix :: TTermDefinition (Namespace -> Namespace)
+addGenerationPrefix :: TTermDefinition (ModuleName -> ModuleName)
 addGenerationPrefix = define "addGenerationPrefix" $
   doc "Add generation namespace prefix" $
   lambda "ns_" $
-    wrap _Namespace (Strings.cat2 (string "generation.") (unwrap _Namespace @@ var "ns_"))
+    wrap _ModuleName (Strings.cat2 (string "generation.") (unwrap _ModuleName @@ var "ns_"))
 
 
 -- | Build a Term representing a convertCase function call
@@ -212,7 +212,7 @@ transformModule = define "transformModule" $
   lambda "m" $
     Packaging.module_
       (project _Module _Module_description @@ var "m")
-      (addGenerationPrefix @@ (project _Module _Module_namespace @@ var "m"))
+      (addGenerationPrefix @@ (project _Module _Module_name @@ var "m"))
       (project _Module _Module_dependencies @@ var "m")
       (project _Module _Module_definitions @@ var "m")
 

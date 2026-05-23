@@ -34,7 +34,7 @@ schemaModules = filterModulesByNamespace ["hydra.module", "hydra.util"] kernelTy
 
 filterModulesByNamespace :: [String] -> [Module] -> [Module]
 filterModulesByNamespace names mods =
-  [m | m <- mods, unNamespace (moduleNamespace m) `elem` names]
+  [m | m <- mods, unModuleName (moduleName m) `elem` names]
 
 -- | All kernel modules: both type modules and term modules.
 allKernelModules :: [Module]
@@ -58,7 +58,7 @@ generateGraphqlSchema outputDir = do
         mod <- schemaModules
         let defs = [d | d@(DefinitionType _) <- moduleDefinitions mod]
         case GraphqlCoder.moduleToGraphql mod defs cx schemaGraph of
-          Left ic -> [(unNamespace (moduleNamespace mod), Left $ show ic)]
+          Left ic -> [(unModuleName (moduleName mod), Left $ show ic)]
           Right files -> [(path, Right content) | (path, content) <- M.toList files]
 
   -- Write output files

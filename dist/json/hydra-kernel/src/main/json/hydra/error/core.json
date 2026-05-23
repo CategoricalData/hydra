@@ -1195,6 +1195,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the void type in a non-bottom position"}}}],
                         "body": {"variable": "hydra.paths.SubtermPath"}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.paths", "hydra.core", "hydra.variants"],
+  "dependencies": [{"module": "hydra.paths"}, {"module": "hydra.core"}, {"module": "hydra.variants"}],
   "description": "Error types for core type and term validation",
-  "namespace": "hydra.error.core"}
+  "name": "hydra.error.core"}

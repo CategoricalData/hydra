@@ -13,8 +13,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.csharp.syntax"
+ns :: ModuleName
+ns = ModuleName "hydra.csharp.syntax"
 
 def :: String -> Type -> Binding
 def = datatype ns
@@ -25,9 +25,9 @@ csharp = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A C# syntax module based on the ANTLR grammar dated 02/07/2024 and available at:\n"
       ++ "  https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/grammar")}
   where

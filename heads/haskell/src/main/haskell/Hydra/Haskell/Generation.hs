@@ -9,6 +9,7 @@ module Hydra.Haskell.Generation (
 ) where
 
 import Hydra.Kernel
+import Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Haskell.Coder
 import Hydra.Haskell.Language
 import Hydra.Generation
@@ -59,7 +60,7 @@ writeCoderHaskell generate basePath universeModules typeModules = do
     _ <- writeHaskell basePath universeModules withCoreDeps
     return ()
   where
-    addCoreDep m = m { moduleDependencies = CoreTypes.ns : moduleDependencies m }
+    addCoreDep m = m { moduleDependencies = unqualifiedDep CoreTypes.ns : moduleDependencies m }
 
 writeDecoderHaskell :: FilePath -> [Module] -> [Module] -> IO ()
 writeDecoderHaskell = writeCoderHaskell generateDecoderModules
@@ -88,7 +89,7 @@ writeDslHaskell basePath universeModules typeModules = do
     _ <- generateSources moduleToHaskell haskellLanguage False False False False basePath universeModules withCoreDeps
     return ()
   where
-    addCoreDep m = m { moduleDependencies = CoreTypes.ns : moduleDependencies m }
+    addCoreDep m = m { moduleDependencies = unqualifiedDep CoreTypes.ns : moduleDependencies m }
 
 ----------------------------------------
 -- Lexicon

@@ -67,17 +67,17 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Sorting as Sorting
 
 
-ns :: Namespace
-ns = Namespace "hydra.strip"
+ns :: ModuleName
+ns = ModuleName "hydra.strip"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Rewriting.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Rewriting.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just ("Annotation and type stripping and normalization")}
   where
    definitions = [

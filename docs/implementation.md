@@ -136,9 +136,11 @@ the descriptions below cover the main ones:
 - Defines variant enums: `TermVariant`, `TypeVariant`, `LiteralVariant`, etc.
 - Provides introspection capabilities: `Precision`, `Comparison`
 
-**Packaging.hs** - `hydra.packaging` namespace
-- Defines module structure: `Module`, `Definition`, `Namespace`, `QualifiedName`, `Package`
-- Enables organized code with namespaces and dependencies
+**Packaging.hs** - `hydra.packaging` module
+- Defines module structure: `Module`, `Definition`, `ModuleName`, `ModuleDependency`, `QualifiedName`, `Package`, `PackageDependency`, `PackageVersionSpecifier`
+- A `Module` carries a `name :: ModuleName`, a list of `definitions`, and a list of
+  `dependencies :: [ModuleDependency]`. A `ModuleDependency` is the depended-on
+  `module :: ModuleName` plus an optional `package :: Maybe PackageName`.
 
 #### Transformation framework
 
@@ -204,10 +206,14 @@ import Hydra.Dsl.Types as Types
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) termDeps typeDeps (Just description)
+module_ = Module {
+    moduleName = ns,
+    moduleDefinitions = map toTypeDef definitions,
+    moduleDependencies = unqualifiedDep <$> [moduleName Core.module_],
+    moduleDescription = Just description}
   where
-    ns = Namespace "hydra.namespace"
-    core = typeref $ moduleNamespace Core.module_
+    ns = ModuleName "hydra.namespace"
+    core = typeref $ moduleName Core.module_
     def = datatype ns
 
     definitions = [
@@ -248,12 +254,12 @@ def "Term" $
 
 ```haskell
 def "Module" $
-  doc "A logical collection of definitions in the same namespace" $
+  doc "A logical collection of definitions sharing a module name" $
   record [
-    "namespace">: packaging "Namespace",
-    "definitions">: list $ packaging "Definition",
-    "dependencies">: list $ packaging "Namespace",
-    "description">: optional string
+    "description">: optional string,
+    "name">: packaging "ModuleName",
+    "dependencies">: list $ packaging "ModuleDependency",
+    "definitions">: list $ packaging "Definition"
   ]
 ```
 
@@ -297,7 +303,7 @@ Core (hydra.core) - Foundation
 Core + supporting types
   ├─ Graph      - Extends core with graph operations
   ├─ Coders     - Language-transformation framework (Coder, Adapter, Language, ...)
-  └─ Packaging  - Module, Definition, Namespace, QualifiedName, Package
+  └─ Packaging  - Module, Definition, ModuleName, ModuleDependency, QualifiedName, Package
 
 Error model
   ├─ Errors     - Structured error types
@@ -680,7 +686,14 @@ Each TermCoder contains:
 
 ### Multi-language generation
 
-Primitives defined once in Haskell generate implementations in multiple languages:
+Primitive *signatures* are defined once in Haskell (in
+`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`) and become
+part of the generated kernel in every target language. The *implementations*
+shown below are hand-written in each host language under `heads/<host>/`, then
+copied into the published `dist/<host>/hydra-kernel/` artifact by
+`heads/<host>/bin/copy-kernel-runtime.sh` — see
+[build-system.md §Hand-written runtime in hydra-kernel](build-system.md#hand-written-runtime-in-hydra-kernel)
+for the full mechanism and the catalog of which subtrees are copied per language.
 
 #### Java Generation
 
@@ -1014,7 +1027,7 @@ moduleToJava cx g mod = do
   classes <- traverse (typeToJavaClass cx g mod) types
 
   -- Generate package structure
-  let packagePath = namespaceToPath (moduleNamespace mod)
+  let packagePath = namespaceToPath (moduleName mod)
 
   -- Map file paths to source code
   pure $ M.fromList $ map (\cls ->

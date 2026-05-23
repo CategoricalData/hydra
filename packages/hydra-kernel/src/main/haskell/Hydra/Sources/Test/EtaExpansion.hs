@@ -3,6 +3,7 @@ module Hydra.Sources.Test.EtaExpansion where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing hiding (checkTest, noChange)
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -24,14 +25,14 @@ import Hydra.Sources.Libraries
 import Prelude hiding (foldl)
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.etaExpansion"
+ns :: ModuleName
+ns = ModuleName "hydra.test.etaExpansion"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [TestGraph.ns, Namespace "hydra.reduction", Namespace "hydra.show.core", Namespace "hydra.test.testTypes"] ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.reduction", ModuleName "hydra.show.core", ModuleName "hydra.test.testTypes"] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for eta expansion of terms")}
   where
     definitions = [

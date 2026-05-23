@@ -41,7 +41,7 @@ short-circuits in seconds.
 | Layer | Where | What it does |
 |-------|-------|--------------|
 | 1. Transform | `heads/haskell/bin/transform-haskell-dsl-to-json.sh`, `transform-json-to-<lang>.sh` | One-shot conversion, one direction, one package or `--all` |
-| 2. Assemble | `heads/<lang>/bin/assemble-distribution.sh <pkg>` (one package), `assemble-all.sh` (batch) | Run Layer 1 + per-target post-processing (TestGraph patches, line-wrap, etc.) |
+| 2. Assemble | `heads/<lang>/bin/assemble-distribution.sh <pkg>` (one package), `assemble-all.sh` (batch) | Run Layer 1 + per-target post-processing (TestGraph patches, line-wrap, etc.). For Java/Python/TypeScript `hydra-kernel`, also copies hand-written runtime support — see [Hand-written runtime in hydra-kernel](#hand-written-runtime-in-hydra-kernel) below. |
 | 2.5. Test | `heads/<lang>/bin/test-distribution.sh` | Compile and run the target's test suite |
 | 3. Orchestrate | `bin/sync.sh`, `bin/sync-packages.sh`, `bin/sync-all.sh`, per-lang `bin/sync-<lang>.sh` | Walk the matrix; gate each step on its cache |
 
@@ -51,6 +51,43 @@ iterating on a single package.
 For the full script inventory and per-script semantics, see
 [implementation.md §Sync system](implementation.md) and
 [recipes/code-generation.md §The sync scripts](recipes/code-generation.md#the-sync-scripts).
+
+## Hand-written runtime in hydra-kernel
+
+Not every file under `dist/` is generated. For Java, Python, and TypeScript,
+`hydra-kernel` ships with a hand-written runtime tree alongside the generated
+kernel types so the published package is self-contained — downstream Gradle /
+pip / npm consumers do not need to know about Hydra's `heads/` layout.
+
+The mechanism: when `heads/<lang>/bin/assemble-distribution.sh hydra-kernel`
+runs, its **Step 0** invokes `heads/<lang>/bin/copy-kernel-runtime.sh`, which
+copies a selected subtree of `heads/<lang>/src/main/<lang>/` into
+`dist/<lang>/hydra-kernel/src/main/<lang>/`. It runs only for `hydra-kernel`,
+and only for languages that have a `copy-kernel-runtime.sh` script.
+
+The copy is a *merge* into the generated tree, not a wholesale overwrite —
+several subdirectories (e.g. `hydra/json/`) contain both generated and
+hand-written files and would clobber the generator's output if replaced.
+The script appends every copied path to a manifest consumed by
+`bootstrap-from-json --keep-paths-from`, which protects hand-copied files
+from the `--prune-stale` deletion pass.
+
+| Language | Copy script | Subtrees copied | Approx. file count |
+|----------|-------------|-----------------|--------------------|
+| Java | `heads/java/bin/copy-kernel-runtime.sh` | `Adapters.java`, `Coders.java`, plus full `hydra/{util,lib,dsl,json,tools}/` (skips multi-coder drivers `Bootstrap.java`, `Generation.java`, `HydraTestBase.java`, and dependencies like `tools/AntlrReaderBase.java`, `json/JsonIoCoder.java`, `json/JsonSerde.java`) | ~290 |
+| Python | `heads/python/bin/copy-kernel-runtime.sh` | `hydra/{dsl,lib,sources,tools.py}/` consolidated runtime files, including the whole `dsl/meta/` subtree | ~45 |
+| TypeScript | `heads/typescript/bin/copy-kernel-runtime.sh` | `hydra/{bootstrap,primitives,runtime}.ts`, `hydra/lib/*.ts`, plus test helpers under `hydra/test/` | ~19 |
+| Haskell, Scala, Go, Lisp dialects | — none — | Their runtimes live under `heads/<lang>/` and are referenced via build-tool source-dir paths (Stack's `hs-source-dirs`, sbt's `unmanagedSourceDirectories`, etc.). Nothing is copied. | 0 |
+
+The canonical edit point is always `heads/<lang>/src/main/<lang>/`. Editing the
+copy in `dist/` is wrong for the same reason editing any other `dist/` file is
+wrong: the next assemble overwrites it. (See CLAUDE.md hard rule 3.)
+
+These files **do not carry** the `// Note: this is an automatically generated
+file. Do not edit.` header that generated files carry — they aren't generated.
+A future grep that scans `dist/` for files missing the header will surface
+this set as false positives; cross-reference against the `copy-kernel-runtime.sh`
+manifests when triaging.
 
 ## Phases of `bin/sync.sh`
 
@@ -75,6 +112,33 @@ legacy Haskell-DSL copies retained as a fallback through 0.15.
 is invoked (via `sync-haskell.sh`'s Step 6). To validate a target's runtime, run that
 head's own `bin/run-tests.sh` or `bin/test-distribution.sh`, or use
 `bin/sync-packages.sh` which adds a Phase 3 test gate.
+
+### Phase 1's memory envelope
+
+Phase 1 ran a single universe-wide inference until [#381](https://github.com/CategoricalData/hydra/issues/381):
+`inferModules` loaded every binding from every module into one giant `let` and unified
+the whole thing. At ~10 packages and ~280 modules, peak Haskell heap exceeded 7 GB —
+larger than GitHub Actions' `ubuntu-latest` (7 GB), so the cold-CI path silently
+overflowed the heap.
+
+Phase 1 now iterates **packages** instead. The driver
+(`Hydra.Generation.inferAndWriteByPackage`) topologically sorts the package dep graph
+from each `packages/<pkg>/package.json`'s `dependencies` field, then for each package
+in order calls `inferModulesGiven` with the typed-so-far universe (deps that finished
+in earlier iterations) plus that package's own modules as the focus subset. Each
+iteration writes the focus package's JSON to disk immediately, which forces the inferred
+TypeSchemes through serialization and breaks any lazy thunk chain across iterations.
+
+Peak memory per iteration is bounded by ≈ *type-schemes of transitive deps + bindings of
+the focus package*, not by the universe-wide
+*bindings of every module + full substitution map + constraint set*. Trade-off: each
+iteration rebuilds `modulesToGraph` over an accumulator that grows linearly, so wall
+time goes up roughly 2× on a roomy host (≈5 min → ≈13 min). On `ubuntu-latest` the
+old path doesn't fit at all, so this is the only path that runs there.
+
+The committed CI heap cap is `RTS_FLAGS=-M6G`. Local syncs are free to raise it; CI
+must surface a heap-overflow diagnostic if the per-package cap is ever exceeded, not
+silently cancel.
 
 ## The cache model
 
@@ -249,6 +313,33 @@ version in this build's manifest, return that version string; otherwise fall bac
 current content hash (the migration-shim case).
 
 This is a small, well-scoped change — one function body — gated on #370.
+
+### 3. `modulesToGraph` realloc per Phase 1 iteration
+
+The per-package iteration in `inferAndWriteByPackage` (see
+[Phase 1's memory envelope](#phase-1s-memory-envelope)) calls `inferModulesGiven` once
+per package, and `inferModulesGiven` internally rebuilds `modulesToGraph` over its
+`universeMods` argument every time. Across ~13 packages that means ~13 graph builds,
+each over a slightly larger accumulator. This is acceptable today (Phase 1 wall time is
+within budget on CI), but if the package count grows it could become the dominant cost.
+
+The targeted fix is to thread an accumulated `Map Name TypeScheme` directly into a
+variant of `inferModulesGiven` that skips the `modulesToGraph` rebuild — i.e. pass the
+incremental delta, not the full universe. Out of scope for #381; flagged here as the
+next bottleneck the per-package design might run into.
+
+### 4. Java and Python self-host pipelines
+
+Phase 5 (native DSL → JSON for hydra-java and hydra-python) now routes through a
+per-package iterative driver that mirrors the Haskell-side
+`inferAndWriteByPackage`: `Generation.inferAndWriteByPackage` in
+`heads/java/src/main/java/hydra/Generation.java` and `infer_and_write_by_package`
+in `heads/python/src/main/python/hydra/generation.py`. Both demos
+(`bin/python-self-host-demo.py` and `JavaSelfHostDemo`) call this driver after
+loading the kernel universe and the package's source modules. Today's runs
+collapse to a one-iteration loop (only hydra-java or hydra-python is being
+re-inferred); the structure is in place for multi-package self-hosts once
+additional packages are owned by these native pipelines.
 
 ## The end-state design
 

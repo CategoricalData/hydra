@@ -112,13 +112,13 @@ haskellCoderDefinition = definitionInModule module_
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [HaskellSerde.ns, HaskellUtilsSource.ns,
-      Adapt.ns, Analysis.ns, Dependencies.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Serialization.ns, ShowError.ns, Strip.ns, Variables.ns, Namespace "hydra.annotations", Namespace "hydra.constants", Namespace "hydra.encode.core", Namespace "hydra.formatting", Namespace "hydra.haskell.language", Namespace "hydra.lexical", Namespace "hydra.names", Namespace "hydra.show.core"] L.++ (HaskellEnvironment.ns:HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([HaskellSerde.ns, HaskellUtilsSource.ns,
+      Adapt.ns, Analysis.ns, Dependencies.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Serialization.ns, ShowError.ns, Strip.ns, Variables.ns] L.++ (HaskellEnvironment.ns:HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Functions for encoding Hydra modules as Haskell modules"}
   where
-    ns = Namespace "hydra.haskell.coder"
+    ns = ModuleName "hydra.haskell.coder"
     definitions = [
       toDefinition includeTypeDefinitions,
       toDefinition useCoreImport,
@@ -202,7 +202,7 @@ constructModule = haskellCoderDefinition "constructModule" $
   doc "Construct a Haskell module from a Hydra module and its definitions" $
   "namespaces" ~> "mod" ~> "defs" ~> "cx" ~> "g" ~> lets [
   "h">: "namespace" ~>
-    unwrap _Namespace @@ var "namespace",
+    unwrap _ModuleName @@ var "namespace",
   "createDeclarations">: "def" ~>
     cases _Definition (var "def") Nothing [
       _Definition_type>>: "type" ~> lets [
@@ -280,7 +280,7 @@ constructModule = haskellCoderDefinition "constructModule" $
     right $ record H._Module [
       H._Module_head>>: just $ record H._ModuleHead [
         H._ModuleHead_comments>>: var "mc",
-        H._ModuleHead_name>>: var "importName" @@ (var "h" @@ (Packaging.moduleNamespace $ var "mod")),
+        H._ModuleHead_name>>: var "importName" @@ (var "h" @@ (Packaging.moduleName $ var "mod")),
         H._ModuleHead_exports>>: list ([] :: [TTerm H.Export])],
       H._Module_imports>>: var "imports",
       H._Module_declarations>>: var "decls"]
@@ -350,14 +350,14 @@ encodeUnwrap = haskellCoderDefinition "encodeUnwrap" $
   doc "Encode an unwrap term as a Haskell expression" $
   "namespaces" ~> "name" ~>
   right $ inject H._Expression H._Expression_variable $ HaskellUtilsSource.elementReference @@ var "namespaces" @@
-    (Names.qname @@ (Maybes.fromMaybe (wrap _Namespace $ string "") (Names.namespaceOf @@ var "name")) @@ (HaskellUtilsSource.newtypeAccessorName @@ var "name"))
+    (Names.qname @@ (Maybes.fromMaybe (wrap _ModuleName $ string "") (Names.namespaceOf @@ var "name")) @@ (HaskellUtilsSource.newtypeAccessorName @@ var "name"))
 
 encodeProjection :: TTermDefinition (HaskellNamespaces -> Projection -> Either Error H.Expression)
 encodeProjection = haskellCoderDefinition "encodeProjection" $
   doc "Encode a record projection as a Haskell expression" $
   "namespaces" ~> "proj" ~> lets [
     "dn">: Core.projectionTypeName $ var "proj",
-    "fname">: Core.projectionField $ var "proj"] $
+    "fname">: Core.projectionFieldName $ var "proj"] $
     right $ inject H._Expression H._Expression_variable $ HaskellUtilsSource.recordFieldReference @@ var "namespaces" @@ var "dn" @@ var "fname"
 
 encodeLambdaTerm :: TTermDefinition (Int -> HaskellNamespaces -> Lambda -> Context -> Graph -> Either Error H.Expression)
@@ -794,7 +794,7 @@ moduleToHaskell = haskellCoderDefinition "moduleToHaskell" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
   "hsmod" <<~ moduleToHaskellModule @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g" $ lets [
   "s">: Serialization.printExpr @@ (Serialization.parenthesize @@ (HaskellSerde.moduleToExpr @@ var "hsmod")),
-  "filepath">: Names.namespaceToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension $ string "hs") @@ (Packaging.moduleNamespace $ var "mod")] $
+  "filepath">: Names.namespaceToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension $ string "hs") @@ (Packaging.moduleName $ var "mod")] $
   right $ Maps.singleton (var "filepath") (var "s")
 
 nameDecls :: TTermDefinition (HaskellNamespaces -> Name -> Type -> [H.Declaration])
@@ -993,7 +993,7 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
       "ftype">: Core.fieldTypeType $ var "fieldType",
       "deconflict">: "name" ~> lets [
         "tname">: Names.unqualifyName @@ record _QualifiedName [
-          _QualifiedName_namespace>>: just $ Pairs.first $ Util.namespacesFocus $ var "namespaces",
+          _QualifiedName_moduleName>>: just $ Pairs.first $ Util.namespacesFocus $ var "namespaces",
           _QualifiedName_local>>: var "name"]] $
         Logic.ifElse (Sets.member (var "tname") (var "boundNames'"))
           (var "deconflict" @@ Strings.cat2 (var "name") (string "_"))
@@ -1092,7 +1092,7 @@ typeDecl = haskellCoderDefinition "typeDecl" $
             nothing),
       "forVariableType">: "vname" ~> lets [
         "qname">: Names.qualifyName @@ var "vname",
-        "mns">: Packaging.qualifiedNameNamespace $ var "qname",
+        "mns">: Packaging.qualifiedNameModuleName $ var "qname",
         "local">: Packaging.qualifiedNameLocal $ var "qname"] $
         Maybes.map ("ns" ~> Core.termVariable $ Names.qname @@ var "ns" @@ (Strings.cat $ list [string "_", var "local", string "_type_"])) (var "mns")] $
       Maybes.fromMaybe (var "recurse" @@ var "term") (Maybes.bind (var "variantResult") (var "forType")),

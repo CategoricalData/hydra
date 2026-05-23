@@ -89,14 +89,14 @@ import qualified Hydra.Sources.Java.Syntax as JavaSyntax
 def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.java.names"
+ns :: ModuleName
+ns = ModuleName "hydra.java.names"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = (JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ((JavaSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Java naming constants and package name utilities"}
   where
     definitions = [

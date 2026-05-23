@@ -90,15 +90,15 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.utils"
+ns :: ModuleName
+ns = ModuleName "hydra.test.utils"
 
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Inference.ns, ShowError.ns, Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Inference.ns, ShowError.ns, Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Shared utility functions for test code generation codecs"}
   where
     definitions = [

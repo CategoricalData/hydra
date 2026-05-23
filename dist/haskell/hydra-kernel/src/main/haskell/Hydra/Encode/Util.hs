@@ -60,10 +60,10 @@ namespaces n x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "focus"),
-          Core.fieldTerm = ((\p -> Core.TermPair (Pairs.bimap Packaging.namespace n p)) (Util.namespacesFocus x))},
+          Core.fieldTerm = ((\p -> Core.TermPair (Pairs.bimap Packaging.moduleName n p)) (Util.namespacesFocus x))},
         Core.Field {
           Core.fieldName = (Core.Name "mapping"),
-          Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap Packaging.namespace n m)) (Util.namespacesMapping x))}]})
+          Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap Packaging.moduleName n m)) (Util.namespacesMapping x))}]})
 -- | Encoder for hydra.util.Precision
 precision :: Util.Precision -> Core.Term
 precision x =

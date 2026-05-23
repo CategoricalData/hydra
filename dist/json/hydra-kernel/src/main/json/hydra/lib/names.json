@@ -5,9 +5,9 @@
         "name": "hydra.lib.names.chars",
         "term": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace of the chars library"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.chars"}}, "typeName": "hydra.packaging.Namespace"}}}},
-        "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName of the chars library"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.chars"}}, "typeName": "hydra.packaging.ModuleName"}}}},
+        "typeScheme": {"body": {"variable": "hydra.packaging.ModuleName"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.lib.names.charsIsAlphaNum",
@@ -61,9 +61,9 @@
         "name": "hydra.lib.names.eithers",
         "term": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace of the eithers library"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.eithers"}}, "typeName": "hydra.packaging.Namespace"}}}},
-        "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName of the eithers library"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.eithers"}}, "typeName": "hydra.packaging.ModuleName"}}}},
+        "typeScheme": {"body": {"variable": "hydra.packaging.ModuleName"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.lib.names.eithersBimap",
@@ -189,9 +189,9 @@
         "name": "hydra.lib.names.equality",
         "term": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace of the equality library"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.equality"}}, "typeName": "hydra.packaging.Namespace"}}}},
-        "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName of the equality library"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.equality"}}, "typeName": "hydra.packaging.ModuleName"}}}},
+        "typeScheme": {"body": {"variable": "hydra.packaging.ModuleName"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.lib.names.equalityCompare",
@@ -269,9 +269,9 @@
         "name": "hydra.lib.names.lists",
         "term": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace of the lists library"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.lists"}}, "typeName": "hydra.packaging.Namespace"}}}},
-        "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName of the lists library"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.lists"}}, "typeName": "hydra.packaging.ModuleName"}}}},
+        "typeScheme": {"body": {"variable": "hydra.packaging.ModuleName"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.lib.names.listsApply",
@@ -573,9 +573,9 @@
         "name": "hydra.lib.names.literals",
         "term": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace of the literals library"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.literals"}}, "typeName": "hydra.packaging.Namespace"}}}},
-        "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName of the literals library"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.literals"}}, "typeName": "hydra.packaging.ModuleName"}}}},
+        "typeScheme": {"body": {"variable": "hydra.packaging.ModuleName"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.lib.names.literalsBigintToDecimal",
@@ -1021,9 +1021,9 @@
         "name": "hydra.lib.names.logic",
         "term": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace of the logic library"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.logic"}}, "typeName": "hydra.packaging.Namespace"}}}},
-        "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName of the logic library"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.logic"}}, "typeName": "hydra.packaging.ModuleName"}}}},
+        "typeScheme": {"body": {"variable": "hydra.packaging.ModuleName"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.lib.names.logicAnd",
@@ -1061,9 +1061,9 @@
         "name": "hydra.lib.names.maps",
         "term": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace of the maps library"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.maps"}}, "typeName": "hydra.packaging.Namespace"}}}},
-        "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName of the maps library"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.maps"}}, "typeName": "hydra.packaging.ModuleName"}}}},
+        "typeScheme": {"body": {"variable": "hydra.packaging.ModuleName"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.lib.names.mapsAlter",
@@ -1229,9 +1229,9 @@
         "name": "hydra.lib.names.math",
         "term": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace of the math library"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.math"}}, "typeName": "hydra.packaging.Namespace"}}}},
-        "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName of the math library"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.math"}}, "typeName": "hydra.packaging.ModuleName"}}}},
+        "typeScheme": {"body": {"variable": "hydra.packaging.ModuleName"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.lib.names.mathAbs",
@@ -1605,9 +1605,9 @@
         "name": "hydra.lib.names.maybes",
         "term": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace of the maybes library"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.maybes"}}, "typeName": "hydra.packaging.Namespace"}}}},
-        "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName of the maybes library"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.maybes"}}, "typeName": "hydra.packaging.ModuleName"}}}},
+        "typeScheme": {"body": {"variable": "hydra.packaging.ModuleName"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.lib.names.maybesApply",
@@ -1717,9 +1717,9 @@
         "name": "hydra.lib.names.pairs",
         "term": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace of the pairs library"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.pairs"}}, "typeName": "hydra.packaging.Namespace"}}}},
-        "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName of the pairs library"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.pairs"}}, "typeName": "hydra.packaging.ModuleName"}}}},
+        "typeScheme": {"body": {"variable": "hydra.packaging.ModuleName"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.lib.names.pairsBimap",
@@ -1749,9 +1749,9 @@
         "name": "hydra.lib.names.regex",
         "term": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace of the regex library"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.regex"}}, "typeName": "hydra.packaging.Namespace"}}}},
-        "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName of the regex library"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.regex"}}, "typeName": "hydra.packaging.ModuleName"}}}},
+        "typeScheme": {"body": {"variable": "hydra.packaging.ModuleName"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.lib.names.regexFind",
@@ -1805,9 +1805,9 @@
         "name": "hydra.lib.names.sets",
         "term": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace of the sets library"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.sets"}}, "typeName": "hydra.packaging.Namespace"}}}},
-        "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName of the sets library"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.sets"}}, "typeName": "hydra.packaging.ModuleName"}}}},
+        "typeScheme": {"body": {"variable": "hydra.packaging.ModuleName"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.lib.names.setsDelete",
@@ -1925,9 +1925,9 @@
         "name": "hydra.lib.names.strings",
         "term": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace of the strings library"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.strings"}}, "typeName": "hydra.packaging.Namespace"}}}},
-        "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName of the strings library"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.strings"}}, "typeName": "hydra.packaging.ModuleName"}}}},
+        "typeScheme": {"body": {"variable": "hydra.packaging.ModuleName"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.lib.names.stringsCat",
@@ -2037,9 +2037,9 @@
         "name": "hydra.lib.names.typeclass",
         "term": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace of the typeclass library"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.typeclass"}}, "typeName": "hydra.packaging.Namespace"}}}},
-        "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName of the typeclass library"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "hydra.typeclass"}}, "typeName": "hydra.packaging.ModuleName"}}}},
+        "typeScheme": {"body": {"variable": "hydra.packaging.ModuleName"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.lib.names.typeclassEq",
@@ -2057,29 +2057,29 @@
             "body": {"wrap": {"body": {"literal": {"string": "hydra.typeclass.Ord"}}, "typeName": "hydra.core.Name"}}}},
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}}],
   "dependencies": [
-    "hydra.paths",
-    "hydra.ast",
-    "hydra.classes",
-    "hydra.coders",
-    "hydra.context",
-    "hydra.core",
-    "hydra.error.checking",
-    "hydra.error.core",
-    "hydra.error.packaging",
-    "hydra.errors",
-    "hydra.graph",
-    "hydra.json.model",
-    "hydra.packaging",
-    "hydra.parsing",
-    "hydra.phantoms",
-    "hydra.query",
-    "hydra.relational",
-    "hydra.tabular",
-    "hydra.testing",
-    "hydra.topology",
-    "hydra.typing",
-    "hydra.util",
-    "hydra.validation",
-    "hydra.variants"],
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.classes"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
   "description": "Namespaces and primitive names for the Hydra standard library",
-  "namespace": "hydra.lib.names"}
+  "name": "hydra.lib.names"}
