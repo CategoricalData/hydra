@@ -210,7 +210,7 @@ encodeLiteral lit =
 encodeProjectionElim :: Syntax.Dialect -> t0 -> t1 -> Core.Projection -> Maybe Core.Term -> Either t2 Syntax.Expression
 encodeProjectionElim dialect cx g proj marg =
 
-      let fname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.projectionField proj))
+      let fname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.projectionFieldName proj))
           tname = qualifiedSnakeName (Core.projectionTypeName proj)
       in (Maybes.cases marg (Right (lispLambdaExpr [
         "v"] (Syntax.ExpressionFieldAccess (Syntax.FieldAccess {
@@ -500,12 +500,12 @@ moduleExports forms =
       in (Logic.ifElse (Lists.null symbols) [] [
         Syntax.ExportDeclaration {
           Syntax.exportDeclarationSymbols = symbols}])
-moduleImports :: Packaging.Namespace -> [Packaging.Definition] -> [Syntax.ImportDeclaration]
+moduleImports :: Packaging.ModuleName -> [Packaging.Definition] -> [Syntax.ImportDeclaration]
 moduleImports focusNs defs =
 
       let depNss = Sets.toList (Sets.delete focusNs (Analysis.definitionDependencyNamespaces defs))
       in (Lists.map (\ns -> Syntax.ImportDeclaration {
-        Syntax.importDeclarationModule = (Syntax.NamespaceName (Packaging.unNamespace ns)),
+        Syntax.importDeclarationModule = (Syntax.NamespaceName (Packaging.unModuleName ns)),
         Syntax.importDeclarationSpec = Syntax.ImportSpecAll}) depNss)
 moduleToLisp :: Syntax.Dialect -> Packaging.Module -> [Packaging.Definition] -> t0 -> t1 -> Either t2 Syntax.Program
 moduleToLisp dialect mod defs0 cx g =
@@ -518,8 +518,8 @@ moduleToLisp dialect mod defs0 cx g =
                   Lists.filter (\td -> Predicates.isNominalType (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme td))) allTypeDefs
       in (Eithers.bind (Eithers.mapList (encodeTypeDefinition cx g) typeDefs) (\typeItems -> Eithers.bind (Eithers.mapList (encodeTermDefinition dialect cx g) termDefs) (\termItems ->
         let allItems = Lists.concat2 typeItems termItems
-            nsName = Packaging.unNamespace (Packaging.moduleNamespace mod)
-            focusNs = Packaging.moduleNamespace mod
+            nsName = Packaging.unModuleName (Packaging.moduleName mod)
+            focusNs = Packaging.moduleName mod
             imports = moduleImports focusNs defs
             exports = moduleExports allItems
         in (Right (Syntax.Program {

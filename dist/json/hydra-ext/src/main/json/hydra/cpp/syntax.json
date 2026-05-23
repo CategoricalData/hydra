@@ -1228,6 +1228,6 @@
               {"name": "leftShift", "type": {"unit": {}}},
               {"name": "rightShift", "type": {"unit": {}}}]},
           "variables": []}}}],
-  "dependencies": ["hydra.core"],
+  "dependencies": [{"module": "hydra.core"}],
   "description": "A C++ syntax model, focusing on features for representing algebraic data types and declarative computations",
-  "namespace": "hydra.cpp.syntax"}
+  "name": "hydra.cpp.syntax"}

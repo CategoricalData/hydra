@@ -9,17 +9,17 @@ import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
-ns :: Namespace
-ns = Namespace "hydra.classes"
+ns :: ModuleName
+ns = ModuleName "hydra.classes"
 
 define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "Type classes"}
   where
     definitions = [

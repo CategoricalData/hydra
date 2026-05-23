@@ -52,14 +52,14 @@ import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.literals"
+ns :: ModuleName
+ns = ModuleName "hydra.literals"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
             moduleDescription = Just "Conversion functions for literal values."}
   where
    definitions = [

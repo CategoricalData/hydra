@@ -42,7 +42,7 @@ associativeExpressionOperands x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.AssociativeExpression"),
-        Core.projectionField = (Core.Name "operands")})),
+        Core.projectionFieldName = (Core.Name "operands")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 associativeExpressionOperator :: Phantoms.TTerm Query.AssociativeExpression -> Phantoms.TTerm Query.BinaryOperator
@@ -50,7 +50,7 @@ associativeExpressionOperator x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.AssociativeExpression"),
-        Core.projectionField = (Core.Name "operator")})),
+        Core.projectionFieldName = (Core.Name "operator")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 associativeExpressionWithOperands :: Phantoms.TTerm Query.AssociativeExpression -> Phantoms.TTerm [Query.Expression] -> Phantoms.TTerm Query.AssociativeExpression
@@ -63,7 +63,7 @@ associativeExpressionWithOperands original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.AssociativeExpression"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operands"),
@@ -82,7 +82,7 @@ associativeExpressionWithOperator original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.AssociativeExpression"),
-              Core.projectionField = (Core.Name "operands")})),
+              Core.projectionFieldName = (Core.Name "operands")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 binaryBooleanOperatorAnd :: Phantoms.TTerm Query.BinaryBooleanOperator
@@ -129,7 +129,7 @@ binaryExpressionLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.BinaryExpression"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 binaryExpressionOperator :: Phantoms.TTerm Query.BinaryExpression -> Phantoms.TTerm Query.BinaryOperator
@@ -137,7 +137,7 @@ binaryExpressionOperator x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.BinaryExpression"),
-        Core.projectionField = (Core.Name "operator")})),
+        Core.projectionFieldName = (Core.Name "operator")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 binaryExpressionRight :: Phantoms.TTerm Query.BinaryExpression -> Phantoms.TTerm Query.Expression
@@ -145,7 +145,7 @@ binaryExpressionRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.BinaryExpression"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 binaryExpressionWithLeft :: Phantoms.TTerm Query.BinaryExpression -> Phantoms.TTerm Query.Expression -> Phantoms.TTerm Query.BinaryExpression
@@ -161,14 +161,14 @@ binaryExpressionWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.BinaryExpression"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.BinaryExpression"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 binaryExpressionWithOperator :: Phantoms.TTerm Query.BinaryExpression -> Phantoms.TTerm Query.BinaryOperator -> Phantoms.TTerm Query.BinaryExpression
@@ -181,7 +181,7 @@ binaryExpressionWithOperator original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.BinaryExpression"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
@@ -191,7 +191,7 @@ binaryExpressionWithOperator original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.BinaryExpression"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 binaryExpressionWithRight :: Phantoms.TTerm Query.BinaryExpression -> Phantoms.TTerm Query.Expression -> Phantoms.TTerm Query.BinaryExpression
@@ -204,14 +204,14 @@ binaryExpressionWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.BinaryExpression"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.BinaryExpression"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -258,7 +258,7 @@ bindingKey x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.Binding"),
-        Core.projectionField = (Core.Name "key")})),
+        Core.projectionFieldName = (Core.Name "key")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bindingValue :: Phantoms.TTerm Query.Binding -> Phantoms.TTerm Query.Query
@@ -266,7 +266,7 @@ bindingValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.Binding"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bindingWithKey :: Phantoms.TTerm Query.Binding -> Phantoms.TTerm Query.Variable -> Phantoms.TTerm Query.Binding
@@ -282,7 +282,7 @@ bindingWithKey original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.Binding"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 bindingWithValue :: Phantoms.TTerm Query.Binding -> Phantoms.TTerm Query.Query -> Phantoms.TTerm Query.Binding
@@ -295,7 +295,7 @@ bindingWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.Binding"),
-              Core.projectionField = (Core.Name "key")})),
+              Core.projectionFieldName = (Core.Name "key")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -372,7 +372,7 @@ edgeProjectionPatternDirection x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.EdgeProjectionPattern"),
-        Core.projectionField = (Core.Name "direction")})),
+        Core.projectionFieldName = (Core.Name "direction")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeProjectionPatternLabel :: Phantoms.TTerm Query.EdgeProjectionPattern -> Phantoms.TTerm (Maybe Model.EdgeLabel)
@@ -380,7 +380,7 @@ edgeProjectionPatternLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.EdgeProjectionPattern"),
-        Core.projectionField = (Core.Name "label")})),
+        Core.projectionFieldName = (Core.Name "label")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeProjectionPatternProperties :: Phantoms.TTerm Query.EdgeProjectionPattern -> Phantoms.TTerm [Query.PropertyPattern]
@@ -388,7 +388,7 @@ edgeProjectionPatternProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.EdgeProjectionPattern"),
-        Core.projectionField = (Core.Name "properties")})),
+        Core.projectionFieldName = (Core.Name "properties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeProjectionPatternVertex :: Phantoms.TTerm Query.EdgeProjectionPattern -> Phantoms.TTerm (Maybe Query.VertexPattern)
@@ -396,7 +396,7 @@ edgeProjectionPatternVertex x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.EdgeProjectionPattern"),
-        Core.projectionField = (Core.Name "vertex")})),
+        Core.projectionFieldName = (Core.Name "vertex")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeProjectionPatternWithDirection :: Phantoms.TTerm Query.EdgeProjectionPattern -> Phantoms.TTerm Model.Direction -> Phantoms.TTerm Query.EdgeProjectionPattern
@@ -412,21 +412,21 @@ edgeProjectionPatternWithDirection original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.EdgeProjectionPattern"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.EdgeProjectionPattern"),
-              Core.projectionField = (Core.Name "properties")})),
+              Core.projectionFieldName = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "vertex"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.EdgeProjectionPattern"),
-              Core.projectionField = (Core.Name "vertex")})),
+              Core.projectionFieldName = (Core.Name "vertex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeProjectionPatternWithLabel :: Phantoms.TTerm Query.EdgeProjectionPattern -> Phantoms.TTerm (Maybe Model.EdgeLabel) -> Phantoms.TTerm Query.EdgeProjectionPattern
@@ -439,7 +439,7 @@ edgeProjectionPatternWithLabel original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.EdgeProjectionPattern"),
-              Core.projectionField = (Core.Name "direction")})),
+              Core.projectionFieldName = (Core.Name "direction")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
@@ -449,14 +449,14 @@ edgeProjectionPatternWithLabel original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.EdgeProjectionPattern"),
-              Core.projectionField = (Core.Name "properties")})),
+              Core.projectionFieldName = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "vertex"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.EdgeProjectionPattern"),
-              Core.projectionField = (Core.Name "vertex")})),
+              Core.projectionFieldName = (Core.Name "vertex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeProjectionPatternWithProperties :: Phantoms.TTerm Query.EdgeProjectionPattern -> Phantoms.TTerm [Query.PropertyPattern] -> Phantoms.TTerm Query.EdgeProjectionPattern
@@ -469,14 +469,14 @@ edgeProjectionPatternWithProperties original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.EdgeProjectionPattern"),
-              Core.projectionField = (Core.Name "direction")})),
+              Core.projectionFieldName = (Core.Name "direction")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.EdgeProjectionPattern"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
@@ -486,7 +486,7 @@ edgeProjectionPatternWithProperties original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.EdgeProjectionPattern"),
-              Core.projectionField = (Core.Name "vertex")})),
+              Core.projectionFieldName = (Core.Name "vertex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeProjectionPatternWithVertex :: Phantoms.TTerm Query.EdgeProjectionPattern -> Phantoms.TTerm (Maybe Query.VertexPattern) -> Phantoms.TTerm Query.EdgeProjectionPattern
@@ -499,21 +499,21 @@ edgeProjectionPatternWithVertex original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.EdgeProjectionPattern"),
-              Core.projectionField = (Core.Name "direction")})),
+              Core.projectionFieldName = (Core.Name "direction")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.EdgeProjectionPattern"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.EdgeProjectionPattern"),
-              Core.projectionField = (Core.Name "properties")})),
+              Core.projectionFieldName = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "vertex"),
@@ -584,7 +584,7 @@ letQueryBindings x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.LetQuery"),
-        Core.projectionField = (Core.Name "bindings")})),
+        Core.projectionFieldName = (Core.Name "bindings")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letQueryEnvironment :: Phantoms.TTerm Query.LetQuery -> Phantoms.TTerm Query.Query
@@ -592,7 +592,7 @@ letQueryEnvironment x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.LetQuery"),
-        Core.projectionField = (Core.Name "environment")})),
+        Core.projectionFieldName = (Core.Name "environment")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letQueryWithBindings :: Phantoms.TTerm Query.LetQuery -> Phantoms.TTerm [Query.Binding] -> Phantoms.TTerm Query.LetQuery
@@ -608,7 +608,7 @@ letQueryWithBindings original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.LetQuery"),
-              Core.projectionField = (Core.Name "environment")})),
+              Core.projectionFieldName = (Core.Name "environment")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 letQueryWithEnvironment :: Phantoms.TTerm Query.LetQuery -> Phantoms.TTerm Query.Query -> Phantoms.TTerm Query.LetQuery
@@ -621,7 +621,7 @@ letQueryWithEnvironment original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.LetQuery"),
-              Core.projectionField = (Core.Name "bindings")})),
+              Core.projectionFieldName = (Core.Name "bindings")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "environment"),
@@ -647,7 +647,7 @@ matchQueryOptional x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.MatchQuery"),
-        Core.projectionField = (Core.Name "optional")})),
+        Core.projectionFieldName = (Core.Name "optional")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 matchQueryPattern :: Phantoms.TTerm Query.MatchQuery -> Phantoms.TTerm [Query.Projection]
@@ -655,7 +655,7 @@ matchQueryPattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.MatchQuery"),
-        Core.projectionField = (Core.Name "pattern")})),
+        Core.projectionFieldName = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 matchQueryWhere :: Phantoms.TTerm Query.MatchQuery -> Phantoms.TTerm (Maybe Query.Expression)
@@ -663,7 +663,7 @@ matchQueryWhere x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.MatchQuery"),
-        Core.projectionField = (Core.Name "where")})),
+        Core.projectionFieldName = (Core.Name "where")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 matchQueryWithOptional :: Phantoms.TTerm Query.MatchQuery -> Phantoms.TTerm Bool -> Phantoms.TTerm Query.MatchQuery
@@ -679,14 +679,14 @@ matchQueryWithOptional original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.MatchQuery"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.MatchQuery"),
-              Core.projectionField = (Core.Name "where")})),
+              Core.projectionFieldName = (Core.Name "where")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 matchQueryWithPattern :: Phantoms.TTerm Query.MatchQuery -> Phantoms.TTerm [Query.Projection] -> Phantoms.TTerm Query.MatchQuery
@@ -699,7 +699,7 @@ matchQueryWithPattern original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.MatchQuery"),
-              Core.projectionField = (Core.Name "optional")})),
+              Core.projectionFieldName = (Core.Name "optional")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
@@ -709,7 +709,7 @@ matchQueryWithPattern original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.MatchQuery"),
-              Core.projectionField = (Core.Name "where")})),
+              Core.projectionFieldName = (Core.Name "where")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 matchQueryWithWhere :: Phantoms.TTerm Query.MatchQuery -> Phantoms.TTerm (Maybe Query.Expression) -> Phantoms.TTerm Query.MatchQuery
@@ -722,14 +722,14 @@ matchQueryWithWhere original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.MatchQuery"),
-              Core.projectionField = (Core.Name "optional")})),
+              Core.projectionFieldName = (Core.Name "optional")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.MatchQuery"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
@@ -752,7 +752,7 @@ projectionAs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.Projection"),
-        Core.projectionField = (Core.Name "as")})),
+        Core.projectionFieldName = (Core.Name "as")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 projectionValue :: Phantoms.TTerm Query.Projection -> Phantoms.TTerm Query.Expression
@@ -760,7 +760,7 @@ projectionValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.Projection"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 projectionWithAs :: Phantoms.TTerm Query.Projection -> Phantoms.TTerm (Maybe Query.Variable) -> Phantoms.TTerm Query.Projection
@@ -773,7 +773,7 @@ projectionWithAs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.Projection"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "as"),
@@ -792,7 +792,7 @@ projectionWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.Projection"),
-              Core.projectionField = (Core.Name "as")})),
+              Core.projectionFieldName = (Core.Name "as")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 projections :: Phantoms.TTerm Bool -> Phantoms.TTerm [Query.Projection] -> Phantoms.TTerm Query.Projections
@@ -812,7 +812,7 @@ projectionsAll x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.Projections"),
-        Core.projectionField = (Core.Name "all")})),
+        Core.projectionFieldName = (Core.Name "all")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 projectionsExplicit :: Phantoms.TTerm Query.Projections -> Phantoms.TTerm [Query.Projection]
@@ -820,7 +820,7 @@ projectionsExplicit x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.Projections"),
-        Core.projectionField = (Core.Name "explicit")})),
+        Core.projectionFieldName = (Core.Name "explicit")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 projectionsWithAll :: Phantoms.TTerm Query.Projections -> Phantoms.TTerm Bool -> Phantoms.TTerm Query.Projections
@@ -836,7 +836,7 @@ projectionsWithAll original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.Projections"),
-              Core.projectionField = (Core.Name "explicit")})),
+              Core.projectionFieldName = (Core.Name "explicit")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 projectionsWithExplicit :: Phantoms.TTerm Query.Projections -> Phantoms.TTerm [Query.Projection] -> Phantoms.TTerm Query.Projections
@@ -849,7 +849,7 @@ projectionsWithExplicit original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.Projections"),
-              Core.projectionField = (Core.Name "all")})),
+              Core.projectionFieldName = (Core.Name "all")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "explicit"),
@@ -872,7 +872,7 @@ propertyPatternKey x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.PropertyPattern"),
-        Core.projectionField = (Core.Name "key")})),
+        Core.projectionFieldName = (Core.Name "key")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyPatternValue :: Phantoms.TTerm Query.PropertyPattern -> Phantoms.TTerm Query.PropertyValuePattern
@@ -880,7 +880,7 @@ propertyPatternValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.PropertyPattern"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyPatternWithKey :: Phantoms.TTerm Query.PropertyPattern -> Phantoms.TTerm Model.PropertyKey -> Phantoms.TTerm Query.PropertyPattern
@@ -896,7 +896,7 @@ propertyPatternWithKey original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.PropertyPattern"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyPatternWithValue :: Phantoms.TTerm Query.PropertyPattern -> Phantoms.TTerm Query.PropertyValuePattern -> Phantoms.TTerm Query.PropertyPattern
@@ -909,7 +909,7 @@ propertyPatternWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.PropertyPattern"),
-              Core.projectionField = (Core.Name "key")})),
+              Core.projectionFieldName = (Core.Name "key")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -932,7 +932,7 @@ propertyProjectionBase x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.PropertyProjection"),
-        Core.projectionField = (Core.Name "base")})),
+        Core.projectionFieldName = (Core.Name "base")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyProjectionKey :: Phantoms.TTerm Query.PropertyProjection -> Phantoms.TTerm Model.PropertyKey
@@ -940,7 +940,7 @@ propertyProjectionKey x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.PropertyProjection"),
-        Core.projectionField = (Core.Name "key")})),
+        Core.projectionFieldName = (Core.Name "key")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyProjectionWithBase :: Phantoms.TTerm Query.PropertyProjection -> Phantoms.TTerm Query.Expression -> Phantoms.TTerm Query.PropertyProjection
@@ -956,7 +956,7 @@ propertyProjectionWithBase original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.PropertyProjection"),
-              Core.projectionField = (Core.Name "key")})),
+              Core.projectionFieldName = (Core.Name "key")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyProjectionWithKey :: Phantoms.TTerm Query.PropertyProjection -> Phantoms.TTerm Model.PropertyKey -> Phantoms.TTerm Query.PropertyProjection
@@ -969,7 +969,7 @@ propertyProjectionWithKey original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.PropertyProjection"),
-              Core.projectionField = (Core.Name "base")})),
+              Core.projectionFieldName = (Core.Name "base")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "key"),
@@ -1062,7 +1062,7 @@ selectQueryDistinct x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.SelectQuery"),
-        Core.projectionField = (Core.Name "distinct")})),
+        Core.projectionFieldName = (Core.Name "distinct")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 selectQueryProjection :: Phantoms.TTerm Query.SelectQuery -> Phantoms.TTerm Query.Projections
@@ -1070,7 +1070,7 @@ selectQueryProjection x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.SelectQuery"),
-        Core.projectionField = (Core.Name "projection")})),
+        Core.projectionFieldName = (Core.Name "projection")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 selectQueryWithDistinct :: Phantoms.TTerm Query.SelectQuery -> Phantoms.TTerm Bool -> Phantoms.TTerm Query.SelectQuery
@@ -1086,7 +1086,7 @@ selectQueryWithDistinct original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.SelectQuery"),
-              Core.projectionField = (Core.Name "projection")})),
+              Core.projectionFieldName = (Core.Name "projection")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 selectQueryWithProjection :: Phantoms.TTerm Query.SelectQuery -> Phantoms.TTerm Query.Projections -> Phantoms.TTerm Query.SelectQuery
@@ -1099,7 +1099,7 @@ selectQueryWithProjection original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.SelectQuery"),
-              Core.projectionField = (Core.Name "distinct")})),
+              Core.projectionFieldName = (Core.Name "distinct")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "projection"),
@@ -1140,7 +1140,7 @@ unaryExpressionOperand x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.UnaryExpression"),
-        Core.projectionField = (Core.Name "operand")})),
+        Core.projectionFieldName = (Core.Name "operand")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unaryExpressionOperator :: Phantoms.TTerm Query.UnaryExpression -> Phantoms.TTerm Query.UnaryOperator
@@ -1148,7 +1148,7 @@ unaryExpressionOperator x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.UnaryExpression"),
-        Core.projectionField = (Core.Name "operator")})),
+        Core.projectionFieldName = (Core.Name "operator")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unaryExpressionWithOperand :: Phantoms.TTerm Query.UnaryExpression -> Phantoms.TTerm Query.Expression -> Phantoms.TTerm Query.UnaryExpression
@@ -1161,7 +1161,7 @@ unaryExpressionWithOperand original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.UnaryExpression"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operand"),
@@ -1180,7 +1180,7 @@ unaryExpressionWithOperator original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.UnaryExpression"),
-              Core.projectionField = (Core.Name "operand")})),
+              Core.projectionFieldName = (Core.Name "operand")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unaryOperatorNegate :: Phantoms.TTerm Query.UnaryOperator
@@ -1220,7 +1220,7 @@ vertexPatternEdges x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.VertexPattern"),
-        Core.projectionField = (Core.Name "edges")})),
+        Core.projectionFieldName = (Core.Name "edges")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexPatternLabel :: Phantoms.TTerm Query.VertexPattern -> Phantoms.TTerm (Maybe Model.VertexLabel)
@@ -1228,7 +1228,7 @@ vertexPatternLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.VertexPattern"),
-        Core.projectionField = (Core.Name "label")})),
+        Core.projectionFieldName = (Core.Name "label")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexPatternProperties :: Phantoms.TTerm Query.VertexPattern -> Phantoms.TTerm [Query.PropertyPattern]
@@ -1236,7 +1236,7 @@ vertexPatternProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.VertexPattern"),
-        Core.projectionField = (Core.Name "properties")})),
+        Core.projectionFieldName = (Core.Name "properties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexPatternVariable :: Phantoms.TTerm Query.VertexPattern -> Phantoms.TTerm (Maybe Query.Variable)
@@ -1244,7 +1244,7 @@ vertexPatternVariable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.query.VertexPattern"),
-        Core.projectionField = (Core.Name "variable")})),
+        Core.projectionFieldName = (Core.Name "variable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexPatternWithEdges :: Phantoms.TTerm Query.VertexPattern -> Phantoms.TTerm [Query.EdgeProjectionPattern] -> Phantoms.TTerm Query.VertexPattern
@@ -1257,21 +1257,21 @@ vertexPatternWithEdges original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.VertexPattern"),
-              Core.projectionField = (Core.Name "variable")})),
+              Core.projectionFieldName = (Core.Name "variable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.VertexPattern"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.VertexPattern"),
-              Core.projectionField = (Core.Name "properties")})),
+              Core.projectionFieldName = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "edges"),
@@ -1287,7 +1287,7 @@ vertexPatternWithLabel original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.VertexPattern"),
-              Core.projectionField = (Core.Name "variable")})),
+              Core.projectionFieldName = (Core.Name "variable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
@@ -1297,14 +1297,14 @@ vertexPatternWithLabel original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.VertexPattern"),
-              Core.projectionField = (Core.Name "properties")})),
+              Core.projectionFieldName = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "edges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.VertexPattern"),
-              Core.projectionField = (Core.Name "edges")})),
+              Core.projectionFieldName = (Core.Name "edges")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 vertexPatternWithProperties :: Phantoms.TTerm Query.VertexPattern -> Phantoms.TTerm [Query.PropertyPattern] -> Phantoms.TTerm Query.VertexPattern
@@ -1317,14 +1317,14 @@ vertexPatternWithProperties original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.VertexPattern"),
-              Core.projectionField = (Core.Name "variable")})),
+              Core.projectionFieldName = (Core.Name "variable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.VertexPattern"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
@@ -1334,7 +1334,7 @@ vertexPatternWithProperties original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.VertexPattern"),
-              Core.projectionField = (Core.Name "edges")})),
+              Core.projectionFieldName = (Core.Name "edges")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 vertexPatternWithVariable :: Phantoms.TTerm Query.VertexPattern -> Phantoms.TTerm (Maybe Query.Variable) -> Phantoms.TTerm Query.VertexPattern
@@ -1350,19 +1350,19 @@ vertexPatternWithVariable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.VertexPattern"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.VertexPattern"),
-              Core.projectionField = (Core.Name "properties")})),
+              Core.projectionFieldName = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "edges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.query.VertexPattern"),
-              Core.projectionField = (Core.Name "edges")})),
+              Core.projectionFieldName = (Core.Name "edges")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))

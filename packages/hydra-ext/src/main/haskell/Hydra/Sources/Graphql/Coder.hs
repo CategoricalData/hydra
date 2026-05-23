@@ -89,16 +89,16 @@ import qualified Hydra.Dsl.Meta.Context as Ctx
 import qualified Hydra.Dsl.Errors as Error
 
 
-ns :: Namespace
-ns = Namespace "hydra.graphql.coder"
+ns :: ModuleName
+ns = ModuleName "hydra.graphql.coder"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Formatting.ns, Names.ns, Strip.ns, Environment.ns, Predicates.ns, Annotations.ns, Serialization.ns,
-      moduleNamespace GraphqlLanguage.module_,
-      GraphqlSerde.ns, Namespace "hydra.show.core"] L.++ (moduleNamespace GraphqlSyntax.module_:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Names.ns, Strip.ns, Environment.ns, Predicates.ns, Annotations.ns, Serialization.ns,
+      moduleName GraphqlLanguage.module_,
+      GraphqlSerde.ns] L.++ (moduleName GraphqlSyntax.module_:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "GraphQL code generator: converts Hydra modules to GraphQL schema definitions"}
   where
     definitions = [
@@ -120,20 +120,20 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 -- | Helper: find namespace prefixes from type definitions
-findPrefixes :: TTerm (Namespace -> [TypeDefinition] -> M.Map Namespace String)
+findPrefixes :: TTerm (ModuleName -> [TypeDefinition] -> M.Map ModuleName String)
 findPrefixes = lambda "modNs" $ lambda "tdefs" $ lets [
-  "namespaces">: (Lists.nub :: TTerm [Namespace] -> TTerm [Namespace]) $ Maybes.cat $ Lists.map
+  "namespaces">: (Lists.nub :: TTerm [ModuleName] -> TTerm [ModuleName]) $ Maybes.cat $ Lists.map
     (lambda "td" $ Names.namespaceOf @@ (Packaging.typeDefinitionName $ var "td"))
     (var "tdefs")] $
   Maps.fromList $ Lists.map
     (lambda "ns_" $ pair (var "ns_")
       (Logic.ifElse (Equality.equal (var "ns_") (var "modNs"))
         (string "")
-        (Strings.cat2 (Formatting.sanitizeWithUnderscores @@ Sets.empty @@ (Packaging.unNamespace $ var "ns_")) (string "_"))))
+        (Strings.cat2 (Formatting.sanitizeWithUnderscores @@ Sets.empty @@ (Packaging.unModuleName $ var "ns_")) (string "_"))))
     (var "namespaces")
 
 -- | Helper: wrap a type in a record with a single "value" field
-wrapAsRecord :: TTerm Name -> TTerm Context -> TTerm Graph -> TTerm (M.Map Namespace String) -> TTerm Type -> TTerm (Either Error G.TypeDefinition)
+wrapAsRecord :: TTerm Name -> TTerm Context -> TTerm Graph -> TTerm (M.Map ModuleName String) -> TTerm Type -> TTerm (Either Error G.TypeDefinition)
 wrapAsRecord name cx g prefixes innerTyp =
   encodeNamedType @@ cx @@ g @@ prefixes @@ name @@
     (inject _Type _Type_record $ list [
@@ -170,7 +170,7 @@ encodeFieldName = define "encodeFieldName" $
   lambda "name" $ wrap G._Name (sanitize @@ (Core.unName $ var "name"))
 
 -- | Encode a field type to a GraphQL FieldDefinition
-encodeFieldType :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> FieldType -> Either Error G.FieldDefinition)
+encodeFieldType :: TTermDefinition (Context -> Graph -> M.Map ModuleName String -> FieldType -> Either Error G.FieldDefinition)
 encodeFieldType = define "encodeFieldType" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "ft" $
     "gtype" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ (Core.fieldTypeType $ var "ft")) $
@@ -204,7 +204,7 @@ encodeLiteralType = define "encodeLiteralType" $
         right (wrap G._NamedType (wrap G._Name (string "String")))]
 
 -- | Encode a named type to a GraphQL type definition.
-encodeNamedType :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> Name -> Type -> Either Error G.TypeDefinition)
+encodeNamedType :: TTermDefinition (Context -> Graph -> M.Map ModuleName String -> Name -> Type -> Either Error G.TypeDefinition)
 encodeNamedType = define "encodeNamedType" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "name" $ lambda "typ" $
     cases _Type (Strip.deannotateType @@ var "typ")
@@ -278,7 +278,7 @@ encodeNamedType = define "encodeNamedType" $
             Core.fieldType (Core.name $ string "codomain") (Core.functionTypeCodomain (var "ft"))])]
 
 -- | Encode a Hydra type as a GraphQL type reference
-encodeType :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> Type -> Either Error G.Type)
+encodeType :: TTermDefinition (Context -> Graph -> M.Map ModuleName String -> Type -> Either Error G.Type)
 encodeType = define "encodeType" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "typ" $
     cases _Type (Strip.deannotateType @@ var "typ")
@@ -358,7 +358,7 @@ encodeType = define "encodeType" $
           (wrap G._NamedType (wrap G._Name (string "Boolean")))))]
 
 -- | Encode a TypeDefinition to a GraphQL TypeDefinition
-encodeTypeDefinition :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> TypeDefinition -> Either Error G.TypeDefinition)
+encodeTypeDefinition :: TTermDefinition (Context -> Graph -> M.Map ModuleName String -> TypeDefinition -> Either Error G.TypeDefinition)
 encodeTypeDefinition = define "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "tdef" $
     encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes"
@@ -366,12 +366,12 @@ encodeTypeDefinition = define "encodeTypeDefinition" $
       @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "tdef")
 
 -- | Encode a Hydra Name as a GraphQL Name with namespace prefix
-encodeTypeName :: TTermDefinition (M.Map Namespace String -> Name -> G.Name)
+encodeTypeName :: TTermDefinition (M.Map ModuleName String -> Name -> G.Name)
 encodeTypeName = define "encodeTypeName" $
   lambda "prefixes" $ lambda "name" $ lets [
     "qualName">: Names.qualifyName @@ var "name",
     "local">: Packaging.qualifiedNameLocal (var "qualName"),
-    "mns">: Packaging.qualifiedNameNamespace (var "qualName"),
+    "mns">: Packaging.qualifiedNameModuleName (var "qualName"),
     "prefix">: Maybes.maybe (string "")
       (lambda "ns_" $ Maybes.maybe (string "") ("p" ~> var "p") (Maps.lookup (var "ns_") (var "prefixes")))
       (var "mns")] $
@@ -379,7 +379,7 @@ encodeTypeName = define "encodeTypeName" $
 
 -- | Encode a union variant field type to a nullable GraphQL FieldDefinition.
 -- Unit-typed variants become Boolean fields; data-carrying variants use their actual type, made nullable.
-encodeUnionFieldType :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> FieldType -> Either Error G.FieldDefinition)
+encodeUnionFieldType :: TTermDefinition (Context -> Graph -> M.Map ModuleName String -> FieldType -> Either Error G.FieldDefinition)
 encodeUnionFieldType = define "encodeUnionFieldType" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "ft" $ lets [
     "innerType">: Core.fieldTypeType $ var "ft",
@@ -404,8 +404,8 @@ moduleToGraphql = define "moduleToGraphql" $
     "cx" ~> "g" ~> lets [
     "partitioned">: Environment.partitionDefinitions @@ var "defs",
     "typeDefs">: Pairs.first (var "partitioned"),
-    "prefixes">: findPrefixes @@ Packaging.moduleNamespace (var "mod") @@ var "typeDefs",
-    "filePath">: Names.namespaceToFilePath @@ Util.caseConventionCamel @@ (wrap _FileExtension (string "graphql")) @@ Packaging.moduleNamespace (var "mod")] $
+    "prefixes">: findPrefixes @@ Packaging.moduleName (var "mod") @@ var "typeDefs",
+    "filePath">: Names.namespaceToFilePath @@ Util.caseConventionCamel @@ (wrap _FileExtension (string "graphql")) @@ Packaging.moduleName (var "mod")] $
     "gtdefs" <<~ (Eithers.mapList (lambda "td" $ encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "td") (var "typeDefs")) $
     right (Maps.fromList $ Lists.pure $ pair (var "filePath")
       (Serialization.printExpr @@ (Serialization.parenthesize @@

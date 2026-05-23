@@ -8395,7 +8395,7 @@
                                                                               "record": {
                                                                                 "fields": [
                                                                                   {"name": "typeName", "term": {"wrap": {"body": {"literal": {"string": "Person"}}, "typeName": "hydra.core.Name"}}},
-                                                                                  {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                  {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
                                                                                 "typeName": "hydra.core.Projection"}}},
                                                                           "typeName": "hydra.core.Term"}},
                                                                       "function": {
@@ -8462,7 +8462,7 @@
                                                                                                       "record": {
                                                                                                         "fields": [
                                                                                                           {"name": "typeName", "term": {"wrap": {"body": {"literal": {"string": "Person"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                          {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                          {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                         "typeName": "hydra.core.Projection"}}},
                                                                                                   "typeName": "hydra.core.Term"}}},
                                                                                             {
@@ -9281,13 +9281,13 @@
                 "typeName": "hydra.testing.TestGroup"}}}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "dependencies": [
-    "hydra.reduction",
-    "hydra.inference",
-    "hydra.show.core",
-    "hydra.context",
-    "hydra.core",
-    "hydra.errors",
-    "hydra.test.testGraph",
-    "hydra.testing"],
+    {"module": "hydra.reduction"},
+    {"module": "hydra.inference"},
+    {"module": "hydra.show.core"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.test.testGraph"},
+    {"module": "hydra.testing"}],
   "description": "Test cases for term reduction/evaluation mechanics",
-  "namespace": "hydra.test.reduction"}
+  "name": "hydra.test.reduction"}

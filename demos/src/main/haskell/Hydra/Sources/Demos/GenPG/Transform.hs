@@ -91,14 +91,14 @@ import qualified Hydra.Tabular as Tab            -- Generated tabular types
 import qualified Hydra.Relational as Rel         -- Generated relational types
 
 
-ns :: Namespace
-ns = Namespace "hydra.demos.genpg.transform"
+ns :: ModuleName
+ns = ModuleName "hydra.demos.genpg.transform"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = ([Reduction.ns, Rewriting.ns, Strip.ns, ExtractCore.ns] L.++ (kernelTypesNamespaces L.++ [PgModel.ns, TabularModel.ns, RelationalModel.ns])),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Reduction.ns, Rewriting.ns, Strip.ns, ExtractCore.ns] L.++ (kernelTypesModuleNames L.++ [PgModel.ns, TabularModel.ns, RelationalModel.ns])),
             moduleDescription = Just "Functions for transforming property graph mappings into property graph elements."}
   where
     definitions = [

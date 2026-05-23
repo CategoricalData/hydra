@@ -1,5 +1,4 @@
 package hydra.dsl.java;
-
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
@@ -8,7 +7,7 @@ import hydra.core.TypeVariableMetadata;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.packaging.Definition;
-import hydra.packaging.Namespace;
+import hydra.packaging.ModuleName;
 import hydra.packaging.TermDefinition;
 import hydra.packaging.TypeDefinition;
 import hydra.util.Maybe;
@@ -50,17 +49,17 @@ public final class Helpers {
      * Construct a TypeVariable reference for a fully-qualified name.
      * {@code typeref("hydra.core", "Type")} → {@code Type.Variable("hydra.core.Type")}.
      */
-    public static Type typeref(Namespace ns, String local) {
+    public static Type typeref(ModuleName ns, String local) {
         return Types.variable(ns.value + "." + local);
     }
 
-    /** Same as {@link #typeref(Namespace, String)} but for a String namespace. */
+    /** Same as {@link #typeref(ModuleName, String)} but for a String namespace. */
     public static Type typeref(String ns, String local) {
         return Types.variable(ns + "." + local);
     }
 
     /** Build a type Definition in the given namespace. */
-    public static Definition typeDef(Namespace ns, String localName, Type typ) {
+    public static Definition typeDef(ModuleName ns, String localName, Type typ) {
         Name fqName = new Name(ns.value + "." + localName);
         TypeScheme ts = new TypeScheme(
             Collections.emptyList(),
@@ -73,7 +72,7 @@ public final class Helpers {
      * Build a term Definition in the given namespace with no type scheme
      * (inference fills it in).
      */
-    public static Definition termDef(Namespace ns, String localName, Term term) {
+    public static Definition termDef(ModuleName ns, String localName, Term term) {
         Name fqName = new Name(ns.value + "." + localName);
         return new Definition.Term(new TermDefinition(
             fqName,
@@ -82,7 +81,7 @@ public final class Helpers {
     }
 
     /** Build a term Definition with a pre-computed TypeScheme. */
-    public static Definition termDefTyped(Namespace ns, String localName, Term term, TypeScheme ts) {
+    public static Definition termDefTyped(ModuleName ns, String localName, Term term, TypeScheme ts) {
         Name fqName = new Name(ns.value + "." + localName);
         return new Definition.Term(new TermDefinition(
             fqName,

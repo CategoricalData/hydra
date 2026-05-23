@@ -83,9 +83,9 @@ define = definitionInModule module_
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = (Namespace "hydra.python.language"),
+            moduleName = (ModuleName "hydra.python.language"),
             moduleDefinitions = [toDefinition pythonLanguage, toDefinition pythonReservedWords],
-            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints and reserved words for Python 3"}
 pythonLanguage :: TTermDefinition Language
 pythonLanguage = define "pythonLanguage" $

@@ -15,6 +15,7 @@ module Hydra.Sources.TypeScript.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -58,19 +59,19 @@ import qualified Hydra.Sources.TypeScript.Serde as TypeScriptSerdeSource
 def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.typeScript.coder"
+ns :: ModuleName
+ns = ModuleName "hydra.typeScript.coder"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies =
-              [moduleNamespace TypeScriptLanguageSource.module_,
-               moduleNamespace TypeScriptSerdeSource.module_,
+            moduleDependencies = unqualifiedDep <$> (
+              [moduleName TypeScriptLanguageSource.module_,
+               moduleName TypeScriptSerdeSource.module_,
                Analysis.ns, Environment.ns, Formatting.ns, Names.ns, Rewriting.ns,
                Serialization.ns, Sorting.ns, Strip.ns, Variables.ns]
-              L.++ (TypeScriptSyntax.ns : KernelTypes.kernelTypesNamespaces),
+              L.++ (TypeScriptSyntax.ns : KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "TypeScript code generator: emits TypeScript type declarations from Hydra modules"}
   where
     definitions = [
@@ -565,7 +566,7 @@ encodeType = def "encodeType" $
 -- at the top of the emitted .ts file. Uses Variables.freeVariablesInType
 -- to walk the whole tree (it handles foralls correctly by excluding bound
 -- parameters).
-collectImports :: TTermDefinition (Namespace -> Type -> S.Set Name)
+collectImports :: TTermDefinition (ModuleName -> Type -> S.Set Name)
 collectImports = def "collectImports" $
   lambda "currentNs" $ lambda "t" $
     "vars" <~ (Variables.freeVariablesInType @@ var "t") $
@@ -574,7 +575,7 @@ collectImports = def "collectImports" $
 -- | Same as `collectImports` but walks a Term, gathering free term-level
 -- variables that resolve to a different module (i.e. references to other
 -- generated `export const` definitions or to runtime lib primitives).
-collectTermImports :: TTermDefinition (Namespace -> Term -> S.Set Name)
+collectTermImports :: TTermDefinition (ModuleName -> Term -> S.Set Name)
 collectTermImports = def "collectTermImports" $
   lambda "currentNs" $ lambda "t" $
     "vars" <~ (Variables.freeVariablesInTerm @@ var "t") $
@@ -586,7 +587,7 @@ collectTermImports = def "collectTermImports" $
 -- misses types referenced only in inner lambdas (e.g. `function helper(
 -- ids: ReadonlyMap<Name, SubtermNode>, ...) { ... }`). This helper
 -- supplements that by walking the term tree.
-collectInnerTypeImports :: TTermDefinition (Namespace -> Term -> S.Set Name)
+collectInnerTypeImports :: TTermDefinition (ModuleName -> Term -> S.Set Name)
 collectInnerTypeImports = def "collectInnerTypeImports" $
   lambda "currentNs" $ lambda "term" $
     "subs" <~ (Rewriting.subterms @@ var "term") $
@@ -619,10 +620,10 @@ collectInnerTypeImports = def "collectInnerTypeImports" $
       (var "subs")) $
     filterNonLocalNames @@ var "currentNs" @@ (Sets.union (var "ownVars") (var "childVars"))
 
--- | Shared filter: keep only Names that have a Namespace distinct from
--- the current module's. Names without a Namespace (bare lambda params)
+-- | Shared filter: keep only Names that have a ModuleName distinct from
+-- the current module's. Names without a ModuleName (bare lambda params)
 -- and Names in the current namespace are dropped.
-filterNonLocalNames :: TTermDefinition (Namespace -> S.Set Name -> S.Set Name)
+filterNonLocalNames :: TTermDefinition (ModuleName -> S.Set Name -> S.Set Name)
 filterNonLocalNames = def "filterNonLocalNames" $
   lambda "currentNs" $ lambda "names" $
     Sets.fromList $ Maybes.cat $ Lists.map
@@ -632,8 +633,8 @@ filterNonLocalNames = def "filterNonLocalNames" $
           (lambda "nameNs" $
             Logic.ifElse
               (Equality.equal
-                (unwrap _Namespace @@ var "currentNs")
-                (unwrap _Namespace @@ var "nameNs"))
+                (unwrap _ModuleName @@ var "currentNs")
+                (unwrap _ModuleName @@ var "nameNs"))
               nothing
               (just $ var "n")))
       (Sets.toList (var "names"))
@@ -646,10 +647,10 @@ filterNonLocalNames = def "filterNonLocalNames" $
 -- `kind` selects the import flavor:
 --   "type"  → emits `import type { ... }` with PascalCased names (for type refs).
 --   "value" → emits `import { ... }` with names verbatim (for term-level refs).
-importsToText :: TTermDefinition (String -> Namespace -> S.Set Name -> String)
+importsToText :: TTermDefinition (String -> ModuleName -> S.Set Name -> String)
 importsToText = def "importsToText" $
   lambda "kind" $ lambda "currentNs" $ lambda "names" $
-    -- Pair each Name with its optional Namespace; drop ones with no namespace
+    -- Pair each Name with its optional ModuleName; drop ones with no namespace
     -- or whose namespace matches the current module.
     "pairs" <~ (Maybes.cat $ Lists.map
       (lambda "n" $
@@ -658,8 +659,8 @@ importsToText = def "importsToText" $
           (lambda "ns" $
             Logic.ifElse
               (Equality.equal
-                (unwrap _Namespace @@ var "currentNs")
-                (unwrap _Namespace @@ var "ns"))
+                (unwrap _ModuleName @@ var "currentNs")
+                (unwrap _ModuleName @@ var "ns"))
               nothing
               (just $ pair (var "ns") (var "n"))))
       (Sets.toList (var "names"))) $
@@ -674,7 +675,7 @@ importsToText = def "importsToText" $
     "importKeyword" <~ Logic.ifElse (Equality.equal (var "kind") (string "type"))
       (string "import type")
       (string "import") $
-    -- Group by namespace via fold into a Map<Namespace, [String]>.
+    -- Group by namespace via fold into a Map<ModuleName, [String]>.
     "grouped" <~ (Lists.foldl
       (lambda "acc" $ lambda "p" $
         "ns" <~ Pairs.first (var "p") $
@@ -683,7 +684,7 @@ importsToText = def "importsToText" $
         "existing" <~ (Maybes.fromMaybe (list ([] :: [TTerm String]))
           (Maps.lookup (var "ns") (var "acc"))) $
         Maps.insert (var "ns") (Lists.cons (var "local") (var "existing")) (var "acc"))
-      (Maps.empty :: TTerm (M.Map Namespace [String]))
+      (Maps.empty :: TTerm (M.Map ModuleName [String]))
       (var "pairs")) $
     -- Path computation: every Hydra namespace has the form `hydra.<a>.<b>...`.
     -- The file for ns `hydra.a.b.c` lives at `hydra/a/b/c.ts` — depth n-1
@@ -698,7 +699,7 @@ importsToText = def "importsToText" $
     -- src/test/typescript into src/main/typescript, hence the extra
     -- `../../main/typescript/` segment appended to upPrefix.
     "currentSegs" <~ (Lists.drop (int32 1)
-      (Strings.splitOn (string ".") (unwrap _Namespace @@ var "currentNs"))) $
+      (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "currentNs"))) $
     "currentDepth" <~ (Lists.length (var "currentSegs")) $
     "currentIsTest" <~ Logic.and
       (Logic.not (Lists.null (var "currentSegs")))
@@ -712,7 +713,7 @@ importsToText = def "importsToText" $
         "ns" <~ Pairs.first (var "entry") $
         "locals" <~ Pairs.second (var "entry") $
         "targetSegs" <~ (Lists.drop (int32 1)
-          (Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns"))) $
+          (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns"))) $
         "targetIsTest" <~ Logic.and
           (Logic.not (Lists.null (var "targetSegs")))
           (Equality.equal (Maybes.fromMaybe (string "") (Lists.maybeHead (var "targetSegs"))) (string "test")) $
@@ -820,7 +821,7 @@ flattenApplication = def "flattenApplication" $
 -- in `() => expr` thunks. The `lazyFlags` list parallels `args`:
 -- True positions are wrapped, False positions are emitted normally.
 -- Returns a single call expression with all args supplied at once.
-encodeLazyCall :: TTermDefinition (Context -> Graph -> Namespace -> Term -> [Term] -> [Bool] -> TS.Expression)
+encodeLazyCall :: TTermDefinition (Context -> Graph -> ModuleName -> Term -> [Term] -> [Bool] -> TS.Expression)
 encodeLazyCall = def "encodeLazyCall" $
   lambda "cx" $ lambda "g" $ lambda "currentNs" $ lambda "headTerm" $ lambda "args" $ lambda "lazyFlags" $
     "headExpr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm") $
@@ -1066,7 +1067,7 @@ encodeLiteral = def "encodeLiteral" $
 -- `Serde.expressionToExpr` + `Serialization.printExpr`. This is the same
 -- pipeline the Java/Scala/Python coders use; it gives proper precedence,
 -- newlines, and indentation without manual string assembly.
-encodeTerm :: TTermDefinition (Context -> Graph -> Namespace -> Term -> TS.Expression)
+encodeTerm :: TTermDefinition (Context -> Graph -> ModuleName -> Term -> TS.Expression)
 encodeTerm = def "encodeTerm" $
   lambda "cx" $ lambda "g" $ lambda "currentNs" $ lambda "term" $ cases _Term (var "term")
     (Just $ tsExprIdent @@ string "null")
@@ -1087,11 +1088,11 @@ encodeTerm = def "encodeTerm" $
          (lambda "ns" $
            Logic.ifElse
              (Equality.equal
-               (unwrap _Namespace @@ var "currentNs")
-               (unwrap _Namespace @@ var "ns"))
+               (unwrap _ModuleName @@ var "currentNs")
+               (unwrap _ModuleName @@ var "ns"))
              (tsExprIdent @@ var "local")
              ("nsSegs" <~ (Lists.drop (int32 1)
-                (Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns"))) $
+                (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns"))) $
               -- Must match the prefix used in importsToText.
               "alias" <~ Strings.cat2 (string "$mod_")
                 (Strings.intercalate (string "_") (var "nsSegs")) $
@@ -1246,7 +1247,7 @@ encodeTerm = def "encodeTerm" $
                  var "headExpr")
                 ("fname" <~ (Formatting.sanitizeWithUnderscores
                    @@ TypeScriptLanguageSource.typeScriptReservedWords
-                   @@ Core.unName (Core.projectionField (var "proj"))) $
+                   @@ Core.unName (Core.projectionFieldName (var "proj"))) $
                  "firstA" <~ Maybes.fromMaybe (tsExprIdent @@ string "undefined") (Lists.maybeHead (var "encArgs")) $
                  "restA" <~ (Lists.drop (int32 1) (var "encArgs")) $
                  "fieldExpr" <~ (tsMember @@ var "firstA" @@ var "fname") $
@@ -1371,7 +1372,7 @@ encodeTerm = def "encodeTerm" $
      _Term_project>>: lambda "proj" $
        "fname" <~ (Formatting.sanitizeWithUnderscores
          @@ TypeScriptLanguageSource.typeScriptReservedWords
-         @@ Core.unName (Core.projectionField (var "proj"))) $
+         @@ Core.unName (Core.projectionFieldName (var "proj"))) $
        tsArrowTyped @@ list [
          tsTypedIdent @@ string "x"
            @@ (inject TS._TypeExpression TS._TypeExpression_any unit)]
@@ -1501,7 +1502,7 @@ encodeParam = def "encodeParam" $
 -- | Encode a let-binding as a TS `Statement` inside an enclosing function body.
 -- If the binding's value is a lambda chain, emit a nested `function` declaration
 -- (which hoists). Otherwise emit a `const name = <expr>;` variable declaration.
-encodeBindingAsStatement :: TTermDefinition (Context -> Graph -> Namespace -> Binding -> TS.Statement)
+encodeBindingAsStatement :: TTermDefinition (Context -> Graph -> ModuleName -> Binding -> TS.Statement)
 encodeBindingAsStatement = def "encodeBindingAsStatement" $
   "cx" ~> "g" ~> "currentNs" ~> "b" ~>
     "bname" <~ Core.bindingName (var "b") $
@@ -1536,7 +1537,7 @@ encodeBindingAsStatement = def "encodeBindingAsStatement" $
 -- into the FunctionStructure shape: explicit params + statements + body.
 -- The `mScheme :: Maybe Type` arg is the binding's known type scheme body
 -- (for codomain inference); pass `Nothing` if not available.
-functionDeclarationFromTerm :: TTermDefinition (Context -> Graph -> Namespace -> String -> Term -> Maybe Type -> TS.FunctionDeclaration)
+functionDeclarationFromTerm :: TTermDefinition (Context -> Graph -> ModuleName -> String -> Term -> Maybe Type -> TS.FunctionDeclaration)
 functionDeclarationFromTerm = def "functionDeclarationFromTerm" $
   "cx" ~> "g" ~> "currentNs" ~> "lname" ~> "term" ~> "_mScheme" ~>
     "fsE" <~ (analyzeTypeScriptFunction @@ var "cx" @@ var "g" @@ var "term") $
@@ -1591,7 +1592,7 @@ functionDeclarationFromTerm = def "functionDeclarationFromTerm" $
 -- (explicit params, typed domains, hoisted let bindings, inner body), then
 -- emitted as either `export const name = expr;` (zero-arg) or
 -- `export function name(p1: T1, ..., pN: TN) { ...bindings... return body; }`.
-encodeTermDefinition :: TTermDefinition (Context -> Graph -> Namespace -> TermDefinition -> TS.ModuleItem)
+encodeTermDefinition :: TTermDefinition (Context -> Graph -> ModuleName -> TermDefinition -> TS.ModuleItem)
 encodeTermDefinition = def "encodeTermDefinition" $
   lambda "cx" $ lambda "g" $ lambda "currentNs" $ lambda "td" $
     "name" <~ Packaging.termDefinitionName (var "td") $
@@ -1844,7 +1845,7 @@ sortBindingsTopologically = def "sortBindingsTopologically" $
 -- intra-module definitions it depends on. This avoids JS Temporal Dead
 -- Zone errors for `const` declarations that reference other constants
 -- defined later in alphabetical order (which is Hydra's source order).
-sortTermDefsTopologically :: TTermDefinition (Namespace -> [TermDefinition] -> [TermDefinition])
+sortTermDefsTopologically :: TTermDefinition (ModuleName -> [TermDefinition] -> [TermDefinition])
 sortTermDefsTopologically = def "sortTermDefsTopologically" $
   lambda "currentNs" $ lambda "tdefs" $
     -- Build a Map<Name, TermDefinition> keyed by full Hydra name.
@@ -1886,7 +1887,7 @@ sortTermDefsTopologically = def "sortTermDefsTopologically" $
 moduleToTypeScript :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
 moduleToTypeScript = def "moduleToTypeScript" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
-    "currentNs" <~ Packaging.moduleNamespace (var "mod") $
+    "currentNs" <~ Packaging.moduleName (var "mod") $
     "partitioned" <~ (Environment.partitionDefinitions @@ var "defs") $
     "typeDefs" <~ Pairs.first (var "partitioned") $
     "rawTermDefs" <~ Pairs.second (var "partitioned") $
@@ -1953,7 +1954,7 @@ moduleToTypeScript = def "moduleToTypeScript" $
     "filePath" <~ (Names.namespaceToFilePath
       @@ Util.caseConventionCamel
       @@ wrap _FileExtension (string "ts")
-      @@ (Packaging.moduleNamespace (var "mod"))) $
+      @@ (Packaging.moduleName (var "mod"))) $
     right (Maps.singleton (var "filePath")
       (Strings.cat (list [
         var "header",

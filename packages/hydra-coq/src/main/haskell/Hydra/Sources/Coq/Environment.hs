@@ -14,8 +14,8 @@ import qualified Hydra.Dsl.Types                           as T
 import qualified Hydra.Sources.Kernel.Types.Core           as Core
 
 
-ns :: Namespace
-ns = Namespace "hydra.coq.environment"
+ns :: ModuleName
+ns = ModuleName "hydra.coq.environment"
 
 def :: String -> Type -> Binding
 def = datatype ns
@@ -28,9 +28,9 @@ core = typeref Core.ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "Environment types for Coq code generation"}
   where
     definitions = [

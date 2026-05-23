@@ -204,6 +204,6 @@
               {"name": "properties", "type": {"list": {"variable": "hydra.pg.query.PropertyPattern"}}},
               {"name": "edges", "type": {"list": {"variable": "hydra.pg.query.EdgeProjectionPattern"}}}]},
           "variables": []}}}],
-  "dependencies": ["hydra.pg.model", "hydra.core"],
+  "dependencies": [{"module": "hydra.pg.model"}, {"module": "hydra.core"}],
   "description": "A common model for pattern-matching queries over property graphs",
-  "namespace": "hydra.pg.query"}
+  "name": "hydra.pg.query"}

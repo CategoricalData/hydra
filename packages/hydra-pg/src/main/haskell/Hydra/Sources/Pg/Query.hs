@@ -16,8 +16,8 @@ import qualified Data.Maybe                      as Y
 import qualified Hydra.Sources.Pg.Model      as PgModel
 
 
-ns :: Namespace
-ns = Namespace "hydra.pg.query"
+ns :: ModuleName
+ns = ModuleName "hydra.pg.query"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -30,9 +30,9 @@ q = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [PgModel.ns, Core.ns],
+            moduleDependencies = unqualifiedDep <$> [PgModel.ns, Core.ns],
             moduleDescription = Just ("A common model for pattern-matching queries over property graphs")}
   where
     definitions = [

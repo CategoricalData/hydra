@@ -6,6 +6,7 @@ module Hydra.Sources.Protobuf.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -73,17 +74,17 @@ emptyList = TTerm $ TermList []
 decodeType :: TTerm (Graph -> Term -> Either DecodingError Type)
 decodeType = TTerm $ TermVariable $ Name "hydra.decode.core.type"
 
-ns :: Namespace
-ns = Namespace "hydra.protobuf.coder"
+ns :: ModuleName
+ns = ModuleName "hydra.protobuf.coder"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [moduleNamespace ProtobufSerdeSource.module_, moduleNamespace ProtobufLanguageSource.module_,
+            moduleDependencies = unqualifiedDep <$> ([moduleName ProtobufSerdeSource.module_, moduleName ProtobufLanguageSource.module_,
       Formatting.ns, Names.ns, Rewriting.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Lexical.ns, Serialization.ns,
       Annotations.ns, Constants.ns, ExtractCore.ns, Adapt.ns, ShowCore.ns, ShowError.ns,
-      moduleNamespace DecodeCore.module_] L.++ (ProtobufEnvironment.ns:Proto3Syntax.ns:KernelTypes.kernelTypesNamespaces),
+      moduleName DecodeCore.module_] L.++ (ProtobufEnvironment.ns:Proto3Syntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions"}
   where
     definitions = [
@@ -163,7 +164,7 @@ constructModule :: TTermDefinition (Context -> Graph -> Module -> [TypeDefinitio
 constructModule = def "constructModule" $
   doc "Construct a Protobuf file from a Hydra module and its type definitions" $
   "cx" ~> "g" ~> "mod" ~> "typeDefs" ~> lets [
-    "ns_">: Packaging.moduleNamespace (var "mod"),
+    "ns_">: Packaging.moduleName (var "mod"),
     "desc">: Packaging.moduleDescription (var "mod"),
     "toDef">: "td" ~> lets [
       "name">: Packaging.typeDefinitionName (var "td"),
@@ -236,7 +237,7 @@ constructModule = def "constructModule" $
 -- Accumulator helper
 -- =============================================================================
 
-encodeDefinition :: TTermDefinition (Context -> Graph -> Namespace -> Name -> Type -> Either Error P3.Definition)
+encodeDefinition :: TTermDefinition (Context -> Graph -> ModuleName -> Name -> Type -> Either Error P3.Definition)
 encodeDefinition = def "encodeDefinition" $
   doc "Encode a Hydra type as a Protobuf definition" $
   "cx" ~> "g" ~> "localNs" ~> "name" ~> "typ" ~> lets [
@@ -311,7 +312,7 @@ encodeFieldName = def "encodeFieldName" $
         (Formatting.convertCaseCamelToLowerSnake @@ (unwrap _Name @@ var "name"))
 
 -- | Returns the field and updated context (for counter threading)
-encodeFieldType :: TTermDefinition (Context -> Graph -> Namespace -> FieldType -> Either Error (P3.Field, Context))
+encodeFieldType :: TTermDefinition (Context -> Graph -> ModuleName -> FieldType -> Either Error (P3.Field, Context))
 encodeFieldType = def "encodeFieldType" $
   doc "Encode a Hydra field type as a Protobuf field" $
   "cx" ~> "g" ~> "localNs" ~> "ft" ~> lets [
@@ -399,7 +400,7 @@ encodeFieldType = def "encodeFieldType" $
 -- =============================================================================
 
 -- | Returns the message definition; counter is threaded via context
-encodeRecordType :: TTermDefinition (Context -> Graph -> Namespace -> [P3.Option] -> Name -> [FieldType] -> Either Error P3.MessageDefinition)
+encodeRecordType :: TTermDefinition (Context -> Graph -> ModuleName -> [P3.Option] -> Name -> [FieldType] -> Either Error P3.MessageDefinition)
 encodeRecordType = def "encodeRecordType" $
   doc "Encode a Hydra record type as a Protobuf message definition" $
   "cx" ~> "g" ~> "localNs" ~> "options" ~> "tname" ~> "fts" ~>
@@ -468,7 +469,7 @@ encodeScalarTypeWrapped = def "encodeScalarTypeWrapped" $
 -- =============================================================================
 
 -- | Encode a simple type for helper message fields
-encodeSimpleTypeForHelper :: TTermDefinition (Context -> Namespace -> Type -> Either Error P3.SimpleType)
+encodeSimpleTypeForHelper :: TTermDefinition (Context -> ModuleName -> Type -> Either Error P3.SimpleType)
 encodeSimpleTypeForHelper = def "encodeSimpleTypeForHelper" $
   doc "Encode a simple type for helper message fields" $
   "cx" ~> "localNs" ~> "typ" ~> lets [
@@ -489,19 +490,19 @@ encodeTypeName = def "encodeTypeName" $
   doc "Encode a Hydra type name as a Protobuf type name" $
   "name" ~> wrap P3._TypeName (Names.localNameOf @@ var "name")
 
-encodeTypeReference :: TTermDefinition (Namespace -> Name -> P3.TypeName)
+encodeTypeReference :: TTermDefinition (ModuleName -> Name -> P3.TypeName)
 encodeTypeReference = def "encodeTypeReference" $
   doc "Encode a Hydra name as a Protobuf type reference" $
   "localNs" ~> "name" ~> lets [
     "qn">: Names.qualifyName @@ var "name",
     "local">: Packaging.qualifiedNameLocal (var "qn"),
-    "ns_">: Packaging.qualifiedNameNamespace (var "qn"),
-    "localNsParts">: Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (Strings.splitOn (string ".") (unwrap _Namespace @@ var "localNs")))] $
+    "ns_">: Packaging.qualifiedNameModuleName (var "qn"),
+    "localNsParts">: Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "localNs")))] $
     wrap P3._TypeName $
       Maybes.maybe
         (var "local")
         ("nsVal" ~> lets [
-          "nsParts">: Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (Strings.splitOn (string ".") (unwrap _Namespace @@ var "nsVal")))] $
+          "nsParts">: Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "nsVal")))] $
           Logic.ifElse (Equality.equal (var "nsParts") (var "localNsParts"))
             (var "local")
             (Strings.intercalate (string ".") (Lists.concat (list [var "nsParts", list [var "local"]]))))
@@ -569,7 +570,7 @@ fromEitherString = def "fromEitherString" $
 
 -- | Generate a helper message definition for a structural type.
 -- Returns the definition and the updated context (counter state).
-generateStructuralTypeMessage :: TTermDefinition (Context -> Graph -> Namespace -> Term -> Either Error (P3.Definition, Context))
+generateStructuralTypeMessage :: TTermDefinition (Context -> Graph -> ModuleName -> Term -> Either Error (P3.Definition, Context))
 generateStructuralTypeMessage = def "generateStructuralTypeMessage" $
   doc "Generate a helper message definition for a structural type" $
   "cx" ~> "g" ~> "localNs" ~> "ref" ~> lets [
@@ -631,7 +632,7 @@ isEnumDefinition = def "isEnumDefinition" $
       _Type_union>>: "fts" ~> asTerm isEnumFields @@ (var "fts")]
 
 -- =============================================================================
--- Namespace conversion
+-- ModuleName conversion
 -- =============================================================================
 
 isEnumFields :: TTermDefinition ([FieldType] -> Bool)
@@ -690,7 +691,7 @@ moduleToProtobuf :: TTermDefinition (Module -> [Definition] -> Context -> Graph 
 moduleToProtobuf = def "moduleToProtobuf" $
   doc "Convert a Hydra module to Protocol Buffers v3 source files" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~> lets [
-    "ns_">: Packaging.moduleNamespace (var "mod"),
+    "ns_">: Packaging.moduleName (var "mod"),
     "partitioned">: Environment.partitionDefinitions @@ var "defs",
     "typeDefs">: Pairs.first (var "partitioned")] $
     "pfile" <<~ (asTerm constructModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "typeDefs") $ lets [
@@ -702,15 +703,15 @@ moduleToProtobuf = def "moduleToProtobuf" $
 -- Option name constants
 -- =============================================================================
 
-namespaceToFileReference :: TTermDefinition (Namespace -> P3.FileReference)
+namespaceToFileReference :: TTermDefinition (ModuleName -> P3.FileReference)
 namespaceToFileReference = def "namespaceToFileReference" $
   doc "Convert a Hydra namespace to a Protobuf file reference" $
   "ns_" ~> lets [
     "pns">: Strings.intercalate (string "/")
-      (Lists.map (lambda "s" $ Formatting.convertCaseCamelToLowerSnake @@ var "s") (Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns_")))] $
+      (Lists.map (lambda "s" $ Formatting.convertCaseCamelToLowerSnake @@ var "s") (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns_")))] $
     wrap P3._FileReference (Strings.cat2 (var "pns") (string ".proto"))
 
-namespaceToPackageName :: TTermDefinition (Namespace -> P3.PackageName)
+namespaceToPackageName :: TTermDefinition (ModuleName -> P3.PackageName)
 namespaceToPackageName = def "namespaceToPackageName" $
   doc "Convert a Hydra namespace to a Protobuf package name" $
   "ns_" ~>
@@ -718,7 +719,7 @@ namespaceToPackageName = def "namespaceToPackageName" $
       Strings.intercalate (string ".")
         (Lists.map
           (lambda "s" $ Formatting.convertCaseCamelToLowerSnake @@ var "s")
-          (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns_")))))
+          (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns_")))))
 
 -- =============================================================================
 -- Boolean annotation reading
@@ -749,7 +750,7 @@ simplifyType = def "simplifyType" $
 -- | Generate a message name for a structural type reference.
 -- The StructuralTypeRef is represented as a tagged union with "either" and "pair" variants,
 -- where each variant holds a pair of types (left/right or first/second).
-structuralTypeName :: TTermDefinition (Namespace -> Term -> P3.TypeName)
+structuralTypeName :: TTermDefinition (ModuleName -> Term -> P3.TypeName)
 structuralTypeName = def "structuralTypeName" $
   doc "Generate a message name for a structural type reference" $
   "localNs" ~> "ref" ~> lets [

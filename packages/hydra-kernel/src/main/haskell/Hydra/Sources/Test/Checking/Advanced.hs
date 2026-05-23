@@ -4,6 +4,7 @@ module Hydra.Sources.Test.Checking.Advanced where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -17,14 +18,14 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.checking.advanced"
+ns :: ModuleName
+ns = ModuleName "hydra.test.checking.advanced"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [TestGraph.ns, Namespace "hydra.rewriting", Namespace "hydra.inference", Namespace "hydra.scoping", Namespace "hydra.show.core", Namespace "hydra.test.testTypes"] ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.rewriting", ModuleName "hydra.inference", ModuleName "hydra.scoping", ModuleName "hydra.show.core", ModuleName "hydra.test.testTypes"] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Advanced type checking test cases: annotated terms and flows")}
   where
     definitions = [

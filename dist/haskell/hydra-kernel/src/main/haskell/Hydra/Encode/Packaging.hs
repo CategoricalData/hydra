@@ -39,20 +39,32 @@ module_ x =
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Packaging.moduleDescription x))},
         Core.Field {
-          Core.fieldName = (Core.Name "namespace"),
-          Core.fieldTerm = (namespace (Packaging.moduleNamespace x))},
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (moduleName (Packaging.moduleName x))},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map namespace xs)) (Packaging.moduleDependencies x))},
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map moduleDependency xs)) (Packaging.moduleDependencies x))},
         Core.Field {
           Core.fieldName = (Core.Name "definitions"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map definition xs)) (Packaging.moduleDefinitions x))}]})
--- | Encoder for hydra.packaging.Namespace
-namespace :: Packaging.Namespace -> Core.Term
-namespace x =
+-- | Encoder for hydra.packaging.ModuleDependency
+moduleDependency :: Packaging.ModuleDependency -> Core.Term
+moduleDependency x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.ModuleDependency"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (moduleName (Packaging.moduleDependencyModule x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "package"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map packageName opt)) (Packaging.moduleDependencyPackage x))}]})
+-- | Encoder for hydra.packaging.ModuleName
+moduleName :: Packaging.ModuleName -> Core.Term
+moduleName x =
     Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.packaging.Namespace"),
-      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Packaging.unNamespace x))})
+      Core.wrappedTermTypeName = (Core.Name "hydra.packaging.ModuleName"),
+      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Packaging.unModuleName x))})
 -- | Encoder for hydra.packaging.Package
 package :: Packaging.Package -> Core.Term
 package x =
@@ -105,8 +117,8 @@ qualifiedName x =
       Core.recordTypeName = (Core.Name "hydra.packaging.QualifiedName"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "namespace"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map namespace opt)) (Packaging.qualifiedNameNamespace x))},
+          Core.fieldName = (Core.Name "moduleName"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map moduleName opt)) (Packaging.qualifiedNameModuleName x))},
         Core.Field {
           Core.fieldName = (Core.Name "local"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Packaging.qualifiedNameLocal x))}]})

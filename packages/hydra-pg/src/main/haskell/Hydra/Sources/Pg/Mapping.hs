@@ -18,8 +18,8 @@ import qualified Hydra.Sources.Kernel.Types.Util as Util
 import qualified Hydra.Sources.Pg.Model         as PgModel
 
 
-ns :: Namespace
-ns = Namespace "hydra.pg.mapping"
+ns :: ModuleName
+ns = ModuleName "hydra.pg.mapping"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -38,9 +38,9 @@ v3 = typeref $ PgModel.ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [PgModel.ns, Coders.ns, Core.ns],
+            moduleDependencies = unqualifiedDep <$> [PgModel.ns, Coders.ns, Core.ns],
             moduleDescription = Just "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs"}
   where
     definitions = [

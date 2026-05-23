@@ -16,8 +16,8 @@ import qualified Data.Maybe                      as Y
 import qualified Hydra.Sources.Rdf.Syntax    as RdfSyntax
 
 
-ns :: Namespace
-ns = Namespace "hydra.shacl.model"
+ns :: ModuleName
+ns = ModuleName "hydra.shacl.model"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -30,9 +30,9 @@ rdf = typeref $ RdfSyntax.ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [RdfSyntax.ns, Core.ns],
+            moduleDependencies = unqualifiedDep <$> [RdfSyntax.ns, Core.ns],
             moduleDescription = Just "A SHACL syntax model. See https://www.w3.org/TR/shacl"}
   where
     definitions = [

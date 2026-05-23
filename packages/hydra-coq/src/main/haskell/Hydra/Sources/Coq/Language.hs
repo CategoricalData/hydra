@@ -6,6 +6,7 @@ module Hydra.Sources.Coq.Language where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -30,14 +31,14 @@ import Hydra.Ast
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.coq.language"
+ns :: ModuleName
+ns = ModuleName "hydra.coq.language"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Constants.ns, Formatting.ns] DL.++ (CoqSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([Constants.ns, Formatting.ns] DL.++ (CoqSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Language constraints for Coq code generation"}
   where
     definitions = [

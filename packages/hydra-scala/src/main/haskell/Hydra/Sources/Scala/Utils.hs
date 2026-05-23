@@ -88,17 +88,17 @@ import qualified Hydra.Sources.Scala.Language as ScalaLanguageSource
 def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.scala.utils"
+ns :: ModuleName
+ns = ModuleName "hydra.scala.utils"
 
-scalaLanguageNs :: Namespace
-scalaLanguageNs = moduleNamespace ScalaLanguageSource.module_
+scalaLanguageNs :: ModuleName
+scalaLanguageNs = moduleName ScalaLanguageSource.module_
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [scalaLanguageNs, Names.ns, Formatting.ns, Namespace "hydra.strip"] L.++ (ScalaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([scalaLanguageNs, Names.ns, Formatting.ns] L.++ (ScalaSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Utility functions for constructing Scala AST nodes"}
   where
     definitions = [
@@ -245,7 +245,7 @@ sprim = def "sprim" $
   doc "Create a Scala primitive reference from a Hydra name" $
   lambda "name" $ lets [
     "qname">: Names.qualifyName @@ var "name",
-    "prefix">: Packaging.unNamespace (Maybes.fromMaybe (wrap _Namespace (string "")) (Packaging.qualifiedNameNamespace $ var "qname")),
+    "prefix">: Packaging.unModuleName (Maybes.fromMaybe (wrap _ModuleName (string "")) (Packaging.qualifiedNameModuleName $ var "qname")),
     "local">: scalaEscapeName @@ (Packaging.qualifiedNameLocal $ var "qname")] $
     sname @@ (var "prefix" ++ string "." ++ var "local")
 

@@ -1,10 +1,11 @@
 package hydra.dsl.meta;
-
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
 import hydra.packaging.Definition;
-import hydra.packaging.Namespace;
+import hydra.packaging.ModuleDependency;
+import hydra.packaging.ModuleName;
+import hydra.packaging.PackageName;
 import hydra.packaging.TermDefinition;
 import hydra.phantoms.TTerm;
 import hydra.util.Maybe;
@@ -26,7 +27,7 @@ import java.util.function.Supplier;
  * <p>Typical usage in a source class:
  * <pre>
  *   public class Coder {
- *     public static final Namespace NS = new Namespace("hydra.java.coder");
+ *     public static final ModuleName NS = new ModuleName("hydra.java.coder");
  *
  *     private static Def define(String localName, Supplier&lt;TTerm&lt;?&gt;&gt; body) {
  *       return Defs.define(NS, localName, body);
@@ -64,7 +65,7 @@ public final class Defs {
         private final Supplier<Term> bodySupplier;
         private volatile Definition cached;
 
-        Def(Namespace ns, String localName, Supplier<TTerm<?>> bodyBuilder) {
+        Def(ModuleName ns, String localName, Supplier<TTerm<?>> bodyBuilder) {
             this.fqName = new Name(ns.value + "." + localName);
             this.bodySupplier = () -> bodyBuilder.get().value;
         }
@@ -94,7 +95,7 @@ public final class Defs {
     }
 
     /** Construct a {@link Def} for the given namespace. */
-    public static Def define(Namespace ns, String localName, Supplier<TTerm<?>> body) {
+    public static Def define(ModuleName ns, String localName, Supplier<TTerm<?>> body) {
         return new Def(ns, localName, body);
     }
 
@@ -117,6 +118,20 @@ public final class Defs {
         ArrayList<Definition> out = new ArrayList<>(defs.length);
         for (Def d : defs) {
             out.add(d.definition());
+        }
+        return out;
+    }
+
+    /** Construct a {@link ModuleDependency} on the given module, without a package qualifier. */
+    public static ModuleDependency unqualifiedDep(ModuleName module) {
+        return new ModuleDependency(module, Maybe.<PackageName>nothing());
+    }
+
+    /** Wrap a list of {@link ModuleName}s as a list of unqualified {@link ModuleDependency} values. */
+    public static List<ModuleDependency> unqualifiedDeps(ModuleName... modules) {
+        ArrayList<ModuleDependency> out = new ArrayList<>(modules.length);
+        for (ModuleName m : modules) {
+            out.add(unqualifiedDep(m));
         }
         return out;
     }

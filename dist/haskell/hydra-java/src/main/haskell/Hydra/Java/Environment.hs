@@ -41,9 +41,9 @@ _JavaFeatures_supportsDiamondOperator = Core.Name "supportsDiamondOperator"
 data Aliases =
   Aliases {
     -- | Current module namespace context
-    aliasesCurrentNamespace :: Packaging.Namespace,
+    aliasesCurrentNamespace :: Packaging.ModuleName,
     -- | Maps namespaces to Java package names
-    aliasesPackages :: (M.Map Packaging.Namespace Syntax.PackageName),
+    aliasesPackages :: (M.Map Packaging.ModuleName Syntax.PackageName),
     -- | Variables bound in pattern matching branches
     aliasesBranchVars :: (S.Set Core.Name),
     -- | Variables that are self-recursive

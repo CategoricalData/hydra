@@ -74,15 +74,15 @@ import qualified Hydra.Sources.Encode.Core            as EncodeCore
 import Hydra.Encoding (encodeBindingName)
 
 
-ns :: Namespace
-ns = Namespace "hydra.annotations"
+ns :: ModuleName
+ns = ModuleName "hydra.annotations"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Constants.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, ExtractCore.ns, Lexical.ns,
-      Strip.ns, ShowCore.ns, ShowError.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, moduleName DecodeCore.module_, moduleName EncodeCore.module_, ExtractCore.ns, Lexical.ns,
+      Strip.ns, ShowCore.ns, ShowError.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "Utilities for reading and writing type and term annotations"}
   where
    definitions = [

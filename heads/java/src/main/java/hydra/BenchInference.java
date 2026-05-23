@@ -7,7 +7,8 @@ import hydra.errors.Error_;
 import hydra.graph.Graph;
 import hydra.packaging.Definition;
 import hydra.packaging.Module;
-import hydra.packaging.Namespace;
+import hydra.packaging.ModuleDependency;
+import hydra.packaging.ModuleName;
 import hydra.packaging.TermDefinition;
 import hydra.util.Either;
 import hydra.util.Maybe;
@@ -87,13 +88,13 @@ public class BenchInference {
         // Seed the schema map with the bootstrap schema (kernel types) so module
         // decoding can resolve type-variable references.
         Map<Name, hydra.core.Type> schemaMap = Generation.bootstrapSchemaMap();
-        List<Namespace> mainNs = Generation.readManifestField(kernelMainDir, "mainModules");
+        List<ModuleName> mainNs = Generation.readManifestField(kernelMainDir, "mainModules");
         List<Module> universe = new ArrayList<>(
                 Generation.loadModulesFromJson(kernelMainDir, schemaMap, mainNs));
         // hydra-bench is opt-in: populated by bin/sync-bench.sh, absent on a
         // default sync. If present, append its modules so the workload resolves.
         if (new java.io.File(benchMainDir).isDirectory()) {
-            List<Namespace> benchNsList = Generation.readManifestField(benchMainDir, "mainModules");
+            List<ModuleName> benchNsList = Generation.readManifestField(benchMainDir, "mainModules");
             universe.addAll(Generation.loadModulesFromJson(benchMainDir, schemaMap, benchNsList));
         }
         long loadMs = System.currentTimeMillis() - t0;
@@ -103,7 +104,7 @@ public class BenchInference {
         // Find the bench module.
         Module benchMod = null;
         for (Module m : universe) {
-            if (benchNs.equals(m.namespace.value)) {
+            if (benchNs.equals(m.name.value)) {
                 benchMod = m;
                 break;
             }
@@ -166,7 +167,7 @@ public class BenchInference {
      * walker(k-1) lookups continue to resolve.
      */
     private static Module makeSyntheticModule(Module benchMod, int n) {
-        Namespace targetNs = new Namespace("z.bench.scaling");
+        ModuleName targetNs = new ModuleName("z.bench.scaling");
         List<Definition> defs = benchMod.definitions;
         List<Definition> renamed = new ArrayList<>(n);
         for (int i = 0; i < Math.min(n, defs.size()); i++) {
@@ -183,8 +184,8 @@ public class BenchInference {
         }
         // Inject the bench module's namespace as an explicit dependency
         // so walker_(k-1) lookups resolve via the universe.
-        List<Namespace> deps = new ArrayList<>();
-        deps.add(benchMod.namespace);
+        List<ModuleDependency> deps = new ArrayList<>();
+        deps.add(new ModuleDependency(benchMod.name, hydra.util.Maybe.<hydra.packaging.PackageName>nothing()));
         deps.addAll(benchMod.dependencies);
         return new Module(benchMod.description, targetNs, deps, renamed);
     }

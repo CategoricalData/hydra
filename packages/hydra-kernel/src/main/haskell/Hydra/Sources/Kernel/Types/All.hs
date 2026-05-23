@@ -57,5 +57,5 @@ kernelTypesModules = [
   Variants.module_]
 
 -- | Namespaces of all kernel type modules
-kernelTypesNamespaces :: [Namespace]
-kernelTypesNamespaces = fmap moduleNamespace kernelTypesModules
+kernelTypesModuleNames :: [ModuleName]
+kernelTypesModuleNames = fmap moduleName kernelTypesModules

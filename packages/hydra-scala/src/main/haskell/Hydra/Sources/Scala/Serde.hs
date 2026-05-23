@@ -87,14 +87,14 @@ import qualified Hydra.Sources.Scala.Syntax as ScalaSyntax
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.scala.serde"
+ns :: ModuleName
+ns = ModuleName "hydra.scala.serde"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Serialization.ns, JavaSerdeSource.ns] L.++ (ScalaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns, JavaSerdeSource.ns] L.++ (ScalaSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Serialization functions for converting Scala AST to abstract expressions"}
   where
     definitions = [

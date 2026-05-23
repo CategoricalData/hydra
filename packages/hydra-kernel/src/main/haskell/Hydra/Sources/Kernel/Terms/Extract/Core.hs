@@ -76,14 +76,14 @@ unexpected :: TTerm String -> TTerm String -> TTerm (Prelude.Either Error a)
 unexpected expected actual = left
   (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError expected actual)
 
-ns :: Namespace
-ns = Namespace "hydra.extract.core"
+ns :: ModuleName
+ns = ModuleName "hydra.extract.core"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Lexical.ns, Strip.ns, ShowCore.ns, ShowError.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, Strip.ns, ShowCore.ns, ShowError.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just ("Extraction and validation for hydra.core types")}
   where
    definitions = [

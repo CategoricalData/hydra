@@ -28,8 +28,8 @@ import qualified Data.Set as S
 -- | State threaded through encoding to collect Go imports incrementally.
 data GoState = GoState {
   goStateImports :: S.Set String,       -- ^ Go import paths accumulated during encoding
-  goStateCurrentNs :: Namespace,        -- ^ Current module's namespace
-  goStateNsMap :: M.Map Namespace String, -- ^ Map from Hydra namespace to Go package path
+  goStateCurrentNs :: ModuleName,        -- ^ Current module's namespace
+  goStateNsMap :: M.Map ModuleName String, -- ^ Map from Hydra namespace to Go package path
   goStateTypeSubst :: M.Map Core.Name Core.Type, -- ^ Type variable substitutions for generics
   goStateInTypeDef :: Bool, -- ^ True when encoding type definitions (keep type vars as params)
   goStateFuncTypeParams :: S.Set Core.Name, -- ^ Forall-bound type vars of the current generic function
@@ -50,7 +50,7 @@ addImport imp st = st { goStateImports = S.insert imp (goStateImports st) }
 initState :: Module -> GoState
 initState mod_ = GoState {
   goStateImports = S.empty,
-  goStateCurrentNs = moduleNamespace mod_,
+  goStateCurrentNs = moduleName mod_,
   goStateNsMap = buildNsMap mod_,
   goStateTypeSubst = M.empty,
   goStateInTypeDef = False,
@@ -64,11 +64,11 @@ initState mod_ = GoState {
 
 -- | Build a mapping from Hydra namespaces to Go import paths.
 -- Hydra namespace "hydra.core" maps to Go package path "hydra/core".
-buildNsMap :: Module -> M.Map Namespace String
+buildNsMap :: Module -> M.Map ModuleName String
 buildNsMap mod_ = M.fromList $ fmap toEntry allNs
   where
-    allNs = moduleNamespace mod_ : moduleDependencies mod_
-    toEntry ns@(Namespace name) = (ns, namespaceToGoPath name)
+    allNs = moduleName mod_ : fmap moduleDependencyModule (moduleDependencies mod_)
+    toEntry ns@(ModuleName name) = (ns, namespaceToGoPath name)
 
 -- | Go module path. Must contain a dot to avoid confusion with the Go standard library.
 goModulePath :: String
@@ -81,8 +81,8 @@ namespaceToGoPath ns = goModulePath ++ "/" ++ fmap (\c -> if c == '.' then '/' e
 -- For two-level namespaces (hydra.core), uses the last segment: core
 -- For deeper namespaces (hydra.encode.core), combines parent+child: encodecore
 -- This avoids import collisions between e.g. hydra/core and hydra/encode/core.
-namespaceToGoPackage :: Namespace -> String
-namespaceToGoPackage (Namespace name) =
+namespaceToGoPackage :: ModuleName -> String
+namespaceToGoPackage (ModuleName name) =
   let parts = Strings.splitOn "." name
   in case parts of
     -- Single segment (e.g., stdlib "big") → use as-is
@@ -133,7 +133,7 @@ resolveTypeRef :: Core.Name -> [Go.Type] -> GoState -> (Go.Type, GoState)
 resolveTypeRef name targs st =
   let qn = qualifyName name
       local = toGoExported (qualifiedNameLocal qn)
-  in case qualifiedNameNamespace qn of
+  in case qualifiedNameModuleName qn of
     Nothing -> (goQualTypeName Nothing local targs, st)
     Just ns
       | ns == goStateCurrentNs st -> (goQualTypeName Nothing local targs, st)
@@ -141,14 +141,14 @@ resolveTypeRef name targs st =
         let pkg = namespaceToGoPackage ns
             impPath = case M.lookup ns (goStateNsMap st) of
               Just p -> p
-              Nothing -> namespaceToGoPath (unNamespace ns)
+              Nothing -> namespaceToGoPath (unModuleName ns)
         in (goQualTypeName (Just pkg) local targs, addImport impPath st)
 
 -- | Resolve a reference to a type in "hydra.util" (Either, Pair, etc.),
 -- handling same-namespace optimization.
 resolveUtilType :: String -> [Go.Type] -> GoState -> (Go.Type, GoState)
 resolveUtilType name targs st =
-  let utilNs = Namespace "hydra.util"
+  let utilNs = ModuleName "hydra.util"
   in if goStateCurrentNs st == utilNs
     then (goQualTypeName Nothing name targs, st)
     else (goQualTypeName (Just "util") name targs, addImport (goModulePath ++ "/hydra/util") st)
@@ -157,7 +157,7 @@ resolveUtilType name targs st =
 -- handling same-namespace optimization.
 resolveUtilExpr :: String -> GoState -> (Go.Expression, GoState)
 resolveUtilExpr name st =
-  let utilNs = Namespace "hydra.util"
+  let utilNs = ModuleName "hydra.util"
   in if goStateCurrentNs st == utilNs
     then (goNameExpr name, st)
     else (goQualNameExpr "util" name, addImport (goModulePath ++ "/hydra/util") st)
@@ -169,7 +169,7 @@ resolveExprRef :: Core.Name -> GoState -> (Go.Expression, GoState)
 resolveExprRef name st =
   let qn = qualifyName name
       localRaw = qualifiedNameLocal qn
-  in case qualifiedNameNamespace qn of
+  in case qualifiedNameModuleName qn of
     Nothing ->
       -- Local variable (lambda parameter, let binding) — use unexported (camelCase)
       (goNameExpr (toGoUnexported localRaw), st)
@@ -182,7 +182,7 @@ resolveExprRef name st =
             local = toGoExported localRaw
             impPath = case M.lookup ns (goStateNsMap st) of
               Just p -> p
-              Nothing -> namespaceToGoPath (unNamespace ns)
+              Nothing -> namespaceToGoPath (unModuleName ns)
         in (goQualNameExpr pkg local, addImport impPath st)
 
 -- | Extract a TypeName from a Type (for use in composite literals).
@@ -425,7 +425,7 @@ encodeType cx g typ st = case deannotateType typ of
   Core.TypeWrap wt -> encodeType cx g wt st  -- Anonymous wraps unwrap
   Core.TypeVariable name ->
     let qn = qualifyName name
-    in case qualifiedNameNamespace qn of
+    in case qualifiedNameModuleName qn of
       Nothing ->
         -- Unqualified type variable: check substitution map first
         case M.lookup name (goStateTypeSubst st) of
@@ -636,7 +636,7 @@ encodeTermInner cx g term st = case term of
         let isNonCallableVar = case deannotateTerm funTerm of
               Core.TermVariable name ->
                 let n = toGoUnexported (unName name)
-                    isLocal = case qualifiedNameNamespace (qualifyName name) of
+                    isLocal = case qualifiedNameModuleName (qualifyName name) of
                       Nothing -> True
                       Just _ -> False
                     -- concrete type AND not a known function (check both tracking maps)
@@ -860,7 +860,7 @@ encodeTermInner cx g term st = case term of
         variantLocalName = localNameOf tname ++ "." ++ unName fname
         goBaseName = toGoExported (localNameOf tname)
         variantQName = case namespaceOf tname of
-          Just (Namespace ns) -> Core.Name (ns ++ "." ++ goBaseName ++ goFieldName)
+          Just (ModuleName ns) -> Core.Name (ns ++ "." ++ goBaseName ++ goFieldName)
           Nothing -> Core.Name (goBaseName ++ goFieldName)
         -- Resolve type arguments from the current substitution context
         resolvedArgs = resolveTypeArgs g tname st
@@ -1069,7 +1069,7 @@ encodeLambda cx g lam st = do
 resolvePrimRef :: Core.Name -> GoState -> (Go.Expression, GoState)
 resolvePrimRef (Core.Name name) st = case Strings.splitOn "." name of
   ["hydra", "lib", lib, fn] ->
-    let ns = Namespace ("hydra.lib." ++ lib)
+    let ns = ModuleName ("hydra.lib." ++ lib)
         pkg = namespaceToGoPackage ns
         impPath = goModulePath ++ "/hydra/lib/" ++ lib
     in (goQualNameExpr pkg (capitalize fn), addImport impPath st)
@@ -1080,7 +1080,7 @@ resolvePrimRef (Core.Name name) st = case Strings.splitOn "." name of
 encodeProjection :: Context -> Graph -> Core.Projection -> Maybe Core.Term -> GoState
   -> GoResult Go.Expression
 encodeProjection cx g proj marg st = do
-    let fname = toGoExported (unName $ Core.projectionField proj)
+    let fname = toGoExported (unName $ Core.projectionFieldName proj)
         typeName = Core.projectionTypeName proj
         -- Resolve type arguments from the current substitution context
         resolvedArgs = resolveTypeArgs g typeName st
@@ -1186,7 +1186,7 @@ encodeCaseArms cx g baseName (cf:cfs) st = do
       cfterm = Core.fieldTerm cf
       -- Build variant type name using the same logic as TermUnion
       variantQName = case namespaceOf baseName of
-        Just (Namespace ns) -> Core.Name (ns ++ "." ++ toGoExported (localNameOf baseName) ++ cfname)
+        Just (ModuleName ns) -> Core.Name (ns ++ "." ++ toGoExported (localNameOf baseName) ++ cfname)
         Nothing -> Core.Name (toGoExported (localNameOf baseName) ++ cfname)
       resolvedArgs = resolveTypeArgs g baseName st
   (goTypeArgs, st0) <- encodeTypes cx g resolvedArgs st
@@ -1381,7 +1381,7 @@ needsTypeAssertion g t = case deannotateType t of
   Core.TypeUnit -> False
   Core.TypeFunction _ -> False
   Core.TypeVariable name ->
-    case qualifiedNameNamespace (qualifyName name) of
+    case qualifiedNameModuleName (qualifyName name) of
       Nothing -> False
       Just _ -> True  -- All named types need assertion from any
   _ -> True
@@ -1415,7 +1415,7 @@ producesAny st t = case deannotateTerm t of
   Core.TermEither _ -> False
   Core.TermPair _ -> False
   Core.TermVariable name ->
-    case qualifiedNameNamespace (qualifyName name) of
+    case qualifiedNameModuleName (qualifyName name) of
       Just _ -> False   -- Qualified: concrete type
       Nothing ->
         -- Check if the local variable has a tracked concrete type.
@@ -1437,7 +1437,7 @@ producesAny st t = case deannotateTerm t of
       -- Generated cross-module functions return concrete types.
       Core.TermVariable name ->
         let goName = toGoUnexported (unName name)
-            isLocal = case qualifiedNameNamespace (qualifyName name) of
+            isLocal = case qualifiedNameModuleName (qualifyName name) of
               Nothing -> True
               Just _ -> False
             isCallable = S.member goName (goStateCallableVars st)
@@ -1623,7 +1623,7 @@ isCollectionAssignedFromQualified ftype fterm =
         _ -> False
       isConcreteSource = case stripTermWrappers fterm of
         Core.TermVariable name ->
-          case qualifiedNameNamespace (qualifyName name) of
+          case qualifiedNameModuleName (qualifyName name) of
             Just _ -> True   -- Qualified var: concrete type
             Nothing -> False -- Local var: might be any
         Core.TermList _ -> True   -- Direct list literal
@@ -1730,7 +1730,7 @@ coerceToType cx g expr targetType sourceTerm st
 
 -- | Check if a Name is qualified (has a namespace/package prefix).
 isQualifiedName :: Core.Name -> Bool
-isQualifiedName name = case qualifiedNameNamespace (qualifyName name) of
+isQualifiedName name = case qualifiedNameModuleName (qualifyName name) of
   Just _ -> True
   Nothing -> False
 
@@ -1770,7 +1770,7 @@ exprToPrimary expr = Go.PrimaryExprOperand $ Go.OperandParen expr
 isCurriedRef :: Core.Term -> Bool
 isCurriedRef t = case deannotateTerm t of
   Core.TermVariable name ->
-    case qualifiedNameNamespace (qualifyName name) of
+    case qualifiedNameModuleName (qualifyName name) of
       Nothing -> True  -- Local variable: curried
       Just _ -> isPrimitiveRef t  -- Qualified: curried only if primitive
   Core.TermLambda _ -> True    -- Lambda: curried
@@ -1793,7 +1793,7 @@ isCurriedRef t = case deannotateTerm t of
 isLocalRef :: Core.Term -> Bool
 isLocalRef t = case deannotateTerm t of
   Core.TermVariable name ->
-    case qualifiedNameNamespace (qualifyName name) of
+    case qualifiedNameModuleName (qualifyName name) of
       Nothing -> True   -- Unqualified = local variable
       Just _ -> False   -- Qualified = top-level definition
   Core.TermTypeApplication ta -> isLocalRef (Core.typeApplicationTermBody ta)
@@ -1831,7 +1831,7 @@ isDirectlyCallable :: Core.Term -> Bool
 isDirectlyCallable t = case deannotateTerm t of
   Core.TermVariable name ->
     -- Only qualified names (with namespace) are top-level definitions
-    case qualifiedNameNamespace (qualifyName name) of
+    case qualifiedNameModuleName (qualifyName name) of
       Just _ -> True
       Nothing -> False
   Core.TermVariable _ -> True
@@ -2618,7 +2618,7 @@ moduleToGo :: Module -> [Definition] -> Context -> Graph
 moduleToGo mod_ defs cx g = do
   let (typeDefs, termDefs) = partitionDefinitions defs
       st0 = initState mod_
-      pkgName = namespaceToGoPackage (moduleNamespace mod_)
+      pkgName = namespaceToGoPackage (moduleName mod_)
   -- Encode type definitions (may produce multiple decls per type for unions)
   (typeDecls, st1) <- encodeTypeDefs cx g typeDefs st0
   -- Encode term definitions
@@ -2630,7 +2630,7 @@ moduleToGo mod_ defs cx g = do
         imports
         allDecls
       code = printExpr $ parenthesize $ moduleToExpr goModule
-      filePath = goNamespaceToFilePath (moduleNamespace mod_)
+      filePath = goNamespaceToFilePath (moduleName mod_)
   Right $ M.singleton filePath code
 
 encodeTypeDefs :: Context -> Graph -> [TypeDefinition] -> GoState
@@ -2689,20 +2689,20 @@ buildImports imps
           Go.InterpretedStringLit path)
     lastSeg = last . Strings.splitOn "/"
     -- Convert import path back to namespace.
-    -- For hydra imports: "hydra.dev/hydra/encode/core" → Namespace "hydra.encode.core"
-    -- For stdlib imports: "math/big" → Namespace "math.big" (no prefix to strip)
+    -- For hydra imports: "hydra.dev/hydra/encode/core" → ModuleName "hydra.encode.core"
+    -- For stdlib imports: "math/big" → ModuleName "math.big" (no prefix to strip)
     pathToNamespace path =
       let segs = Strings.splitOn "/" path
           nsParts = if L.isPrefixOf "hydra.dev" (head segs)
             then drop 1 segs  -- Drop "hydra.dev" module prefix
             else segs          -- Standard library: keep as-is
-      in Namespace $ L.intercalate "." nsParts
+      in ModuleName $ L.intercalate "." nsParts
 
 -- | Convert a Hydra namespace to a Go file path.
 -- In Go, each package must be its own directory. So "hydra.core" becomes
 -- "hydra/core/core.go" (the directory is the package, the file is named after the last segment).
-goNamespaceToFilePath :: Namespace -> FilePath
-goNamespaceToFilePath (Namespace ns) =
+goNamespaceToFilePath :: ModuleName -> FilePath
+goNamespaceToFilePath (ModuleName ns) =
   let parts = Strings.splitOn "." ns
       dirPath = L.intercalate "/" parts
       fileName = case reverse parts of

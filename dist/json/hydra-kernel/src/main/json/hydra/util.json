@@ -50,13 +50,13 @@
                         "type": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace in focus, together with its associated value"}}}],
-                            "body": {"pair": {"first": {"variable": "hydra.packaging.Namespace"}, "second": {"variable": "n"}}}}}},
+                            "body": {"pair": {"first": {"variable": "hydra.packaging.ModuleName"}, "second": {"variable": "n"}}}}}},
                       {
                         "name": "mapping",
                         "type": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "A mapping of namespaces to values"}}}],
-                            "body": {"map": {"keys": {"variable": "hydra.packaging.Namespace"}, "values": {"variable": "n"}}}}}}]},
+                            "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "n"}}}}}}]},
                   "parameter": "n"}}}},
           "variables": []}}},
     {
@@ -82,6 +82,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Precision to a specified number of bits"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core", "hydra.packaging"],
+  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.packaging"}],
   "description": "General-purpose utility types used across Hydra.",
-  "namespace": "hydra.util"}
+  "name": "hydra.util"}

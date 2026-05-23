@@ -42,12 +42,12 @@ Renaming a namespace requires updating all of these, plus any code that imports 
       packages/hydra-kernel/src/main/haskell/Hydra/Sources/Json/Model.hs
    ```
 
-2. **Update the namespace declaration in the source**
+2. **Update the module name declaration in the source**
    ```haskell
    -- Change from:
-   ns = Namespace "hydra.json"
+   ns = ModuleName "hydra.json"
    -- To:
-   ns = Namespace "hydra.json.model"
+   ns = ModuleName "hydra.json.model"
    ```
 
 3. **Update the Haskell module declaration**
