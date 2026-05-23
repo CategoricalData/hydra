@@ -22,6 +22,7 @@
 module Hydra.Sources.Bench.FanOut where
 
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
@@ -32,8 +33,8 @@ import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Data.List                   as L
 import           Prelude                     hiding ((++))
 
-ns :: Namespace
-ns = Namespace "hydra.bench.fanOut"
+ns :: ModuleName
+ns = ModuleName "hydra.bench.fanOut"
 
 -- | Number of fanWalker definitions in the tree.
 numFanWalkers :: Int
@@ -97,13 +98,13 @@ mkFanWalker k =
        $ fanWalkerBody k
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-  moduleNamespace = ns,
+  moduleName = ns,
   moduleDefinitions = definitions,
-  moduleDependencies = [Strip.ns] `L.union` kernelTypesNamespaces,
+  moduleDependencies = unqualifiedDep <$> ([Strip.ns] `L.union` kernelTypesModuleNames),
   moduleDescription = Just "Fan-out inference benchmark. Each fanWalker_K branches to three smaller fanWalkers via _Term cases — closer to real codegen DAG shape than LinearChain."
   }
   where

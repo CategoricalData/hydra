@@ -4,6 +4,7 @@ module Hydra.Sources.Test.Checking.Failures where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -17,14 +18,14 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.checking.failures"
+ns :: ModuleName
+ns = ModuleName "hydra.test.checking.failures"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [TestGraph.ns, Namespace "hydra.rewriting"] ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.rewriting"] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Type checking failure test cases")}
   where
     definitions = [

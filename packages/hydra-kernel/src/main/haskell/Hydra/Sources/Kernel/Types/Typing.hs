@@ -10,17 +10,17 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Context as Context
 
 
-ns :: Namespace
-ns = Namespace "hydra.typing"
+ns :: ModuleName
+ns = ModuleName "hydra.typing"
 
 define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns, Context.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns, Context.ns],
             moduleDescription = Just "Types supporting type inference and type reconstruction."}
   where
     definitions = [

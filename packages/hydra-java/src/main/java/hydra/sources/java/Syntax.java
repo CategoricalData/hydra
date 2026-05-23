@@ -1,10 +1,11 @@
 package hydra.sources.java;
-
 import hydra.core.Type;
+import static hydra.dsl.meta.Defs.unqualifiedDeps;
 import hydra.dsl.Types;
 import hydra.packaging.Definition;
 import hydra.packaging.Module;
-import hydra.packaging.Namespace;
+import hydra.packaging.ModuleName;
+import hydra.packaging.ModuleDependency;
 import hydra.util.Maybe;
 
 import java.util.Arrays;
@@ -19,8 +20,8 @@ import static hydra.dsl.java.Helpers.typeref;
  * Mirror of packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Syntax.hs.
  */
 public class Syntax {
-    public static final Namespace NS = new Namespace("hydra.java.syntax");
-    private static final Namespace CORE_NS = new Namespace("hydra.core");
+    public static final ModuleName NS = new ModuleName("hydra.java.syntax");
+    private static final ModuleName CORE_NS = new ModuleName("hydra.core");
 
     private static Type java(String local) { return typeref(NS, local); }
 
@@ -1406,7 +1407,7 @@ public class Syntax {
         constantExpressionDef()
     );
 
-    private static final List<Namespace> DEPENDENCIES = Arrays.asList(CORE_NS);
+    private static final List<ModuleDependency> DEPENDENCIES = unqualifiedDeps(CORE_NS);
 
     public static final Module module_ = new Module(
         Maybe.just("A Java syntax module. Tracks the Oracle Java SE 21 BNF:\n  https://docs.oracle.com/javase/specs/jls/se21/html/jls-19.html\nNote: all *WithComments types were added manually, rather than derived from the BNF, which does not allow for comments."),

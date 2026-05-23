@@ -1,5 +1,4 @@
 package hydra.sources.java;
-
 import hydra.dsl.java.Syntax;
 import hydra.dsl.meta.Phantoms;
 import hydra.java.syntax.AdditionalBound;

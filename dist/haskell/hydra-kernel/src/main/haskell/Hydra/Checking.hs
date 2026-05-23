@@ -527,7 +527,7 @@ typeOfProjection :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Projec
 typeOfProjection cx tx typeArgs p =
 
       let tname = Core.projectionTypeName p
-          fname = Core.projectionField p
+          fname = Core.projectionFieldName p
       in (Eithers.bind (Resolution.requireSchemaType cx (Graph.graphSchemaTypes tx) tname) (\schemaResult ->
         let schemaType = Pairs.first schemaResult
             cx2 = Pairs.second schemaResult

@@ -61,14 +61,14 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 
 
-ns :: Namespace
-ns = Namespace "hydra.validate.core"
+ns :: ModuleName
+ns = ModuleName "hydra.validate.core"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Reflect.ns, Rewriting.ns, Variables.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Reflect.ns, Rewriting.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "Validation functions for core terms and types"}
   where
    definitions = [

@@ -85,14 +85,14 @@ import qualified Hydra.Sources.Rdf.Syntax as RdfSyntax
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.rdf.utils"
+ns :: ModuleName
+ns = ModuleName "hydra.rdf.utils"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Formatting.ns, Names.ns, Annotations.ns] L.++ (RdfSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Names.ns, Annotations.ns] L.++ (RdfSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Utility functions for working with RDF graphs and descriptions"}
   where
     definitions = [
@@ -291,12 +291,12 @@ propertyIri = define "propertyIri" $
   doc "Construct a property IRI from a record name and field name" $
   lambda "rname" $ lambda "fname" $ lets [
     "qualName">: Names.qualifyName @@ var "rname",
-    "gname">: Packaging.qualifiedNameNamespace (var "qualName"),
+    "gname">: Packaging.qualifiedNameModuleName (var "qualName"),
     "local_">: Packaging.qualifiedNameLocal (var "qualName")] $
     wrap Rdf._Iri
       (Strings.cat $ list [
         string "urn:",
-        Maybes.maybe (string "") (unwrap _Namespace) (var "gname"),
+        Maybes.maybe (string "") (unwrap _ModuleName) (var "gname"),
         string "#",
         Formatting.decapitalize @@ var "local_",
         Formatting.capitalize @@ (Core.unName $ var "fname")])

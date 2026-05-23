@@ -12,11 +12,14 @@ module_ :: Packaging.Module
 module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term encoders for hydra.query"),
-      Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.query"),
+      Packaging.moduleName = (Packaging.ModuleName "hydra.encode.query"),
       Packaging.moduleDependencies = [
-        Packaging.Namespace "hydra.encode.core",
-        (Packaging.Namespace "hydra.core"),
-        (Packaging.Namespace "hydra.query")],
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.core"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.query"),
+          Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.query.comparisonConstraint"),
@@ -303,7 +306,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-                                      Core.projectionField = (Core.Name "type")})),
+                                      Core.projectionFieldName = (Core.Name "type")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -331,7 +334,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-                                      Core.projectionField = (Core.Name "out")})),
+                                      Core.projectionFieldName = (Core.Name "out")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -359,7 +362,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-                                      Core.projectionField = (Core.Name "in")})),
+                                      Core.projectionFieldName = (Core.Name "in")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.query.Edge")))])})),
@@ -405,7 +408,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.query.GraphPattern"),
-                                      Core.projectionField = (Core.Name "graph")})),
+                                      Core.projectionFieldName = (Core.Name "graph")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -433,7 +436,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.query.GraphPattern"),
-                                      Core.projectionField = (Core.Name "patterns")})),
+                                      Core.projectionFieldName = (Core.Name "patterns")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.query.GraphPattern")))])})),
@@ -708,7 +711,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.query.PathEquation"),
-                                      Core.projectionField = (Core.Name "left")})),
+                                      Core.projectionFieldName = (Core.Name "left")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -725,7 +728,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.query.PathEquation"),
-                                      Core.projectionField = (Core.Name "right")})),
+                                      Core.projectionFieldName = (Core.Name "right")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.query.PathEquation")))])})),
@@ -968,7 +971,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.query.PatternImplication"),
-                                      Core.projectionField = (Core.Name "antecedent")})),
+                                      Core.projectionFieldName = (Core.Name "antecedent")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -985,7 +988,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.query.PatternImplication"),
-                                      Core.projectionField = (Core.Name "consequent")})),
+                                      Core.projectionFieldName = (Core.Name "consequent")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.query.PatternImplication")))])})),
@@ -1042,7 +1045,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.query.Query"),
-                                      Core.projectionField = (Core.Name "variables")})),
+                                      Core.projectionFieldName = (Core.Name "variables")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1070,7 +1073,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.query.Query"),
-                                      Core.projectionField = (Core.Name "patterns")})),
+                                      Core.projectionFieldName = (Core.Name "patterns")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.query.Query")))])})),
@@ -1131,7 +1134,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.query.Range"),
-                                      Core.projectionField = (Core.Name "min")})),
+                                      Core.projectionFieldName = (Core.Name "min")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1163,7 +1166,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.query.Range"),
-                                      Core.projectionField = (Core.Name "max")})),
+                                      Core.projectionFieldName = (Core.Name "max")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.query.Range")))])})),
@@ -1506,7 +1509,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.query.RegexSequence"),
-                                      Core.projectionField = (Core.Name "path")})),
+                                      Core.projectionFieldName = (Core.Name "path")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1523,7 +1526,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.query.RegexSequence"),
-                                      Core.projectionField = (Core.Name "quantifier")})),
+                                      Core.projectionFieldName = (Core.Name "quantifier")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.query.RegexSequence")))])})),
@@ -1680,7 +1683,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-                                      Core.projectionField = (Core.Name "subject")})),
+                                      Core.projectionFieldName = (Core.Name "subject")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1697,7 +1700,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-                                      Core.projectionField = (Core.Name "predicate")})),
+                                      Core.projectionFieldName = (Core.Name "predicate")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1714,7 +1717,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-                                      Core.projectionField = (Core.Name "object")})),
+                                      Core.projectionFieldName = (Core.Name "object")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.query.TriplePattern")))])})),

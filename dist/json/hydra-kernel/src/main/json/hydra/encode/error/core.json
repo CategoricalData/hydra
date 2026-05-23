@@ -33,7 +33,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.ConstantConditionError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.ConstantConditionError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -47,7 +47,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "value", "typeName": "hydra.error.core.ConstantConditionError"}}}},
+                                                  "function": {"project": {"fieldName": "value", "typeName": "hydra.error.core.ConstantConditionError"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -100,7 +100,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.DuplicateBindingError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.DuplicateBindingError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -114,7 +114,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.error.core.DuplicateBindingError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.error.core.DuplicateBindingError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -158,7 +158,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.DuplicateFieldError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.DuplicateFieldError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -172,7 +172,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.error.core.DuplicateFieldError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.error.core.DuplicateFieldError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -220,7 +220,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.DuplicateRecordTypeFieldNamesError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.DuplicateRecordTypeFieldNamesError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -234,7 +234,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.error.core.DuplicateRecordTypeFieldNamesError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.error.core.DuplicateRecordTypeFieldNamesError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -284,7 +284,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.DuplicateUnionTypeFieldNamesError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.DuplicateUnionTypeFieldNamesError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -298,7 +298,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.error.core.DuplicateUnionTypeFieldNamesError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.error.core.DuplicateUnionTypeFieldNamesError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -344,7 +344,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.EmptyCaseStatementError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.EmptyCaseStatementError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -358,7 +358,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "typeName", "typeName": "hydra.error.core.EmptyCaseStatementError"}}}},
+                                                  "function": {"project": {"fieldName": "typeName", "typeName": "hydra.error.core.EmptyCaseStatementError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -402,7 +402,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.EmptyLetBindingsError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.EmptyLetBindingsError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -446,7 +446,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.EmptyRecordTypeError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.EmptyRecordTypeError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -490,7 +490,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.EmptyTermAnnotationError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.EmptyTermAnnotationError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -534,7 +534,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.EmptyTypeAnnotationError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.EmptyTypeAnnotationError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -578,7 +578,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.EmptyTypeNameInTermError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.EmptyTypeNameInTermError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -622,7 +622,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.EmptyUnionTypeError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.EmptyUnionTypeError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -668,7 +668,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.InvalidForallParameterNameError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.InvalidForallParameterNameError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -682,7 +682,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.error.core.InvalidForallParameterNameError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.error.core.InvalidForallParameterNameError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -730,7 +730,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.InvalidLambdaParameterNameError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.InvalidLambdaParameterNameError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -744,7 +744,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.error.core.InvalidLambdaParameterNameError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.error.core.InvalidLambdaParameterNameError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -791,7 +791,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.InvalidLetBindingNameError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.InvalidLetBindingNameError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -805,7 +805,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.error.core.InvalidLetBindingNameError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.error.core.InvalidLetBindingNameError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -2034,7 +2034,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.InvalidTypeLambdaParameterNameError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.InvalidTypeLambdaParameterNameError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -2048,7 +2048,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.error.core.InvalidTypeLambdaParameterNameError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.error.core.InvalidTypeLambdaParameterNameError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -2098,7 +2098,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.InvalidTypeSchemeVariableNameError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.InvalidTypeSchemeVariableNameError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -2112,7 +2112,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.error.core.InvalidTypeSchemeVariableNameError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.error.core.InvalidTypeSchemeVariableNameError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -2158,7 +2158,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "expectedType", "typeName": "hydra.error.core.LiteralTypeMismatchError"}}}},
+                                                  "function": {"project": {"fieldName": "expectedType", "typeName": "hydra.error.core.LiteralTypeMismatchError"}}}},
                                               "function": {"variable": "hydra.encode.core.literalType"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -2172,7 +2172,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "actualType", "typeName": "hydra.error.core.LiteralTypeMismatchError"}}}},
+                                                  "function": {"project": {"fieldName": "actualType", "typeName": "hydra.error.core.LiteralTypeMismatchError"}}}},
                                               "function": {"variable": "hydra.encode.core.literalType"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -2216,7 +2216,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.NestedTermAnnotationError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.NestedTermAnnotationError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -2260,7 +2260,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.NestedTypeAnnotationError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.NestedTypeAnnotationError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -2305,7 +2305,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.NonComparableMapKeyTypeError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.NonComparableMapKeyTypeError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -2319,7 +2319,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "keyType", "typeName": "hydra.error.core.NonComparableMapKeyTypeError"}}}},
+                                                  "function": {"project": {"fieldName": "keyType", "typeName": "hydra.error.core.NonComparableMapKeyTypeError"}}}},
                                               "function": {"variable": "hydra.encode.core.type"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -2367,7 +2367,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.NonComparableSetElementTypeError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.NonComparableSetElementTypeError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -2381,7 +2381,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "elementType", "typeName": "hydra.error.core.NonComparableSetElementTypeError"}}}},
+                                                  "function": {"project": {"fieldName": "elementType", "typeName": "hydra.error.core.NonComparableSetElementTypeError"}}}},
                                               "function": {"variable": "hydra.encode.core.type"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -2427,7 +2427,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.RedundantWrapUnwrapError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.RedundantWrapUnwrapError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -2441,7 +2441,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "typeName", "typeName": "hydra.error.core.RedundantWrapUnwrapError"}}}},
+                                                  "function": {"project": {"fieldName": "typeName", "typeName": "hydra.error.core.RedundantWrapUnwrapError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -2485,7 +2485,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.SelfApplicationError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.SelfApplicationError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -2499,7 +2499,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.error.core.SelfApplicationError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.error.core.SelfApplicationError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -2543,7 +2543,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.SingleVariantUnionError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.SingleVariantUnionError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -2557,7 +2557,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "fieldName", "typeName": "hydra.error.core.SingleVariantUnionError"}}}},
+                                                  "function": {"project": {"fieldName": "fieldName", "typeName": "hydra.error.core.SingleVariantUnionError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -2602,7 +2602,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.TermVariableShadowingError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.TermVariableShadowingError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -2616,7 +2616,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.error.core.TermVariableShadowingError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.error.core.TermVariableShadowingError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -2664,7 +2664,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.TypeVariableShadowingInForallError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.TypeVariableShadowingInForallError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -2678,7 +2678,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.error.core.TypeVariableShadowingInForallError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.error.core.TypeVariableShadowingInForallError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -2730,7 +2730,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.TypeVariableShadowingInTypeLambdaError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.TypeVariableShadowingInTypeLambdaError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -2744,7 +2744,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.error.core.TypeVariableShadowingInTypeLambdaError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.error.core.TypeVariableShadowingInTypeLambdaError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -2790,7 +2790,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "fieldName", "typeName": "hydra.error.core.UndefinedFieldError"}}}},
+                                                  "function": {"project": {"fieldName": "fieldName", "typeName": "hydra.error.core.UndefinedFieldError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -2804,7 +2804,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "typeName", "typeName": "hydra.error.core.UndefinedFieldError"}}}},
+                                                  "function": {"project": {"fieldName": "typeName", "typeName": "hydra.error.core.UndefinedFieldError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -2849,7 +2849,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.UndefinedTermVariableError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.UndefinedTermVariableError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -2863,7 +2863,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.error.core.UndefinedTermVariableError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.error.core.UndefinedTermVariableError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -2908,7 +2908,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.UndefinedTypeVariableError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.UndefinedTypeVariableError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -2922,7 +2922,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.error.core.UndefinedTypeVariableError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.error.core.UndefinedTypeVariableError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -2972,7 +2972,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.UndefinedTypeVariableInBindingTypeError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.UndefinedTypeVariableInBindingTypeError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -2986,7 +2986,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.error.core.UndefinedTypeVariableInBindingTypeError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.error.core.UndefinedTypeVariableInBindingTypeError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -3038,7 +3038,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -3052,7 +3052,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -3104,7 +3104,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -3118,7 +3118,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -3165,7 +3165,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "expectedVariant", "typeName": "hydra.error.core.UnexpectedTermVariantError"}}}},
+                                                  "function": {"project": {"fieldName": "expectedVariant", "typeName": "hydra.error.core.UnexpectedTermVariantError"}}}},
                                               "function": {"variable": "hydra.encode.variants.termVariant"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -3179,7 +3179,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "actualTerm", "typeName": "hydra.error.core.UnexpectedTermVariantError"}}}},
+                                                  "function": {"project": {"fieldName": "actualTerm", "typeName": "hydra.error.core.UnexpectedTermVariantError"}}}},
                                               "function": {"variable": "hydra.encode.core.term"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -3224,7 +3224,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "expectedVariant", "typeName": "hydra.error.core.UnexpectedTypeVariantError"}}}},
+                                                  "function": {"project": {"fieldName": "expectedVariant", "typeName": "hydra.error.core.UnexpectedTypeVariantError"}}}},
                                               "function": {"variable": "hydra.encode.variants.typeVariant"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -3238,7 +3238,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "actualType", "typeName": "hydra.error.core.UnexpectedTypeVariantError"}}}},
+                                                  "function": {"project": {"fieldName": "actualType", "typeName": "hydra.error.core.UnexpectedTypeVariantError"}}}},
                                               "function": {"variable": "hydra.encode.core.type"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -3282,7 +3282,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.UnknownPrimitiveNameError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.UnknownPrimitiveNameError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -3296,7 +3296,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.error.core.UnknownPrimitiveNameError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.error.core.UnknownPrimitiveNameError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -3344,7 +3344,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.UnnecessaryIdentityApplicationError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.UnnecessaryIdentityApplicationError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -3390,7 +3390,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.UntypedTermVariableError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.UntypedTermVariableError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -3404,7 +3404,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.error.core.UntypedTermVariableError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.error.core.UntypedTermVariableError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -3449,7 +3449,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "location", "typeName": "hydra.error.core.VoidInNonBottomPositionError"}}}},
+                                                  "function": {"project": {"fieldName": "location", "typeName": "hydra.error.core.VoidInNonBottomPositionError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -3461,12 +3461,9 @@
             "function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.error.core.VoidInNonBottomPositionError"}}},
           "variables": []}}}],
   "dependencies": [
-    "hydra.encode.paths",
-    "hydra.encode.core",
-    "hydra.encode.variants",
-    "hydra.paths",
-    "hydra.core",
-    "hydra.variants",
-    "hydra.error.core"],
+    {"module": "hydra.encode.paths"},
+    {"module": "hydra.encode.core"},
+    {"module": "hydra.encode.variants"},
+    {"module": "hydra.error.core"}],
   "description": "Term encoders for hydra.error.core",
-  "namespace": "hydra.encode.error.core"}
+  "name": "hydra.encode.error.core"}

@@ -54,6 +54,6 @@
                                 "string": "Accessor names for record fields that were sanitized to unit due to Coq's strict positivity requirement. Applications of these accessors are replaced with hydra_unreachable at emission time."}}}],
                         "body": {"set": {"literal": {"string": {}}}}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core"],
+  "dependencies": [{"module": "hydra.core"}],
   "description": "Environment types for Coq code generation",
-  "namespace": "hydra.coq.environment"}
+  "name": "hydra.coq.environment"}

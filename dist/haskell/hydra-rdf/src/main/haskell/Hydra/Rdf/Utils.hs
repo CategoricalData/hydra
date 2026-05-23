@@ -131,11 +131,11 @@ propertyIri :: Core.Name -> Core.Name -> Syntax.Iri
 propertyIri rname fname =
 
       let qualName = Names.qualifyName rname
-          gname = Packaging.qualifiedNameNamespace qualName
+          gname = Packaging.qualifiedNameModuleName qualName
           local_ = Packaging.qualifiedNameLocal qualName
       in (Syntax.Iri (Strings.cat [
         "urn:",
-        (Maybes.maybe "" Packaging.unNamespace gname),
+        (Maybes.maybe "" Packaging.unModuleName gname),
         "#",
         (Formatting.decapitalize local_),
         (Formatting.capitalize (Core.unName fname))]))

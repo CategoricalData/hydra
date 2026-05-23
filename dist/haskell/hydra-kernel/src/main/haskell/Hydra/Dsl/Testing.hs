@@ -45,7 +45,7 @@ testCaseWithMetadataCase x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
-        Core.projectionField = (Core.Name "case")})),
+        Core.projectionFieldName = (Core.Name "case")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the description field of hydra.testing.TestCaseWithMetadata
 testCaseWithMetadataDescription :: Phantoms.TTerm Testing.TestCaseWithMetadata -> Phantoms.TTerm (Maybe String)
@@ -53,7 +53,7 @@ testCaseWithMetadataDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
-        Core.projectionField = (Core.Name "description")})),
+        Core.projectionFieldName = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.testing.TestCaseWithMetadata
 testCaseWithMetadataName :: Phantoms.TTerm Testing.TestCaseWithMetadata -> Phantoms.TTerm String
@@ -61,7 +61,7 @@ testCaseWithMetadataName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the tags field of hydra.testing.TestCaseWithMetadata
 testCaseWithMetadataTags :: Phantoms.TTerm Testing.TestCaseWithMetadata -> Phantoms.TTerm [Testing.Tag]
@@ -69,7 +69,7 @@ testCaseWithMetadataTags x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
-        Core.projectionField = (Core.Name "tags")})),
+        Core.projectionFieldName = (Core.Name "tags")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the case field of hydra.testing.TestCaseWithMetadata
 testCaseWithMetadataWithCase :: Phantoms.TTerm Testing.TestCaseWithMetadata -> Phantoms.TTerm Testing.TestCase -> Phantoms.TTerm Testing.TestCaseWithMetadata
@@ -82,7 +82,7 @@ testCaseWithMetadataWithCase original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "case"),
@@ -92,14 +92,14 @@ testCaseWithMetadataWithCase original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
-              Core.projectionField = (Core.Name "description")})),
+              Core.projectionFieldName = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "tags"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
-              Core.projectionField = (Core.Name "tags")})),
+              Core.projectionFieldName = (Core.Name "tags")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the description field of hydra.testing.TestCaseWithMetadata
 testCaseWithMetadataWithDescription :: Phantoms.TTerm Testing.TestCaseWithMetadata -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Testing.TestCaseWithMetadata
@@ -112,14 +112,14 @@ testCaseWithMetadataWithDescription original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "case"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
-              Core.projectionField = (Core.Name "case")})),
+              Core.projectionFieldName = (Core.Name "case")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
@@ -129,7 +129,7 @@ testCaseWithMetadataWithDescription original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
-              Core.projectionField = (Core.Name "tags")})),
+              Core.projectionFieldName = (Core.Name "tags")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.testing.TestCaseWithMetadata
 testCaseWithMetadataWithName :: Phantoms.TTerm Testing.TestCaseWithMetadata -> Phantoms.TTerm String -> Phantoms.TTerm Testing.TestCaseWithMetadata
@@ -145,21 +145,21 @@ testCaseWithMetadataWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
-              Core.projectionField = (Core.Name "case")})),
+              Core.projectionFieldName = (Core.Name "case")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
-              Core.projectionField = (Core.Name "description")})),
+              Core.projectionFieldName = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "tags"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
-              Core.projectionField = (Core.Name "tags")})),
+              Core.projectionFieldName = (Core.Name "tags")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the tags field of hydra.testing.TestCaseWithMetadata
 testCaseWithMetadataWithTags :: Phantoms.TTerm Testing.TestCaseWithMetadata -> Phantoms.TTerm [Testing.Tag] -> Phantoms.TTerm Testing.TestCaseWithMetadata
@@ -172,21 +172,21 @@ testCaseWithMetadataWithTags original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "case"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
-              Core.projectionField = (Core.Name "case")})),
+              Core.projectionFieldName = (Core.Name "case")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
-              Core.projectionField = (Core.Name "description")})),
+              Core.projectionFieldName = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "tags"),
@@ -215,7 +215,7 @@ testGroupCases x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
-        Core.projectionField = (Core.Name "cases")})),
+        Core.projectionFieldName = (Core.Name "cases")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the description field of hydra.testing.TestGroup
 testGroupDescription :: Phantoms.TTerm Testing.TestGroup -> Phantoms.TTerm (Maybe String)
@@ -223,7 +223,7 @@ testGroupDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
-        Core.projectionField = (Core.Name "description")})),
+        Core.projectionFieldName = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.testing.TestGroup
 testGroupName :: Phantoms.TTerm Testing.TestGroup -> Phantoms.TTerm String
@@ -231,7 +231,7 @@ testGroupName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the subgroups field of hydra.testing.TestGroup
 testGroupSubgroups :: Phantoms.TTerm Testing.TestGroup -> Phantoms.TTerm [Testing.TestGroup]
@@ -239,7 +239,7 @@ testGroupSubgroups x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
-        Core.projectionField = (Core.Name "subgroups")})),
+        Core.projectionFieldName = (Core.Name "subgroups")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the cases field of hydra.testing.TestGroup
 testGroupWithCases :: Phantoms.TTerm Testing.TestGroup -> Phantoms.TTerm [Testing.TestCaseWithMetadata] -> Phantoms.TTerm Testing.TestGroup
@@ -252,21 +252,21 @@ testGroupWithCases original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
-              Core.projectionField = (Core.Name "description")})),
+              Core.projectionFieldName = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "subgroups"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
-              Core.projectionField = (Core.Name "subgroups")})),
+              Core.projectionFieldName = (Core.Name "subgroups")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
@@ -282,7 +282,7 @@ testGroupWithDescription original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
@@ -292,14 +292,14 @@ testGroupWithDescription original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
-              Core.projectionField = (Core.Name "subgroups")})),
+              Core.projectionFieldName = (Core.Name "subgroups")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
-              Core.projectionField = (Core.Name "cases")})),
+              Core.projectionFieldName = (Core.Name "cases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.testing.TestGroup
 testGroupWithName :: Phantoms.TTerm Testing.TestGroup -> Phantoms.TTerm String -> Phantoms.TTerm Testing.TestGroup
@@ -315,21 +315,21 @@ testGroupWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
-              Core.projectionField = (Core.Name "description")})),
+              Core.projectionFieldName = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "subgroups"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
-              Core.projectionField = (Core.Name "subgroups")})),
+              Core.projectionFieldName = (Core.Name "subgroups")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
-              Core.projectionField = (Core.Name "cases")})),
+              Core.projectionFieldName = (Core.Name "cases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the subgroups field of hydra.testing.TestGroup
 testGroupWithSubgroups :: Phantoms.TTerm Testing.TestGroup -> Phantoms.TTerm [Testing.TestGroup] -> Phantoms.TTerm Testing.TestGroup
@@ -342,14 +342,14 @@ testGroupWithSubgroups original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
-              Core.projectionField = (Core.Name "description")})),
+              Core.projectionFieldName = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "subgroups"),
@@ -359,7 +359,7 @@ testGroupWithSubgroups original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
-              Core.projectionField = (Core.Name "cases")})),
+              Core.projectionFieldName = (Core.Name "cases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL accessor for the body of hydra.testing.Tag
 unTag :: Phantoms.TTerm Testing.Tag -> Phantoms.TTerm String
@@ -385,7 +385,7 @@ universalTestCaseActual x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.testing.UniversalTestCase"),
-        Core.projectionField = (Core.Name "actual")})),
+        Core.projectionFieldName = (Core.Name "actual")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the expected field of hydra.testing.UniversalTestCase
 universalTestCaseExpected :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm (() -> String)
@@ -393,7 +393,7 @@ universalTestCaseExpected x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.testing.UniversalTestCase"),
-        Core.projectionField = (Core.Name "expected")})),
+        Core.projectionFieldName = (Core.Name "expected")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the actual field of hydra.testing.UniversalTestCase
 universalTestCaseWithActual :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm (() -> String) -> Phantoms.TTerm Testing.UniversalTestCase
@@ -409,7 +409,7 @@ universalTestCaseWithActual original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.UniversalTestCase"),
-              Core.projectionField = (Core.Name "expected")})),
+              Core.projectionFieldName = (Core.Name "expected")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the expected field of hydra.testing.UniversalTestCase
 universalTestCaseWithExpected :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm (() -> String) -> Phantoms.TTerm Testing.UniversalTestCase
@@ -422,7 +422,7 @@ universalTestCaseWithExpected original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.testing.UniversalTestCase"),
-              Core.projectionField = (Core.Name "actual")})),
+              Core.projectionFieldName = (Core.Name "actual")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expected"),

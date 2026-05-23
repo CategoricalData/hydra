@@ -785,7 +785,7 @@ inferTypeOfProjection :: Context.Context -> Graph.Graph -> Core.Projection -> Ei
 inferTypeOfProjection fcx cx proj =
 
       let tname = Core.projectionTypeName proj
-          fname = Core.projectionField proj
+          fname = Core.projectionFieldName proj
       in (Eithers.bind (Resolution.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->
         let schemaType = Pairs.first stRp
             fcx2 = Pairs.second stRp
@@ -793,7 +793,7 @@ inferTypeOfProjection fcx cx proj =
             stype = Core.typeSchemeBody schemaType
         in (Eithers.bind (ExtractCore.recordType tname stype) (\sfields -> Eithers.bind (Resolution.findFieldType fcx2 fname sfields) (\ftyp -> Right (yield fcx2 (buildTypeApplicationTerm svars (Core.TermProject (Core.Projection {
           Core.projectionTypeName = tname,
-          Core.projectionField = fname}))) (Core.TypeFunction (Core.FunctionType {
+          Core.projectionFieldName = fname}))) (Core.TypeFunction (Core.FunctionType {
           Core.functionTypeDomain = (Resolution.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
           Core.functionTypeCodomain = ftyp})) Substitution.idTypeSubst))))))
 -- | Infer the type of a record (Either version)

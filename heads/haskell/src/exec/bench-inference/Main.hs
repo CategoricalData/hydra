@@ -22,7 +22,7 @@ import Hydra.Generation (showError)
 import qualified Hydra.Codegen as CodeGeneration
 import qualified Hydra.Sources.All as All
 import qualified Hydra.Sources.Ext as Ext
-import Hydra.Dsl.Bootstrap (bootstrapGraph)
+import Hydra.Dsl.Bootstrap (bootstrapGraph, unqualifiedDep)
 
 import qualified Data.List               as L
 import qualified Data.Map                as M
@@ -32,8 +32,8 @@ import qualified System.IO               as IO
 import qualified System.Exit             as Exit
 import           Text.Printf             (printf, hPrintf)
 
-defaultBenchNamespace :: Namespace
-defaultBenchNamespace = Namespace "hydra.bench.linearChain"
+defaultBenchNamespace :: ModuleName
+defaultBenchNamespace = ModuleName "hydra.bench.linearChain"
 
 -- | Default prefix sizes: 0 (empty-target baseline), 10, 25, 50, 100.
 defaultSizes :: [Int]
@@ -52,12 +52,12 @@ parseSizes s = L.sort $ L.nub
                             (_:r) -> splitOn c r
 
 -- | Parse argv into (sizes, namespace, optional output path).
-parseArgs :: [String] -> ([Int], Namespace, Maybe FilePath)
+parseArgs :: [String] -> ([Int], ModuleName, Maybe FilePath)
 parseArgs = go defaultSizes defaultBenchNamespace Nothing
   where
     go sz nsv out [] = (sz, nsv, out)
     go _  nsv out ("--sizes":s:rest)     = go (parseSizes s) nsv out rest
-    go sz _   out ("--namespace":n:rest) = go sz (Namespace n) out rest
+    go sz _   out ("--namespace":n:rest) = go sz (ModuleName n) out rest
     go sz nsv _   ("--out":p:rest)       = go sz nsv (Just p) rest
     go sz nsv out (_:rest)               = go sz nsv out rest
 
@@ -69,20 +69,20 @@ parseArgs = go defaultSizes defaultBenchNamespace Nothing
 makeSyntheticModule :: Module -> Int -> Module
 makeSyntheticModule benchMod n =
     Module {
-        moduleNamespace = targetNs,
+        moduleName = targetNs,
         moduleDefinitions = renamed,
-        moduleDependencies = moduleNamespace benchMod : moduleDependencies benchMod,
+        moduleDependencies = unqualifiedDep (moduleName benchMod) : moduleDependencies benchMod,
         moduleDescription = moduleDescription benchMod
       }
   where
-    targetNs = Namespace "z.bench.scaling"
+    targetNs = ModuleName "z.bench.scaling"
     -- Definitions come in declaration order: walker0, walker1, ...
     take' = take n (moduleDefinitions benchMod)
     renamed = [ renameDef d | d <- take' ]
     renameDef d = case d of
       DefinitionTerm td ->
         let local = lastDot (unName (termDefinitionName td))
-            newName = Name (unNamespace targetNs ++ "." ++ local)
+            newName = Name (unModuleName targetNs ++ "." ++ local)
         in DefinitionTerm (td { termDefinitionName = newName })
       other -> other  -- keep type defs etc as-is (bench has no type defs)
     lastDot s = case L.elemIndices '.' s of
@@ -136,13 +136,13 @@ main = do
     hPrintf IO.stderr "Universe: %d modules\n" (length universe)
 
     -- Find the bench module.
-    case L.find (\m -> moduleNamespace m == benchNs) universe of
+    case L.find (\m -> moduleName m == benchNs) universe of
       Nothing -> do
-        hPrintf IO.stderr "ERROR: bench module %s not found in linked hydra-bench package.\n" (unNamespace benchNs)
+        hPrintf IO.stderr "ERROR: bench module %s not found in linked hydra-bench package.\n" (unModuleName benchNs)
         Exit.exitWith (Exit.ExitFailure 2)
       Just benchMod -> do
         let avail = length (moduleDefinitions benchMod)
-        hPrintf IO.stderr "Bench workload %s: %d definitions available\n" (unNamespace benchNs) avail
+        hPrintf IO.stderr "Bench workload %s: %d definitions available\n" (unModuleName benchNs) avail
 
         -- Run inference at each requested size.
         results <- L.foldl' (\acc n -> acc >>= \prev -> do
@@ -160,7 +160,7 @@ main = do
 
         -- Emit JSON.
         let jsonBody = "[\n" ++ L.intercalate ",\n"
-                         [ resultJson host (unNamespace benchNs) n elapsed ok err
+                         [ resultJson host (unModuleName benchNs) n elapsed ok err
                          | (n, elapsed, ok, err) <- results ]
                        ++ "\n]\n"
         case mOut of

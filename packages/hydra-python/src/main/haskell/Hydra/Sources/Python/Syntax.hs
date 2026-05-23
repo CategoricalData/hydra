@@ -9,8 +9,8 @@ import qualified Hydra.Dsl.Types                           as T
 import qualified Hydra.Sources.Kernel.Types.Core           as Core
 
 
-ns :: Namespace
-ns = Namespace "hydra.python.syntax"
+ns :: ModuleName
+ns = ModuleName "hydra.python.syntax"
 
 def :: String -> Type -> Binding
 def = datatype ns
@@ -20,9 +20,9 @@ python = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A Python syntax model, tracking the Python 3.14 PEG grammar:\n"
       ++ "  https://docs.python.org/3.14/reference/grammar.html")}
   where

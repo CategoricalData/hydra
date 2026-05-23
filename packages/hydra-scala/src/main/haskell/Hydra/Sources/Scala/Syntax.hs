@@ -9,8 +9,8 @@ import qualified Hydra.Dsl.Types                 as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
-ns :: Namespace
-ns = Namespace "hydra.scala.syntax"
+ns :: ModuleName
+ns = ModuleName "hydra.scala.syntax"
 
 def :: String -> Type -> Binding
 def = datatype ns
@@ -20,9 +20,9 @@ meta = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "A Scala syntax model for Hydra, anchored on Scalameta (https://scalameta.org). Departs from Scalameta where Hydra's needs differ: Term is renamed to Data, the FunctionType/FunctionData wrappers are flattened, and arms Hydra never emits (xml literals, quasiquote/macro forms) are omitted."}
   where
     definitions = [

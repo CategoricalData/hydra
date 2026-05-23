@@ -2,19 +2,20 @@ module Hydra.Sources.Kernel.Terms.Validate.Packaging where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Error.Packaging (
   InvalidModuleError, InvalidPackageError,
   _InvalidModuleError,
   _InvalidModuleError_conflictingVariantName,
-  _InvalidModuleError_definitionNotInModuleNamespace,
+  _InvalidModuleError_definitionNotInModuleName,
   _InvalidModuleError_definitionsOutOfOrder,
   _InvalidModuleError_duplicateDefinitionName,
   _InvalidModuleError_invalidDefinitionName,
-  _InvalidModuleError_invalidNamespaceConvention,
+  _InvalidModuleError_invalidModuleNameConvention,
   _InvalidModuleError_missingDocumentation,
   _InvalidPackageError,
-  _InvalidPackageError_conflictingModuleNamespace,
-  _InvalidPackageError_duplicateModuleNamespace,
+  _InvalidPackageError_conflictingModuleName,
+  _InvalidPackageError_duplicateModuleName,
   _InvalidPackageError_invalidPackageName)
 import Hydra.Packaging (Package)
 import Hydra.Sources.Libraries
@@ -45,28 +46,28 @@ import qualified Data.List                       as L
 import qualified Data.Set                        as S
 
 
-ns :: Namespace
-ns = Namespace "hydra.validate.packaging"
+ns :: ModuleName
+ns = ModuleName "hydra.validate.packaging"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Annotations.ns, Constants.ns, Formatting.ns, Names.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([Annotations.ns, Constants.ns, Formatting.ns, Names.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "Validation functions for modules and packages"}
   where
     definitions = [
       toDefinition appendFindingModule,
       toDefinition appendFindingPackage,
-      toDefinition checkConflictingModuleNamespaces,
+      toDefinition checkConflictingModuleNames,
       toDefinition checkConflictingVariantNames,
       toDefinition checkDefinitionDocumentation,
+      toDefinition checkDefinitionModuleNames,
       toDefinition checkDefinitionNameConvention,
-      toDefinition checkDefinitionNamespaces,
       toDefinition checkDefinitionOrdering,
       toDefinition checkDuplicateDefinitionNames,
-      toDefinition checkDuplicateModuleNamespaces,
-      toDefinition checkModuleNamespaceConvention,
+      toDefinition checkDuplicateModuleNames,
+      toDefinition checkModuleNameConvention,
       toDefinition checkPackageNameConvention,
       toDefinition definitionName,
       toDefinition enabledPackaging,
@@ -216,8 +217,8 @@ definitionName = define "definitionName" $
 -- directory structure. Two namespaces conflict if they are identical when lowercased,
 -- e.g. hydra.fooBar and hydra.foobar, or hydra.Foo.Bar and hydra.foo.bar.
 -- Fails on the first conflict found.
-checkConflictingModuleNamespaces :: TTermDefinition (Package -> Maybe InvalidPackageError)
-checkConflictingModuleNamespaces = define "checkConflictingModuleNamespaces" $
+checkConflictingModuleNames :: TTermDefinition (Package -> Maybe InvalidPackageError)
+checkConflictingModuleNames = define "checkConflictingModuleNames" $
   doc "Check for module namespaces that conflict when mapped to target language paths" $
   "pkg" ~>
   -- Build a map from lowercased namespace strings to original namespaces.
@@ -227,8 +228,8 @@ checkConflictingModuleNamespaces = define "checkConflictingModuleNamespaces" $
       "seen" <~ Pairs.first (var "acc") $
       "err" <~ Pairs.second (var "acc") $
       Maybes.cases (var "err")
-        ("ns" <~ Packaging.moduleNamespace (var "mod") $
-          "key" <~ Strings.toLower (Packaging.unNamespace $ var "ns") $
+        ("ns" <~ Packaging.moduleName (var "mod") $
+          "key" <~ Strings.toLower (Packaging.unModuleName $ var "ns") $
           "existing" <~ Maps.lookup (var "key") (var "seen") $
           Maybes.cases (var "existing")
             -- No conflict: add to map
@@ -236,8 +237,8 @@ checkConflictingModuleNamespaces = define "checkConflictingModuleNamespaces" $
             -- Conflict found
             ("first" ~>
               pair (var "seen") (just $
-                ErrorPackaging.invalidPackageErrorConflictingModuleNamespace $
-                  ErrorPackaging.conflictingModuleNamespaceError (var "first") (var "ns"))))
+                ErrorPackaging.invalidPackageErrorConflictingModuleName $
+                  ErrorPackaging.conflictingModuleNameError (var "first") (var "ns"))))
         (constant $ var "acc"))
     (pair Maps.empty nothing)
     (Packaging.packageModules $ var "pkg") $
@@ -251,7 +252,7 @@ checkConflictingVariantNames :: TTermDefinition (Module -> Maybe InvalidModuleEr
 checkConflictingVariantNames = define "checkConflictingVariantNames" $
   doc "Check for union variant names that, when mapped to constructor names, conflict with other type definitions" $
   "mod" ~>
-  "ns" <~ Packaging.moduleNamespace (var "mod") $
+  "ns" <~ Packaging.moduleName (var "mod") $
   "defs" <~ Packaging.moduleDefinitions (var "mod") $
   -- Collect all definition local names into a set
   "defNames" <~ Lists.foldl
@@ -304,7 +305,7 @@ checkDefinitionDocumentation :: TTermDefinition (Module -> Maybe InvalidModuleEr
 checkDefinitionDocumentation = define "checkDefinitionDocumentation" $
   doc "Check that every top-level definition is wrapped in a description annotation" $
   "mod" ~>
-  "ns" <~ Packaging.moduleNamespace (var "mod") $
+  "ns" <~ Packaging.moduleName (var "mod") $
   Lists.foldl
     ("acc" ~> "def" ~>
       Maybes.cases (var "acc")
@@ -328,6 +329,32 @@ checkDefinitionDocumentation = define "checkDefinitionDocumentation" $
     nothing
     (Packaging.moduleDefinitions $ var "mod")
 
+-- | Check that all definition names in a module have the module's name as a prefix.
+-- For a module named foo.bar, every definition name must have the form foo.bar.xyz.
+-- Fails on the first definition that violates this constraint.
+checkDefinitionModuleNames :: TTermDefinition (Module -> Maybe InvalidModuleError)
+checkDefinitionModuleNames = define "checkDefinitionModuleNames" $
+  doc "Check that all definition names in a module have the module's name as a prefix" $
+  "mod" ~>
+  "ns" <~ Packaging.moduleName (var "mod") $
+  "prefix" <~ (Strings.cat2 (Packaging.unModuleName $ var "ns") (string ".")) $
+  "prefixLen" <~ Strings.length (var "prefix") $
+  Lists.foldl
+    ("acc" ~> "def" ~>
+      Maybes.cases (var "acc")
+        -- No error yet: check this definition
+        ("name" <~ (definitionName @@ var "def") $
+          "nameStr" <~ Core.unName (var "name") $
+          "namePrefix" <~ Lists.take (var "prefixLen") (Strings.toList $ var "nameStr") $
+          Logic.ifElse (Equality.equal (Strings.fromList $ var "namePrefix") (var "prefix"))
+            nothing
+            (just $ ErrorPackaging.invalidModuleErrorDefinitionNotInModuleName $
+              ErrorPackaging.definitionNotInModuleNameError (var "ns") (var "name")))
+        -- Already have an error: stop
+        (constant $ var "acc"))
+    nothing
+    (Packaging.moduleDefinitions $ var "mod")
+
 -- | Check that every term-level definition's local name matches the camelCase regex
 -- and every type-level definition's local name matches the PascalCase regex.
 -- Fails on the first definition whose name violates the convention.
@@ -335,7 +362,7 @@ checkDefinitionNameConvention :: TTermDefinition (Module -> Maybe InvalidModuleE
 checkDefinitionNameConvention = define "checkDefinitionNameConvention" $
   doc "Check that term definitions have camelCase local names and type definitions have PascalCase local names" $
   "mod" ~>
-  "ns" <~ Packaging.moduleNamespace (var "mod") $
+  "ns" <~ Packaging.moduleName (var "mod") $
   Lists.foldl
     ("acc" ~> "def" ~>
       Maybes.cases (var "acc")
@@ -355,32 +382,6 @@ checkDefinitionNameConvention = define "checkDefinitionNameConvention" $
     nothing
     (Packaging.moduleDefinitions $ var "mod")
 
--- | Check that all definition names in a module have the module's namespace as a prefix.
--- For a module with namespace foo.bar, every definition name must have the form foo.bar.xyz.
--- Fails on the first definition that violates this constraint.
-checkDefinitionNamespaces :: TTermDefinition (Module -> Maybe InvalidModuleError)
-checkDefinitionNamespaces = define "checkDefinitionNamespaces" $
-  doc "Check that all definition names in a module have the module's namespace as a prefix" $
-  "mod" ~>
-  "ns" <~ Packaging.moduleNamespace (var "mod") $
-  "prefix" <~ (Strings.cat2 (Packaging.unNamespace $ var "ns") (string ".")) $
-  "prefixLen" <~ Strings.length (var "prefix") $
-  Lists.foldl
-    ("acc" ~> "def" ~>
-      Maybes.cases (var "acc")
-        -- No error yet: check this definition
-        ("name" <~ (definitionName @@ var "def") $
-          "nameStr" <~ Core.unName (var "name") $
-          "namePrefix" <~ Lists.take (var "prefixLen") (Strings.toList $ var "nameStr") $
-          Logic.ifElse (Equality.equal (Strings.fromList $ var "namePrefix") (var "prefix"))
-            nothing
-            (just $ ErrorPackaging.invalidModuleErrorDefinitionNotInModuleNamespace $
-              ErrorPackaging.definitionNotInModuleNamespaceError (var "ns") (var "name")))
-        -- Already have an error: stop
-        (constant $ var "acc"))
-    nothing
-    (Packaging.moduleDefinitions $ var "mod")
-
 -- | Check that the module's definitions list is sorted in ascending lexicographic
 -- order by local name. The check is a pairwise walk over consecutive entries; if any
 -- entry's local name is less than or equal to its predecessor's, an error is reported
@@ -396,7 +397,7 @@ checkDefinitionOrdering :: TTermDefinition (Module -> Maybe InvalidModuleError)
 checkDefinitionOrdering = define "checkDefinitionOrdering" $
   doc "Check that a module's definitions list is sorted in ascending lexicographic order by local name" $
   "mod" ~>
-  "ns" <~ Packaging.moduleNamespace (var "mod") $
+  "ns" <~ Packaging.moduleName (var "mod") $
   -- Fold through definitions tracking the previous name and any error.
   -- Accumulator is (Maybe Name, Maybe InvalidModuleError).
   "result" <~ Lists.foldl
@@ -431,7 +432,7 @@ checkDuplicateDefinitionNames :: TTermDefinition (Module -> Maybe InvalidModuleE
 checkDuplicateDefinitionNames = define "checkDuplicateDefinitionNames" $
   doc "Check for duplicate definition names in a module" $
   "mod" ~>
-  "ns" <~ Packaging.moduleNamespace (var "mod") $
+  "ns" <~ Packaging.moduleName (var "mod") $
   -- Fold through definitions tracking seen names in a set.
   -- Accumulator is (Set Name, Maybe InvalidModuleError).
   "result" <~ Lists.foldl
@@ -454,8 +455,8 @@ checkDuplicateDefinitionNames = define "checkDuplicateDefinitionNames" $
 
 -- | Check for duplicate module namespaces in a package.
 -- Fails on the first duplicate found.
-checkDuplicateModuleNamespaces :: TTermDefinition (Package -> Maybe InvalidPackageError)
-checkDuplicateModuleNamespaces = define "checkDuplicateModuleNamespaces" $
+checkDuplicateModuleNames :: TTermDefinition (Package -> Maybe InvalidPackageError)
+checkDuplicateModuleNames = define "checkDuplicateModuleNames" $
   doc "Check for duplicate module namespaces in a package" $
   "pkg" ~>
   "result" <~ Lists.foldl
@@ -463,11 +464,11 @@ checkDuplicateModuleNamespaces = define "checkDuplicateModuleNamespaces" $
       "seen" <~ Pairs.first (var "acc") $
       "err" <~ Pairs.second (var "acc") $
       Maybes.cases (var "err")
-        ("ns" <~ Packaging.moduleNamespace (var "mod") $
+        ("ns" <~ Packaging.moduleName (var "mod") $
           Logic.ifElse (Sets.member (var "ns") (var "seen"))
             (pair (var "seen") (just $
-              ErrorPackaging.invalidPackageErrorDuplicateModuleNamespace $
-                ErrorPackaging.duplicateModuleNamespaceError (var "ns")))
+              ErrorPackaging.invalidPackageErrorDuplicateModuleName $
+                ErrorPackaging.duplicateModuleNameError (var "ns")))
             (pair (Sets.insert (var "ns") (var "seen")) nothing))
         (constant $ var "acc"))
     (pair Sets.empty nothing)
@@ -476,15 +477,15 @@ checkDuplicateModuleNamespaces = define "checkDuplicateModuleNamespaces" $
 
 -- | Check that the module's namespace matches the dotted-lowercase namespace regex
 -- (dot-separated lowercase segments, each starting with a letter).
-checkModuleNamespaceConvention :: TTermDefinition (Module -> Maybe InvalidModuleError)
-checkModuleNamespaceConvention = define "checkModuleNamespaceConvention" $
+checkModuleNameConvention :: TTermDefinition (Module -> Maybe InvalidModuleError)
+checkModuleNameConvention = define "checkModuleNameConvention" $
   doc "Check that the module's namespace matches the dotted-lowercase naming convention" $
   "mod" ~>
-  "ns" <~ Packaging.moduleNamespace (var "mod") $
-  Logic.ifElse (Regex.matches (Phantoms.asTerm Constants.regexNamespace) (Packaging.unNamespace $ var "ns"))
+  "ns" <~ Packaging.moduleName (var "mod") $
+  Logic.ifElse (Regex.matches (Phantoms.asTerm Constants.regexNamespace) (Packaging.unModuleName $ var "ns"))
     nothing
-    (just $ ErrorPackaging.invalidModuleErrorInvalidNamespaceConvention $
-      ErrorPackaging.invalidNamespaceConventionError (var "ns"))
+    (just $ ErrorPackaging.invalidModuleErrorInvalidModuleNameConvention $
+      ErrorPackaging.invalidModuleNameConventionError (var "ns"))
 
 -- | Check that the package's name matches the hyphen-separated lowercase package-name regex
 -- (hyphen-separated lowercase segments, each starting with a letter).
@@ -548,15 +549,15 @@ kernelPackagingRuleNames :: [Name]
 kernelPackagingRuleNames = L.concat
   [ fmap (qualifiedRule _InvalidModuleError)
       [ _InvalidModuleError_conflictingVariantName
-      , _InvalidModuleError_definitionNotInModuleNamespace
+      , _InvalidModuleError_definitionNotInModuleName
       , _InvalidModuleError_definitionsOutOfOrder
       , _InvalidModuleError_duplicateDefinitionName
       , _InvalidModuleError_invalidDefinitionName
-      , _InvalidModuleError_invalidNamespaceConvention
+      , _InvalidModuleError_invalidModuleNameConvention
       , _InvalidModuleError_missingDocumentation]
   , fmap (qualifiedRule _InvalidPackageError)
-      [ _InvalidPackageError_conflictingModuleNamespace
-      , _InvalidPackageError_duplicateModuleNamespace
+      [ _InvalidPackageError_conflictingModuleName
+      , _InvalidPackageError_duplicateModuleName
       , _InvalidPackageError_invalidPackageName]]
 
 -- | Validate a module against the given ValidationProfile, threading a
@@ -595,14 +596,14 @@ module' = define "module" $
         (checkDefinitionDocumentation @@ var "mod"),
       guardedModuleRule (var "p") _InvalidModuleError _InvalidModuleError_invalidDefinitionName
         (checkDefinitionNameConvention @@ var "mod"),
-      guardedModuleRule (var "p") _InvalidModuleError _InvalidModuleError_definitionNotInModuleNamespace
-        (checkDefinitionNamespaces @@ var "mod"),
+      guardedModuleRule (var "p") _InvalidModuleError _InvalidModuleError_definitionNotInModuleName
+        (checkDefinitionModuleNames @@ var "mod"),
       guardedModuleRule (var "p") _InvalidModuleError _InvalidModuleError_definitionsOutOfOrder
         (checkDefinitionOrdering @@ var "mod"),
       guardedModuleRule (var "p") _InvalidModuleError _InvalidModuleError_duplicateDefinitionName
         (checkDuplicateDefinitionNames @@ var "mod"),
-      guardedModuleRule (var "p") _InvalidModuleError _InvalidModuleError_invalidNamespaceConvention
-        (checkModuleNamespaceConvention @@ var "mod")])
+      guardedModuleRule (var "p") _InvalidModuleError _InvalidModuleError_invalidModuleNameConvention
+        (checkModuleNameConvention @@ var "mod")])
 
 -- | Validate a package against the given ValidationProfile, threading a
 -- 'ValidationResult InvalidPackageError' accumulator. Runs the
@@ -628,10 +629,10 @@ package = define "package" $
         (appendFindingPackage @@ var "p" @@ var "acc" @@ var "guarded"))
     (var "acc0")
     (list [
-      guardedPackageRule (var "p") _InvalidPackageError _InvalidPackageError_conflictingModuleNamespace
-        (checkConflictingModuleNamespaces @@ var "pkg"),
-      guardedPackageRule (var "p") _InvalidPackageError _InvalidPackageError_duplicateModuleNamespace
-        (checkDuplicateModuleNamespaces @@ var "pkg"),
+      guardedPackageRule (var "p") _InvalidPackageError _InvalidPackageError_conflictingModuleName
+        (checkConflictingModuleNames @@ var "pkg"),
+      guardedPackageRule (var "p") _InvalidPackageError _InvalidPackageError_duplicateModuleName
+        (checkDuplicateModuleNames @@ var "pkg"),
       guardedPackageRule (var "p") _InvalidPackageError _InvalidPackageError_invalidPackageName
         (checkPackageNameConvention @@ var "pkg")]) $
   -- Second: walk each module, lifting module-level findings into

@@ -86,14 +86,14 @@ import qualified Hydra.Sources.Protobuf.Proto3 as Proto3Syntax
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.protobuf.serde"
+ns :: ModuleName
+ns = ModuleName "hydra.protobuf.serde"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Formatting.ns, Serialization.ns] L.++ (Proto3Syntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Serialization.ns] L.++ (Proto3Syntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Serialization functions for converting Protocol Buffers v3 AST to abstract expressions"}
   where
     definitions = [

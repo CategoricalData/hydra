@@ -11,17 +11,17 @@ import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 import qualified Hydra.Sources.Kernel.Types.Variants as Variants
 
 
-ns :: Namespace
-ns = Namespace "hydra.error.checking"
+ns :: ModuleName
+ns = ModuleName "hydra.error.checking"
 
 define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns, Paths.ns, Typing.ns, Variants.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns, Paths.ns, Typing.ns, Variants.ns],
             moduleDescription = Just "Error types for type checking"}
   where
     definitions = [

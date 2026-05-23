@@ -83,9 +83,9 @@ define = definitionInModule module_
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = (Namespace "hydra.pegasus.language"),
+            moduleName = (ModuleName "hydra.pegasus.language"),
             moduleDefinitions = [toDefinition pdlLanguage],
-            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints for LinkedIn Pegasus (PDL)"}
 pdlLanguage :: TTermDefinition Language
 pdlLanguage = define "pdlLanguage" $

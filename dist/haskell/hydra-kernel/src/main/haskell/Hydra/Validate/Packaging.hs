@@ -49,28 +49,28 @@ appendFindingPackage p acc finding =
         Validation.validationResultErrors = errs,
         Validation.validationResultWarnings = (Lists.concat2 wrns (Lists.singleton payload))}) acc) acc)))
 -- | Check for module namespaces that conflict when mapped to target language paths
-checkConflictingModuleNamespaces :: Packaging.Package -> Maybe ErrorPackaging.InvalidPackageError
-checkConflictingModuleNamespaces pkg =
+checkConflictingModuleNames :: Packaging.Package -> Maybe ErrorPackaging.InvalidPackageError
+checkConflictingModuleNames pkg =
 
       let result =
               Lists.foldl (\acc -> \mod ->
                 let seen = Pairs.first acc
                     err = Pairs.second acc
                 in (Maybes.cases err (
-                  let ns = Packaging.moduleNamespace mod
-                      key = Strings.toLower (Packaging.unNamespace ns)
+                  let ns = Packaging.moduleName mod
+                      key = Strings.toLower (Packaging.unModuleName ns)
                       existing = Maps.lookup key seen
                   in (Maybes.cases existing (Maps.insert key ns seen, Nothing) (\first -> (
                     seen,
-                    (Just (ErrorPackaging.InvalidPackageErrorConflictingModuleNamespace (ErrorPackaging.ConflictingModuleNamespaceError {
-                      ErrorPackaging.conflictingModuleNamespaceErrorFirst = first,
-                      ErrorPackaging.conflictingModuleNamespaceErrorSecond = ns}))))))) (\_ -> acc))) (Maps.empty, Nothing) (Packaging.packageModules pkg)
+                    (Just (ErrorPackaging.InvalidPackageErrorConflictingModuleName (ErrorPackaging.ConflictingModuleNameError {
+                      ErrorPackaging.conflictingModuleNameErrorFirst = first,
+                      ErrorPackaging.conflictingModuleNameErrorSecond = ns}))))))) (\_ -> acc))) (Maps.empty, Nothing) (Packaging.packageModules pkg)
       in (Pairs.second result)
 -- | Check for union variant names that, when mapped to constructor names, conflict with other type definitions
 checkConflictingVariantNames :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
 checkConflictingVariantNames mod =
 
-      let ns = Packaging.moduleNamespace mod
+      let ns = Packaging.moduleName mod
           defs = Packaging.moduleDefinitions mod
           defNames = Lists.foldl (\acc -> \def -> Sets.insert (Names.localNameOf (definitionName def)) acc) Sets.empty defs
       in (Lists.foldl (\acc -> \def -> Maybes.cases acc (case def of
@@ -84,7 +84,7 @@ checkConflictingVariantNames mod =
                   localFieldName = Names.localNameOf fieldName
                   constructorName = Strings.cat2 (Formatting.capitalize localTypeName) (Formatting.capitalize localFieldName)
               in (Logic.ifElse (Sets.member constructorName defNames) (Just (ErrorPackaging.InvalidModuleErrorConflictingVariantName (ErrorPackaging.ConflictingVariantNameError {
-                ErrorPackaging.conflictingVariantNameErrorNamespace = ns,
+                ErrorPackaging.conflictingVariantNameErrorModuleName = ns,
                 ErrorPackaging.conflictingVariantNameErrorTypeName = typeName,
                 ErrorPackaging.conflictingVariantNameErrorVariantName = fieldName,
                 ErrorPackaging.conflictingVariantNameErrorConflictingName = (Core.Name constructorName)}))) Nothing)) (\_ -> innerAcc)) Nothing v1
@@ -94,7 +94,7 @@ checkConflictingVariantNames mod =
 checkDefinitionDocumentation :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
 checkDefinitionDocumentation mod =
 
-      let ns = Packaging.moduleNamespace mod
+      let ns = Packaging.moduleName mod
       in (Lists.foldl (\acc -> \def -> Maybes.cases acc (
         let name = definitionName def
             documented =
@@ -111,13 +111,27 @@ checkDefinitionDocumentation mod =
                           _ -> False
                       _ -> False
         in (Logic.ifElse documented Nothing (Just (ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
-          ErrorPackaging.missingDocumentationErrorNamespace = ns,
+          ErrorPackaging.missingDocumentationErrorModuleName = ns,
           ErrorPackaging.missingDocumentationErrorName = name}))))) (\_ -> acc)) Nothing (Packaging.moduleDefinitions mod))
+-- | Check that all definition names in a module have the module's name as a prefix
+checkDefinitionModuleNames :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
+checkDefinitionModuleNames mod =
+
+      let ns = Packaging.moduleName mod
+          prefix = Strings.cat2 (Packaging.unModuleName ns) "."
+          prefixLen = Strings.length prefix
+      in (Lists.foldl (\acc -> \def -> Maybes.cases acc (
+        let name = definitionName def
+            nameStr = Core.unName name
+            namePrefix = Lists.take prefixLen (Strings.toList nameStr)
+        in (Logic.ifElse (Equality.equal (Strings.fromList namePrefix) prefix) Nothing (Just (ErrorPackaging.InvalidModuleErrorDefinitionNotInModuleName (ErrorPackaging.DefinitionNotInModuleNameError {
+          ErrorPackaging.definitionNotInModuleNameErrorModuleName = ns,
+          ErrorPackaging.definitionNotInModuleNameErrorName = name}))))) (\_ -> acc)) Nothing (Packaging.moduleDefinitions mod))
 -- | Check that term definitions have camelCase local names and type definitions have PascalCase local names
 checkDefinitionNameConvention :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
 checkDefinitionNameConvention mod =
 
-      let ns = Packaging.moduleNamespace mod
+      let ns = Packaging.moduleName mod
       in (Lists.foldl (\acc -> \def -> Maybes.cases acc (
         let name = definitionName def
             local = Names.localNameOf name
@@ -132,28 +146,14 @@ checkDefinitionNameConvention mod =
                       Packaging.DefinitionType _ -> Constants.regexPascalCase
                       _ -> Constants.regexCamelCase
         in (Logic.ifElse (Regex.matches pattern local) Nothing (Just (ErrorPackaging.InvalidModuleErrorInvalidDefinitionName (ErrorPackaging.InvalidDefinitionNameError {
-          ErrorPackaging.invalidDefinitionNameErrorNamespace = ns,
+          ErrorPackaging.invalidDefinitionNameErrorModuleName = ns,
           ErrorPackaging.invalidDefinitionNameErrorName = name,
           ErrorPackaging.invalidDefinitionNameErrorExpectedConvention = expected}))))) (\_ -> acc)) Nothing (Packaging.moduleDefinitions mod))
--- | Check that all definition names in a module have the module's namespace as a prefix
-checkDefinitionNamespaces :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
-checkDefinitionNamespaces mod =
-
-      let ns = Packaging.moduleNamespace mod
-          prefix = Strings.cat2 (Packaging.unNamespace ns) "."
-          prefixLen = Strings.length prefix
-      in (Lists.foldl (\acc -> \def -> Maybes.cases acc (
-        let name = definitionName def
-            nameStr = Core.unName name
-            namePrefix = Lists.take prefixLen (Strings.toList nameStr)
-        in (Logic.ifElse (Equality.equal (Strings.fromList namePrefix) prefix) Nothing (Just (ErrorPackaging.InvalidModuleErrorDefinitionNotInModuleNamespace (ErrorPackaging.DefinitionNotInModuleNamespaceError {
-          ErrorPackaging.definitionNotInModuleNamespaceErrorNamespace = ns,
-          ErrorPackaging.definitionNotInModuleNamespaceErrorName = name}))))) (\_ -> acc)) Nothing (Packaging.moduleDefinitions mod))
 -- | Check that a module's definitions list is sorted in ascending lexicographic order by local name
 checkDefinitionOrdering :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
 checkDefinitionOrdering mod =
 
-      let ns = Packaging.moduleNamespace mod
+      let ns = Packaging.moduleName mod
           result =
                   Lists.foldl (\acc -> \def ->
                     let prev = Pairs.first acc
@@ -166,7 +166,7 @@ checkDefinitionOrdering mod =
                         in (Logic.ifElse (Equality.lt prevLocal currLocal) (Just currName, Nothing) (
                           Just currName,
                           (Just (ErrorPackaging.InvalidModuleErrorDefinitionsOutOfOrder (ErrorPackaging.DefinitionsOutOfOrderError {
-                            ErrorPackaging.definitionsOutOfOrderErrorNamespace = ns,
+                            ErrorPackaging.definitionsOutOfOrderErrorModuleName = ns,
                             ErrorPackaging.definitionsOutOfOrderErrorPrecedingName = prevName,
                             ErrorPackaging.definitionsOutOfOrderErrorFollowingName = currName})))))))) (\_ -> acc))) (Nothing, Nothing) (Packaging.moduleDefinitions mod)
       in (Pairs.second result)
@@ -174,7 +174,7 @@ checkDefinitionOrdering mod =
 checkDuplicateDefinitionNames :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
 checkDuplicateDefinitionNames mod =
 
-      let ns = Packaging.moduleNamespace mod
+      let ns = Packaging.moduleName mod
           result =
                   Lists.foldl (\acc -> \def ->
                     let seen = Pairs.first acc
@@ -184,31 +184,31 @@ checkDuplicateDefinitionNames mod =
                       in (Logic.ifElse (Sets.member name seen) (
                         seen,
                         (Just (ErrorPackaging.InvalidModuleErrorDuplicateDefinitionName (ErrorPackaging.DuplicateDefinitionNameError {
-                          ErrorPackaging.duplicateDefinitionNameErrorNamespace = ns,
+                          ErrorPackaging.duplicateDefinitionNameErrorModuleName = ns,
                           ErrorPackaging.duplicateDefinitionNameErrorName = name})))) (Sets.insert name seen, Nothing))) (\_ -> acc))) (Sets.empty, Nothing) (Packaging.moduleDefinitions mod)
       in (Pairs.second result)
 -- | Check for duplicate module namespaces in a package
-checkDuplicateModuleNamespaces :: Packaging.Package -> Maybe ErrorPackaging.InvalidPackageError
-checkDuplicateModuleNamespaces pkg =
+checkDuplicateModuleNames :: Packaging.Package -> Maybe ErrorPackaging.InvalidPackageError
+checkDuplicateModuleNames pkg =
 
       let result =
               Lists.foldl (\acc -> \mod ->
                 let seen = Pairs.first acc
                     err = Pairs.second acc
                 in (Maybes.cases err (
-                  let ns = Packaging.moduleNamespace mod
+                  let ns = Packaging.moduleName mod
                   in (Logic.ifElse (Sets.member ns seen) (
                     seen,
-                    (Just (ErrorPackaging.InvalidPackageErrorDuplicateModuleNamespace (ErrorPackaging.DuplicateModuleNamespaceError {
-                      ErrorPackaging.duplicateModuleNamespaceErrorNamespace = ns})))) (Sets.insert ns seen, Nothing))) (\_ -> acc))) (Sets.empty, Nothing) (Packaging.packageModules pkg)
+                    (Just (ErrorPackaging.InvalidPackageErrorDuplicateModuleName (ErrorPackaging.DuplicateModuleNameError {
+                      ErrorPackaging.duplicateModuleNameErrorModuleName = ns})))) (Sets.insert ns seen, Nothing))) (\_ -> acc))) (Sets.empty, Nothing) (Packaging.packageModules pkg)
       in (Pairs.second result)
 -- | Check that the module's namespace matches the dotted-lowercase naming convention
-checkModuleNamespaceConvention :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
-checkModuleNamespaceConvention mod =
+checkModuleNameConvention :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
+checkModuleNameConvention mod =
 
-      let ns = Packaging.moduleNamespace mod
-      in (Logic.ifElse (Regex.matches Constants.regexNamespace (Packaging.unNamespace ns)) Nothing (Just (ErrorPackaging.InvalidModuleErrorInvalidNamespaceConvention (ErrorPackaging.InvalidNamespaceConventionError {
-        ErrorPackaging.invalidNamespaceConventionErrorNamespace = ns}))))
+      let ns = Packaging.moduleName mod
+      in (Logic.ifElse (Regex.matches Constants.regexNamespace (Packaging.unModuleName ns)) Nothing (Just (ErrorPackaging.InvalidModuleErrorInvalidModuleNameConvention (ErrorPackaging.InvalidModuleNameConventionError {
+        ErrorPackaging.invalidModuleNameConventionErrorModuleName = ns}))))
 -- | Check that the package's name matches the hyphen-separated lowercase naming convention
 checkPackageNameConvention :: Packaging.Package -> Maybe ErrorPackaging.InvalidPackageError
 checkPackageNameConvention pkg =
@@ -232,14 +232,14 @@ kernelDefaultPackagingProfile =
     Validation.ValidationProfile {
       Validation.validationProfileErrorRules = (Sets.fromList [
         Core.Name "hydra.error.packaging.InvalidModuleError.conflictingVariantName",
-        (Core.Name "hydra.error.packaging.InvalidModuleError.definitionNotInModuleNamespace"),
+        (Core.Name "hydra.error.packaging.InvalidModuleError.definitionNotInModuleName"),
         (Core.Name "hydra.error.packaging.InvalidModuleError.definitionsOutOfOrder"),
         (Core.Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName"),
         (Core.Name "hydra.error.packaging.InvalidModuleError.invalidDefinitionName"),
-        (Core.Name "hydra.error.packaging.InvalidModuleError.invalidNamespaceConvention"),
+        (Core.Name "hydra.error.packaging.InvalidModuleError.invalidModuleNameConvention"),
         (Core.Name "hydra.error.packaging.InvalidModuleError.missingDocumentation"),
-        (Core.Name "hydra.error.packaging.InvalidPackageError.conflictingModuleNamespace"),
-        (Core.Name "hydra.error.packaging.InvalidPackageError.duplicateModuleNamespace"),
+        (Core.Name "hydra.error.packaging.InvalidPackageError.conflictingModuleName"),
+        (Core.Name "hydra.error.packaging.InvalidPackageError.duplicateModuleName"),
         (Core.Name "hydra.error.packaging.InvalidPackageError.invalidPackageName")]),
       Validation.validationProfileWarningRules = Sets.empty,
       Validation.validationProfileMaxErrors = 1,
@@ -263,18 +263,18 @@ module_ p acc0 mod =
       Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.conflictingVariantName")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.conflictingVariantName", f)) (checkConflictingVariantNames mod)) Nothing,
       (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.missingDocumentation")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.missingDocumentation", f)) (checkDefinitionDocumentation mod)) Nothing),
       (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.invalidDefinitionName")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.invalidDefinitionName", f)) (checkDefinitionNameConvention mod)) Nothing),
-      (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.definitionNotInModuleNamespace")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.definitionNotInModuleNamespace", f)) (checkDefinitionNamespaces mod)) Nothing),
+      (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.definitionNotInModuleName")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.definitionNotInModuleName", f)) (checkDefinitionModuleNames mod)) Nothing),
       (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.definitionsOutOfOrder")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.definitionsOutOfOrder", f)) (checkDefinitionOrdering mod)) Nothing),
       (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName", f)) (checkDuplicateDefinitionNames mod)) Nothing),
-      (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.invalidNamespaceConvention")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.invalidNamespaceConvention", f)) (checkModuleNamespaceConvention mod)) Nothing)]
+      (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.invalidModuleNameConvention")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.invalidModuleNameConvention", f)) (checkModuleNameConvention mod)) Nothing)]
 -- | Validate a package against the given ValidationProfile, accumulating findings into a ValidationResult. Errors hard-stop traversal once maxErrors is reached.
 package :: Validation.ValidationProfile -> Validation.ValidationResult ErrorPackaging.InvalidPackageError -> Packaging.Package -> Validation.ValidationResult ErrorPackaging.InvalidPackageError
 package p acc0 pkg =
 
       let accPkg =
               Lists.foldl (\acc -> \guarded -> Logic.ifElse (Equality.gte (Lists.length (Validation.validationResultErrors acc)) (Validation.validationProfileMaxErrors p)) acc (appendFindingPackage p acc guarded)) acc0 [
-                Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidPackageError.conflictingModuleNamespace")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidPackageError.conflictingModuleNamespace", f)) (checkConflictingModuleNamespaces pkg)) Nothing,
-                (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidPackageError.duplicateModuleNamespace")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidPackageError.duplicateModuleNamespace", f)) (checkDuplicateModuleNamespaces pkg)) Nothing),
+                Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidPackageError.conflictingModuleName")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidPackageError.conflictingModuleName", f)) (checkConflictingModuleNames pkg)) Nothing,
+                (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidPackageError.duplicateModuleName")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidPackageError.duplicateModuleName", f)) (checkDuplicateModuleNames pkg)) Nothing),
                 (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidPackageError.invalidPackageName")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidPackageError.invalidPackageName", f)) (checkPackageNameConvention pkg)) Nothing)]
       in (Lists.foldl (\acc -> \mod -> Logic.ifElse (Equality.gte (Lists.length (Validation.validationResultErrors acc)) (Validation.validationProfileMaxErrors p)) acc (
         let mr =

@@ -22,7 +22,7 @@ import qualified Hydra.Sources.All as All
 import qualified Hydra.Sources.Ext as Ext
 import qualified Hydra.Show.Errors as ShowError
 import qualified Hydra.Json.Model as JsonModel
-import Hydra.Dsl.Bootstrap (bootstrapGraph)
+import Hydra.Dsl.Bootstrap (bootstrapGraph, unqualifiedDep)
 import qualified Hydra.PackageRouting as PackageRouting
 
 import qualified Data.Aeson as A
@@ -57,16 +57,16 @@ aesonToJsonModel v = case v of
   A.Array xs -> JsonModel.ValueArray (fmap aesonToJsonModel (V.toList xs))
   A.Object o -> JsonModel.ValueObject (M.fromList [(T.unpack (AK.toText k), aesonToJsonModel x) | (k, x) <- AKM.toList o])
 
-loadModuleFromJson :: FilePath -> [Module] -> Namespace -> IO Module
+loadModuleFromJson :: FilePath -> [Module] -> ModuleName -> IO Module
 loadModuleFromJson distJsonRoot universe ns = do
   let pkg = PackageRouting.namespaceToPackage ns
       pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
       filePath = pkgDir FP.</> CodeGeneration.namespaceToPath ns ++ ".json"
   parseResult <- parseJsonFile filePath
   case parseResult of
-    Left err -> fail $ "JSON parse error for " ++ unNamespace ns ++ " at " ++ filePath ++ ": " ++ err
+    Left err -> fail $ "JSON parse error for " ++ unModuleName ns ++ " at " ++ filePath ++ ": " ++ err
     Right jsonVal -> case CodeGeneration.decodeModuleFromJson bootstrapGraph universe jsonVal of
-      Left err -> fail $ "Module decode error for " ++ unNamespace ns ++ ": " ++ ShowError.error err
+      Left err -> fail $ "Module decode error for " ++ unModuleName ns ++ ": " ++ ShowError.error err
       Right m -> return m
 
 main :: IO ()
@@ -81,9 +81,9 @@ main = do
 
 listDefs :: String -> IO ()
 listDefs nsStr = do
-  let ns = Namespace nsStr
+  let ns = ModuleName nsStr
       universe = All.mainModules ++ Ext.hydraExtModules
-  case L.find (\m -> moduleNamespace m == ns) universe of
+  case L.find (\m -> moduleName m == ns) universe of
     Nothing -> fail $ "No such module: " ++ nsStr
     Just m -> do
       let defs = moduleDefinitions m
@@ -101,8 +101,8 @@ runModules :: String -> IO ()
 runModules spec = do
   let universe = All.mainModules ++ Ext.hydraExtModules
   putStrLn $ "Universe: " ++ show (length universe) ++ " modules"
-  let allKernelNss = [moduleNamespace m | m <- universe,
-                       let ns = unNamespace (moduleNamespace m),
+  let allKernelNss = [moduleName m | m <- universe,
+                       let ns = unModuleName (moduleName m),
                        not ("hydra.test." `L.isPrefixOf` ns),
                        not ("hydra.ext." `L.isPrefixOf` ns),
                        not ("hydra.wasm." `L.isPrefixOf` ns),
@@ -113,13 +113,13 @@ runModules spec = do
         "ALL"   -> allKernelNss
         "HALF1" -> take half allKernelNss
         "HALF2" -> drop half allKernelNss
-        _ -> fmap Namespace (splitCommas spec)
+        _ -> fmap ModuleName (splitCommas spec)
   putStrLn $ "Dirty set: " ++ show (length dirtyNss) ++ " modules"
   CM.when (length dirtyNss <= 20) $
-    mapM_ (\ns -> putStrLn $ "  " ++ unNamespace ns) dirtyNss
+    mapM_ (\ns -> putStrLn $ "  " ++ unModuleName ns) dirtyNss
   let dirtySet = M.fromList [(ns, ()) | ns <- dirtyNss]
-      dirtyMods = [m | m <- universe, M.member (moduleNamespace m) dirtySet]
-      cleanMods = [m | m <- universe, not (M.member (moduleNamespace m) dirtySet)]
+      dirtyMods = [m | m <- universe, M.member (moduleName m) dirtySet]
+      cleanMods = [m | m <- universe, not (M.member (moduleName m) dirtySet)]
   runWithCleanAndDirty cleanMods dirtyMods
 
 -- Subset mode: build a dirty module at namespace "hydra.bisect" that
@@ -134,11 +134,11 @@ runModules spec = do
 -- of the universe.
 runSubset :: String -> String -> IO ()
 runSubset nsStr defSpec = do
-  let ns = Namespace nsStr
+  let ns = ModuleName nsStr
       universe = All.mainModules ++ Ext.hydraExtModules
       wanted = splitCommas defSpec
-      bisectNs = Namespace "hydra.bisect"
-  case L.find (\m -> moduleNamespace m == ns) universe of
+      bisectNs = ModuleName "hydra.bisect"
+  case L.find (\m -> moduleName m == ns) universe of
     Nothing -> fail $ "No such module: " ++ nsStr
     Just fullMod -> do
       let allDefs = moduleDefinitions fullMod
@@ -165,9 +165,9 @@ runSubset nsStr defSpec = do
             in Name ("hydra.bisect." ++ simple)
           cloned = fmap cloneDef picked
       let syntheticDirty = Module {
-            moduleNamespace = bisectNs,
+            moduleName = bisectNs,
             moduleDefinitions = cloned,
-            moduleDependencies = [ns],
+            moduleDependencies = unqualifiedDep <$> [ns],
             moduleDescription = Just "Bisection dummy module" }
       putStrLn $ "Universe: " ++ show (length universe) ++ " kept intact; dirty is new hydra.bisect with " ++ show (length picked) ++ " cloned defs:"
       mapM_ (\d -> putStrLn $ "  " ++ defName d ++ " → " ++ cloneName d) picked
@@ -182,7 +182,7 @@ runWithCleanAndDirty :: [Module] -> [Module] -> IO ()
 runWithCleanAndDirty cleanMods dirtyMods = do
   putStrLn $ "Loading " ++ show (length cleanMods) ++ " clean modules from dist/json..."
   distJsonRoot <- SD.makeAbsolute "../../dist/json"
-  cleanLoaded <- mapM (loadModuleFromJson distJsonRoot (cleanMods ++ dirtyMods) . moduleNamespace) cleanMods
+  cleanLoaded <- mapM (loadModuleFromJson distJsonRoot (cleanMods ++ dirtyMods) . moduleName) cleanMods
   putStrLn "Running inferModulesGiven..."
   result <- E.try (inferModulesGivenIO (cleanLoaded ++ dirtyMods) dirtyMods) :: IO (Either E.SomeException [Module])
   case result of

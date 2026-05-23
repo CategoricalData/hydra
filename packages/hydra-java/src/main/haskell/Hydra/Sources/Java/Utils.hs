@@ -5,6 +5,7 @@ module Hydra.Sources.Java.Utils where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -46,14 +47,14 @@ import qualified Hydra.Sources.Java.Serde as JavaSerdeSource
 def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.java.utils"
+ns :: ModuleName
+ns = ModuleName "hydra.java.utils"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [moduleNamespace JavaLanguageSource.module_, JavaNamesSource.ns, JavaSerdeSource.ns, Formatting.ns, Names.ns, Serialization.ns] L.++ (JavaEnvironmentSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([moduleName JavaLanguageSource.module_, JavaNamesSource.ns, JavaSerdeSource.ns, Formatting.ns, Names.ns, Serialization.ns] L.++ (JavaEnvironmentSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Java utilities for constructing Java syntax trees"}
   where
     definitions = [
@@ -345,8 +346,8 @@ importAliasesForModule :: TTermDefinition (Module -> JavaHelpers.Aliases)
 importAliasesForModule = def "importAliasesForModule" $
   lambda "mod" $
     record JavaHelpers._Aliases [
-      JavaHelpers._Aliases_currentNamespace>>: Packaging.moduleNamespace (var "mod"),
-      JavaHelpers._Aliases_packages>>: (Maps.empty :: TTerm (M.Map Namespace Java.PackageName)),
+      JavaHelpers._Aliases_currentNamespace>>: Packaging.moduleName (var "mod"),
+      JavaHelpers._Aliases_packages>>: (Maps.empty :: TTerm (M.Map ModuleName Java.PackageName)),
       JavaHelpers._Aliases_branchVars>>: (Sets.empty :: TTerm (S.Set Name)),
       JavaHelpers._Aliases_recursiveVars>>: (Sets.empty :: TTerm (S.Set Name)),
       JavaHelpers._Aliases_inScopeTypeParams>>: (Sets.empty :: TTerm (S.Set Name)),
@@ -724,11 +725,11 @@ javaMultiplicativeExpressionToJavaRelationalExpression = def "javaMultiplicative
     (JavaDsl.shiftExpressionUnary
       (JavaDsl.additiveExpressionUnary (var "me")))
 
-javaPackageDeclaration :: TTermDefinition (Namespace -> Java.PackageDeclaration)
+javaPackageDeclaration :: TTermDefinition (ModuleName -> Java.PackageDeclaration)
 javaPackageDeclaration = def "javaPackageDeclaration" $
   lambda "ns" $ JavaDsl.packageDeclaration
     (list ([] :: [TTerm Java.PackageModifier]))
-    (Lists.map (lambda "s" $ JavaDsl.identifier (var "s")) (Strings.splitOn (string ".") (Packaging.unNamespace $ var "ns")))
+    (Lists.map (lambda "s" $ JavaDsl.identifier (var "s")) (Strings.splitOn (string ".") (Packaging.unModuleName $ var "ns")))
 
 javaPostfixExpressionToJavaEqualityExpression :: TTermDefinition (Java.PostfixExpression -> Java.EqualityExpression)
 javaPostfixExpressionToJavaEqualityExpression = def "javaPostfixExpressionToJavaEqualityExpression" $
@@ -1031,7 +1032,7 @@ nameToJavaName :: TTermDefinition (JavaHelpers.Aliases -> Name -> Java.Identifie
 nameToJavaName = def "nameToJavaName" $
   lambda "aliases" $ lambda "name" $ lets [
     "qn">: Names.qualifyName @@ var "name",
-    "ns_">: Packaging.qualifiedNameNamespace (var "qn"),
+    "ns_">: Packaging.qualifiedNameModuleName (var "qn"),
     "local">: Packaging.qualifiedNameLocal (var "qn")] $
     Logic.ifElse (isEscaped @@ (Core.unName $ var "name"))
       (JavaDsl.identifier (sanitizeJavaName @@ var "local"))
@@ -1041,7 +1042,7 @@ nameToJavaName = def "nameToJavaName" $
           "parts">: Maybes.cases
             (Maps.lookup (var "gname")
               (project JavaHelpers._Aliases JavaHelpers._Aliases_packages @@ var "aliases"))
-            (Strings.splitOn (string ".") (unwrap _Namespace @@ var "gname"))
+            (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "gname"))
             (lambda "pkgName" $
               Lists.map (lambda "i" $ unwrap Java._Identifier @@ var "i")
                 (unwrap Java._PackageName @@ var "pkgName")),
@@ -1070,7 +1071,7 @@ nameToQualifiedJavaName :: TTermDefinition (JavaHelpers.Aliases -> Bool -> Name 
 nameToQualifiedJavaName = def "nameToQualifiedJavaName" $
   lambda "aliases" $ lambda "qualify" $ lambda "name" $ lambda "mlocal" $ lets [
     "qn">: Names.qualifyName @@ var "name",
-    "ns_">: Packaging.qualifiedNameNamespace (var "qn"),
+    "ns_">: Packaging.qualifiedNameModuleName (var "qn"),
     "local">: Packaging.qualifiedNameLocal (var "qn"),
     -- Build the alias: if ns is Just, look up in packages map; if not found, create from namespace
     "alias">: Maybes.cases (var "ns_")
@@ -1079,7 +1080,7 @@ nameToQualifiedJavaName = def "nameToQualifiedJavaName" $
         just (Maybes.cases
           (Maps.lookup (var "n")
             (project JavaHelpers._Aliases JavaHelpers._Aliases_packages @@ var "aliases"))
-          (JavaNamesSource.javaPackageName @@ (Strings.splitOn (string ".") (unwrap _Namespace @@ var "n")))
+          (JavaNamesSource.javaPackageName @@ (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "n")))
           (lambda "id" $ var "id"))),
     -- Build the package qualifier
     "pkg">: Logic.ifElse (var "qualify")
@@ -1273,7 +1274,7 @@ variantClassName :: TTermDefinition (Bool -> Name -> Name -> Name)
 variantClassName = def "variantClassName" $
   lambda "qualify" $ lambda "elName" $ lambda "fname" $ lets [
     "qn">: Names.qualifyName @@ var "elName",
-    "ns_">: Packaging.qualifiedNameNamespace (var "qn"),
+    "ns_">: Packaging.qualifiedNameModuleName (var "qn"),
     "local">: Packaging.qualifiedNameLocal (var "qn"),
     "flocal">: Formatting.capitalize @@ (Core.unName $ var "fname"),
     "local1">: Logic.ifElse (var "qualify")

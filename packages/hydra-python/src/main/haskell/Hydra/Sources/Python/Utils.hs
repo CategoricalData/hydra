@@ -94,14 +94,14 @@ import qualified Hydra.Dsl.Python.Helpers as PyDsl
 def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.python.utils"
+ns :: ModuleName
+ns = ModuleName "hydra.python.utils"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns] L.++ (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns] L.++ (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Python utilities for constructing Python syntax trees"}
   where
     definitions = [
@@ -329,15 +329,15 @@ doubleQuotedString = def "doubleQuotedString" $
     stringToPyExpression @@ PyDsl.quoteStyleDouble @@ var "s"
 
 -- | Find all namespaces referenced by a list of definitions, plus the core namespace
-findNamespaces :: TTermDefinition (Namespace -> [Definition] -> Namespaces Py.DottedName)
+findNamespaces :: TTermDefinition (ModuleName -> [Definition] -> Namespaces Py.DottedName)
 findNamespaces = def "findNamespaces" $
   doc "Find all namespaces referenced by a list of definitions, plus the core namespace" $
   lambdas ["focusNs", "defs"] $ lets [
-    "coreNs">: Packaging.namespace $ string "hydra.core",
+    "coreNs">: Packaging.moduleName2 $ string "hydra.core",
     "namespaces">: Analysis.namespacesForDefinitions @@ PyNames.encodeNamespace @@ var "focusNs" @@ var "defs"] $
     Logic.ifElse (Equality.equal
-      (Packaging.unNamespace $ Pairs.first $ Util.namespacesFocus $ var "namespaces")
-      (Packaging.unNamespace $ var "coreNs"))
+      (Packaging.unModuleName $ Pairs.first $ Util.namespacesFocus $ var "namespaces")
+      (Packaging.unModuleName $ var "coreNs"))
       (var "namespaces")
       (Util.namespaces
         (Util.namespacesFocus $ var "namespaces")

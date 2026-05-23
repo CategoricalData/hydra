@@ -427,9 +427,9 @@ projection cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (ExtractCore.requireField "field" name fieldMap cx) (\field_field -> Right (Core.Projection {
+        in (Eithers.bind (ExtractCore.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (ExtractCore.requireField "fieldName" name fieldMap cx) (\field_fieldName -> Right (Core.Projection {
           Core.projectionTypeName = field_typeName,
-          Core.projectionField = field_field}))))
+          Core.projectionFieldName = field_fieldName}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.Record
 record :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Record

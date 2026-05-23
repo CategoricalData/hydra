@@ -491,12 +491,12 @@
                         "body": {"variable": "hydra.errors.UnificationError"}}}}]}}},
           "variables": []}}}],
   "dependencies": [
-    "hydra.context",
-    "hydra.core",
-    "hydra.error.checking",
-    "hydra.error.core",
-    "hydra.paths",
-    "hydra.typing",
-    "hydra.variants"],
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.variants"}],
   "description": "Top-level error types for the Hydra kernel",
-  "namespace": "hydra.errors"}
+  "name": "hydra.errors"}

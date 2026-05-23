@@ -143,10 +143,10 @@ nameToPath :: Core.Name -> String
 nameToPath name =
 
       let qn = Names.qualifyName name
-          mns = Packaging.qualifiedNameNamespace qn
+          mns = Packaging.qualifiedNameModuleName qn
           local = Packaging.qualifiedNameLocal qn
-          nsPart = Maybes.maybe "" (\ns -> Strings.cat2 (Packaging.unNamespace ns) ".") mns
-      in (Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "json") (Packaging.Namespace (Strings.cat2 nsPart local)))
+          nsPart = Maybes.maybe "" (\ns -> Strings.cat2 (Packaging.unModuleName ns) ".") mns
+      in (Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "json") (Packaging.ModuleName (Strings.cat2 nsPart local)))
 -- | Build the JSON Schema restriction list for a pair type
 pairRestrictions :: Bool -> [Schema.Restriction] -> [Schema.Restriction] -> [Schema.Restriction]
 pairRestrictions optional firstRes secondRes =

@@ -379,9 +379,9 @@ encodeLiteralType lt =
 -- | Encode a name with a specified case convention, optionally qualified
 encodeName :: t0 -> t1 -> t2 -> Core.Name -> String
 encodeName isQualified conv env name = sanitizeCppName (Names.localNameOf name)
-encodeNamespace :: Packaging.Namespace -> String
+encodeNamespace :: Packaging.ModuleName -> String
 encodeNamespace ns =
-    Strings.intercalate "::" (Lists.map (\seg -> Formatting.convertCaseCamelToLowerSnake seg) (Strings.splitOn "." (Packaging.unNamespace ns)))
+    Strings.intercalate "::" (Lists.map (\seg -> Formatting.convertCaseCamelToLowerSnake seg) (Strings.splitOn "." (Packaging.unModuleName ns)))
 encodeRecordType :: t0 -> t1 -> Core.Name -> [Core.FieldType] -> t2 -> Either Errors.Error [Syntax.Declaration]
 encodeRecordType cx g name rt comment =
     Eithers.bind (Eithers.mapList (\f -> encodeFieldType False f cx g) rt) (\cppFields -> Eithers.bind (Eithers.mapList (\f -> encodeFieldType True f cx g) rt) (\constructorParams -> Right [
@@ -471,7 +471,7 @@ encodeWrappedType cx g name typ comment =
       Core.FieldType {
         Core.fieldTypeName = (Core.Name "value"),
         Core.fieldTypeType = typ}] comment
-findIncludes :: Bool -> Packaging.Namespace -> [Packaging.TypeDefinition] -> [Syntax.IncludeDirective]
+findIncludes :: Bool -> Packaging.ModuleName -> [Packaging.TypeDefinition] -> [Syntax.IncludeDirective]
 findIncludes withFwd ns defs =
     Lists.concat [
       [
@@ -488,20 +488,20 @@ findIncludes withFwd ns defs =
         Syntax.IncludeDirective {
           Syntax.includeDirectiveName = (bindingNameToFilePath (fwdHeaderName ns)),
           Syntax.includeDirectiveIsSystem = False}] [])]
-findTypeDependencies :: Packaging.Namespace -> [Packaging.TypeDefinition] -> [Core.Name]
+findTypeDependencies :: Packaging.ModuleName -> [Packaging.TypeDefinition] -> [Core.Name]
 findTypeDependencies ns defs =
-    Lists.filter (\n -> Logic.not (Equality.equal (Maybes.map Packaging.unNamespace (Names.namespaceOf n)) (Just (Packaging.unNamespace ns)))) (Sets.toList (Lists.foldl (\acc -> \d -> Sets.union acc (Dependencies.typeDependencyNames True (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme d)))) Sets.empty defs))
-fwdHeaderName :: Packaging.Namespace -> Core.Name
+    Lists.filter (\n -> Logic.not (Equality.equal (Maybes.map Packaging.unModuleName (Names.namespaceOf n)) (Just (Packaging.unModuleName ns)))) (Sets.toList (Lists.foldl (\acc -> \d -> Sets.union acc (Dependencies.typeDependencyNames True (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme d)))) Sets.empty defs))
+fwdHeaderName :: Packaging.ModuleName -> Core.Name
 fwdHeaderName ns =
     Names.unqualifyName (Packaging.QualifiedName {
-      Packaging.qualifiedNameNamespace = (Just ns),
+      Packaging.qualifiedNameModuleName = (Just ns),
       Packaging.qualifiedNameLocal = "Fwd"})
 gatherMetadata :: t0 -> Bool
 gatherMetadata defs = True
 generateForwardDeclarations :: Core.Name -> [Core.FieldType] -> [Syntax.Declaration]
 generateForwardDeclarations tname fields =
     Lists.map (\ft -> cppClassDeclaration (variantName tname (Core.fieldTypeName ft)) [] Nothing) fields
-generateTypeFile :: Packaging.Namespace -> Packaging.TypeDefinition -> t0 -> t1 -> Either Errors.Error (String, String)
+generateTypeFile :: Packaging.ModuleName -> Packaging.TypeDefinition -> t0 -> t1 -> Either Errors.Error (String, String)
 generateTypeFile ns def_ cx g =
 
       let name = Packaging.typeDefinitionName def_
@@ -511,7 +511,7 @@ generateTypeFile ns def_ cx g =
               def_]
         in (Right (serializeHeaderFile name includes [
           namespaceDecl ns decls]))))
-generateTypeFiles :: Packaging.Namespace -> [Packaging.TypeDefinition] -> t0 -> t1 -> Either Errors.Error [(String, String)]
+generateTypeFiles :: Packaging.ModuleName -> [Packaging.TypeDefinition] -> t0 -> t1 -> Either Errors.Error [(String, String)]
 generateTypeFiles ns defs cx g =
     Eithers.bind (Eithers.mapList (\d -> generateTypeFile ns d cx g) defs) (\classFiles -> Right classFiles)
 isStdContainerType :: Core.Type -> Bool
@@ -550,10 +550,10 @@ memberSpecificationPublic = Syntax.MemberSpecificationAccessLabel Syntax.AccessS
 moduleToCpp :: Packaging.Module -> [Packaging.Definition] -> t0 -> t1 -> Either Errors.Error (M.Map String String)
 moduleToCpp mod defs cx g =
 
-      let ns = Packaging.moduleNamespace mod
+      let ns = Packaging.moduleName mod
           typeDefs = Pairs.first (Environment.partitionDefinitions defs)
       in (Eithers.bind (generateTypeFiles ns typeDefs cx g) (\typeFiles -> Right (Maps.fromList typeFiles)))
-namespaceDecl :: Packaging.Namespace -> [Syntax.Declaration] -> Syntax.Declaration
+namespaceDecl :: Packaging.ModuleName -> [Syntax.Declaration] -> Syntax.Declaration
 namespaceDecl ns decls =
     Syntax.DeclarationNamespace (Syntax.NamespaceDeclaration {
       Syntax.namespaceDeclarationName = (encodeNamespace ns),

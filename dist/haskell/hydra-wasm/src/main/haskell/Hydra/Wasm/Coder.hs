@@ -368,7 +368,7 @@ encodeProjection :: t0 -> t1 -> M.Map Core.Name [(Core.Name, Int)] -> Core.Proje
 encodeProjection cx g fieldOffsets proj scrutineeInstrs =
 
       let typeName = Core.projectionTypeName proj
-          fieldName = Core.projectionField proj
+          fieldName = Core.projectionFieldName proj
           mFields = Maps.lookup typeName fieldOffsets
           mOffset =
                   Maybes.cases mFields Nothing (\pairs ->
@@ -943,7 +943,7 @@ moduleToWasm mod defs cx g =
                         allFields])}
             code = Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr wasmMod))
             filePath =
-                    Names.namespaceToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "wat") (Packaging.moduleNamespace mod)
+                    Names.namespaceToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "wat") (Packaging.moduleName mod)
         in (Right (Maps.singleton filePath code)))))
 
 peelLambdaApp :: Core.Term -> [t0] -> ([Core.Name], Core.Term)

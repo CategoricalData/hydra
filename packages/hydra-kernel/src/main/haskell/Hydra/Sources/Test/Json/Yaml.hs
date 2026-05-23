@@ -8,6 +8,7 @@ module Hydra.Sources.Test.Json.Yaml where
 
 -- Standard imports for tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
@@ -33,14 +34,14 @@ import qualified Hydra.Sources.Json.Yaml.Encode as JsonYamlEncode
 import qualified Hydra.Sources.Json.Yaml.Decode as JsonYamlDecode
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.json.yaml"
+ns :: ModuleName
+ns = ModuleName "hydra.test.json.yaml"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Namespace "hydra.json.writer", Namespace "hydra.json.yaml.encode", Namespace "hydra.json.yaml.decode"] ++ (Namespace "hydra.yaml.model" : kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.json.writer", ModuleName "hydra.json.yaml.encode", ModuleName "hydra.json.yaml.decode"] ++ (ModuleName "hydra.yaml.model" : kernelTypesModuleNames)),
             moduleDescription = (Just "Round-trip test cases for the JSON<->YAML bridge, focused on decimal precision")}
   where
     definitions = [

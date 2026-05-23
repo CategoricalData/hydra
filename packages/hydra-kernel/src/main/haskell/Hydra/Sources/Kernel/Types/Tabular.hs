@@ -10,17 +10,17 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Relational as Relational
 
 
-ns :: Namespace
-ns = Namespace "hydra.tabular"
+ns :: ModuleName
+ns = ModuleName "hydra.tabular"
 
 define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns, Relational.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns, Relational.ns],
             moduleDescription = Just "A simple, untyped tabular data model, suitable for CSVs and TSVs"}
   where
     definitions = [
