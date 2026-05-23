@@ -469,21 +469,34 @@ echo ""
 # sync.sh themselves to ensure the cross-language dist trees their
 # gradle compile imports from are populated.
 export HYDRA_IN_SYNC=1
-echo "--- hydra-java (native Java DSL → JSON) ---"
-native_generate_and_report java \
-    "$HYDRA_ROOT/bin/generate-hydra-java-from-java.sh" \
-    "$JAVA_HOST_SENTINEL"
-echo "--- hydra-python (native Python DSL → JSON) ---"
-# Use PyPy when available — ~4x faster than CPython.
-if command -v pypy3 >/dev/null 2>&1; then
-    native_generate_and_report python \
-        "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" \
-        "$PYTHON_HOST_SENTINEL" \
-        --pypy
+# Skip a language's native self-host pass entirely when that language
+# is not in HOSTS — e.g. a TypeScript-only sync (--hosts typescript)
+# has no reason to spin up Java's full kernel build or Python's pypy
+# self-host demo, and on a tree where both heads were built previously
+# the sentinel-based skip alone won't catch them.
+if printf '%s\n' $HOSTS | grep -qx java; then
+    echo "--- hydra-java (native Java DSL → JSON) ---"
+    native_generate_and_report java \
+        "$HYDRA_ROOT/bin/generate-hydra-java-from-java.sh" \
+        "$JAVA_HOST_SENTINEL"
 else
-    native_generate_and_report python \
-        "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" \
-        "$PYTHON_HOST_SENTINEL"
+    echo "--- hydra-java (skipped: java not in HOSTS) ---"
+fi
+if printf '%s\n' $HOSTS | grep -qx python; then
+    echo "--- hydra-python (native Python DSL → JSON) ---"
+    # Use PyPy when available — ~4x faster than CPython.
+    if command -v pypy3 >/dev/null 2>&1; then
+        native_generate_and_report python \
+            "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" \
+            "$PYTHON_HOST_SENTINEL" \
+            --pypy
+    else
+        native_generate_and_report python \
+            "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" \
+            "$PYTHON_HOST_SENTINEL"
+    fi
+else
+    echo "--- hydra-python (skipped: python not in HOSTS) ---"
 fi
 unset HYDRA_IN_SYNC
 

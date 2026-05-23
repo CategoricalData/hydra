@@ -541,6 +541,62 @@ The `cleanMods` set (modules whose typed JSON is loaded for inference
 context) should still span `universeMods \\ dirtyMods` — wider than
 `targetMods` — so cross-package type references resolve.
 
+### Hand-written runtime files in `heads/<lang>/` clobber generated kernel
+### modules with the same name
+
+`bin/sync-typescript.sh` (and `bin/copy-kernel-runtime.sh` more generally)
+copies `heads/typescript/src/main/typescript/hydra/*.ts` into
+`dist/typescript/hydra-kernel/src/main/typescript/hydra/`. If the
+hand-written tree contains a file whose name matches a generated kernel
+module (e.g. `core.ts`), the copy SILENTLY OVERWRITES the generated
+file. Symptoms: cascading TS2305 "Module 'X' has no exported member
+'Term'/'Type'/…" at every site that imports kernel types from
+`./core.js`, plus runtime "Cannot read .tag of undefined" because the
+runtime's structural shape no longer matches what the kernel emits.
+
+Fix: rename the hand-written file. In #126 the hand-written
+`heads/typescript/src/main/typescript/hydra/core.ts` was renamed to
+`runtime.ts`; the corresponding `copy-kernel-runtime.sh` loop was
+updated. Any future head should pick a name that cannot collide with
+the kernel's namespace (e.g. `hydra.<lang>.core`, `hydra.<lang>.context`,
+etc.).
+
+### dist trees need a `package.json` with `"type": "module"` for NodeNext
+
+When a generated dist tree under `dist/typescript/hydra-kernel/` is
+checked by `tsc --moduleResolution nodenext`, tsc walks up looking for
+the nearest `package.json` to decide whether `.ts` files compile as
+ESM or CommonJS. Without a `package.json` in the dist subtree, tsc
+walks past the worktree root and lands on `/Users/<you>/package.json`
+or fails entirely — at which point any `import.meta` reference fails
+with TS1470 ("not allowed in files which will build into CommonJS
+output"), and the runtime imports are treated as CJS.
+
+`heads/typescript/bin/copy-kernel-runtime.sh` writes a minimal
+`{"name":"hydra-kernel-dist","private":true,"type":"module"}` into
+`dist/typescript/hydra-kernel/` for exactly this reason. Other heads
+that grow a similar dist subtree need the same.
+
+### TS coder: hand-edit the dist Syntax.hs to bootstrap a new AST node
+
+Adding a new variant to a TS Syntax binding (e.g. `Expression_asExpression`
+for #126) follows the standard Hydra bootstrap pattern but is non-obvious:
+
+1. Add the variant to `packages/hydra-typescript/src/main/haskell/Hydra/Sources/TypeScript/Syntax.hs`.
+2. Add the matching constructor + `_X` Name to
+   `dist/haskell/hydra-typescript/src/main/haskell/Hydra/TypeScript/Syntax.hs`
+   by hand (the dist file is generated, but stack-built coder/serde code
+   that *uses* the new variant won't compile until the dist Haskell
+   declares it).
+3. `stack build hydra:lib` — compiles the coder/serde code.
+4. `bin/sync-typescript.sh` — regenerates the dist Syntax.hs, overwriting
+   the hand-edit. This step is required to keep the JSON canonical.
+
+Step 2 will be reverted on every sync, so it's a per-edit ritual, not
+a permanent patch. See [Extending Hydra core](../docs/recipes/extending-hydra-core.md)
+for the general bootstrap pattern; the TS-specific wrinkle is just
+that the AST lives in `Syntax.hs`, not the kernel.
+
 ### Lazy `readFile` keeps the handle open across a subsequent `writeFile`
 
 Standard Haskell pitfall, but it specifically bit `readPerPackageDigest`

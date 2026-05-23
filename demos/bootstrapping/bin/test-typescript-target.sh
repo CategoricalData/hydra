@@ -17,17 +17,14 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_TS_HEAD="$HYDRA_ROOT/heads/typescript"
 
-# Restore hand-written runtime files that the haskell host overwrote with
-# generated kernel versions. The generated core.ts/primitives.ts only
-# declare kernel data types; the hand-written versions also export the
-# Maybe<T>/Just/Nothing/Either/Left/Right helpers used by lib/*.ts. This
-# mirrors heads/typescript/bin/copy-kernel-runtime.sh's post-sync
-# behavior. The lib/*.ts files don't overlap with the generated output
-# (they live under hydra/lib/, while generated puts top-level files like
-# literals.ts, parsers.ts, etc.) so no restore needed there.
-if [ -f "$HYDRA_TS_HEAD/src/main/typescript/hydra/core.ts" ]; then
-    cp "$HYDRA_TS_HEAD/src/main/typescript/hydra/core.ts" \
-       "$OUTPUT_DIR/src/main/typescript/hydra/core.ts"
+# Restore hand-written runtime files. After #126's rename, `runtime.ts`
+# no longer collides with generated `core.ts`, so we just re-copy
+# `runtime.ts` and `primitives.ts` (`primitives.ts` is hand-written and
+# is not overwritten by the host invoker, but copying defensively is
+# cheap).
+if [ -f "$HYDRA_TS_HEAD/src/main/typescript/hydra/runtime.ts" ]; then
+    cp "$HYDRA_TS_HEAD/src/main/typescript/hydra/runtime.ts" \
+       "$OUTPUT_DIR/src/main/typescript/hydra/runtime.ts"
 fi
 if [ -f "$HYDRA_TS_HEAD/src/main/typescript/hydra/primitives.ts" ]; then
     cp "$HYDRA_TS_HEAD/src/main/typescript/hydra/primitives.ts" \
