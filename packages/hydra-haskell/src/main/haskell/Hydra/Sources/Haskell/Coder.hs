@@ -666,7 +666,7 @@ encodeType = haskellCoderDefinition "encodeType" $
       right $ inject H._Type H._Type_variable $ HaskellUtilsSource.rawName @@ string "Void",
     _Type_wrap>>: constant (var "ref" @@ Core.name (string "placeholder"))]
 
-encodeTypeWithClassAssertions :: TTermDefinition (HaskellNamespaces -> M.Map Name (S.Set TypeClass) -> Type -> Context -> Graph -> Either Error H.Type)
+encodeTypeWithClassAssertions :: TTermDefinition (HaskellNamespaces -> M.Map Name (S.Set Name) -> Type -> Context -> Graph -> Either Error H.Type)
 encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAssertions" $
   doc "Encode a Hydra type as a Haskell type with typeclass assertions" $
   "namespaces" ~> "explicitClasses" ~> "typ" ~> "cx" ~> "g" ~> lets [
@@ -675,9 +675,11 @@ encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAsser
     "encodeAssertion">: "pair" ~> lets [
       "name">: Pairs.first $ var "pair",
       "cls">: Pairs.second $ var "pair",
-      "hname">: HaskellUtilsSource.rawName @@ cases _TypeClass (var "cls") Nothing [
-        _TypeClass_equality>>: constant $ string "Eq",
-        _TypeClass_ordering>>: constant $ string "Ord"],
+      "classLocal">: Core.unName $ var "cls",
+      "hname">: HaskellUtilsSource.rawName @@
+        (Logic.ifElse (Equality.equal (var "classLocal") (string "equality")) (string "Eq")
+          (Logic.ifElse (Equality.equal (var "classLocal") (string "ordering")) (string "Ord")
+            (Formatting.capitalize @@ var "classLocal"))),
       "htype">: inject H._Type H._Type_variable $ HaskellUtilsSource.rawName @@ (Core.unName $ var "name")] $
       inject H._Constraint H._Constraint_class $ record H._ClassConstraint [
         H._ClassConstraint_name>>: var "hname",
@@ -773,12 +775,12 @@ gatherMetadata = haskellCoderDefinition "gatherMetadata" $
             @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "meta" @@ var "typ"]) $
     Lists.foldl (var "addDef") (asTerm emptyMetadata) (var "defs")
 
-getImplicitTypeClasses :: TTermDefinition (Type -> M.Map Name (S.Set TypeClass))
+getImplicitTypeClasses :: TTermDefinition (Type -> M.Map Name (S.Set Name))
 getImplicitTypeClasses = haskellCoderDefinition "getImplicitTypeClasses" $
   doc "Get implicit typeclass constraints for type variables that need Ord" $
   "typ" ~> lets [
     "toPair">: "name" ~>
-      pair (var "name") (Sets.fromList $ list [Graph.typeClassOrdering])] $
+      pair (var "name") (Sets.fromList $ list [Core.name (string "ordering")])] $
     Maps.fromList $ Lists.map (var "toPair") (Sets.toList $ findOrdVariables @@ var "typ")
 
 moduleToHaskellModule :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Prelude.Either Error H.Module)
@@ -1108,28 +1110,18 @@ typeDecl = haskellCoderDefinition "typeDecl" $
       H._SimpleValueBinding_comments>>: nothing]] $
     right $ var "decl"
 
--- | Convert TypeScheme constraints to the Map format used by encodeTypeWithClassAssertions.
+-- | Extract TypeScheme class constraints into the Map format used by encodeTypeWithClassAssertions.
 -- TypeScheme constraints are Maybe (Map Name TypeVariableMetadata), where TypeVariableMetadata
--- has a 'classes' field of type Set Name. We convert this to Map Name (Set TypeClass).
-typeSchemeConstraintsToClassMap :: TTermDefinition (Maybe (M.Map Name TypeVariableMetadata) -> M.Map Name (S.Set TypeClass))
+-- has a 'classes' field of type Set Name. Under the bare-name representation introduced for #275,
+-- the inner Set is already the right shape; we just unwrap Maybe and pull out the classes field.
+typeSchemeConstraintsToClassMap :: TTermDefinition (Maybe (M.Map Name TypeVariableMetadata) -> M.Map Name (S.Set Name))
 typeSchemeConstraintsToClassMap = haskellCoderDefinition "typeSchemeConstraintsToClassMap" $
-  doc "Convert type scheme constraints to a map of type variables to typeclasses" $
-  "maybeConstraints" ~> lets [
-    -- Convert a class name to a TypeClass, returning Nothing for unknown classes
-    "nameToTypeClass">: "className" ~> lets [
-      "classNameStr">: Core.unName $ var "className",
-      "isEq">: Equality.equal (var "classNameStr") (Core.unName $ Core.nameLift _TypeClass_equality),
-      "isOrd">: Equality.equal (var "classNameStr") (Core.unName $ Core.nameLift _TypeClass_ordering)] $
-      Logic.ifElse (var "isEq")
-        (just $ inject _TypeClass _TypeClass_equality unit)
-        (Logic.ifElse (var "isOrd")
-          (just $ inject _TypeClass _TypeClass_ordering unit)
-          nothing)] $
+  doc "Project type scheme constraints to a map of type variables to typeclass names" $
+  "maybeConstraints" ~>
     Maybes.maybe
       Maps.empty
       ("constraints" ~>
         Maps.map
-          ("meta" ~> Sets.fromList $
-            Maybes.cat $ Lists.map (var "nameToTypeClass") $ Sets.toList $ Core.typeVariableMetadataClasses (var "meta"))
+          ("meta" ~> Core.typeVariableMetadataClasses (var "meta"))
           (var "constraints"))
       (var "maybeConstraints")
