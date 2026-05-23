@@ -94,7 +94,7 @@ in `Libraries.hs`, in DSL wrappers, and in test files.
 
 ### 3. Register the primitive
 
-Update `/heads/haskell/src/main/haskell/Hydra/Sources/Libraries.hs`:
+Update `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`:
 
 ```haskell
 -- Add import at the top

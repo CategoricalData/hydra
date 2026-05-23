@@ -35,7 +35,7 @@ The authoring host language varies per package:
 
 | Package | Source of truth (Phase 1) | Self-host script |
 |---------|---------------------------|------------------|
-| hydra-kernel | Haskell (`src/main/haskell/Hydra/Sources/Kernel/`) | `bin/sync-haskell.sh` (Phase 1 of) |
+| hydra-kernel | Haskell (`src/main/haskell/Hydra/Sources/Kernel/`) | `heads/haskell/bin/sync-haskell.sh` (Phase 1 of) |
 | hydra-haskell | Haskell (`src/main/haskell/Hydra/Sources/Haskell/`) | (same as above) |
 | **hydra-java** | **Java (`src/main/java/hydra/sources/java/`)** | `bin/generate-hydra-java-from-java.sh` |
 | **hydra-python** | **Python (`src/main/python/hydra/sources/python/`)** | `bin/generate-hydra-python-from-python.sh` |
