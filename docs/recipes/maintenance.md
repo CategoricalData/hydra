@@ -804,6 +804,24 @@ done
 If this prints anything, investigate whether the file is intentional or leftover
 from a pre-0.15 version.
 
+**Known false positives.** The `extend_path` stub is required only for directories
+that have a generated sibling tree (e.g. `hydra/`, `hydra/dsl/`, `hydra/sources/`,
+`hydra/python/`, `hydra/dsl/python/` — these merge with `src/gen-main/python/...`
+content). Directories that are *entirely hand-written* runtime trees, copied into
+`dist/python/hydra-kernel/` from `heads/python/src/main/python/` via
+`copy-kernel-runtime.sh`, do not need (and should not have) the stub. The
+following intentionally lack `extend_path`:
+
+- `hydra/lib/__init__.py` — docstring-only marker for the hand-written
+  primitive-implementation tree.
+- `hydra/dsl/meta/__init__.py` — empty marker for the hand-written meta-DSL.
+- `hydra/dsl/meta/lib/__init__.py` — empty marker for the hand-written meta-DSL
+  library helpers.
+- `hydra/python/util/__init__.py` (in `heads/python/` only; not copied into
+  `dist/`) — explicit re-exports for the persistent-collection types.
+
+The check above flags these by design; they are not stale.
+
 ---
 
 ## Reviewing user documentation
