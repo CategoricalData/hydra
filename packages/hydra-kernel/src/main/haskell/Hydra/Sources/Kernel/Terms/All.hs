@@ -8,6 +8,7 @@ import qualified Hydra.Sources.Kernel.Terms.Analysis        as Analysis
 import qualified Hydra.Sources.Kernel.Terms.Annotations     as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Arity           as Arity
 import qualified Hydra.Sources.Kernel.Terms.Checking        as Checking
+import qualified Hydra.Sources.Kernel.Terms.Classes         as Classes
 import qualified Hydra.Sources.Kernel.Terms.Generation      as Generation
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
 import qualified Hydra.Sources.Kernel.Terms.Decoding        as Decoding
@@ -56,7 +57,6 @@ import qualified Hydra.Sources.Kernel.Terms.Validate.Packaging as ValidatePackag
 -- Secondary, generated decoding modules
 import qualified Hydra.Sources.Decode.Paths          as DecodePaths
 import qualified Hydra.Sources.Decode.Ast           as DecodeAst
-import qualified Hydra.Sources.Decode.Classes       as DecodeClasses
 import qualified Hydra.Sources.Decode.Coders        as DecodeCoders
 import qualified Hydra.Sources.Decode.Context       as DecodeContext
 import qualified Hydra.Sources.Decode.Core          as DecodeCore
@@ -79,7 +79,6 @@ import qualified Hydra.Sources.Decode.Variants      as DecodeVariants
 -- Secondary, generated encoding modules
 import qualified Hydra.Sources.Encode.Paths          as EncodePaths
 import qualified Hydra.Sources.Encode.Ast           as EncodeAst
-import qualified Hydra.Sources.Encode.Classes       as EncodeClasses
 import qualified Hydra.Sources.Encode.Coders        as EncodeCoders
 import qualified Hydra.Sources.Encode.Context       as EncodeContext
 import qualified Hydra.Sources.Encode.Core          as EncodeCore
@@ -110,6 +109,7 @@ kernelPrimaryTermsModules = [
   Annotations.module_,
   Arity.module_,
   Checking.module_,
+  Classes.module_,
   Generation.module_,
   Constants.module_,
   Decoding.module_,
@@ -159,7 +159,6 @@ kernelDecodingModules :: [Module]
 kernelDecodingModules = [
   DecodePaths.module_,
   DecodeAst.module_,
-  DecodeClasses.module_,
   DecodeCoders.module_,
   DecodeContext.module_,
   DecodeCore.module_,
@@ -183,7 +182,6 @@ kernelEncodingModules :: [Module]
 kernelEncodingModules = [
   EncodePaths.module_,
   EncodeAst.module_,
-  EncodeClasses.module_,
   EncodeCoders.module_,
   EncodeContext.module_,
   EncodeCore.module_,
