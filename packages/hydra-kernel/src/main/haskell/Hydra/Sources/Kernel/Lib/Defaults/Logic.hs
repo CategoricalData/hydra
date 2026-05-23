@@ -52,17 +52,17 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.lib.defaults.logic"
+ns :: ModuleName
+ns = ModuleName "hydra.lib.defaults.logic"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
             moduleDescription = Just ("Default term-level implementations of Logic functions for the Hydra interpreter.")}
   where
     definitions = [

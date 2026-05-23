@@ -106,14 +106,14 @@ import qualified Hydra.Typing as HydraTyping
 def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.python.coder"
+ns :: ModuleName
+ns = ModuleName "hydra.python.coder"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [PyUtils.ns, PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns, Environment.ns, Formatting.ns, Names.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, ShowCore.ns, Reduction.ns, Sorting.ns, Inference.ns, Namespace "hydra.annotations", Namespace "hydra.arity", Namespace "hydra.checking", Namespace "hydra.lexical"] L.++ (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([PyUtils.ns, PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns, Environment.ns, Formatting.ns, Names.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, ShowCore.ns, Reduction.ns, Sorting.ns, Inference.ns] L.++ (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Python code generator: converts Hydra modules to Python source code"}
   where
     definitions = [
@@ -586,7 +586,7 @@ encodeApplicationInner = def "encodeApplicationInner" $
     cases _Term (Strip.deannotateAndDetypeTerm @@ var "fun") (Just $ var "defaultCase") [
       -- Record projection: obj.field
       _Term_project>>: "proj" ~>
-        "fname" <~ (project _Projection _Projection_field @@ var "proj") $
+        "fname" <~ (project _Projection _Projection_fieldName @@ var "proj") $
         "fieldExpr" <~ (PyUtils.projectFromExpression @@ var "firstArg" @@ (PyNames.encodeFieldName @@ var "env" @@ var "fname")) $
         right $ pair (var "withRest" @@ var "fieldExpr") (var "rargs"),
       -- Union elimination: encode as inline conditional chain (isinstance-based ternary)
@@ -1344,7 +1344,7 @@ encodePythonModule = def "encodePythonModule" $
   doc "Encode a Hydra module to a Python module AST" $
   "cx" ~> "g" ~> "mod" ~> "defs0" ~>
     "defs" <~ (Environment.reorderDefs @@ var "defs0") $
-    "meta0" <~ (gatherMetadata @@ (Packaging.moduleNamespace $ var "mod") @@ var "defs") $
+    "meta0" <~ (gatherMetadata @@ (Packaging.moduleName $ var "mod") @@ var "defs") $
     "namespaces0" <~ (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "meta0") $
     "env0" <~ (initialEnvironment @@ var "namespaces0" @@ var "g") $
     "isTypeMod" <~ (isTypeModuleCheck @@ var "defs0") $
@@ -1543,7 +1543,7 @@ encodeTermInline = def "encodeTermInline" $
 
       -- TermProject: record projection as lambda v1: v1.field
       _Term_project>>: "proj" ~>
-        "fname" <~ (Phantoms.project _Projection _Projection_field @@ var "proj") $
+        "fname" <~ (Phantoms.project _Projection _Projection_fieldName @@ var "proj") $
         right $ makeCurriedLambda @@ list [PyDsl.name $ string "v1"] @@
           (PyUtils.projectFromExpression @@ (PyDsl.pyNameToPyExpression $ PyDsl.name $ string "v1") @@ (PyNames.encodeFieldName @@ var "env" @@ var "fname")),
 
@@ -2509,7 +2509,7 @@ gatherLambdas = def "gatherLambdas" $
 
 -- | Gather metadata from a list of definitions.
 --   This is the main entry point for collecting all import requirements.
-gatherMetadata :: TTermDefinition (Namespace -> [Definition] -> PyHelpers.PythonModuleMetadata)
+gatherMetadata :: TTermDefinition (ModuleName -> [Definition] -> PyHelpers.PythonModuleMetadata)
 gatherMetadata = def "gatherMetadata" $
   doc "Gather metadata from definitions" $
   "focusNs" ~> "defs" ~>
@@ -2571,7 +2571,7 @@ initialEnvironment = def "initialEnvironment" $
       PyHelpers._PythonEnvironment_inlineVariables>>: Sets.empty]
 
 -- | Initial empty metadata for a Python module
-initialMetadata :: TTermDefinition (Namespace -> PyHelpers.PythonModuleMetadata)
+initialMetadata :: TTermDefinition (ModuleName -> PyHelpers.PythonModuleMetadata)
 initialMetadata = def "initialMetadata" $
   doc "Create initial empty metadata for a Python module" $
   "ns" ~>
@@ -2868,7 +2868,7 @@ moduleToPython = def "moduleToPython" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
     "file" <<~ (encodePythonModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "defs") $
     "s" <~ (Serialization.printExpr @@ (Serialization.parenthesize @@ (PySerde.moduleToExpr @@ var "file"))) $
-    "path" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ (wrap _FileExtension $ string "py") @@ (Packaging.moduleNamespace $ var "mod")) $
+    "path" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ (wrap _FileExtension $ string "py") @@ (Packaging.moduleName $ var "mod")) $
     right $ Maps.singleton (var "path") (var "s")
 
 -- | Accessor for the graph field of PyGraph

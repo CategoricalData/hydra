@@ -13,8 +13,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.protobuf.any"
+ns :: ModuleName
+ns = ModuleName "hydra.protobuf.any"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -24,9 +24,9 @@ pbAny = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto"}
   where
     definitions = [any_]

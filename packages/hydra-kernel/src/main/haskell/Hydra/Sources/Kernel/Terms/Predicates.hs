@@ -79,17 +79,17 @@ import qualified Hydra.Sources.Kernel.Terms.Lexical     as Lexical
 import qualified Hydra.Sources.Decode.Core              as DecodeCore
 
 
-ns :: Namespace
-ns = Namespace "hydra.predicates"
+ns :: ModuleName
+ns = ModuleName "hydra.predicates"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Arity.ns, Dependencies.ns, moduleNamespace DecodeCore.module_, Lexical.ns, Reflect.ns, Rewriting.ns, Strip.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Arity.ns, Dependencies.ns, moduleName DecodeCore.module_, Lexical.ns, Reflect.ns, Rewriting.ns, Strip.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just ("Type and term classification predicates")}
   where
     definitions = [

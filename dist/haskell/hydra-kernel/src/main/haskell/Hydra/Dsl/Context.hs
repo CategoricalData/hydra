@@ -29,7 +29,7 @@ contextMessages x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.context.Context"),
-        Core.projectionField = (Core.Name "messages")})),
+        Core.projectionFieldName = (Core.Name "messages")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the other field of hydra.context.Context
 contextOther :: Phantoms.TTerm Context.Context -> Phantoms.TTerm (M.Map Core.Name Core.Term)
@@ -37,7 +37,7 @@ contextOther x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.context.Context"),
-        Core.projectionField = (Core.Name "other")})),
+        Core.projectionFieldName = (Core.Name "other")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the trace field of hydra.context.Context
 contextTrace :: Phantoms.TTerm Context.Context -> Phantoms.TTerm [String]
@@ -45,7 +45,7 @@ contextTrace x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.context.Context"),
-        Core.projectionField = (Core.Name "trace")})),
+        Core.projectionFieldName = (Core.Name "trace")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the messages field of hydra.context.Context
 contextWithMessages :: Phantoms.TTerm Context.Context -> Phantoms.TTerm [String] -> Phantoms.TTerm Context.Context
@@ -58,7 +58,7 @@ contextWithMessages original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.context.Context"),
-              Core.projectionField = (Core.Name "trace")})),
+              Core.projectionFieldName = (Core.Name "trace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "messages"),
@@ -68,7 +68,7 @@ contextWithMessages original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.context.Context"),
-              Core.projectionField = (Core.Name "other")})),
+              Core.projectionFieldName = (Core.Name "other")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the other field of hydra.context.Context
 contextWithOther :: Phantoms.TTerm Context.Context -> Phantoms.TTerm (M.Map Core.Name Core.Term) -> Phantoms.TTerm Context.Context
@@ -81,14 +81,14 @@ contextWithOther original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.context.Context"),
-              Core.projectionField = (Core.Name "trace")})),
+              Core.projectionFieldName = (Core.Name "trace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "messages"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.context.Context"),
-              Core.projectionField = (Core.Name "messages")})),
+              Core.projectionFieldName = (Core.Name "messages")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "other"),
@@ -107,12 +107,12 @@ contextWithTrace original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.context.Context"),
-              Core.projectionField = (Core.Name "messages")})),
+              Core.projectionFieldName = (Core.Name "messages")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "other"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.context.Context"),
-              Core.projectionField = (Core.Name "other")})),
+              Core.projectionFieldName = (Core.Name "other")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))

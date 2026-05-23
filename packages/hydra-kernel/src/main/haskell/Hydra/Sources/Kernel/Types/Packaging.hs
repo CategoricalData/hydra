@@ -10,24 +10,25 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 
 
-ns :: Namespace
-ns = Namespace "hydra.packaging"
+ns :: ModuleName
+ns = ModuleName "hydra.packaging"
 
 define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns, Typing.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns, Typing.ns],
             moduleDescription = Just "A model for Hydra namespaces, modules, and packages"}
   where
     definitions = [
       definition,
       fileExtension,
       module',
-      namespace,
+      moduleDependency,
+      moduleNameDef,
       package,
       packageDependency,
       packageName,
@@ -63,19 +64,34 @@ module' = define "Module" $
     "description">:
       doc "An optional human-readable description of the module" $
       T.maybe T.string,
-    "namespace">:
-      doc "A common prefix for all element names in the module"
-      namespace,
+    "name">:
+      doc "The name of the module, which is also the common prefix for all element names in the module"
+      moduleNameDef,
     "dependencies">:
       doc "Any modules which this module directly depends on" $
-      T.list namespace,
+      T.list moduleDependency,
     "definitions">:
       doc "The definitions in this module" $
       T.list definition]
 
-namespace :: Binding
-namespace = define "Namespace" $
-  doc "A prefix for element names" $
+moduleDependency :: Binding
+moduleDependency = define "ModuleDependency" $
+  doc ("A dependency on another module, identified by its name and"
+    ++ " (optionally) the package which provides it. When the package is omitted,"
+    ++ " the resolver searches all packages in scope; a duplicate module name"
+    ++ " across packages is a resolution error which can be disambiguated by"
+    ++ " naming the intended package explicitly.") $
+  T.record [
+    "module">:
+      doc "The name of the depended-on module"
+      moduleNameDef,
+    "package">:
+      doc "The package providing the depended-on module, if disambiguation is required" $
+      T.maybe packageName]
+
+moduleNameDef :: Binding
+moduleNameDef = define "ModuleName" $
+  doc "The unique name of a module; a prefix for the names of elements defined in the module." $
   T.wrap T.string
 
 package :: Binding
@@ -124,11 +140,11 @@ packageVersionSpecifier = define "PackageVersionSpecifier" $
 
 qualifiedName :: Binding
 qualifiedName = define "QualifiedName" $
-  doc "A qualified name consisting of an optional namespace together with a mandatory local name" $
+  doc "A qualified name consisting of an optional module name together with a mandatory local name" $
   T.record [
-    "namespace">:
-      doc "The optional namespace" $
-      T.maybe namespace,
+    "moduleName">:
+      doc "The optional module name" $
+      T.maybe moduleNameDef,
     "local">:
       doc "The local name"
       T.string]

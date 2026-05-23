@@ -55,26 +55,26 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Util as ShowUtil
 import Hydra.Error.Packaging
 
 
-ns :: Namespace
-ns = Namespace "hydra.show.error.packaging"
+ns :: ModuleName
+ns = ModuleName "hydra.show.error.packaging"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ShowUtil.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([ShowUtil.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "String representations of hydra.error.packaging types"}
   where
    definitions = [
-     toDefinition conflictingModuleNamespaceError,
+     toDefinition conflictingModuleNameError,
      toDefinition conflictingVariantNameError,
-     toDefinition definitionNotInModuleNamespaceError,
+     toDefinition definitionNotInModuleNameError,
      toDefinition definitionsOutOfOrderError,
      toDefinition duplicateDefinitionNameError,
-     toDefinition duplicateModuleNamespaceError,
+     toDefinition duplicateModuleNameError,
      toDefinition invalidDefinitionNameError,
      toDefinition invalidModuleError,
-     toDefinition invalidNamespaceConventionError,
+     toDefinition invalidModuleNameConventionError,
      toDefinition invalidPackageError,
      toDefinition invalidPackageNameError,
      toDefinition missingDocumentationError]
@@ -82,21 +82,21 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-conflictingModuleNamespaceError :: TTermDefinition (ConflictingModuleNamespaceError -> String)
-conflictingModuleNamespaceError = define "conflictingModuleNamespaceError" $
+conflictingModuleNameError :: TTermDefinition (ConflictingModuleNameError -> String)
+conflictingModuleNameError = define "conflictingModuleNameError" $
   doc "Show a conflicting module namespace error as a string" $
   "e" ~> Strings.cat $ list [
     string "module namespaces conflict when mapped to target language path: ",
-    Packaging.unNamespace $ project _ConflictingModuleNamespaceError _ConflictingModuleNamespaceError_first @@ var "e",
+    Packaging.unModuleName $ project _ConflictingModuleNameError _ConflictingModuleNameError_first @@ var "e",
     string " vs ",
-    Packaging.unNamespace $ project _ConflictingModuleNamespaceError _ConflictingModuleNamespaceError_second @@ var "e"]
+    Packaging.unModuleName $ project _ConflictingModuleNameError _ConflictingModuleNameError_second @@ var "e"]
 
 conflictingVariantNameError :: TTermDefinition (ConflictingVariantNameError -> String)
 conflictingVariantNameError = define "conflictingVariantNameError" $
   doc "Show a conflicting variant name error as a string" $
   "e" ~> Strings.cat $ list [
     string "in module ",
-    Packaging.unNamespace $ project _ConflictingVariantNameError _ConflictingVariantNameError_namespace @@ var "e",
+    Packaging.unModuleName $ project _ConflictingVariantNameError _ConflictingVariantNameError_moduleName @@ var "e",
     string ": variant ",
     Core.unName $ project _ConflictingVariantNameError _ConflictingVariantNameError_variantName @@ var "e",
     string " of type ",
@@ -105,21 +105,21 @@ conflictingVariantNameError = define "conflictingVariantNameError" $
     Core.unName $ project _ConflictingVariantNameError _ConflictingVariantNameError_conflictingName @@ var "e",
     string " which conflicts with another type definition"]
 
-definitionNotInModuleNamespaceError :: TTermDefinition (DefinitionNotInModuleNamespaceError -> String)
-definitionNotInModuleNamespaceError = define "definitionNotInModuleNamespaceError" $
+definitionNotInModuleNameError :: TTermDefinition (DefinitionNotInModuleNameError -> String)
+definitionNotInModuleNameError = define "definitionNotInModuleNameError" $
   doc "Show a definition-not-in-module-namespace error as a string" $
   "e" ~> Strings.cat $ list [
     string "definition ",
-    Core.unName $ project _DefinitionNotInModuleNamespaceError _DefinitionNotInModuleNamespaceError_name @@ var "e",
+    Core.unName $ project _DefinitionNotInModuleNameError _DefinitionNotInModuleNameError_name @@ var "e",
     string " is not in module namespace ",
-    Packaging.unNamespace $ project _DefinitionNotInModuleNamespaceError _DefinitionNotInModuleNamespaceError_namespace @@ var "e"]
+    Packaging.unModuleName $ project _DefinitionNotInModuleNameError _DefinitionNotInModuleNameError_moduleName @@ var "e"]
 
 definitionsOutOfOrderError :: TTermDefinition (DefinitionsOutOfOrderError -> String)
 definitionsOutOfOrderError = define "definitionsOutOfOrderError" $
   doc "Show a definitions-out-of-order error as a string" $
   "e" ~> Strings.cat $ list [
     string "in module ",
-    Packaging.unNamespace $ project _DefinitionsOutOfOrderError _DefinitionsOutOfOrderError_namespace @@ var "e",
+    Packaging.unModuleName $ project _DefinitionsOutOfOrderError _DefinitionsOutOfOrderError_moduleName @@ var "e",
     string ": definitions out of order: ",
     Core.unName $ project _DefinitionsOutOfOrderError _DefinitionsOutOfOrderError_precedingName @@ var "e",
     string " precedes ",
@@ -130,23 +130,23 @@ duplicateDefinitionNameError = define "duplicateDefinitionNameError" $
   doc "Show a duplicate definition name error as a string" $
   "e" ~> Strings.cat $ list [
     string "in module ",
-    Packaging.unNamespace $ project _DuplicateDefinitionNameError _DuplicateDefinitionNameError_namespace @@ var "e",
+    Packaging.unModuleName $ project _DuplicateDefinitionNameError _DuplicateDefinitionNameError_moduleName @@ var "e",
     string ": duplicate definition name ",
     Core.unName $ project _DuplicateDefinitionNameError _DuplicateDefinitionNameError_name @@ var "e"]
 
-duplicateModuleNamespaceError :: TTermDefinition (DuplicateModuleNamespaceError -> String)
-duplicateModuleNamespaceError = define "duplicateModuleNamespaceError" $
+duplicateModuleNameError :: TTermDefinition (DuplicateModuleNameError -> String)
+duplicateModuleNameError = define "duplicateModuleNameError" $
   doc "Show a duplicate module namespace error as a string" $
   "e" ~> Strings.cat $ list [
     string "duplicate module namespace ",
-    Packaging.unNamespace $ project _DuplicateModuleNamespaceError _DuplicateModuleNamespaceError_namespace @@ var "e"]
+    Packaging.unModuleName $ project _DuplicateModuleNameError _DuplicateModuleNameError_moduleName @@ var "e"]
 
 invalidDefinitionNameError :: TTermDefinition (InvalidDefinitionNameError -> String)
 invalidDefinitionNameError = define "invalidDefinitionNameError" $
   doc "Show an invalid definition name error as a string" $
   "e" ~> Strings.cat $ list [
     string "in module ",
-    Packaging.unNamespace $ project _InvalidDefinitionNameError _InvalidDefinitionNameError_namespace @@ var "e",
+    Packaging.unModuleName $ project _InvalidDefinitionNameError _InvalidDefinitionNameError_moduleName @@ var "e",
     string ": definition ",
     Core.unName $ project _InvalidDefinitionNameError _InvalidDefinitionNameError_name @@ var "e",
     string " does not match expected ",
@@ -158,19 +158,19 @@ invalidModuleError = define "invalidModuleError" $
   "e" ~> Strings.cat2 (string "invalid module: ") $
     cases _InvalidModuleError (var "e") Nothing [
       _InvalidModuleError_conflictingVariantName>>: conflictingVariantNameError,
-      _InvalidModuleError_definitionNotInModuleNamespace>>: definitionNotInModuleNamespaceError,
+      _InvalidModuleError_definitionNotInModuleName>>: definitionNotInModuleNameError,
       _InvalidModuleError_definitionsOutOfOrder>>: definitionsOutOfOrderError,
       _InvalidModuleError_duplicateDefinitionName>>: duplicateDefinitionNameError,
       _InvalidModuleError_invalidDefinitionName>>: invalidDefinitionNameError,
-      _InvalidModuleError_invalidNamespaceConvention>>: invalidNamespaceConventionError,
+      _InvalidModuleError_invalidModuleNameConvention>>: invalidModuleNameConventionError,
       _InvalidModuleError_missingDocumentation>>: missingDocumentationError]
 
-invalidNamespaceConventionError :: TTermDefinition (InvalidNamespaceConventionError -> String)
-invalidNamespaceConventionError = define "invalidNamespaceConventionError" $
+invalidModuleNameConventionError :: TTermDefinition (InvalidModuleNameConventionError -> String)
+invalidModuleNameConventionError = define "invalidModuleNameConventionError" $
   doc "Show an invalid namespace convention error as a string" $
   "e" ~> Strings.cat $ list [
     string "namespace ",
-    Packaging.unNamespace $ project _InvalidNamespaceConventionError _InvalidNamespaceConventionError_namespace @@ var "e",
+    Packaging.unModuleName $ project _InvalidModuleNameConventionError _InvalidModuleNameConventionError_moduleName @@ var "e",
     string " does not match the dotted-camelCase naming convention"]
 
 invalidPackageError :: TTermDefinition (InvalidPackageError -> String)
@@ -178,8 +178,8 @@ invalidPackageError = define "invalidPackageError" $
   doc "Show an invalid package error as a string" $
   "e" ~> Strings.cat2 (string "invalid package: ") $
     cases _InvalidPackageError (var "e") Nothing [
-      _InvalidPackageError_conflictingModuleNamespace>>: conflictingModuleNamespaceError,
-      _InvalidPackageError_duplicateModuleNamespace>>: duplicateModuleNamespaceError,
+      _InvalidPackageError_conflictingModuleName>>: conflictingModuleNameError,
+      _InvalidPackageError_duplicateModuleName>>: duplicateModuleNameError,
       _InvalidPackageError_invalidModule>>: invalidModuleError,
       _InvalidPackageError_invalidPackageName>>: invalidPackageNameError]
 
@@ -196,7 +196,7 @@ missingDocumentationError = define "missingDocumentationError" $
   doc "Show a missing documentation error as a string" $
   "e" ~> Strings.cat $ list [
     string "in module ",
-    Packaging.unNamespace $ project _MissingDocumentationError _MissingDocumentationError_namespace @@ var "e",
+    Packaging.unModuleName $ project _MissingDocumentationError _MissingDocumentationError_moduleName @@ var "e",
     string ": definition ",
     Core.unName $ project _MissingDocumentationError _MissingDocumentationError_name @@ var "e",
     string " lacks a description annotation"]

@@ -54,17 +54,17 @@ import qualified Data.Maybe              as Y
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
-ns :: Namespace
-ns = Namespace "hydra.lib.defaults.eithers"
+ns :: ModuleName
+ns = ModuleName "hydra.lib.defaults.eithers"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ExtractCore.ns, ShowCore.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([ExtractCore.ns, ShowCore.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just ("Default term-level implementations of Either functions for the Hydra interpreter.")}
   where
     definitions = [

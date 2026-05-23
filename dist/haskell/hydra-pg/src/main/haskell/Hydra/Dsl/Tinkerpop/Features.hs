@@ -75,7 +75,7 @@ dataTypeFeaturesSupportsBooleanArrayValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-        Core.projectionField = (Core.Name "supportsBooleanArrayValues")})),
+        Core.projectionFieldName = (Core.Name "supportsBooleanArrayValues")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dataTypeFeaturesSupportsBooleanValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool
@@ -83,7 +83,7 @@ dataTypeFeaturesSupportsBooleanValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-        Core.projectionField = (Core.Name "supportsBooleanValues")})),
+        Core.projectionFieldName = (Core.Name "supportsBooleanValues")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dataTypeFeaturesSupportsByteArrayValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool
@@ -91,7 +91,7 @@ dataTypeFeaturesSupportsByteArrayValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-        Core.projectionField = (Core.Name "supportsByteArrayValues")})),
+        Core.projectionFieldName = (Core.Name "supportsByteArrayValues")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dataTypeFeaturesSupportsByteValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool
@@ -99,7 +99,7 @@ dataTypeFeaturesSupportsByteValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-        Core.projectionField = (Core.Name "supportsByteValues")})),
+        Core.projectionFieldName = (Core.Name "supportsByteValues")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dataTypeFeaturesSupportsDoubleArrayValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool
@@ -107,7 +107,7 @@ dataTypeFeaturesSupportsDoubleArrayValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-        Core.projectionField = (Core.Name "supportsDoubleArrayValues")})),
+        Core.projectionFieldName = (Core.Name "supportsDoubleArrayValues")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dataTypeFeaturesSupportsDoubleValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool
@@ -115,7 +115,7 @@ dataTypeFeaturesSupportsDoubleValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-        Core.projectionField = (Core.Name "supportsDoubleValues")})),
+        Core.projectionFieldName = (Core.Name "supportsDoubleValues")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dataTypeFeaturesSupportsFloatArrayValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool
@@ -123,7 +123,7 @@ dataTypeFeaturesSupportsFloatArrayValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-        Core.projectionField = (Core.Name "supportsFloatArrayValues")})),
+        Core.projectionFieldName = (Core.Name "supportsFloatArrayValues")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dataTypeFeaturesSupportsFloatValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool
@@ -131,7 +131,7 @@ dataTypeFeaturesSupportsFloatValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-        Core.projectionField = (Core.Name "supportsFloatValues")})),
+        Core.projectionFieldName = (Core.Name "supportsFloatValues")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dataTypeFeaturesSupportsIntegerArrayValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool
@@ -139,7 +139,7 @@ dataTypeFeaturesSupportsIntegerArrayValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-        Core.projectionField = (Core.Name "supportsIntegerArrayValues")})),
+        Core.projectionFieldName = (Core.Name "supportsIntegerArrayValues")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dataTypeFeaturesSupportsIntegerValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool
@@ -147,7 +147,7 @@ dataTypeFeaturesSupportsIntegerValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-        Core.projectionField = (Core.Name "supportsIntegerValues")})),
+        Core.projectionFieldName = (Core.Name "supportsIntegerValues")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dataTypeFeaturesSupportsLongArrayValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool
@@ -155,7 +155,7 @@ dataTypeFeaturesSupportsLongArrayValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-        Core.projectionField = (Core.Name "supportsLongArrayValues")})),
+        Core.projectionFieldName = (Core.Name "supportsLongArrayValues")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dataTypeFeaturesSupportsLongValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool
@@ -163,7 +163,7 @@ dataTypeFeaturesSupportsLongValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-        Core.projectionField = (Core.Name "supportsLongValues")})),
+        Core.projectionFieldName = (Core.Name "supportsLongValues")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dataTypeFeaturesSupportsMapValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool
@@ -171,7 +171,7 @@ dataTypeFeaturesSupportsMapValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-        Core.projectionField = (Core.Name "supportsMapValues")})),
+        Core.projectionFieldName = (Core.Name "supportsMapValues")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dataTypeFeaturesSupportsMixedListValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool
@@ -179,7 +179,7 @@ dataTypeFeaturesSupportsMixedListValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-        Core.projectionField = (Core.Name "supportsMixedListValues")})),
+        Core.projectionFieldName = (Core.Name "supportsMixedListValues")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dataTypeFeaturesSupportsSerializableValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool
@@ -187,7 +187,7 @@ dataTypeFeaturesSupportsSerializableValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-        Core.projectionField = (Core.Name "supportsSerializableValues")})),
+        Core.projectionFieldName = (Core.Name "supportsSerializableValues")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dataTypeFeaturesSupportsStringArrayValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool
@@ -195,7 +195,7 @@ dataTypeFeaturesSupportsStringArrayValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-        Core.projectionField = (Core.Name "supportsStringArrayValues")})),
+        Core.projectionFieldName = (Core.Name "supportsStringArrayValues")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dataTypeFeaturesSupportsStringValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool
@@ -203,7 +203,7 @@ dataTypeFeaturesSupportsStringValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-        Core.projectionField = (Core.Name "supportsStringValues")})),
+        Core.projectionFieldName = (Core.Name "supportsStringValues")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dataTypeFeaturesSupportsUniformListValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool
@@ -211,7 +211,7 @@ dataTypeFeaturesSupportsUniformListValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-        Core.projectionField = (Core.Name "supportsUniformListValues")})),
+        Core.projectionFieldName = (Core.Name "supportsUniformListValues")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dataTypeFeaturesWithSupportsBooleanArrayValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DataTypeFeatures
@@ -227,119 +227,119 @@ dataTypeFeaturesWithSupportsBooleanArrayValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMapValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMapValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMapValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMixedListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMixedListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMixedListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsSerializableValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsSerializableValues")})),
+              Core.projectionFieldName = (Core.Name "supportsSerializableValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUniformListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsUniformListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsUniformListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dataTypeFeaturesWithSupportsBooleanValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DataTypeFeatures
@@ -352,7 +352,7 @@ dataTypeFeaturesWithSupportsBooleanValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsBooleanValues"),
@@ -362,112 +362,112 @@ dataTypeFeaturesWithSupportsBooleanValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMapValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMapValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMapValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMixedListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMixedListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMixedListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsSerializableValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsSerializableValues")})),
+              Core.projectionFieldName = (Core.Name "supportsSerializableValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUniformListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsUniformListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsUniformListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dataTypeFeaturesWithSupportsByteArrayValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DataTypeFeatures
@@ -480,14 +480,14 @@ dataTypeFeaturesWithSupportsByteArrayValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsBooleanValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteArrayValues"),
@@ -497,105 +497,105 @@ dataTypeFeaturesWithSupportsByteArrayValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMapValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMapValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMapValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMixedListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMixedListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMixedListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsSerializableValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsSerializableValues")})),
+              Core.projectionFieldName = (Core.Name "supportsSerializableValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUniformListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsUniformListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsUniformListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dataTypeFeaturesWithSupportsByteValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DataTypeFeatures
@@ -608,21 +608,21 @@ dataTypeFeaturesWithSupportsByteValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsBooleanValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteValues"),
@@ -632,98 +632,98 @@ dataTypeFeaturesWithSupportsByteValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMapValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMapValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMapValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMixedListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMixedListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMixedListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsSerializableValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsSerializableValues")})),
+              Core.projectionFieldName = (Core.Name "supportsSerializableValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUniformListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsUniformListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsUniformListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dataTypeFeaturesWithSupportsDoubleArrayValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DataTypeFeatures
@@ -736,28 +736,28 @@ dataTypeFeaturesWithSupportsDoubleArrayValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsBooleanValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleArrayValues"),
@@ -767,91 +767,91 @@ dataTypeFeaturesWithSupportsDoubleArrayValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMapValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMapValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMapValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMixedListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMixedListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMixedListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsSerializableValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsSerializableValues")})),
+              Core.projectionFieldName = (Core.Name "supportsSerializableValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUniformListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsUniformListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsUniformListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dataTypeFeaturesWithSupportsDoubleValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DataTypeFeatures
@@ -864,35 +864,35 @@ dataTypeFeaturesWithSupportsDoubleValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsBooleanValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleValues"),
@@ -902,84 +902,84 @@ dataTypeFeaturesWithSupportsDoubleValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMapValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMapValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMapValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMixedListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMixedListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMixedListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsSerializableValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsSerializableValues")})),
+              Core.projectionFieldName = (Core.Name "supportsSerializableValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUniformListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsUniformListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsUniformListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dataTypeFeaturesWithSupportsFloatArrayValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DataTypeFeatures
@@ -992,42 +992,42 @@ dataTypeFeaturesWithSupportsFloatArrayValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsBooleanValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatArrayValues"),
@@ -1037,77 +1037,77 @@ dataTypeFeaturesWithSupportsFloatArrayValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMapValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMapValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMapValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMixedListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMixedListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMixedListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsSerializableValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsSerializableValues")})),
+              Core.projectionFieldName = (Core.Name "supportsSerializableValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUniformListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsUniformListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsUniformListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dataTypeFeaturesWithSupportsFloatValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DataTypeFeatures
@@ -1120,49 +1120,49 @@ dataTypeFeaturesWithSupportsFloatValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsBooleanValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatValues"),
@@ -1172,70 +1172,70 @@ dataTypeFeaturesWithSupportsFloatValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMapValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMapValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMapValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMixedListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMixedListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMixedListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsSerializableValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsSerializableValues")})),
+              Core.projectionFieldName = (Core.Name "supportsSerializableValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUniformListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsUniformListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsUniformListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dataTypeFeaturesWithSupportsIntegerArrayValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DataTypeFeatures
@@ -1248,56 +1248,56 @@ dataTypeFeaturesWithSupportsIntegerArrayValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsBooleanValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerArrayValues"),
@@ -1307,63 +1307,63 @@ dataTypeFeaturesWithSupportsIntegerArrayValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMapValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMapValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMapValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMixedListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMixedListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMixedListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsSerializableValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsSerializableValues")})),
+              Core.projectionFieldName = (Core.Name "supportsSerializableValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUniformListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsUniformListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsUniformListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dataTypeFeaturesWithSupportsIntegerValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DataTypeFeatures
@@ -1376,63 +1376,63 @@ dataTypeFeaturesWithSupportsIntegerValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsBooleanValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerValues"),
@@ -1442,56 +1442,56 @@ dataTypeFeaturesWithSupportsIntegerValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMapValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMapValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMapValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMixedListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMixedListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMixedListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsSerializableValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsSerializableValues")})),
+              Core.projectionFieldName = (Core.Name "supportsSerializableValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUniformListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsUniformListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsUniformListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dataTypeFeaturesWithSupportsLongArrayValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DataTypeFeatures
@@ -1504,70 +1504,70 @@ dataTypeFeaturesWithSupportsLongArrayValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsBooleanValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongArrayValues"),
@@ -1577,49 +1577,49 @@ dataTypeFeaturesWithSupportsLongArrayValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMapValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMapValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMapValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMixedListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMixedListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMixedListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsSerializableValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsSerializableValues")})),
+              Core.projectionFieldName = (Core.Name "supportsSerializableValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUniformListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsUniformListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsUniformListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dataTypeFeaturesWithSupportsLongValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DataTypeFeatures
@@ -1632,77 +1632,77 @@ dataTypeFeaturesWithSupportsLongValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsBooleanValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongValues"),
@@ -1712,42 +1712,42 @@ dataTypeFeaturesWithSupportsLongValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMapValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMapValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMixedListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMixedListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMixedListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsSerializableValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsSerializableValues")})),
+              Core.projectionFieldName = (Core.Name "supportsSerializableValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUniformListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsUniformListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsUniformListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dataTypeFeaturesWithSupportsMapValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DataTypeFeatures
@@ -1760,84 +1760,84 @@ dataTypeFeaturesWithSupportsMapValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsBooleanValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMapValues"),
@@ -1847,35 +1847,35 @@ dataTypeFeaturesWithSupportsMapValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMixedListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMixedListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsSerializableValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsSerializableValues")})),
+              Core.projectionFieldName = (Core.Name "supportsSerializableValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUniformListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsUniformListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsUniformListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dataTypeFeaturesWithSupportsMixedListValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DataTypeFeatures
@@ -1888,91 +1888,91 @@ dataTypeFeaturesWithSupportsMixedListValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsBooleanValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMapValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMapValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMapValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMixedListValues"),
@@ -1982,28 +1982,28 @@ dataTypeFeaturesWithSupportsMixedListValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsSerializableValues")})),
+              Core.projectionFieldName = (Core.Name "supportsSerializableValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUniformListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsUniformListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsUniformListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dataTypeFeaturesWithSupportsSerializableValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DataTypeFeatures
@@ -2016,98 +2016,98 @@ dataTypeFeaturesWithSupportsSerializableValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsBooleanValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMapValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMapValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMapValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMixedListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMixedListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMixedListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsSerializableValues"),
@@ -2117,21 +2117,21 @@ dataTypeFeaturesWithSupportsSerializableValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUniformListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsUniformListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsUniformListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dataTypeFeaturesWithSupportsStringArrayValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DataTypeFeatures
@@ -2144,105 +2144,105 @@ dataTypeFeaturesWithSupportsStringArrayValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsBooleanValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMapValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMapValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMapValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMixedListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMixedListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMixedListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsSerializableValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsSerializableValues")})),
+              Core.projectionFieldName = (Core.Name "supportsSerializableValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringArrayValues"),
@@ -2252,14 +2252,14 @@ dataTypeFeaturesWithSupportsStringArrayValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUniformListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsUniformListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsUniformListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dataTypeFeaturesWithSupportsStringValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DataTypeFeatures
@@ -2272,112 +2272,112 @@ dataTypeFeaturesWithSupportsStringValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsBooleanValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMapValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMapValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMapValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMixedListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMixedListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMixedListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsSerializableValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsSerializableValues")})),
+              Core.projectionFieldName = (Core.Name "supportsSerializableValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringValues"),
@@ -2387,7 +2387,7 @@ dataTypeFeaturesWithSupportsStringValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsUniformListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsUniformListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dataTypeFeaturesWithSupportsUniformListValues :: Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DataTypeFeatures
@@ -2400,119 +2400,119 @@ dataTypeFeaturesWithSupportsUniformListValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsBooleanValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsBooleanValues")})),
+              Core.projectionFieldName = (Core.Name "supportsBooleanValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsByteValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsByteValues")})),
+              Core.projectionFieldName = (Core.Name "supportsByteValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDoubleValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsDoubleValues")})),
+              Core.projectionFieldName = (Core.Name "supportsDoubleValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsFloatValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsFloatValues")})),
+              Core.projectionFieldName = (Core.Name "supportsFloatValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIntegerValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsIntegerValues")})),
+              Core.projectionFieldName = (Core.Name "supportsIntegerValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsLongValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsLongValues")})),
+              Core.projectionFieldName = (Core.Name "supportsLongValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMapValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMapValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMapValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMixedListValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsMixedListValues")})),
+              Core.projectionFieldName = (Core.Name "supportsMixedListValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsSerializableValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsSerializableValues")})),
+              Core.projectionFieldName = (Core.Name "supportsSerializableValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringArrayValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringArrayValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringArrayValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringValues"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.DataTypeFeatures"),
-              Core.projectionField = (Core.Name "supportsStringValues")})),
+              Core.projectionFieldName = (Core.Name "supportsStringValues")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUniformListValues"),
@@ -2544,7 +2544,7 @@ edgeFeaturesElementFeatures x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-        Core.projectionField = (Core.Name "elementFeatures")})),
+        Core.projectionFieldName = (Core.Name "elementFeatures")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeFeaturesProperties :: Phantoms.TTerm Features.EdgeFeatures -> Phantoms.TTerm Features.EdgePropertyFeatures
@@ -2552,7 +2552,7 @@ edgeFeaturesProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-        Core.projectionField = (Core.Name "properties")})),
+        Core.projectionFieldName = (Core.Name "properties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeFeaturesSupportsAddEdges :: Phantoms.TTerm Features.EdgeFeatures -> Phantoms.TTerm Bool
@@ -2560,7 +2560,7 @@ edgeFeaturesSupportsAddEdges x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-        Core.projectionField = (Core.Name "supportsAddEdges")})),
+        Core.projectionFieldName = (Core.Name "supportsAddEdges")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeFeaturesSupportsRemoveEdges :: Phantoms.TTerm Features.EdgeFeatures -> Phantoms.TTerm Bool
@@ -2568,7 +2568,7 @@ edgeFeaturesSupportsRemoveEdges x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-        Core.projectionField = (Core.Name "supportsRemoveEdges")})),
+        Core.projectionFieldName = (Core.Name "supportsRemoveEdges")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeFeaturesSupportsUpsert :: Phantoms.TTerm Features.EdgeFeatures -> Phantoms.TTerm Bool
@@ -2576,7 +2576,7 @@ edgeFeaturesSupportsUpsert x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-        Core.projectionField = (Core.Name "supportsUpsert")})),
+        Core.projectionFieldName = (Core.Name "supportsUpsert")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeFeaturesWithElementFeatures :: Phantoms.TTerm Features.EdgeFeatures -> Phantoms.TTerm Features.ElementFeatures -> Phantoms.TTerm Features.EdgeFeatures
@@ -2592,28 +2592,28 @@ edgeFeaturesWithElementFeatures original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-              Core.projectionField = (Core.Name "properties")})),
+              Core.projectionFieldName = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsAddEdges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-              Core.projectionField = (Core.Name "supportsAddEdges")})),
+              Core.projectionFieldName = (Core.Name "supportsAddEdges")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemoveEdges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-              Core.projectionField = (Core.Name "supportsRemoveEdges")})),
+              Core.projectionFieldName = (Core.Name "supportsRemoveEdges")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUpsert"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-              Core.projectionField = (Core.Name "supportsUpsert")})),
+              Core.projectionFieldName = (Core.Name "supportsUpsert")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeFeaturesWithProperties :: Phantoms.TTerm Features.EdgeFeatures -> Phantoms.TTerm Features.EdgePropertyFeatures -> Phantoms.TTerm Features.EdgeFeatures
@@ -2626,7 +2626,7 @@ edgeFeaturesWithProperties original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-              Core.projectionField = (Core.Name "elementFeatures")})),
+              Core.projectionFieldName = (Core.Name "elementFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
@@ -2636,21 +2636,21 @@ edgeFeaturesWithProperties original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-              Core.projectionField = (Core.Name "supportsAddEdges")})),
+              Core.projectionFieldName = (Core.Name "supportsAddEdges")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemoveEdges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-              Core.projectionField = (Core.Name "supportsRemoveEdges")})),
+              Core.projectionFieldName = (Core.Name "supportsRemoveEdges")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUpsert"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-              Core.projectionField = (Core.Name "supportsUpsert")})),
+              Core.projectionFieldName = (Core.Name "supportsUpsert")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeFeaturesWithSupportsAddEdges :: Phantoms.TTerm Features.EdgeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.EdgeFeatures
@@ -2663,14 +2663,14 @@ edgeFeaturesWithSupportsAddEdges original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-              Core.projectionField = (Core.Name "elementFeatures")})),
+              Core.projectionFieldName = (Core.Name "elementFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-              Core.projectionField = (Core.Name "properties")})),
+              Core.projectionFieldName = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsAddEdges"),
@@ -2680,14 +2680,14 @@ edgeFeaturesWithSupportsAddEdges original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-              Core.projectionField = (Core.Name "supportsRemoveEdges")})),
+              Core.projectionFieldName = (Core.Name "supportsRemoveEdges")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUpsert"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-              Core.projectionField = (Core.Name "supportsUpsert")})),
+              Core.projectionFieldName = (Core.Name "supportsUpsert")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeFeaturesWithSupportsRemoveEdges :: Phantoms.TTerm Features.EdgeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.EdgeFeatures
@@ -2700,21 +2700,21 @@ edgeFeaturesWithSupportsRemoveEdges original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-              Core.projectionField = (Core.Name "elementFeatures")})),
+              Core.projectionFieldName = (Core.Name "elementFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-              Core.projectionField = (Core.Name "properties")})),
+              Core.projectionFieldName = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsAddEdges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-              Core.projectionField = (Core.Name "supportsAddEdges")})),
+              Core.projectionFieldName = (Core.Name "supportsAddEdges")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemoveEdges"),
@@ -2724,7 +2724,7 @@ edgeFeaturesWithSupportsRemoveEdges original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-              Core.projectionField = (Core.Name "supportsUpsert")})),
+              Core.projectionFieldName = (Core.Name "supportsUpsert")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeFeaturesWithSupportsUpsert :: Phantoms.TTerm Features.EdgeFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.EdgeFeatures
@@ -2737,28 +2737,28 @@ edgeFeaturesWithSupportsUpsert original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-              Core.projectionField = (Core.Name "elementFeatures")})),
+              Core.projectionFieldName = (Core.Name "elementFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-              Core.projectionField = (Core.Name "properties")})),
+              Core.projectionFieldName = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsAddEdges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-              Core.projectionField = (Core.Name "supportsAddEdges")})),
+              Core.projectionFieldName = (Core.Name "supportsAddEdges")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemoveEdges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgeFeatures"),
-              Core.projectionField = (Core.Name "supportsRemoveEdges")})),
+              Core.projectionFieldName = (Core.Name "supportsRemoveEdges")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUpsert"),
@@ -2778,7 +2778,7 @@ edgePropertyFeaturesPropertyFeatures x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.EdgePropertyFeatures"),
-        Core.projectionField = (Core.Name "propertyFeatures")})),
+        Core.projectionFieldName = (Core.Name "propertyFeatures")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgePropertyFeaturesWithPropertyFeatures :: Phantoms.TTerm Features.EdgePropertyFeatures -> Phantoms.TTerm Features.PropertyFeatures -> Phantoms.TTerm Features.EdgePropertyFeatures
@@ -2825,7 +2825,7 @@ elementFeaturesSupportsAddProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-        Core.projectionField = (Core.Name "supportsAddProperty")})),
+        Core.projectionFieldName = (Core.Name "supportsAddProperty")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 elementFeaturesSupportsAnyIds :: Phantoms.TTerm Features.ElementFeatures -> Phantoms.TTerm Bool
@@ -2833,7 +2833,7 @@ elementFeaturesSupportsAnyIds x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-        Core.projectionField = (Core.Name "supportsAnyIds")})),
+        Core.projectionFieldName = (Core.Name "supportsAnyIds")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 elementFeaturesSupportsCustomIds :: Phantoms.TTerm Features.ElementFeatures -> Phantoms.TTerm Bool
@@ -2841,7 +2841,7 @@ elementFeaturesSupportsCustomIds x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-        Core.projectionField = (Core.Name "supportsCustomIds")})),
+        Core.projectionFieldName = (Core.Name "supportsCustomIds")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 elementFeaturesSupportsNumericIds :: Phantoms.TTerm Features.ElementFeatures -> Phantoms.TTerm Bool
@@ -2849,7 +2849,7 @@ elementFeaturesSupportsNumericIds x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-        Core.projectionField = (Core.Name "supportsNumericIds")})),
+        Core.projectionFieldName = (Core.Name "supportsNumericIds")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 elementFeaturesSupportsRemoveProperty :: Phantoms.TTerm Features.ElementFeatures -> Phantoms.TTerm Bool
@@ -2857,7 +2857,7 @@ elementFeaturesSupportsRemoveProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-        Core.projectionField = (Core.Name "supportsRemoveProperty")})),
+        Core.projectionFieldName = (Core.Name "supportsRemoveProperty")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 elementFeaturesSupportsStringIds :: Phantoms.TTerm Features.ElementFeatures -> Phantoms.TTerm Bool
@@ -2865,7 +2865,7 @@ elementFeaturesSupportsStringIds x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-        Core.projectionField = (Core.Name "supportsStringIds")})),
+        Core.projectionFieldName = (Core.Name "supportsStringIds")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 elementFeaturesSupportsUserSuppliedIds :: Phantoms.TTerm Features.ElementFeatures -> Phantoms.TTerm Bool
@@ -2873,7 +2873,7 @@ elementFeaturesSupportsUserSuppliedIds x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-        Core.projectionField = (Core.Name "supportsUserSuppliedIds")})),
+        Core.projectionFieldName = (Core.Name "supportsUserSuppliedIds")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 elementFeaturesSupportsUuidIds :: Phantoms.TTerm Features.ElementFeatures -> Phantoms.TTerm Bool
@@ -2881,7 +2881,7 @@ elementFeaturesSupportsUuidIds x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-        Core.projectionField = (Core.Name "supportsUuidIds")})),
+        Core.projectionFieldName = (Core.Name "supportsUuidIds")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 elementFeaturesWithSupportsAddProperty :: Phantoms.TTerm Features.ElementFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ElementFeatures
@@ -2897,49 +2897,49 @@ elementFeaturesWithSupportsAddProperty original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsAnyIds")})),
+              Core.projectionFieldName = (Core.Name "supportsAnyIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsCustomIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsCustomIds")})),
+              Core.projectionFieldName = (Core.Name "supportsCustomIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsNumericIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsNumericIds")})),
+              Core.projectionFieldName = (Core.Name "supportsNumericIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemoveProperty"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsRemoveProperty")})),
+              Core.projectionFieldName = (Core.Name "supportsRemoveProperty")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsStringIds")})),
+              Core.projectionFieldName = (Core.Name "supportsStringIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUserSuppliedIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsUserSuppliedIds")})),
+              Core.projectionFieldName = (Core.Name "supportsUserSuppliedIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUuidIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsUuidIds")})),
+              Core.projectionFieldName = (Core.Name "supportsUuidIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 elementFeaturesWithSupportsAnyIds :: Phantoms.TTerm Features.ElementFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ElementFeatures
@@ -2952,7 +2952,7 @@ elementFeaturesWithSupportsAnyIds original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsAddProperty")})),
+              Core.projectionFieldName = (Core.Name "supportsAddProperty")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsAnyIds"),
@@ -2962,42 +2962,42 @@ elementFeaturesWithSupportsAnyIds original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsCustomIds")})),
+              Core.projectionFieldName = (Core.Name "supportsCustomIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsNumericIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsNumericIds")})),
+              Core.projectionFieldName = (Core.Name "supportsNumericIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemoveProperty"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsRemoveProperty")})),
+              Core.projectionFieldName = (Core.Name "supportsRemoveProperty")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsStringIds")})),
+              Core.projectionFieldName = (Core.Name "supportsStringIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUserSuppliedIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsUserSuppliedIds")})),
+              Core.projectionFieldName = (Core.Name "supportsUserSuppliedIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUuidIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsUuidIds")})),
+              Core.projectionFieldName = (Core.Name "supportsUuidIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 elementFeaturesWithSupportsCustomIds :: Phantoms.TTerm Features.ElementFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ElementFeatures
@@ -3010,14 +3010,14 @@ elementFeaturesWithSupportsCustomIds original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsAddProperty")})),
+              Core.projectionFieldName = (Core.Name "supportsAddProperty")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsAnyIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsAnyIds")})),
+              Core.projectionFieldName = (Core.Name "supportsAnyIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsCustomIds"),
@@ -3027,35 +3027,35 @@ elementFeaturesWithSupportsCustomIds original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsNumericIds")})),
+              Core.projectionFieldName = (Core.Name "supportsNumericIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemoveProperty"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsRemoveProperty")})),
+              Core.projectionFieldName = (Core.Name "supportsRemoveProperty")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsStringIds")})),
+              Core.projectionFieldName = (Core.Name "supportsStringIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUserSuppliedIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsUserSuppliedIds")})),
+              Core.projectionFieldName = (Core.Name "supportsUserSuppliedIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUuidIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsUuidIds")})),
+              Core.projectionFieldName = (Core.Name "supportsUuidIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 elementFeaturesWithSupportsNumericIds :: Phantoms.TTerm Features.ElementFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ElementFeatures
@@ -3068,21 +3068,21 @@ elementFeaturesWithSupportsNumericIds original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsAddProperty")})),
+              Core.projectionFieldName = (Core.Name "supportsAddProperty")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsAnyIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsAnyIds")})),
+              Core.projectionFieldName = (Core.Name "supportsAnyIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsCustomIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsCustomIds")})),
+              Core.projectionFieldName = (Core.Name "supportsCustomIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsNumericIds"),
@@ -3092,28 +3092,28 @@ elementFeaturesWithSupportsNumericIds original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsRemoveProperty")})),
+              Core.projectionFieldName = (Core.Name "supportsRemoveProperty")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsStringIds")})),
+              Core.projectionFieldName = (Core.Name "supportsStringIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUserSuppliedIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsUserSuppliedIds")})),
+              Core.projectionFieldName = (Core.Name "supportsUserSuppliedIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUuidIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsUuidIds")})),
+              Core.projectionFieldName = (Core.Name "supportsUuidIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 elementFeaturesWithSupportsRemoveProperty :: Phantoms.TTerm Features.ElementFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ElementFeatures
@@ -3126,28 +3126,28 @@ elementFeaturesWithSupportsRemoveProperty original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsAddProperty")})),
+              Core.projectionFieldName = (Core.Name "supportsAddProperty")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsAnyIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsAnyIds")})),
+              Core.projectionFieldName = (Core.Name "supportsAnyIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsCustomIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsCustomIds")})),
+              Core.projectionFieldName = (Core.Name "supportsCustomIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsNumericIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsNumericIds")})),
+              Core.projectionFieldName = (Core.Name "supportsNumericIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemoveProperty"),
@@ -3157,21 +3157,21 @@ elementFeaturesWithSupportsRemoveProperty original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsStringIds")})),
+              Core.projectionFieldName = (Core.Name "supportsStringIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUserSuppliedIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsUserSuppliedIds")})),
+              Core.projectionFieldName = (Core.Name "supportsUserSuppliedIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUuidIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsUuidIds")})),
+              Core.projectionFieldName = (Core.Name "supportsUuidIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 elementFeaturesWithSupportsStringIds :: Phantoms.TTerm Features.ElementFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ElementFeatures
@@ -3184,35 +3184,35 @@ elementFeaturesWithSupportsStringIds original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsAddProperty")})),
+              Core.projectionFieldName = (Core.Name "supportsAddProperty")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsAnyIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsAnyIds")})),
+              Core.projectionFieldName = (Core.Name "supportsAnyIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsCustomIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsCustomIds")})),
+              Core.projectionFieldName = (Core.Name "supportsCustomIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsNumericIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsNumericIds")})),
+              Core.projectionFieldName = (Core.Name "supportsNumericIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemoveProperty"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsRemoveProperty")})),
+              Core.projectionFieldName = (Core.Name "supportsRemoveProperty")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringIds"),
@@ -3222,14 +3222,14 @@ elementFeaturesWithSupportsStringIds original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsUserSuppliedIds")})),
+              Core.projectionFieldName = (Core.Name "supportsUserSuppliedIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUuidIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsUuidIds")})),
+              Core.projectionFieldName = (Core.Name "supportsUuidIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 elementFeaturesWithSupportsUserSuppliedIds :: Phantoms.TTerm Features.ElementFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ElementFeatures
@@ -3242,42 +3242,42 @@ elementFeaturesWithSupportsUserSuppliedIds original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsAddProperty")})),
+              Core.projectionFieldName = (Core.Name "supportsAddProperty")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsAnyIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsAnyIds")})),
+              Core.projectionFieldName = (Core.Name "supportsAnyIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsCustomIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsCustomIds")})),
+              Core.projectionFieldName = (Core.Name "supportsCustomIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsNumericIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsNumericIds")})),
+              Core.projectionFieldName = (Core.Name "supportsNumericIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemoveProperty"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsRemoveProperty")})),
+              Core.projectionFieldName = (Core.Name "supportsRemoveProperty")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsStringIds")})),
+              Core.projectionFieldName = (Core.Name "supportsStringIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUserSuppliedIds"),
@@ -3287,7 +3287,7 @@ elementFeaturesWithSupportsUserSuppliedIds original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsUuidIds")})),
+              Core.projectionFieldName = (Core.Name "supportsUuidIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 elementFeaturesWithSupportsUuidIds :: Phantoms.TTerm Features.ElementFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ElementFeatures
@@ -3300,49 +3300,49 @@ elementFeaturesWithSupportsUuidIds original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsAddProperty")})),
+              Core.projectionFieldName = (Core.Name "supportsAddProperty")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsAnyIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsAnyIds")})),
+              Core.projectionFieldName = (Core.Name "supportsAnyIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsCustomIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsCustomIds")})),
+              Core.projectionFieldName = (Core.Name "supportsCustomIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsNumericIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsNumericIds")})),
+              Core.projectionFieldName = (Core.Name "supportsNumericIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemoveProperty"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsRemoveProperty")})),
+              Core.projectionFieldName = (Core.Name "supportsRemoveProperty")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsStringIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsStringIds")})),
+              Core.projectionFieldName = (Core.Name "supportsStringIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUserSuppliedIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ElementFeatures"),
-              Core.projectionField = (Core.Name "supportsUserSuppliedIds")})),
+              Core.projectionFieldName = (Core.Name "supportsUserSuppliedIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUuidIds"),
@@ -3362,7 +3362,7 @@ extraFeaturesSupportsMapKey x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.ExtraFeatures"),
-        Core.projectionField = (Core.Name "supportsMapKey")})),
+        Core.projectionFieldName = (Core.Name "supportsMapKey")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 extraFeaturesWithSupportsMapKey :: Phantoms.TTerm (Features.ExtraFeatures a) -> Phantoms.TTerm (Core.Type -> Bool) -> Phantoms.TTerm (Features.ExtraFeatures a)
@@ -3394,7 +3394,7 @@ featuresEdge x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.Features"),
-        Core.projectionField = (Core.Name "edge")})),
+        Core.projectionFieldName = (Core.Name "edge")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 featuresGraph :: Phantoms.TTerm Features.Features -> Phantoms.TTerm Features.GraphFeatures
@@ -3402,7 +3402,7 @@ featuresGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.Features"),
-        Core.projectionField = (Core.Name "graph")})),
+        Core.projectionFieldName = (Core.Name "graph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 featuresVertex :: Phantoms.TTerm Features.Features -> Phantoms.TTerm Features.VertexFeatures
@@ -3410,7 +3410,7 @@ featuresVertex x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.Features"),
-        Core.projectionField = (Core.Name "vertex")})),
+        Core.projectionFieldName = (Core.Name "vertex")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 featuresWithEdge :: Phantoms.TTerm Features.Features -> Phantoms.TTerm Features.EdgeFeatures -> Phantoms.TTerm Features.Features
@@ -3426,14 +3426,14 @@ featuresWithEdge original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.Features"),
-              Core.projectionField = (Core.Name "graph")})),
+              Core.projectionFieldName = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "vertex"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.Features"),
-              Core.projectionField = (Core.Name "vertex")})),
+              Core.projectionFieldName = (Core.Name "vertex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 featuresWithGraph :: Phantoms.TTerm Features.Features -> Phantoms.TTerm Features.GraphFeatures -> Phantoms.TTerm Features.Features
@@ -3446,7 +3446,7 @@ featuresWithGraph original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.Features"),
-              Core.projectionField = (Core.Name "edge")})),
+              Core.projectionFieldName = (Core.Name "edge")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
@@ -3456,7 +3456,7 @@ featuresWithGraph original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.Features"),
-              Core.projectionField = (Core.Name "vertex")})),
+              Core.projectionFieldName = (Core.Name "vertex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 featuresWithVertex :: Phantoms.TTerm Features.Features -> Phantoms.TTerm Features.VertexFeatures -> Phantoms.TTerm Features.Features
@@ -3469,14 +3469,14 @@ featuresWithVertex original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.Features"),
-              Core.projectionField = (Core.Name "edge")})),
+              Core.projectionFieldName = (Core.Name "edge")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.Features"),
-              Core.projectionField = (Core.Name "graph")})),
+              Core.projectionFieldName = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "vertex"),
@@ -3517,7 +3517,7 @@ graphFeaturesSupportsComputer x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-        Core.projectionField = (Core.Name "supportsComputer")})),
+        Core.projectionFieldName = (Core.Name "supportsComputer")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphFeaturesSupportsConcurrentAccess :: Phantoms.TTerm Features.GraphFeatures -> Phantoms.TTerm Bool
@@ -3525,7 +3525,7 @@ graphFeaturesSupportsConcurrentAccess x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-        Core.projectionField = (Core.Name "supportsConcurrentAccess")})),
+        Core.projectionFieldName = (Core.Name "supportsConcurrentAccess")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphFeaturesSupportsIoRead :: Phantoms.TTerm Features.GraphFeatures -> Phantoms.TTerm Bool
@@ -3533,7 +3533,7 @@ graphFeaturesSupportsIoRead x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-        Core.projectionField = (Core.Name "supportsIoRead")})),
+        Core.projectionFieldName = (Core.Name "supportsIoRead")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphFeaturesSupportsIoWrite :: Phantoms.TTerm Features.GraphFeatures -> Phantoms.TTerm Bool
@@ -3541,7 +3541,7 @@ graphFeaturesSupportsIoWrite x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-        Core.projectionField = (Core.Name "supportsIoWrite")})),
+        Core.projectionFieldName = (Core.Name "supportsIoWrite")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphFeaturesSupportsPersistence :: Phantoms.TTerm Features.GraphFeatures -> Phantoms.TTerm Bool
@@ -3549,7 +3549,7 @@ graphFeaturesSupportsPersistence x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-        Core.projectionField = (Core.Name "supportsPersistence")})),
+        Core.projectionFieldName = (Core.Name "supportsPersistence")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphFeaturesSupportsThreadedTransactions :: Phantoms.TTerm Features.GraphFeatures -> Phantoms.TTerm Bool
@@ -3557,7 +3557,7 @@ graphFeaturesSupportsThreadedTransactions x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-        Core.projectionField = (Core.Name "supportsThreadedTransactions")})),
+        Core.projectionFieldName = (Core.Name "supportsThreadedTransactions")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphFeaturesSupportsTransactions :: Phantoms.TTerm Features.GraphFeatures -> Phantoms.TTerm Bool
@@ -3565,7 +3565,7 @@ graphFeaturesSupportsTransactions x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-        Core.projectionField = (Core.Name "supportsTransactions")})),
+        Core.projectionFieldName = (Core.Name "supportsTransactions")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphFeaturesVariables :: Phantoms.TTerm Features.GraphFeatures -> Phantoms.TTerm Features.VariableFeatures
@@ -3573,7 +3573,7 @@ graphFeaturesVariables x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-        Core.projectionField = (Core.Name "variables")})),
+        Core.projectionFieldName = (Core.Name "variables")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphFeaturesWithSupportsComputer :: Phantoms.TTerm Features.GraphFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GraphFeatures
@@ -3589,49 +3589,49 @@ graphFeaturesWithSupportsComputer original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsConcurrentAccess")})),
+              Core.projectionFieldName = (Core.Name "supportsConcurrentAccess")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIoRead"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsIoRead")})),
+              Core.projectionFieldName = (Core.Name "supportsIoRead")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIoWrite"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsIoWrite")})),
+              Core.projectionFieldName = (Core.Name "supportsIoWrite")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsPersistence"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsPersistence")})),
+              Core.projectionFieldName = (Core.Name "supportsPersistence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsThreadedTransactions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsThreadedTransactions")})),
+              Core.projectionFieldName = (Core.Name "supportsThreadedTransactions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsTransactions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsTransactions")})),
+              Core.projectionFieldName = (Core.Name "supportsTransactions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "variables")})),
+              Core.projectionFieldName = (Core.Name "variables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 graphFeaturesWithSupportsConcurrentAccess :: Phantoms.TTerm Features.GraphFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GraphFeatures
@@ -3644,7 +3644,7 @@ graphFeaturesWithSupportsConcurrentAccess original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsComputer")})),
+              Core.projectionFieldName = (Core.Name "supportsComputer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsConcurrentAccess"),
@@ -3654,42 +3654,42 @@ graphFeaturesWithSupportsConcurrentAccess original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsIoRead")})),
+              Core.projectionFieldName = (Core.Name "supportsIoRead")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIoWrite"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsIoWrite")})),
+              Core.projectionFieldName = (Core.Name "supportsIoWrite")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsPersistence"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsPersistence")})),
+              Core.projectionFieldName = (Core.Name "supportsPersistence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsThreadedTransactions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsThreadedTransactions")})),
+              Core.projectionFieldName = (Core.Name "supportsThreadedTransactions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsTransactions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsTransactions")})),
+              Core.projectionFieldName = (Core.Name "supportsTransactions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "variables")})),
+              Core.projectionFieldName = (Core.Name "variables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 graphFeaturesWithSupportsIoRead :: Phantoms.TTerm Features.GraphFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GraphFeatures
@@ -3702,14 +3702,14 @@ graphFeaturesWithSupportsIoRead original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsComputer")})),
+              Core.projectionFieldName = (Core.Name "supportsComputer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsConcurrentAccess"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsConcurrentAccess")})),
+              Core.projectionFieldName = (Core.Name "supportsConcurrentAccess")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIoRead"),
@@ -3719,35 +3719,35 @@ graphFeaturesWithSupportsIoRead original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsIoWrite")})),
+              Core.projectionFieldName = (Core.Name "supportsIoWrite")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsPersistence"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsPersistence")})),
+              Core.projectionFieldName = (Core.Name "supportsPersistence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsThreadedTransactions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsThreadedTransactions")})),
+              Core.projectionFieldName = (Core.Name "supportsThreadedTransactions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsTransactions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsTransactions")})),
+              Core.projectionFieldName = (Core.Name "supportsTransactions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "variables")})),
+              Core.projectionFieldName = (Core.Name "variables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 graphFeaturesWithSupportsIoWrite :: Phantoms.TTerm Features.GraphFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GraphFeatures
@@ -3760,21 +3760,21 @@ graphFeaturesWithSupportsIoWrite original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsComputer")})),
+              Core.projectionFieldName = (Core.Name "supportsComputer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsConcurrentAccess"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsConcurrentAccess")})),
+              Core.projectionFieldName = (Core.Name "supportsConcurrentAccess")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIoRead"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsIoRead")})),
+              Core.projectionFieldName = (Core.Name "supportsIoRead")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIoWrite"),
@@ -3784,28 +3784,28 @@ graphFeaturesWithSupportsIoWrite original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsPersistence")})),
+              Core.projectionFieldName = (Core.Name "supportsPersistence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsThreadedTransactions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsThreadedTransactions")})),
+              Core.projectionFieldName = (Core.Name "supportsThreadedTransactions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsTransactions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsTransactions")})),
+              Core.projectionFieldName = (Core.Name "supportsTransactions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "variables")})),
+              Core.projectionFieldName = (Core.Name "variables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 graphFeaturesWithSupportsPersistence :: Phantoms.TTerm Features.GraphFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GraphFeatures
@@ -3818,28 +3818,28 @@ graphFeaturesWithSupportsPersistence original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsComputer")})),
+              Core.projectionFieldName = (Core.Name "supportsComputer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsConcurrentAccess"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsConcurrentAccess")})),
+              Core.projectionFieldName = (Core.Name "supportsConcurrentAccess")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIoRead"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsIoRead")})),
+              Core.projectionFieldName = (Core.Name "supportsIoRead")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIoWrite"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsIoWrite")})),
+              Core.projectionFieldName = (Core.Name "supportsIoWrite")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsPersistence"),
@@ -3849,21 +3849,21 @@ graphFeaturesWithSupportsPersistence original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsThreadedTransactions")})),
+              Core.projectionFieldName = (Core.Name "supportsThreadedTransactions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsTransactions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsTransactions")})),
+              Core.projectionFieldName = (Core.Name "supportsTransactions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "variables")})),
+              Core.projectionFieldName = (Core.Name "variables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 graphFeaturesWithSupportsThreadedTransactions :: Phantoms.TTerm Features.GraphFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GraphFeatures
@@ -3876,35 +3876,35 @@ graphFeaturesWithSupportsThreadedTransactions original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsComputer")})),
+              Core.projectionFieldName = (Core.Name "supportsComputer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsConcurrentAccess"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsConcurrentAccess")})),
+              Core.projectionFieldName = (Core.Name "supportsConcurrentAccess")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIoRead"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsIoRead")})),
+              Core.projectionFieldName = (Core.Name "supportsIoRead")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIoWrite"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsIoWrite")})),
+              Core.projectionFieldName = (Core.Name "supportsIoWrite")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsPersistence"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsPersistence")})),
+              Core.projectionFieldName = (Core.Name "supportsPersistence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsThreadedTransactions"),
@@ -3914,14 +3914,14 @@ graphFeaturesWithSupportsThreadedTransactions original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsTransactions")})),
+              Core.projectionFieldName = (Core.Name "supportsTransactions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "variables")})),
+              Core.projectionFieldName = (Core.Name "variables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 graphFeaturesWithSupportsTransactions :: Phantoms.TTerm Features.GraphFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GraphFeatures
@@ -3934,42 +3934,42 @@ graphFeaturesWithSupportsTransactions original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsComputer")})),
+              Core.projectionFieldName = (Core.Name "supportsComputer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsConcurrentAccess"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsConcurrentAccess")})),
+              Core.projectionFieldName = (Core.Name "supportsConcurrentAccess")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIoRead"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsIoRead")})),
+              Core.projectionFieldName = (Core.Name "supportsIoRead")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIoWrite"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsIoWrite")})),
+              Core.projectionFieldName = (Core.Name "supportsIoWrite")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsPersistence"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsPersistence")})),
+              Core.projectionFieldName = (Core.Name "supportsPersistence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsThreadedTransactions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsThreadedTransactions")})),
+              Core.projectionFieldName = (Core.Name "supportsThreadedTransactions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsTransactions"),
@@ -3979,7 +3979,7 @@ graphFeaturesWithSupportsTransactions original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "variables")})),
+              Core.projectionFieldName = (Core.Name "variables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 graphFeaturesWithVariables :: Phantoms.TTerm Features.GraphFeatures -> Phantoms.TTerm Features.VariableFeatures -> Phantoms.TTerm Features.GraphFeatures
@@ -3992,49 +3992,49 @@ graphFeaturesWithVariables original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsComputer")})),
+              Core.projectionFieldName = (Core.Name "supportsComputer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsConcurrentAccess"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsConcurrentAccess")})),
+              Core.projectionFieldName = (Core.Name "supportsConcurrentAccess")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIoRead"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsIoRead")})),
+              Core.projectionFieldName = (Core.Name "supportsIoRead")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsIoWrite"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsIoWrite")})),
+              Core.projectionFieldName = (Core.Name "supportsIoWrite")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsPersistence"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsPersistence")})),
+              Core.projectionFieldName = (Core.Name "supportsPersistence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsThreadedTransactions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsThreadedTransactions")})),
+              Core.projectionFieldName = (Core.Name "supportsThreadedTransactions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsTransactions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.GraphFeatures"),
-              Core.projectionField = (Core.Name "supportsTransactions")})),
+              Core.projectionFieldName = (Core.Name "supportsTransactions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variables"),
@@ -4057,7 +4057,7 @@ propertyFeaturesDataTypeFeatures x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.PropertyFeatures"),
-        Core.projectionField = (Core.Name "dataTypeFeatures")})),
+        Core.projectionFieldName = (Core.Name "dataTypeFeatures")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyFeaturesSupportsProperties :: Phantoms.TTerm Features.PropertyFeatures -> Phantoms.TTerm Bool
@@ -4065,7 +4065,7 @@ propertyFeaturesSupportsProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.PropertyFeatures"),
-        Core.projectionField = (Core.Name "supportsProperties")})),
+        Core.projectionFieldName = (Core.Name "supportsProperties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyFeaturesWithDataTypeFeatures :: Phantoms.TTerm Features.PropertyFeatures -> Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Features.PropertyFeatures
@@ -4081,7 +4081,7 @@ propertyFeaturesWithDataTypeFeatures original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.PropertyFeatures"),
-              Core.projectionField = (Core.Name "supportsProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyFeaturesWithSupportsProperties :: Phantoms.TTerm Features.PropertyFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.PropertyFeatures
@@ -4094,7 +4094,7 @@ propertyFeaturesWithSupportsProperties original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.PropertyFeatures"),
-              Core.projectionField = (Core.Name "dataTypeFeatures")})),
+              Core.projectionFieldName = (Core.Name "dataTypeFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsProperties"),
@@ -4117,7 +4117,7 @@ variableFeaturesDataTypeFeatures x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VariableFeatures"),
-        Core.projectionField = (Core.Name "dataTypeFeatures")})),
+        Core.projectionFieldName = (Core.Name "dataTypeFeatures")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 variableFeaturesSupportsVariables :: Phantoms.TTerm Features.VariableFeatures -> Phantoms.TTerm Bool
@@ -4125,7 +4125,7 @@ variableFeaturesSupportsVariables x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VariableFeatures"),
-        Core.projectionField = (Core.Name "supportsVariables")})),
+        Core.projectionFieldName = (Core.Name "supportsVariables")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 variableFeaturesWithDataTypeFeatures :: Phantoms.TTerm Features.VariableFeatures -> Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Features.VariableFeatures
@@ -4141,7 +4141,7 @@ variableFeaturesWithDataTypeFeatures original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VariableFeatures"),
-              Core.projectionField = (Core.Name "supportsVariables")})),
+              Core.projectionFieldName = (Core.Name "supportsVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 variableFeaturesWithSupportsVariables :: Phantoms.TTerm Features.VariableFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VariableFeatures
@@ -4154,7 +4154,7 @@ variableFeaturesWithSupportsVariables original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VariableFeatures"),
-              Core.projectionField = (Core.Name "dataTypeFeatures")})),
+              Core.projectionFieldName = (Core.Name "dataTypeFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsVariables"),
@@ -4195,7 +4195,7 @@ vertexFeaturesElementFeatures x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-        Core.projectionField = (Core.Name "elementFeatures")})),
+        Core.projectionFieldName = (Core.Name "elementFeatures")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexFeaturesProperties :: Phantoms.TTerm Features.VertexFeatures -> Phantoms.TTerm Features.VertexPropertyFeatures
@@ -4203,7 +4203,7 @@ vertexFeaturesProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-        Core.projectionField = (Core.Name "properties")})),
+        Core.projectionFieldName = (Core.Name "properties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexFeaturesSupportsAddVertices :: Phantoms.TTerm Features.VertexFeatures -> Phantoms.TTerm Bool
@@ -4211,7 +4211,7 @@ vertexFeaturesSupportsAddVertices x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-        Core.projectionField = (Core.Name "supportsAddVertices")})),
+        Core.projectionFieldName = (Core.Name "supportsAddVertices")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexFeaturesSupportsDuplicateMultiProperties :: Phantoms.TTerm Features.VertexFeatures -> Phantoms.TTerm Bool
@@ -4219,7 +4219,7 @@ vertexFeaturesSupportsDuplicateMultiProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-        Core.projectionField = (Core.Name "supportsDuplicateMultiProperties")})),
+        Core.projectionFieldName = (Core.Name "supportsDuplicateMultiProperties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexFeaturesSupportsMetaProperties :: Phantoms.TTerm Features.VertexFeatures -> Phantoms.TTerm Bool
@@ -4227,7 +4227,7 @@ vertexFeaturesSupportsMetaProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-        Core.projectionField = (Core.Name "supportsMetaProperties")})),
+        Core.projectionFieldName = (Core.Name "supportsMetaProperties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexFeaturesSupportsMultiProperties :: Phantoms.TTerm Features.VertexFeatures -> Phantoms.TTerm Bool
@@ -4235,7 +4235,7 @@ vertexFeaturesSupportsMultiProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-        Core.projectionField = (Core.Name "supportsMultiProperties")})),
+        Core.projectionFieldName = (Core.Name "supportsMultiProperties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexFeaturesSupportsRemoveVertices :: Phantoms.TTerm Features.VertexFeatures -> Phantoms.TTerm Bool
@@ -4243,7 +4243,7 @@ vertexFeaturesSupportsRemoveVertices x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-        Core.projectionField = (Core.Name "supportsRemoveVertices")})),
+        Core.projectionFieldName = (Core.Name "supportsRemoveVertices")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexFeaturesSupportsUpsert :: Phantoms.TTerm Features.VertexFeatures -> Phantoms.TTerm Bool
@@ -4251,7 +4251,7 @@ vertexFeaturesSupportsUpsert x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-        Core.projectionField = (Core.Name "supportsUpsert")})),
+        Core.projectionFieldName = (Core.Name "supportsUpsert")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexFeaturesWithElementFeatures :: Phantoms.TTerm Features.VertexFeatures -> Phantoms.TTerm Features.ElementFeatures -> Phantoms.TTerm Features.VertexFeatures
@@ -4267,49 +4267,49 @@ vertexFeaturesWithElementFeatures original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "properties")})),
+              Core.projectionFieldName = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsAddVertices"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsAddVertices")})),
+              Core.projectionFieldName = (Core.Name "supportsAddVertices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDuplicateMultiProperties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsDuplicateMultiProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsDuplicateMultiProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMetaProperties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsMetaProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsMetaProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMultiProperties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsMultiProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsMultiProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemoveVertices"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsRemoveVertices")})),
+              Core.projectionFieldName = (Core.Name "supportsRemoveVertices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUpsert"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsUpsert")})),
+              Core.projectionFieldName = (Core.Name "supportsUpsert")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 vertexFeaturesWithProperties :: Phantoms.TTerm Features.VertexFeatures -> Phantoms.TTerm Features.VertexPropertyFeatures -> Phantoms.TTerm Features.VertexFeatures
@@ -4322,7 +4322,7 @@ vertexFeaturesWithProperties original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "elementFeatures")})),
+              Core.projectionFieldName = (Core.Name "elementFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
@@ -4332,42 +4332,42 @@ vertexFeaturesWithProperties original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsAddVertices")})),
+              Core.projectionFieldName = (Core.Name "supportsAddVertices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDuplicateMultiProperties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsDuplicateMultiProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsDuplicateMultiProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMetaProperties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsMetaProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsMetaProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMultiProperties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsMultiProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsMultiProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemoveVertices"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsRemoveVertices")})),
+              Core.projectionFieldName = (Core.Name "supportsRemoveVertices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUpsert"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsUpsert")})),
+              Core.projectionFieldName = (Core.Name "supportsUpsert")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 vertexFeaturesWithSupportsAddVertices :: Phantoms.TTerm Features.VertexFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VertexFeatures
@@ -4380,14 +4380,14 @@ vertexFeaturesWithSupportsAddVertices original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "elementFeatures")})),
+              Core.projectionFieldName = (Core.Name "elementFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "properties")})),
+              Core.projectionFieldName = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsAddVertices"),
@@ -4397,35 +4397,35 @@ vertexFeaturesWithSupportsAddVertices original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsDuplicateMultiProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsDuplicateMultiProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMetaProperties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsMetaProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsMetaProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMultiProperties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsMultiProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsMultiProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemoveVertices"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsRemoveVertices")})),
+              Core.projectionFieldName = (Core.Name "supportsRemoveVertices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUpsert"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsUpsert")})),
+              Core.projectionFieldName = (Core.Name "supportsUpsert")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 vertexFeaturesWithSupportsDuplicateMultiProperties :: Phantoms.TTerm Features.VertexFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VertexFeatures
@@ -4438,21 +4438,21 @@ vertexFeaturesWithSupportsDuplicateMultiProperties original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "elementFeatures")})),
+              Core.projectionFieldName = (Core.Name "elementFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "properties")})),
+              Core.projectionFieldName = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsAddVertices"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsAddVertices")})),
+              Core.projectionFieldName = (Core.Name "supportsAddVertices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDuplicateMultiProperties"),
@@ -4462,28 +4462,28 @@ vertexFeaturesWithSupportsDuplicateMultiProperties original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsMetaProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsMetaProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMultiProperties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsMultiProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsMultiProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemoveVertices"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsRemoveVertices")})),
+              Core.projectionFieldName = (Core.Name "supportsRemoveVertices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUpsert"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsUpsert")})),
+              Core.projectionFieldName = (Core.Name "supportsUpsert")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 vertexFeaturesWithSupportsMetaProperties :: Phantoms.TTerm Features.VertexFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VertexFeatures
@@ -4496,28 +4496,28 @@ vertexFeaturesWithSupportsMetaProperties original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "elementFeatures")})),
+              Core.projectionFieldName = (Core.Name "elementFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "properties")})),
+              Core.projectionFieldName = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsAddVertices"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsAddVertices")})),
+              Core.projectionFieldName = (Core.Name "supportsAddVertices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDuplicateMultiProperties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsDuplicateMultiProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsDuplicateMultiProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMetaProperties"),
@@ -4527,21 +4527,21 @@ vertexFeaturesWithSupportsMetaProperties original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsMultiProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsMultiProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemoveVertices"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsRemoveVertices")})),
+              Core.projectionFieldName = (Core.Name "supportsRemoveVertices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUpsert"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsUpsert")})),
+              Core.projectionFieldName = (Core.Name "supportsUpsert")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 vertexFeaturesWithSupportsMultiProperties :: Phantoms.TTerm Features.VertexFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VertexFeatures
@@ -4554,35 +4554,35 @@ vertexFeaturesWithSupportsMultiProperties original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "elementFeatures")})),
+              Core.projectionFieldName = (Core.Name "elementFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "properties")})),
+              Core.projectionFieldName = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsAddVertices"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsAddVertices")})),
+              Core.projectionFieldName = (Core.Name "supportsAddVertices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDuplicateMultiProperties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsDuplicateMultiProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsDuplicateMultiProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMetaProperties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsMetaProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsMetaProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMultiProperties"),
@@ -4592,14 +4592,14 @@ vertexFeaturesWithSupportsMultiProperties original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsRemoveVertices")})),
+              Core.projectionFieldName = (Core.Name "supportsRemoveVertices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUpsert"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsUpsert")})),
+              Core.projectionFieldName = (Core.Name "supportsUpsert")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 vertexFeaturesWithSupportsRemoveVertices :: Phantoms.TTerm Features.VertexFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VertexFeatures
@@ -4612,42 +4612,42 @@ vertexFeaturesWithSupportsRemoveVertices original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "elementFeatures")})),
+              Core.projectionFieldName = (Core.Name "elementFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "properties")})),
+              Core.projectionFieldName = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsAddVertices"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsAddVertices")})),
+              Core.projectionFieldName = (Core.Name "supportsAddVertices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDuplicateMultiProperties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsDuplicateMultiProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsDuplicateMultiProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMetaProperties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsMetaProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsMetaProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMultiProperties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsMultiProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsMultiProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemoveVertices"),
@@ -4657,7 +4657,7 @@ vertexFeaturesWithSupportsRemoveVertices original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsUpsert")})),
+              Core.projectionFieldName = (Core.Name "supportsUpsert")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 vertexFeaturesWithSupportsUpsert :: Phantoms.TTerm Features.VertexFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VertexFeatures
@@ -4670,49 +4670,49 @@ vertexFeaturesWithSupportsUpsert original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "elementFeatures")})),
+              Core.projectionFieldName = (Core.Name "elementFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "properties")})),
+              Core.projectionFieldName = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsAddVertices"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsAddVertices")})),
+              Core.projectionFieldName = (Core.Name "supportsAddVertices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsDuplicateMultiProperties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsDuplicateMultiProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsDuplicateMultiProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMetaProperties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsMetaProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsMetaProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsMultiProperties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsMultiProperties")})),
+              Core.projectionFieldName = (Core.Name "supportsMultiProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemoveVertices"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexFeatures"),
-              Core.projectionField = (Core.Name "supportsRemoveVertices")})),
+              Core.projectionFieldName = (Core.Name "supportsRemoveVertices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsUpsert"),
@@ -4741,7 +4741,7 @@ vertexPropertyFeaturesDataTypeFeatures x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexPropertyFeatures"),
-        Core.projectionField = (Core.Name "dataTypeFeatures")})),
+        Core.projectionFieldName = (Core.Name "dataTypeFeatures")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexPropertyFeaturesElementFeatures :: Phantoms.TTerm Features.VertexPropertyFeatures -> Phantoms.TTerm Features.ElementFeatures
@@ -4749,7 +4749,7 @@ vertexPropertyFeaturesElementFeatures x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexPropertyFeatures"),
-        Core.projectionField = (Core.Name "elementFeatures")})),
+        Core.projectionFieldName = (Core.Name "elementFeatures")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexPropertyFeaturesPropertyFeatures :: Phantoms.TTerm Features.VertexPropertyFeatures -> Phantoms.TTerm Features.PropertyFeatures
@@ -4757,7 +4757,7 @@ vertexPropertyFeaturesPropertyFeatures x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexPropertyFeatures"),
-        Core.projectionField = (Core.Name "propertyFeatures")})),
+        Core.projectionFieldName = (Core.Name "propertyFeatures")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexPropertyFeaturesSupportsRemove :: Phantoms.TTerm Features.VertexPropertyFeatures -> Phantoms.TTerm Bool
@@ -4765,7 +4765,7 @@ vertexPropertyFeaturesSupportsRemove x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexPropertyFeatures"),
-        Core.projectionField = (Core.Name "supportsRemove")})),
+        Core.projectionFieldName = (Core.Name "supportsRemove")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexPropertyFeaturesWithDataTypeFeatures :: Phantoms.TTerm Features.VertexPropertyFeatures -> Phantoms.TTerm Features.DataTypeFeatures -> Phantoms.TTerm Features.VertexPropertyFeatures
@@ -4781,21 +4781,21 @@ vertexPropertyFeaturesWithDataTypeFeatures original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexPropertyFeatures"),
-              Core.projectionField = (Core.Name "propertyFeatures")})),
+              Core.projectionFieldName = (Core.Name "propertyFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "elementFeatures"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexPropertyFeatures"),
-              Core.projectionField = (Core.Name "elementFeatures")})),
+              Core.projectionFieldName = (Core.Name "elementFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemove"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexPropertyFeatures"),
-              Core.projectionField = (Core.Name "supportsRemove")})),
+              Core.projectionFieldName = (Core.Name "supportsRemove")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 vertexPropertyFeaturesWithElementFeatures :: Phantoms.TTerm Features.VertexPropertyFeatures -> Phantoms.TTerm Features.ElementFeatures -> Phantoms.TTerm Features.VertexPropertyFeatures
@@ -4808,14 +4808,14 @@ vertexPropertyFeaturesWithElementFeatures original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexPropertyFeatures"),
-              Core.projectionField = (Core.Name "dataTypeFeatures")})),
+              Core.projectionFieldName = (Core.Name "dataTypeFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "propertyFeatures"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexPropertyFeatures"),
-              Core.projectionField = (Core.Name "propertyFeatures")})),
+              Core.projectionFieldName = (Core.Name "propertyFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "elementFeatures"),
@@ -4825,7 +4825,7 @@ vertexPropertyFeaturesWithElementFeatures original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexPropertyFeatures"),
-              Core.projectionField = (Core.Name "supportsRemove")})),
+              Core.projectionFieldName = (Core.Name "supportsRemove")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 vertexPropertyFeaturesWithPropertyFeatures :: Phantoms.TTerm Features.VertexPropertyFeatures -> Phantoms.TTerm Features.PropertyFeatures -> Phantoms.TTerm Features.VertexPropertyFeatures
@@ -4838,7 +4838,7 @@ vertexPropertyFeaturesWithPropertyFeatures original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexPropertyFeatures"),
-              Core.projectionField = (Core.Name "dataTypeFeatures")})),
+              Core.projectionFieldName = (Core.Name "dataTypeFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "propertyFeatures"),
@@ -4848,14 +4848,14 @@ vertexPropertyFeaturesWithPropertyFeatures original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexPropertyFeatures"),
-              Core.projectionField = (Core.Name "elementFeatures")})),
+              Core.projectionFieldName = (Core.Name "elementFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemove"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexPropertyFeatures"),
-              Core.projectionField = (Core.Name "supportsRemove")})),
+              Core.projectionFieldName = (Core.Name "supportsRemove")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 vertexPropertyFeaturesWithSupportsRemove :: Phantoms.TTerm Features.VertexPropertyFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VertexPropertyFeatures
@@ -4868,21 +4868,21 @@ vertexPropertyFeaturesWithSupportsRemove original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexPropertyFeatures"),
-              Core.projectionField = (Core.Name "dataTypeFeatures")})),
+              Core.projectionFieldName = (Core.Name "dataTypeFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "propertyFeatures"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexPropertyFeatures"),
-              Core.projectionField = (Core.Name "propertyFeatures")})),
+              Core.projectionFieldName = (Core.Name "propertyFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "elementFeatures"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.features.VertexPropertyFeatures"),
-              Core.projectionField = (Core.Name "elementFeatures")})),
+              Core.projectionFieldName = (Core.Name "elementFeatures")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "supportsRemove"),

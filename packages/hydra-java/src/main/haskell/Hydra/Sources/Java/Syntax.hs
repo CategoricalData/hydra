@@ -13,8 +13,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.java.syntax"
+ns :: ModuleName
+ns = ModuleName "hydra.java.syntax"
 
 def :: String -> Type -> Binding
 def = datatype ns
@@ -24,9 +24,9 @@ java = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A Java syntax module. Tracks the Oracle Java SE 21 BNF:\n" ++
       "  https://docs.oracle.com/javase/specs/jls/se21/html/jls-19.html\n" ++
       "Note: all *WithComments types were added manually, rather than derived from the BNF, which does not allow for comments.")}
@@ -62,7 +62,7 @@ module_ = Module {
       typeArgument,
       wildcard,
       wildcardBounds,
-      moduleName,
+      moduleNameDef,
       packageName,
       typeName,
       expressionName,
@@ -544,8 +544,8 @@ wildcardBounds = def "WildcardBounds" $ T.union [
 --Productions from §6 (Names)
 
 --ModuleName:
-moduleName :: Binding
-moduleName = def "ModuleName" $ T.record [
+moduleNameDef :: Binding
+moduleNameDef = def "ModuleName" $ T.record [
 --  Identifier
   "identifier">: java "Identifier",
 --  ModuleName . Identifier

@@ -435,7 +435,7 @@ globalAmbiguousNames modules =
 
       let allNames =
               Lists.concat (Lists.map (\m ->
-                let nsStr = Packaging.unNamespace (Packaging.moduleNamespace m)
+                let nsStr = Packaging.unModuleName (Packaging.moduleName m)
                     fromDef =
                             \def_ -> case def_ of
                               Packaging.DefinitionType v0 -> Just (Utils.localName (Core.unName (Packaging.typeDefinitionName v0)), nsStr)
@@ -678,7 +678,7 @@ mkTypeBinders body typeVars =
 moduleToCoq :: M.Map (String, String) String -> M.Map String Int -> S.Set String -> S.Set String -> Packaging.Module -> [Packaging.Definition] -> M.Map String String
 moduleToCoq fieldMap constrCounts ambiguousNames globalSanitizedAcc mod_ defs =
 
-      let nsStr = Packaging.unNamespace (Packaging.moduleNamespace mod_)
+      let nsStr = Packaging.unModuleName (Packaging.moduleName mod_)
           path = namespaceToPath nsStr
           desc =
                   Maybes.maybe "" (\d -> Strings.cat [

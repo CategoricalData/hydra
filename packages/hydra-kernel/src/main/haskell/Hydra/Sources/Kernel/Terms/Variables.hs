@@ -71,17 +71,17 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Sorting as Sorting
 
 
-ns :: Namespace
-ns = Namespace "hydra.variables"
+ns :: ModuleName
+ns = ModuleName "hydra.variables"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Names.ns, Rewriting.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Rewriting.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just ("Free variable analysis, term-level substitution, and unshadowing")}
   where
    definitions = [

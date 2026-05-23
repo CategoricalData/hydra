@@ -85,14 +85,14 @@ import Hydra.Ast
 haskellOperatorsDefinition :: String -> TTerm a -> TTermDefinition a
 haskellOperatorsDefinition = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.haskell.operators"
+ns :: ModuleName
+ns = ModuleName "hydra.haskell.operators"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Serialization.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "AST operators for Haskell"}
   where
     definitions = [

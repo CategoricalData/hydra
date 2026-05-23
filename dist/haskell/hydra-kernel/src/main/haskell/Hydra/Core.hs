@@ -73,7 +73,7 @@ data CaseStatement =
     caseStatementTypeName :: Name,
     -- | An optional default case, used if none of the explicit cases match
     caseStatementDefault :: (Maybe Term),
-    -- | A list of case alternatives, one per union field
+    -- | A list of case alternatives, one per union field. Each Field's name is the variant tag being matched and term is the handler applied to the variant's payload.
     caseStatementCases :: [Field]}
   deriving (Eq, Ord, Read, Show)
 _CaseStatement = Name "hydra.core.CaseStatement"
@@ -331,11 +331,11 @@ data Projection =
     -- | The name of the record type
     projectionTypeName :: Name,
     -- | The name of the projected field
-    projectionField :: Name}
+    projectionFieldName :: Name}
   deriving (Eq, Ord, Read, Show)
 _Projection = Name "hydra.core.Projection"
 _Projection_typeName = Name "typeName"
-_Projection_field = Name "field"
+_Projection_fieldName = Name "fieldName"
 -- | A record, or labeled tuple; a map of field names to terms
 data Record =
   Record {
@@ -385,7 +385,7 @@ data Term =
   TermTypeLambda TypeLambda |
   -- | A unit value; a term with no value
   TermUnit |
-  -- | An unwrap elimination; the inverse of a wrap
+  -- | An unwrap elimination; the inverse of a wrap. Given the name of a wrapper type, unwraps an instance of that type to its underlying body value.
   TermUnwrap Name |
   -- | A variable reference
   TermVariable Name |
@@ -448,7 +448,7 @@ data Type =
   TypeVariable Name |
   -- | The void (uninhabited, or bottom) type
   TypeVoid |
-  -- | A wrapped type (newtype)
+  -- | A wrapped type (newtype). There is no corresponding `unwrap` variant at the type level: wrap is the introduction form, and a wrapper type's underlying body type is given by the `wrap` variant's argument.
   TypeWrap Type
   deriving (Eq, Ord, Read, Show)
 _Type = Name "hydra.core.Type"

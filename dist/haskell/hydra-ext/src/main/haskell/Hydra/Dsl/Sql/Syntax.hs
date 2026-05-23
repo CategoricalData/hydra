@@ -63,7 +63,7 @@ arrayElementListFirst x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ArrayElementList"),
-        Core.projectionField = (Core.Name "first")})),
+        Core.projectionFieldName = (Core.Name "first")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 arrayElementListRest :: Phantoms.TTerm Syntax.ArrayElementList -> Phantoms.TTerm [Syntax.ArrayElement]
@@ -71,7 +71,7 @@ arrayElementListRest x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ArrayElementList"),
-        Core.projectionField = (Core.Name "rest")})),
+        Core.projectionFieldName = (Core.Name "rest")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 arrayElementListWithFirst :: Phantoms.TTerm Syntax.ArrayElementList -> Phantoms.TTerm Syntax.ArrayElement -> Phantoms.TTerm Syntax.ArrayElementList
@@ -87,7 +87,7 @@ arrayElementListWithFirst original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ArrayElementList"),
-              Core.projectionField = (Core.Name "rest")})),
+              Core.projectionFieldName = (Core.Name "rest")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 arrayElementListWithRest :: Phantoms.TTerm Syntax.ArrayElementList -> Phantoms.TTerm [Syntax.ArrayElement] -> Phantoms.TTerm Syntax.ArrayElementList
@@ -100,7 +100,7 @@ arrayElementListWithRest original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ArrayElementList"),
-              Core.projectionField = (Core.Name "first")})),
+              Core.projectionFieldName = (Core.Name "first")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
@@ -138,7 +138,7 @@ arrayValueConstructorByEnumerationArrayElementList x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ArrayValueConstructorByEnumeration"),
-        Core.projectionField = (Core.Name "ArrayElementList")})),
+        Core.projectionFieldName = (Core.Name "ArrayElementList")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 arrayValueConstructorByEnumerationLeftBracketOrTrigraph :: Phantoms.TTerm Syntax.ArrayValueConstructorByEnumeration -> Phantoms.TTerm Syntax.LeftBracketOrTrigraph
@@ -146,7 +146,7 @@ arrayValueConstructorByEnumerationLeftBracketOrTrigraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ArrayValueConstructorByEnumeration"),
-        Core.projectionField = (Core.Name "LeftBracketOrTrigraph")})),
+        Core.projectionFieldName = (Core.Name "LeftBracketOrTrigraph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 arrayValueConstructorByEnumerationRightBracketOrTrigraph :: Phantoms.TTerm Syntax.ArrayValueConstructorByEnumeration -> Phantoms.TTerm Syntax.RightBracketOrTrigraph
@@ -154,7 +154,7 @@ arrayValueConstructorByEnumerationRightBracketOrTrigraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ArrayValueConstructorByEnumeration"),
-        Core.projectionField = (Core.Name "RightBracketOrTrigraph")})),
+        Core.projectionFieldName = (Core.Name "RightBracketOrTrigraph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 arrayValueConstructorByEnumerationWithArrayElementList :: Phantoms.TTerm Syntax.ArrayValueConstructorByEnumeration -> Phantoms.TTerm Syntax.ArrayElementList -> Phantoms.TTerm Syntax.ArrayValueConstructorByEnumeration
@@ -167,7 +167,7 @@ arrayValueConstructorByEnumerationWithArrayElementList original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ArrayValueConstructorByEnumeration"),
-              Core.projectionField = (Core.Name "LeftBracketOrTrigraph")})),
+              Core.projectionFieldName = (Core.Name "LeftBracketOrTrigraph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ArrayElementList"),
@@ -177,7 +177,7 @@ arrayValueConstructorByEnumerationWithArrayElementList original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ArrayValueConstructorByEnumeration"),
-              Core.projectionField = (Core.Name "RightBracketOrTrigraph")})),
+              Core.projectionFieldName = (Core.Name "RightBracketOrTrigraph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 arrayValueConstructorByEnumerationWithLeftBracketOrTrigraph :: Phantoms.TTerm Syntax.ArrayValueConstructorByEnumeration -> Phantoms.TTerm Syntax.LeftBracketOrTrigraph -> Phantoms.TTerm Syntax.ArrayValueConstructorByEnumeration
@@ -193,14 +193,14 @@ arrayValueConstructorByEnumerationWithLeftBracketOrTrigraph original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ArrayValueConstructorByEnumeration"),
-              Core.projectionField = (Core.Name "ArrayElementList")})),
+              Core.projectionFieldName = (Core.Name "ArrayElementList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "RightBracketOrTrigraph"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ArrayValueConstructorByEnumeration"),
-              Core.projectionField = (Core.Name "RightBracketOrTrigraph")})),
+              Core.projectionFieldName = (Core.Name "RightBracketOrTrigraph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 arrayValueConstructorByEnumerationWithRightBracketOrTrigraph :: Phantoms.TTerm Syntax.ArrayValueConstructorByEnumeration -> Phantoms.TTerm Syntax.RightBracketOrTrigraph -> Phantoms.TTerm Syntax.ArrayValueConstructorByEnumeration
@@ -213,14 +213,14 @@ arrayValueConstructorByEnumerationWithRightBracketOrTrigraph original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ArrayValueConstructorByEnumeration"),
-              Core.projectionField = (Core.Name "LeftBracketOrTrigraph")})),
+              Core.projectionFieldName = (Core.Name "LeftBracketOrTrigraph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ArrayElementList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ArrayValueConstructorByEnumeration"),
-              Core.projectionField = (Core.Name "ArrayElementList")})),
+              Core.projectionFieldName = (Core.Name "ArrayElementList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "RightBracketOrTrigraph"),
@@ -305,7 +305,7 @@ booleanFactorBooleanTest x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.BooleanFactor"),
-        Core.projectionField = (Core.Name "BooleanTest")})),
+        Core.projectionFieldName = (Core.Name "BooleanTest")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 booleanFactorNOT :: Phantoms.TTerm Syntax.BooleanFactor -> Phantoms.TTerm (Maybe ())
@@ -313,7 +313,7 @@ booleanFactorNOT x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.BooleanFactor"),
-        Core.projectionField = (Core.Name "NOT")})),
+        Core.projectionFieldName = (Core.Name "NOT")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 booleanFactorWithBooleanTest :: Phantoms.TTerm Syntax.BooleanFactor -> Phantoms.TTerm Syntax.BooleanTest -> Phantoms.TTerm Syntax.BooleanFactor
@@ -326,7 +326,7 @@ booleanFactorWithBooleanTest original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.BooleanFactor"),
-              Core.projectionField = (Core.Name "NOT")})),
+              Core.projectionFieldName = (Core.Name "NOT")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "BooleanTest"),
@@ -345,7 +345,7 @@ booleanFactorWithNOT original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.BooleanFactor"),
-              Core.projectionField = (Core.Name "BooleanTest")})),
+              Core.projectionFieldName = (Core.Name "BooleanTest")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 booleanLiteralFALSE :: Phantoms.TTerm Syntax.BooleanLiteral
@@ -427,7 +427,7 @@ booleanTerm_AndLhs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.BooleanTerm_And"),
-        Core.projectionField = (Core.Name "lhs")})),
+        Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 booleanTerm_AndRhs :: Phantoms.TTerm Syntax.BooleanTerm_And -> Phantoms.TTerm Syntax.BooleanFactor
@@ -435,7 +435,7 @@ booleanTerm_AndRhs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.BooleanTerm_And"),
-        Core.projectionField = (Core.Name "rhs")})),
+        Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 booleanTerm_AndWithLhs :: Phantoms.TTerm Syntax.BooleanTerm_And -> Phantoms.TTerm Syntax.BooleanTerm -> Phantoms.TTerm Syntax.BooleanTerm_And
@@ -451,7 +451,7 @@ booleanTerm_AndWithLhs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.BooleanTerm_And"),
-              Core.projectionField = (Core.Name "rhs")})),
+              Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 booleanTerm_AndWithRhs :: Phantoms.TTerm Syntax.BooleanTerm_And -> Phantoms.TTerm Syntax.BooleanFactor -> Phantoms.TTerm Syntax.BooleanTerm_And
@@ -464,7 +464,7 @@ booleanTerm_AndWithRhs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.BooleanTerm_And"),
-              Core.projectionField = (Core.Name "lhs")})),
+              Core.projectionFieldName = (Core.Name "lhs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
@@ -487,7 +487,7 @@ booleanTestBooleanPrimary x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.BooleanTest"),
-        Core.projectionField = (Core.Name "BooleanPrimary")})),
+        Core.projectionFieldName = (Core.Name "BooleanPrimary")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 booleanTestSequence :: Phantoms.TTerm Syntax.BooleanTest -> Phantoms.TTerm (Maybe Syntax.BooleanTest_Sequence_Option)
@@ -495,7 +495,7 @@ booleanTestSequence x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.BooleanTest"),
-        Core.projectionField = (Core.Name "Sequence")})),
+        Core.projectionFieldName = (Core.Name "Sequence")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 booleanTestWithBooleanPrimary :: Phantoms.TTerm Syntax.BooleanTest -> Phantoms.TTerm Syntax.BooleanPrimary -> Phantoms.TTerm Syntax.BooleanTest
@@ -511,7 +511,7 @@ booleanTestWithBooleanPrimary original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.BooleanTest"),
-              Core.projectionField = (Core.Name "Sequence")})),
+              Core.projectionFieldName = (Core.Name "Sequence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 booleanTestWithSequence :: Phantoms.TTerm Syntax.BooleanTest -> Phantoms.TTerm (Maybe Syntax.BooleanTest_Sequence_Option) -> Phantoms.TTerm Syntax.BooleanTest
@@ -524,7 +524,7 @@ booleanTestWithSequence original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.BooleanTest"),
-              Core.projectionField = (Core.Name "BooleanPrimary")})),
+              Core.projectionFieldName = (Core.Name "BooleanPrimary")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Sequence"),
@@ -547,7 +547,7 @@ booleanTest_Sequence_OptionNOT x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.BooleanTest_Sequence_Option"),
-        Core.projectionField = (Core.Name "NOT")})),
+        Core.projectionFieldName = (Core.Name "NOT")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 booleanTest_Sequence_OptionTruthValue :: Phantoms.TTerm Syntax.BooleanTest_Sequence_Option -> Phantoms.TTerm Syntax.TruthValue
@@ -555,7 +555,7 @@ booleanTest_Sequence_OptionTruthValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.BooleanTest_Sequence_Option"),
-        Core.projectionField = (Core.Name "TruthValue")})),
+        Core.projectionFieldName = (Core.Name "TruthValue")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 booleanTest_Sequence_OptionWithNOT :: Phantoms.TTerm Syntax.BooleanTest_Sequence_Option -> Phantoms.TTerm (Maybe ()) -> Phantoms.TTerm Syntax.BooleanTest_Sequence_Option
@@ -571,7 +571,7 @@ booleanTest_Sequence_OptionWithNOT original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.BooleanTest_Sequence_Option"),
-              Core.projectionField = (Core.Name "TruthValue")})),
+              Core.projectionFieldName = (Core.Name "TruthValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 booleanTest_Sequence_OptionWithTruthValue :: Phantoms.TTerm Syntax.BooleanTest_Sequence_Option -> Phantoms.TTerm Syntax.TruthValue -> Phantoms.TTerm Syntax.BooleanTest_Sequence_Option
@@ -584,7 +584,7 @@ booleanTest_Sequence_OptionWithTruthValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.BooleanTest_Sequence_Option"),
-              Core.projectionField = (Core.Name "NOT")})),
+              Core.projectionFieldName = (Core.Name "NOT")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "TruthValue"),
@@ -629,7 +629,7 @@ booleanValueExpression_OrLhs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.BooleanValueExpression_Or"),
-        Core.projectionField = (Core.Name "lhs")})),
+        Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 booleanValueExpression_OrRhs :: Phantoms.TTerm Syntax.BooleanValueExpression_Or -> Phantoms.TTerm Syntax.BooleanTerm
@@ -637,7 +637,7 @@ booleanValueExpression_OrRhs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.BooleanValueExpression_Or"),
-        Core.projectionField = (Core.Name "rhs")})),
+        Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 booleanValueExpression_OrWithLhs :: Phantoms.TTerm Syntax.BooleanValueExpression_Or -> Phantoms.TTerm Syntax.BooleanValueExpression -> Phantoms.TTerm Syntax.BooleanValueExpression_Or
@@ -653,7 +653,7 @@ booleanValueExpression_OrWithLhs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.BooleanValueExpression_Or"),
-              Core.projectionField = (Core.Name "rhs")})),
+              Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 booleanValueExpression_OrWithRhs :: Phantoms.TTerm Syntax.BooleanValueExpression_Or -> Phantoms.TTerm Syntax.BooleanTerm -> Phantoms.TTerm Syntax.BooleanValueExpression_Or
@@ -666,7 +666,7 @@ booleanValueExpression_OrWithRhs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.BooleanValueExpression_Or"),
-              Core.projectionField = (Core.Name "lhs")})),
+              Core.projectionFieldName = (Core.Name "lhs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
@@ -849,7 +849,7 @@ columnDefinitionCollate x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-        Core.projectionField = (Core.Name "collate")})),
+        Core.projectionFieldName = (Core.Name "collate")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 columnDefinitionConstraints :: Phantoms.TTerm Syntax.ColumnDefinition -> Phantoms.TTerm [Syntax.ColumnConstraintDefinition]
@@ -857,7 +857,7 @@ columnDefinitionConstraints x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-        Core.projectionField = (Core.Name "constraints")})),
+        Core.projectionFieldName = (Core.Name "constraints")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 columnDefinitionDefaultOrIdentityOrGeneration :: Phantoms.TTerm Syntax.ColumnDefinition -> Phantoms.TTerm (Maybe Syntax.ColumnDefinition_DefaultOrIdentityOrGeneration_Option)
@@ -865,7 +865,7 @@ columnDefinitionDefaultOrIdentityOrGeneration x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-        Core.projectionField = (Core.Name "defaultOrIdentityOrGeneration")})),
+        Core.projectionFieldName = (Core.Name "defaultOrIdentityOrGeneration")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 columnDefinitionName :: Phantoms.TTerm Syntax.ColumnDefinition -> Phantoms.TTerm Syntax.ColumnName
@@ -873,7 +873,7 @@ columnDefinitionName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 columnDefinitionRefScope :: Phantoms.TTerm Syntax.ColumnDefinition -> Phantoms.TTerm (Maybe Syntax.ReferenceScopeCheck)
@@ -881,7 +881,7 @@ columnDefinitionRefScope x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-        Core.projectionField = (Core.Name "refScope")})),
+        Core.projectionFieldName = (Core.Name "refScope")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 columnDefinitionTypeOrDomain :: Phantoms.TTerm Syntax.ColumnDefinition -> Phantoms.TTerm (Maybe Syntax.ColumnDefinition_TypeOrDomain_Option)
@@ -889,7 +889,7 @@ columnDefinitionTypeOrDomain x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-        Core.projectionField = (Core.Name "typeOrDomain")})),
+        Core.projectionFieldName = (Core.Name "typeOrDomain")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 columnDefinitionWithCollate :: Phantoms.TTerm Syntax.ColumnDefinition -> Phantoms.TTerm (Maybe Syntax.CollateClause) -> Phantoms.TTerm Syntax.ColumnDefinition
@@ -902,35 +902,35 @@ columnDefinitionWithCollate original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeOrDomain"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "typeOrDomain")})),
+              Core.projectionFieldName = (Core.Name "typeOrDomain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "refScope"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "refScope")})),
+              Core.projectionFieldName = (Core.Name "refScope")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultOrIdentityOrGeneration"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "defaultOrIdentityOrGeneration")})),
+              Core.projectionFieldName = (Core.Name "defaultOrIdentityOrGeneration")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "constraints")})),
+              Core.projectionFieldName = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "collate"),
@@ -946,28 +946,28 @@ columnDefinitionWithConstraints original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeOrDomain"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "typeOrDomain")})),
+              Core.projectionFieldName = (Core.Name "typeOrDomain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "refScope"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "refScope")})),
+              Core.projectionFieldName = (Core.Name "refScope")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultOrIdentityOrGeneration"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "defaultOrIdentityOrGeneration")})),
+              Core.projectionFieldName = (Core.Name "defaultOrIdentityOrGeneration")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
@@ -977,7 +977,7 @@ columnDefinitionWithConstraints original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "collate")})),
+              Core.projectionFieldName = (Core.Name "collate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 columnDefinitionWithDefaultOrIdentityOrGeneration :: Phantoms.TTerm Syntax.ColumnDefinition -> Phantoms.TTerm (Maybe Syntax.ColumnDefinition_DefaultOrIdentityOrGeneration_Option) -> Phantoms.TTerm Syntax.ColumnDefinition
@@ -990,21 +990,21 @@ columnDefinitionWithDefaultOrIdentityOrGeneration original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeOrDomain"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "typeOrDomain")})),
+              Core.projectionFieldName = (Core.Name "typeOrDomain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "refScope"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "refScope")})),
+              Core.projectionFieldName = (Core.Name "refScope")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultOrIdentityOrGeneration"),
@@ -1014,14 +1014,14 @@ columnDefinitionWithDefaultOrIdentityOrGeneration original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "constraints")})),
+              Core.projectionFieldName = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "collate"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "collate")})),
+              Core.projectionFieldName = (Core.Name "collate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 columnDefinitionWithName :: Phantoms.TTerm Syntax.ColumnDefinition -> Phantoms.TTerm Syntax.ColumnName -> Phantoms.TTerm Syntax.ColumnDefinition
@@ -1037,35 +1037,35 @@ columnDefinitionWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "typeOrDomain")})),
+              Core.projectionFieldName = (Core.Name "typeOrDomain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "refScope"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "refScope")})),
+              Core.projectionFieldName = (Core.Name "refScope")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultOrIdentityOrGeneration"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "defaultOrIdentityOrGeneration")})),
+              Core.projectionFieldName = (Core.Name "defaultOrIdentityOrGeneration")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "constraints")})),
+              Core.projectionFieldName = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "collate"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "collate")})),
+              Core.projectionFieldName = (Core.Name "collate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 columnDefinitionWithRefScope :: Phantoms.TTerm Syntax.ColumnDefinition -> Phantoms.TTerm (Maybe Syntax.ReferenceScopeCheck) -> Phantoms.TTerm Syntax.ColumnDefinition
@@ -1078,14 +1078,14 @@ columnDefinitionWithRefScope original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeOrDomain"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "typeOrDomain")})),
+              Core.projectionFieldName = (Core.Name "typeOrDomain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "refScope"),
@@ -1095,21 +1095,21 @@ columnDefinitionWithRefScope original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "defaultOrIdentityOrGeneration")})),
+              Core.projectionFieldName = (Core.Name "defaultOrIdentityOrGeneration")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "constraints")})),
+              Core.projectionFieldName = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "collate"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "collate")})),
+              Core.projectionFieldName = (Core.Name "collate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 columnDefinitionWithTypeOrDomain :: Phantoms.TTerm Syntax.ColumnDefinition -> Phantoms.TTerm (Maybe Syntax.ColumnDefinition_TypeOrDomain_Option) -> Phantoms.TTerm Syntax.ColumnDefinition
@@ -1122,7 +1122,7 @@ columnDefinitionWithTypeOrDomain original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeOrDomain"),
@@ -1132,28 +1132,28 @@ columnDefinitionWithTypeOrDomain original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "refScope")})),
+              Core.projectionFieldName = (Core.Name "refScope")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultOrIdentityOrGeneration"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "defaultOrIdentityOrGeneration")})),
+              Core.projectionFieldName = (Core.Name "defaultOrIdentityOrGeneration")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "constraints")})),
+              Core.projectionFieldName = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "collate"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnDefinition"),
-              Core.projectionField = (Core.Name "collate")})),
+              Core.projectionFieldName = (Core.Name "collate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 columnDefinition_DefaultOrIdentityOrGeneration_OptionDefaultClause :: Phantoms.TTerm Syntax.DefaultClause -> Phantoms.TTerm Syntax.ColumnDefinition_DefaultOrIdentityOrGeneration_Option
@@ -1219,7 +1219,7 @@ columnNameListFirst x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnNameList"),
-        Core.projectionField = (Core.Name "first")})),
+        Core.projectionFieldName = (Core.Name "first")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 columnNameListRest :: Phantoms.TTerm Syntax.ColumnNameList -> Phantoms.TTerm [Syntax.ColumnName]
@@ -1227,7 +1227,7 @@ columnNameListRest x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnNameList"),
-        Core.projectionField = (Core.Name "rest")})),
+        Core.projectionFieldName = (Core.Name "rest")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 columnNameListWithFirst :: Phantoms.TTerm Syntax.ColumnNameList -> Phantoms.TTerm Syntax.ColumnName -> Phantoms.TTerm Syntax.ColumnNameList
@@ -1243,7 +1243,7 @@ columnNameListWithFirst original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnNameList"),
-              Core.projectionField = (Core.Name "rest")})),
+              Core.projectionFieldName = (Core.Name "rest")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 columnNameListWithRest :: Phantoms.TTerm Syntax.ColumnNameList -> Phantoms.TTerm [Syntax.ColumnName] -> Phantoms.TTerm Syntax.ColumnNameList
@@ -1256,7 +1256,7 @@ columnNameListWithRest original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ColumnNameList"),
-              Core.projectionField = (Core.Name "first")})),
+              Core.projectionFieldName = (Core.Name "first")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
@@ -1361,7 +1361,7 @@ contextuallyTypedRowValueExpressionListFirst x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ContextuallyTypedRowValueExpressionList"),
-        Core.projectionField = (Core.Name "first")})),
+        Core.projectionFieldName = (Core.Name "first")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 contextuallyTypedRowValueExpressionListRest :: Phantoms.TTerm Syntax.ContextuallyTypedRowValueExpressionList -> Phantoms.TTerm [Syntax.ContextuallyTypedRowValueExpression]
@@ -1369,7 +1369,7 @@ contextuallyTypedRowValueExpressionListRest x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ContextuallyTypedRowValueExpressionList"),
-        Core.projectionField = (Core.Name "rest")})),
+        Core.projectionFieldName = (Core.Name "rest")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 contextuallyTypedRowValueExpressionListWithFirst :: Phantoms.TTerm Syntax.ContextuallyTypedRowValueExpressionList -> Phantoms.TTerm Syntax.ContextuallyTypedRowValueExpression -> Phantoms.TTerm Syntax.ContextuallyTypedRowValueExpressionList
@@ -1385,7 +1385,7 @@ contextuallyTypedRowValueExpressionListWithFirst original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ContextuallyTypedRowValueExpressionList"),
-              Core.projectionField = (Core.Name "rest")})),
+              Core.projectionFieldName = (Core.Name "rest")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 contextuallyTypedRowValueExpressionListWithRest :: Phantoms.TTerm Syntax.ContextuallyTypedRowValueExpressionList -> Phantoms.TTerm [Syntax.ContextuallyTypedRowValueExpression] -> Phantoms.TTerm Syntax.ContextuallyTypedRowValueExpressionList
@@ -1398,7 +1398,7 @@ contextuallyTypedRowValueExpressionListWithRest original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ContextuallyTypedRowValueExpressionList"),
-              Core.projectionField = (Core.Name "first")})),
+              Core.projectionFieldName = (Core.Name "first")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
@@ -1597,7 +1597,7 @@ exactNumericType_Dec_OptionPrecision x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ExactNumericType_Dec_Option"),
-        Core.projectionField = (Core.Name "Precision")})),
+        Core.projectionFieldName = (Core.Name "Precision")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 exactNumericType_Dec_OptionSequence :: Phantoms.TTerm Syntax.ExactNumericType_Dec_Option -> Phantoms.TTerm (Maybe Syntax.Scale)
@@ -1605,7 +1605,7 @@ exactNumericType_Dec_OptionSequence x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ExactNumericType_Dec_Option"),
-        Core.projectionField = (Core.Name "Sequence")})),
+        Core.projectionFieldName = (Core.Name "Sequence")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 exactNumericType_Dec_OptionWithPrecision :: Phantoms.TTerm Syntax.ExactNumericType_Dec_Option -> Phantoms.TTerm Syntax.Precision -> Phantoms.TTerm Syntax.ExactNumericType_Dec_Option
@@ -1621,7 +1621,7 @@ exactNumericType_Dec_OptionWithPrecision original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ExactNumericType_Dec_Option"),
-              Core.projectionField = (Core.Name "Sequence")})),
+              Core.projectionFieldName = (Core.Name "Sequence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 exactNumericType_Dec_OptionWithSequence :: Phantoms.TTerm Syntax.ExactNumericType_Dec_Option -> Phantoms.TTerm (Maybe Syntax.Scale) -> Phantoms.TTerm Syntax.ExactNumericType_Dec_Option
@@ -1634,7 +1634,7 @@ exactNumericType_Dec_OptionWithSequence original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ExactNumericType_Dec_Option"),
-              Core.projectionField = (Core.Name "Precision")})),
+              Core.projectionFieldName = (Core.Name "Precision")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Sequence"),
@@ -1657,7 +1657,7 @@ exactNumericType_Decimal_OptionPrecision x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ExactNumericType_Decimal_Option"),
-        Core.projectionField = (Core.Name "Precision")})),
+        Core.projectionFieldName = (Core.Name "Precision")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 exactNumericType_Decimal_OptionSequence :: Phantoms.TTerm Syntax.ExactNumericType_Decimal_Option -> Phantoms.TTerm (Maybe Syntax.Scale)
@@ -1665,7 +1665,7 @@ exactNumericType_Decimal_OptionSequence x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ExactNumericType_Decimal_Option"),
-        Core.projectionField = (Core.Name "Sequence")})),
+        Core.projectionFieldName = (Core.Name "Sequence")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 exactNumericType_Decimal_OptionWithPrecision :: Phantoms.TTerm Syntax.ExactNumericType_Decimal_Option -> Phantoms.TTerm Syntax.Precision -> Phantoms.TTerm Syntax.ExactNumericType_Decimal_Option
@@ -1681,7 +1681,7 @@ exactNumericType_Decimal_OptionWithPrecision original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ExactNumericType_Decimal_Option"),
-              Core.projectionField = (Core.Name "Sequence")})),
+              Core.projectionFieldName = (Core.Name "Sequence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 exactNumericType_Decimal_OptionWithSequence :: Phantoms.TTerm Syntax.ExactNumericType_Decimal_Option -> Phantoms.TTerm (Maybe Syntax.Scale) -> Phantoms.TTerm Syntax.ExactNumericType_Decimal_Option
@@ -1694,7 +1694,7 @@ exactNumericType_Decimal_OptionWithSequence original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ExactNumericType_Decimal_Option"),
-              Core.projectionField = (Core.Name "Precision")})),
+              Core.projectionFieldName = (Core.Name "Precision")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Sequence"),
@@ -1717,7 +1717,7 @@ exactNumericType_Numeric_OptionPrecision x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ExactNumericType_Numeric_Option"),
-        Core.projectionField = (Core.Name "Precision")})),
+        Core.projectionFieldName = (Core.Name "Precision")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 exactNumericType_Numeric_OptionSequence :: Phantoms.TTerm Syntax.ExactNumericType_Numeric_Option -> Phantoms.TTerm (Maybe Syntax.Scale)
@@ -1725,7 +1725,7 @@ exactNumericType_Numeric_OptionSequence x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ExactNumericType_Numeric_Option"),
-        Core.projectionField = (Core.Name "Sequence")})),
+        Core.projectionFieldName = (Core.Name "Sequence")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 exactNumericType_Numeric_OptionWithPrecision :: Phantoms.TTerm Syntax.ExactNumericType_Numeric_Option -> Phantoms.TTerm Syntax.Precision -> Phantoms.TTerm Syntax.ExactNumericType_Numeric_Option
@@ -1741,7 +1741,7 @@ exactNumericType_Numeric_OptionWithPrecision original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ExactNumericType_Numeric_Option"),
-              Core.projectionField = (Core.Name "Sequence")})),
+              Core.projectionFieldName = (Core.Name "Sequence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 exactNumericType_Numeric_OptionWithSequence :: Phantoms.TTerm Syntax.ExactNumericType_Numeric_Option -> Phantoms.TTerm (Maybe Syntax.Scale) -> Phantoms.TTerm Syntax.ExactNumericType_Numeric_Option
@@ -1754,7 +1754,7 @@ exactNumericType_Numeric_OptionWithSequence original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.ExactNumericType_Numeric_Option"),
-              Core.projectionField = (Core.Name "Precision")})),
+              Core.projectionFieldName = (Core.Name "Precision")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Sequence"),
@@ -1786,7 +1786,7 @@ fromConstructorColumns x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.FromConstructor"),
-        Core.projectionField = (Core.Name "columns")})),
+        Core.projectionFieldName = (Core.Name "columns")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fromConstructorOverride :: Phantoms.TTerm Syntax.FromConstructor -> Phantoms.TTerm (Maybe Syntax.OverrideClause)
@@ -1794,7 +1794,7 @@ fromConstructorOverride x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.FromConstructor"),
-        Core.projectionField = (Core.Name "override")})),
+        Core.projectionFieldName = (Core.Name "override")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fromConstructorValues :: Phantoms.TTerm Syntax.FromConstructor -> Phantoms.TTerm Syntax.ContextuallyTypedTableValueConstructor
@@ -1802,7 +1802,7 @@ fromConstructorValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.FromConstructor"),
-        Core.projectionField = (Core.Name "values")})),
+        Core.projectionFieldName = (Core.Name "values")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fromConstructorWithColumns :: Phantoms.TTerm Syntax.FromConstructor -> Phantoms.TTerm (Maybe Syntax.InsertColumnList) -> Phantoms.TTerm Syntax.FromConstructor
@@ -1818,14 +1818,14 @@ fromConstructorWithColumns original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.FromConstructor"),
-              Core.projectionField = (Core.Name "override")})),
+              Core.projectionFieldName = (Core.Name "override")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "values"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.FromConstructor"),
-              Core.projectionField = (Core.Name "values")})),
+              Core.projectionFieldName = (Core.Name "values")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fromConstructorWithOverride :: Phantoms.TTerm Syntax.FromConstructor -> Phantoms.TTerm (Maybe Syntax.OverrideClause) -> Phantoms.TTerm Syntax.FromConstructor
@@ -1838,7 +1838,7 @@ fromConstructorWithOverride original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.FromConstructor"),
-              Core.projectionField = (Core.Name "columns")})),
+              Core.projectionFieldName = (Core.Name "columns")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "override"),
@@ -1848,7 +1848,7 @@ fromConstructorWithOverride original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.FromConstructor"),
-              Core.projectionField = (Core.Name "values")})),
+              Core.projectionFieldName = (Core.Name "values")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fromConstructorWithValues :: Phantoms.TTerm Syntax.FromConstructor -> Phantoms.TTerm Syntax.ContextuallyTypedTableValueConstructor -> Phantoms.TTerm Syntax.FromConstructor
@@ -1861,14 +1861,14 @@ fromConstructorWithValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.FromConstructor"),
-              Core.projectionField = (Core.Name "columns")})),
+              Core.projectionFieldName = (Core.Name "columns")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "override"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.FromConstructor"),
-              Core.projectionField = (Core.Name "override")})),
+              Core.projectionFieldName = (Core.Name "override")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "values"),
@@ -2023,7 +2023,7 @@ insertStatementColumnsAndSource x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.InsertStatement"),
-        Core.projectionField = (Core.Name "columnsAndSource")})),
+        Core.projectionFieldName = (Core.Name "columnsAndSource")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 insertStatementTarget :: Phantoms.TTerm Syntax.InsertStatement -> Phantoms.TTerm Syntax.InsertionTarget
@@ -2031,7 +2031,7 @@ insertStatementTarget x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.InsertStatement"),
-        Core.projectionField = (Core.Name "target")})),
+        Core.projectionFieldName = (Core.Name "target")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 insertStatementWithColumnsAndSource :: Phantoms.TTerm Syntax.InsertStatement -> Phantoms.TTerm Syntax.InsertColumnsAndSource -> Phantoms.TTerm Syntax.InsertStatement
@@ -2044,7 +2044,7 @@ insertStatementWithColumnsAndSource original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.InsertStatement"),
-              Core.projectionField = (Core.Name "target")})),
+              Core.projectionFieldName = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "columnsAndSource"),
@@ -2063,7 +2063,7 @@ insertStatementWithTarget original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.InsertStatement"),
-              Core.projectionField = (Core.Name "columnsAndSource")})),
+              Core.projectionFieldName = (Core.Name "columnsAndSource")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 insertionTarget :: Phantoms.TTerm Syntax.TableName -> Phantoms.TTerm Syntax.InsertionTarget
@@ -2449,7 +2449,7 @@ predefinedType_NationalStringCollate x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.PredefinedType_NationalString"),
-        Core.projectionField = (Core.Name "collate")})),
+        Core.projectionFieldName = (Core.Name "collate")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 predefinedType_NationalStringType :: Phantoms.TTerm Syntax.PredefinedType_NationalString -> Phantoms.TTerm Syntax.NationalCharacterStringType
@@ -2457,7 +2457,7 @@ predefinedType_NationalStringType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.PredefinedType_NationalString"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 predefinedType_NationalStringWithCollate :: Phantoms.TTerm Syntax.PredefinedType_NationalString -> Phantoms.TTerm (Maybe Syntax.CollateClause) -> Phantoms.TTerm Syntax.PredefinedType_NationalString
@@ -2470,7 +2470,7 @@ predefinedType_NationalStringWithCollate original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.PredefinedType_NationalString"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "collate"),
@@ -2489,7 +2489,7 @@ predefinedType_NationalStringWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.PredefinedType_NationalString"),
-              Core.projectionField = (Core.Name "collate")})),
+              Core.projectionFieldName = (Core.Name "collate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 predefinedType_String :: Phantoms.TTerm Syntax.CharacterStringType -> Phantoms.TTerm (Maybe Syntax.CharacterSetSpecification) -> Phantoms.TTerm (Maybe Syntax.CollateClause) -> Phantoms.TTerm Syntax.PredefinedType_String
@@ -2512,7 +2512,7 @@ predefinedType_StringCharacters x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.PredefinedType_String"),
-        Core.projectionField = (Core.Name "characters")})),
+        Core.projectionFieldName = (Core.Name "characters")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 predefinedType_StringCollate :: Phantoms.TTerm Syntax.PredefinedType_String -> Phantoms.TTerm (Maybe Syntax.CollateClause)
@@ -2520,7 +2520,7 @@ predefinedType_StringCollate x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.PredefinedType_String"),
-        Core.projectionField = (Core.Name "collate")})),
+        Core.projectionFieldName = (Core.Name "collate")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 predefinedType_StringType :: Phantoms.TTerm Syntax.PredefinedType_String -> Phantoms.TTerm Syntax.CharacterStringType
@@ -2528,7 +2528,7 @@ predefinedType_StringType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.PredefinedType_String"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 predefinedType_StringWithCharacters :: Phantoms.TTerm Syntax.PredefinedType_String -> Phantoms.TTerm (Maybe Syntax.CharacterSetSpecification) -> Phantoms.TTerm Syntax.PredefinedType_String
@@ -2541,7 +2541,7 @@ predefinedType_StringWithCharacters original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.PredefinedType_String"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "characters"),
@@ -2551,7 +2551,7 @@ predefinedType_StringWithCharacters original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.PredefinedType_String"),
-              Core.projectionField = (Core.Name "collate")})),
+              Core.projectionFieldName = (Core.Name "collate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 predefinedType_StringWithCollate :: Phantoms.TTerm Syntax.PredefinedType_String -> Phantoms.TTerm (Maybe Syntax.CollateClause) -> Phantoms.TTerm Syntax.PredefinedType_String
@@ -2564,14 +2564,14 @@ predefinedType_StringWithCollate original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.PredefinedType_String"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "characters"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.PredefinedType_String"),
-              Core.projectionField = (Core.Name "characters")})),
+              Core.projectionFieldName = (Core.Name "characters")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "collate"),
@@ -2590,14 +2590,14 @@ predefinedType_StringWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.PredefinedType_String"),
-              Core.projectionField = (Core.Name "characters")})),
+              Core.projectionFieldName = (Core.Name "characters")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "collate"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.PredefinedType_String"),
-              Core.projectionField = (Core.Name "collate")})),
+              Core.projectionFieldName = (Core.Name "collate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 predicate :: Phantoms.TTerm () -> Phantoms.TTerm Syntax.Predicate
@@ -2786,7 +2786,7 @@ tableContentsSource_SubtableElements x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableContentsSource_Subtable"),
-        Core.projectionField = (Core.Name "elements")})),
+        Core.projectionFieldName = (Core.Name "elements")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tableContentsSource_SubtableSubtable :: Phantoms.TTerm Syntax.TableContentsSource_Subtable -> Phantoms.TTerm (Maybe Syntax.SubtableClause)
@@ -2794,7 +2794,7 @@ tableContentsSource_SubtableSubtable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableContentsSource_Subtable"),
-        Core.projectionField = (Core.Name "subtable")})),
+        Core.projectionFieldName = (Core.Name "subtable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tableContentsSource_SubtableType :: Phantoms.TTerm Syntax.TableContentsSource_Subtable -> Phantoms.TTerm Syntax.PathResolvedUserDefinedTypeName
@@ -2802,7 +2802,7 @@ tableContentsSource_SubtableType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableContentsSource_Subtable"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tableContentsSource_SubtableWithElements :: Phantoms.TTerm Syntax.TableContentsSource_Subtable -> Phantoms.TTerm (Maybe Syntax.TableElementList) -> Phantoms.TTerm Syntax.TableContentsSource_Subtable
@@ -2815,14 +2815,14 @@ tableContentsSource_SubtableWithElements original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableContentsSource_Subtable"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "subtable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableContentsSource_Subtable"),
-              Core.projectionField = (Core.Name "subtable")})),
+              Core.projectionFieldName = (Core.Name "subtable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "elements"),
@@ -2838,7 +2838,7 @@ tableContentsSource_SubtableWithSubtable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableContentsSource_Subtable"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "subtable"),
@@ -2848,7 +2848,7 @@ tableContentsSource_SubtableWithSubtable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableContentsSource_Subtable"),
-              Core.projectionField = (Core.Name "elements")})),
+              Core.projectionFieldName = (Core.Name "elements")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tableContentsSource_SubtableWithType :: Phantoms.TTerm Syntax.TableContentsSource_Subtable -> Phantoms.TTerm Syntax.PathResolvedUserDefinedTypeName -> Phantoms.TTerm Syntax.TableContentsSource_Subtable
@@ -2864,14 +2864,14 @@ tableContentsSource_SubtableWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableContentsSource_Subtable"),
-              Core.projectionField = (Core.Name "subtable")})),
+              Core.projectionFieldName = (Core.Name "subtable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "elements"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableContentsSource_Subtable"),
-              Core.projectionField = (Core.Name "elements")})),
+              Core.projectionFieldName = (Core.Name "elements")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tableDefinition :: Phantoms.TTerm (Maybe Syntax.TableScope) -> Phantoms.TTerm Syntax.TableName -> Phantoms.TTerm Syntax.TableContentsSource -> Phantoms.TTerm (Maybe Syntax.TableCommitAction) -> Phantoms.TTerm Syntax.TableDefinition
@@ -2897,7 +2897,7 @@ tableDefinitionCommitActions x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableDefinition"),
-        Core.projectionField = (Core.Name "commitActions")})),
+        Core.projectionFieldName = (Core.Name "commitActions")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tableDefinitionName :: Phantoms.TTerm Syntax.TableDefinition -> Phantoms.TTerm Syntax.TableName
@@ -2905,7 +2905,7 @@ tableDefinitionName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableDefinition"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tableDefinitionScope :: Phantoms.TTerm Syntax.TableDefinition -> Phantoms.TTerm (Maybe Syntax.TableScope)
@@ -2913,7 +2913,7 @@ tableDefinitionScope x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableDefinition"),
-        Core.projectionField = (Core.Name "scope")})),
+        Core.projectionFieldName = (Core.Name "scope")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tableDefinitionSource :: Phantoms.TTerm Syntax.TableDefinition -> Phantoms.TTerm Syntax.TableContentsSource
@@ -2921,7 +2921,7 @@ tableDefinitionSource x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableDefinition"),
-        Core.projectionField = (Core.Name "source")})),
+        Core.projectionFieldName = (Core.Name "source")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tableDefinitionWithCommitActions :: Phantoms.TTerm Syntax.TableDefinition -> Phantoms.TTerm (Maybe Syntax.TableCommitAction) -> Phantoms.TTerm Syntax.TableDefinition
@@ -2934,21 +2934,21 @@ tableDefinitionWithCommitActions original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableDefinition"),
-              Core.projectionField = (Core.Name "scope")})),
+              Core.projectionFieldName = (Core.Name "scope")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "source"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableDefinition"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "commitActions"),
@@ -2964,7 +2964,7 @@ tableDefinitionWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableDefinition"),
-              Core.projectionField = (Core.Name "scope")})),
+              Core.projectionFieldName = (Core.Name "scope")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -2974,14 +2974,14 @@ tableDefinitionWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableDefinition"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "commitActions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableDefinition"),
-              Core.projectionField = (Core.Name "commitActions")})),
+              Core.projectionFieldName = (Core.Name "commitActions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tableDefinitionWithScope :: Phantoms.TTerm Syntax.TableDefinition -> Phantoms.TTerm (Maybe Syntax.TableScope) -> Phantoms.TTerm Syntax.TableDefinition
@@ -2997,21 +2997,21 @@ tableDefinitionWithScope original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "source"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableDefinition"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "commitActions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableDefinition"),
-              Core.projectionField = (Core.Name "commitActions")})),
+              Core.projectionFieldName = (Core.Name "commitActions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tableDefinitionWithSource :: Phantoms.TTerm Syntax.TableDefinition -> Phantoms.TTerm Syntax.TableContentsSource -> Phantoms.TTerm Syntax.TableDefinition
@@ -3024,14 +3024,14 @@ tableDefinitionWithSource original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableDefinition"),
-              Core.projectionField = (Core.Name "scope")})),
+              Core.projectionFieldName = (Core.Name "scope")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "source"),
@@ -3041,7 +3041,7 @@ tableDefinitionWithSource original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableDefinition"),
-              Core.projectionField = (Core.Name "commitActions")})),
+              Core.projectionFieldName = (Core.Name "commitActions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tableElementColumOptions :: Phantoms.TTerm Syntax.ColumnOptions -> Phantoms.TTerm Syntax.TableElement
@@ -3085,7 +3085,7 @@ tableElementListFirst x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableElementList"),
-        Core.projectionField = (Core.Name "first")})),
+        Core.projectionFieldName = (Core.Name "first")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tableElementListRest :: Phantoms.TTerm Syntax.TableElementList -> Phantoms.TTerm [Syntax.TableElement]
@@ -3093,7 +3093,7 @@ tableElementListRest x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableElementList"),
-        Core.projectionField = (Core.Name "rest")})),
+        Core.projectionFieldName = (Core.Name "rest")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tableElementListWithFirst :: Phantoms.TTerm Syntax.TableElementList -> Phantoms.TTerm Syntax.TableElement -> Phantoms.TTerm Syntax.TableElementList
@@ -3109,7 +3109,7 @@ tableElementListWithFirst original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableElementList"),
-              Core.projectionField = (Core.Name "rest")})),
+              Core.projectionFieldName = (Core.Name "rest")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tableElementListWithRest :: Phantoms.TTerm Syntax.TableElementList -> Phantoms.TTerm [Syntax.TableElement] -> Phantoms.TTerm Syntax.TableElementList
@@ -3122,7 +3122,7 @@ tableElementListWithRest original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.sql.syntax.TableElementList"),
-              Core.projectionField = (Core.Name "first")})),
+              Core.projectionFieldName = (Core.Name "first")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),

@@ -92,14 +92,14 @@ type HaskellNamespaces = Namespaces H.ModuleName
 haskellUtilsDefinition :: String -> TTerm a -> TTermDefinition a
 haskellUtilsDefinition = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.haskell.utils"
+ns :: ModuleName
+ns = ModuleName "hydra.haskell.utils"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Analysis.ns, Formatting.ns, HaskellLanguage.ns, Names.ns, Namespace "hydra.strip"] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Analysis.ns, Formatting.ns, HaskellLanguage.ns, Names.ns] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Utilities for working with Haskell syntax trees"}
   where
     definitions = [
@@ -141,8 +141,8 @@ elementReference = haskellUtilsDefinition "elementReference" $
     "qname">: Names.qualifyName @@ var "name",
     "local">: Packaging.qualifiedNameLocal $ var "qname",
     "escLocal">: sanitizeHaskellName @@ var "local",
-    "mns">: Packaging.qualifiedNameNamespace $ var "qname"] $
-    Maybes.cases (Packaging.qualifiedNameNamespace $ var "qname")
+    "mns">: Packaging.qualifiedNameModuleName $ var "qname"] $
+    Maybes.cases (Packaging.qualifiedNameModuleName $ var "qname")
       (simpleName @@ var "local") $
       "ns" ~>
         Maybes.cases (Maps.lookup (var "ns") (var "namespacesMap"))
@@ -191,9 +191,9 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
   doc "Compute the Haskell module namespaces for a Hydra module" $
   "mod" ~> "cx" ~> "g" ~>
     "nss" <<~ Analysis.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ true @@ true @@ true @@ true @@ var "mod" $
-    "ns" <~ (Packaging.moduleNamespace $ var "mod") $
+    "ns" <~ (Packaging.moduleName $ var "mod") $
     "segmentsOf" <~ ("namespace" ~>
-      Strings.splitOn (string ".") (unwrap _Namespace @@ var "namespace")) $
+      Strings.splitOn (string ".") (unwrap _ModuleName @@ var "namespace")) $
     -- Build an alias by taking the last `n` segments of `segs`, capitalizing each,
     -- and concatenating. E.g. ["hydra","encode","core"] with n=2 becomes "EncodeCore".
     "aliasFromSuffix" <~ ("segs" ~> "n" ~> lets [
@@ -215,7 +215,7 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
       ("a" ~> "b" ~> Logic.ifElse (Equality.gt (var "a") (var "b")) (var "a") (var "b"))
       (int32 1)
       (Lists.map ("nm" ~> Lists.length (var "segmentsOf" @@ var "nm")) (var "nssAsList")) $
-    -- Disambiguation state: Map Namespace Int, where the Int is the number of
+    -- Disambiguation state: Map ModuleName Int, where the Int is the number of
     -- trailing segments currently used to form the alias. Every namespace starts
     -- at 1 (just the last segment, matching the legacy behavior).
     "initialState" <~ (Maps.fromList $ Lists.map
@@ -329,13 +329,13 @@ recordFieldReference = haskellUtilsDefinition "recordFieldReference" $
   "namespaces" ~> "sname" ~> "fname" ~> lets [
     "fnameStr">: unwrap _Name @@ var "fname",
     "qname">: Names.qualifyName @@ var "sname",
-    "ns">: Packaging.qualifiedNameNamespace $ var "qname",
+    "ns">: Packaging.qualifiedNameModuleName $ var "qname",
     "typeNameStr">: typeNameForRecord @@ var "sname",
     "decapitalized">: Formatting.decapitalize @@ var "typeNameStr",
     "capitalized">: Formatting.capitalize @@ var "fnameStr",
     "nm">: Strings.cat2 (var "decapitalized") (var "capitalized"),
     "qualName">: record _QualifiedName [
-      _QualifiedName_namespace>>: var "ns",
+      _QualifiedName_moduleName>>: var "ns",
       _QualifiedName_local>>: var "nm"],
     "unqualName">: Names.unqualifyName @@ var "qualName"] $
     elementReference @@ var "namespaces" @@ var "unqualName"
@@ -399,20 +399,20 @@ unionFieldReference = haskellUtilsDefinition "unionFieldReference" $
   "boundNames" ~> "namespaces" ~> "sname" ~> "fname" ~> lets [
     "fnameStr">: unwrap _Name @@ var "fname",
     "qname">: Names.qualifyName @@ var "sname",
-    "ns">: Packaging.qualifiedNameNamespace $ var "qname",
+    "ns">: Packaging.qualifiedNameModuleName $ var "qname",
     "typeNameStr">: typeNameForRecord @@ var "sname",
     "capitalizedTypeName">: Formatting.capitalize @@ var "typeNameStr",
     "capitalizedFieldName">: Formatting.capitalize @@ var "fnameStr",
     "deconflict">: "name" ~> lets [
       "tname">: Names.unqualifyName @@ record _QualifiedName [
-        _QualifiedName_namespace>>: var "ns",
+        _QualifiedName_moduleName>>: var "ns",
         _QualifiedName_local>>: var "name"]] $
       Logic.ifElse (Sets.member (var "tname") (var "boundNames"))
         (var "deconflict" @@ Strings.cat2 (var "name") (string "_"))
         (var "name"),
     "nm">: var "deconflict" @@ Strings.cat2 (var "capitalizedTypeName") (var "capitalizedFieldName"),
     "qualName">: record _QualifiedName [
-      _QualifiedName_namespace>>: var "ns",
+      _QualifiedName_moduleName>>: var "ns",
       _QualifiedName_local>>: var "nm"],
     "unqualName">: Names.unqualifyName @@ var "qualName"] $
     elementReference @@ var "namespaces" @@ var "unqualName"

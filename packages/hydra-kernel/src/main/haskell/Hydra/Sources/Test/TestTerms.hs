@@ -2,6 +2,7 @@ module Hydra.Sources.Test.TestTerms where
 
 -- Standard imports for kernel test fixtures
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -19,14 +20,14 @@ import           Prelude hiding ((++))
 -- Type alias to avoid confusion with DSL Module
 type HydraModule = Module
 
-ns :: Namespace
-ns = Namespace "hydra.test.testTerms"
+ns :: ModuleName
+ns = ModuleName "hydra.test.testTerms"
 
 module_ :: HydraModule
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [TestTypes.ns, Namespace "hydra.core"],
+            moduleDependencies = unqualifiedDep <$> [TestTypes.ns, ModuleName "hydra.core"],
             moduleDescription = (Just "Term definitions for the test suite")}
   where
     definitions = [

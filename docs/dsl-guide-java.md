@@ -586,12 +586,11 @@ import hydra.util.Maybe;
 import static hydra.dsl.meta.Phantoms.*;
 import static hydra.dsl.meta.Core.*;
 
-public interface MyFunctions {
-    String NS = "my.namespace";
+public class MyFunctions {
+    public static final ModuleName NS = new ModuleName("my.namespace");
 
-    static <A> TBinding<A> define(String lname, TTerm<A> term) {
-        return Phantoms.definitionInNamespace(
-            new hydra.packaging.Namespace(NS), lname, term);
+    private static Def def(String localName, Supplier<TTerm<?>> body) {
+        return Defs.define(NS, localName, body);
     }
 
     // Simple function: pattern match + extract body

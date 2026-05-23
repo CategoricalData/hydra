@@ -57,7 +57,7 @@ aliasDeclName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.AliasDecl"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.go.syntax.AliasDecl
 aliasDeclType :: Phantoms.TTerm Syntax.AliasDecl -> Phantoms.TTerm Syntax.Type
@@ -65,7 +65,7 @@ aliasDeclType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.AliasDecl"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the name field of hydra.go.syntax.AliasDecl
 aliasDeclWithName :: Phantoms.TTerm Syntax.AliasDecl -> Phantoms.TTerm Syntax.Identifier -> Phantoms.TTerm Syntax.AliasDecl
@@ -81,7 +81,7 @@ aliasDeclWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.AliasDecl"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.go.syntax.AliasDecl
 aliasDeclWithType :: Phantoms.TTerm Syntax.AliasDecl -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.AliasDecl
@@ -94,7 +94,7 @@ aliasDeclWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.AliasDecl"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -117,7 +117,7 @@ annotatedDeclarationComment x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.AnnotatedDeclaration"),
-        Core.projectionField = (Core.Name "comment")})),
+        Core.projectionFieldName = (Core.Name "comment")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the declaration field of hydra.go.syntax.AnnotatedDeclaration
 annotatedDeclarationDeclaration :: Phantoms.TTerm Syntax.AnnotatedDeclaration -> Phantoms.TTerm Syntax.TopLevelDecl
@@ -125,7 +125,7 @@ annotatedDeclarationDeclaration x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.AnnotatedDeclaration"),
-        Core.projectionField = (Core.Name "declaration")})),
+        Core.projectionFieldName = (Core.Name "declaration")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the comment field of hydra.go.syntax.AnnotatedDeclaration
 annotatedDeclarationWithComment :: Phantoms.TTerm Syntax.AnnotatedDeclaration -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.AnnotatedDeclaration
@@ -141,7 +141,7 @@ annotatedDeclarationWithComment original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.AnnotatedDeclaration"),
-              Core.projectionField = (Core.Name "declaration")})),
+              Core.projectionFieldName = (Core.Name "declaration")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the declaration field of hydra.go.syntax.AnnotatedDeclaration
 annotatedDeclarationWithDeclaration :: Phantoms.TTerm Syntax.AnnotatedDeclaration -> Phantoms.TTerm Syntax.TopLevelDecl -> Phantoms.TTerm Syntax.AnnotatedDeclaration
@@ -154,7 +154,7 @@ annotatedDeclarationWithDeclaration original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.AnnotatedDeclaration"),
-              Core.projectionField = (Core.Name "comment")})),
+              Core.projectionFieldName = (Core.Name "comment")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "declaration"),
@@ -180,7 +180,7 @@ argumentsEllipsis x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.Arguments"),
-        Core.projectionField = (Core.Name "ellipsis")})),
+        Core.projectionFieldName = (Core.Name "ellipsis")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the expressions field of hydra.go.syntax.Arguments
 argumentsExpressions :: Phantoms.TTerm Syntax.Arguments -> Phantoms.TTerm [Syntax.Expression]
@@ -188,7 +188,7 @@ argumentsExpressions x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.Arguments"),
-        Core.projectionField = (Core.Name "expressions")})),
+        Core.projectionFieldName = (Core.Name "expressions")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the typeArg field of hydra.go.syntax.Arguments
 argumentsTypeArg :: Phantoms.TTerm Syntax.Arguments -> Phantoms.TTerm (Maybe Syntax.Type)
@@ -196,7 +196,7 @@ argumentsTypeArg x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.Arguments"),
-        Core.projectionField = (Core.Name "typeArg")})),
+        Core.projectionFieldName = (Core.Name "typeArg")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the ellipsis field of hydra.go.syntax.Arguments
 argumentsWithEllipsis :: Phantoms.TTerm Syntax.Arguments -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.Arguments
@@ -209,14 +209,14 @@ argumentsWithEllipsis original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Arguments"),
-              Core.projectionField = (Core.Name "typeArg")})),
+              Core.projectionFieldName = (Core.Name "typeArg")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expressions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Arguments"),
-              Core.projectionField = (Core.Name "expressions")})),
+              Core.projectionFieldName = (Core.Name "expressions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ellipsis"),
@@ -232,7 +232,7 @@ argumentsWithExpressions original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Arguments"),
-              Core.projectionField = (Core.Name "typeArg")})),
+              Core.projectionFieldName = (Core.Name "typeArg")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expressions"),
@@ -242,7 +242,7 @@ argumentsWithExpressions original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Arguments"),
-              Core.projectionField = (Core.Name "ellipsis")})),
+              Core.projectionFieldName = (Core.Name "ellipsis")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the typeArg field of hydra.go.syntax.Arguments
 argumentsWithTypeArg :: Phantoms.TTerm Syntax.Arguments -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.Arguments
@@ -258,14 +258,14 @@ argumentsWithTypeArg original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Arguments"),
-              Core.projectionField = (Core.Name "expressions")})),
+              Core.projectionFieldName = (Core.Name "expressions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ellipsis"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Arguments"),
-              Core.projectionField = (Core.Name "ellipsis")})),
+              Core.projectionFieldName = (Core.Name "ellipsis")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.go.syntax.ArrayType
 arrayType :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.ArrayType
@@ -285,7 +285,7 @@ arrayTypeElement x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ArrayType"),
-        Core.projectionField = (Core.Name "element")})),
+        Core.projectionFieldName = (Core.Name "element")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the length field of hydra.go.syntax.ArrayType
 arrayTypeLength :: Phantoms.TTerm Syntax.ArrayType -> Phantoms.TTerm Syntax.Expression
@@ -293,7 +293,7 @@ arrayTypeLength x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ArrayType"),
-        Core.projectionField = (Core.Name "length")})),
+        Core.projectionFieldName = (Core.Name "length")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the element field of hydra.go.syntax.ArrayType
 arrayTypeWithElement :: Phantoms.TTerm Syntax.ArrayType -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.ArrayType
@@ -306,7 +306,7 @@ arrayTypeWithElement original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ArrayType"),
-              Core.projectionField = (Core.Name "length")})),
+              Core.projectionFieldName = (Core.Name "length")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "element"),
@@ -325,7 +325,7 @@ arrayTypeWithLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ArrayType"),
-              Core.projectionField = (Core.Name "element")})),
+              Core.projectionFieldName = (Core.Name "element")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL injection for the add variant of hydra.go.syntax.AssignOp
 assignOpAdd :: Phantoms.TTerm Syntax.AddOp -> Phantoms.TTerm Syntax.AssignOp
@@ -372,7 +372,7 @@ assignmentLhs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.Assignment"),
-        Core.projectionField = (Core.Name "lhs")})),
+        Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the op field of hydra.go.syntax.Assignment
 assignmentOp :: Phantoms.TTerm Syntax.Assignment -> Phantoms.TTerm Syntax.AssignOp
@@ -380,7 +380,7 @@ assignmentOp x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.Assignment"),
-        Core.projectionField = (Core.Name "op")})),
+        Core.projectionFieldName = (Core.Name "op")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the rhs field of hydra.go.syntax.Assignment
 assignmentRhs :: Phantoms.TTerm Syntax.Assignment -> Phantoms.TTerm [Syntax.Expression]
@@ -388,7 +388,7 @@ assignmentRhs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.Assignment"),
-        Core.projectionField = (Core.Name "rhs")})),
+        Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the lhs field of hydra.go.syntax.Assignment
 assignmentWithLhs :: Phantoms.TTerm Syntax.Assignment -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.Assignment
@@ -404,14 +404,14 @@ assignmentWithLhs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Assignment"),
-              Core.projectionField = (Core.Name "op")})),
+              Core.projectionFieldName = (Core.Name "op")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Assignment"),
-              Core.projectionField = (Core.Name "rhs")})),
+              Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the op field of hydra.go.syntax.Assignment
 assignmentWithOp :: Phantoms.TTerm Syntax.Assignment -> Phantoms.TTerm Syntax.AssignOp -> Phantoms.TTerm Syntax.Assignment
@@ -424,7 +424,7 @@ assignmentWithOp original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Assignment"),
-              Core.projectionField = (Core.Name "lhs")})),
+              Core.projectionFieldName = (Core.Name "lhs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "op"),
@@ -434,7 +434,7 @@ assignmentWithOp original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Assignment"),
-              Core.projectionField = (Core.Name "rhs")})),
+              Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the rhs field of hydra.go.syntax.Assignment
 assignmentWithRhs :: Phantoms.TTerm Syntax.Assignment -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.Assignment
@@ -447,14 +447,14 @@ assignmentWithRhs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Assignment"),
-              Core.projectionField = (Core.Name "lhs")})),
+              Core.projectionFieldName = (Core.Name "lhs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "op"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Assignment"),
-              Core.projectionField = (Core.Name "op")})),
+              Core.projectionFieldName = (Core.Name "op")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
@@ -520,7 +520,7 @@ binaryExprLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.BinaryExpr"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the op field of hydra.go.syntax.BinaryExpr
 binaryExprOp :: Phantoms.TTerm Syntax.BinaryExpr -> Phantoms.TTerm Syntax.BinaryOp
@@ -528,7 +528,7 @@ binaryExprOp x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.BinaryExpr"),
-        Core.projectionField = (Core.Name "op")})),
+        Core.projectionFieldName = (Core.Name "op")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the right field of hydra.go.syntax.BinaryExpr
 binaryExprRight :: Phantoms.TTerm Syntax.BinaryExpr -> Phantoms.TTerm Syntax.Expression
@@ -536,7 +536,7 @@ binaryExprRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.BinaryExpr"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the left field of hydra.go.syntax.BinaryExpr
 binaryExprWithLeft :: Phantoms.TTerm Syntax.BinaryExpr -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.BinaryExpr
@@ -552,14 +552,14 @@ binaryExprWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.BinaryExpr"),
-              Core.projectionField = (Core.Name "op")})),
+              Core.projectionFieldName = (Core.Name "op")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.BinaryExpr"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the op field of hydra.go.syntax.BinaryExpr
 binaryExprWithOp :: Phantoms.TTerm Syntax.BinaryExpr -> Phantoms.TTerm Syntax.BinaryOp -> Phantoms.TTerm Syntax.BinaryExpr
@@ -572,7 +572,7 @@ binaryExprWithOp original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.BinaryExpr"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "op"),
@@ -582,7 +582,7 @@ binaryExprWithOp original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.BinaryExpr"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the right field of hydra.go.syntax.BinaryExpr
 binaryExprWithRight :: Phantoms.TTerm Syntax.BinaryExpr -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.BinaryExpr
@@ -595,14 +595,14 @@ binaryExprWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.BinaryExpr"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "op"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.BinaryExpr"),
-              Core.projectionField = (Core.Name "op")})),
+              Core.projectionFieldName = (Core.Name "op")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -789,7 +789,7 @@ callExprArguments x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.CallExpr"),
-        Core.projectionField = (Core.Name "arguments")})),
+        Core.projectionFieldName = (Core.Name "arguments")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the function field of hydra.go.syntax.CallExpr
 callExprFunction :: Phantoms.TTerm Syntax.CallExpr -> Phantoms.TTerm Syntax.PrimaryExpr
@@ -797,7 +797,7 @@ callExprFunction x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.CallExpr"),
-        Core.projectionField = (Core.Name "function")})),
+        Core.projectionFieldName = (Core.Name "function")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the arguments field of hydra.go.syntax.CallExpr
 callExprWithArguments :: Phantoms.TTerm Syntax.CallExpr -> Phantoms.TTerm Syntax.Arguments -> Phantoms.TTerm Syntax.CallExpr
@@ -810,7 +810,7 @@ callExprWithArguments original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.CallExpr"),
-              Core.projectionField = (Core.Name "function")})),
+              Core.projectionFieldName = (Core.Name "function")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
@@ -829,7 +829,7 @@ callExprWithFunction original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.CallExpr"),
-              Core.projectionField = (Core.Name "arguments")})),
+              Core.projectionFieldName = (Core.Name "arguments")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL injection for the bidirectional variant of hydra.go.syntax.ChannelDirection
 channelDirectionBidirectional :: Phantoms.TTerm Syntax.ChannelDirection
@@ -873,7 +873,7 @@ channelTypeDirection x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ChannelType"),
-        Core.projectionField = (Core.Name "direction")})),
+        Core.projectionFieldName = (Core.Name "direction")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the element field of hydra.go.syntax.ChannelType
 channelTypeElement :: Phantoms.TTerm Syntax.ChannelType -> Phantoms.TTerm Syntax.Type
@@ -881,7 +881,7 @@ channelTypeElement x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ChannelType"),
-        Core.projectionField = (Core.Name "element")})),
+        Core.projectionFieldName = (Core.Name "element")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the direction field of hydra.go.syntax.ChannelType
 channelTypeWithDirection :: Phantoms.TTerm Syntax.ChannelType -> Phantoms.TTerm Syntax.ChannelDirection -> Phantoms.TTerm Syntax.ChannelType
@@ -897,7 +897,7 @@ channelTypeWithDirection original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ChannelType"),
-              Core.projectionField = (Core.Name "element")})),
+              Core.projectionFieldName = (Core.Name "element")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the element field of hydra.go.syntax.ChannelType
 channelTypeWithElement :: Phantoms.TTerm Syntax.ChannelType -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.ChannelType
@@ -910,7 +910,7 @@ channelTypeWithElement original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ChannelType"),
-              Core.projectionField = (Core.Name "direction")})),
+              Core.projectionFieldName = (Core.Name "direction")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "element"),
@@ -957,7 +957,7 @@ commClauseCase x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.CommClause"),
-        Core.projectionField = (Core.Name "case")})),
+        Core.projectionFieldName = (Core.Name "case")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the statements field of hydra.go.syntax.CommClause
 commClauseStatements :: Phantoms.TTerm Syntax.CommClause -> Phantoms.TTerm [Syntax.Statement]
@@ -965,7 +965,7 @@ commClauseStatements x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.CommClause"),
-        Core.projectionField = (Core.Name "statements")})),
+        Core.projectionFieldName = (Core.Name "statements")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the case field of hydra.go.syntax.CommClause
 commClauseWithCase :: Phantoms.TTerm Syntax.CommClause -> Phantoms.TTerm Syntax.CommCase -> Phantoms.TTerm Syntax.CommClause
@@ -981,7 +981,7 @@ commClauseWithCase original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.CommClause"),
-              Core.projectionField = (Core.Name "statements")})),
+              Core.projectionFieldName = (Core.Name "statements")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the statements field of hydra.go.syntax.CommClause
 commClauseWithStatements :: Phantoms.TTerm Syntax.CommClause -> Phantoms.TTerm [Syntax.Statement] -> Phantoms.TTerm Syntax.CommClause
@@ -994,7 +994,7 @@ commClauseWithStatements original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.CommClause"),
-              Core.projectionField = (Core.Name "case")})),
+              Core.projectionFieldName = (Core.Name "case")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "statements"),
@@ -1017,7 +1017,7 @@ compositeLitType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.CompositeLit"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the value field of hydra.go.syntax.CompositeLit
 compositeLitValue :: Phantoms.TTerm Syntax.CompositeLit -> Phantoms.TTerm Syntax.LiteralValue
@@ -1025,7 +1025,7 @@ compositeLitValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.CompositeLit"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the type field of hydra.go.syntax.CompositeLit
 compositeLitWithType :: Phantoms.TTerm Syntax.CompositeLit -> Phantoms.TTerm Syntax.LiteralType -> Phantoms.TTerm Syntax.CompositeLit
@@ -1041,7 +1041,7 @@ compositeLitWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.CompositeLit"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the value field of hydra.go.syntax.CompositeLit
 compositeLitWithValue :: Phantoms.TTerm Syntax.CompositeLit -> Phantoms.TTerm Syntax.LiteralValue -> Phantoms.TTerm Syntax.CompositeLit
@@ -1054,7 +1054,7 @@ compositeLitWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.CompositeLit"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -1086,7 +1086,7 @@ constSpecNames x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ConstSpec"),
-        Core.projectionField = (Core.Name "names")})),
+        Core.projectionFieldName = (Core.Name "names")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.go.syntax.ConstSpec
 constSpecType :: Phantoms.TTerm Syntax.ConstSpec -> Phantoms.TTerm (Maybe Syntax.Type)
@@ -1094,7 +1094,7 @@ constSpecType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ConstSpec"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the values field of hydra.go.syntax.ConstSpec
 constSpecValues :: Phantoms.TTerm Syntax.ConstSpec -> Phantoms.TTerm [Syntax.Expression]
@@ -1102,7 +1102,7 @@ constSpecValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ConstSpec"),
-        Core.projectionField = (Core.Name "values")})),
+        Core.projectionFieldName = (Core.Name "values")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the names field of hydra.go.syntax.ConstSpec
 constSpecWithNames :: Phantoms.TTerm Syntax.ConstSpec -> Phantoms.TTerm [Syntax.Identifier] -> Phantoms.TTerm Syntax.ConstSpec
@@ -1118,14 +1118,14 @@ constSpecWithNames original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ConstSpec"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "values"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ConstSpec"),
-              Core.projectionField = (Core.Name "values")})),
+              Core.projectionFieldName = (Core.Name "values")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.go.syntax.ConstSpec
 constSpecWithType :: Phantoms.TTerm Syntax.ConstSpec -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.ConstSpec
@@ -1138,7 +1138,7 @@ constSpecWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ConstSpec"),
-              Core.projectionField = (Core.Name "names")})),
+              Core.projectionFieldName = (Core.Name "names")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -1148,7 +1148,7 @@ constSpecWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ConstSpec"),
-              Core.projectionField = (Core.Name "values")})),
+              Core.projectionFieldName = (Core.Name "values")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the values field of hydra.go.syntax.ConstSpec
 constSpecWithValues :: Phantoms.TTerm Syntax.ConstSpec -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.ConstSpec
@@ -1161,14 +1161,14 @@ constSpecWithValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ConstSpec"),
-              Core.projectionField = (Core.Name "names")})),
+              Core.projectionFieldName = (Core.Name "names")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ConstSpec"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "values"),
@@ -1197,7 +1197,7 @@ conversionExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.Conversion"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.go.syntax.Conversion
 conversionType :: Phantoms.TTerm Syntax.Conversion -> Phantoms.TTerm Syntax.Type
@@ -1205,7 +1205,7 @@ conversionType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.Conversion"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the expression field of hydra.go.syntax.Conversion
 conversionWithExpression :: Phantoms.TTerm Syntax.Conversion -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.Conversion
@@ -1218,7 +1218,7 @@ conversionWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Conversion"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -1237,7 +1237,7 @@ conversionWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Conversion"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL injection for the const variant of hydra.go.syntax.Declaration
 declarationConst :: Phantoms.TTerm Syntax.ConstDecl -> Phantoms.TTerm Syntax.Declaration
@@ -1328,7 +1328,7 @@ embeddedFieldPointer x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.EmbeddedField"),
-        Core.projectionField = (Core.Name "pointer")})),
+        Core.projectionFieldName = (Core.Name "pointer")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the tag field of hydra.go.syntax.EmbeddedField
 embeddedFieldTag :: Phantoms.TTerm Syntax.EmbeddedField -> Phantoms.TTerm (Maybe Syntax.Tag)
@@ -1336,7 +1336,7 @@ embeddedFieldTag x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.EmbeddedField"),
-        Core.projectionField = (Core.Name "tag")})),
+        Core.projectionFieldName = (Core.Name "tag")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.go.syntax.EmbeddedField
 embeddedFieldType :: Phantoms.TTerm Syntax.EmbeddedField -> Phantoms.TTerm Syntax.TypeName
@@ -1344,7 +1344,7 @@ embeddedFieldType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.EmbeddedField"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the pointer field of hydra.go.syntax.EmbeddedField
 embeddedFieldWithPointer :: Phantoms.TTerm Syntax.EmbeddedField -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.EmbeddedField
@@ -1360,14 +1360,14 @@ embeddedFieldWithPointer original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.EmbeddedField"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "tag"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.EmbeddedField"),
-              Core.projectionField = (Core.Name "tag")})),
+              Core.projectionFieldName = (Core.Name "tag")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the tag field of hydra.go.syntax.EmbeddedField
 embeddedFieldWithTag :: Phantoms.TTerm Syntax.EmbeddedField -> Phantoms.TTerm (Maybe Syntax.Tag) -> Phantoms.TTerm Syntax.EmbeddedField
@@ -1380,14 +1380,14 @@ embeddedFieldWithTag original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.EmbeddedField"),
-              Core.projectionField = (Core.Name "pointer")})),
+              Core.projectionFieldName = (Core.Name "pointer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.EmbeddedField"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "tag"),
@@ -1403,7 +1403,7 @@ embeddedFieldWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.EmbeddedField"),
-              Core.projectionField = (Core.Name "pointer")})),
+              Core.projectionFieldName = (Core.Name "pointer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -1413,7 +1413,7 @@ embeddedFieldWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.EmbeddedField"),
-              Core.projectionField = (Core.Name "tag")})),
+              Core.projectionFieldName = (Core.Name "tag")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for the hydra.go.syntax.EmptyStmt wrapper
 emptyStmt :: Phantoms.TTerm () -> Phantoms.TTerm Syntax.EmptyStmt
@@ -1439,7 +1439,7 @@ exprCaseClauseCase x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ExprCaseClause"),
-        Core.projectionField = (Core.Name "case")})),
+        Core.projectionFieldName = (Core.Name "case")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the statements field of hydra.go.syntax.ExprCaseClause
 exprCaseClauseStatements :: Phantoms.TTerm Syntax.ExprCaseClause -> Phantoms.TTerm [Syntax.Statement]
@@ -1447,7 +1447,7 @@ exprCaseClauseStatements x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ExprCaseClause"),
-        Core.projectionField = (Core.Name "statements")})),
+        Core.projectionFieldName = (Core.Name "statements")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the case field of hydra.go.syntax.ExprCaseClause
 exprCaseClauseWithCase :: Phantoms.TTerm Syntax.ExprCaseClause -> Phantoms.TTerm (Maybe [Syntax.Expression]) -> Phantoms.TTerm Syntax.ExprCaseClause
@@ -1463,7 +1463,7 @@ exprCaseClauseWithCase original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ExprCaseClause"),
-              Core.projectionField = (Core.Name "statements")})),
+              Core.projectionFieldName = (Core.Name "statements")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the statements field of hydra.go.syntax.ExprCaseClause
 exprCaseClauseWithStatements :: Phantoms.TTerm Syntax.ExprCaseClause -> Phantoms.TTerm [Syntax.Statement] -> Phantoms.TTerm Syntax.ExprCaseClause
@@ -1476,7 +1476,7 @@ exprCaseClauseWithStatements original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ExprCaseClause"),
-              Core.projectionField = (Core.Name "case")})),
+              Core.projectionFieldName = (Core.Name "case")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "statements"),
@@ -1502,7 +1502,7 @@ exprSwitchStmtCases x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ExprSwitchStmt"),
-        Core.projectionField = (Core.Name "cases")})),
+        Core.projectionFieldName = (Core.Name "cases")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the expression field of hydra.go.syntax.ExprSwitchStmt
 exprSwitchStmtExpression :: Phantoms.TTerm Syntax.ExprSwitchStmt -> Phantoms.TTerm (Maybe Syntax.Expression)
@@ -1510,7 +1510,7 @@ exprSwitchStmtExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ExprSwitchStmt"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the init field of hydra.go.syntax.ExprSwitchStmt
 exprSwitchStmtInit :: Phantoms.TTerm Syntax.ExprSwitchStmt -> Phantoms.TTerm (Maybe Syntax.SimpleStmt)
@@ -1518,7 +1518,7 @@ exprSwitchStmtInit x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ExprSwitchStmt"),
-        Core.projectionField = (Core.Name "init")})),
+        Core.projectionFieldName = (Core.Name "init")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the cases field of hydra.go.syntax.ExprSwitchStmt
 exprSwitchStmtWithCases :: Phantoms.TTerm Syntax.ExprSwitchStmt -> Phantoms.TTerm [Syntax.ExprCaseClause] -> Phantoms.TTerm Syntax.ExprSwitchStmt
@@ -1531,14 +1531,14 @@ exprSwitchStmtWithCases original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ExprSwitchStmt"),
-              Core.projectionField = (Core.Name "init")})),
+              Core.projectionFieldName = (Core.Name "init")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ExprSwitchStmt"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
@@ -1554,7 +1554,7 @@ exprSwitchStmtWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ExprSwitchStmt"),
-              Core.projectionField = (Core.Name "init")})),
+              Core.projectionFieldName = (Core.Name "init")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -1564,7 +1564,7 @@ exprSwitchStmtWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ExprSwitchStmt"),
-              Core.projectionField = (Core.Name "cases")})),
+              Core.projectionFieldName = (Core.Name "cases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the init field of hydra.go.syntax.ExprSwitchStmt
 exprSwitchStmtWithInit :: Phantoms.TTerm Syntax.ExprSwitchStmt -> Phantoms.TTerm (Maybe Syntax.SimpleStmt) -> Phantoms.TTerm Syntax.ExprSwitchStmt
@@ -1580,14 +1580,14 @@ exprSwitchStmtWithInit original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ExprSwitchStmt"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ExprSwitchStmt"),
-              Core.projectionField = (Core.Name "cases")})),
+              Core.projectionFieldName = (Core.Name "cases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL injection for the binary variant of hydra.go.syntax.Expression
 expressionBinary :: Phantoms.TTerm Syntax.BinaryExpr -> Phantoms.TTerm Syntax.Expression
@@ -1660,7 +1660,7 @@ forClauseCondition x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ForClause"),
-        Core.projectionField = (Core.Name "condition")})),
+        Core.projectionFieldName = (Core.Name "condition")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the init field of hydra.go.syntax.ForClause
 forClauseInit :: Phantoms.TTerm Syntax.ForClause -> Phantoms.TTerm (Maybe Syntax.SimpleStmt)
@@ -1668,7 +1668,7 @@ forClauseInit x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ForClause"),
-        Core.projectionField = (Core.Name "init")})),
+        Core.projectionFieldName = (Core.Name "init")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL injection for the clause variant of hydra.go.syntax.ForClauseOrRange
 forClauseOrRangeClause :: Phantoms.TTerm Syntax.ForClause -> Phantoms.TTerm Syntax.ForClauseOrRange
@@ -1700,7 +1700,7 @@ forClausePost x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ForClause"),
-        Core.projectionField = (Core.Name "post")})),
+        Core.projectionFieldName = (Core.Name "post")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the condition field of hydra.go.syntax.ForClause
 forClauseWithCondition :: Phantoms.TTerm Syntax.ForClause -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.ForClause
@@ -1713,7 +1713,7 @@ forClauseWithCondition original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ForClause"),
-              Core.projectionField = (Core.Name "init")})),
+              Core.projectionFieldName = (Core.Name "init")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "condition"),
@@ -1723,7 +1723,7 @@ forClauseWithCondition original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ForClause"),
-              Core.projectionField = (Core.Name "post")})),
+              Core.projectionFieldName = (Core.Name "post")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the init field of hydra.go.syntax.ForClause
 forClauseWithInit :: Phantoms.TTerm Syntax.ForClause -> Phantoms.TTerm (Maybe Syntax.SimpleStmt) -> Phantoms.TTerm Syntax.ForClause
@@ -1739,14 +1739,14 @@ forClauseWithInit original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ForClause"),
-              Core.projectionField = (Core.Name "condition")})),
+              Core.projectionFieldName = (Core.Name "condition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "post"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ForClause"),
-              Core.projectionField = (Core.Name "post")})),
+              Core.projectionFieldName = (Core.Name "post")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the post field of hydra.go.syntax.ForClause
 forClauseWithPost :: Phantoms.TTerm Syntax.ForClause -> Phantoms.TTerm (Maybe Syntax.SimpleStmt) -> Phantoms.TTerm Syntax.ForClause
@@ -1759,14 +1759,14 @@ forClauseWithPost original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ForClause"),
-              Core.projectionField = (Core.Name "init")})),
+              Core.projectionFieldName = (Core.Name "init")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "condition"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ForClause"),
-              Core.projectionField = (Core.Name "condition")})),
+              Core.projectionFieldName = (Core.Name "condition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "post"),
@@ -1789,7 +1789,7 @@ forStmtBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ForStmt"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the clause field of hydra.go.syntax.ForStmt
 forStmtClause :: Phantoms.TTerm Syntax.ForStmt -> Phantoms.TTerm (Maybe Syntax.ForClauseOrRange)
@@ -1797,7 +1797,7 @@ forStmtClause x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ForStmt"),
-        Core.projectionField = (Core.Name "clause")})),
+        Core.projectionFieldName = (Core.Name "clause")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the body field of hydra.go.syntax.ForStmt
 forStmtWithBody :: Phantoms.TTerm Syntax.ForStmt -> Phantoms.TTerm Syntax.Block -> Phantoms.TTerm Syntax.ForStmt
@@ -1810,7 +1810,7 @@ forStmtWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ForStmt"),
-              Core.projectionField = (Core.Name "clause")})),
+              Core.projectionFieldName = (Core.Name "clause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -1829,7 +1829,7 @@ forStmtWithClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ForStmt"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.go.syntax.FullSlice
 fullSlice :: Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.FullSlice
@@ -1852,7 +1852,7 @@ fullSliceHigh x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.FullSlice"),
-        Core.projectionField = (Core.Name "high")})),
+        Core.projectionFieldName = (Core.Name "high")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the low field of hydra.go.syntax.FullSlice
 fullSliceLow :: Phantoms.TTerm Syntax.FullSlice -> Phantoms.TTerm (Maybe Syntax.Expression)
@@ -1860,7 +1860,7 @@ fullSliceLow x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.FullSlice"),
-        Core.projectionField = (Core.Name "low")})),
+        Core.projectionFieldName = (Core.Name "low")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the max field of hydra.go.syntax.FullSlice
 fullSliceMax :: Phantoms.TTerm Syntax.FullSlice -> Phantoms.TTerm Syntax.Expression
@@ -1868,7 +1868,7 @@ fullSliceMax x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.FullSlice"),
-        Core.projectionField = (Core.Name "max")})),
+        Core.projectionFieldName = (Core.Name "max")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the high field of hydra.go.syntax.FullSlice
 fullSliceWithHigh :: Phantoms.TTerm Syntax.FullSlice -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.FullSlice
@@ -1881,7 +1881,7 @@ fullSliceWithHigh original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.FullSlice"),
-              Core.projectionField = (Core.Name "low")})),
+              Core.projectionFieldName = (Core.Name "low")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "high"),
@@ -1891,7 +1891,7 @@ fullSliceWithHigh original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.FullSlice"),
-              Core.projectionField = (Core.Name "max")})),
+              Core.projectionFieldName = (Core.Name "max")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the low field of hydra.go.syntax.FullSlice
 fullSliceWithLow :: Phantoms.TTerm Syntax.FullSlice -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.FullSlice
@@ -1907,14 +1907,14 @@ fullSliceWithLow original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.FullSlice"),
-              Core.projectionField = (Core.Name "high")})),
+              Core.projectionFieldName = (Core.Name "high")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "max"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.FullSlice"),
-              Core.projectionField = (Core.Name "max")})),
+              Core.projectionFieldName = (Core.Name "max")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the max field of hydra.go.syntax.FullSlice
 fullSliceWithMax :: Phantoms.TTerm Syntax.FullSlice -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.FullSlice
@@ -1927,14 +1927,14 @@ fullSliceWithMax original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.FullSlice"),
-              Core.projectionField = (Core.Name "low")})),
+              Core.projectionFieldName = (Core.Name "low")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "high"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.FullSlice"),
-              Core.projectionField = (Core.Name "high")})),
+              Core.projectionFieldName = (Core.Name "high")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "max"),
@@ -1969,7 +1969,7 @@ functionDeclBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionDecl"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.go.syntax.FunctionDecl
 functionDeclName :: Phantoms.TTerm Syntax.FunctionDecl -> Phantoms.TTerm Syntax.Identifier
@@ -1977,7 +1977,7 @@ functionDeclName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionDecl"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the signature field of hydra.go.syntax.FunctionDecl
 functionDeclSignature :: Phantoms.TTerm Syntax.FunctionDecl -> Phantoms.TTerm Syntax.Signature
@@ -1985,7 +1985,7 @@ functionDeclSignature x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionDecl"),
-        Core.projectionField = (Core.Name "signature")})),
+        Core.projectionFieldName = (Core.Name "signature")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the typeParams field of hydra.go.syntax.FunctionDecl
 functionDeclTypeParams :: Phantoms.TTerm Syntax.FunctionDecl -> Phantoms.TTerm (Maybe Syntax.TypeParameters)
@@ -1993,7 +1993,7 @@ functionDeclTypeParams x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionDecl"),
-        Core.projectionField = (Core.Name "typeParams")})),
+        Core.projectionFieldName = (Core.Name "typeParams")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the body field of hydra.go.syntax.FunctionDecl
 functionDeclWithBody :: Phantoms.TTerm Syntax.FunctionDecl -> Phantoms.TTerm (Maybe Syntax.FunctionBody) -> Phantoms.TTerm Syntax.FunctionDecl
@@ -2006,21 +2006,21 @@ functionDeclWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionDecl"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeParams"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionDecl"),
-              Core.projectionField = (Core.Name "typeParams")})),
+              Core.projectionFieldName = (Core.Name "typeParams")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "signature"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionDecl"),
-              Core.projectionField = (Core.Name "signature")})),
+              Core.projectionFieldName = (Core.Name "signature")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -2039,21 +2039,21 @@ functionDeclWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionDecl"),
-              Core.projectionField = (Core.Name "typeParams")})),
+              Core.projectionFieldName = (Core.Name "typeParams")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "signature"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionDecl"),
-              Core.projectionField = (Core.Name "signature")})),
+              Core.projectionFieldName = (Core.Name "signature")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionDecl"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the signature field of hydra.go.syntax.FunctionDecl
 functionDeclWithSignature :: Phantoms.TTerm Syntax.FunctionDecl -> Phantoms.TTerm Syntax.Signature -> Phantoms.TTerm Syntax.FunctionDecl
@@ -2066,14 +2066,14 @@ functionDeclWithSignature original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionDecl"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeParams"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionDecl"),
-              Core.projectionField = (Core.Name "typeParams")})),
+              Core.projectionFieldName = (Core.Name "typeParams")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "signature"),
@@ -2083,7 +2083,7 @@ functionDeclWithSignature original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionDecl"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the typeParams field of hydra.go.syntax.FunctionDecl
 functionDeclWithTypeParams :: Phantoms.TTerm Syntax.FunctionDecl -> Phantoms.TTerm (Maybe Syntax.TypeParameters) -> Phantoms.TTerm Syntax.FunctionDecl
@@ -2096,7 +2096,7 @@ functionDeclWithTypeParams original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionDecl"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeParams"),
@@ -2106,14 +2106,14 @@ functionDeclWithTypeParams original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionDecl"),
-              Core.projectionField = (Core.Name "signature")})),
+              Core.projectionFieldName = (Core.Name "signature")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionDecl"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.go.syntax.FunctionLit
 functionLit :: Phantoms.TTerm Syntax.Signature -> Phantoms.TTerm Syntax.FunctionBody -> Phantoms.TTerm Syntax.FunctionLit
@@ -2133,7 +2133,7 @@ functionLitBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionLit"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the signature field of hydra.go.syntax.FunctionLit
 functionLitSignature :: Phantoms.TTerm Syntax.FunctionLit -> Phantoms.TTerm Syntax.Signature
@@ -2141,7 +2141,7 @@ functionLitSignature x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionLit"),
-        Core.projectionField = (Core.Name "signature")})),
+        Core.projectionFieldName = (Core.Name "signature")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the body field of hydra.go.syntax.FunctionLit
 functionLitWithBody :: Phantoms.TTerm Syntax.FunctionLit -> Phantoms.TTerm Syntax.FunctionBody -> Phantoms.TTerm Syntax.FunctionLit
@@ -2154,7 +2154,7 @@ functionLitWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionLit"),
-              Core.projectionField = (Core.Name "signature")})),
+              Core.projectionFieldName = (Core.Name "signature")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -2173,7 +2173,7 @@ functionLitWithSignature original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionLit"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for the hydra.go.syntax.FunctionType wrapper
 functionType :: Phantoms.TTerm Syntax.Signature -> Phantoms.TTerm Syntax.FunctionType
@@ -2223,7 +2223,7 @@ ifStmtCondition x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.IfStmt"),
-        Core.projectionField = (Core.Name "condition")})),
+        Core.projectionFieldName = (Core.Name "condition")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the else field of hydra.go.syntax.IfStmt
 ifStmtElse :: Phantoms.TTerm Syntax.IfStmt -> Phantoms.TTerm (Maybe Syntax.ElseClause)
@@ -2231,7 +2231,7 @@ ifStmtElse x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.IfStmt"),
-        Core.projectionField = (Core.Name "else")})),
+        Core.projectionFieldName = (Core.Name "else")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the init field of hydra.go.syntax.IfStmt
 ifStmtInit :: Phantoms.TTerm Syntax.IfStmt -> Phantoms.TTerm (Maybe Syntax.SimpleStmt)
@@ -2239,7 +2239,7 @@ ifStmtInit x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.IfStmt"),
-        Core.projectionField = (Core.Name "init")})),
+        Core.projectionFieldName = (Core.Name "init")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the then field of hydra.go.syntax.IfStmt
 ifStmtThen :: Phantoms.TTerm Syntax.IfStmt -> Phantoms.TTerm Syntax.Block
@@ -2247,7 +2247,7 @@ ifStmtThen x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.IfStmt"),
-        Core.projectionField = (Core.Name "then")})),
+        Core.projectionFieldName = (Core.Name "then")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the condition field of hydra.go.syntax.IfStmt
 ifStmtWithCondition :: Phantoms.TTerm Syntax.IfStmt -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.IfStmt
@@ -2260,7 +2260,7 @@ ifStmtWithCondition original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.IfStmt"),
-              Core.projectionField = (Core.Name "init")})),
+              Core.projectionFieldName = (Core.Name "init")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "condition"),
@@ -2270,14 +2270,14 @@ ifStmtWithCondition original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.IfStmt"),
-              Core.projectionField = (Core.Name "then")})),
+              Core.projectionFieldName = (Core.Name "then")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "else"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.IfStmt"),
-              Core.projectionField = (Core.Name "else")})),
+              Core.projectionFieldName = (Core.Name "else")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the else field of hydra.go.syntax.IfStmt
 ifStmtWithElse :: Phantoms.TTerm Syntax.IfStmt -> Phantoms.TTerm (Maybe Syntax.ElseClause) -> Phantoms.TTerm Syntax.IfStmt
@@ -2290,21 +2290,21 @@ ifStmtWithElse original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.IfStmt"),
-              Core.projectionField = (Core.Name "init")})),
+              Core.projectionFieldName = (Core.Name "init")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "condition"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.IfStmt"),
-              Core.projectionField = (Core.Name "condition")})),
+              Core.projectionFieldName = (Core.Name "condition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "then"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.IfStmt"),
-              Core.projectionField = (Core.Name "then")})),
+              Core.projectionFieldName = (Core.Name "then")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "else"),
@@ -2323,21 +2323,21 @@ ifStmtWithInit original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.IfStmt"),
-              Core.projectionField = (Core.Name "condition")})),
+              Core.projectionFieldName = (Core.Name "condition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "then"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.IfStmt"),
-              Core.projectionField = (Core.Name "then")})),
+              Core.projectionFieldName = (Core.Name "then")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "else"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.IfStmt"),
-              Core.projectionField = (Core.Name "else")})),
+              Core.projectionFieldName = (Core.Name "else")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the then field of hydra.go.syntax.IfStmt
 ifStmtWithThen :: Phantoms.TTerm Syntax.IfStmt -> Phantoms.TTerm Syntax.Block -> Phantoms.TTerm Syntax.IfStmt
@@ -2350,14 +2350,14 @@ ifStmtWithThen original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.IfStmt"),
-              Core.projectionField = (Core.Name "init")})),
+              Core.projectionFieldName = (Core.Name "init")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "condition"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.IfStmt"),
-              Core.projectionField = (Core.Name "condition")})),
+              Core.projectionFieldName = (Core.Name "condition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "then"),
@@ -2367,7 +2367,7 @@ ifStmtWithThen original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.IfStmt"),
-              Core.projectionField = (Core.Name "else")})),
+              Core.projectionFieldName = (Core.Name "else")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for the hydra.go.syntax.ImaginaryLit wrapper
 imaginaryLit :: Phantoms.TTerm Double -> Phantoms.TTerm Syntax.ImaginaryLit
@@ -2421,7 +2421,7 @@ importSpecAlias x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ImportSpec"),
-        Core.projectionField = (Core.Name "alias")})),
+        Core.projectionFieldName = (Core.Name "alias")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the path field of hydra.go.syntax.ImportSpec
 importSpecPath :: Phantoms.TTerm Syntax.ImportSpec -> Phantoms.TTerm Syntax.ImportPath
@@ -2429,7 +2429,7 @@ importSpecPath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ImportSpec"),
-        Core.projectionField = (Core.Name "path")})),
+        Core.projectionFieldName = (Core.Name "path")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the alias field of hydra.go.syntax.ImportSpec
 importSpecWithAlias :: Phantoms.TTerm Syntax.ImportSpec -> Phantoms.TTerm (Maybe Syntax.ImportAlias) -> Phantoms.TTerm Syntax.ImportSpec
@@ -2445,7 +2445,7 @@ importSpecWithAlias original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ImportSpec"),
-              Core.projectionField = (Core.Name "path")})),
+              Core.projectionFieldName = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the path field of hydra.go.syntax.ImportSpec
 importSpecWithPath :: Phantoms.TTerm Syntax.ImportSpec -> Phantoms.TTerm Syntax.ImportPath -> Phantoms.TTerm Syntax.ImportSpec
@@ -2458,7 +2458,7 @@ importSpecWithPath original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ImportSpec"),
-              Core.projectionField = (Core.Name "alias")})),
+              Core.projectionFieldName = (Core.Name "alias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "path"),
@@ -2481,7 +2481,7 @@ incDecStmtExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.IncDecStmt"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the increment field of hydra.go.syntax.IncDecStmt
 incDecStmtIncrement :: Phantoms.TTerm Syntax.IncDecStmt -> Phantoms.TTerm Bool
@@ -2489,7 +2489,7 @@ incDecStmtIncrement x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.IncDecStmt"),
-        Core.projectionField = (Core.Name "increment")})),
+        Core.projectionFieldName = (Core.Name "increment")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the expression field of hydra.go.syntax.IncDecStmt
 incDecStmtWithExpression :: Phantoms.TTerm Syntax.IncDecStmt -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.IncDecStmt
@@ -2505,7 +2505,7 @@ incDecStmtWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.IncDecStmt"),
-              Core.projectionField = (Core.Name "increment")})),
+              Core.projectionFieldName = (Core.Name "increment")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the increment field of hydra.go.syntax.IncDecStmt
 incDecStmtWithIncrement :: Phantoms.TTerm Syntax.IncDecStmt -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.IncDecStmt
@@ -2518,7 +2518,7 @@ incDecStmtWithIncrement original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.IncDecStmt"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "increment"),
@@ -2547,7 +2547,7 @@ indexExprExpr x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.IndexExpr"),
-        Core.projectionField = (Core.Name "expr")})),
+        Core.projectionFieldName = (Core.Name "expr")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the index field of hydra.go.syntax.IndexExpr
 indexExprIndex :: Phantoms.TTerm Syntax.IndexExpr -> Phantoms.TTerm Syntax.Expression
@@ -2555,7 +2555,7 @@ indexExprIndex x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.IndexExpr"),
-        Core.projectionField = (Core.Name "index")})),
+        Core.projectionFieldName = (Core.Name "index")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the expr field of hydra.go.syntax.IndexExpr
 indexExprWithExpr :: Phantoms.TTerm Syntax.IndexExpr -> Phantoms.TTerm Syntax.PrimaryExpr -> Phantoms.TTerm Syntax.IndexExpr
@@ -2571,7 +2571,7 @@ indexExprWithExpr original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.IndexExpr"),
-              Core.projectionField = (Core.Name "index")})),
+              Core.projectionFieldName = (Core.Name "index")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the index field of hydra.go.syntax.IndexExpr
 indexExprWithIndex :: Phantoms.TTerm Syntax.IndexExpr -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.IndexExpr
@@ -2584,7 +2584,7 @@ indexExprWithIndex original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.IndexExpr"),
-              Core.projectionField = (Core.Name "expr")})),
+              Core.projectionFieldName = (Core.Name "expr")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "index"),
@@ -2665,7 +2665,7 @@ keyedElementElement x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.KeyedElement"),
-        Core.projectionField = (Core.Name "element")})),
+        Core.projectionFieldName = (Core.Name "element")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the key field of hydra.go.syntax.KeyedElement
 keyedElementKey :: Phantoms.TTerm Syntax.KeyedElement -> Phantoms.TTerm (Maybe Syntax.Key)
@@ -2673,7 +2673,7 @@ keyedElementKey x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.KeyedElement"),
-        Core.projectionField = (Core.Name "key")})),
+        Core.projectionFieldName = (Core.Name "key")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the element field of hydra.go.syntax.KeyedElement
 keyedElementWithElement :: Phantoms.TTerm Syntax.KeyedElement -> Phantoms.TTerm Syntax.Element -> Phantoms.TTerm Syntax.KeyedElement
@@ -2686,7 +2686,7 @@ keyedElementWithElement original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.KeyedElement"),
-              Core.projectionField = (Core.Name "key")})),
+              Core.projectionFieldName = (Core.Name "key")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "element"),
@@ -2705,7 +2705,7 @@ keyedElementWithKey original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.KeyedElement"),
-              Core.projectionField = (Core.Name "element")})),
+              Core.projectionFieldName = (Core.Name "element")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.go.syntax.LabeledStmt
 labeledStmt :: Phantoms.TTerm Syntax.Identifier -> Phantoms.TTerm Syntax.Statement -> Phantoms.TTerm Syntax.LabeledStmt
@@ -2725,7 +2725,7 @@ labeledStmtLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.LabeledStmt"),
-        Core.projectionField = (Core.Name "label")})),
+        Core.projectionFieldName = (Core.Name "label")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the statement field of hydra.go.syntax.LabeledStmt
 labeledStmtStatement :: Phantoms.TTerm Syntax.LabeledStmt -> Phantoms.TTerm Syntax.Statement
@@ -2733,7 +2733,7 @@ labeledStmtStatement x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.LabeledStmt"),
-        Core.projectionField = (Core.Name "statement")})),
+        Core.projectionFieldName = (Core.Name "statement")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the label field of hydra.go.syntax.LabeledStmt
 labeledStmtWithLabel :: Phantoms.TTerm Syntax.LabeledStmt -> Phantoms.TTerm Syntax.Identifier -> Phantoms.TTerm Syntax.LabeledStmt
@@ -2749,7 +2749,7 @@ labeledStmtWithLabel original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.LabeledStmt"),
-              Core.projectionField = (Core.Name "statement")})),
+              Core.projectionFieldName = (Core.Name "statement")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the statement field of hydra.go.syntax.LabeledStmt
 labeledStmtWithStatement :: Phantoms.TTerm Syntax.LabeledStmt -> Phantoms.TTerm Syntax.Statement -> Phantoms.TTerm Syntax.LabeledStmt
@@ -2762,7 +2762,7 @@ labeledStmtWithStatement original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.LabeledStmt"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "statement"),
@@ -2863,7 +2863,7 @@ mapTypeKey x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.MapType"),
-        Core.projectionField = (Core.Name "key")})),
+        Core.projectionFieldName = (Core.Name "key")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the value field of hydra.go.syntax.MapType
 mapTypeValue :: Phantoms.TTerm Syntax.MapType -> Phantoms.TTerm Syntax.Type
@@ -2871,7 +2871,7 @@ mapTypeValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.MapType"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the key field of hydra.go.syntax.MapType
 mapTypeWithKey :: Phantoms.TTerm Syntax.MapType -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.MapType
@@ -2887,7 +2887,7 @@ mapTypeWithKey original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.MapType"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the value field of hydra.go.syntax.MapType
 mapTypeWithValue :: Phantoms.TTerm Syntax.MapType -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.MapType
@@ -2900,7 +2900,7 @@ mapTypeWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.MapType"),
-              Core.projectionField = (Core.Name "key")})),
+              Core.projectionFieldName = (Core.Name "key")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -2929,7 +2929,7 @@ methodDeclBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodDecl"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.go.syntax.MethodDecl
 methodDeclName :: Phantoms.TTerm Syntax.MethodDecl -> Phantoms.TTerm Syntax.Identifier
@@ -2937,7 +2937,7 @@ methodDeclName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodDecl"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the receiver field of hydra.go.syntax.MethodDecl
 methodDeclReceiver :: Phantoms.TTerm Syntax.MethodDecl -> Phantoms.TTerm Syntax.Receiver
@@ -2945,7 +2945,7 @@ methodDeclReceiver x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodDecl"),
-        Core.projectionField = (Core.Name "receiver")})),
+        Core.projectionFieldName = (Core.Name "receiver")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the signature field of hydra.go.syntax.MethodDecl
 methodDeclSignature :: Phantoms.TTerm Syntax.MethodDecl -> Phantoms.TTerm Syntax.Signature
@@ -2953,7 +2953,7 @@ methodDeclSignature x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodDecl"),
-        Core.projectionField = (Core.Name "signature")})),
+        Core.projectionFieldName = (Core.Name "signature")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the body field of hydra.go.syntax.MethodDecl
 methodDeclWithBody :: Phantoms.TTerm Syntax.MethodDecl -> Phantoms.TTerm (Maybe Syntax.FunctionBody) -> Phantoms.TTerm Syntax.MethodDecl
@@ -2966,21 +2966,21 @@ methodDeclWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodDecl"),
-              Core.projectionField = (Core.Name "receiver")})),
+              Core.projectionFieldName = (Core.Name "receiver")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodDecl"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "signature"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodDecl"),
-              Core.projectionField = (Core.Name "signature")})),
+              Core.projectionFieldName = (Core.Name "signature")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -2996,7 +2996,7 @@ methodDeclWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodDecl"),
-              Core.projectionField = (Core.Name "receiver")})),
+              Core.projectionFieldName = (Core.Name "receiver")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -3006,14 +3006,14 @@ methodDeclWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodDecl"),
-              Core.projectionField = (Core.Name "signature")})),
+              Core.projectionFieldName = (Core.Name "signature")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodDecl"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the receiver field of hydra.go.syntax.MethodDecl
 methodDeclWithReceiver :: Phantoms.TTerm Syntax.MethodDecl -> Phantoms.TTerm Syntax.Receiver -> Phantoms.TTerm Syntax.MethodDecl
@@ -3029,21 +3029,21 @@ methodDeclWithReceiver original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodDecl"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "signature"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodDecl"),
-              Core.projectionField = (Core.Name "signature")})),
+              Core.projectionFieldName = (Core.Name "signature")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodDecl"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the signature field of hydra.go.syntax.MethodDecl
 methodDeclWithSignature :: Phantoms.TTerm Syntax.MethodDecl -> Phantoms.TTerm Syntax.Signature -> Phantoms.TTerm Syntax.MethodDecl
@@ -3056,14 +3056,14 @@ methodDeclWithSignature original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodDecl"),
-              Core.projectionField = (Core.Name "receiver")})),
+              Core.projectionFieldName = (Core.Name "receiver")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodDecl"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "signature"),
@@ -3073,7 +3073,7 @@ methodDeclWithSignature original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodDecl"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.go.syntax.MethodElem
 methodElem :: Phantoms.TTerm Syntax.Identifier -> Phantoms.TTerm Syntax.Signature -> Phantoms.TTerm Syntax.MethodElem
@@ -3093,7 +3093,7 @@ methodElemName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodElem"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the signature field of hydra.go.syntax.MethodElem
 methodElemSignature :: Phantoms.TTerm Syntax.MethodElem -> Phantoms.TTerm Syntax.Signature
@@ -3101,7 +3101,7 @@ methodElemSignature x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodElem"),
-        Core.projectionField = (Core.Name "signature")})),
+        Core.projectionFieldName = (Core.Name "signature")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the name field of hydra.go.syntax.MethodElem
 methodElemWithName :: Phantoms.TTerm Syntax.MethodElem -> Phantoms.TTerm Syntax.Identifier -> Phantoms.TTerm Syntax.MethodElem
@@ -3117,7 +3117,7 @@ methodElemWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodElem"),
-              Core.projectionField = (Core.Name "signature")})),
+              Core.projectionFieldName = (Core.Name "signature")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the signature field of hydra.go.syntax.MethodElem
 methodElemWithSignature :: Phantoms.TTerm Syntax.MethodElem -> Phantoms.TTerm Syntax.Signature -> Phantoms.TTerm Syntax.MethodElem
@@ -3130,7 +3130,7 @@ methodElemWithSignature original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodElem"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "signature"),
@@ -3153,7 +3153,7 @@ methodExprMethod x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodExpr"),
-        Core.projectionField = (Core.Name "method")})),
+        Core.projectionFieldName = (Core.Name "method")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the receiver field of hydra.go.syntax.MethodExpr
 methodExprReceiver :: Phantoms.TTerm Syntax.MethodExpr -> Phantoms.TTerm Syntax.Type
@@ -3161,7 +3161,7 @@ methodExprReceiver x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodExpr"),
-        Core.projectionField = (Core.Name "receiver")})),
+        Core.projectionFieldName = (Core.Name "receiver")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the method field of hydra.go.syntax.MethodExpr
 methodExprWithMethod :: Phantoms.TTerm Syntax.MethodExpr -> Phantoms.TTerm Syntax.Identifier -> Phantoms.TTerm Syntax.MethodExpr
@@ -3174,7 +3174,7 @@ methodExprWithMethod original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodExpr"),
-              Core.projectionField = (Core.Name "receiver")})),
+              Core.projectionFieldName = (Core.Name "receiver")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "method"),
@@ -3193,7 +3193,7 @@ methodExprWithReceiver original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodExpr"),
-              Core.projectionField = (Core.Name "method")})),
+              Core.projectionFieldName = (Core.Name "method")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.go.syntax.Module
 module_ :: Phantoms.TTerm Syntax.PackageClause -> Phantoms.TTerm [Syntax.ImportDecl] -> Phantoms.TTerm [Syntax.TopLevelDecl] -> Phantoms.TTerm Syntax.Module
@@ -3216,7 +3216,7 @@ moduleDeclarations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.Module"),
-        Core.projectionField = (Core.Name "declarations")})),
+        Core.projectionFieldName = (Core.Name "declarations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the imports field of hydra.go.syntax.Module
 moduleImports :: Phantoms.TTerm Syntax.Module -> Phantoms.TTerm [Syntax.ImportDecl]
@@ -3224,7 +3224,7 @@ moduleImports x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.Module"),
-        Core.projectionField = (Core.Name "imports")})),
+        Core.projectionFieldName = (Core.Name "imports")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the package field of hydra.go.syntax.Module
 modulePackage :: Phantoms.TTerm Syntax.Module -> Phantoms.TTerm Syntax.PackageClause
@@ -3232,7 +3232,7 @@ modulePackage x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.Module"),
-        Core.projectionField = (Core.Name "package")})),
+        Core.projectionFieldName = (Core.Name "package")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the declarations field of hydra.go.syntax.Module
 moduleWithDeclarations :: Phantoms.TTerm Syntax.Module -> Phantoms.TTerm [Syntax.TopLevelDecl] -> Phantoms.TTerm Syntax.Module
@@ -3245,14 +3245,14 @@ moduleWithDeclarations original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Module"),
-              Core.projectionField = (Core.Name "package")})),
+              Core.projectionFieldName = (Core.Name "package")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "imports"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Module"),
-              Core.projectionField = (Core.Name "imports")})),
+              Core.projectionFieldName = (Core.Name "imports")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "declarations"),
@@ -3268,7 +3268,7 @@ moduleWithImports original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Module"),
-              Core.projectionField = (Core.Name "package")})),
+              Core.projectionFieldName = (Core.Name "package")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "imports"),
@@ -3278,7 +3278,7 @@ moduleWithImports original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Module"),
-              Core.projectionField = (Core.Name "declarations")})),
+              Core.projectionFieldName = (Core.Name "declarations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the package field of hydra.go.syntax.Module
 moduleWithPackage :: Phantoms.TTerm Syntax.Module -> Phantoms.TTerm Syntax.PackageClause -> Phantoms.TTerm Syntax.Module
@@ -3294,14 +3294,14 @@ moduleWithPackage original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Module"),
-              Core.projectionField = (Core.Name "imports")})),
+              Core.projectionFieldName = (Core.Name "imports")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "declarations"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Module"),
-              Core.projectionField = (Core.Name "declarations")})),
+              Core.projectionFieldName = (Core.Name "declarations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL injection for the bitClear variant of hydra.go.syntax.MulOp
 mulOpBitClear :: Phantoms.TTerm Syntax.MulOp
@@ -3380,7 +3380,7 @@ namedFieldNames x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.NamedField"),
-        Core.projectionField = (Core.Name "names")})),
+        Core.projectionFieldName = (Core.Name "names")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the tag field of hydra.go.syntax.NamedField
 namedFieldTag :: Phantoms.TTerm Syntax.NamedField -> Phantoms.TTerm (Maybe Syntax.Tag)
@@ -3388,7 +3388,7 @@ namedFieldTag x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.NamedField"),
-        Core.projectionField = (Core.Name "tag")})),
+        Core.projectionFieldName = (Core.Name "tag")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.go.syntax.NamedField
 namedFieldType :: Phantoms.TTerm Syntax.NamedField -> Phantoms.TTerm Syntax.Type
@@ -3396,7 +3396,7 @@ namedFieldType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.NamedField"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the names field of hydra.go.syntax.NamedField
 namedFieldWithNames :: Phantoms.TTerm Syntax.NamedField -> Phantoms.TTerm [Syntax.Identifier] -> Phantoms.TTerm Syntax.NamedField
@@ -3412,14 +3412,14 @@ namedFieldWithNames original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.NamedField"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "tag"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.NamedField"),
-              Core.projectionField = (Core.Name "tag")})),
+              Core.projectionFieldName = (Core.Name "tag")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the tag field of hydra.go.syntax.NamedField
 namedFieldWithTag :: Phantoms.TTerm Syntax.NamedField -> Phantoms.TTerm (Maybe Syntax.Tag) -> Phantoms.TTerm Syntax.NamedField
@@ -3432,14 +3432,14 @@ namedFieldWithTag original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.NamedField"),
-              Core.projectionField = (Core.Name "names")})),
+              Core.projectionFieldName = (Core.Name "names")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.NamedField"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "tag"),
@@ -3455,7 +3455,7 @@ namedFieldWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.NamedField"),
-              Core.projectionField = (Core.Name "names")})),
+              Core.projectionFieldName = (Core.Name "names")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -3465,7 +3465,7 @@ namedFieldWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.NamedField"),
-              Core.projectionField = (Core.Name "tag")})),
+              Core.projectionFieldName = (Core.Name "tag")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL injection for the literal variant of hydra.go.syntax.Operand
 operandLiteral :: Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm Syntax.Operand
@@ -3501,7 +3501,7 @@ operandNameName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.OperandName"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the typeArgs field of hydra.go.syntax.OperandName
 operandNameTypeArgs :: Phantoms.TTerm Syntax.OperandName -> Phantoms.TTerm [Syntax.Type]
@@ -3509,7 +3509,7 @@ operandNameTypeArgs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.OperandName"),
-        Core.projectionField = (Core.Name "typeArgs")})),
+        Core.projectionFieldName = (Core.Name "typeArgs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the name field of hydra.go.syntax.OperandName
 operandNameWithName :: Phantoms.TTerm Syntax.OperandName -> Phantoms.TTerm Syntax.QualifiedIdent -> Phantoms.TTerm Syntax.OperandName
@@ -3525,7 +3525,7 @@ operandNameWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.OperandName"),
-              Core.projectionField = (Core.Name "typeArgs")})),
+              Core.projectionFieldName = (Core.Name "typeArgs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the typeArgs field of hydra.go.syntax.OperandName
 operandNameWithTypeArgs :: Phantoms.TTerm Syntax.OperandName -> Phantoms.TTerm [Syntax.Type] -> Phantoms.TTerm Syntax.OperandName
@@ -3538,7 +3538,7 @@ operandNameWithTypeArgs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.OperandName"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeArgs"),
@@ -3578,7 +3578,7 @@ parameterDeclNames x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ParameterDecl"),
-        Core.projectionField = (Core.Name "names")})),
+        Core.projectionFieldName = (Core.Name "names")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.go.syntax.ParameterDecl
 parameterDeclType :: Phantoms.TTerm Syntax.ParameterDecl -> Phantoms.TTerm Syntax.Type
@@ -3586,7 +3586,7 @@ parameterDeclType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ParameterDecl"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the variadic field of hydra.go.syntax.ParameterDecl
 parameterDeclVariadic :: Phantoms.TTerm Syntax.ParameterDecl -> Phantoms.TTerm Bool
@@ -3594,7 +3594,7 @@ parameterDeclVariadic x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ParameterDecl"),
-        Core.projectionField = (Core.Name "variadic")})),
+        Core.projectionFieldName = (Core.Name "variadic")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the names field of hydra.go.syntax.ParameterDecl
 parameterDeclWithNames :: Phantoms.TTerm Syntax.ParameterDecl -> Phantoms.TTerm [Syntax.Identifier] -> Phantoms.TTerm Syntax.ParameterDecl
@@ -3610,14 +3610,14 @@ parameterDeclWithNames original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ParameterDecl"),
-              Core.projectionField = (Core.Name "variadic")})),
+              Core.projectionFieldName = (Core.Name "variadic")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ParameterDecl"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.go.syntax.ParameterDecl
 parameterDeclWithType :: Phantoms.TTerm Syntax.ParameterDecl -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.ParameterDecl
@@ -3630,14 +3630,14 @@ parameterDeclWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ParameterDecl"),
-              Core.projectionField = (Core.Name "names")})),
+              Core.projectionFieldName = (Core.Name "names")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variadic"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ParameterDecl"),
-              Core.projectionField = (Core.Name "variadic")})),
+              Core.projectionFieldName = (Core.Name "variadic")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -3653,7 +3653,7 @@ parameterDeclWithVariadic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ParameterDecl"),
-              Core.projectionField = (Core.Name "names")})),
+              Core.projectionFieldName = (Core.Name "names")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variadic"),
@@ -3663,7 +3663,7 @@ parameterDeclWithVariadic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ParameterDecl"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for the hydra.go.syntax.Parameters wrapper
 parameters :: Phantoms.TTerm [Syntax.ParameterDecl] -> Phantoms.TTerm Syntax.Parameters
@@ -3759,7 +3759,7 @@ qualifiedIdentName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.QualifiedIdent"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the package field of hydra.go.syntax.QualifiedIdent
 qualifiedIdentPackage :: Phantoms.TTerm Syntax.QualifiedIdent -> Phantoms.TTerm (Maybe Syntax.Identifier)
@@ -3767,7 +3767,7 @@ qualifiedIdentPackage x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.QualifiedIdent"),
-        Core.projectionField = (Core.Name "package")})),
+        Core.projectionFieldName = (Core.Name "package")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the name field of hydra.go.syntax.QualifiedIdent
 qualifiedIdentWithName :: Phantoms.TTerm Syntax.QualifiedIdent -> Phantoms.TTerm Syntax.Identifier -> Phantoms.TTerm Syntax.QualifiedIdent
@@ -3780,7 +3780,7 @@ qualifiedIdentWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.QualifiedIdent"),
-              Core.projectionField = (Core.Name "package")})),
+              Core.projectionFieldName = (Core.Name "package")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -3799,7 +3799,7 @@ qualifiedIdentWithPackage original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.QualifiedIdent"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.go.syntax.RangeClause
 rangeClause :: Phantoms.TTerm (Maybe Syntax.RangeVars) -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.RangeClause
@@ -3819,7 +3819,7 @@ rangeClauseExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.RangeClause"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the vars field of hydra.go.syntax.RangeClause
 rangeClauseVars :: Phantoms.TTerm Syntax.RangeClause -> Phantoms.TTerm (Maybe Syntax.RangeVars)
@@ -3827,7 +3827,7 @@ rangeClauseVars x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.RangeClause"),
-        Core.projectionField = (Core.Name "vars")})),
+        Core.projectionFieldName = (Core.Name "vars")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the expression field of hydra.go.syntax.RangeClause
 rangeClauseWithExpression :: Phantoms.TTerm Syntax.RangeClause -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.RangeClause
@@ -3840,7 +3840,7 @@ rangeClauseWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.RangeClause"),
-              Core.projectionField = (Core.Name "vars")})),
+              Core.projectionFieldName = (Core.Name "vars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -3859,7 +3859,7 @@ rangeClauseWithVars original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.RangeClause"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL injection for the assign variant of hydra.go.syntax.RangeVars
 rangeVarsAssign :: Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.RangeVars
@@ -3901,7 +3901,7 @@ receiveCaseExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ReceiveCase"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the vars field of hydra.go.syntax.ReceiveCase
 receiveCaseVars :: Phantoms.TTerm Syntax.ReceiveCase -> Phantoms.TTerm (Maybe Syntax.RangeVars)
@@ -3909,7 +3909,7 @@ receiveCaseVars x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ReceiveCase"),
-        Core.projectionField = (Core.Name "vars")})),
+        Core.projectionFieldName = (Core.Name "vars")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the expression field of hydra.go.syntax.ReceiveCase
 receiveCaseWithExpression :: Phantoms.TTerm Syntax.ReceiveCase -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.ReceiveCase
@@ -3922,7 +3922,7 @@ receiveCaseWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ReceiveCase"),
-              Core.projectionField = (Core.Name "vars")})),
+              Core.projectionFieldName = (Core.Name "vars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -3941,7 +3941,7 @@ receiveCaseWithVars original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ReceiveCase"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.go.syntax.Receiver
 receiver :: Phantoms.TTerm (Maybe Syntax.Identifier) -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.Receiver
@@ -3961,7 +3961,7 @@ receiverName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.Receiver"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.go.syntax.Receiver
 receiverType :: Phantoms.TTerm Syntax.Receiver -> Phantoms.TTerm Syntax.Type
@@ -3969,7 +3969,7 @@ receiverType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.Receiver"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the name field of hydra.go.syntax.Receiver
 receiverWithName :: Phantoms.TTerm Syntax.Receiver -> Phantoms.TTerm (Maybe Syntax.Identifier) -> Phantoms.TTerm Syntax.Receiver
@@ -3985,7 +3985,7 @@ receiverWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Receiver"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.go.syntax.Receiver
 receiverWithType :: Phantoms.TTerm Syntax.Receiver -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.Receiver
@@ -3998,7 +3998,7 @@ receiverWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Receiver"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -4109,7 +4109,7 @@ selectorExprExpr x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.SelectorExpr"),
-        Core.projectionField = (Core.Name "expr")})),
+        Core.projectionFieldName = (Core.Name "expr")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the selector field of hydra.go.syntax.SelectorExpr
 selectorExprSelector :: Phantoms.TTerm Syntax.SelectorExpr -> Phantoms.TTerm Syntax.Identifier
@@ -4117,7 +4117,7 @@ selectorExprSelector x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.SelectorExpr"),
-        Core.projectionField = (Core.Name "selector")})),
+        Core.projectionFieldName = (Core.Name "selector")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the expr field of hydra.go.syntax.SelectorExpr
 selectorExprWithExpr :: Phantoms.TTerm Syntax.SelectorExpr -> Phantoms.TTerm Syntax.PrimaryExpr -> Phantoms.TTerm Syntax.SelectorExpr
@@ -4133,7 +4133,7 @@ selectorExprWithExpr original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.SelectorExpr"),
-              Core.projectionField = (Core.Name "selector")})),
+              Core.projectionFieldName = (Core.Name "selector")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the selector field of hydra.go.syntax.SelectorExpr
 selectorExprWithSelector :: Phantoms.TTerm Syntax.SelectorExpr -> Phantoms.TTerm Syntax.Identifier -> Phantoms.TTerm Syntax.SelectorExpr
@@ -4146,7 +4146,7 @@ selectorExprWithSelector original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.SelectorExpr"),
-              Core.projectionField = (Core.Name "expr")})),
+              Core.projectionFieldName = (Core.Name "expr")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "selector"),
@@ -4169,7 +4169,7 @@ sendStmtChannel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.SendStmt"),
-        Core.projectionField = (Core.Name "channel")})),
+        Core.projectionFieldName = (Core.Name "channel")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the value field of hydra.go.syntax.SendStmt
 sendStmtValue :: Phantoms.TTerm Syntax.SendStmt -> Phantoms.TTerm Syntax.Expression
@@ -4177,7 +4177,7 @@ sendStmtValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.SendStmt"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the channel field of hydra.go.syntax.SendStmt
 sendStmtWithChannel :: Phantoms.TTerm Syntax.SendStmt -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.SendStmt
@@ -4193,7 +4193,7 @@ sendStmtWithChannel original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.SendStmt"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the value field of hydra.go.syntax.SendStmt
 sendStmtWithValue :: Phantoms.TTerm Syntax.SendStmt -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.SendStmt
@@ -4206,7 +4206,7 @@ sendStmtWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.SendStmt"),
-              Core.projectionField = (Core.Name "channel")})),
+              Core.projectionFieldName = (Core.Name "channel")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -4229,7 +4229,7 @@ shortVarDeclNames x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ShortVarDecl"),
-        Core.projectionField = (Core.Name "names")})),
+        Core.projectionFieldName = (Core.Name "names")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the values field of hydra.go.syntax.ShortVarDecl
 shortVarDeclValues :: Phantoms.TTerm Syntax.ShortVarDecl -> Phantoms.TTerm [Syntax.Expression]
@@ -4237,7 +4237,7 @@ shortVarDeclValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ShortVarDecl"),
-        Core.projectionField = (Core.Name "values")})),
+        Core.projectionFieldName = (Core.Name "values")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the names field of hydra.go.syntax.ShortVarDecl
 shortVarDeclWithNames :: Phantoms.TTerm Syntax.ShortVarDecl -> Phantoms.TTerm [Syntax.Identifier] -> Phantoms.TTerm Syntax.ShortVarDecl
@@ -4253,7 +4253,7 @@ shortVarDeclWithNames original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ShortVarDecl"),
-              Core.projectionField = (Core.Name "values")})),
+              Core.projectionFieldName = (Core.Name "values")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the values field of hydra.go.syntax.ShortVarDecl
 shortVarDeclWithValues :: Phantoms.TTerm Syntax.ShortVarDecl -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.ShortVarDecl
@@ -4266,7 +4266,7 @@ shortVarDeclWithValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.ShortVarDecl"),
-              Core.projectionField = (Core.Name "names")})),
+              Core.projectionFieldName = (Core.Name "names")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "values"),
@@ -4289,7 +4289,7 @@ signatureParameters x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.Signature"),
-        Core.projectionField = (Core.Name "parameters")})),
+        Core.projectionFieldName = (Core.Name "parameters")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the result field of hydra.go.syntax.Signature
 signatureResult :: Phantoms.TTerm Syntax.Signature -> Phantoms.TTerm (Maybe Syntax.Result)
@@ -4297,7 +4297,7 @@ signatureResult x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.Signature"),
-        Core.projectionField = (Core.Name "result")})),
+        Core.projectionFieldName = (Core.Name "result")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the parameters field of hydra.go.syntax.Signature
 signatureWithParameters :: Phantoms.TTerm Syntax.Signature -> Phantoms.TTerm Syntax.Parameters -> Phantoms.TTerm Syntax.Signature
@@ -4313,7 +4313,7 @@ signatureWithParameters original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Signature"),
-              Core.projectionField = (Core.Name "result")})),
+              Core.projectionFieldName = (Core.Name "result")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the result field of hydra.go.syntax.Signature
 signatureWithResult :: Phantoms.TTerm Syntax.Signature -> Phantoms.TTerm (Maybe Syntax.Result) -> Phantoms.TTerm Syntax.Signature
@@ -4326,7 +4326,7 @@ signatureWithResult original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.Signature"),
-              Core.projectionField = (Core.Name "parameters")})),
+              Core.projectionFieldName = (Core.Name "parameters")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "result"),
@@ -4349,7 +4349,7 @@ simpleSliceHigh x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.SimpleSlice"),
-        Core.projectionField = (Core.Name "high")})),
+        Core.projectionFieldName = (Core.Name "high")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the low field of hydra.go.syntax.SimpleSlice
 simpleSliceLow :: Phantoms.TTerm Syntax.SimpleSlice -> Phantoms.TTerm (Maybe Syntax.Expression)
@@ -4357,7 +4357,7 @@ simpleSliceLow x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.SimpleSlice"),
-        Core.projectionField = (Core.Name "low")})),
+        Core.projectionFieldName = (Core.Name "low")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the high field of hydra.go.syntax.SimpleSlice
 simpleSliceWithHigh :: Phantoms.TTerm Syntax.SimpleSlice -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.SimpleSlice
@@ -4370,7 +4370,7 @@ simpleSliceWithHigh original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.SimpleSlice"),
-              Core.projectionField = (Core.Name "low")})),
+              Core.projectionFieldName = (Core.Name "low")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "high"),
@@ -4389,7 +4389,7 @@ simpleSliceWithLow original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.SimpleSlice"),
-              Core.projectionField = (Core.Name "high")})),
+              Core.projectionFieldName = (Core.Name "high")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL injection for the assignment variant of hydra.go.syntax.SimpleStmt
 simpleStmtAssignment :: Phantoms.TTerm Syntax.Assignment -> Phantoms.TTerm Syntax.SimpleStmt
@@ -4457,7 +4457,7 @@ sliceExprExpr x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.SliceExpr"),
-        Core.projectionField = (Core.Name "expr")})),
+        Core.projectionFieldName = (Core.Name "expr")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the slice field of hydra.go.syntax.SliceExpr
 sliceExprSlice :: Phantoms.TTerm Syntax.SliceExpr -> Phantoms.TTerm Syntax.Slice
@@ -4465,7 +4465,7 @@ sliceExprSlice x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.SliceExpr"),
-        Core.projectionField = (Core.Name "slice")})),
+        Core.projectionFieldName = (Core.Name "slice")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the expr field of hydra.go.syntax.SliceExpr
 sliceExprWithExpr :: Phantoms.TTerm Syntax.SliceExpr -> Phantoms.TTerm Syntax.PrimaryExpr -> Phantoms.TTerm Syntax.SliceExpr
@@ -4481,7 +4481,7 @@ sliceExprWithExpr original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.SliceExpr"),
-              Core.projectionField = (Core.Name "slice")})),
+              Core.projectionFieldName = (Core.Name "slice")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the slice field of hydra.go.syntax.SliceExpr
 sliceExprWithSlice :: Phantoms.TTerm Syntax.SliceExpr -> Phantoms.TTerm Syntax.Slice -> Phantoms.TTerm Syntax.SliceExpr
@@ -4494,7 +4494,7 @@ sliceExprWithSlice original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.SliceExpr"),
-              Core.projectionField = (Core.Name "expr")})),
+              Core.projectionFieldName = (Core.Name "expr")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "slice"),
@@ -4542,7 +4542,7 @@ sourceFileDeclarations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.SourceFile"),
-        Core.projectionField = (Core.Name "declarations")})),
+        Core.projectionFieldName = (Core.Name "declarations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the imports field of hydra.go.syntax.SourceFile
 sourceFileImports :: Phantoms.TTerm Syntax.SourceFile -> Phantoms.TTerm [Syntax.ImportDecl]
@@ -4550,7 +4550,7 @@ sourceFileImports x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.SourceFile"),
-        Core.projectionField = (Core.Name "imports")})),
+        Core.projectionFieldName = (Core.Name "imports")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the package field of hydra.go.syntax.SourceFile
 sourceFilePackage :: Phantoms.TTerm Syntax.SourceFile -> Phantoms.TTerm Syntax.PackageClause
@@ -4558,7 +4558,7 @@ sourceFilePackage x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.SourceFile"),
-        Core.projectionField = (Core.Name "package")})),
+        Core.projectionFieldName = (Core.Name "package")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the declarations field of hydra.go.syntax.SourceFile
 sourceFileWithDeclarations :: Phantoms.TTerm Syntax.SourceFile -> Phantoms.TTerm [Syntax.TopLevelDecl] -> Phantoms.TTerm Syntax.SourceFile
@@ -4571,14 +4571,14 @@ sourceFileWithDeclarations original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.SourceFile"),
-              Core.projectionField = (Core.Name "package")})),
+              Core.projectionFieldName = (Core.Name "package")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "imports"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.SourceFile"),
-              Core.projectionField = (Core.Name "imports")})),
+              Core.projectionFieldName = (Core.Name "imports")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "declarations"),
@@ -4594,7 +4594,7 @@ sourceFileWithImports original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.SourceFile"),
-              Core.projectionField = (Core.Name "package")})),
+              Core.projectionFieldName = (Core.Name "package")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "imports"),
@@ -4604,7 +4604,7 @@ sourceFileWithImports original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.SourceFile"),
-              Core.projectionField = (Core.Name "declarations")})),
+              Core.projectionFieldName = (Core.Name "declarations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the package field of hydra.go.syntax.SourceFile
 sourceFileWithPackage :: Phantoms.TTerm Syntax.SourceFile -> Phantoms.TTerm Syntax.PackageClause -> Phantoms.TTerm Syntax.SourceFile
@@ -4620,14 +4620,14 @@ sourceFileWithPackage original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.SourceFile"),
-              Core.projectionField = (Core.Name "imports")})),
+              Core.projectionFieldName = (Core.Name "imports")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "declarations"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.SourceFile"),
-              Core.projectionField = (Core.Name "declarations")})),
+              Core.projectionFieldName = (Core.Name "declarations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL injection for the block variant of hydra.go.syntax.Statement
 statementBlock :: Phantoms.TTerm Syntax.Block -> Phantoms.TTerm Syntax.Statement
@@ -4841,7 +4841,7 @@ typeAssertionExprExpr x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeAssertionExpr"),
-        Core.projectionField = (Core.Name "expr")})),
+        Core.projectionFieldName = (Core.Name "expr")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.go.syntax.TypeAssertionExpr
 typeAssertionExprType :: Phantoms.TTerm Syntax.TypeAssertionExpr -> Phantoms.TTerm Syntax.Type
@@ -4849,7 +4849,7 @@ typeAssertionExprType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeAssertionExpr"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the expr field of hydra.go.syntax.TypeAssertionExpr
 typeAssertionExprWithExpr :: Phantoms.TTerm Syntax.TypeAssertionExpr -> Phantoms.TTerm Syntax.PrimaryExpr -> Phantoms.TTerm Syntax.TypeAssertionExpr
@@ -4865,7 +4865,7 @@ typeAssertionExprWithExpr original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeAssertionExpr"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.go.syntax.TypeAssertionExpr
 typeAssertionExprWithType :: Phantoms.TTerm Syntax.TypeAssertionExpr -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TypeAssertionExpr
@@ -4878,7 +4878,7 @@ typeAssertionExprWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeAssertionExpr"),
-              Core.projectionField = (Core.Name "expr")})),
+              Core.projectionFieldName = (Core.Name "expr")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -4901,7 +4901,7 @@ typeCaseClauseCase x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeCaseClause"),
-        Core.projectionField = (Core.Name "case")})),
+        Core.projectionFieldName = (Core.Name "case")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the statements field of hydra.go.syntax.TypeCaseClause
 typeCaseClauseStatements :: Phantoms.TTerm Syntax.TypeCaseClause -> Phantoms.TTerm [Syntax.Statement]
@@ -4909,7 +4909,7 @@ typeCaseClauseStatements x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeCaseClause"),
-        Core.projectionField = (Core.Name "statements")})),
+        Core.projectionFieldName = (Core.Name "statements")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the case field of hydra.go.syntax.TypeCaseClause
 typeCaseClauseWithCase :: Phantoms.TTerm Syntax.TypeCaseClause -> Phantoms.TTerm (Maybe [Syntax.Type]) -> Phantoms.TTerm Syntax.TypeCaseClause
@@ -4925,7 +4925,7 @@ typeCaseClauseWithCase original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeCaseClause"),
-              Core.projectionField = (Core.Name "statements")})),
+              Core.projectionFieldName = (Core.Name "statements")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the statements field of hydra.go.syntax.TypeCaseClause
 typeCaseClauseWithStatements :: Phantoms.TTerm Syntax.TypeCaseClause -> Phantoms.TTerm [Syntax.Statement] -> Phantoms.TTerm Syntax.TypeCaseClause
@@ -4938,7 +4938,7 @@ typeCaseClauseWithStatements original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeCaseClause"),
-              Core.projectionField = (Core.Name "case")})),
+              Core.projectionFieldName = (Core.Name "case")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "statements"),
@@ -4976,7 +4976,7 @@ typeDefName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeDef"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.go.syntax.TypeDef
 typeDefType :: Phantoms.TTerm Syntax.TypeDef -> Phantoms.TTerm Syntax.Type
@@ -4984,7 +4984,7 @@ typeDefType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeDef"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the typeParams field of hydra.go.syntax.TypeDef
 typeDefTypeParams :: Phantoms.TTerm Syntax.TypeDef -> Phantoms.TTerm (Maybe Syntax.TypeParameters)
@@ -4992,7 +4992,7 @@ typeDefTypeParams x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeDef"),
-        Core.projectionField = (Core.Name "typeParams")})),
+        Core.projectionFieldName = (Core.Name "typeParams")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the name field of hydra.go.syntax.TypeDef
 typeDefWithName :: Phantoms.TTerm Syntax.TypeDef -> Phantoms.TTerm Syntax.Identifier -> Phantoms.TTerm Syntax.TypeDef
@@ -5008,14 +5008,14 @@ typeDefWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeDef"),
-              Core.projectionField = (Core.Name "typeParams")})),
+              Core.projectionFieldName = (Core.Name "typeParams")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeDef"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.go.syntax.TypeDef
 typeDefWithType :: Phantoms.TTerm Syntax.TypeDef -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TypeDef
@@ -5028,14 +5028,14 @@ typeDefWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeParams"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeDef"),
-              Core.projectionField = (Core.Name "typeParams")})),
+              Core.projectionFieldName = (Core.Name "typeParams")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -5051,7 +5051,7 @@ typeDefWithTypeParams original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeParams"),
@@ -5061,7 +5061,7 @@ typeDefWithTypeParams original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeDef"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for the hydra.go.syntax.TypeElem wrapper
 typeElem :: Phantoms.TTerm [Syntax.TypeTerm] -> Phantoms.TTerm Syntax.TypeElem
@@ -5167,7 +5167,7 @@ typeNameName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeName"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the typeArgs field of hydra.go.syntax.TypeName
 typeNameTypeArgs :: Phantoms.TTerm Syntax.TypeName -> Phantoms.TTerm [Syntax.Type]
@@ -5175,7 +5175,7 @@ typeNameTypeArgs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeName"),
-        Core.projectionField = (Core.Name "typeArgs")})),
+        Core.projectionFieldName = (Core.Name "typeArgs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the name field of hydra.go.syntax.TypeName
 typeNameWithName :: Phantoms.TTerm Syntax.TypeName -> Phantoms.TTerm Syntax.QualifiedIdent -> Phantoms.TTerm Syntax.TypeName
@@ -5191,7 +5191,7 @@ typeNameWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeName"),
-              Core.projectionField = (Core.Name "typeArgs")})),
+              Core.projectionFieldName = (Core.Name "typeArgs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the typeArgs field of hydra.go.syntax.TypeName
 typeNameWithTypeArgs :: Phantoms.TTerm Syntax.TypeName -> Phantoms.TTerm [Syntax.Type] -> Phantoms.TTerm Syntax.TypeName
@@ -5204,7 +5204,7 @@ typeNameWithTypeArgs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeName"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeArgs"),
@@ -5227,7 +5227,7 @@ typeParamDeclConstraint x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeParamDecl"),
-        Core.projectionField = (Core.Name "constraint")})),
+        Core.projectionFieldName = (Core.Name "constraint")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the names field of hydra.go.syntax.TypeParamDecl
 typeParamDeclNames :: Phantoms.TTerm Syntax.TypeParamDecl -> Phantoms.TTerm [Syntax.Identifier]
@@ -5235,7 +5235,7 @@ typeParamDeclNames x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeParamDecl"),
-        Core.projectionField = (Core.Name "names")})),
+        Core.projectionFieldName = (Core.Name "names")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the constraint field of hydra.go.syntax.TypeParamDecl
 typeParamDeclWithConstraint :: Phantoms.TTerm Syntax.TypeParamDecl -> Phantoms.TTerm Syntax.TypeConstraint -> Phantoms.TTerm Syntax.TypeParamDecl
@@ -5248,7 +5248,7 @@ typeParamDeclWithConstraint original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeParamDecl"),
-              Core.projectionField = (Core.Name "names")})),
+              Core.projectionFieldName = (Core.Name "names")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraint"),
@@ -5267,7 +5267,7 @@ typeParamDeclWithNames original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeParamDecl"),
-              Core.projectionField = (Core.Name "constraint")})),
+              Core.projectionFieldName = (Core.Name "constraint")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for the hydra.go.syntax.TypeParameters wrapper
 typeParameters :: Phantoms.TTerm [Syntax.TypeParamDecl] -> Phantoms.TTerm Syntax.TypeParameters
@@ -5317,7 +5317,7 @@ typeSwitchGuardExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeSwitchGuard"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.go.syntax.TypeSwitchGuard
 typeSwitchGuardName :: Phantoms.TTerm Syntax.TypeSwitchGuard -> Phantoms.TTerm (Maybe Syntax.Identifier)
@@ -5325,7 +5325,7 @@ typeSwitchGuardName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeSwitchGuard"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the expression field of hydra.go.syntax.TypeSwitchGuard
 typeSwitchGuardWithExpression :: Phantoms.TTerm Syntax.TypeSwitchGuard -> Phantoms.TTerm Syntax.PrimaryExpr -> Phantoms.TTerm Syntax.TypeSwitchGuard
@@ -5338,7 +5338,7 @@ typeSwitchGuardWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeSwitchGuard"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -5357,7 +5357,7 @@ typeSwitchGuardWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeSwitchGuard"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.go.syntax.TypeSwitchStmt
 typeSwitchStmt :: Phantoms.TTerm (Maybe Syntax.SimpleStmt) -> Phantoms.TTerm Syntax.TypeSwitchGuard -> Phantoms.TTerm [Syntax.TypeCaseClause] -> Phantoms.TTerm Syntax.TypeSwitchStmt
@@ -5380,7 +5380,7 @@ typeSwitchStmtCases x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeSwitchStmt"),
-        Core.projectionField = (Core.Name "cases")})),
+        Core.projectionFieldName = (Core.Name "cases")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the guard field of hydra.go.syntax.TypeSwitchStmt
 typeSwitchStmtGuard :: Phantoms.TTerm Syntax.TypeSwitchStmt -> Phantoms.TTerm Syntax.TypeSwitchGuard
@@ -5388,7 +5388,7 @@ typeSwitchStmtGuard x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeSwitchStmt"),
-        Core.projectionField = (Core.Name "guard")})),
+        Core.projectionFieldName = (Core.Name "guard")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the init field of hydra.go.syntax.TypeSwitchStmt
 typeSwitchStmtInit :: Phantoms.TTerm Syntax.TypeSwitchStmt -> Phantoms.TTerm (Maybe Syntax.SimpleStmt)
@@ -5396,7 +5396,7 @@ typeSwitchStmtInit x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeSwitchStmt"),
-        Core.projectionField = (Core.Name "init")})),
+        Core.projectionFieldName = (Core.Name "init")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the cases field of hydra.go.syntax.TypeSwitchStmt
 typeSwitchStmtWithCases :: Phantoms.TTerm Syntax.TypeSwitchStmt -> Phantoms.TTerm [Syntax.TypeCaseClause] -> Phantoms.TTerm Syntax.TypeSwitchStmt
@@ -5409,14 +5409,14 @@ typeSwitchStmtWithCases original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeSwitchStmt"),
-              Core.projectionField = (Core.Name "init")})),
+              Core.projectionFieldName = (Core.Name "init")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "guard"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeSwitchStmt"),
-              Core.projectionField = (Core.Name "guard")})),
+              Core.projectionFieldName = (Core.Name "guard")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
@@ -5432,7 +5432,7 @@ typeSwitchStmtWithGuard original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeSwitchStmt"),
-              Core.projectionField = (Core.Name "init")})),
+              Core.projectionFieldName = (Core.Name "init")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "guard"),
@@ -5442,7 +5442,7 @@ typeSwitchStmtWithGuard original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeSwitchStmt"),
-              Core.projectionField = (Core.Name "cases")})),
+              Core.projectionFieldName = (Core.Name "cases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the init field of hydra.go.syntax.TypeSwitchStmt
 typeSwitchStmtWithInit :: Phantoms.TTerm Syntax.TypeSwitchStmt -> Phantoms.TTerm (Maybe Syntax.SimpleStmt) -> Phantoms.TTerm Syntax.TypeSwitchStmt
@@ -5458,14 +5458,14 @@ typeSwitchStmtWithInit original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeSwitchStmt"),
-              Core.projectionField = (Core.Name "guard")})),
+              Core.projectionFieldName = (Core.Name "guard")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeSwitchStmt"),
-              Core.projectionField = (Core.Name "cases")})),
+              Core.projectionFieldName = (Core.Name "cases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.go.syntax.TypeTerm
 typeTerm :: Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TypeTerm
@@ -5485,7 +5485,7 @@ typeTermType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeTerm"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the underlying field of hydra.go.syntax.TypeTerm
 typeTermUnderlying :: Phantoms.TTerm Syntax.TypeTerm -> Phantoms.TTerm Bool
@@ -5493,7 +5493,7 @@ typeTermUnderlying x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeTerm"),
-        Core.projectionField = (Core.Name "underlying")})),
+        Core.projectionFieldName = (Core.Name "underlying")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the type field of hydra.go.syntax.TypeTerm
 typeTermWithType :: Phantoms.TTerm Syntax.TypeTerm -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TypeTerm
@@ -5506,7 +5506,7 @@ typeTermWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeTerm"),
-              Core.projectionField = (Core.Name "underlying")})),
+              Core.projectionFieldName = (Core.Name "underlying")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -5525,7 +5525,7 @@ typeTermWithUnderlying original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeTerm"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL accessor for the body of hydra.go.syntax.Block
 unBlock :: Phantoms.TTerm Syntax.Block -> Phantoms.TTerm [Syntax.Statement]
@@ -5857,7 +5857,7 @@ unaryOperationOp x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.UnaryOperation"),
-        Core.projectionField = (Core.Name "op")})),
+        Core.projectionFieldName = (Core.Name "op")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the operand field of hydra.go.syntax.UnaryOperation
 unaryOperationOperand :: Phantoms.TTerm Syntax.UnaryOperation -> Phantoms.TTerm Syntax.UnaryExpr
@@ -5865,7 +5865,7 @@ unaryOperationOperand x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.UnaryOperation"),
-        Core.projectionField = (Core.Name "operand")})),
+        Core.projectionFieldName = (Core.Name "operand")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the op field of hydra.go.syntax.UnaryOperation
 unaryOperationWithOp :: Phantoms.TTerm Syntax.UnaryOperation -> Phantoms.TTerm Syntax.UnaryOp -> Phantoms.TTerm Syntax.UnaryOperation
@@ -5881,7 +5881,7 @@ unaryOperationWithOp original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.UnaryOperation"),
-              Core.projectionField = (Core.Name "operand")})),
+              Core.projectionFieldName = (Core.Name "operand")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the operand field of hydra.go.syntax.UnaryOperation
 unaryOperationWithOperand :: Phantoms.TTerm Syntax.UnaryOperation -> Phantoms.TTerm Syntax.UnaryExpr -> Phantoms.TTerm Syntax.UnaryOperation
@@ -5894,7 +5894,7 @@ unaryOperationWithOperand original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.UnaryOperation"),
-              Core.projectionField = (Core.Name "op")})),
+              Core.projectionFieldName = (Core.Name "op")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operand"),
@@ -5926,7 +5926,7 @@ varSpecNames x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.VarSpec"),
-        Core.projectionField = (Core.Name "names")})),
+        Core.projectionFieldName = (Core.Name "names")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.go.syntax.VarSpec
 varSpecType :: Phantoms.TTerm Syntax.VarSpec -> Phantoms.TTerm (Maybe Syntax.Type)
@@ -5934,7 +5934,7 @@ varSpecType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.VarSpec"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the values field of hydra.go.syntax.VarSpec
 varSpecValues :: Phantoms.TTerm Syntax.VarSpec -> Phantoms.TTerm [Syntax.Expression]
@@ -5942,7 +5942,7 @@ varSpecValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.VarSpec"),
-        Core.projectionField = (Core.Name "values")})),
+        Core.projectionFieldName = (Core.Name "values")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the names field of hydra.go.syntax.VarSpec
 varSpecWithNames :: Phantoms.TTerm Syntax.VarSpec -> Phantoms.TTerm [Syntax.Identifier] -> Phantoms.TTerm Syntax.VarSpec
@@ -5958,14 +5958,14 @@ varSpecWithNames original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.VarSpec"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "values"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.VarSpec"),
-              Core.projectionField = (Core.Name "values")})),
+              Core.projectionFieldName = (Core.Name "values")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.go.syntax.VarSpec
 varSpecWithType :: Phantoms.TTerm Syntax.VarSpec -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.VarSpec
@@ -5978,7 +5978,7 @@ varSpecWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.VarSpec"),
-              Core.projectionField = (Core.Name "names")})),
+              Core.projectionFieldName = (Core.Name "names")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -5988,7 +5988,7 @@ varSpecWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.VarSpec"),
-              Core.projectionField = (Core.Name "values")})),
+              Core.projectionFieldName = (Core.Name "values")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the values field of hydra.go.syntax.VarSpec
 varSpecWithValues :: Phantoms.TTerm Syntax.VarSpec -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.VarSpec
@@ -6001,14 +6001,14 @@ varSpecWithValues original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.VarSpec"),
-              Core.projectionField = (Core.Name "names")})),
+              Core.projectionFieldName = (Core.Name "names")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.VarSpec"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "values"),

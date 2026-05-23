@@ -3056,6 +3056,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The length expression"}}}],
                         "body": {"variable": "hydra.rust.syntax.Expression"}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core"],
+  "dependencies": [{"module": "hydra.core"}],
   "description": "A Rust syntax model, based on the Rust Reference grammar (https://doc.rust-lang.org/reference/), retrieved 2025-01-29",
-  "namespace": "hydra.rust.syntax"}
+  "name": "hydra.rust.syntax"}

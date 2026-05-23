@@ -95,23 +95,23 @@ type HydraAvroAdapter = Adapter Type Avro.Schema Term JM.Value
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-avroSchemaPhantomNs :: Namespace
-avroSchemaPhantomNs = Namespace "hydra.avro.schema"
+avroSchemaPhantomNs :: ModuleName
+avroSchemaPhantomNs = ModuleName "hydra.avro.schema"
 
-jsonModelNs :: Namespace
-jsonModelNs = Namespace "hydra.json.model"
+jsonModelNs :: ModuleName
+jsonModelNs = ModuleName "hydra.json.model"
 
-avroEnvironmentNs :: Namespace
-avroEnvironmentNs = Namespace "hydra.avro.environment"
+avroEnvironmentNs :: ModuleName
+avroEnvironmentNs = ModuleName "hydra.avro.environment"
 
-ns :: Namespace
-ns = Namespace "hydra.avro.encoder"
+ns :: ModuleName
+ns = ModuleName "hydra.avro.encoder"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ExtractCore.ns, Strip.ns] L.++ (avroEnvironmentNs:AvroSchema.ns:jsonModelNs:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([ExtractCore.ns, Strip.ns] L.++ (avroEnvironmentNs:AvroSchema.ns:jsonModelNs:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Hydra-to-Avro encoder: converts Hydra types and terms to Avro schemas and JSON values"}
   where
     definitions = [

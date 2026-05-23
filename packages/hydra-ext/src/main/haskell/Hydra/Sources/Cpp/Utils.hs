@@ -103,14 +103,14 @@ _CppEnvironment_boundTypeVariables = Name "boundTypeVariables"
 def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.cpp.utils"
+ns :: ModuleName
+ns = ModuleName "hydra.cpp.utils"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = (CppSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ((CppSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "C++ utilities for constructing C++ syntax trees"}
   where
     definitions = [

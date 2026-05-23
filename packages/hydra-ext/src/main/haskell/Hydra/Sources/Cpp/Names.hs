@@ -91,17 +91,17 @@ import qualified Hydra.Sources.Cpp.Language as CppLanguage
 def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.cpp.names"
+ns :: ModuleName
+ns = ModuleName "hydra.cpp.names"
 
-cppLanguageNs :: Namespace
-cppLanguageNs = Namespace "hydra.cpp.language"
+cppLanguageNs :: ModuleName
+cppLanguageNs = ModuleName "hydra.cpp.language"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Names.ns, Formatting.ns, cppLanguageNs, CppUtils.ns] L.++ (CppEnvironment.ns:CppSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Formatting.ns, cppLanguageNs, CppUtils.ns] L.++ (CppEnvironment.ns:CppSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "C++ naming utilities: encoding Hydra names as C++ names"}
   where
     definitions = [
@@ -167,7 +167,7 @@ encodeNameQualified = def "encodeNameQualified" $
       Util.namespacesFocus
         (project CppUtils._CppEnvironment CppUtils._CppEnvironment_namespaces @@ var "env"),
     "qualName">: Names.qualifyName @@ var "name",
-    "mns">: Packaging.qualifiedNameNamespace $ var "qualName",
+    "mns">: Packaging.qualifiedNameModuleName $ var "qualName",
     "local">: Packaging.qualifiedNameLocal $ var "qualName"] $
     Maybes.maybe
       (Logic.ifElse (Equality.equal (var "mns") (just $ var "focusNs"))
@@ -189,12 +189,12 @@ encodeName = def "encodeName" $
     "boundVars">: Pairs.second $
       project CppUtils._CppEnvironment CppUtils._CppEnvironment_boundTypeVariables @@ var "env",
     "qualName">: Names.qualifyName @@ var "name",
-    "mns">: Packaging.qualifiedNameNamespace $ var "qualName",
+    "mns">: Packaging.qualifiedNameModuleName $ var "qualName",
     "local">: Packaging.qualifiedNameLocal $ var "qualName",
     "cppLocal">: sanitizeCppName @@ (Formatting.convertCase @@ Util.caseConventionCamel @@ var "conv" @@ var "local"),
     "cppNs">: lambda "nsVal" $ Strings.intercalate (string "::")
       (Lists.map (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake)
-        (Strings.splitOn (string ".") (Packaging.unNamespace $ var "nsVal")))] $
+        (Strings.splitOn (string ".") (Packaging.unModuleName $ var "nsVal")))] $
     Logic.ifElse (var "isQualified")
       (Maybes.maybe
         (Maybes.maybe
@@ -206,13 +206,13 @@ encodeName = def "encodeName" $
       (var "cppLocal")
 
 -- | Encode a namespace as a C++ namespace string
-encodeNamespace :: TTermDefinition (Namespace -> String)
+encodeNamespace :: TTermDefinition (ModuleName -> String)
 encodeNamespace = def "encodeNamespace" $
   doc "Encode a namespace as a C++ namespace string" $
   lambda "nsVal" $
     Strings.intercalate (string "::")
       (Lists.map (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake)
-        (Strings.splitOn (string ".") (Packaging.unNamespace $ var "nsVal")))
+        (Strings.splitOn (string ".") (Packaging.unModuleName $ var "nsVal")))
 
 -- | Encode a type variable name
 encodeTypeVariable :: TTermDefinition (Name -> String)
@@ -222,7 +222,7 @@ encodeTypeVariable = def "encodeTypeVariable" $
     Formatting.capitalize @@ (Core.unName $ var "name")
 
 -- | Get the forward header name for a namespace
-fwdHeaderName :: TTermDefinition (Namespace -> Name)
+fwdHeaderName :: TTermDefinition (ModuleName -> Name)
 fwdHeaderName = def "fwdHeaderName" $
   doc "Get the forward header name for a namespace" $
   lambda "nsVal" $
@@ -230,7 +230,7 @@ fwdHeaderName = def "fwdHeaderName" $
       (Packaging.qualifiedName (just $ var "nsVal") (string "Fwd"))
 
 -- | Create a namespace declaration wrapping inner declarations
-namespaceDecl :: TTermDefinition (Namespace -> [Cpp.Declaration] -> Cpp.Declaration)
+namespaceDecl :: TTermDefinition (ModuleName -> [Cpp.Declaration] -> Cpp.Declaration)
 namespaceDecl = def "namespaceDecl" $
   doc "Create a namespace declaration wrapping inner declarations" $
   lambdas ["nsVal", "decls"] $

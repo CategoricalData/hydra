@@ -1,9 +1,10 @@
 package hydra.sources.java;
-
 import hydra.dsl.Types;
+import static hydra.dsl.meta.Defs.unqualifiedDeps;
 import hydra.packaging.Definition;
 import hydra.packaging.Module;
-import hydra.packaging.Namespace;
+import hydra.packaging.ModuleName;
+import hydra.packaging.ModuleDependency;
 import hydra.util.Maybe;
 
 import java.util.Arrays;
@@ -20,14 +21,14 @@ import static hydra.dsl.java.Helpers.typeref;
  * {@code packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Environment.hs}.</p>
  */
 public class Environment {
-    public static final Namespace NS = new Namespace("hydra.java.environment");
+    public static final ModuleName NS = new ModuleName("hydra.java.environment");
 
     // Reference helpers, mirroring Haskell {@code environment}, {@code syntax}, etc.
-    private static final Namespace SYNTAX_NS = new Namespace("hydra.java.syntax");
-    private static final Namespace CORE_NS = new Namespace("hydra.core");
-    private static final Namespace GRAPH_NS = new Namespace("hydra.graph");
-    private static final Namespace MODULE_NS = new Namespace("hydra.packaging");
-    private static final Namespace TYPING_NS = new Namespace("hydra.typing");
+    private static final ModuleName SYNTAX_NS = new ModuleName("hydra.java.syntax");
+    private static final ModuleName CORE_NS = new ModuleName("hydra.core");
+    private static final ModuleName GRAPH_NS = new ModuleName("hydra.graph");
+    private static final ModuleName MODULE_NS = new ModuleName("hydra.packaging");
+    private static final ModuleName TYPING_NS = new ModuleName("hydra.typing");
 
     private static hydra.core.Type env(String local) { return typeref(NS, local); }
     private static hydra.core.Type syntax(String local) { return typeref(SYNTAX_NS, local); }
@@ -62,9 +63,9 @@ public class Environment {
         return typeDef(NS, "Aliases",
             doc("Aliases and context for Java code generation",
                 Types.record(
-                    Types.field("currentNamespace", doc("Current module namespace context", modul("Namespace"))),
+                    Types.field("currentNamespace", doc("Current module namespace context", modul("ModuleName"))),
                     Types.field("packages", doc("Maps namespaces to Java package names",
-                        Types.map(modul("Namespace"), syntax("PackageName")))),
+                        Types.map(modul("ModuleName"), syntax("PackageName")))),
                     Types.field("branchVars", doc("Variables bound in pattern matching branches",
                         Types.set(core("Name")))),
                     Types.field("recursiveVars", doc("Variables that are self-recursive",
@@ -104,7 +105,7 @@ public class Environment {
         aliases(),
         javaEnvironment());
 
-    private static final List<Namespace> DEPENDENCIES = Arrays.asList(
+    private static final List<ModuleDependency> DEPENDENCIES = unqualifiedDeps(
         SYNTAX_NS, CORE_NS, GRAPH_NS, MODULE_NS, TYPING_NS);
 
     public static final Module module_ = new Module(

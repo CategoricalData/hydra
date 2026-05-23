@@ -7,6 +7,7 @@ module Hydra.Sources.Coq.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -47,14 +48,14 @@ define = definitionInModule module_
 listAny :: TTerm (a -> Bool) -> TTerm [a] -> TTerm Bool
 listAny pred xs = Maybes.isJust (Lists.find pred xs)
 
-ns :: Namespace
-ns = Namespace "hydra.coq.coder"
+ns :: ModuleName
+ns = ModuleName "hydra.coq.coder"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Formatting.ns, CoqLanguage.ns, Namespace "hydra.coq.utils"] DL.++ (CoqEnvironmentSource.ns:CoqSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([Formatting.ns, CoqLanguage.ns, ModuleName "hydra.coq.utils"] DL.++ (CoqEnvironmentSource.ns:CoqSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Coq code generator: converts Hydra modules to Coq source"}
   where
     definitions = [
@@ -388,7 +389,7 @@ encodeProjectionElim :: TTermDefinition (CE.CoqEnvironment -> Projection -> C.Te
 encodeProjectionElim = define "encodeProjectionElim" $
   doc "Translate a Hydra record projection into a Coq lambda that pulls out the field" $
   lambdas ["env", "p"] $ lets [
-    "fname">: Core.projectionField $ var "p",
+    "fname">: Core.projectionFieldName $ var "p",
     "rawFname">: unwrap _Name @@ var "fname",
     "sanitizedSet">: project CE._CoqEnvironment CE._CoqEnvironment_sanitizedAccessors @@ var "env"] $
     Logic.ifElse (Sets.member (var "rawFname") (var "sanitizedSet"))

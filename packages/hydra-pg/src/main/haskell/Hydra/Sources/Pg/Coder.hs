@@ -101,14 +101,14 @@ import qualified Hydra.Sources.Pg.TermsToElements as TermsToElements
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.pg.coder"
+ns :: ModuleName
+ns = ModuleName "hydra.pg.coder"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Annotations.ns, ExtractCore.ns, Resolution.ns, TermsToElements.ns, Namespace "hydra.strip"] L.++ (PgModel.ns:PgMapping.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, ExtractCore.ns, Resolution.ns, TermsToElements.ns] L.++ (PgModel.ns:PgMapping.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Property graph element coders for mapping Hydra terms to property graph elements"}
   where
     definitions = [

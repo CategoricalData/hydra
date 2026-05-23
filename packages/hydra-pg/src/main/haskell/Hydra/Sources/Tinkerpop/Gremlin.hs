@@ -13,8 +13,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.tinkerpop.gremlin"
+ns :: ModuleName
+ns = ModuleName "hydra.tinkerpop.gremlin"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -31,9 +31,9 @@ defArgument name typ = define name $ T.union [
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A Gremlin model, based on the Gremlin ANTLR grammar "
       ++ "(master branch, as of 2024-06-30).")}
   where
