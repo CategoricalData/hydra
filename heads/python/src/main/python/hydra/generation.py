@@ -24,7 +24,7 @@ from hydra.core import Binding
 from hydra.dsl.python import FrozenDict, Just, Left, Nothing, Right
 from hydra.graph import Graph
 from hydra.json import model as JsonModel
-from hydra.packaging import Module, Namespace
+from hydra.packaging import Module, ModuleName
 from hydra.strip import deannotate_type_recursive, remove_types_from_term
 from hydra.scoping import f_type_to_type_scheme
 from hydra.sources.libraries import standard_library
@@ -173,7 +173,7 @@ def read_manifest_field(base_path, field_name):
     manifest_path = os.path.join(base_path, "manifest.json")
     with open(manifest_path, "r", encoding="utf-8") as f:
         manifest = json.load(f)
-    return [Namespace(ns) for ns in manifest[field_name]]
+    return [ModuleName(ns) for ns in manifest[field_name]]
 
 
 def generate_sources(coder, language, do_infer, do_expand, do_hoist_case, do_hoist_poly,
@@ -217,7 +217,7 @@ def strip_term_types(m):
             stripped.append(DefinitionTerm(TermDefinition(td.name, new_term, Nothing())))
         else:
             stripped.append(d)
-    return Module(m.description, m.namespace, m.dependencies, tuple(stripped))
+    return Module(m.description, m.name, m.dependencies, tuple(stripped))
 
 
 def strip_all_term_types(modules):
@@ -227,7 +227,7 @@ def strip_all_term_types(modules):
 
 def filter_kernel_modules(modules):
     """Filter modules to only kernel modules (exclude hydra.* namespaces)."""
-    return [m for m in modules if not m.namespace.value.startswith("hydra.") and not m.namespace.value.startswith("hydra.json.yaml.")]
+    return [m for m in modules if not m.name.value.startswith("hydra.") and not m.name.value.startswith("hydra.json.yaml.")]
 
 
 def filter_type_modules(modules):
@@ -295,7 +295,7 @@ def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
     from hydra.lisp.syntax import Dialect
     from hydra.serialization import print_expr, parenthesize
     from hydra.names import namespace_to_file_path
-    from hydra.packaging import FileExtension, Namespace
+    from hydra.packaging import FileExtension, ModuleName
     from hydra.util import CaseConvention
 
     dialect_map = {
@@ -315,7 +315,7 @@ def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
                 return result
             case Right(value=program):
                 code = print_expr(parenthesize(program_to_expr(program)))
-                file_path = namespace_to_file_path(case_conv, FileExtension(ext), mod.namespace)
+                file_path = namespace_to_file_path(case_conv, FileExtension(ext), mod.name)
                 return Right(FrozenDict({file_path: code}))
 
     generate_sources(
@@ -450,13 +450,13 @@ _PACKAGE_PREFIXES = [
 ]
 
 
-def namespace_to_package(namespace):
-    """Map a Namespace to its owning package name.
+def namespace_to_package(module_name):
+    """Map a ModuleName to its owning package name.
 
     Mirrors Hydra.PackageRouting.namespaceToPackage. Falls back to
     "hydra-kernel" if no prefix matches.
     """
-    ns = namespace.value if hasattr(namespace, "value") else namespace
+    ns = module_name.value if hasattr(module_name, "value") else module_name
     for prefix, pkg in _PACKAGE_PREFIXES:
         if ns.startswith(prefix):
             return pkg
@@ -471,7 +471,7 @@ def group_by_package(mods):
     """
     groups = {}
     for m in mods:
-        pkg = namespace_to_package(m.namespace)
+        pkg = namespace_to_package(m.name)
         groups.setdefault(pkg, []).append(m)
     return sorted(groups.items(), key=lambda kv: kv[0])
 
@@ -532,9 +532,9 @@ def infer_and_write_by_package(
     from hydra.context import Context
     from hydra.dsl.python import FrozenDict, Left, Right
 
-    seed_ns = {m.namespace.value for m in seed_acc}
-    grouping_universe = [m for m in universe_mods if m.namespace.value not in seed_ns]
-    grouping_targets  = [m for m in mods          if m.namespace.value not in seed_ns]
+    seed_ns = {m.name.value for m in seed_acc}
+    grouping_universe = [m for m in universe_mods if m.name.value not in seed_ns]
+    grouping_targets  = [m for m in mods          if m.name.value not in seed_ns]
 
     target_groups   = group_by_package(grouping_targets)
     universe_groups = group_by_package(grouping_universe)
@@ -577,7 +577,7 @@ def infer_and_write_by_package(
     for pkg in ordered:
         pkg_targets  = pkg_to_mods.get(pkg, [])
         pkg_universe = pkg_to_universe.get(pkg, [])
-        target_ns    = {m.namespace.value for m in pkg_targets}
+        target_ns    = {m.name.value for m in pkg_targets}
         infer_targets = pkg_targets if pkg_targets else pkg_universe
         typed_universe = acc + pkg_universe
         print(f"  [{pkg}] {len(pkg_targets)} write / "
@@ -595,7 +595,7 @@ def infer_and_write_by_package(
             case _:
                 raise RuntimeError(
                     f"infer_and_write_by_package: unexpected inference result {result!r}")
-        to_write = [m for m in inferred if m.namespace.value in target_ns]
+        to_write = [m for m in inferred if m.name.value in target_ns]
         if to_write:
             _write_package_split_json(dist_json_root, typed_universe, inferred, to_write)
         acc = acc + inferred
@@ -621,7 +621,7 @@ def _write_package_split_json(dist_json_root, universe_mods, universe_for_schema
             result = codegen.module_to_json(schema_map, m)
             match result:
                 case Right(value=json_str):
-                    file_path = os.path.join(pkg_dir, namespace_to_path(m.namespace) + ".json")
+                    file_path = os.path.join(pkg_dir, namespace_to_path(m.name) + ".json")
                     os.makedirs(os.path.dirname(file_path), exist_ok=True)
                     new_content = json_str + "\n"
                     if os.path.exists(file_path):
@@ -634,7 +634,7 @@ def _write_package_split_json(dist_json_root, universe_mods, universe_for_schema
                 case Left(value=err):
                     raise RuntimeError(
                         f"_write_package_split_json: encode failed for "
-                        f"{m.namespace.value}: {err}")
+                        f"{m.name.value}: {err}")
                 case _:
                     raise RuntimeError(
                         f"_write_package_split_json: unexpected encode result {result!r}")

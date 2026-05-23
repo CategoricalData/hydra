@@ -16,8 +16,8 @@ import qualified Data.Maybe                      as Y
 import           Hydra.Sources.Kernel.Types.All
 
 
-ns :: Namespace
-ns = Namespace "com.gdblab.pathAlgebra.expressions"
+ns :: ModuleName
+ns = ModuleName "com.gdblab.pathAlgebra.expressions"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -27,9 +27,9 @@ expr = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> (kernelTypesModuleNames),
             moduleDescription = Just "Algebraic expression trees for the path algebra by Angles et al., extended for GQL support"}
   where
     definitions = [

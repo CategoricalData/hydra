@@ -16,8 +16,8 @@ import qualified Data.Maybe                      as Y
 import qualified Hydra.Sources.Json.Model        as JsonModel
 
 
-ns :: Namespace
-ns = Namespace "hydra.avro.schema"
+ns :: ModuleName
+ns = ModuleName "hydra.avro.schema"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -30,9 +30,9 @@ json = typeref $ JsonModel.ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [JsonModel.ns, Core.ns],
+            moduleDependencies = unqualifiedDep <$> [JsonModel.ns, Core.ns],
             moduleDescription = Just ("A model for Avro schemas. Based on the Avro 1.11.1 specification:\n" ++
       "  https://avro.apache.org/docs/1.11.1/specification")}
   where

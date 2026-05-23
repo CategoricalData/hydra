@@ -33,7 +33,7 @@ columnSchemaDomain x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.relational.ColumnSchema"),
-        Core.projectionField = (Core.Name "domain")})),
+        Core.projectionFieldName = (Core.Name "domain")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.relational.ColumnSchema
 columnSchemaName :: Phantoms.TTerm (Relational.ColumnSchema t) -> Phantoms.TTerm Relational.ColumnName
@@ -41,7 +41,7 @@ columnSchemaName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.relational.ColumnSchema"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the domain field of hydra.relational.ColumnSchema
 columnSchemaWithDomain :: Phantoms.TTerm (Relational.ColumnSchema t) -> Phantoms.TTerm t -> Phantoms.TTerm (Relational.ColumnSchema t)
@@ -54,7 +54,7 @@ columnSchemaWithDomain original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.relational.ColumnSchema"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "domain"),
@@ -73,7 +73,7 @@ columnSchemaWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.relational.ColumnSchema"),
-              Core.projectionField = (Core.Name "domain")})),
+              Core.projectionFieldName = (Core.Name "domain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.relational.ForeignKey
 foreignKey :: Phantoms.TTerm Relational.RelationName -> Phantoms.TTerm (M.Map Relational.ColumnName Relational.ColumnName) -> Phantoms.TTerm Relational.ForeignKey
@@ -93,7 +93,7 @@ foreignKeyForeignRelation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.relational.ForeignKey"),
-        Core.projectionField = (Core.Name "foreignRelation")})),
+        Core.projectionFieldName = (Core.Name "foreignRelation")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the keys field of hydra.relational.ForeignKey
 foreignKeyKeys :: Phantoms.TTerm Relational.ForeignKey -> Phantoms.TTerm (M.Map Relational.ColumnName Relational.ColumnName)
@@ -101,7 +101,7 @@ foreignKeyKeys x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.relational.ForeignKey"),
-        Core.projectionField = (Core.Name "keys")})),
+        Core.projectionFieldName = (Core.Name "keys")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the foreignRelation field of hydra.relational.ForeignKey
 foreignKeyWithForeignRelation :: Phantoms.TTerm Relational.ForeignKey -> Phantoms.TTerm Relational.RelationName -> Phantoms.TTerm Relational.ForeignKey
@@ -117,7 +117,7 @@ foreignKeyWithForeignRelation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.relational.ForeignKey"),
-              Core.projectionField = (Core.Name "keys")})),
+              Core.projectionFieldName = (Core.Name "keys")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the keys field of hydra.relational.ForeignKey
 foreignKeyWithKeys :: Phantoms.TTerm Relational.ForeignKey -> Phantoms.TTerm (M.Map Relational.ColumnName Relational.ColumnName) -> Phantoms.TTerm Relational.ForeignKey
@@ -130,7 +130,7 @@ foreignKeyWithKeys original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.relational.ForeignKey"),
-              Core.projectionField = (Core.Name "foreignRelation")})),
+              Core.projectionFieldName = (Core.Name "foreignRelation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "keys"),
@@ -177,7 +177,7 @@ relationSchemaColumns x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-        Core.projectionField = (Core.Name "columns")})),
+        Core.projectionFieldName = (Core.Name "columns")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the foreignKeys field of hydra.relational.RelationSchema
 relationSchemaForeignKeys :: Phantoms.TTerm (Relational.RelationSchema t) -> Phantoms.TTerm [Relational.ForeignKey]
@@ -185,7 +185,7 @@ relationSchemaForeignKeys x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-        Core.projectionField = (Core.Name "foreignKeys")})),
+        Core.projectionFieldName = (Core.Name "foreignKeys")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.relational.RelationSchema
 relationSchemaName :: Phantoms.TTerm (Relational.RelationSchema t) -> Phantoms.TTerm Relational.RelationName
@@ -193,7 +193,7 @@ relationSchemaName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the primaryKeys field of hydra.relational.RelationSchema
 relationSchemaPrimaryKeys :: Phantoms.TTerm (Relational.RelationSchema t) -> Phantoms.TTerm [Relational.PrimaryKey]
@@ -201,7 +201,7 @@ relationSchemaPrimaryKeys x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-        Core.projectionField = (Core.Name "primaryKeys")})),
+        Core.projectionFieldName = (Core.Name "primaryKeys")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the columns field of hydra.relational.RelationSchema
 relationSchemaWithColumns :: Phantoms.TTerm (Relational.RelationSchema t) -> Phantoms.TTerm [Relational.ColumnSchema t] -> Phantoms.TTerm (Relational.RelationSchema t)
@@ -214,7 +214,7 @@ relationSchemaWithColumns original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "columns"),
@@ -224,14 +224,14 @@ relationSchemaWithColumns original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-              Core.projectionField = (Core.Name "primaryKeys")})),
+              Core.projectionFieldName = (Core.Name "primaryKeys")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "foreignKeys"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-              Core.projectionField = (Core.Name "foreignKeys")})),
+              Core.projectionFieldName = (Core.Name "foreignKeys")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the foreignKeys field of hydra.relational.RelationSchema
 relationSchemaWithForeignKeys :: Phantoms.TTerm (Relational.RelationSchema t) -> Phantoms.TTerm [Relational.ForeignKey] -> Phantoms.TTerm (Relational.RelationSchema t)
@@ -244,21 +244,21 @@ relationSchemaWithForeignKeys original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "columns"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-              Core.projectionField = (Core.Name "columns")})),
+              Core.projectionFieldName = (Core.Name "columns")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "primaryKeys"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-              Core.projectionField = (Core.Name "primaryKeys")})),
+              Core.projectionFieldName = (Core.Name "primaryKeys")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "foreignKeys"),
@@ -277,21 +277,21 @@ relationSchemaWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-              Core.projectionField = (Core.Name "columns")})),
+              Core.projectionFieldName = (Core.Name "columns")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "primaryKeys"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-              Core.projectionField = (Core.Name "primaryKeys")})),
+              Core.projectionFieldName = (Core.Name "primaryKeys")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "foreignKeys"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-              Core.projectionField = (Core.Name "foreignKeys")})),
+              Core.projectionFieldName = (Core.Name "foreignKeys")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the primaryKeys field of hydra.relational.RelationSchema
 relationSchemaWithPrimaryKeys :: Phantoms.TTerm (Relational.RelationSchema t) -> Phantoms.TTerm [Relational.PrimaryKey] -> Phantoms.TTerm (Relational.RelationSchema t)
@@ -304,14 +304,14 @@ relationSchemaWithPrimaryKeys original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "columns"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-              Core.projectionField = (Core.Name "columns")})),
+              Core.projectionFieldName = (Core.Name "columns")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "primaryKeys"),
@@ -321,7 +321,7 @@ relationSchemaWithPrimaryKeys original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
-              Core.projectionField = (Core.Name "foreignKeys")})),
+              Core.projectionFieldName = (Core.Name "foreignKeys")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for the hydra.relational.Relationship wrapper
 relationship :: Phantoms.TTerm (S.Set (M.Map Relational.ColumnName v)) -> Phantoms.TTerm (Relational.Relationship v)

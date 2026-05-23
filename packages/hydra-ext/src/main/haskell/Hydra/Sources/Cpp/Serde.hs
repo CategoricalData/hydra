@@ -88,14 +88,14 @@ import qualified Hydra.Sources.Cpp.Syntax as CppSyntax
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.cpp.serde"
+ns :: ModuleName
+ns = ModuleName "hydra.cpp.serde"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Serialization.ns] L.++ (CppSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ (CppSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Serialization functions for converting C++ AST to abstract expressions"}
   where
     definitions = [

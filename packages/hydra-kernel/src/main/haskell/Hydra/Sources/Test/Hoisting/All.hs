@@ -2,6 +2,7 @@
 module Hydra.Sources.Test.Hoisting.All where
 
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing as Testing
 import Hydra.Sources.Kernel.Types.All
 import Hydra.Dsl.Meta.Phantoms as Phantoms
@@ -17,14 +18,14 @@ import qualified Hydra.Sources.Test.Hoisting.Cases as Cases
 import qualified Hydra.Sources.Test.Hoisting.Let as Let
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.hoisting.all"
+ns :: ModuleName
+ns = ModuleName "hydra.test.hoisting.all"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = namespaces Prelude.++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> (namespaces Prelude.++ kernelTypesModuleNames),
             moduleDescription = Just "Hydra's hoisting test suite"}
   where
     definitions = [Phantoms.toDefinition allTests]

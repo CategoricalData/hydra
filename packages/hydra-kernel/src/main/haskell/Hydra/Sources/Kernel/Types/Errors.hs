@@ -14,17 +14,17 @@ import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 import qualified Hydra.Sources.Kernel.Types.Variants as Variants
 
 
-ns :: Namespace
-ns = Namespace "hydra.errors"
+ns :: ModuleName
+ns = ModuleName "hydra.errors"
 
 define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Context.ns, Core.ns, ErrorsChecking.ns, ErrorsCore.ns, Paths.ns, Typing.ns, Variants.ns],
+            moduleDependencies = unqualifiedDep <$> [Context.ns, Core.ns, ErrorsChecking.ns, ErrorsCore.ns, Paths.ns, Typing.ns, Variants.ns],
             moduleDescription = Just "Top-level error types for the Hydra kernel"}
   where
     definitions = [

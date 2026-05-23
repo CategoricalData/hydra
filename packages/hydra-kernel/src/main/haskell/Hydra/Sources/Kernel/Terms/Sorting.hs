@@ -59,14 +59,14 @@ import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Hydra.Topology as Topo
 
 
-ns :: Namespace
-ns = Namespace "hydra.sorting"
+ns :: ModuleName
+ns = ModuleName "hydra.sorting"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Constants.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just ("Utilities for sorting."
       <> " This module includes an implementation of Tarjan's algorithm,"
       <> " originally based on GraphSCC by Iavor S. Diatchki:"

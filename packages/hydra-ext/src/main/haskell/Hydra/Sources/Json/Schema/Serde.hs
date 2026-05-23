@@ -85,20 +85,20 @@ import qualified Hydra.Json.Model as J
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-jsonSchemaSyntaxNs :: Namespace
-jsonSchemaSyntaxNs = Namespace "hydra.json.schema"
+jsonSchemaSyntaxNs :: ModuleName
+jsonSchemaSyntaxNs = ModuleName "hydra.json.schema"
 
-jsonWriterNs :: Namespace
-jsonWriterNs = Namespace "hydra.json.writer"
+jsonWriterNs :: ModuleName
+jsonWriterNs = ModuleName "hydra.json.writer"
 
-ns :: Namespace
-ns = Namespace "hydra.json.schema.serde"
+ns :: ModuleName
+ns = ModuleName "hydra.json.schema.serde"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [jsonWriterNs] L.++ (jsonSchemaSyntaxNs:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([jsonWriterNs] L.++ (jsonSchemaSyntaxNs:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Serialization functions for converting JSON Schema documents to JSON values"}
   where
     definitions = [

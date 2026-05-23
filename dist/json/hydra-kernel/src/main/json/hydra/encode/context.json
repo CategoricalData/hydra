@@ -31,7 +31,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "trace", "typeName": "hydra.context.Context"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "trace", "typeName": "hydra.context.Context"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -70,7 +70,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "messages", "typeName": "hydra.context.Context"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "messages", "typeName": "hydra.context.Context"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -109,7 +109,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "other", "typeName": "hydra.context.Context"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "other", "typeName": "hydra.context.Context"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -146,6 +146,6 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.context.Context"}}},
           "variables": []}}}],
-  "dependencies": ["hydra.encode.core", "hydra.core", "hydra.context"],
+  "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.context"}],
   "description": "Term encoders for hydra.context",
-  "namespace": "hydra.encode.context"}
+  "name": "hydra.encode.context"}

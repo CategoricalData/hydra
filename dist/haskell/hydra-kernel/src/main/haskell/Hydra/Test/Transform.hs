@@ -15,8 +15,8 @@ import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Add generation namespace prefix
-addGenerationPrefix :: Packaging.Namespace -> Packaging.Namespace
-addGenerationPrefix ns_ = Packaging.Namespace (Strings.cat2 "generation." (Packaging.unNamespace ns_))
+addGenerationPrefix :: Packaging.ModuleName -> Packaging.ModuleName
+addGenerationPrefix ns_ = Packaging.ModuleName (Strings.cat2 "generation." (Packaging.unModuleName ns_))
 -- | Build a Term representing a convertCase function call
 buildConvertCaseCall :: Util.CaseConvention -> Util.CaseConvention -> String -> Core.Term
 buildConvertCaseCall fromConv toConv input_ =
@@ -77,7 +77,7 @@ transformModule :: Packaging.Module -> Packaging.Module
 transformModule m =
     Packaging.Module {
       Packaging.moduleDescription = (Packaging.moduleDescription m),
-      Packaging.moduleNamespace = (addGenerationPrefix (Packaging.moduleNamespace m)),
+      Packaging.moduleName = (addGenerationPrefix (Packaging.moduleName m)),
       Packaging.moduleDependencies = (Packaging.moduleDependencies m),
       Packaging.moduleDefinitions = (Packaging.moduleDefinitions m)}
 -- | Pass through test cases unchanged

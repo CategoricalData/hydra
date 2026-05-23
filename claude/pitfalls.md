@@ -645,3 +645,51 @@ a feature branch, check `git merge-base --is-ancestor 443e036c36
 HEAD`. If "NOT ancestor," merge `main` first, then re-run sync — the
 old-path files will get deleted by the merge and the new path will be
 gitignored.
+
+### Cross-host C3-style renames: places to sweep beyond the schema
+
+When a kernel type or field renames (Namespace→ModuleName,
+Module.namespace→name, Projection.field→fieldName, etc.), the Haskell
+compile catches the kernel-side and Java-side breakage cleanly. But
+Python and Scala are looser — and bin/ scripts and string-literal
+projection sites slip past the type checker. After updating the schema
+and sync passes Phase 1, expect a second wave of issues in:
+
+- **DSL bodies with stringly-typed projection paths.** Calls like
+  `project("hydra.core.Projection", "field")` (Java),
+  `_proj("hydra.core.Projection", "field", "proj")` (Python), and
+  `Testing.java`'s `project("hydra.packaging.Module", "namespace")`
+  encode the OLD field name as a literal. Inference fails late with
+  `NoMatchingFieldError(field_name=Name(value='field'))`.
+- **`[ModuleDependency]` lists with stray bare `ModuleName` entries.**
+  e.g. `[LEXICAL_NS] + KERNEL_TYPES_NAMESPACES` after the C3 rename
+  builds a list of mixed types; Python silently accepts it and inference
+  later barfs with `'ModuleName' object has no attribute 'module'`. The
+  fix is to wrap with `unqualified_dep(LEXICAL_NS)` — and to add the
+  helper import. Two patches in `language.py` (only file affected for
+  hydra-python).
+- **`QualifiedName.namespace` accessors on host code.** Only the *type*
+  renamed to `ModuleName`; the *field* on `QualifiedName` is
+  `module_name` (Python) / `moduleName` (Haskell/Java/Scala). Code like
+  `qname.namespace` in `phantoms.py` and equivalents needs the field
+  rename, not the type rename.
+- **`Packaging.un_namespace` / `Packaging.unNamespace` accessors.** Now
+  `un_module_name` / `unModuleName`. Easy to miss in host runtime code.
+- **`m.name.startsWith(...)` in Scala.** `ModuleName` is a wrapper, not
+  a `String`. Needs `m.name.value.startsWith(...)`.
+- **Regex literals in bin/ scripts.** `bin/lib/check-dsl-fresh.py` has
+  patterns like `r'ns\s*=\s*Namespace\s*"..."'` that need updating to
+  match the new type name. Any rename to a type that appears in a
+  source-file regex anywhere under `bin/` is a candidate.
+- **Heads runtime accessors.** `heads/python/src/main/python/hydra/`
+  contains hand-written helpers like `generation.py:228` (filter on
+  `m.namespace.value`) and `bootstrap.py` that all need the field
+  rename — these are checked at *use* time, not import time, so they
+  pass Python import but break Phase 1.
+
+The full sync cycle for cross-host C3 took ~10 iterations before all
+runtime callsites were caught; each iteration was a 15-minute sync
+exposing the next callsite. After the schema-side sync passes Phase 1,
+proactively grep across `packages/hydra-{java,python,scala}/src/`,
+`heads/{java,python,scala}/`, and `bin/` for the OLD field/type name
+before relying on sync to surface it.

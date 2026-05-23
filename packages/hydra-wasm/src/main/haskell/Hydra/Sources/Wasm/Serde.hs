@@ -89,14 +89,14 @@ import qualified Hydra.Sources.Wasm.Syntax as WasmSyntax
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.wasm.serde"
+ns :: ModuleName
+ns = ModuleName "hydra.wasm.serde"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Constants.ns, Serialization.ns] L.++ (WasmSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns] L.++ (WasmSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "WebAssembly serializer: converts WAT AST to concrete WAT text format"}
   where
     definitions = [

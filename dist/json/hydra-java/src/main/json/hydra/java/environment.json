@@ -69,13 +69,13 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Current module namespace context"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}}},
+                        "body": {"variable": "hydra.packaging.ModuleName"}}}},
                   {
                     "name": "packages",
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Maps namespaces to Java package names"}}}],
-                        "body": {"map": {"keys": {"variable": "hydra.packaging.Namespace"}, "values": {"variable": "hydra.java.syntax.PackageName"}}}}}},
+                        "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "hydra.java.syntax.PackageName"}}}}}},
                   {
                     "name": "branchVars",
                     "type": {
@@ -193,6 +193,11 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Graph context for type inference"}}}],
                         "body": {"variable": "hydra.graph.Graph"}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.java.syntax", "hydra.core", "hydra.graph", "hydra.packaging", "hydra.typing"],
+  "dependencies": [
+    {"module": "hydra.java.syntax"},
+    {"module": "hydra.core"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.typing"}],
   "description": "Environment types for Java code generation",
-  "namespace": "hydra.java.environment"}
+  "name": "hydra.java.environment"}

@@ -2,6 +2,7 @@ module Hydra.Sources.Test.Inference.NominalTypes where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -17,14 +18,14 @@ import qualified Data.Map                     as M
 import Hydra.Sources.Libraries
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.inference.nominalTypes"
+ns :: ModuleName
+ns = ModuleName "hydra.test.inference.nominalTypes"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [TestGraph.ns, Namespace "hydra.inference", Namespace "hydra.show.core", Namespace "hydra.test.testTerms", Namespace "hydra.test.testTypes"] ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.inference", ModuleName "hydra.show.core", ModuleName "hydra.test.testTerms", ModuleName "hydra.test.testTypes"] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Inference tests for nominal types")}
   where
     definitions = [

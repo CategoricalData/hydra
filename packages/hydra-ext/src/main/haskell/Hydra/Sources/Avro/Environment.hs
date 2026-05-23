@@ -10,17 +10,17 @@ import qualified Hydra.Dsl.Types                 as T
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
 import qualified Hydra.Sources.Kernel.Types.Coders as Coders
 
-ns :: Namespace
-ns = Namespace "hydra.avro.environment"
+ns :: ModuleName
+ns = ModuleName "hydra.avro.environment"
 
 computeType :: String -> Type
 computeType = typeref Coders.ns
 
 avroSchemaType :: Type
-avroSchemaType = typeref (Namespace "hydra.avro.schema") "Schema"
+avroSchemaType = typeref (ModuleName "hydra.avro.schema") "Schema"
 
 jsonValueType :: Type
-jsonValueType = typeref (Namespace "hydra.json.model") "Value"
+jsonValueType = typeref (ModuleName "hydra.json.model") "Value"
 
 -- | AvroHydraAdapter = Adapter Avro.Schema Type Json.Value Term
 avroHydraAdapterType :: Type
@@ -41,9 +41,9 @@ localType = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [CoreTypes.ns, Coders.ns, Namespace "hydra.avro.schema", Namespace "hydra.json.model"],
+            moduleDependencies = unqualifiedDep <$> [CoreTypes.ns, Coders.ns, ModuleName "hydra.avro.schema", ModuleName "hydra.json.model"],
             moduleDescription = Just "Type definitions for the Avro code generation environment"}
   where
     definitions = [

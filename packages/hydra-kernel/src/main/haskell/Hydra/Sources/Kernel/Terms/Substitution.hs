@@ -58,14 +58,14 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 
 
-ns :: Namespace
-ns = Namespace "hydra.substitution"
+ns :: ModuleName
+ns = ModuleName "hydra.substitution"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Rewriting.ns, Variables.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Rewriting.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just ("Variable substitution in type and term expressions.")}
   where
    definitions = [

@@ -116,7 +116,7 @@ def main():
     print(f"  imported {len(py_sources)} python source modules ({t_import:.1f}s)", flush=True)
     for m in py_sources:
         ndefs = len(m.definitions) if m.definitions else 0
-        print(f"    {m.namespace.value}: {ndefs} definitions", flush=True)
+        print(f"    {m.name.value}: {ndefs} definitions", flush=True)
 
     # Resolve where the demo expects to write. --out-root is the legacy
     # contract: a single per-package json directory ending in
@@ -149,7 +149,7 @@ def main():
             match result:
                 case Right(value=json_str):
                     file_path = Path(dist_json_root) / "hydra-python" / "src" / "main" / "json" / \
-                        (_namespace_to_path(m.namespace.value) + ".json")
+                        (_namespace_to_path(m.name.value) + ".json")
                     file_path.parent.mkdir(parents=True, exist_ok=True)
                     new_content = json_str + "\n"
                     if file_path.exists() and file_path.read_text() == new_content:
@@ -157,7 +157,7 @@ def main():
                     file_path.write_text(new_content)
                     n_written += 1
                 case Left(value=err):
-                    print(f"  ENCODE FAILED for {m.namespace.value}: {err}", flush=True)
+                    print(f"  ENCODE FAILED for {m.name.value}: {err}", flush=True)
                     return 2
         t_pkg = time.perf_counter() - t0
         print(f"  wrote {n_written} files ({t_pkg:.1f}s)", flush=True)

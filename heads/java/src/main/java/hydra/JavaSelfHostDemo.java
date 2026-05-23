@@ -3,7 +3,7 @@ package hydra;
 import hydra.core.Name;
 import hydra.core.Type;
 import hydra.packaging.Module;
-import hydra.packaging.Namespace;
+import hydra.packaging.ModuleName;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -116,7 +116,7 @@ public class JavaSelfHostDemo {
         long t0 = System.nanoTime();
         System.err.println("Loading universe from " + kernelJson + " ...");
         Map<Name, Type> bootstrapSchema = Generation.bootstrapSchemaMap();
-        List<Namespace> mainModulesNs = Generation.readManifestField(kernelJson, "mainModules");
+        List<ModuleName> mainModulesNs = Generation.readManifestField(kernelJson, "mainModules");
         List<Module> universe = Generation.loadModulesFromJson(kernelJson, bootstrapSchema, mainModulesNs);
         double tUniverse = (System.nanoTime() - t0) / 1e9;
         System.err.println("  loaded " + universe.size() + " kernel modules ("
@@ -138,7 +138,7 @@ public class JavaSelfHostDemo {
                 Module m = (Module) val;
                 sources.add(m);
                 int nDefs = m.definitions.size();
-                System.err.println("    " + m.namespace.value + ": " + nDefs + " definitions");
+                System.err.println("    " + m.name.value + ": " + nDefs + " definitions");
             } catch (ClassNotFoundException e) {
                 System.err.println("  MISSING: " + className
                     + " (skipping; expected when port is incomplete)");

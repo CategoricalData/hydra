@@ -15,7 +15,7 @@ import hydra.formatting
 from hydra.classes import TypeClass
 from hydra.util import CaseConvention
 from hydra.core import Binding, Field, Name, Term, Type
-from hydra.packaging import Module, Namespace, QualifiedName
+from hydra.packaging import Module, ModuleName, QualifiedName
 from hydra.phantoms import TBinding, TTerm
 from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing
 
@@ -190,10 +190,10 @@ def constant(term: TTerm[A]) -> TTerm[B]:
 
 def definition_in_module(mod: Module, lname: str, term: TTerm[A]) -> TBinding[A]:
     """Create a definition in a module."""
-    return definition_in_namespace(mod.namespace, lname, term)
+    return definition_in_namespace(mod.name, lname, term)
 
 
-def definition_in_namespace(ns: Namespace, lname: str, term: TTerm[A] | None = None) -> "TBinding[A] | DefineBuilder":
+def definition_in_namespace(ns: ModuleName, lname: str, term: TTerm[A] | None = None) -> "TBinding[A] | DefineBuilder":
     """Create a definition in a namespace.
 
     With 3 arguments: returns a TBinding (direct definition).
@@ -206,7 +206,7 @@ def definition_in_namespace(ns: Namespace, lname: str, term: TTerm[A] | None = N
     return DefineBuilder(name, [])
 
 
-def make_local(ns: Namespace):
+def make_local(ns: ModuleName):
     """Create a local reference function for a namespace.
 
     Returns a function that takes a local name and produces a TTerm variable
@@ -614,9 +614,9 @@ def match(name, dflt: Maybe[TTerm[B]] = None, fields: Sequence[Field] = ()) -> T
     return TTerm[A](terms.match(_name(name), dflt_term, fields))
 
 
-def module_namespace(mod: Module) -> Namespace:
+def module_name(mod: Module) -> ModuleName:
     """Get the namespace from a module."""
-    return mod.namespace
+    return mod.name
 
 
 def nothing() -> TTerm[Maybe[A]]:
@@ -757,7 +757,7 @@ def inject_unit(name, fname) -> TTerm[A]:
 
 def unqualify_name(qname: QualifiedName) -> Name:
     """Convert a QualifiedName to a Name."""
-    match qname.namespace:
+    match qname.module_name:
         case Just(ns):
             return Name(f"{ns.value}.{qname.local}")
         case Nothing():

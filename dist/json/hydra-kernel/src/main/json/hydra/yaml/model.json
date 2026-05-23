@@ -81,6 +81,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A string value"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core"],
+  "dependencies": [{"module": "hydra.core"}],
   "description": "A basic YAML representation model. Based on:\n  https://yaml.org/spec/1.2/spec.html\nThe Serialization and Presentation properties of YAML,\nincluding directives, comments, anchors, style, formatting, and aliases, are not supported by this model.\nIn addition, tags are omitted from this model, and non-standard scalars are unsupported.",
-  "namespace": "hydra.yaml.model"}
+  "name": "hydra.yaml.model"}

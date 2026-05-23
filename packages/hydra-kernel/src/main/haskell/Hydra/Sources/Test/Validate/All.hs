@@ -2,6 +2,7 @@
 module Hydra.Sources.Test.Validate.All where
 
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing as Testing
 import Hydra.Sources.Kernel.Types.All
 import Hydra.Dsl.Meta.Phantoms as Phantoms
@@ -17,14 +18,14 @@ import qualified Hydra.Sources.Test.Validate.Core as ValidateCore
 import qualified Hydra.Sources.Test.Validate.Packaging as ValidatePackaging
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.validate.all"
+ns :: ModuleName
+ns = ModuleName "hydra.test.validate.all"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = namespaces Prelude.++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> (namespaces Prelude.++ kernelTypesModuleNames),
             moduleDescription = Just "Hydra's validation test suite"}
   where
     definitions = [Phantoms.toDefinition allTests]

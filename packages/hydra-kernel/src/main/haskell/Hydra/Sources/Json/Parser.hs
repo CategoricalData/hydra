@@ -90,12 +90,12 @@ jsonParserDefinition = definitionInModule module_
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Parsers.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Parsers.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "JSON parser using Hydra parser combinators"}
   where
-    ns = Namespace "hydra.json.parser"
+    ns = ModuleName "hydra.json.parser"
     definitions = [
       toDefinition digit,
       toDefinition digits,

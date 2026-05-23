@@ -30,8 +30,8 @@ fileExtension x =
       Core.wrappedTermTypeName = (Core.Name "hydra.packaging.FileExtension"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 -- | DSL constructor for hydra.packaging.Module
-module_ :: Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm [Packaging.Namespace] -> Phantoms.TTerm [Packaging.Definition] -> Phantoms.TTerm Packaging.Module
-module_ description namespace dependencies definitions =
+module_ :: Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Packaging.ModuleName -> Phantoms.TTerm [Packaging.ModuleDependency] -> Phantoms.TTerm [Packaging.Definition] -> Phantoms.TTerm Packaging.Module
+module_ description name dependencies definitions =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.Module"),
       Core.recordFields = [
@@ -39,8 +39,8 @@ module_ description namespace dependencies definitions =
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Phantoms.unTTerm description)},
         Core.Field {
-          Core.fieldName = (Core.Name "namespace"),
-          Core.fieldTerm = (Phantoms.unTTerm namespace)},
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
           Core.fieldTerm = (Phantoms.unTTerm dependencies)},
@@ -53,32 +53,98 @@ moduleDefinitions x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-        Core.projectionField = (Core.Name "definitions")})),
+        Core.projectionFieldName = (Core.Name "definitions")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the dependencies field of hydra.packaging.Module
-moduleDependencies :: Phantoms.TTerm Packaging.Module -> Phantoms.TTerm [Packaging.Namespace]
+moduleDependencies :: Phantoms.TTerm Packaging.Module -> Phantoms.TTerm [Packaging.ModuleDependency]
 moduleDependencies x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-        Core.projectionField = (Core.Name "dependencies")})),
+        Core.projectionFieldName = (Core.Name "dependencies")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL constructor for hydra.packaging.ModuleDependency
+moduleDependency :: Phantoms.TTerm Packaging.ModuleName -> Phantoms.TTerm (Maybe Packaging.PackageName) -> Phantoms.TTerm Packaging.ModuleDependency
+moduleDependency module_ package =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.ModuleDependency"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (Phantoms.unTTerm module_)},
+        Core.Field {
+          Core.fieldName = (Core.Name "package"),
+          Core.fieldTerm = (Phantoms.unTTerm package)}]}))
+-- | DSL accessor for the module field of hydra.packaging.ModuleDependency
+moduleDependencyModule :: Phantoms.TTerm Packaging.ModuleDependency -> Phantoms.TTerm Packaging.ModuleName
+moduleDependencyModule x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.ModuleDependency"),
+        Core.projectionFieldName = (Core.Name "module")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the package field of hydra.packaging.ModuleDependency
+moduleDependencyPackage :: Phantoms.TTerm Packaging.ModuleDependency -> Phantoms.TTerm (Maybe Packaging.PackageName)
+moduleDependencyPackage x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.ModuleDependency"),
+        Core.projectionFieldName = (Core.Name "package")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the module field of hydra.packaging.ModuleDependency
+moduleDependencyWithModule :: Phantoms.TTerm Packaging.ModuleDependency -> Phantoms.TTerm Packaging.ModuleName -> Phantoms.TTerm Packaging.ModuleDependency
+moduleDependencyWithModule original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.ModuleDependency"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "package"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.ModuleDependency"),
+              Core.projectionFieldName = (Core.Name "package")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the package field of hydra.packaging.ModuleDependency
+moduleDependencyWithPackage :: Phantoms.TTerm Packaging.ModuleDependency -> Phantoms.TTerm (Maybe Packaging.PackageName) -> Phantoms.TTerm Packaging.ModuleDependency
+moduleDependencyWithPackage original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.ModuleDependency"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.ModuleDependency"),
+              Core.projectionFieldName = (Core.Name "module")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "package"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL accessor for the description field of hydra.packaging.Module
 moduleDescription :: Phantoms.TTerm Packaging.Module -> Phantoms.TTerm (Maybe String)
 moduleDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-        Core.projectionField = (Core.Name "description")})),
+        Core.projectionFieldName = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the namespace field of hydra.packaging.Module
-moduleNamespace :: Phantoms.TTerm Packaging.Module -> Phantoms.TTerm Packaging.Namespace
-moduleNamespace x =
+-- | DSL accessor for the name field of hydra.packaging.Module
+moduleName :: Phantoms.TTerm Packaging.Module -> Phantoms.TTerm Packaging.ModuleName
+moduleName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-        Core.projectionField = (Core.Name "namespace")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL constructor for the hydra.packaging.ModuleName wrapper
+moduleName2 :: Phantoms.TTerm String -> Phantoms.TTerm Packaging.ModuleName
+moduleName2 x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.packaging.ModuleName"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 -- | DSL updater for the definitions field of hydra.packaging.Module
 moduleWithDefinitions :: Phantoms.TTerm Packaging.Module -> Phantoms.TTerm [Packaging.Definition] -> Phantoms.TTerm Packaging.Module
 moduleWithDefinitions original newVal =
@@ -90,27 +156,27 @@ moduleWithDefinitions original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-              Core.projectionField = (Core.Name "description")})),
+              Core.projectionFieldName = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-              Core.projectionField = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-              Core.projectionField = (Core.Name "dependencies")})),
+              Core.projectionFieldName = (Core.Name "dependencies")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "definitions"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL updater for the dependencies field of hydra.packaging.Module
-moduleWithDependencies :: Phantoms.TTerm Packaging.Module -> Phantoms.TTerm [Packaging.Namespace] -> Phantoms.TTerm Packaging.Module
+moduleWithDependencies :: Phantoms.TTerm Packaging.Module -> Phantoms.TTerm [Packaging.ModuleDependency] -> Phantoms.TTerm Packaging.Module
 moduleWithDependencies original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.Module"),
@@ -120,14 +186,14 @@ moduleWithDependencies original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-              Core.projectionField = (Core.Name "description")})),
+              Core.projectionFieldName = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-              Core.projectionField = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
@@ -137,7 +203,7 @@ moduleWithDependencies original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-              Core.projectionField = (Core.Name "definitions")})),
+              Core.projectionFieldName = (Core.Name "definitions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the description field of hydra.packaging.Module
 moduleWithDescription :: Phantoms.TTerm Packaging.Module -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Packaging.Module
@@ -149,29 +215,29 @@ moduleWithDescription original newVal =
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
-          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-              Core.projectionField = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-              Core.projectionField = (Core.Name "dependencies")})),
+              Core.projectionFieldName = (Core.Name "dependencies")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "definitions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-              Core.projectionField = (Core.Name "definitions")})),
+              Core.projectionFieldName = (Core.Name "definitions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL updater for the namespace field of hydra.packaging.Module
-moduleWithNamespace :: Phantoms.TTerm Packaging.Module -> Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm Packaging.Module
-moduleWithNamespace original newVal =
+-- | DSL updater for the name field of hydra.packaging.Module
+moduleWithName :: Phantoms.TTerm Packaging.Module -> Phantoms.TTerm Packaging.ModuleName -> Phantoms.TTerm Packaging.Module
+moduleWithName original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.Module"),
       Core.recordFields = [
@@ -180,31 +246,25 @@ moduleWithNamespace original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-              Core.projectionField = (Core.Name "description")})),
+              Core.projectionFieldName = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-              Core.projectionField = (Core.Name "dependencies")})),
+              Core.projectionFieldName = (Core.Name "dependencies")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "definitions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-              Core.projectionField = (Core.Name "definitions")})),
+              Core.projectionFieldName = (Core.Name "definitions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL constructor for the hydra.packaging.Namespace wrapper
-namespace :: Phantoms.TTerm String -> Phantoms.TTerm Packaging.Namespace
-namespace x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.packaging.Namespace"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 -- | DSL constructor for hydra.packaging.Package
 package :: Phantoms.TTerm Packaging.PackageName -> Phantoms.TTerm [Packaging.Module] -> Phantoms.TTerm [Packaging.PackageDependency] -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Packaging.Package
 package name modules dependencies description =
@@ -229,7 +289,7 @@ packageDependencies x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-        Core.projectionField = (Core.Name "dependencies")})),
+        Core.projectionFieldName = (Core.Name "dependencies")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL constructor for hydra.packaging.PackageDependency
 packageDependency :: Phantoms.TTerm Packaging.PackageName -> Phantoms.TTerm Packaging.PackageVersionSpecifier -> Phantoms.TTerm Packaging.PackageDependency
@@ -249,7 +309,7 @@ packageDependencyName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.PackageDependency"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the version field of hydra.packaging.PackageDependency
 packageDependencyVersion :: Phantoms.TTerm Packaging.PackageDependency -> Phantoms.TTerm Packaging.PackageVersionSpecifier
@@ -257,7 +317,7 @@ packageDependencyVersion x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.PackageDependency"),
-        Core.projectionField = (Core.Name "version")})),
+        Core.projectionFieldName = (Core.Name "version")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the name field of hydra.packaging.PackageDependency
 packageDependencyWithName :: Phantoms.TTerm Packaging.PackageDependency -> Phantoms.TTerm Packaging.PackageName -> Phantoms.TTerm Packaging.PackageDependency
@@ -273,7 +333,7 @@ packageDependencyWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.PackageDependency"),
-              Core.projectionField = (Core.Name "version")})),
+              Core.projectionFieldName = (Core.Name "version")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the version field of hydra.packaging.PackageDependency
 packageDependencyWithVersion :: Phantoms.TTerm Packaging.PackageDependency -> Phantoms.TTerm Packaging.PackageVersionSpecifier -> Phantoms.TTerm Packaging.PackageDependency
@@ -286,7 +346,7 @@ packageDependencyWithVersion original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.PackageDependency"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
@@ -297,7 +357,7 @@ packageDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-        Core.projectionField = (Core.Name "description")})),
+        Core.projectionFieldName = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the modules field of hydra.packaging.Package
 packageModules :: Phantoms.TTerm Packaging.Package -> Phantoms.TTerm [Packaging.Module]
@@ -305,7 +365,7 @@ packageModules x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-        Core.projectionField = (Core.Name "modules")})),
+        Core.projectionFieldName = (Core.Name "modules")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.packaging.Package
 packageName :: Phantoms.TTerm Packaging.Package -> Phantoms.TTerm Packaging.PackageName
@@ -313,7 +373,7 @@ packageName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL constructor for the hydra.packaging.PackageName wrapper
 packageName2 :: Phantoms.TTerm String -> Phantoms.TTerm Packaging.PackageName
@@ -340,14 +400,14 @@ packageWithDependencies original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modules"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-              Core.projectionField = (Core.Name "modules")})),
+              Core.projectionFieldName = (Core.Name "modules")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
@@ -357,7 +417,7 @@ packageWithDependencies original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-              Core.projectionField = (Core.Name "description")})),
+              Core.projectionFieldName = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the description field of hydra.packaging.Package
 packageWithDescription :: Phantoms.TTerm Packaging.Package -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Packaging.Package
@@ -370,21 +430,21 @@ packageWithDescription original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modules"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-              Core.projectionField = (Core.Name "modules")})),
+              Core.projectionFieldName = (Core.Name "modules")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-              Core.projectionField = (Core.Name "dependencies")})),
+              Core.projectionFieldName = (Core.Name "dependencies")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
@@ -400,7 +460,7 @@ packageWithModules original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modules"),
@@ -410,14 +470,14 @@ packageWithModules original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-              Core.projectionField = (Core.Name "dependencies")})),
+              Core.projectionFieldName = (Core.Name "dependencies")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-              Core.projectionField = (Core.Name "description")})),
+              Core.projectionFieldName = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.packaging.Package
 packageWithName :: Phantoms.TTerm Packaging.Package -> Phantoms.TTerm Packaging.PackageName -> Phantoms.TTerm Packaging.Package
@@ -433,31 +493,31 @@ packageWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-              Core.projectionField = (Core.Name "modules")})),
+              Core.projectionFieldName = (Core.Name "modules")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-              Core.projectionField = (Core.Name "dependencies")})),
+              Core.projectionFieldName = (Core.Name "dependencies")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-              Core.projectionField = (Core.Name "description")})),
+              Core.projectionFieldName = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.packaging.QualifiedName
-qualifiedName :: Phantoms.TTerm (Maybe Packaging.Namespace) -> Phantoms.TTerm String -> Phantoms.TTerm Packaging.QualifiedName
-qualifiedName namespace local =
+qualifiedName :: Phantoms.TTerm (Maybe Packaging.ModuleName) -> Phantoms.TTerm String -> Phantoms.TTerm Packaging.QualifiedName
+qualifiedName moduleName local =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.QualifiedName"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "namespace"),
-          Core.fieldTerm = (Phantoms.unTTerm namespace)},
+          Core.fieldName = (Core.Name "moduleName"),
+          Core.fieldTerm = (Phantoms.unTTerm moduleName)},
         Core.Field {
           Core.fieldName = (Core.Name "local"),
           Core.fieldTerm = (Phantoms.unTTerm local)}]}))
@@ -467,15 +527,15 @@ qualifiedNameLocal x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.QualifiedName"),
-        Core.projectionField = (Core.Name "local")})),
+        Core.projectionFieldName = (Core.Name "local")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the namespace field of hydra.packaging.QualifiedName
-qualifiedNameNamespace :: Phantoms.TTerm Packaging.QualifiedName -> Phantoms.TTerm (Maybe Packaging.Namespace)
-qualifiedNameNamespace x =
+-- | DSL accessor for the moduleName field of hydra.packaging.QualifiedName
+qualifiedNameModuleName :: Phantoms.TTerm Packaging.QualifiedName -> Phantoms.TTerm (Maybe Packaging.ModuleName)
+qualifiedNameModuleName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.QualifiedName"),
-        Core.projectionField = (Core.Name "namespace")})),
+        Core.projectionFieldName = (Core.Name "moduleName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the local field of hydra.packaging.QualifiedName
 qualifiedNameWithLocal :: Phantoms.TTerm Packaging.QualifiedName -> Phantoms.TTerm String -> Phantoms.TTerm Packaging.QualifiedName
@@ -484,30 +544,30 @@ qualifiedNameWithLocal original newVal =
       Core.recordTypeName = (Core.Name "hydra.packaging.QualifiedName"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldName = (Core.Name "moduleName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.QualifiedName"),
-              Core.projectionField = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "moduleName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "local"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
--- | DSL updater for the namespace field of hydra.packaging.QualifiedName
-qualifiedNameWithNamespace :: Phantoms.TTerm Packaging.QualifiedName -> Phantoms.TTerm (Maybe Packaging.Namespace) -> Phantoms.TTerm Packaging.QualifiedName
-qualifiedNameWithNamespace original newVal =
+-- | DSL updater for the moduleName field of hydra.packaging.QualifiedName
+qualifiedNameWithModuleName :: Phantoms.TTerm Packaging.QualifiedName -> Phantoms.TTerm (Maybe Packaging.ModuleName) -> Phantoms.TTerm Packaging.QualifiedName
+qualifiedNameWithModuleName original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.QualifiedName"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldName = (Core.Name "moduleName"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "local"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.QualifiedName"),
-              Core.projectionField = (Core.Name "local")})),
+              Core.projectionFieldName = (Core.Name "local")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.packaging.TermDefinition
 termDefinition :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.Term -> Phantoms.TTerm (Maybe Core.TypeScheme) -> Phantoms.TTerm Packaging.TermDefinition
@@ -530,7 +590,7 @@ termDefinitionName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the term field of hydra.packaging.TermDefinition
 termDefinitionTerm :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm Core.Term
@@ -538,7 +598,7 @@ termDefinitionTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
-        Core.projectionField = (Core.Name "term")})),
+        Core.projectionFieldName = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the typeScheme field of hydra.packaging.TermDefinition
 termDefinitionTypeScheme :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm (Maybe Core.TypeScheme)
@@ -546,7 +606,7 @@ termDefinitionTypeScheme x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
-        Core.projectionField = (Core.Name "typeScheme")})),
+        Core.projectionFieldName = (Core.Name "typeScheme")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the name field of hydra.packaging.TermDefinition
 termDefinitionWithName :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Packaging.TermDefinition
@@ -562,14 +622,14 @@ termDefinitionWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
-              Core.projectionField = (Core.Name "typeScheme")})),
+              Core.projectionFieldName = (Core.Name "typeScheme")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the term field of hydra.packaging.TermDefinition
 termDefinitionWithTerm :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Packaging.TermDefinition
@@ -582,7 +642,7 @@ termDefinitionWithTerm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -592,7 +652,7 @@ termDefinitionWithTerm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
-              Core.projectionField = (Core.Name "typeScheme")})),
+              Core.projectionFieldName = (Core.Name "typeScheme")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the typeScheme field of hydra.packaging.TermDefinition
 termDefinitionWithTypeScheme :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm (Maybe Core.TypeScheme) -> Phantoms.TTerm Packaging.TermDefinition
@@ -605,14 +665,14 @@ termDefinitionWithTypeScheme original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeScheme"),
@@ -635,7 +695,7 @@ typeDefinitionName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.TypeDefinition"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the typeScheme field of hydra.packaging.TypeDefinition
 typeDefinitionTypeScheme :: Phantoms.TTerm Packaging.TypeDefinition -> Phantoms.TTerm Core.TypeScheme
@@ -643,7 +703,7 @@ typeDefinitionTypeScheme x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.TypeDefinition"),
-        Core.projectionField = (Core.Name "typeScheme")})),
+        Core.projectionFieldName = (Core.Name "typeScheme")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the name field of hydra.packaging.TypeDefinition
 typeDefinitionWithName :: Phantoms.TTerm Packaging.TypeDefinition -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Packaging.TypeDefinition
@@ -659,7 +719,7 @@ typeDefinitionWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.TypeDefinition"),
-              Core.projectionField = (Core.Name "typeScheme")})),
+              Core.projectionFieldName = (Core.Name "typeScheme")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the typeScheme field of hydra.packaging.TypeDefinition
 typeDefinitionWithTypeScheme :: Phantoms.TTerm Packaging.TypeDefinition -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm Packaging.TypeDefinition
@@ -672,7 +732,7 @@ typeDefinitionWithTypeScheme original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.TypeDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeScheme"),
@@ -683,11 +743,11 @@ unFileExtension x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.packaging.FileExtension")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the body of hydra.packaging.Namespace
-unNamespace :: Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm String
-unNamespace x =
+-- | DSL accessor for the body of hydra.packaging.ModuleName
+unModuleName :: Phantoms.TTerm Packaging.ModuleName -> Phantoms.TTerm String
+unModuleName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.packaging.Namespace")),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.packaging.ModuleName")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the body of hydra.packaging.PackageName
 unPackageName :: Phantoms.TTerm Packaging.PackageName -> Phantoms.TTerm String

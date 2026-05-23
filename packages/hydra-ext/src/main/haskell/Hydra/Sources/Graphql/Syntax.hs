@@ -8,8 +8,8 @@ import           Hydra.Dsl.Types                 ((>:))
 import qualified Hydra.Dsl.Types                 as T
 
 
-ns :: Namespace
-ns = Namespace "hydra.graphql.syntax"
+ns :: ModuleName
+ns = ModuleName "hydra.graphql.syntax"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -19,9 +19,9 @@ gql = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [],
+            moduleDependencies = unqualifiedDep <$> [],
             moduleDescription = Just ("A GraphQL model. Based on the (extended) BNF at:\n" ++
       "  https://spec.graphql.org/draft/#sec-Appendix-Grammar-Summary")}
   where

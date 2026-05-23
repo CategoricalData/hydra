@@ -177,6 +177,6 @@
               "annotation": [{"key": "description", "value": {"literal": {"string": "An n-tuple which is an element of a given relation"}}}],
               "body": {"forall": {"body": {"wrap": {"list": {"variable": "v"}}}, "parameter": "v"}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core"],
+  "dependencies": [{"module": "hydra.core"}],
   "description": "An interpretation of Codd's Relational Model, as described in 'A Relational Model of Data for Large Shared Data Banks' (1970). Types ('domains') and values are parameterized so as to allow for application-specific implementations. No special support is provided for 'nonsimple' domains; i.e. relations are assumed to be normalized.",
-  "namespace": "hydra.relational"}
+  "name": "hydra.relational"}
