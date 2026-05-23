@@ -204,6 +204,18 @@ These refactoring patterns are especially prone to leaving orphans:
   (e.g., `FooTestCase`, `BarTestCase` → `TestCase`), the old per-type Java files remain.
 - **Module renames**: Any rename leaves the old file in every implementation
   plus in the JSON kernel, decoders, encoders, and DSL modules.
+- **Type-module nominalization changes**: When a type module that previously
+  had nominal types is reduced to only structural types (or all its types are
+  removed), `encodeModule` / `decodeModule` return `Right Nothing` and the
+  generator simply does not write `hydra/encode/<x>.<ext>` or
+  `hydra/decode/<x>.<ext>` files anymore. Stub files from an earlier sync run
+  (often a few lines of `(define-library ... (begin))` for Scheme, or the
+  equivalent empty wrapper for other targets) survive as orphans. They are
+  not detectable via the source-Module → dist-file cross-reference because the
+  Source modules still exist; only the *current generator output* identifies
+  them. To detect: snapshot `dist/<lang>/<pkg>/.../` before a clean rebuild,
+  rebuild from scratch, diff. Any file present in the snapshot but absent
+  from the rebuild is an orphan of this kind.
 
 ### Relationship to refactoring recipes
 
