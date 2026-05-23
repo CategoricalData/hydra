@@ -207,8 +207,9 @@ These refactoring patterns are especially prone to leaving orphans:
 
 ### Relationship to refactoring recipes
 
-The [refactoring recipe](refactoring.md) and [namespace refactoring recipe](refactoring-namespaces.md)
-include "delete orphan files" as a step in their workflows.
+The [refactoring recipe](refactoring.md), including its
+[namespace-refactoring section](refactoring.md#moving-or-renaming-modules-namespace-refactoring),
+includes "delete orphan files" as a step in its workflow.
 This recipe covers the broader audit — finding orphans that were missed during those workflows
 or that accumulated across multiple changes.
 
