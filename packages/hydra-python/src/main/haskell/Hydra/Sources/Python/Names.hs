@@ -205,16 +205,25 @@ encodeNameQualified = def "encodeNameQualified" $
     -- Qualify the name
     "qualName">: Names.qualifyName @@ var "name",
     "mns">: Packaging.qualifiedNameNamespace $ var "qualName",
-    "local">: Packaging.qualifiedNameLocal $ var "qualName"] $
+    "local">: Packaging.qualifiedNameLocal $ var "qualName",
+    -- Convert namespace to Python dotted path (camel -> snake on each segment)
+    "pyNs">: lambda "nsVal" $ Strings.intercalate (string ".") $
+      Lists.map (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake)
+        (Strings.splitOn (string ".") (Packaging.unNamespace $ var "nsVal"))] $
     -- Check if name is a bound type variable
     Maybes.maybe
       -- Not a bound type variable
       (Logic.ifElse (Equality.equal (var "mns") (just $ var "focusNs"))
         -- Same namespace - use local name (possibly escaped for future annotations)
         (wrap Py._Name $ Logic.ifElse useFutureAnnotations (var "local") (PySerde.escapePythonString @@ true @@ var "local"))
-        -- Different namespace - use full dotted name with sanitization
-        (wrap Py._Name $ Strings.intercalate (string ".") $
-          Lists.map sanitizePythonName (Strings.splitOn (string ".") (Core.unName $ var "name"))))
+        -- Different namespace - use snake-cased dotted namespace + sanitized local
+        (Maybes.maybe
+          -- No namespace - just use local sanitized
+          (wrap Py._Name $ sanitizePythonName @@ var "local")
+          -- Has namespace - snake-case the namespace, keep local PascalCase
+          (lambda "nsVal" $ wrap Py._Name $
+            Strings.cat2 (var "pyNs" @@ var "nsVal") (Strings.cat2 (string ".") (sanitizePythonName @@ var "local")))
+          (var "mns")))
       -- Found in bound type variables - use the bound name
       (lambda "n" $ var "n")
       (Maps.lookup (var "name") (var "boundVars"))
