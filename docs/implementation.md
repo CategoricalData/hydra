@@ -1294,6 +1294,64 @@ and `dist/json/build/digest.json` (see [#247](https://github.com/CategoricalData
 and [#379](https://github.com/CategoricalData/hydra/issues/379) for the
 build/ layout rationale).
 
+### Per-package inference
+
+When the cache misses or the dirty set is too large to fit in one
+`inferModulesGiven` call, Phase 1 falls back to a per-package iterative
+driver (`Hydra.Generation.inferAndWriteByPackage` and its seeded variant
+`inferAndWriteByPackageSeeded`). The driver topologically sorts the
+package dep graph from each `packages/<pkg>/package.json`'s
+`dependencies` field, then for each package in order runs a
+Generation-side wrapper `inferModulesGivenSchemes` over only that
+package's modules — with the typed-so-far universe merged into the
+inference graph as `(Name, TypeScheme)` maps rather than full `Module`
+values. Each iteration writes the focus package's JSON to disk
+immediately, which forces the inferred TypeSchemes through serialization
+and breaks any lazy thunk chain across iterations.
+
+Two entry points use the same driver:
+
+- The **cold-cache fallback** in `writeModulesJsonPackageSplit` calls
+  `inferAndWriteByPackage` with empty seed maps and an empty schema
+  context. Every module flows through the per-package loop.
+- The **warm-cache incremental path** in `tryIncrementalInference`
+  calls `inferAndWriteByPackageSeeded` with the JSON-loaded clean
+  modules' `(Name, TypeScheme)` pairs as the seed maps (one for term
+  bindings, one for type-def schemas) and the clean modules themselves
+  as a schema-context-only set used to build the JSON-write `schemaMap`
+  once up front. After that one-shot build, the clean modules are
+  unreferenced and can be GC'd; the iteration carries only the seed
+  maps + dirty modules forward.
+
+Peak memory per iteration is bounded by *type-schemes of transitive
+deps + bindings of the focus package*, not by *every prior module's
+full payload* (which is what the original `[Module]` accumulator
+retained). A `TypeScheme` is typically 1-3 orders of magnitude smaller
+than the term body it types, so this is what keeps Phase 1 within the
+`-M6G` CI heap cap on a wholly dirty universe (e.g. after a kernel-wide
+rename invalidates every namespace's digest). See
+[#381](https://github.com/CategoricalData/hydra/issues/381) and
+[Phase 1's memory envelope](build-system.md#phase-1s-memory-envelope)
+in the build-system doc for the wall-time trade-off and the dead-end
+per-SCC attempt that preceded it.
+
+One subtlety: DSL-authored TypeDefinitions encode polymorphism as
+nested `TypeForall` wrappers inside `typeSchemeBody` (with empty
+`typeSchemeVariables`). The kernel's `schemaGraphToTypingEnvironment`
+unwraps these at schema-graph lookup time; when we bypass the schema
+graph and inject TypeSchemes directly into `graphSchemaTypes`, we have
+to apply the same normalization (`normalizeTypeScheme`) ourselves —
+otherwise downstream consumers that pattern-match on the body shape
+(e.g. expecting `record{...}`) hit `UnexpectedShape` errors against
+the raw `∀.∀.…record{...}` form.
+
+The Java and Python self-host pipelines (`heads/java/.../Generation.java`
+and `heads/python/.../generation.py`) mirror the same driver shape in
+their host language so the native generators (`JavaSelfHostDemo`,
+`python-self-host-demo.py`) hit the same per-package memory envelope —
+relevant when those pipelines grow to cover more than their own one
+package.
+
 ### The bootstrap challenge
 
 ```

@@ -1,17 +1,16 @@
-"""Meta-DSL for constructing graph-related terms (Graph, Primitive, Comparison, TypeClass).
+"""Meta-DSL for constructing graph-related terms (Graph, Primitive, Comparison).
 
 Mirrors the Haskell module Hydra.Dsl.Meta.Graph, providing phantom-typed constructors,
 accessors, and modifiers for graph-related Hydra types.
 
 Most functions are re-exported from the generated module hydra.dsl.graph. This module
-adds custom helpers for Comparison and TypeClass union constructors.
+adds custom helpers for Comparison union constructors.
 """
 
 import hydra.dsl.meta.phantoms as Phantoms
 import hydra.dsl.meta.lib.lists as Lists
 import hydra.dsl.meta.lib.maps as Maps
 import hydra.dsl.meta.lib.sets as Sets
-from hydra.classes import TypeClass
 from hydra.core import Name
 from hydra.phantoms import TTerm
 
@@ -43,20 +42,6 @@ def comparison_greater_than() -> TTerm:
     _COMPARISON_NAME = Name("hydra.util.Comparison")
     _COMPARISON_GREATER_THAN = Name("greaterThan")
     return Phantoms.inject_unit(_COMPARISON_NAME, _COMPARISON_GREATER_THAN)
-
-
-# ============================================================
-# TypeClass (custom -- not in hydra.graph type module)
-# ============================================================
-
-def type_class_equality() -> TTerm:
-    """The equality TypeClass variant."""
-    return Phantoms.inject_unit(TypeClass.TYPE_, TypeClass.EQUALITY.value)
-
-
-def type_class_ordering() -> TTerm:
-    """The ordering TypeClass variant."""
-    return Phantoms.inject_unit(TypeClass.TYPE_, TypeClass.ORDERING.value)
 
 
 # ============================================================

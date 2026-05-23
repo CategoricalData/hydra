@@ -1160,9 +1160,9 @@ _AssignmentOperator_nullishAssign = Core.Name "nullishAssign"
 data Comment =
   -- | A single-line comment (// ...)
   CommentLine String |
-  -- | A block comment (/* ... */)
+  -- | A block comment, delimited by slash-star and star-slash
   CommentBlock String |
-  -- | A documentation comment (/** ... */, i.e. JSDoc)
+  -- | A documentation comment, delimited by slash-double-star and star-slash (JSDoc)
   CommentDocumentation DocumentationComment
   deriving (Eq, Ord, Read, Show)
 _Comment = Core.Name "hydra.typeScript.syntax.Comment"

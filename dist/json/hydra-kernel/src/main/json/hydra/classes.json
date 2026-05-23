@@ -1,14 +1,56 @@
 {
   "definitions": [
     {
-      "type": {
-        "name": "hydra.classes.TypeClass",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "Any of a small number of built-in type classes"}}}],
-              "body": {"union": [{"name": "equality", "type": {"unit": {}}}, {"name": "ordering", "type": {"unit": {}}}]}}},
-          "variables": []}}}],
-  "dependencies": [{"module": "hydra.core"}],
-  "description": "Type classes",
+      "term": {
+        "name": "hydra.classes.equality",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "The equality type class: instances support structural equality."}}}],
+            "body": {
+              "record": {
+                "fields": [{"name": "description", "term": {"literal": {"string": "Equality: instances support structural equality."}}}],
+                "typeName": "hydra.typing.TypeClass"}}}},
+        "typeScheme": {"body": {"variable": "hydra.typing.TypeClass"}, "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.classes.ordering",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "The ordering type class: instances support total ordering (and equality)."}}}],
+            "body": {
+              "record": {
+                "fields": [{"name": "description", "term": {"literal": {"string": "Ordering: instances support total ordering (and equality)."}}}],
+                "typeName": "hydra.typing.TypeClass"}}}},
+        "typeScheme": {"body": {"variable": "hydra.typing.TypeClass"}, "variables": []}}}],
+  "dependencies": [
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "description": "Registry of Hydra's built-in type classes.",
   "name": "hydra.classes"}

@@ -143,7 +143,9 @@ typeScriptReservedWords =
     strictModeReserved =
         [
           "arguments",
-          "eval"]
+          "eval",
+          "static",
+          "yield"]
     typeScriptKeywords =
         [
           "abstract",

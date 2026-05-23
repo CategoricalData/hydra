@@ -177,6 +177,27 @@ export const binaryToString = (b: Uint8Array | string | null | undefined): strin
 // value, which is what `binaryToString` will accept.
 export const stringToBinary = (s: string): string => s;
 
+// `binaryToBytes` decodes a binary value into a list of byte values
+// (0-255). Mirrors Python's `binary_to_bytes`. The TS runtime stores
+// binary as base64-encoded strings, so we decode then return byte ints.
+export const binaryToBytes = (b: Uint8Array | string | null | undefined): readonly number[] => {
+  if (b === null || b === undefined) return [];
+  if (typeof b !== "string") return Array.from(b);
+  // Decode base64. Use atob in browser, Buffer in Node.
+  const raw = typeof atob !== "undefined" ? atob(b) : Buffer.from(b, "base64").toString("binary");
+  const out: number[] = [];
+  for (let i = 0; i < raw.length; i++) out.push(raw.charCodeAt(i));
+  return out;
+};
+
+// `bytesToBinary` is the inverse of `binaryToBytes`: pack a list of
+// byte values (0-255) into a base64-encoded string.
+export const bytesToBinary = (bytes: readonly number[]): string => {
+  let raw = "";
+  for (const b of bytes) raw += String.fromCharCode(b & 0xff);
+  return typeof btoa !== "undefined" ? btoa(raw) : Buffer.from(raw, "binary").toString("base64");
+};
+
 // === typed show helpers (used by encodeLiteral in the coder) ===
 
 export const showInt8 = (n: number): string => n.toString();
@@ -201,20 +222,24 @@ const _showFloatPrecise = (f: number): string => {
   if (f === 0) return Object.is(f, -0) ? "-0.0" : "0.0";
   const abs = Math.abs(f);
   if (abs < 0.1) {
-    // Force exponential notation. toExponential(11) gives 12 sig digits
-    // (one before the dot, 11 after). Then trim mantissa zeros + ensure
-    // the mantissa has a `.0` if it became integer.
-    let s = f.toExponential(11);
-    // Strip trailing zeros from mantissa.
-    s = s.replace(/(\.\d*?)0+e/, "$1e").replace(/\.e/, ".0e");
-    // Normalize Haskell-style: "5e-2" → "5.0e-2".
-    if (!s.includes(".")) s = s.replace(/e/, ".0e");
+    // Haskell shows values < 0.1 in exponential notation
+    // (e.g. `5.0e-2`, `1.22464679915e-16`). Use toExponential() for the
+    // shortest round-trip mantissa, then normalize to Haskell style.
+    // toExponential() with no arg picks the shortest exact representation.
+    let s = f.toExponential();
+    const eIdx = s.indexOf("e");
+    const mantissa = s.slice(0, eIdx);
+    const expPart = s.slice(eIdx + 1);
+    // Ensure mantissa contains a '.', so `5e-2` → `5.0e-2`.
+    const fixedMantissa = mantissa.includes(".") ? mantissa : `${mantissa}.0`;
     // Strip leading "+" and zero-padding from exponent: e+05 → e5, e-05 → e-5.
-    s = s.replace(/e\+?(-?)0*(\d)/, "e$1$2");
-    return s;
+    const sign = expPart.startsWith("-") ? "-" : "";
+    const digits = expPart.replace(/^[+-]?0*/, "") || "0";
+    return `${fixedMantissa}e${sign}${digits}`;
   }
-  // Try toPrecision(12) and strip trailing zeros / clean up.
-  let s = f.toPrecision(12);
+  // For values >= 0.1, use shortest round-trip representation via toString().
+  // This matches Haskell's `show :: Double -> String` for finite values.
+  let s = f.toString();
   if (s.includes("e")) {
     s = s.replace(/(\.\d*?)0+e/, "$1e").replace(/\.e/, ".0e");
     if (!s.includes(".")) s = s.replace(/e/, ".0e");

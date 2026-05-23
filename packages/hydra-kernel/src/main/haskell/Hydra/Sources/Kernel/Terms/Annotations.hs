@@ -242,28 +242,20 @@ getTypeAnnotation = define "getTypeAnnotation" $
   doc "Get a type annotation" $
   "key" ~> "typ" ~> Maps.lookup (var "key") (typeAnnotationInternal @@ var "typ")
 
-getTypeClasses :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either Error (M.Map Name (S.Set TypeClass)))
+getTypeClasses :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either Error (M.Map Name (S.Set Name)))
 getTypeClasses = define "getTypeClasses" $
-  doc "Get type classes from term" $
+  doc "Get type classes from term. Each Set Name contains bare class identifiers (#275)." $
   "cx" ~> "graph" ~> "term" ~>
-  "decodeClass" <~ ("term" ~>
-    "byName" <~ Maps.fromList (list [
-      pair (Core.nameLift _TypeClass_equality) Graph.typeClassEquality,
-      pair (Core.nameLift _TypeClass_ordering) Graph.typeClassOrdering]) $
-    "fn" <<~ ExtractCore.unitVariant @@ Core.nameLift _TypeClass @@ var "graph" @@ var "term" $
-    Maybes.maybe
-      (Ctx.failInContext (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "type class") (ShowCore.term @@ var "term")) (var "cx"))
-      (reify right)
-      (Maps.lookup (var "fn") (var "byName"))) $
+  "decodeName" <~ ("term" ~> Eithers.bimap
+    ("de" ~> Error.errorDecoding $ var "de")
+    ("x" ~> var "x")
+    (decoderFor _Name @@ var "graph" @@ var "term")) $
   Maybes.maybe
     (right Maps.empty)
     ("term" ~>
       ExtractCore.map
-        @@ ("t" ~> Eithers.bimap
-          ("de" ~> Error.errorDecoding $ var "de")
-          ("x" ~> var "x")
-          (decoderFor _Name @@ var "graph" @@ var "t"))
-        @@ (ExtractCore.setOf @@ var "decodeClass" @@ var "graph")
+        @@ var "decodeName"
+        @@ (ExtractCore.setOf @@ var "decodeName" @@ var "graph")
         @@ var "graph"
         @@ (var "term"))
     (getTermAnnotation @@ Constants.keyClasses @@ var "term")
@@ -394,20 +386,16 @@ setTypeAnnotation = define "setTypeAnnotation" $
     (var "typ'")
     (Core.typeAnnotated (Core.annotatedType (var "typ'") (var "anns")))
 
-setTypeClasses :: TTermDefinition (M.Map Name (S.Set TypeClass) -> Term -> Term)
+setTypeClasses :: TTermDefinition (M.Map Name (S.Set Name) -> Term -> Term)
 setTypeClasses = define "setTypeClasses" $
-  doc "Set type classes on term" $
+  doc "Set type classes on term. The Set Name carries bare class identifiers (#275)." $
   "m" ~> "term" ~>
-  "encodeClass" <~ ("tc" ~> cases _TypeClass (var "tc")
-    Nothing [
-    _TypeClass_equality>>: constant (MetaTerms.injectUnitPhantom _TypeClass _TypeClass_equality),
-    _TypeClass_ordering>>: constant (MetaTerms.injectUnitPhantom _TypeClass _TypeClass_ordering)]) $
   "encodePair" <~ ("nameClasses" ~>
     "name" <~ Pairs.first (var "nameClasses") $
     "classes" <~ Pairs.second (var "nameClasses") $
     pair
       (encoderFor _Name @@ var "name")
-      (Core.termSet (Sets.fromList (Lists.map (var "encodeClass") (Sets.toList (var "classes")))))) $
+      (Core.termSet (Sets.fromList (Lists.map (encoderFor _Name) (Sets.toList (var "classes")))))) $
   "encoded" <~ Logic.ifElse (Maps.null (var "m"))
     nothing
     (just (Core.termMap (Maps.fromList (Lists.map (var "encodePair") (Maps.toList (var "m")))))) $
