@@ -2217,6 +2217,246 @@ typesByName =
               Core.Name "description",
               (Core.TermLiteral (Core.LiteralString "A type-level definition, including a name and the type scheme")))])}))),
       (
+        Core.Name "hydra.typing.FunctionStructure",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeForall (Core.ForallType {
+            Core.forallTypeParameter = (Core.Name "env"),
+            Core.forallTypeBody = (Core.TypeRecord [
+              Core.FieldType {
+                Core.fieldTypeName = (Core.Name "typeParams"),
+                Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                  Core.annotatedTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.core.Name"))),
+                  Core.annotatedTypeAnnotation = (M.fromList [
+                    (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Type parameters (from type lambdas)")))])}))},
+              Core.FieldType {
+                Core.fieldTypeName = (Core.Name "params"),
+                Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                  Core.annotatedTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.core.Name"))),
+                  Core.annotatedTypeAnnotation = (M.fromList [
+                    (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Value parameters (from lambdas)")))])}))},
+              Core.FieldType {
+                Core.fieldTypeName = (Core.Name "bindings"),
+                Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                  Core.annotatedTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.core.Binding"))),
+                  Core.annotatedTypeAnnotation = (M.fromList [
+                    (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Let bindings accumulated from the term")))])}))},
+              Core.FieldType {
+                Core.fieldTypeName = (Core.Name "body"),
+                Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                  Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                  Core.annotatedTypeAnnotation = (M.fromList [
+                    (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The body term after removing all lambdas, lets, etc.")))])}))},
+              Core.FieldType {
+                Core.fieldTypeName = (Core.Name "domains"),
+                Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                  Core.annotatedTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.core.Type"))),
+                  Core.annotatedTypeAnnotation = (M.fromList [
+                    (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Domain types of the value parameters")))])}))},
+              Core.FieldType {
+                Core.fieldTypeName = (Core.Name "codomain"),
+                Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                  Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.core.Type"))),
+                  Core.annotatedTypeAnnotation = (M.fromList [
+                    (
+                      Core.Name "description",
+                      (Core.TermLiteral (Core.LiteralString "The return type of the function (if type inference succeeded)")))])}))},
+              Core.FieldType {
+                Core.fieldTypeName = (Core.Name "environment"),
+                Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                  Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "env")),
+                  Core.annotatedTypeAnnotation = (M.fromList [
+                    (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Updated environment after processing all bindings")))])}))}])})),
+          Core.annotatedTypeAnnotation = (M.fromList [
+            (
+              Core.Name "description",
+              (Core.TermLiteral (Core.LiteralString "A structured representation of a function term's components, replacing ad-hoc tuples. This captures all the information extracted from peeling lambdas, type lambdas, lets, and type applications from a term.")))])}))),
+      (
+        Core.Name "hydra.typing.InferenceResult",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeRecord [
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "term"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The term which was inferred")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "type"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The inferred type of the term")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "subst"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.typing.TypeSubst")),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The type substitution resulting from unification")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "classConstraints"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeMap (Core.MapType {
+                  Core.mapTypeKeys = (Core.TypeVariable (Core.Name "hydra.core.Name")),
+                  Core.mapTypeValues = (Core.TypeVariable (Core.Name "hydra.core.TypeVariableMetadata"))})),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (
+                    Core.Name "description",
+                    (Core.TermLiteral (Core.LiteralString "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "context"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.context.Context")),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (
+                    Core.Name "description",
+                    (Core.TermLiteral (Core.LiteralString "The updated context after inference (carries fresh variable state)")))])}))}]),
+          Core.annotatedTypeAnnotation = (M.fromList [
+            (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The result of applying inference rules to a term.")))])}))),
+      (
+        Core.Name "hydra.typing.Parameter",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeRecord [
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "name"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Name")),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The name of the parameter")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "description"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An optional human-readable description of the parameter")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "type"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The type of the parameter")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "isLazy"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeLiteral Core.LiteralTypeBoolean),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (
+                    Core.Name "description",
+                    (Core.TermLiteral (Core.LiteralString "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation")))])}))}]),
+          Core.annotatedTypeAnnotation = (M.fromList [
+            (
+              Core.Name "description",
+              (Core.TermLiteral (Core.LiteralString "A named, typed parameter of a term, with optional human-readable description and a flag indicating whether the parameter requires lazy evaluation by hosts which support it.")))])}))),
+      (
+        Core.Name "hydra.typing.Result",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeRecord [
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "description"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An optional human-readable description of the result")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "type"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The type of the result")))])}))}]),
+          Core.annotatedTypeAnnotation = (M.fromList [
+            (
+              Core.Name "description",
+              (Core.TermLiteral (Core.LiteralString "The result of a term, consisting of a type and an optional human-readable description.")))])}))),
+      (
+        Core.Name "hydra.typing.TermSignature",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeRecord [
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "typeParameters"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.typing.TypeParameter"))),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The type parameters of the term, in order")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "parameters"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.typing.Parameter"))),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The value parameters of the term, in order")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "result"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.typing.Result")),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The result of the term")))])}))}]),
+          Core.annotatedTypeAnnotation = (M.fromList [
+            (
+              Core.Name "description",
+              (Core.TermLiteral (Core.LiteralString "A structured signature for a term: an ordered list of type parameters (with optional class constraints), an ordered list of value parameters, and a result. TermSignature is a richer view of TypeScheme: every TermSignature can be converted to a TypeScheme by erasing parameter names, descriptions, and laziness flags.")))])}))),
+      (
+        Core.Name "hydra.typing.TermSubst",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeWrap (Core.TypeMap (Core.MapType {
+            Core.mapTypeKeys = (Core.TypeVariable (Core.Name "hydra.core.Name")),
+            Core.mapTypeValues = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))),
+          Core.annotatedTypeAnnotation = (M.fromList [
+            (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A substitution of term variables for terms")))])}))),
+      (
+        Core.Name "hydra.typing.TypeConstraint",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeRecord [
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "left"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The left-hand side of the constraint")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "right"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The right-hand side of the constraint")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "comment"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeLiteral Core.LiteralTypeString),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (
+                    Core.Name "description",
+                    (Core.TermLiteral (Core.LiteralString "A description of the type constraint which may be used for tracing or debugging")))])}))}]),
+          Core.annotatedTypeAnnotation = (M.fromList [
+            (
+              Core.Name "description",
+              (Core.TermLiteral (Core.LiteralString "An assertion that two types can be unified into a single type")))])}))),
+      (
+        Core.Name "hydra.typing.TypeParameter",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeRecord [
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "name"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Name")),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The name of the type parameter")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "constraints"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.core.TypeClassConstraint"))),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Any type class constraints on the type parameter")))])}))}]),
+          Core.annotatedTypeAnnotation = (M.fromList [
+            (
+              Core.Name "description",
+              (Core.TermLiteral (Core.LiteralString "A type parameter of a term, with an optional list of type class constraints")))])}))),
+      (
+        Core.Name "hydra.typing.TypeSubst",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeWrap (Core.TypeMap (Core.MapType {
+            Core.mapTypeKeys = (Core.TypeVariable (Core.Name "hydra.core.Name")),
+            Core.mapTypeValues = (Core.TypeVariable (Core.Name "hydra.core.Type"))}))),
+          Core.annotatedTypeAnnotation = (M.fromList [
+            (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A substitution of type variables for types")))])}))),
+      (
         Core.Name "hydra.util.CaseConvention",
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeUnion [

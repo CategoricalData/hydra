@@ -3,6 +3,13 @@
     {
       "term": {
         "name": "hydra.python.names.encodeConstantForFieldName",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"variable": "hydra.python.syntax.Name"}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -36,19 +43,16 @@
                         "domain": {"variable": "t0"},
                         "parameter": "env"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"function": {"codomain": {"variable": "hydra.python.syntax.Name"}, "domain": {"variable": "hydra.core.Name"}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.python.names.encodeConstantForTypeName",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}}],
+          "result": {"type": {"variable": "hydra.python.syntax.Name"}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -66,16 +70,16 @@
                         "domain": {"variable": "t0"},
                         "parameter": "env"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.python.syntax.Name"}, "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.python.names.encodeEnumValue",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.environment.PythonEnvironment"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"variable": "hydra.python.syntax.Name"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a name as a Python enum value (UPPER_SNAKE case)"}}}],
@@ -83,16 +87,16 @@
               "application": {
                 "argument": {"inject": {"field": {"name": "upperSnake", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
                 "function": {
-                  "application": {"argument": {"literal": {"boolean": false}}, "function": {"variable": "hydra.python.names.encodeName"}}}}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.python.syntax.Name"}, "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
-          "variables": []}}},
+                  "application": {"argument": {"literal": {"boolean": false}}, "function": {"variable": "hydra.python.names.encodeName"}}}}}}}}},
     {
       "term": {
         "name": "hydra.python.names.encodeFieldName",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.environment.PythonEnvironment"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"variable": "hydra.python.syntax.Name"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a name as a Python field name (lower_snake case)"}}}],
@@ -114,16 +118,18 @@
                     "domain": {"variable": "hydra.core.Name"},
                     "parameter": "fname"}},
                 "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
-                "parameter": "env"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.python.syntax.Name"}, "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
-          "variables": []}}},
+                "parameter": "env"}}}}}},
     {
       "term": {
         "name": "hydra.python.names.encodeName",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.util.CaseConvention"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.python.environment.PythonEnvironment"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"variable": "hydra.python.syntax.Name"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra name as a Python name"}}}],
@@ -349,22 +355,16 @@
                     "domain": {"variable": "hydra.util.CaseConvention"},
                     "parameter": "conv"}},
                 "domain": {"literal": {"boolean": {}}},
-                "parameter": "isQualified"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"function": {"codomain": {"variable": "hydra.python.syntax.Name"}, "domain": {"variable": "hydra.core.Name"}}},
-                      "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
-                  "domain": {"variable": "hydra.util.CaseConvention"}}},
-              "domain": {"literal": {"boolean": {}}}}},
-          "variables": []}}},
+                "parameter": "isQualified"}}}}}},
     {
       "term": {
         "name": "hydra.python.names.encodeNameQualified",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.environment.PythonEnvironment"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"variable": "hydra.python.syntax.Name"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a name as a fully qualified Python name"}}}],
@@ -516,16 +516,14 @@
                     "domain": {"variable": "hydra.core.Name"},
                     "parameter": "name"}},
                 "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
-                "parameter": "env"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.python.syntax.Name"}, "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
-          "variables": []}}},
+                "parameter": "env"}}}}}},
     {
       "term": {
         "name": "hydra.python.names.encodeNamespace",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.ModuleName"}}],
+          "result": {"type": {"variable": "hydra.python.syntax.DottedName"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a namespace as a Python dotted name"}}}],
@@ -564,14 +562,14 @@
                                 "type": {"variable": "hydra.python.syntax.Name"}}}}}}},
                     "typeName": "hydra.python.syntax.DottedName"}},
                 "domain": {"variable": "hydra.packaging.ModuleName"},
-                "parameter": "nsVal"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.python.syntax.DottedName"}, "domain": {"variable": "hydra.packaging.ModuleName"}}},
-          "variables": []}}},
+                "parameter": "nsVal"}}}}}},
     {
       "term": {
         "name": "hydra.python.names.encodeTypeVariable",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"variable": "hydra.python.syntax.Name"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a type variable name (capitalized)"}}}],
@@ -585,26 +583,30 @@
                         "function": {"variable": "hydra.formatting.capitalize"}}},
                     "typeName": "hydra.python.syntax.Name"}},
                 "domain": {"variable": "hydra.core.Name"},
-                "parameter": "name"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.python.syntax.Name"}, "domain": {"variable": "hydra.core.Name"}}},
-          "variables": []}}},
+                "parameter": "name"}}}}}},
     {
       "term": {
         "name": "hydra.python.names.sanitizePythonName",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Sanitize a string to be a valid Python name"}}}],
             "body": {
               "application": {
                 "argument": {"variable": "hydra.python.language.pythonReservedWords"},
-                "function": {"variable": "hydra.formatting.sanitizeWithUnderscores"}}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+                "function": {"variable": "hydra.formatting.sanitizeWithUnderscores"}}}}}}},
     {
       "term": {
         "name": "hydra.python.names.termVariableReference",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.environment.PythonEnvironment"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"variable": "hydra.python.syntax.Expression"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Reference a term variable as a Python expression"}}}],
@@ -614,16 +616,16 @@
                 "function": {
                   "application": {
                     "argument": {"inject": {"field": {"name": "lowerSnake", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
-                    "function": {"variable": "hydra.python.names.variableReference"}}}}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.python.syntax.Expression"}, "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
-          "variables": []}}},
+                    "function": {"variable": "hydra.python.names.variableReference"}}}}}}}}},
     {
       "term": {
         "name": "hydra.python.names.typeVariableReference",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.environment.PythonEnvironment"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"variable": "hydra.python.syntax.Expression"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Reference a type variable as a Python expression"}}}],
@@ -633,25 +635,27 @@
                 "function": {
                   "application": {
                     "argument": {"inject": {"field": {"name": "pascal", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
-                    "function": {"variable": "hydra.python.names.variableReference"}}}}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.python.syntax.Expression"}, "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
-          "variables": []}}},
+                    "function": {"variable": "hydra.python.names.variableReference"}}}}}}}}},
     {
       "term": {
         "name": "hydra.python.names.useFutureAnnotations",
+        "signature": {"parameters": [], "result": {"type": {"literal": {"boolean": {}}}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "Whether to use __future__ annotations for forward references"}}}],
-            "body": {"literal": {"boolean": true}}}},
-        "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}}},
+            "body": {"literal": {"boolean": true}}}}}},
     {
       "term": {
         "name": "hydra.python.names.variableReference",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.util.CaseConvention"}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"boolean": {}}}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.python.environment.PythonEnvironment"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"variable": "hydra.python.syntax.Expression"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Reference a variable as a Python expression"}}}],
@@ -1003,22 +1007,18 @@
                     "domain": {"literal": {"boolean": {}}},
                     "parameter": "quoted"}},
                 "domain": {"variable": "hydra.util.CaseConvention"},
-                "parameter": "conv"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"function": {"codomain": {"variable": "hydra.python.syntax.Expression"}, "domain": {"variable": "hydra.core.Name"}}},
-                      "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
-                  "domain": {"literal": {"boolean": {}}}}},
-              "domain": {"variable": "hydra.util.CaseConvention"}}},
-          "variables": []}}},
+                "parameter": "conv"}}}}}},
     {
       "term": {
         "name": "hydra.python.names.variantName",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.python.environment.PythonEnvironment"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"variable": "hydra.python.syntax.Name"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a variant name from type name and field name"}}}],
@@ -1059,19 +1059,7 @@
                     "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "parameter": "env"}},
                 "domain": {"literal": {"boolean": {}}},
-                "parameter": "isQualified"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"function": {"codomain": {"variable": "hydra.python.syntax.Name"}, "domain": {"variable": "hydra.core.Name"}}},
-                      "domain": {"variable": "hydra.core.Name"}}},
-                  "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
-              "domain": {"literal": {"boolean": {}}}}},
-          "variables": []}}}],
+                "parameter": "isQualified"}}}}}}],
   "dependencies": [
     {"module": "hydra.names"},
     {"module": "hydra.formatting"},
