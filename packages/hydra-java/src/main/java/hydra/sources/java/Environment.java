@@ -63,9 +63,9 @@ public class Environment {
         return typeDef(NS, "Aliases",
             doc("Aliases and context for Java code generation",
                 Types.record(
-                    Types.field("currentNamespace", doc("Current module namespace context", modul("Namespace"))),
+                    Types.field("currentNamespace", doc("Current module namespace context", modul("ModuleName"))),
                     Types.field("packages", doc("Maps namespaces to Java package names",
-                        Types.map(modul("Namespace"), syntax("PackageName")))),
+                        Types.map(modul("ModuleName"), syntax("PackageName")))),
                     Types.field("branchVars", doc("Variables bound in pattern matching branches",
                         Types.set(core("Name")))),
                     Types.field("recursiveVars", doc("Variables that are self-recursive",
