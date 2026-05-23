@@ -204,7 +204,12 @@
                     "term": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Additional words reserved in strict mode"}}}],
-                        "body": {"list": [{"literal": {"string": "arguments"}}, {"literal": {"string": "eval"}}]}}},
+                        "body": {
+                          "list": [
+                            {"literal": {"string": "arguments"}},
+                            {"literal": {"string": "eval"}},
+                            {"literal": {"string": "static"}},
+                            {"literal": {"string": "yield"}}]}}},
                     "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "typeScriptKeywords",
@@ -349,7 +354,6 @@
     {"module": "hydra.lexical"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
-    {"module": "hydra.classes"},
     {"module": "hydra.coders"},
     {"module": "hydra.context"},
     {"module": "hydra.core"},

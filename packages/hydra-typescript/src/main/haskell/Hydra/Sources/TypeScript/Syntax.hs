@@ -1234,10 +1234,10 @@ comment = define "Comment" $
       doc "A single-line comment (// ...)"
       T.string,
     "block">:
-      doc "A block comment (/* ... */)"
+      doc "A block comment, delimited by slash-star and star-slash"
       T.string,
     "documentation">:
-      doc "A documentation comment (/** ... */, i.e. JSDoc)" $
+      doc "A documentation comment, delimited by slash-double-star and star-slash (JSDoc)" $
       ts "DocumentationComment"]
 
 documentationComment :: Binding

@@ -846,7 +846,7 @@ encoderTypeScheme = define "encoderTypeScheme" $
       Logic.ifElse (Lists.null (var "ordVars"))
         nothing
         (just $ Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.nameLift _TypeClass_ordering))
+          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.name (string "ordering")))
           (var "ordVars"))] $
   Core.typeScheme (var "typeVars") (var "encoderFunType") (var "constraints")
 
@@ -872,7 +872,7 @@ encoderTypeSchemeNamed = define "encoderTypeSchemeNamed" $
       Logic.ifElse (Lists.null (var "ordVars"))
         nothing
         (just $ Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.nameLift _TypeClass_ordering))
+          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.name (string "ordering")))
           (var "ordVars"))] $
   Core.typeScheme (var "typeVars") (var "encoderFunType") (var "constraints")
 -- | Filter bindings to only encodable type definitions

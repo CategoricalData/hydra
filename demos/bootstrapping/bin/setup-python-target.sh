@@ -75,7 +75,7 @@ fi
 # Overlay coder packages from per-package dist dirs. The Python bootstrap
 # driver (bootstrap.py / generation.py) imports hydra.{java,python,haskell,
 # lisp,scala}.coder to dispatch on target language.
-for coder_pkg in hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp; do
+for coder_pkg in hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp hydra-typescript; do
     coder_base="$HYDRA_ROOT/dist/python/$coder_pkg/src/main/python"
     if [ -d "$coder_base/hydra" ]; then
         cp -r "$coder_base/hydra/." "$PY_GEN/hydra/"

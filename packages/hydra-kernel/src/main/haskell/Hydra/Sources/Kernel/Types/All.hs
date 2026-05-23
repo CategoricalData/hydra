@@ -5,7 +5,6 @@ import Hydra.Kernel
 
 import qualified Hydra.Sources.Kernel.Types.Paths        as Paths
 import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
-import qualified Hydra.Sources.Kernel.Types.Classes     as Classes
 import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
 import qualified Hydra.Sources.Kernel.Types.Context     as Context
 import qualified Hydra.Sources.Kernel.Types.Core        as Core
@@ -33,7 +32,6 @@ kernelTypesModules :: [Module]
 kernelTypesModules = [
   Paths.module_,
   Ast.module_,
-  Classes.module_,
   Coders.module_,
   Context.module_,
   Core.module_,

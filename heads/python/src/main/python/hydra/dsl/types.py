@@ -190,7 +190,7 @@ def poly(vs: Sequence[str], t: Type) -> TypeScheme:
 def poly_constrained(vs_with_constraints: Sequence[tuple[str, list[Name]]], t: Type) -> TypeScheme:
     """Create a polymorphic type scheme with type variables and class constraints.
 
-    Example: poly_constrained([("k", [Name("hydra.util.TypeClass.ordering")]), ("v", [])],
+    Example: poly_constrained([("k", [Name("ordering")]), ("v", [])],
                               function(var("k"), var("v")))
     """
     vars = tuple(Name(v) for v, _ in vs_with_constraints)
