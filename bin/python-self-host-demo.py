@@ -25,7 +25,6 @@ from __future__ import annotations
 
 import argparse
 import importlib
-import os
 import sys
 import time
 from pathlib import Path
@@ -44,11 +43,10 @@ for sub in (
         sys.path.insert(0, p)
 
 import hydra.codegen as codegen
-import hydra.core as core
-from hydra.context import Context
-from hydra.dsl.python import FrozenDict, Left, Right
+from hydra.dsl.python import Left, Right
 from hydra.generation import (
     bootstrap_graph,
+    infer_and_write_by_package,
     load_modules_from_json,
     read_manifest_field,
 )
@@ -120,76 +118,74 @@ def main():
         ndefs = len(m.definitions) if m.definitions else 0
         print(f"    {m.name.value}: {ndefs} definitions", flush=True)
 
-    # Stage 1: inference over universe + python sources.
-    universe_all = tuple(universe) + tuple(py_sources)
-    if args.no_infer:
-        print("Skipping inference (--no-infer)...", flush=True)
-        inferred_py = py_sources
-        t_infer = 0.0
+    # Resolve where the demo expects to write. --out-root is the legacy
+    # contract: a single per-package json directory ending in
+    # ".../hydra-python/src/main/json". The per-package driver works in
+    # terms of the dist/json root and routes each package into its own
+    # <pkg>/src/main/json/ subdir. Strip the four-segment per-package tail
+    # when present; otherwise treat --out-root as the dist-json root
+    # verbatim (non-canonical layout, e.g. /tmp output for --compare).
+    out_root = Path(args.out_root).resolve()
+    tail = ("hydra-python", "src", "main", "json")
+    if out_root.parts[-len(tail):] == tail:
+        dist_json_root = out_root.parents[len(tail) - 1]
     else:
-        print(f"Inferring {len(py_sources)} python source modules...", flush=True)
+        dist_json_root = out_root
+    dist_json_root = str(dist_json_root)
+    print(f"Output dist/json root: {dist_json_root}", flush=True)
+
+    if args.no_infer:
+        # Direct write path: no inference, no per-package iteration.
+        # Useful only when the DSL produces typed terms directly.
+        print("Skipping inference (--no-infer); direct write...", flush=True)
         t0 = time.perf_counter()
-        ctx = Context((), (), FrozenDict({}))
-        result = codegen.infer_modules_given(
-            ctx, bootstrap_graph(), universe_all, tuple(py_sources)
-        )
-        t_infer = time.perf_counter() - t0
-        match result:
-            case Right(value=mods):
-                inferred_py = list(mods)
-                print(f"  inferred ({t_infer:.1f}s)", flush=True)
-            case Left(value=err):
-                print(f"  INFERENCE FAILED: {err}", flush=True)
-                return 1
-
-    # Stage 2: build a Graph over the universe so build_schema_map can resolve types.
-    print(f"Building graph + schema_map...", flush=True)
-    t0 = time.perf_counter()
-    # codegen.modules_to_graph signature: bs_graph, universe_modules, modules
-    graph = codegen.modules_to_graph(bootstrap_graph(),
-                                     tuple(universe) + tuple(inferred_py),
-                                     tuple(inferred_py))
-    schema_map = codegen.build_schema_map(graph)
-    t_graph = time.perf_counter() - t0
-    print(f"  built ({t_graph:.1f}s; schema_map has {len(schema_map)} entries)", flush=True)
-
-    # Stage 3: encode each module and write to disk.
-    out_root = Path(args.out_root)
-    out_root.mkdir(parents=True, exist_ok=True)
-    print(f"Writing JSON to {out_root}...", flush=True)
-    t0 = time.perf_counter()
-    n_written = 0
-    for m in inferred_py:
-        result = codegen.module_to_json(schema_map, m)
-        match result:
-            case Right(value=json_str):
-                file_path = out_root / (_namespace_to_path(m.name.value) + ".json")
-                file_path.parent.mkdir(parents=True, exist_ok=True)
-                new_content = json_str + "\n"
-                # Skip the write if byte-identical (matches Haskell behavior).
-                if file_path.exists():
-                    old = file_path.read_text()
-                    if old == new_content:
-                        print(f"  unchanged: {file_path}", flush=True)
+        graph = codegen.modules_to_graph(bootstrap_graph(),
+                                         tuple(universe) + tuple(py_sources),
+                                         tuple(py_sources))
+        schema_map = codegen.build_schema_map(graph)
+        n_written = 0
+        for m in py_sources:
+            result = codegen.module_to_json(schema_map, m)
+            match result:
+                case Right(value=json_str):
+                    file_path = Path(dist_json_root) / "hydra-python" / "src" / "main" / "json" / \
+                        (_namespace_to_path(m.name.value) + ".json")
+                    file_path.parent.mkdir(parents=True, exist_ok=True)
+                    new_content = json_str + "\n"
+                    if file_path.exists() and file_path.read_text() == new_content:
                         continue
-                file_path.write_text(new_content)
-                n_written += 1
-                print(f"  wrote: {file_path}", flush=True)
-            case Left(value=err):
-                print(f"  ENCODE FAILED for {m.name.value}: {err}", flush=True)
-                return 2
-    t_write = time.perf_counter() - t0
-    print(f"  wrote {n_written} files ({t_write:.1f}s)", flush=True)
+                    file_path.write_text(new_content)
+                    n_written += 1
+                case Left(value=err):
+                    print(f"  ENCODE FAILED for {m.name.value}: {err}", flush=True)
+                    return 2
+        t_pkg = time.perf_counter() - t0
+        print(f"  wrote {n_written} files ({t_pkg:.1f}s)", flush=True)
+    else:
+        # Per-package iterative inference + JSON write (mirrors the
+        # Haskell-side inferAndWriteByPackage). For today's single-package
+        # demo (hydra-python sources only) this is effectively a one-iteration
+        # loop, but the driver shape is in place for future multi-package
+        # self-hosts.
+        print(f"Per-package inference + write...", flush=True)
+        t0 = time.perf_counter()
+        universe_all = tuple(universe) + tuple(py_sources)
+        infer_and_write_by_package(
+            hydra_root=str(_ROOT),
+            dist_json_root=dist_json_root,
+            universe_mods=universe_all,
+            mods=tuple(py_sources),
+            seed_acc=tuple(universe),
+        )
+        t_pkg = time.perf_counter() - t0
+        print(f"  done ({t_pkg:.1f}s)", flush=True)
 
-    # Summary.
-    t_total = t_universe + t_import + t_infer + t_graph + t_write
+    t_total = t_universe + t_import + t_pkg
     print(f"\nSummary:", flush=True)
-    print(f"  universe load: {t_universe:>6.1f}s", flush=True)
-    print(f"  source import: {t_import:>6.1f}s", flush=True)
-    print(f"  inference:     {t_infer:>6.1f}s", flush=True)
-    print(f"  graph+schema:  {t_graph:>6.1f}s", flush=True)
-    print(f"  json write:    {t_write:>6.1f}s", flush=True)
-    print(f"  total:         {t_total:>6.1f}s", flush=True)
+    print(f"  universe load:        {t_universe:>6.1f}s", flush=True)
+    print(f"  source import:        {t_import:>6.1f}s", flush=True)
+    print(f"  per-package + write:  {t_pkg:>6.1f}s", flush=True)
+    print(f"  total:                {t_total:>6.1f}s", flush=True)
     return 0
 
 

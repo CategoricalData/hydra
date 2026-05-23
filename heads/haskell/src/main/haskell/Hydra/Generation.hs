@@ -239,7 +239,21 @@ inferModulesGivenIO universeMods targetMods = do
 -- thunk chain that wrecked the per-SCC attempt
 -- (see docs/history/inferModules-per-scc-attempt.md on staging).
 inferAndWriteByPackage :: FilePath -> [Module] -> [Module] -> IO [Module]
-inferAndWriteByPackage distJsonRoot universeMods mods = do
+inferAndWriteByPackage distJsonRoot universeMods mods =
+  inferAndWriteByPackageSeeded distJsonRoot [] universeMods mods
+
+-- | As 'inferAndWriteByPackage' but with a 'seedAcc' of modules that
+-- are already typed (e.g. clean modules loaded from JSON with their
+-- TypeSchemes baked in). seedAcc modules are excluded from grouping +
+-- iteration and pre-seeded into the typed-so-far accumulator, so
+-- downstream packages can resolve cross-package type references
+-- against them without paying for re-inference.
+--
+-- Used by 'tryIncrementalInference' to thread the JSON-loaded clean
+-- universe through as type-resolution context while running the
+-- per-package re-inference only on the dirty subset.
+inferAndWriteByPackageSeeded :: FilePath -> [Module] -> [Module] -> [Module] -> IO [Module]
+inferAndWriteByPackageSeeded distJsonRoot seedAcc universeMods mods = do
   -- Group both the target set (mods, what we write) and the full universe
   -- (universeMods, what participates in type resolution) by owning package.
   -- pkgsInScope is the union — every package whose modules appear in either
@@ -249,8 +263,15 @@ inferAndWriteByPackage distJsonRoot universeMods mods = do
   -- pass) still get inferred so their TypeSchemes seed the typed universe
   -- for downstream packages; their inferred output is held in the
   -- accumulator but never reaches writePackageSplitJson.
-  let targetGroups    = groupByPackage mods
-      universeGroups  = groupByPackage universeMods
+  --
+  -- seedAcc modules are EXCLUDED from grouping/iteration entirely: they
+  -- live in the initial 'acc' so type resolution downstream resolves them
+  -- but no inference cost is paid against them.
+  let seedNs          = S.fromList (map moduleName seedAcc)
+      groupingUniverse = filter (\m -> not (moduleName m `S.member` seedNs)) universeMods
+      groupingTargets  = filter (\m -> not (moduleName m `S.member` seedNs)) mods
+      targetGroups    = groupByPackage groupingTargets
+      universeGroups  = groupByPackage groupingUniverse
       pkgToMods       = M.fromList targetGroups
       pkgToUniverse   = M.fromList universeGroups
       pkgsInScope     = L.nub (map fst universeGroups ++ map fst targetGroups)
@@ -302,7 +323,7 @@ inferAndWriteByPackage distJsonRoot universeMods mods = do
           writePackageSplitJson distJsonRoot typedUniverse inferred toWrite
         return (acc ++ inferred)
   L.foldl' (\ioAcc pkg -> ioAcc >>= \acc -> processOne acc pkg)
-           (return [])
+           (return seedAcc)
            topoResult
 
 ----------------------------------------
@@ -427,6 +448,13 @@ writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
           CM.when doInfer $ do
             refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
             refreshPerPackageDigests distJsonRoot universeMods allMods
+        Just (IncrementalPartialPreWritten allMods) -> do
+          -- #381 follow-up: tryIncrementalInference routed through
+          -- inferAndWriteByPackage, which already inferred and wrote JSON
+          -- per package. Skip the write step here; just refresh digests.
+          CM.when doInfer $ do
+            refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
+            refreshPerPackageDigests distJsonRoot universeMods allMods
         Nothing -> do
           -- #381: per-package iterative inference. Replaces the
           -- universe-wide 'inferModulesIO universeMods mods' that runs
@@ -445,11 +473,17 @@ writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
 -- | Incremental inference result. 'IncrementalFull mods' means all
 -- modules need a fresh write; 'IncrementalPartial all dirty' means
 -- only the dirty subset needs writing (the clean modules' on-disk
--- JSON is already correct).
+-- JSON is already correct). 'IncrementalPartialPreWritten all' means
+-- inference and writes already happened inside tryIncrementalInference
+-- (via the per-package driver); the caller still needs the full module
+-- set to refresh universe + per-package digests, but should not call
+-- writePackageSplitJson again.
 data IncrementalResult
   = IncrementalFull [Module]
   | IncrementalPartial [Module] [Module]
   -- ^ IncrementalPartial all-modules dirty-modules
+  | IncrementalPartialPreWritten [Module]
+  -- ^ IncrementalPartialPreWritten all-modules
 
 -- | Shared writer: build the schemaMap from the full module universe
 -- and write the subset that needs to hit disk. 'universeForSchema' is
@@ -750,14 +784,30 @@ tryIncrementalInference distJsonRoot universeMods targetMods = do
                   putStrLn $ "  Incremental load failed: " ++ show e
                   return Nothing
                 Right cleanLoaded -> do
+                  -- #381 follow-up: route the incremental dirty set through
+                  -- the per-package driver instead of doing a single mega-
+                  -- inference over (cleanLoaded ++ dirtyMods). On a #369-
+                  -- style mass-rename (every namespace literal touched),
+                  -- 'dirtyMods' easily hits 250+ modules; passing the full
+                  -- cleanLoaded set (with already-baked TypeSchemes) plus
+                  -- the full dirty set to a single inferModulesGivenIO call
+                  -- blows past -M6G with heap overflow. Per-package
+                  -- iteration is the same architectural fix as the cold-
+                  -- cache path (see 'inferAndWriteByPackage' above).
+                  --
+                  -- We pass cleanLoaded as 'seedAcc' so the JSON-loaded
+                  -- clean modules pre-seed the typed-so-far accumulator
+                  -- without being grouped or re-inferred — they serve as
+                  -- type-resolution context only. Each package iteration
+                  -- re-infers + writes JSON only for its dirty subset.
                   let typedUniverse = cleanLoaded ++ dirtyMods
-                  inferred <- inferModulesGivenIO typedUniverse dirtyMods
-                  -- Return:
-                  --   * all modules (cleanLoaded ++ inferred), so the
-                  --     schemaMap can be built over the complete set.
-                  --   * dirty subset (inferred), so the caller writes
-                  --     JSON only for the modules that actually changed.
-                  return (Just (IncrementalPartial (cleanLoaded ++ inferred) inferred))
+                  -- The seeded driver's foldl threads 'seedAcc' through as
+                  -- the initial accumulator, so its return value is
+                  -- 'cleanLoaded ++ <all freshly-inferred dirty mods>' —
+                  -- exactly the set the caller needs for digest refresh.
+                  allMods <- inferAndWriteByPackageSeeded
+                               distJsonRoot cleanLoaded typedUniverse dirtyMods
+                  return (Just (IncrementalPartialPreWritten allMods))
 
 -- | Load modules from per-package JSON paths. The dist-json-root
 -- layout is dist/json/<pkg>/src/main/json/<ns-path>.json; we route
