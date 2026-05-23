@@ -24,6 +24,8 @@ from hydra.core import (
 from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing, frozenlist, Either, Left, Right
 from hydra.errors import Error, ErrorOther, OtherError
 from hydra.graph import Graph, Primitive, TermCoder
+from hydra.packaging import PrimitiveDefinition
+from hydra.scoping import type_scheme_to_term_signature
 from hydra.util import Comparison
 
 A = TypeVar("A")
@@ -80,6 +82,18 @@ def type_vars_to_constraints(vars: list[TypeVar_]) -> list[tuple[str, list[Name]
     Filters out variables with no constraints.
     """
     return [(tv.name, tv.classes) for tv in vars if tv.classes]
+
+
+def default_primitive_definition(name: Name, typ) -> PrimitiveDefinition:
+    """Build a PrimitiveDefinition with default metadata (mirrors Haskell default). For #156."""
+    return PrimitiveDefinition(
+        name=name,
+        description="",
+        signature=type_scheme_to_term_signature(typ),
+        is_pure=True,
+        is_total=True,
+        default_implementation=Nothing(),
+    )
 
 
 # Basic numeric types
@@ -524,7 +538,8 @@ def prim0(
         return result
 
     return Primitive(
-        name=name, type_scheme=build_type_scheme(variables, output.type), implementation=impl
+        definition=default_primitive_definition(name, build_type_scheme(variables, output.type)),
+        implementation=impl,
     )
 
 
@@ -554,8 +569,7 @@ def prim1(
         return go()
 
     return Primitive(
-        name=name,
-        type_scheme=build_type_scheme(variables, types.function(input1.type, output.type)),
+        definition=default_primitive_definition(name, build_type_scheme(variables, types.function(input1.type, output.type))),
         implementation=impl,
     )
 
@@ -593,11 +607,10 @@ def prim2(
         return go()
 
     return Primitive(
-        name=name,
-        type_scheme=build_type_scheme(
+        definition=default_primitive_definition(name, build_type_scheme(
             variables,
             types.function(input1.type, types.function(input2.type, output.type)),
-        ),
+        )),
         implementation=impl,
     )
 
@@ -642,14 +655,13 @@ def prim3(
         return go()
 
     return Primitive(
-        name=name,
-        type_scheme=build_type_scheme(
+        definition=default_primitive_definition(name, build_type_scheme(
             variables,
             types.function(
                 input1.type,
                 types.function(input2.type, types.function(input3.type, output.type)),
             ),
-        ),
+        )),
         implementation=impl,
     )
 
