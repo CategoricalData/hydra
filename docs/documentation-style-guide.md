@@ -192,26 +192,38 @@ Do not refer to immature implementations in user-facing documentation unless con
 
 ```
 docs/
-├── index.html              # GitHub Pages landing page
-└── src/
-    ├── demos.md            # Demo overviews
-    ├── documentation-style-guide.md  # This file
-    ├── dsl-guide.md        # Haskell DSL guide
-    ├── dsl-guide-java.md   # Java DSL guide
-    ├── dsl-guide-python.md # Python DSL guide
-    ├── implementation.md   # Architecture and internals
-    ├── llm-quickstart.md   # LLM orientation guide
-    ├── test-suite-architecture.md  # Test kernel details
-    └── recipes/            # Task-oriented guides
-        ├── index.md
-        └── ...             # Individual recipes
+├── index.html                       # GitHub Pages landing page
+├── build-system.md                  # Pipeline, cache model, generator stamps
+├── demos.md                         # Demo overviews
+├── documentation-style-guide.md     # This file
+├── dsl-guide.md                     # Haskell DSL guide
+├── dsl-guide-java.md                # Java DSL guide
+├── dsl-guide-python.md              # Python DSL guide
+├── getting-started.md               # Library-user setup per host
+├── hydra-lexicon.txt                # Kernel types + ~180 primitive signatures (generated)
+├── implementation.md                # Architecture and internals
+├── import-conventions.md            # Haskell DSL import block conventions
+├── json-format.md                   # JSON wire-format spec + stability guarantees
+├── tco-implementation.md            # Tail-call optimization in Python/Java coders
+├── test-suite-architecture.md       # Test kernel details
+├── troubleshooting.md               # Diagnostic checklist
+├── history/                         # Retained provisional notes
+│   └── ...                          # Investigation work products
+└── recipes/                         # Task-oriented guides
+    ├── index.md
+    └── ...                          # Individual recipes
 
-wiki/
-├── Home.md                 # Documentation index
-├── Concepts.md             # Theoretical foundations
-├── Testing.md              # Testing guide
-├── Release-process.md      # Release procedures
-└── ...                     # Other reference docs
+wiki/                                # Separate Git repo (user-facing design docs)
+├── Home.md                          # Wiki landing
+├── Concepts.md                      # LambdaGraph, type system, design principles
+├── Code-Organization.md             # packages/heads/dist pattern (canonical)
+├── Coding-style.md                  # Conventions for kernel + DSL sources
+├── Property-graphs.md               # PG data model + mappings
+├── RDF.md                           # RDF / SHACL / OWL design
+├── Testing.md                       # Common test suite design
+├── Benchmarking.md                  # Inference benchmark design
+├── Release-process.md               # Release policy
+└── ...
 ```
 
 ### File naming
