@@ -26,8 +26,20 @@ import qualified Hydra.Sources.Kernel.Terms.Languages       as Languages
 import qualified Hydra.Sources.Kernel.Terms.Lexical         as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Literals        as Literals
 
+import qualified Hydra.Sources.Kernel.Lib.Chars             as LibChars
+import qualified Hydra.Sources.Kernel.Lib.Eithers           as LibEithers
+import qualified Hydra.Sources.Kernel.Lib.Equality          as LibEquality
+import qualified Hydra.Sources.Kernel.Lib.Lists              as LibLists
+import qualified Hydra.Sources.Kernel.Lib.Literals          as LibLiterals
 import qualified Hydra.Sources.Kernel.Lib.Logic             as LibLogic
+import qualified Hydra.Sources.Kernel.Lib.Maps              as LibMaps
+import qualified Hydra.Sources.Kernel.Lib.Math              as LibMath
+import qualified Hydra.Sources.Kernel.Lib.Maybes            as LibMaybes
 import qualified Hydra.Sources.Kernel.Lib.Names             as LibNames
+import qualified Hydra.Sources.Kernel.Lib.Pairs             as LibPairs
+import qualified Hydra.Sources.Kernel.Lib.Regex             as LibRegex
+import qualified Hydra.Sources.Kernel.Lib.Sets              as LibSets
+import qualified Hydra.Sources.Kernel.Lib.Strings           as LibStrings
 import qualified Hydra.Sources.Kernel.Terms.Names           as Names
 import qualified Hydra.Sources.Kernel.Terms.Parsers         as Parsers
 import qualified Hydra.Sources.Kernel.Terms.Predicates     as Predicates
@@ -126,8 +138,20 @@ kernelPrimaryTermsModules = [
   Inference.module_,
   Languages.module_,
   Lexical.module_,
+  LibChars.module_,
+  LibEithers.module_,
+  LibEquality.module_,
+  LibLists.module_,
+  LibLiterals.module_,
   LibLogic.module_,
+  LibMaps.module_,
+  LibMath.module_,
+  LibMaybes.module_,
   LibNames.module_,
+  LibPairs.module_,
+  LibRegex.module_,
+  LibSets.module_,
+  LibStrings.module_,
   Literals.module_,
 
   Names.module_,

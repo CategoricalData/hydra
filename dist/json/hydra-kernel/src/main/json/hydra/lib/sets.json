@@ -1,0 +1,337 @@
+{
+  "definitions": [
+    {
+      "primitive": {
+        "description": "Remove an element from a set.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.sets.delete",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
+            {"isLazy": false, "name": "arg1", "type": {"set": {"variable": "x"}}}],
+          "result": {"type": {"set": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Set difference, defined in terms of member and insert."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {"application": {"argument": {"variable": "s1"}, "function": {"variable": "hydra.lib.sets.toList"}}},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "hydra.lib.sets.empty"},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "lambda": {
+                                    "body": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "acc"},
+                                                "function": {"application": {"argument": {"variable": "el"}, "function": {"variable": "hydra.lib.sets.insert"}}}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "acc"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "s2"},
+                                                        "function": {"application": {"argument": {"variable": "el"}, "function": {"variable": "hydra.lib.sets.member"}}}}},
+                                                    "function": {"variable": "hydra.lib.logic.ifElse"}}}}}}},
+                                        "parameter": "el"}},
+                                    "parameter": "acc"}},
+                                "function": {"variable": "hydra.lib.lists.foldl"}}}}}}},
+                    "parameter": "s2"}},
+                "parameter": "s1"}}}},
+        "description": "Compute the difference of two sets: elements in the first that are not in the second.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.sets.difference",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"set": {"variable": "x"}}},
+            {"isLazy": false, "name": "arg1", "type": {"set": {"variable": "x"}}}],
+          "result": {"type": {"set": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "The empty set.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.sets.empty",
+        "signature": {
+          "parameters": [],
+          "result": {"type": {"set": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Construct a set from a list of elements (duplicates removed).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.sets.fromList",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"set": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Add an element to a set.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.sets.insert",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
+            {"isLazy": false, "name": "arg1", "type": {"set": {"variable": "x"}}}],
+          "result": {"type": {"set": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Set intersection, defined in terms of member and insert."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {"application": {"argument": {"variable": "s1"}, "function": {"variable": "hydra.lib.sets.toList"}}},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "hydra.lib.sets.empty"},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "lambda": {
+                                    "body": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {"variable": "acc"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "acc"},
+                                                    "function": {"application": {"argument": {"variable": "el"}, "function": {"variable": "hydra.lib.sets.insert"}}}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "s2"},
+                                                        "function": {"application": {"argument": {"variable": "el"}, "function": {"variable": "hydra.lib.sets.member"}}}}},
+                                                    "function": {"variable": "hydra.lib.logic.ifElse"}}}}}}},
+                                        "parameter": "el"}},
+                                    "parameter": "acc"}},
+                                "function": {"variable": "hydra.lib.lists.foldl"}}}}}}},
+                    "parameter": "s2"}},
+                "parameter": "s1"}}}},
+        "description": "Compute the intersection of two sets: elements present in both.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.sets.intersection",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"set": {"variable": "x"}}},
+            {"isLazy": false, "name": "arg1", "type": {"set": {"variable": "x"}}}],
+          "result": {"type": {"set": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "Map a function over a set, defined in terms of toList, lists.map and fromList."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {"application": {"argument": {"variable": "s"}, "function": {"variable": "hydra.lib.sets.toList"}}},
+                            "function": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.lists.map"}}}}},
+                        "function": {"variable": "hydra.lib.sets.fromList"}}},
+                    "parameter": "s"}},
+                "parameter": "f"}}}},
+        "description": "Map a function over a set.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.sets.map",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"set": {"variable": "x"}}}],
+          "result": {"type": {"set": {"variable": "y"}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}, {"constraints": [{"simple": "ordering"}], "name": "y"}]}}},
+    {
+      "primitive": {
+        "description": "Test whether an element is in a set.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.sets.member",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
+            {"isLazy": false, "name": "arg1", "type": {"set": {"variable": "x"}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Test whether a set is empty.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.sets.null",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"set": {"variable": "x"}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Construct a set containing a single element.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.sets.singleton",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "x"}}],
+          "result": {"type": {"set": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Return the number of elements in a set.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.sets.size",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"set": {"variable": "x"}}}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Convert a set to a list (in unspecified order).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.sets.toList",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"set": {"variable": "x"}}}],
+          "result": {"type": {"list": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Set union, defined in terms of insert and toList."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {"application": {"argument": {"variable": "s1"}, "function": {"variable": "hydra.lib.sets.toList"}}},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "s2"},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "lambda": {
+                                    "body": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {"variable": "acc"},
+                                            "function": {"application": {"argument": {"variable": "el"}, "function": {"variable": "hydra.lib.sets.insert"}}}}},
+                                        "parameter": "el"}},
+                                    "parameter": "acc"}},
+                                "function": {"variable": "hydra.lib.lists.foldl"}}}}}}},
+                    "parameter": "s2"}},
+                "parameter": "s1"}}}},
+        "description": "Compute the union of two sets: elements in either.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.sets.union",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"set": {"variable": "x"}}},
+            {"isLazy": false, "name": "arg1", "type": {"set": {"variable": "x"}}}],
+          "result": {"type": {"set": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "Union of a list of sets, defined in terms of foldl and union."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "ss"},
+                    "function": {
+                      "application": {
+                        "argument": {"variable": "hydra.lib.sets.empty"},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "lambda": {
+                                "body": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {"variable": "s"},
+                                        "function": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.sets.union"}}}}},
+                                    "parameter": "s"}},
+                                "parameter": "acc"}},
+                            "function": {"variable": "hydra.lib.lists.foldl"}}}}}}},
+                "parameter": "ss"}}}},
+        "description": "Compute the union of a list of sets.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.sets.unions",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"set": {"variable": "x"}}}}],
+          "result": {"type": {"set": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}}],
+  "dependencies": [
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "description": "Primitives in the hydra.lib.sets namespace.",
+  "name": "hydra.lib.sets"}

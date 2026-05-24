@@ -36,12 +36,10 @@ module_ = Module {
             moduleDescription = Just "Primitives in the hydra.lib.logic namespace."}
   where
     definitions = [
-      toPrimitive "Logical AND" andSig and_,
-      primNoDef "ifElse"
-        "Conditional expression: yield the second argument if the first is true, otherwise the third"
-        ifElseSig,
-      toPrimitive "Logical NOT" notSig not_,
-      toPrimitive "Logical OR" orSig or_]
+      toPrimitive "Compute the logical AND of two boolean values." andSig and_,
+      primNoDef "ifElse" "Compute a conditional expression." ifElseSig,
+      toPrimitive "Compute the logical NOT of a boolean value." notSig not_,
+      toPrimitive "Compute the logical OR of two boolean values." orSig or_]
 
 -- Signatures
 
@@ -49,8 +47,8 @@ andSig :: TermSignature
 andSig = sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) Nothing
 
 ifElseSig :: TermSignature
-ifElseSig = sig $ TypeScheme [Name "a"]
-  (Types.boolean Types.~> Types.var "a" Types.~> Types.var "a" Types.~> Types.var "a")
+ifElseSig = sig $ TypeScheme [Name "x"]
+  (Types.boolean Types.~> Types.var "x" Types.~> Types.var "x" Types.~> Types.var "x")
   Nothing
 
 notSig :: TermSignature

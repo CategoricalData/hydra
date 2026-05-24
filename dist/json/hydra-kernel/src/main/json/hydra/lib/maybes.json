@@ -1,0 +1,390 @@
+{
+  "definitions": [
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "Applicative apply for optionals, defined in terms of bind and map."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {"variable": "mx"},
+                                "function": {
+                                  "application": {
+                                    "argument": {"lambda": {"body": {"application": {"argument": {"variable": "x"}, "function": {"variable": "f"}}}, "parameter": "x"}},
+                                    "function": {"variable": "hydra.lib.maybes.map"}}}}},
+                            "parameter": "f"}},
+                        "function": {"application": {"argument": {"variable": "mf"}, "function": {"variable": "hydra.lib.maybes.bind"}}}}},
+                    "parameter": "mx"}},
+                "parameter": "mf"}}}},
+        "description": "Applicative apply for optionals: combine an optional function and an optional argument.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maybes.apply",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"maybe": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"maybe": {"variable": "x"}}}],
+          "result": {"type": {"maybe": {"variable": "y"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Monadic bind for optionals, defined in terms of maybe."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {"variable": "m"},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "f"},
+                            "function": {"application": {"argument": {"maybe": null}, "function": {"variable": "hydra.lib.maybes.maybe"}}}}}}},
+                    "parameter": "f"}},
+                "parameter": "m"}}}},
+        "description": "Monadic bind for optionals.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maybes.bind",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"maybe": {"variable": "x"}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"function": {"codomain": {"maybe": {"variable": "y"}}, "domain": {"variable": "x"}}}}],
+          "result": {"type": {"maybe": {"variable": "y"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
+    {
+      "primitive": {
+        "description": "Case analysis on an optional, with cases-style argument order.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maybes.cases",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"maybe": {"variable": "x"}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "y"}},
+            {"isLazy": false, "name": "arg2", "type": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}}],
+          "result": {"type": {"variable": "y"}},
+          "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "Catenate a list of optionals, keeping only the present values."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "xs"},
+                    "function": {
+                      "application": {
+                        "argument": {"list": []},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "lambda": {
+                                "body": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {"variable": "m"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "lambda": {
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {"variable": "acc"},
+                                                    "function": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.lists.cons"}}}}},
+                                                "parameter": "v"}},
+                                            "function": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.maybes.maybe"}}}}}}},
+                                    "parameter": "acc"}},
+                                "parameter": "m"}},
+                            "function": {"variable": "hydra.lib.lists.foldr"}}}}}}},
+                "parameter": "xs"}}}},
+        "description": "Concatenate optionals, keeping only the present values.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maybes.cat",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"maybe": {"variable": "x"}}}}],
+          "result": {"type": {"list": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [
+              {"key": "description", "value": {"literal": {"string": "Kleisli composition for optionals, defined in terms of bind."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "g"},
+                            "function": {
+                              "application": {
+                                "argument": {"application": {"argument": {"variable": "x"}, "function": {"variable": "f"}}},
+                                "function": {"variable": "hydra.lib.maybes.bind"}}}}},
+                        "parameter": "x"}},
+                    "parameter": "g"}},
+                "parameter": "f"}}}},
+        "description": "Kleisli composition for optionals.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maybes.compose",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"maybe": {"variable": "y"}}, "domain": {"variable": "x"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"function": {"codomain": {"maybe": {"variable": "z"}}, "domain": {"variable": "y"}}}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "x"}}],
+          "result": {"type": {"maybe": {"variable": "z"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}, {"constraints": [], "name": "z"}]}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "Return the contained value or a default, defined in terms of maybe."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {"variable": "m"},
+                        "function": {
+                          "application": {
+                            "argument": {"lambda": {"body": {"variable": "x"}, "parameter": "x"}},
+                            "function": {"application": {"argument": {"variable": "def"}, "function": {"variable": "hydra.lib.maybes.maybe"}}}}}}},
+                    "parameter": "m"}},
+                "parameter": "def"}}}},
+        "description": "Return the value contained in an optional, falling back to a default if absent.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maybes.fromMaybe",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
+            {"isLazy": false, "name": "arg1", "type": {"maybe": {"variable": "x"}}}],
+          "result": {"type": {"variable": "x"}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Test for presence, defined in terms of maybe."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "m"},
+                    "function": {
+                      "application": {
+                        "argument": {"lambda": {"body": {"literal": {"boolean": true}}, "parameter": "_"}},
+                        "function": {"application": {"argument": {"literal": {"boolean": false}}, "function": {"variable": "hydra.lib.maybes.maybe"}}}}}}},
+                "parameter": "m"}}}},
+        "description": "Test whether an optional is present (Just).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maybes.isJust",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"maybe": {"variable": "x"}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Test for absence, defined in terms of maybe."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "m"},
+                    "function": {
+                      "application": {
+                        "argument": {"lambda": {"body": {"literal": {"boolean": false}}, "parameter": "_"}},
+                        "function": {"application": {"argument": {"literal": {"boolean": true}}, "function": {"variable": "hydra.lib.maybes.maybe"}}}}}}},
+                "parameter": "m"}}}},
+        "description": "Test whether an optional is absent (Nothing).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maybes.isNothing",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"maybe": {"variable": "x"}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [
+              {"key": "description", "value": {"literal": {"string": "Map a function over an optional, defined in terms of maybe."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {"variable": "m"},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "lambda": {"body": {"maybe": {"application": {"argument": {"variable": "x"}, "function": {"variable": "f"}}}}, "parameter": "x"}},
+                            "function": {"application": {"argument": {"maybe": null}, "function": {"variable": "hydra.lib.maybes.maybe"}}}}}}},
+                    "parameter": "m"}},
+                "parameter": "f"}}}},
+        "description": "Map a function over an optional.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maybes.map",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"maybe": {"variable": "x"}}}],
+          "result": {"type": {"maybe": {"variable": "y"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {
+                  "literal": {"string": "Map a partial function and keep only the present results, defined in terms of lists.map and cat."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {"variable": "xs"},
+                            "function": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.lists.map"}}}}},
+                        "function": {"variable": "hydra.lib.maybes.cat"}}},
+                    "parameter": "xs"}},
+                "parameter": "f"}}}},
+        "description": "Map a partial function over a list, keeping only the present results.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maybes.mapMaybe",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"maybe": {"variable": "y"}}, "domain": {"variable": "x"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"list": {"variable": "y"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
+    {
+      "primitive": {
+        "description": "Case analysis on an optional, applying a function if present or returning a default if absent.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maybes.maybe",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "y"}},
+            {"isLazy": false, "name": "arg1", "type": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}},
+            {"isLazy": false, "name": "arg2", "type": {"maybe": {"variable": "x"}}}],
+          "result": {"type": {"variable": "y"}},
+          "typeParameters": [{"constraints": [], "name": "y"}, {"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Wrap a value in Just."}}}],
+            "body": {"lambda": {"body": {"maybe": {"variable": "x"}}, "parameter": "x"}}}},
+        "description": "Wrap a value in Just.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maybes.pure",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "x"}}],
+          "result": {"type": {"maybe": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an optional to a list, defined in terms of maybe."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "m"},
+                    "function": {
+                      "application": {
+                        "argument": {"lambda": {"body": {"list": [{"variable": "x"}]}, "parameter": "x"}},
+                        "function": {"application": {"argument": {"list": []}, "function": {"variable": "hydra.lib.maybes.maybe"}}}}}}},
+                "parameter": "m"}}}},
+        "description": "Convert an optional to a list: Just x maps to [x], Nothing to [].",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maybes.toList",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"maybe": {"variable": "x"}}}],
+          "result": {"type": {"list": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}}],
+  "dependencies": [
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "description": "Primitives in the hydra.lib.maybes namespace.",
+  "name": "hydra.lib.maybes"}
