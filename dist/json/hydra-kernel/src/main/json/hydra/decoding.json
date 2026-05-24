@@ -11234,13 +11234,11 @@
                                                                             {
                                                                               "name": "classes",
                                                                               "term": {
-                                                                                "application": {
-                                                                                  "argument": {
+                                                                                "list": [
+                                                                                  {
                                                                                     "inject": {
                                                                                       "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
-                                                                                      "typeName": "hydra.core.TypeClassConstraint"}},
-                                                                                  "function": {
-                                                                                    "typeApplication": {"body": {"variable": "hydra.lib.sets.singleton"}, "type": {"variable": "hydra.core.TypeClassConstraint"}}}}}}],
+                                                                                      "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                           "typeName": "hydra.core.TypeVariableMetadata"}}}},
                                                                   "type": {"variable": "hydra.core.Name"}}},
                                                               "type": {"variable": "hydra.core.TypeVariableMetadata"}}},
@@ -11368,13 +11366,11 @@
                                                                                 {
                                                                                   "name": "classes",
                                                                                   "term": {
-                                                                                    "application": {
-                                                                                      "argument": {
+                                                                                    "list": [
+                                                                                      {
                                                                                         "inject": {
                                                                                           "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
-                                                                                          "typeName": "hydra.core.TypeClassConstraint"}},
-                                                                                      "function": {
-                                                                                        "typeApplication": {"body": {"variable": "hydra.lib.sets.singleton"}, "type": {"variable": "hydra.core.TypeClassConstraint"}}}}}}],
+                                                                                          "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                               "typeName": "hydra.core.TypeVariableMetadata"}}}},
                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                   "type": {"variable": "hydra.core.TypeVariableMetadata"}}},

@@ -17,7 +17,6 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
@@ -644,7 +643,8 @@ encoderTypeScheme typ =
                   Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (
                     v,
                     Core.TypeVariableMetadata {
-                      Core.typeVariableMetadataClasses = [Core.TypeClassConstraintSimple (Core.Name "ordering")]})) ordVars)))
+                      Core.typeVariableMetadataClasses = [
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")]})) ordVars)))
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeBody = encoderFunType,
@@ -661,7 +661,8 @@ encoderTypeSchemeNamed ename typ =
                   Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (
                     v,
                     Core.TypeVariableMetadata {
-                      Core.typeVariableMetadataClasses = [Core.TypeClassConstraintSimple (Core.Name "ordering")]})) ordVars)))
+                      Core.typeVariableMetadataClasses = [
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")]})) ordVars)))
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeBody = encoderFunType,

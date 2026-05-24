@@ -1029,12 +1029,8 @@
                                                                                               "name": "classes",
                                                                                               "term": {
                                                                                                 "application": {
-                                                                                                  "argument": {
-                                                                                                    "application": {
-                                                                                                      "argument": {"variable": "tp"},
-                                                                                                      "function": {"project": {"fieldName": "constraints", "typeName": "hydra.typing.TypeParameter"}}}},
-                                                                                                  "function": {
-                                                                                                    "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.core.TypeClassConstraint"}}}}}}],
+                                                                                                  "argument": {"variable": "tp"},
+                                                                                                  "function": {"project": {"fieldName": "constraints", "typeName": "hydra.typing.TypeParameter"}}}}}],
                                                                                           "typeName": "hydra.core.TypeVariableMetadata"}}}},
                                                                                   "type": {"variable": "hydra.core.Name"}}},
                                                                               "type": {"variable": "hydra.core.TypeVariableMetadata"}}},
@@ -1226,12 +1222,8 @@
                                                                   "lambda": {
                                                                     "body": {
                                                                       "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "tvm"},
-                                                                            "function": {"project": {"fieldName": "classes", "typeName": "hydra.core.TypeVariableMetadata"}}}},
-                                                                        "function": {
-                                                                          "typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.core.TypeClassConstraint"}}}}},
+                                                                        "argument": {"variable": "tvm"},
+                                                                        "function": {"project": {"fieldName": "classes", "typeName": "hydra.core.TypeVariableMetadata"}}}},
                                                                     "domain": {"variable": "hydra.core.TypeVariableMetadata"},
                                                                     "parameter": "tvm"}},
                                                                 "function": {

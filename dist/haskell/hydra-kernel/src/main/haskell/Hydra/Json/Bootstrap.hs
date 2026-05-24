@@ -2401,6 +2401,20 @@ typesByName =
           Core.annotatedTypeAnnotation = (M.fromList [
             (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A substitution of term variables for terms")))])}))),
       (
+        Core.Name "hydra.typing.TypeClass",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeRecord [
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "description"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeLiteral Core.LiteralTypeString),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A human-readable description of the type class")))])}))}]),
+          Core.annotatedTypeAnnotation = (M.fromList [
+            (
+              Core.Name "description",
+              (Core.TermLiteral (Core.LiteralString "A type class identifier together with a human-readable description. Type classes are referenced as bare names (e.g. the local name \"equality\") in TypeVariableMetadata.classes; the canonical definitions live as term bindings under hydra.classes.")))])}))),
+      (
         Core.Name "hydra.typing.TypeConstraint",
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeRecord [

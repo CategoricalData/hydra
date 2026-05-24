@@ -4252,21 +4252,21 @@
                                                   "body": {
                                                     "inject": {
                                                       "field": {
-                                                        "name": "set",
+                                                        "name": "list",
                                                         "term": {
                                                           "application": {
-                                                            "argument": {"variable": "s"},
+                                                            "argument": {"variable": "xs"},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {"variable": "hydra.encode.core.typeClassConstraint"},
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
-                                                                      "typeApplication": {"body": {"variable": "hydra.lib.sets.map"}, "type": {"variable": "hydra.core.TypeClassConstraint"}}},
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.TypeClassConstraint"}}},
                                                                     "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                       "typeName": "hydra.core.Term"}},
-                                                  "domain": {"set": {"variable": "hydra.core.TypeClassConstraint"}},
-                                                  "parameter": "s"}}}}}],
+                                                  "domain": {"list": {"variable": "hydra.core.TypeClassConstraint"}},
+                                                  "parameter": "xs"}}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},

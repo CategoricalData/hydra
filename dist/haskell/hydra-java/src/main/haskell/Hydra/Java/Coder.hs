@@ -284,7 +284,7 @@ bindingsToStatements env bindings cx g0 =
           thunkedVars =
                   Sets.fromList (Lists.concat (Lists.map (\b ->
                     let bname = Core.bindingName b
-                    in (Logic.ifElse (Logic.and (Logic.not (Sets.member bname recursiveVars)) (Logic.and (needsThunking (Core.bindingTerm b)) (Logic.not (bindingIsFunctionType b)))) [
+                    in (Logic.ifElse (Logic.and (Logic.not (Sets.member bname recursiveVars)) (Logic.and (Predicates.isComplexBinding gExtended b) (Logic.and (Logic.not (Predicates.isTrivialTerm (Core.bindingTerm b))) (Logic.not (bindingIsFunctionType b))))) [
                       bname] [])) flatBindings))
           aliasesExtended =
                   JavaEnvironment.Aliases {
@@ -1063,7 +1063,7 @@ encodeElimination env marg dom cod elimTerm cx g =
       in case (Strip.deannotateAndDetypeTerm elimTerm) of
         Core.TermProject v0 ->
           let fname = Core.projectionFieldName v0
-          in (Eithers.bind (encodeType aliases Sets.empty dom cx g) (\jdom0 -> Eithers.bind (Utils.javaTypeToJavaReferenceType jdom0 cx) (\_ -> Maybes.cases marg (
+          in (Eithers.bind (encodeType aliases Sets.empty dom cx g) (\jdom0 -> Eithers.bind (Utils.javaTypeToJavaReferenceType jdom0 cx) (\jdomr -> Maybes.cases marg (
             let projVar = Core.Name "projected"
                 jbody =
                         Utils.javaExpressionNameToJavaExpression (Utils.fieldExpression (Utils.variableToJavaIdentifier projVar) (Utils.javaIdentifier (Core.unName fname)))
@@ -1540,7 +1540,7 @@ encodeTermInternal env anns tyapps term cx g0 =
                         (Utils.sanitizeJavaName (Formatting.capitalize (Core.unName injFieldName)))])
           in (Eithers.bind (isFieldUnitType injTypeName injFieldName cx g) (\fieldIsUnit -> Eithers.bind (Logic.ifElse (Logic.or (Predicates.isUnitTerm (Strip.deannotateTerm injFieldTerm)) fieldIsUnit) (Right []) (Eithers.bind (encode injFieldTerm) (\ex -> Right [
             ex]))) (\args -> Right (Utils.javaConstructorCall (Utils.javaConstructorName consId Nothing) args Nothing))))
-        Core.TermVariable v0 -> Maybes.cases (Maps.lookup v0 (Graph.graphPrimitives g)) (encodeVariable env v0 cx g) (\_ ->
+        Core.TermVariable v0 -> Maybes.cases (Maps.lookup v0 (Graph.graphPrimitives g)) (encodeVariable env v0 cx g) (\_prim ->
           let combinedAnns = Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns
           in (Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mt -> Eithers.bind (Maybes.cases mt (Checking.typeOfTerm cx g term) (\t -> Right t)) (\typ -> case (Strip.deannotateType typ) of
             Core.TypeFunction v1 -> encodeFunctionPrimitiveByName env (Core.functionTypeDomain v1) (Core.functionTypeCodomain v1) v0 cx g

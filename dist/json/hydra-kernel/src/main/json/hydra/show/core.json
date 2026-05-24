@@ -2591,16 +2591,12 @@
                                                       "application": {
                                                         "argument": {
                                                           "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "p"},
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                    "type": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
-                                                            "function": {"project": {"fieldName": "classes", "typeName": "hydra.core.TypeVariableMetadata"}}}},
-                                                        "function": {
-                                                          "typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.core.TypeClassConstraint"}}}}},
+                                                            "argument": {"variable": "p"},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                "type": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
+                                                        "function": {"project": {"fieldName": "classes", "typeName": "hydra.core.TypeVariableMetadata"}}}},
                                                     "function": {
                                                       "application": {
                                                         "argument": {
