@@ -120,7 +120,7 @@ termSignatureToTypeScheme sig =
                   Logic.ifElse hasConstraints (Just (Maps.fromList (Lists.map (\tp -> (
                     Typing.typeParameterName tp,
                     Core.TypeVariableMetadata {
-                      Core.typeVariableMetadataClasses = (Sets.fromList (Typing.typeParameterConstraints tp))})) typeParams))) Nothing
+                      Core.typeVariableMetadataClasses = (Typing.typeParameterConstraints tp)})) typeParams))) Nothing
       in Core.TypeScheme {
         Core.typeSchemeVariables = variables,
         Core.typeSchemeBody = body,
@@ -144,7 +144,7 @@ typeSchemeToTermSignature ts =
           typeParams =
                   Lists.map (\v -> Typing.TypeParameter {
                     Typing.typeParameterName = v,
-                    Typing.typeParameterConstraints = (Maybes.maybe [] (\tvm -> Sets.toList (Core.typeVariableMetadataClasses tvm)) (Maps.lookup v constraintsMap))}) variables
+                    Typing.typeParameterConstraints = (Maybes.maybe [] (\tvm -> Core.typeVariableMetadataClasses tvm) (Maps.lookup v constraintsMap))}) variables
           peel =
                   \acc -> \t -> case t of
                     Core.TypeFunction v0 -> peel (Lists.cons (Core.functionTypeDomain v0) acc) (Core.functionTypeCodomain v0)

@@ -1186,8 +1186,8 @@ module_ =
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
             Core.typeSchemeConstraints = (Just (M.fromList [
               (Core.Name "v", Core.TypeVariableMetadata {
-                Core.typeVariableMetadataClasses = (S.fromList [
-                  Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))})))})),
+                Core.typeVariableMetadataClasses = [
+                  Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))})))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.graphSchema"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {

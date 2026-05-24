@@ -383,7 +383,7 @@ inferTypeOfCollection fcx cx typCons trmCons desc classNames els =
           fcx2 = Pairs.second varResult
           classConstraints =
                   Logic.ifElse (Sets.null classNames) Maps.empty (Maps.singleton var (Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = (Sets.map (\n -> Core.TypeClassConstraintSimple n) classNames)}))
+                    Core.typeVariableMetadataClasses = (Lists.map (\n -> Core.TypeClassConstraintSimple n) (Sets.toList classNames))}))
       in (Logic.ifElse (Lists.null els) (Right (yieldWithConstraints fcx2 (buildTypeApplicationTerm [
         var] (trmCons [])) (typCons (Core.TypeVariable var)) Substitution.idTypeSubst classConstraints)) (Eithers.bind (inferMany fcx2 cx (Lists.zip els (Lists.map (\i -> Strings.cat [
         "#",
@@ -703,7 +703,7 @@ inferTypeOfMap fcx cx m =
           fcx3 = Pairs.second vvarResult
           keyConstraints =
                   Maps.singleton kvar (Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = (Sets.singleton (Core.TypeClassConstraintSimple (Core.Name "ordering")))})
+                    Core.typeVariableMetadataClasses = [Core.TypeClassConstraintSimple (Core.Name "ordering")]})
       in (Logic.ifElse (Maps.null m) (Right (yieldWithConstraints fcx3 (buildTypeApplicationTerm [
         kvar,
         vvar] (Core.TermMap Maps.empty)) (Core.TypeMap (Core.MapType {
@@ -990,7 +990,7 @@ mergeClassConstraints m1 m2 =
       in (Maybes.maybe (Maps.insert k v acc) (\existing ->
         let merged =
                 Core.TypeVariableMetadata {
-                  Core.typeVariableMetadataClasses = (Sets.union (Core.typeVariableMetadataClasses existing) (Core.typeVariableMetadataClasses v))}
+                  Core.typeVariableMetadataClasses = (Lists.nub (Lists.concat2 (Core.typeVariableMetadataClasses existing) (Core.typeVariableMetadataClasses v)))}
         in (Maps.insert k merged acc)) (Maps.lookup k acc))) m1 (Maps.toList m2)
 -- | Show an inference result for debugging
 showInferenceResult :: Typing.InferenceResult -> String

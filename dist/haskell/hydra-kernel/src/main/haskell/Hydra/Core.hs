@@ -515,8 +515,8 @@ _TypeScheme_constraints = Name "constraints"
 -- | Metadata associated with a type variable, including typeclass constraints
 data TypeVariableMetadata =
   TypeVariableMetadata {
-    -- | The set of typeclass constraints on this type variable
-    typeVariableMetadataClasses :: (S.Set TypeClassConstraint)}
+    -- | The typeclass constraints on this type variable
+    typeVariableMetadataClasses :: [TypeClassConstraint]}
   deriving (Eq, Ord, Read, Show)
 _TypeVariableMetadata = Name "hydra.core.TypeVariableMetadata"
 _TypeVariableMetadata_classes = Name "classes"

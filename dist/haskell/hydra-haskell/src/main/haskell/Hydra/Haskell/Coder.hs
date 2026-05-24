@@ -824,7 +824,7 @@ typeSchemeConstraintsToClassMap maybeConstraints =
       let constraintToName =
               \tcc -> case tcc of
                 Core.TypeClassConstraintSimple className -> Just className
-      in (Maybes.maybe Maps.empty (\constraints -> Maps.map (\meta -> Sets.fromList (Maybes.cat (Lists.map constraintToName (Sets.toList (Core.typeVariableMetadataClasses meta))))) constraints) maybeConstraints)
+      in (Maybes.maybe Maps.empty (\constraints -> Maps.map (\meta -> Sets.fromList (Maybes.cat (Lists.map constraintToName (Core.typeVariableMetadataClasses meta)))) constraints) maybeConstraints)
 -- | Whether to use the Hydra core import in generated modules
 useCoreImport :: Bool
 useCoreImport = True

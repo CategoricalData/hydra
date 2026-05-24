@@ -1126,6 +1126,6 @@ typeSchemeConstraintsToClassMap = haskellCoderDefinition "typeSchemeConstraintsT
       ("constraints" ~>
         Maps.map
           ("meta" ~> Sets.fromList $
-            Maybes.cat $ Lists.map (var "constraintToName") $ Sets.toList $ Core.typeVariableMetadataClasses (var "meta"))
+            Maybes.cat $ Lists.map (var "constraintToName") $ Core.typeVariableMetadataClasses (var "meta"))
           (var "constraints"))
       (var "maybeConstraints")
