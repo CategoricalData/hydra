@@ -140,6 +140,15 @@ The committed CI heap cap is `RTS_FLAGS=-M6G`. Local syncs are free to raise it;
 must surface a heap-overflow diagnostic if the per-package cap is ever exceeded, not
 silently cancel.
 
+Phase 1 has two paths into per-package iteration: the cold-cache fallback (above) and
+the warm-cache **incremental** path that fires when a digest already exists. The
+incremental path also routes through the same driver via `inferAndWriteByPackageSeeded`,
+which takes the JSON-loaded clean modules as a pre-typed seed for the accumulator —
+they participate in cross-package type resolution but are not re-grouped or re-inferred.
+A change that dirties most of the universe (e.g. a kernel-wide rename) thus stays
+within the per-package memory envelope on the incremental path too, instead of falling
+back to a single mega-inference over the full dirty set.
+
 ## The cache model
 
 Every layer of the pipeline caches its work. All caches are content-hash based
@@ -316,25 +325,36 @@ This is a small, well-scoped change — one function body — gated on #370.
 
 ### 3. `modulesToGraph` realloc per Phase 1 iteration
 
-The per-package iteration in `inferAndWriteByPackage` (see
-[Phase 1's memory envelope](#phase-1s-memory-envelope)) calls `inferModulesGiven` once
-per package, and `inferModulesGiven` internally rebuilds `modulesToGraph` over its
-`universeMods` argument every time. Across ~13 packages that means ~13 graph builds,
-each over a slightly larger accumulator. This is acceptable today (Phase 1 wall time is
-within budget on CI), but if the package count grows it could become the dominant cost.
+The per-package iteration originally called `inferModulesGiven` (kernel) per package,
+which rebuilds `modulesToGraph` over its `universeMods` argument every time. Across
+~13 packages that meant ~13 graph builds, each over a `[Module]` accumulator that grew
+linearly — retaining every prior package's full term bodies, annotations, and
+dependencies. Acceptable for small dirty sets but OOM at -M6G on a kernel-wide rename
+(#369-style) that dirtied ~250 modules in one shot.
 
-The targeted fix is to thread an accumulated `Map Name TypeScheme` directly into a
-variant of `inferModulesGiven` that skips the `modulesToGraph` rebuild — i.e. pass the
-incremental delta, not the full universe. Out of scope for #381; flagged here as the
-next bottleneck the per-package design might run into.
+`inferAndWriteByPackageSeeded` now threads a `Map Name TypeScheme` accumulator instead
+of `[Module]`. After each package writes its JSON, only the inferred bindings'
+`(Name, TypeScheme)` pairs are folded into the accumulator; the inferred Module values
+themselves are dropped, so GC reclaims their term bodies. A Generation-side wrapper
+`inferModulesGivenSchemes` augments `Graph.graphBoundTypes` and `graphSchemaTypes`
+with the seed Map directly, bypassing the per-iteration `[Module]` reload. The
+JSON-write `schemaMap` is built ONCE up front from the full input universe (including
+the JSON-loaded clean modules in the warm-incremental path) so the encoder has
+hydra.packaging.Module and other cross-package schema types available — without this,
+`Maybe String` fields mis-serialize as single-element arrays.
 
 ### 4. Java and Python self-host pipelines
 
-Phase 5 (native DSL → JSON for hydra-java and hydra-python) still runs whole-universe
-inference via `bin/generate-hydra-java-from-java.sh` and
-`bin/generate-hydra-python-from-python.sh`. The same per-package treatment that landed
-in Phase 1 applies. Out of scope for #381; will land separately once the Haskell side
-is stable.
+Phase 5 (native DSL → JSON for hydra-java and hydra-python) now routes through a
+per-package iterative driver that mirrors the Haskell-side
+`inferAndWriteByPackage`: `Generation.inferAndWriteByPackage` in
+`heads/java/src/main/java/hydra/Generation.java` and `infer_and_write_by_package`
+in `heads/python/src/main/python/hydra/generation.py`. Both demos
+(`bin/python-self-host-demo.py` and `JavaSelfHostDemo`) call this driver after
+loading the kernel universe and the package's source modules. Today's runs
+collapse to a one-iteration loop (only hydra-java or hydra-python is being
+re-inferred); the structure is in place for multi-package self-hosts once
+additional packages are owned by these native pipelines.
 
 ## The end-state design
 

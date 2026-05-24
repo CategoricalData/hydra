@@ -440,7 +440,38 @@
                               "application": {
                                 "argument": {"variable": "qualName"},
                                 "function": {"project": {"fieldName": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
-                            "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
+                            "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
+                          {
+                            "name": "pyNs",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"application": {"argument": {"variable": "nsVal"}, "function": {"unwrap": "hydra.packaging.ModuleName"}}},
+                                            "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"inject": {"field": {"name": "lowerSnake", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"inject": {"field": {"name": "camel", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
+                                                    "function": {"variable": "hydra.formatting.convertCase"}}}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"string": {}}}}},
+                                                "type": {"literal": {"string": {}}}}}}}}},
+                                    "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
+                                "domain": {"variable": "hydra.packaging.ModuleName"},
+                                "parameter": "nsVal"}},
+                            "typeScheme": {
+                              "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.packaging.ModuleName"}}},
+                              "variables": []}}],
                         "body": {
                           "application": {
                             "argument": {
@@ -461,24 +492,37 @@
                                     "argument": {
                                       "application": {
                                         "argument": {
-                                          "wrap": {
-                                            "body": {
+                                          "application": {
+                                            "argument": {"variable": "mns"},
+                                            "function": {
                                               "application": {
                                                 "argument": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "wrap": {
+                                                        "body": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"application": {"argument": {"variable": "local"}, "function": {"variable": "hydra.python.names.sanitizePythonName"}}},
+                                                                "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"application": {"argument": {"variable": "nsVal"}, "function": {"variable": "pyNs"}}},
+                                                                "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                        "typeName": "hydra.python.syntax.Name"}},
+                                                    "domain": {"variable": "hydra.packaging.ModuleName"},
+                                                    "parameter": "nsVal"}},
+                                                "function": {
                                                   "application": {
                                                     "argument": {
-                                                      "application": {
-                                                        "argument": {"application": {"argument": {"variable": "name"}, "function": {"unwrap": "hydra.core.Name"}}},
-                                                        "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
+                                                      "wrap": {
+                                                        "body": {"application": {"argument": {"variable": "local"}, "function": {"variable": "hydra.python.names.sanitizePythonName"}}},
+                                                        "typeName": "hydra.python.syntax.Name"}},
                                                     "function": {
-                                                      "application": {
-                                                        "argument": {"variable": "hydra.python.names.sanitizePythonName"},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"string": {}}}}},
-                                                            "type": {"literal": {"string": {}}}}}}}}},
-                                                "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
-                                            "typeName": "hydra.python.syntax.Name"}},
+                                                      "typeApplication": {
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.python.syntax.Name"}}},
+                                                        "type": {"variable": "hydra.packaging.ModuleName"}}}}}}}}},
                                         "function": {
                                           "application": {
                                             "argument": {

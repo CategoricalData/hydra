@@ -30,6 +30,7 @@ module_ = Module {
       result,
       termSignature,
       termSubst,
+      typeClass,
       typeConstraint,
       typeParameter,
       typeSubst]
@@ -58,6 +59,17 @@ termSubst :: Binding
 termSubst = define "TermSubst" $
   doc "A substitution of term variables for terms" $
   T.wrap $ T.map Core.name Core.term
+
+typeClass :: Binding
+typeClass = define "TypeClass" $
+  doc ("A type class identifier together with a human-readable description."
+    ++ " Type classes are referenced as bare names (e.g. the local name \"equality\") in"
+    ++ " TypeVariableMetadata.classes; the canonical definitions live as term bindings"
+    ++ " under hydra.classes.") $
+  T.record [
+    "description">:
+      doc "A human-readable description of the type class"
+      T.string]
 
 typeConstraint :: Binding
 typeConstraint = define "TypeConstraint" $

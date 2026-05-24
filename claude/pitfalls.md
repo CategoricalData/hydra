@@ -693,3 +693,28 @@ exposing the next callsite. After the schema-side sync passes Phase 1,
 proactively grep across `packages/hydra-{java,python,scala}/src/`,
 `heads/{java,python,scala}/`, and `bin/` for the OLD field/type name
 before relying on sync to surface it.
+
+A separate chicken-and-egg surfaces on **warm trees** after the rename
+partially propagates: `dist/json/hydra-{java,python}/.../<lang>/*.json`
+is owned by Phase 5 (#344), but Phase 2 reads those JSONs early to
+assemble the Haskell dist for hydra-java / hydra-python. If the JSON
+references the OLD type name but the kernel has the new one, Phase 2
+fails with `bootstrap-from-json: ... no such element:
+hydra.packaging.Namespace` before Phase 5 ever runs to refresh the JSON.
+Recovery:
+
+1. Delete the cold-start sentinels:
+   `rm dist/json/hydra-{java,python}/src/main/json/hydra/{java,python}/*.json`
+2. Bust the Phase 1 freshness gate (otherwise Phase 1 short-circuits):
+   `rm heads/haskell/.stack-work/phase1-input-cache.txt`
+3. Re-run `bin/sync.sh`. Phase 1 sees the missing sentinels, sets
+   `HYDRA_INCLUDE_JAVA_PYTHON=1`, regenerates the JSON from the Haskell
+   DSL (which is the up-to-date source for the rename). Phases 2-4 then
+   succeed; Phase 5 overwrites with the native generators' output.
+
+Stale `dist/<lang>/hydra-kernel/<old-type>.{java,py,...}` files are a
+sibling symptom: `--prune-stale` in `assemble-distribution.sh` does NOT
+detect renamed kernel types as stale (it only prunes files no longer
+referenced *anywhere* in the manifest, and the file's basename is the
+type name not a path). Manual `rm` is required; safe because the next
+assemble regenerates the new-named file.

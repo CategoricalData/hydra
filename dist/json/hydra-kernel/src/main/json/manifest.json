@@ -11,7 +11,6 @@
     "hydra.lib.defaults.sets"],
   "dslModules": [
     "hydra.dsl.ast",
-    "hydra.dsl.classes",
     "hydra.dsl.coders",
     "hydra.dsl.context",
     "hydra.dsl.core",
@@ -48,7 +47,6 @@
     "hydra.context",
     "hydra.core",
     "hydra.decode.ast",
-    "hydra.decode.classes",
     "hydra.decode.coders",
     "hydra.decode.context",
     "hydra.decode.core",
@@ -73,7 +71,6 @@
     "hydra.differentiation",
     "hydra.dsls",
     "hydra.encode.ast",
-    "hydra.encode.classes",
     "hydra.encode.coders",
     "hydra.encode.context",
     "hydra.encode.core",
