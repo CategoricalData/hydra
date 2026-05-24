@@ -18,7 +18,7 @@
                             "function": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.lib.logic.ifElse"}}}}}}},
                     "parameter": "b"}},
                 "parameter": "a"}}}},
-        "description": "Logical AND",
+        "description": "Compute the logical AND of two boolean values.",
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.logic.and",
@@ -30,17 +30,17 @@
           "typeParameters": []}}},
     {
       "primitive": {
-        "description": "Conditional expression: yield the second argument if the first is true, otherwise the third",
+        "description": "Compute a conditional expression.",
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.logic.ifElse",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "a"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "a"}}],
-          "result": {"type": {"variable": "a"}},
-          "typeParameters": [{"constraints": [], "name": "a"}]}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "x"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "x"}}],
+          "result": {"type": {"variable": "x"}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
     {
       "primitive": {
         "defaultImplementation": {
@@ -56,7 +56,7 @@
                         "argument": {"literal": {"boolean": false}},
                         "function": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.lib.logic.ifElse"}}}}}}},
                 "parameter": "a"}}}},
-        "description": "Logical NOT",
+        "description": "Compute the logical NOT of a boolean value.",
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.logic.not",
@@ -82,7 +82,7 @@
                             "function": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.lib.logic.ifElse"}}}}}}},
                     "parameter": "b"}},
                 "parameter": "a"}}}},
-        "description": "Logical OR",
+        "description": "Compute the logical OR of two boolean values.",
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.logic.or",
