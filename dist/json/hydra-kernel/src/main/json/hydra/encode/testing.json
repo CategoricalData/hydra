@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.encode.testing.tag",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.testing.Tag"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.testing.Tag"}}}],
@@ -36,10 +40,7 @@
                           "typeName": "hydra.core.WrappedTerm"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.testing.Tag"},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.testing.Tag"}}},
-          "variables": []}}}],
+                "parameter": "x"}}}}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.testing"}],
   "description": "Term encoders for hydra.testing",
   "name": "hydra.encode.testing"}

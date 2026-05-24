@@ -997,6 +997,27 @@
           "variables": []}}},
     {
       "type": {
+        "name": "hydra.core.TypeClassConstraint",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {
+                      "string": "A type class constraint on a type variable. Currently has only one variant, but designed to be forward-compatible with multi-parameter type classes and constraints on type expressions."}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "simple",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A simple type class constraint, naming a single type class"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
         "name": "hydra.core.TypeLambda",
         "typeScheme": {
           "body": {
@@ -1069,8 +1090,8 @@
                     "name": "classes",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The set of typeclass constraints on this type variable"}}}],
-                        "body": {"set": {"variable": "hydra.core.Name"}}}}}]}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The typeclass constraints on this type variable"}}}],
+                        "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}}}}}]}}},
           "variables": []}}},
     {
       "type": {

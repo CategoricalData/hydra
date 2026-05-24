@@ -151,6 +151,7 @@ import hydra.java.syntax.VariableDeclaratorId;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.java.syntax.VariableInitializer;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.java.syntax.WhileStatement;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.packaging.FileExtension;  // AUTO-IMPORT (hydra-java DSL)
+import hydra.packaging.PrimitiveDefinition;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.packaging.QualifiedName;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.packaging.TermDefinition;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.packaging.TypeDefinition;  // AUTO-IMPORT (hydra-java DSL)
@@ -284,7 +285,9 @@ public class Coder {
                                     right(
                                         Maybes.map(
                                             lambda("prim",
-                                                proj(Primitive.TYPE_, Primitive.TYPE_SCHEME, "prim")),
+                                                apply(var("hydra.scoping.termSignatureToTypeScheme"),
+                                                    proj(PrimitiveDefinition.TYPE_, PrimitiveDefinition.SIGNATURE,
+                                                        proj(Primitive.TYPE_, Primitive.DEFINITION, "prim")))),
                                             Maps.lookup(
                                                 var("cname"),
                                                 proj(Graph.TYPE_, Graph.PRIMITIVES, "g")))),
@@ -6337,8 +6340,10 @@ public class Coder {
                                                     wrap(Name.TYPE_,
                                                         string("hydra.core.Unit")))),
                                             field(TypeScheme.CONSTRAINTS, nothing())),
-                                        lambda("x", var("x")),
-                                        proj(TermDefinition.TYPE_, TermDefinition.TYPE_SCHEME, "tdef"))),
+                                        lambda("sig",
+                                            apply(var("hydra.scoping.termSignatureToTypeScheme"),
+                                                var("sig"))),
+                                        proj(TermDefinition.TYPE_, TermDefinition.SIGNATURE, "tdef"))),
                                 field("term",
                                     apply(var("hydra.variables.unshadowVariables"), var("term0"))),
                                 Eithers.bind(

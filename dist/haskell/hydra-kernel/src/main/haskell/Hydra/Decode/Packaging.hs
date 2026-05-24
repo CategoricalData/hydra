@@ -4,6 +4,7 @@
 module Hydra.Decode.Packaging where
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Decode.Typing as Typing
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
@@ -25,7 +26,8 @@ definition cx raw =
             variantMap =
                     Maps.fromList [
                       (Core.Name "term", (\input -> Eithers.map (\t -> Packaging.DefinitionTerm t) (termDefinition cx input))),
-                      (Core.Name "type", (\input -> Eithers.map (\t -> Packaging.DefinitionType t) (typeDefinition cx input)))]
+                      (Core.Name "type", (\input -> Eithers.map (\t -> Packaging.DefinitionType t) (typeDefinition cx input))),
+                      (Core.Name "primitive", (\input -> Eithers.map (\t -> Packaging.DefinitionPrimitive t) (primitiveDefinition cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
@@ -129,6 +131,32 @@ packageVersionSpecifier cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.packaging.PrimitiveDefinition
+primitiveDefinition :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.PrimitiveDefinition
+primitiveDefinition cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermRecord v0 ->
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "description" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+          Core.TermLiteral v1 -> case v1 of
+            Core.LiteralString v2 -> Right v2
+            _ -> Left (Errors.DecodingError "expected string literal")
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_description -> Eithers.bind (ExtractCore.requireField "signature" Typing.termSignature fieldMap cx) (\field_signature -> Eithers.bind (ExtractCore.requireField "isPure" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+          Core.TermLiteral v1 -> case v1 of
+            Core.LiteralBoolean v2 -> Right v2
+            _ -> Left (Errors.DecodingError "expected boolean literal")
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_isPure -> Eithers.bind (ExtractCore.requireField "isTotal" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+          Core.TermLiteral v1 -> case v1 of
+            Core.LiteralBoolean v2 -> Right v2
+            _ -> Left (Errors.DecodingError "expected boolean literal")
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_isTotal -> Eithers.bind (ExtractCore.requireField "defaultImplementation" (ExtractCore.decodeMaybe DecodeCore.term) fieldMap cx) (\field_defaultImplementation -> Right (Packaging.PrimitiveDefinition {
+          Packaging.primitiveDefinitionName = field_name,
+          Packaging.primitiveDefinitionDescription = field_description,
+          Packaging.primitiveDefinitionSignature = field_signature,
+          Packaging.primitiveDefinitionIsPure = field_isPure,
+          Packaging.primitiveDefinitionIsTotal = field_isTotal,
+          Packaging.primitiveDefinitionDefaultImplementation = field_defaultImplementation}))))))))
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.packaging.QualifiedName
 qualifiedName :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.QualifiedName
 qualifiedName cx raw =
@@ -149,10 +177,10 @@ termDefinition cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "term" DecodeCore.term fieldMap cx) (\field_term -> Eithers.bind (ExtractCore.requireField "typeScheme" (ExtractCore.decodeMaybe DecodeCore.typeScheme) fieldMap cx) (\field_typeScheme -> Right (Packaging.TermDefinition {
+        in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "term" DecodeCore.term fieldMap cx) (\field_term -> Eithers.bind (ExtractCore.requireField "signature" (ExtractCore.decodeMaybe Typing.termSignature) fieldMap cx) (\field_signature -> Right (Packaging.TermDefinition {
           Packaging.termDefinitionName = field_name,
           Packaging.termDefinitionTerm = field_term,
-          Packaging.termDefinitionTypeScheme = field_typeScheme})))))
+          Packaging.termDefinitionSignature = field_signature})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.packaging.TypeDefinition
 typeDefinition :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.TypeDefinition

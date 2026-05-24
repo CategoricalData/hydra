@@ -5,8 +5,17 @@ module Hydra.Dsl.Packaging where
 import qualified Hydra.Core as Core
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | DSL injection for the primitive variant of hydra.packaging.Definition
+definitionPrimitive :: Phantoms.TTerm Packaging.PrimitiveDefinition -> Phantoms.TTerm Packaging.Definition
+definitionPrimitive x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.packaging.Definition"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "primitive"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the term variant of hydra.packaging.Definition
 definitionTerm :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm Packaging.Definition
 definitionTerm x =
@@ -509,6 +518,342 @@ packageWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
               Core.projectionFieldName = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL constructor for hydra.packaging.PrimitiveDefinition
+primitiveDefinition :: Phantoms.TTerm Core.Name -> Phantoms.TTerm String -> Phantoms.TTerm Typing.TermSignature -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm (Maybe Core.Term) -> Phantoms.TTerm Packaging.PrimitiveDefinition
+primitiveDefinition name description signature isPure isTotal defaultImplementation =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm name)},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Phantoms.unTTerm description)},
+        Core.Field {
+          Core.fieldName = (Core.Name "signature"),
+          Core.fieldTerm = (Phantoms.unTTerm signature)},
+        Core.Field {
+          Core.fieldName = (Core.Name "isPure"),
+          Core.fieldTerm = (Phantoms.unTTerm isPure)},
+        Core.Field {
+          Core.fieldName = (Core.Name "isTotal"),
+          Core.fieldTerm = (Phantoms.unTTerm isTotal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "defaultImplementation"),
+          Core.fieldTerm = (Phantoms.unTTerm defaultImplementation)}]}))
+-- | DSL accessor for the defaultImplementation field of hydra.packaging.PrimitiveDefinition
+primitiveDefinitionDefaultImplementation :: Phantoms.TTerm Packaging.PrimitiveDefinition -> Phantoms.TTerm (Maybe Core.Term)
+primitiveDefinitionDefaultImplementation x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+        Core.projectionFieldName = (Core.Name "defaultImplementation")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the description field of hydra.packaging.PrimitiveDefinition
+primitiveDefinitionDescription :: Phantoms.TTerm Packaging.PrimitiveDefinition -> Phantoms.TTerm String
+primitiveDefinitionDescription x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+        Core.projectionFieldName = (Core.Name "description")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the isPure field of hydra.packaging.PrimitiveDefinition
+primitiveDefinitionIsPure :: Phantoms.TTerm Packaging.PrimitiveDefinition -> Phantoms.TTerm Bool
+primitiveDefinitionIsPure x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+        Core.projectionFieldName = (Core.Name "isPure")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the isTotal field of hydra.packaging.PrimitiveDefinition
+primitiveDefinitionIsTotal :: Phantoms.TTerm Packaging.PrimitiveDefinition -> Phantoms.TTerm Bool
+primitiveDefinitionIsTotal x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+        Core.projectionFieldName = (Core.Name "isTotal")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the name field of hydra.packaging.PrimitiveDefinition
+primitiveDefinitionName :: Phantoms.TTerm Packaging.PrimitiveDefinition -> Phantoms.TTerm Core.Name
+primitiveDefinitionName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+        Core.projectionFieldName = (Core.Name "name")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the signature field of hydra.packaging.PrimitiveDefinition
+primitiveDefinitionSignature :: Phantoms.TTerm Packaging.PrimitiveDefinition -> Phantoms.TTerm Typing.TermSignature
+primitiveDefinitionSignature x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+        Core.projectionFieldName = (Core.Name "signature")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the defaultImplementation field of hydra.packaging.PrimitiveDefinition
+primitiveDefinitionWithDefaultImplementation :: Phantoms.TTerm Packaging.PrimitiveDefinition -> Phantoms.TTerm (Maybe Core.Term) -> Phantoms.TTerm Packaging.PrimitiveDefinition
+primitiveDefinitionWithDefaultImplementation original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "name")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "description")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "signature"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "signature")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "isPure"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "isPure")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "isTotal"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "isTotal")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "defaultImplementation"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL updater for the description field of hydra.packaging.PrimitiveDefinition
+primitiveDefinitionWithDescription :: Phantoms.TTerm Packaging.PrimitiveDefinition -> Phantoms.TTerm String -> Phantoms.TTerm Packaging.PrimitiveDefinition
+primitiveDefinitionWithDescription original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "name")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "signature"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "signature")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "isPure"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "isPure")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "isTotal"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "isTotal")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "defaultImplementation"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "defaultImplementation")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the isPure field of hydra.packaging.PrimitiveDefinition
+primitiveDefinitionWithIsPure :: Phantoms.TTerm Packaging.PrimitiveDefinition -> Phantoms.TTerm Bool -> Phantoms.TTerm Packaging.PrimitiveDefinition
+primitiveDefinitionWithIsPure original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "name")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "description")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "signature"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "signature")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "isPure"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "isTotal"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "isTotal")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "defaultImplementation"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "defaultImplementation")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the isTotal field of hydra.packaging.PrimitiveDefinition
+primitiveDefinitionWithIsTotal :: Phantoms.TTerm Packaging.PrimitiveDefinition -> Phantoms.TTerm Bool -> Phantoms.TTerm Packaging.PrimitiveDefinition
+primitiveDefinitionWithIsTotal original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "name")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "description")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "signature"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "signature")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "isPure"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "isPure")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "isTotal"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "defaultImplementation"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "defaultImplementation")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the name field of hydra.packaging.PrimitiveDefinition
+primitiveDefinitionWithName :: Phantoms.TTerm Packaging.PrimitiveDefinition -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Packaging.PrimitiveDefinition
+primitiveDefinitionWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "description")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "signature"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "signature")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "isPure"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "isPure")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "isTotal"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "isTotal")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "defaultImplementation"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "defaultImplementation")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the signature field of hydra.packaging.PrimitiveDefinition
+primitiveDefinitionWithSignature :: Phantoms.TTerm Packaging.PrimitiveDefinition -> Phantoms.TTerm Typing.TermSignature -> Phantoms.TTerm Packaging.PrimitiveDefinition
+primitiveDefinitionWithSignature original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "name")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "description")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "signature"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "isPure"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "isPure")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "isTotal"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "isTotal")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "defaultImplementation"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "defaultImplementation")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.packaging.QualifiedName
 qualifiedName :: Phantoms.TTerm (Maybe Packaging.ModuleName) -> Phantoms.TTerm String -> Phantoms.TTerm Packaging.QualifiedName
 qualifiedName moduleName local =
@@ -570,8 +915,8 @@ qualifiedNameWithModuleName original newVal =
               Core.projectionFieldName = (Core.Name "local")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.packaging.TermDefinition
-termDefinition :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.Term -> Phantoms.TTerm (Maybe Core.TypeScheme) -> Phantoms.TTerm Packaging.TermDefinition
-termDefinition name term typeScheme =
+termDefinition :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.Term -> Phantoms.TTerm (Maybe Typing.TermSignature) -> Phantoms.TTerm Packaging.TermDefinition
+termDefinition name term signature =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.TermDefinition"),
       Core.recordFields = [
@@ -582,8 +927,8 @@ termDefinition name term typeScheme =
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Phantoms.unTTerm term)},
         Core.Field {
-          Core.fieldName = (Core.Name "typeScheme"),
-          Core.fieldTerm = (Phantoms.unTTerm typeScheme)}]}))
+          Core.fieldName = (Core.Name "signature"),
+          Core.fieldTerm = (Phantoms.unTTerm signature)}]}))
 -- | DSL accessor for the name field of hydra.packaging.TermDefinition
 termDefinitionName :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm Core.Name
 termDefinitionName x =
@@ -592,6 +937,14 @@ termDefinitionName x =
         Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the signature field of hydra.packaging.TermDefinition
+termDefinitionSignature :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm (Maybe Typing.TermSignature)
+termDefinitionSignature x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
+        Core.projectionFieldName = (Core.Name "signature")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the term field of hydra.packaging.TermDefinition
 termDefinitionTerm :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm Core.Term
 termDefinitionTerm x =
@@ -599,14 +952,6 @@ termDefinitionTerm x =
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
         Core.projectionFieldName = (Core.Name "term")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the typeScheme field of hydra.packaging.TermDefinition
-termDefinitionTypeScheme :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm (Maybe Core.TypeScheme)
-termDefinitionTypeScheme x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
-        Core.projectionFieldName = (Core.Name "typeScheme")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the name field of hydra.packaging.TermDefinition
 termDefinitionWithName :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Packaging.TermDefinition
@@ -625,38 +970,15 @@ termDefinitionWithName original newVal =
               Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "typeScheme"),
+          Core.fieldName = (Core.Name "signature"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
-              Core.projectionFieldName = (Core.Name "typeScheme")})),
+              Core.projectionFieldName = (Core.Name "signature")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL updater for the term field of hydra.packaging.TermDefinition
-termDefinitionWithTerm :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Packaging.TermDefinition
-termDefinitionWithTerm original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.packaging.TermDefinition"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
-              Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "term"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "typeScheme"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
-              Core.projectionFieldName = (Core.Name "typeScheme")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL updater for the typeScheme field of hydra.packaging.TermDefinition
-termDefinitionWithTypeScheme :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm (Maybe Core.TypeScheme) -> Phantoms.TTerm Packaging.TermDefinition
-termDefinitionWithTypeScheme original newVal =
+-- | DSL updater for the signature field of hydra.packaging.TermDefinition
+termDefinitionWithSignature :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm (Maybe Typing.TermSignature) -> Phantoms.TTerm Packaging.TermDefinition
+termDefinitionWithSignature original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.TermDefinition"),
       Core.recordFields = [
@@ -675,8 +997,31 @@ termDefinitionWithTypeScheme original newVal =
               Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "typeScheme"),
+          Core.fieldName = (Core.Name "signature"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL updater for the term field of hydra.packaging.TermDefinition
+termDefinitionWithTerm :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Packaging.TermDefinition
+termDefinitionWithTerm original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.TermDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
+              Core.projectionFieldName = (Core.Name "name")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "signature"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
+              Core.projectionFieldName = (Core.Name "signature")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.packaging.TypeDefinition
 typeDefinition :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm Packaging.TypeDefinition
 typeDefinition name typeScheme =
