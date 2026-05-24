@@ -132,7 +132,7 @@ termSignatureToTypeScheme = define "termSignatureToTypeScheme" $
   "constraints" <~ Logic.ifElse (var "hasConstraints")
     (Phantoms.just $ Maps.fromList $ Lists.map
       ("tp" ~> pair (Typing.typeParameterName $ var "tp")
-        (Core.typeVariableMetadata $ Sets.fromList $ Typing.typeParameterConstraints $ var "tp"))
+        (Core.typeVariableMetadata $ Typing.typeParameterConstraints $ var "tp"))
       (var "typeParams"))
     Phantoms.nothing $
   Core.typeScheme (var "variables") (var "body") (var "constraints")
@@ -151,7 +151,7 @@ typeSchemeToTermSignature = define "typeSchemeToTermSignature" $
     ("v" ~> Typing.typeParameter (var "v") $ optCases
       (Maps.lookup (var "v") (var "constraintsMap"))
       (list ([] :: [TTerm TypeClassConstraint]))
-      ("tvm" ~> Sets.toList $ Core.typeVariableMetadataClasses $ var "tvm"))
+      ("tvm" ~> Core.typeVariableMetadataClasses $ var "tvm"))
     (var "variables") $
   -- Peel function arrows off the body, accumulating parameter types in reverse order.
   "peel" <~ ("acc" ~> "t" ~> cases _Type (var "t")

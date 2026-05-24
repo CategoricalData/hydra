@@ -644,7 +644,7 @@ encoderTypeScheme typ =
                   Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (
                     v,
                     Core.TypeVariableMetadata {
-                      Core.typeVariableMetadataClasses = (Sets.singleton (Core.TypeClassConstraintSimple (Core.Name "ordering")))})) ordVars)))
+                      Core.typeVariableMetadataClasses = [Core.TypeClassConstraintSimple (Core.Name "ordering")]})) ordVars)))
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeBody = encoderFunType,
@@ -661,7 +661,7 @@ encoderTypeSchemeNamed ename typ =
                   Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (
                     v,
                     Core.TypeVariableMetadata {
-                      Core.typeVariableMetadataClasses = (Sets.singleton (Core.TypeClassConstraintSimple (Core.Name "ordering")))})) ordVars)))
+                      Core.typeVariableMetadataClasses = [Core.TypeClassConstraintSimple (Core.Name "ordering")]})) ordVars)))
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeBody = encoderFunType,

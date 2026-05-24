@@ -690,7 +690,7 @@ typeVariableMetadata x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "classes"),
-          Core.fieldTerm = ((\s -> Core.TermSet (Sets.map typeClassConstraint s)) (Core.typeVariableMetadataClasses x))}]})
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map typeClassConstraint xs)) (Core.typeVariableMetadataClasses x))}]})
 -- | Encoder for hydra.core.WrappedTerm
 wrappedTerm :: Core.WrappedTerm -> Core.Term
 wrappedTerm x =

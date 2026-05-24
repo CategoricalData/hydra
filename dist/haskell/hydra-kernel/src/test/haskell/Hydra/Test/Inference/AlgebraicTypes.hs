@@ -61,8 +61,8 @@ testGroupForCollectionPrimitives =
                     (
                       Core.Name "t0",
                       Core.TypeVariableMetadata {
-                        Core.typeVariableMetadataClasses = (S.fromList [
-                          Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
+                        Core.typeVariableMetadataClasses = [
+                          Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
@@ -91,8 +91,8 @@ testGroupForCollectionPrimitives =
                     (
                       Core.Name "t0",
                       Core.TypeVariableMetadata {
-                        Core.typeVariableMetadataClasses = (S.fromList [
-                          Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
+                        Core.typeVariableMetadataClasses = [
+                          Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
@@ -117,13 +117,13 @@ testGroupForCollectionPrimitives =
                     (
                       Core.Name "t0",
                       Core.TypeVariableMetadata {
-                        Core.typeVariableMetadataClasses = (S.fromList [
-                          Core.TypeClassConstraintSimple (Core.Name "ordering")])}),
+                        Core.typeVariableMetadataClasses = [
+                          Core.TypeClassConstraintSimple (Core.Name "ordering")]}),
                     (
                       Core.Name "t1",
                       Core.TypeVariableMetadata {
-                        Core.typeVariableMetadataClasses = (S.fromList [
-                          Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
+                        Core.typeVariableMetadataClasses = [
+                          Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]},
@@ -163,8 +163,8 @@ testGroupForCollectionPrimitives =
                     (
                       Core.Name "t0",
                       Core.TypeVariableMetadata {
-                        Core.typeVariableMetadataClasses = (S.fromList [
-                          Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
+                        Core.typeVariableMetadataClasses = [
+                          Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]},
@@ -200,13 +200,13 @@ testGroupForCollectionPrimitives =
                     (
                       Core.Name "t0",
                       Core.TypeVariableMetadata {
-                        Core.typeVariableMetadataClasses = (S.fromList [
-                          Core.TypeClassConstraintSimple (Core.Name "ordering")])}),
+                        Core.typeVariableMetadataClasses = [
+                          Core.TypeClassConstraintSimple (Core.Name "ordering")]}),
                     (
                       Core.Name "t1",
                       Core.TypeVariableMetadata {
-                        Core.typeVariableMetadataClasses = (S.fromList [
-                          Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
+                        Core.typeVariableMetadataClasses = [
+                          Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
@@ -273,8 +273,8 @@ testGroupForCollectionPrimitives =
                     (
                       Core.Name "t0",
                       Core.TypeVariableMetadata {
-                        Core.typeVariableMetadataClasses = (S.fromList [
-                          Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
+                        Core.typeVariableMetadataClasses = [
+                          Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
@@ -312,8 +312,8 @@ testGroupForCollectionPrimitives =
                     (
                       Core.Name "t2",
                       Core.TypeVariableMetadata {
-                        Core.typeVariableMetadataClasses = (S.fromList [
-                          Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
+                        Core.typeVariableMetadataClasses = [
+                          Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]},
@@ -957,8 +957,8 @@ testGroupForMaps =
                 (
                   Core.Name "t0",
                   Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = (S.fromList [
-                      Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
+                    Core.typeVariableMetadataClasses = [
+                      Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -988,8 +988,8 @@ testGroupForMaps =
                 (
                   Core.Name "t0",
                   Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = (S.fromList [
-                      Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
+                    Core.typeVariableMetadataClasses = [
+                      Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]}
@@ -1298,8 +1298,8 @@ testGroupForSets =
                 (
                   Core.Name "t0",
                   Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = (S.fromList [
-                      Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
+                    Core.typeVariableMetadataClasses = [
+                      Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]}

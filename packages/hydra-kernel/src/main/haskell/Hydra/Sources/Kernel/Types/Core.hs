@@ -574,8 +574,8 @@ typeVariableMetadata = define "TypeVariableMetadata" $
   doc "Metadata associated with a type variable, including typeclass constraints" $
   T.record [
     "classes">:
-      doc "The set of typeclass constraints on this type variable" $
-      T.set typeClassConstraint]
+      doc "The typeclass constraints on this type variable" $
+      T.list typeClassConstraint]
 
 wrappedTerm :: Binding
 wrappedTerm = define "WrappedTerm" $

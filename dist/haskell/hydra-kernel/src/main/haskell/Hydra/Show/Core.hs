@@ -460,7 +460,7 @@ typeScheme ts =
                     " ",
                     (Core.unName v)]
           toConstraintPairs =
-                  \p -> Lists.map (toConstraintPair (Pairs.first p)) (Sets.toList (Core.typeVariableMetadataClasses (Pairs.second p)))
+                  \p -> Lists.map (toConstraintPair (Pairs.first p)) (Core.typeVariableMetadataClasses (Pairs.second p))
           tc = Maybes.maybe [] (\m -> Lists.concat (Lists.map toConstraintPairs (Maps.toList m))) (Core.typeSchemeConstraints ts)
       in (Strings.cat [
         "(",

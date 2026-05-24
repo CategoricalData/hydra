@@ -1309,9 +1309,9 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "classes"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeSet (Core.TypeVariable (Core.Name "hydra.core.TypeClassConstraint"))),
+                Core.annotatedTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.core.TypeClassConstraint"))),
                 Core.annotatedTypeAnnotation = (M.fromList [
-                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The set of typeclass constraints on this type variable")))])}))}]),
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The typeclass constraints on this type variable")))])}))}]),
           Core.annotatedTypeAnnotation = (M.fromList [
             (
               Core.Name "description",
