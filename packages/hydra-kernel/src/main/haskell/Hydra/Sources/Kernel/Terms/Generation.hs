@@ -384,7 +384,8 @@ generateSourceFiles = define "generateSourceFiles" $
       -- Refresh modules with elements from the inferred graph
       "defName" <~ ("d" ~> cases _Definition (var "d") Nothing [
         _Definition_term>>: "td" ~> Packaging.termDefinitionName (var "td"),
-        _Definition_type>>: "td" ~> Packaging.typeDefinitionName (var "td")]) $
+        _Definition_type>>: "td" ~> Packaging.typeDefinitionName (var "td"),
+        _Definition_primitive>>: "pd" ~> Packaging.primitiveDefinitionName (var "pd")]) $
       "refreshModule" <~ ("els" ~> "m" ~>
         Packaging.module_
           (Packaging.moduleDescription $ var "m")
@@ -398,7 +399,8 @@ generateSourceFiles = define "generateSourceFiles" $
                   (Core.bindingName $ var "b")
                   (Core.bindingTerm $ var "b")
                   (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
-                (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td")) (var "els"))])
+                (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td")) (var "els")),
+              _Definition_primitive>>: "pd" ~> just (Packaging.definitionPrimitive (var "pd"))])
             (Packaging.moduleDefinitions $ var "m"))) $
       "allBindings" <~ Lexical.graphToBindings @@ var "g1" $
       "refreshedMods" <~ Lists.map ("m" ~> var "refreshModule" @@ var "allBindings" @@ var "m") (var "termModulesToGenerate") $
@@ -675,7 +677,8 @@ refreshModule = define "refreshModule" $
               (Core.bindingTerm $ var "b")
               (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
             (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td"))
-              (var "inferredElements"))])
+              (var "inferredElements")),
+          _Definition_primitive>>: "pd" ~> just (Packaging.definitionPrimitive (var "pd"))])
         (Packaging.moduleDefinitions $ var "m")))
 
 -- | Perform type inference on a set of modules and reconstruct the target modules

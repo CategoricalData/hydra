@@ -202,7 +202,11 @@ showDef d = Phantoms.cases _Definition d Nothing [
           (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature (var "td"))),
         Phantoms.string " = ",
         ShowCore.term # (Packaging.termDefinitionTerm (var "td")),
-        Phantoms.string "\n"]]
+        Phantoms.string "\n"],
+    _Definition_primitive>>: "pd" ~>
+      Strings.concat [
+        Core.unName (Packaging.primitiveDefinitionName (var "pd")),
+        Phantoms.string " :: <primitive>\n"]]
 
 showModule :: TTerm Module -> TTerm String
 showModule m = Strings.cat (Lists.map ("d" ~> showDef (var "d")) (Packaging.moduleDefinitions m))

@@ -38,7 +38,10 @@ allTests =
                     (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))),
                     " = ",
                     (ShowCore.term (Packaging.termDefinitionTerm v0)),
-                    "\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModulesGiven TestGraph.testContext TestGraph.testGraph [
+                    "\n"]
+                  Packaging.DefinitionPrimitive v0 -> Strings.cat [
+                    Core.unName (Packaging.primitiveDefinitionName v0),
+                    " :: <primitive>\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModulesGiven TestGraph.testContext TestGraph.testGraph [
                   Packaging.Module {
                     Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.a"),
@@ -93,7 +96,10 @@ allTests =
                     (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))),
                     " = ",
                     (ShowCore.term (Packaging.termDefinitionTerm v0)),
-                    "\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModules TestGraph.testContext TestGraph.testGraph [
+                    "\n"]
+                  Packaging.DefinitionPrimitive v0 -> Strings.cat [
+                    Core.unName (Packaging.primitiveDefinitionName v0),
+                    " :: <primitive>\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModules TestGraph.testContext TestGraph.testGraph [
                   Packaging.Module {
                     Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.a"),
@@ -153,7 +159,10 @@ allTests =
                     (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))),
                     " = ",
                     (ShowCore.term (Packaging.termDefinitionTerm v0)),
-                    "\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModulesGiven TestGraph.testContext TestGraph.testGraph [
+                    "\n"]
+                  Packaging.DefinitionPrimitive v0 -> Strings.cat [
+                    Core.unName (Packaging.primitiveDefinitionName v0),
+                    " :: <primitive>\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModulesGiven TestGraph.testContext TestGraph.testGraph [
                   Packaging.Module {
                     Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.a"),
@@ -226,7 +235,10 @@ allTests =
                     (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))),
                     " = ",
                     (ShowCore.term (Packaging.termDefinitionTerm v0)),
-                    "\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModules TestGraph.testContext TestGraph.testGraph [
+                    "\n"]
+                  Packaging.DefinitionPrimitive v0 -> Strings.cat [
+                    Core.unName (Packaging.primitiveDefinitionName v0),
+                    " :: <primitive>\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModules TestGraph.testContext TestGraph.testGraph [
                   Packaging.Module {
                     Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.a"),
@@ -304,7 +316,10 @@ allTests =
                     (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))),
                     " = ",
                     (ShowCore.term (Packaging.termDefinitionTerm v0)),
-                    "\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModulesGiven TestGraph.testContext TestGraph.testGraph [
+                    "\n"]
+                  Packaging.DefinitionPrimitive v0 -> Strings.cat [
+                    Core.unName (Packaging.primitiveDefinitionName v0),
+                    " :: <primitive>\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModulesGiven TestGraph.testContext TestGraph.testGraph [
                   Packaging.Module {
                     Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.v"),

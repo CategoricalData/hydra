@@ -2284,7 +2284,17 @@
                                                                                                                                                                             "argument": {"variable": "td"},
                                                                                                                                                                             "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.TypeDefinition"}}}},
                                                                                                                                                                         "domain": {"variable": "hydra.packaging.TypeDefinition"},
-                                                                                                                                                                        "parameter": "td"}}}],
+                                                                                                                                                                        "parameter": "td"}}},
+                                                                                                                                                                  {
+                                                                                                                                                                    "name": "primitive",
+                                                                                                                                                                    "term": {
+                                                                                                                                                                      "lambda": {
+                                                                                                                                                                        "body": {
+                                                                                                                                                                          "application": {
+                                                                                                                                                                            "argument": {"variable": "pd"},
+                                                                                                                                                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.PrimitiveDefinition"}}}},
+                                                                                                                                                                        "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
+                                                                                                                                                                        "parameter": "pd"}}}],
                                                                                                                                                                 "typeName": "hydra.packaging.Definition"}}}},
                                                                                                                                                         "domain": {"variable": "hydra.packaging.Definition"},
                                                                                                                                                         "parameter": "d"}},
@@ -2414,7 +2424,15 @@
                                                                                                                                                                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.core.Binding"}}},
                                                                                                                                                                                                                     "type": {"variable": "hydra.packaging.Definition"}}}}}}},
                                                                                                                                                                                                         "domain": {"variable": "hydra.packaging.TermDefinition"},
-                                                                                                                                                                                                        "parameter": "td"}}}],
+                                                                                                                                                                                                        "parameter": "td"}}},
+                                                                                                                                                                                                  {
+                                                                                                                                                                                                    "name": "primitive",
+                                                                                                                                                                                                    "term": {
+                                                                                                                                                                                                      "lambda": {
+                                                                                                                                                                                                        "body": {
+                                                                                                                                                                                                          "maybe": {"inject": {"field": {"name": "primitive", "term": {"variable": "pd"}}, "typeName": "hydra.packaging.Definition"}}},
+                                                                                                                                                                                                        "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
+                                                                                                                                                                                                        "parameter": "pd"}}}],
                                                                                                                                                                                                 "typeName": "hydra.packaging.Definition"}}}},
                                                                                                                                                                                         "domain": {"variable": "hydra.packaging.Definition"},
                                                                                                                                                                                         "parameter": "d"}},
@@ -5058,7 +5076,15 @@
                                                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.core.Binding"}}},
                                                                             "type": {"variable": "hydra.packaging.Definition"}}}}}}},
                                                                 "domain": {"variable": "hydra.packaging.TermDefinition"},
-                                                                "parameter": "td"}}}],
+                                                                "parameter": "td"}}},
+                                                          {
+                                                            "name": "primitive",
+                                                            "term": {
+                                                              "lambda": {
+                                                                "body": {
+                                                                  "maybe": {"inject": {"field": {"name": "primitive", "term": {"variable": "pd"}}, "typeName": "hydra.packaging.Definition"}}},
+                                                                "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
+                                                                "parameter": "pd"}}}],
                                                         "typeName": "hydra.packaging.Definition"}}}},
                                                 "domain": {"variable": "hydra.packaging.Definition"},
                                                 "parameter": "d"}},

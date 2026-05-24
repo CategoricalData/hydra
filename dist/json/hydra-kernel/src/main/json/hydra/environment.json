@@ -283,6 +283,13 @@
                                           "lambda": {
                                             "body": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.TypeDefinition"}}},
                                             "domain": {"variable": "hydra.packaging.TermDefinition"},
+                                            "parameter": "_"}}},
+                                      {
+                                        "name": "primitive",
+                                        "term": {
+                                          "lambda": {
+                                            "body": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.TypeDefinition"}}},
+                                            "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
                                             "parameter": "_"}}}],
                                     "typeName": "hydra.packaging.Definition"}}}},
                             "domain": {"variable": "hydra.packaging.Definition"},
@@ -316,7 +323,14 @@
                                           {
                                             "name": "term",
                                             "term": {
-                                              "lambda": {"body": {"maybe": {"variable": "td"}}, "domain": {"variable": "hydra.packaging.TermDefinition"}, "parameter": "td"}}}],
+                                              "lambda": {"body": {"maybe": {"variable": "td"}}, "domain": {"variable": "hydra.packaging.TermDefinition"}, "parameter": "td"}}},
+                                          {
+                                            "name": "primitive",
+                                            "term": {
+                                              "lambda": {
+                                                "body": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.TermDefinition"}}},
+                                                "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
+                                                "parameter": "_"}}}],
                                         "typeName": "hydra.packaging.Definition"}}}},
                                 "domain": {"variable": "hydra.packaging.Definition"},
                                 "parameter": "def"}},

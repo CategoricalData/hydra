@@ -1,0 +1,120 @@
+{
+  "definitions": [
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Logical AND, defined in terms of ifElse."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {"literal": {"boolean": false}},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "b"},
+                            "function": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.lib.logic.ifElse"}}}}}}},
+                    "parameter": "b"}},
+                "parameter": "a"}}}},
+        "description": "Logical AND",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.logic.and",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"boolean": {}}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Conditional expression: yield the second argument if the first is true, otherwise the third",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.logic.ifElse",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "a"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "a"}}],
+          "result": {"type": {"variable": "a"}},
+          "typeParameters": [{"constraints": [], "name": "a"}]}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Logical NOT, defined in terms of ifElse."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"literal": {"boolean": true}},
+                    "function": {
+                      "application": {
+                        "argument": {"literal": {"boolean": false}},
+                        "function": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.lib.logic.ifElse"}}}}}}},
+                "parameter": "a"}}}},
+        "description": "Logical NOT",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.logic.not",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Logical OR, defined in terms of ifElse."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {"variable": "b"},
+                        "function": {
+                          "application": {
+                            "argument": {"literal": {"boolean": true}},
+                            "function": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.lib.logic.ifElse"}}}}}}},
+                    "parameter": "b"}},
+                "parameter": "a"}}}},
+        "description": "Logical OR",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.logic.or",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"boolean": {}}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []}}}],
+  "dependencies": [
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "description": "Primitives in the hydra.lib.logic namespace.",
+  "name": "hydra.lib.logic"}

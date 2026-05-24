@@ -123,6 +123,7 @@
     "hydra.lib.defaults.maybes",
     "hydra.lib.defaults.pairs",
     "hydra.lib.defaults.sets",
+    "hydra.lib.logic",
     "hydra.lib.names",
     "hydra.literals",
     "hydra.names",
