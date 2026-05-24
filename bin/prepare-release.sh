@@ -84,7 +84,6 @@ BOOT_JAVA_VERSION=$(grep "version = " demos/bootstrapping/resources/java/build.g
 PYTHON_VERSION=$(grep '^version' heads/python/pyproject.toml | sed 's/.*"\(.*\)"/\1/')
 BOOT_PYTHON_VERSION=$(grep '^version' demos/bootstrapping/resources/python/pyproject.toml | sed 's/.*"\(.*\)"/\1/')
 SCALA_VERSION=$(grep 'version :=' packages/hydra-scala/build.sbt | sed 's/.*"\(.*\)".*/\1/' 2>/dev/null || echo "")
-PIXI_VERSION=$(grep '^version' pixi.toml | sed 's/.*"\(.*\)"/\1/')
 
 echo "  VERSION:                              $CANONICAL_VERSION"
 echo "  heads/haskell/package.yaml:           $HASKELL_VERSION"
@@ -94,7 +93,6 @@ echo "  demos/bootstrapping/.../java:         $BOOT_JAVA_VERSION"
 echo "  heads/python/pyproject.toml:          $PYTHON_VERSION"
 echo "  demos/bootstrapping/.../python:       $BOOT_PYTHON_VERSION"
 echo "  packages/hydra-scala/build.sbt:       $SCALA_VERSION"
-echo "  pixi.toml:                            $PIXI_VERSION"
 echo ""
 
 EXPECTED="$CANONICAL_VERSION"
@@ -111,8 +109,7 @@ for pair in \
     "demos/bootstrapping/.../java:$BOOT_JAVA_VERSION" \
     "heads/python/pyproject.toml:$PYTHON_VERSION" \
     "demos/bootstrapping/.../python:$BOOT_PYTHON_VERSION" \
-    "packages/hydra-scala/build.sbt:$SCALA_VERSION" \
-    "pixi.toml:$PIXI_VERSION"; do
+    "packages/hydra-scala/build.sbt:$SCALA_VERSION"; do
     file="${pair%%:*}"
     ver="${pair##*:}"
     if [ "$ver" != "$EXPECTED" ]; then

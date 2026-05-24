@@ -163,9 +163,11 @@ the descriptions below cover the main ones:
 **Typing.hs** - `hydra.typing` namespace
 - Type inference and reconstruction
 - Type constraints and substitutions
+- `TypeClass` record (used by `hydra.classes` term bindings)
 
-**Classes.hs** - `hydra.classes` namespace
-- Minimal typeclass metadata (`Ord`, `Eq`) used during inference
+**hydra.classes** - term module (not a type module)
+- `equality` and `ordering` bindings of type `TypeClass`
+- See the [Concepts wiki § Type classes](https://github.com/CategoricalData/hydra/wiki/Concepts#type-classes)
 
 **Context.hs** - `hydra.context` namespace
 - Execution context: trace, messages, error attribution

@@ -729,3 +729,26 @@ detect renamed kernel types as stale (it only prunes files no longer
 referenced *anywhere* in the manifest, and the file's basename is the
 type name not a path). Manual `rm` is required; safe because the next
 assemble regenerates the new-named file.
+
+### Deleting a `dist/json/<pkg>/build/main/digest.json` causes Phase 2 silent exit
+
+`assemble_refresh_digest` in `bin/lib/assemble-common.sh` is gated by
+`[ -f "$input_digest" ] && (cd ... && stack exec digest-check refresh ...)`.
+Under `set -e`, when the input digest file is missing the `[ -f ]` returns 1
+and the whole `&& (...)` returns 1, killing the calling `assemble-distribution.sh`
+silently — no error to stderr, no "FAILED" banner. The next package in the
+sync loop never runs.
+
+Symptom: `bin/sync.sh` Phase 2 exits EXIT=1 after writing the first package's
+files ("Done: N main files") with no error message and no Phase 3 banner.
+
+Recovery: when you nuke a `dist/json/<pkg>/build/main/digest.json` to force
+regen, also nuke `heads/haskell/.stack-work/phase1-input-cache.txt`. The
+Phase 1 cache miss triggers a full Phase 1 rerun, which regenerates the
+json digest as part of `update-json-manifest`. Without busting the Phase 1
+cache, Phase 1 stays skipped and the dist/json side never gets a new digest,
+so Phase 2 keeps re-failing the same way.
+
+Documented in the build-system cache model
+([docs/build-system.md §Cache files are not tracked](../docs/build-system.md#cache-files-are-not-tracked)),
+but the silent-exit mechanism deserves the explicit pitfall callout.
