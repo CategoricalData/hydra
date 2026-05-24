@@ -45,7 +45,7 @@ substInClassConstraints subst constraints =
                   \varName -> \metadata -> \acc -> Maybes.maybe (Maps.insert varName metadata acc) (\existing ->
                     let merged =
                             Core.TypeVariableMetadata {
-                              Core.typeVariableMetadataClasses = (Sets.union (Core.typeVariableMetadataClasses existing) (Core.typeVariableMetadataClasses metadata))}
+                              Core.typeVariableMetadataClasses = (Lists.nub (Lists.concat2 (Core.typeVariableMetadataClasses existing) (Core.typeVariableMetadataClasses metadata)))}
                     in (Maps.insert varName merged acc)) (Maps.lookup varName acc)
       in (Lists.foldl (\acc -> \pair ->
         let varName = Pairs.first pair

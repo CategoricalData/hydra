@@ -8,6 +8,7 @@ import hydra.packaging.ModuleName;
 import hydra.packaging.PackageName;
 import hydra.packaging.TermDefinition;
 import hydra.phantoms.TTerm;
+import hydra.typing.TermSignature;
 import hydra.util.Maybe;
 
 import java.util.ArrayList;
@@ -85,7 +86,7 @@ public final class Defs {
                         d = new Definition.Term(new TermDefinition(
                             fqName,
                             bodySupplier.get(),
-                            Maybe.<TypeScheme>nothing()));
+                            Maybe.<TermSignature>nothing()));
                         cached = d;
                     }
                 }
