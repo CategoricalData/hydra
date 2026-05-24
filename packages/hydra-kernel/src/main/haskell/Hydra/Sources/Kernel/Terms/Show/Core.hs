@@ -565,7 +565,7 @@ typeScheme = define "typeScheme" $
     Core.unName (var "v")]) $
   "toConstraintPairs" <~ ("p" ~> Lists.map
     (var "toConstraintPair" @@ (Pairs.first $ var "p")) $
-    Sets.toList $ Core.typeVariableMetadataClasses $ Pairs.second $ var "p") $
+    Core.typeVariableMetadataClasses $ Pairs.second $ var "p") $
   "tc" <~ optCases (Core.typeSchemeConstraints (var "ts"))
     (list ([] :: [TTerm String]))
     ("m" ~> Lists.concat $ Lists.map (var "toConstraintPairs") $ Maps.toList $ var "m") $

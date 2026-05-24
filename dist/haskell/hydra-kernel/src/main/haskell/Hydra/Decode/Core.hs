@@ -562,7 +562,7 @@ typeVariableMetadata cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "classes" (ExtractCore.decodeSet typeClassConstraint) fieldMap cx) (\field_classes -> Right (Core.TypeVariableMetadata {
+        in (Eithers.bind (ExtractCore.requireField "classes" (ExtractCore.decodeList typeClassConstraint) fieldMap cx) (\field_classes -> Right (Core.TypeVariableMetadata {
           Core.typeVariableMetadataClasses = field_classes})))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.WrappedTerm
