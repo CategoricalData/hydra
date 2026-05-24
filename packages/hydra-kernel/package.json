@@ -1,6 +1,6 @@
 {
   "name": "hydra-kernel",
-  "description": "The Hydra kernel: core types, terms, DSL, eval, primitives",
+  "description": "Hydra programming language kernel",
   "sourceLanguage": "haskell",
   "dependencies": []
 }

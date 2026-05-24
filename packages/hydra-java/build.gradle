@@ -151,7 +151,7 @@ publishing {
 
             pom {
                 name = 'hydra-java'
-                description = 'Java implementation of the Hydra language'
+                description = 'Java support for Hydra'
                 url = 'https://github.com/CategoricalData/hydra'
                 licenses {
                     license {
