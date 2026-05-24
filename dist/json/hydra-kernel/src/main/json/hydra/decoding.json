@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.decoding.collectForallVariables",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"list": {"variable": "hydra.core.Name"}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Collect forall type variable names from a type"}}}],
@@ -48,13 +52,14 @@
                         "default": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}},
                         "typeName": "hydra.core.Type"}}}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "typ"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"list": {"variable": "hydra.core.Name"}}, "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "parameter": "typ"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.collectOrdConstrainedVariables",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"list": {"variable": "hydra.core.Name"}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -280,13 +285,14 @@
                         "default": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}},
                         "typeName": "hydra.core.Type"}}}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "typ"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"list": {"variable": "hydra.core.Name"}}, "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "parameter": "typ"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.collectTypeVariables",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"list": {"variable": "hydra.core.Name"}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -297,13 +303,14 @@
               "lambda": {
                 "body": {"application": {"argument": {"variable": "typ"}, "function": {"variable": "hydra.decoding.collectForallVariables"}}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "typ"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"list": {"variable": "hydra.core.Name"}}, "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "parameter": "typ"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.collectTypeVariablesFromType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"list": {"variable": "hydra.core.Name"}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Collect all type variable names from a type expression"}}}],
@@ -517,13 +524,17 @@
                         "default": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}},
                         "typeName": "hydra.core.Type"}}}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "typ"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"list": {"variable": "hydra.core.Name"}}, "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "parameter": "typ"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeBinding",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Binding"}}],
+          "result": {"type": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.core.Binding"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -630,22 +641,14 @@
                         "parameter": "graph"}},
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.core.Binding"}}},
-                      "domain": {"variable": "hydra.core.Binding"}}},
-                  "domain": {"variable": "hydra.graph.Graph"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeBindingName",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"variable": "hydra.core.Name"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -752,13 +755,14 @@
                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.core.Name"}}},
                                             "type": {"list": {"literal": {"string": {}}}}}}}}}}}}}}}}}},
                 "domain": {"variable": "hydra.core.Name"},
-                "parameter": "n"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Name"}, "domain": {"variable": "hydra.core.Name"}}},
-          "variables": []}}},
+                "parameter": "n"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeEitherType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.EitherType"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a decoder for an Either type"}}}],
@@ -817,13 +821,14 @@
                                   "typeName": "hydra.core.Application"}}},
                             "typeName": "hydra.core.Term"}}}}}},
                 "domain": {"variable": "hydra.core.EitherType"},
-                "parameter": "et"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.EitherType"}}},
-          "variables": []}}},
+                "parameter": "et"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeForallType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.ForallType"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a decoder for a polymorphic (forall) type"}}}],
@@ -856,13 +861,14 @@
                           "typeName": "hydra.core.Lambda"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.core.ForallType"},
-                "parameter": "ft"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.ForallType"}}},
-          "variables": []}}},
+                "parameter": "ft"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeListType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a decoder for a list type"}}}],
@@ -894,13 +900,14 @@
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}}}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "elemType"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "parameter": "elemType"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeLiteralType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.LiteralType"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a decoder for a literal type"}}}],
@@ -7119,13 +7126,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.core.LiteralType"}}}},
                 "domain": {"variable": "hydra.core.LiteralType"},
-                "parameter": "lt"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.LiteralType"}}},
-          "variables": []}}},
+                "parameter": "lt"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeMapType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.MapType"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a decoder for a map type"}}}],
@@ -7184,13 +7192,14 @@
                                   "typeName": "hydra.core.Application"}}},
                             "typeName": "hydra.core.Term"}}}}}},
                 "domain": {"variable": "hydra.core.MapType"},
-                "parameter": "mt"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.MapType"}}},
-          "variables": []}}},
+                "parameter": "mt"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeMaybeType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a decoder for an optional type"}}}],
@@ -7222,13 +7231,18 @@
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}}}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "elemType"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "parameter": "elemType"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeModule",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.packaging.Module"}}],
+          "result": {
+            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"maybe": {"variable": "hydra.packaging.Module"}}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Transform a type module into a decoder module"}}}],
@@ -7380,9 +7394,18 @@
                                                                                                 "term": {
                                                                                                   "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "term", "typeName": "hydra.core.Binding"}}}}},
                                                                                               {
-                                                                                                "name": "typeScheme",
+                                                                                                "name": "signature",
                                                                                                 "term": {
-                                                                                                  "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "typeScheme", "typeName": "hydra.core.Binding"}}}}}],
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "typeScheme", "typeName": "hydra.core.Binding"}}}},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "hydra.scoping.typeSchemeToTermSignature"},
+                                                                                                        "function": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                                                                            "type": {"variable": "hydra.typing.TermSignature"}}}}}}}}],
                                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                                       "typeName": "hydra.packaging.Definition"}},
                                                                                   "domain": {"variable": "hydra.core.Binding"},
@@ -7631,22 +7654,14 @@
                     "domain": {"variable": "hydra.graph.Graph"},
                     "parameter": "graph"}},
                 "domain": {"variable": "hydra.context.Context"},
-                "parameter": "cx"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"maybe": {"variable": "hydra.packaging.Module"}}}},
-                      "domain": {"variable": "hydra.packaging.Module"}}},
-                  "domain": {"variable": "hydra.graph.Graph"}}},
-              "domain": {"variable": "hydra.context.Context"}}},
-          "variables": []}}},
+                "parameter": "cx"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeNamespace",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.ModuleName"}}],
+          "result": {"type": {"variable": "hydra.packaging.ModuleName"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -7715,14 +7730,14 @@
                                           "typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
                                         "type": {"pair": {"first": {"literal": {"string": {}}}, "second": {"list": {"literal": {"string": {}}}}}}}}}}}}}}}}}},
                 "domain": {"variable": "hydra.packaging.ModuleName"},
-                "parameter": "ns"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.packaging.ModuleName"}, "domain": {"variable": "hydra.packaging.ModuleName"}}},
-          "variables": []}}},
+                "parameter": "ns"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodePairType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.PairType"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a decoder for a pair type"}}}],
@@ -7781,13 +7796,14 @@
                                   "typeName": "hydra.core.Application"}}},
                             "typeName": "hydra.core.Term"}}}}}},
                 "domain": {"variable": "hydra.core.PairType"},
-                "parameter": "pt"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.PairType"}}},
-          "variables": []}}},
+                "parameter": "pt"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeRecordType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.core.FieldType"}}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a decoder for a record type"}}}],
@@ -7801,13 +7817,16 @@
                         "argument": {"wrap": {"body": {"literal": {"string": "unknown"}}, "typeName": "hydra.core.Name"}},
                         "function": {"variable": "hydra.decoding.decodeRecordTypeImpl"}}}}},
                 "domain": {"list": {"variable": "hydra.core.FieldType"}},
-                "parameter": "rt"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
-          "variables": []}}},
+                "parameter": "rt"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeRecordTypeImpl",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.core.FieldType"}}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a decoder for a record type with a type name"}}}],
@@ -8385,16 +8404,16 @@
                     "domain": {"list": {"variable": "hydra.core.FieldType"}},
                     "parameter": "rt"}},
                 "domain": {"variable": "hydra.core.Name"},
-                "parameter": "tname"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
-              "domain": {"variable": "hydra.core.Name"}}},
-          "variables": []}}},
+                "parameter": "tname"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeRecordTypeNamed",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.core.FieldType"}}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a decoder for a record type with element name"}}}],
@@ -8409,16 +8428,14 @@
                     "domain": {"list": {"variable": "hydra.core.FieldType"}},
                     "parameter": "rt"}},
                 "domain": {"variable": "hydra.core.Name"},
-                "parameter": "ename"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
-              "domain": {"variable": "hydra.core.Name"}}},
-          "variables": []}}},
+                "parameter": "ename"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeSetType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a decoder for a set type"}}}],
@@ -8450,13 +8467,14 @@
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}}}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "elemType"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "parameter": "elemType"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a decoder term for a Type"}}}],
@@ -8671,13 +8689,16 @@
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.core.Type"}}}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "typ"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "parameter": "typ"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeTypeNamed",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -8933,16 +8954,14 @@
                     "domain": {"variable": "hydra.core.Type"},
                     "parameter": "typ"}},
                 "domain": {"variable": "hydra.core.Name"},
-                "parameter": "ename"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.Type"}}},
-              "domain": {"variable": "hydra.core.Name"}}},
-          "variables": []}}},
+                "parameter": "ename"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeUnionType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.core.FieldType"}}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a decoder for a union type"}}}],
@@ -8956,13 +8975,16 @@
                         "argument": {"wrap": {"body": {"literal": {"string": "unknown"}}, "typeName": "hydra.core.Name"}},
                         "function": {"variable": "hydra.decoding.decodeUnionTypeNamed"}}}}},
                 "domain": {"list": {"variable": "hydra.core.FieldType"}},
-                "parameter": "rt"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
-          "variables": []}}},
+                "parameter": "rt"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeUnionTypeNamed",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.core.FieldType"}}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -9785,16 +9807,11 @@
                     "domain": {"list": {"variable": "hydra.core.FieldType"}},
                     "parameter": "rt"}},
                 "domain": {"variable": "hydra.core.Name"},
-                "parameter": "ename"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
-              "domain": {"variable": "hydra.core.Name"}}},
-          "variables": []}}},
+                "parameter": "ename"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeUnitType",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Term"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a decoder for the unit type"}}}],
@@ -9863,11 +9880,14 @@
                                     "typeName": "hydra.core.Lambda"}}},
                               "typeName": "hydra.core.Term"}}}],
                       "typeName": "hydra.core.Lambda"}}},
-                "typeName": "hydra.core.Term"}}}},
-        "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}},
+                "typeName": "hydra.core.Term"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeWrappedType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a decoder for a wrapped type"}}}],
@@ -9881,13 +9901,16 @@
                         "argument": {"wrap": {"body": {"literal": {"string": "unknown"}}, "typeName": "hydra.core.Name"}},
                         "function": {"variable": "hydra.decoding.decodeWrappedTypeNamed"}}}}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "wt"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "parameter": "wt"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decodeWrappedTypeNamed",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -10274,16 +10297,14 @@
                     "domain": {"variable": "hydra.core.Type"},
                     "parameter": "wt"}},
                 "domain": {"variable": "hydra.core.Name"},
-                "parameter": "ename"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.Type"}}},
-              "domain": {"variable": "hydra.core.Name"}}},
-          "variables": []}}},
+                "parameter": "ename"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decoderFullResultType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"variable": "hydra.core.Type"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Get full result type for decoder"}}}],
@@ -10572,13 +10593,16 @@
                             "typeName": "hydra.core.Type"}},
                         "typeName": "hydra.core.Type"}}}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "typ"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Type"}, "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "parameter": "typ"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decoderFullResultTypeNamed",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"variable": "hydra.core.Type"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Get full result type for decoder with element name"}}}],
@@ -10858,16 +10882,14 @@
                     "domain": {"variable": "hydra.core.Type"},
                     "parameter": "typ"}},
                 "domain": {"variable": "hydra.core.Name"},
-                "parameter": "ename"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.Type"}, "domain": {"variable": "hydra.core.Type"}}},
-              "domain": {"variable": "hydra.core.Name"}}},
-          "variables": []}}},
+                "parameter": "ename"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decoderResultType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"variable": "hydra.core.Name"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Compute the result type name for a decoder"}}}],
@@ -10945,13 +10967,14 @@
                         "default": {"wrap": {"body": {"literal": {"string": "hydra.core.Term"}}, "typeName": "hydra.core.Name"}},
                         "typeName": "hydra.core.Type"}}}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "typ"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Name"}, "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "parameter": "typ"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decoderType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"variable": "hydra.core.Type"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Build decoder function type"}}}],
@@ -11032,13 +11055,16 @@
                             "function": {
                               "application": {"argument": {"variable": "baseType"}, "function": {"variable": "hydra.decoding.prependForallDecoders"}}}}}}}}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "typ"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Type"}, "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "parameter": "typ"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decoderTypeNamed",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"variable": "hydra.core.Type"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Build decoder function type with element name"}}}],
@@ -11127,16 +11153,14 @@
                     "domain": {"variable": "hydra.core.Type"},
                     "parameter": "typ"}},
                 "domain": {"variable": "hydra.core.Name"},
-                "parameter": "ename"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.Type"}, "domain": {"variable": "hydra.core.Type"}}},
-              "domain": {"variable": "hydra.core.Name"}}},
-          "variables": []}}},
+                "parameter": "ename"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decoderTypeScheme",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"variable": "hydra.core.TypeScheme"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Build type scheme for a decoder function"}}}],
@@ -11210,9 +11234,11 @@
                                                                             {
                                                                               "name": "classes",
                                                                               "term": {
-                                                                                "application": {
-                                                                                  "argument": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}},
-                                                                                  "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.singleton"}, "type": {"variable": "hydra.core.Name"}}}}}}],
+                                                                                "list": [
+                                                                                  {
+                                                                                    "inject": {
+                                                                                      "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                      "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                           "typeName": "hydra.core.TypeVariableMetadata"}}}},
                                                                   "type": {"variable": "hydra.core.Name"}}},
                                                               "type": {"variable": "hydra.core.TypeVariableMetadata"}}},
@@ -11255,13 +11281,16 @@
                                       {"name": "constraints", "term": {"variable": "constraints"}}],
                                     "typeName": "hydra.core.TypeScheme"}}}}}}}}}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "typ"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.TypeScheme"}, "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "parameter": "typ"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.decoderTypeSchemeNamed",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"variable": "hydra.core.TypeScheme"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Build type scheme for a decoder function with element name"}}}],
@@ -11337,9 +11366,11 @@
                                                                                 {
                                                                                   "name": "classes",
                                                                                   "term": {
-                                                                                    "application": {
-                                                                                      "argument": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}},
-                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.singleton"}, "type": {"variable": "hydra.core.Name"}}}}}}],
+                                                                                    "list": [
+                                                                                      {
+                                                                                        "inject": {
+                                                                                          "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                          "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                               "typeName": "hydra.core.TypeVariableMetadata"}}}},
                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                   "type": {"variable": "hydra.core.TypeVariableMetadata"}}},
@@ -11387,16 +11418,18 @@
                     "domain": {"variable": "hydra.core.Type"},
                     "parameter": "typ"}},
                 "domain": {"variable": "hydra.core.Name"},
-                "parameter": "ename"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.TypeScheme"}, "domain": {"variable": "hydra.core.Type"}}},
-              "domain": {"variable": "hydra.core.Name"}}},
-          "variables": []}}},
+                "parameter": "ename"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.filterTypeBindings",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg2", "type": {"list": {"variable": "hydra.core.Binding"}}}],
+          "result": {
+            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"list": {"variable": "hydra.core.Binding"}}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Filter bindings to only decodable type definitions"}}}],
@@ -11446,22 +11479,18 @@
                     "domain": {"variable": "hydra.graph.Graph"},
                     "parameter": "graph"}},
                 "domain": {"variable": "hydra.context.Context"},
-                "parameter": "cx"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"list": {"variable": "hydra.core.Binding"}}}},
-                      "domain": {"list": {"variable": "hydra.core.Binding"}}}},
-                  "domain": {"variable": "hydra.graph.Graph"}}},
-              "domain": {"variable": "hydra.context.Context"}}},
-          "variables": []}}},
+                "parameter": "cx"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.isDecodableBinding",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Binding"}}],
+          "result": {
+            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"maybe": {"variable": "hydra.core.Binding"}}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Check if a binding is decodable (serializable type)"}}}],
@@ -11518,22 +11547,16 @@
                     "domain": {"variable": "hydra.graph.Graph"},
                     "parameter": "graph"}},
                 "domain": {"variable": "hydra.context.Context"},
-                "parameter": "cx"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"maybe": {"variable": "hydra.core.Binding"}}}},
-                      "domain": {"variable": "hydra.core.Binding"}}},
-                  "domain": {"variable": "hydra.graph.Graph"}}},
-              "domain": {"variable": "hydra.context.Context"}}},
-          "variables": []}}},
+                "parameter": "cx"}}}}}},
     {
       "term": {
         "name": "hydra.decoding.prependForallDecoders",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"variable": "hydra.core.Type"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Prepend decoder types for forall parameters to base type"}}}],
@@ -11655,13 +11678,7 @@
                     "domain": {"variable": "hydra.core.Type"},
                     "parameter": "typ"}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "baseType"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.Type"}, "domain": {"variable": "hydra.core.Type"}}},
-              "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}}],
+                "parameter": "baseType"}}}}}}],
   "dependencies": [
     {"module": "hydra.annotations"},
     {"module": "hydra.extract.core"},

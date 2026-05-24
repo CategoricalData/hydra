@@ -227,7 +227,7 @@ Primary entry point — the doc most likely to answer the question by task:
 | Add or modify tests | [docs/recipes/extending-tests.md](docs/recipes/extending-tests.md) |
 | Regenerate code | [docs/recipes/code-generation.md](docs/recipes/code-generation.md) |
 | Debug test failures | [docs/troubleshooting.md](docs/troubleshooting.md) |
-| Refactor modules/namespaces | [docs/recipes/refactoring.md](docs/recipes/refactoring.md) / [refactoring-namespaces.md](docs/recipes/refactoring-namespaces.md) |
+| Refactor modules/namespaces | [docs/recipes/refactoring.md](docs/recipes/refactoring.md) (includes namespace refactoring) |
 | Clean up repo / find stale files | [docs/recipes/maintenance.md](docs/recipes/maintenance.md) |
 | New target language | [docs/recipes/new-implementation.md](docs/recipes/new-implementation.md) |
 | Test suite structure | [docs/test-suite-architecture.md](docs/test-suite-architecture.md) |
@@ -391,6 +391,15 @@ context usage. Keep it lean by following these principles:
   - **`claude/`**: deeper Claude-specific protocols and gotchas, loaded on demand.
   - **`docs/`** + wiki + READMEs: human-facing documentation. Don't mix Claude-specific
     content into `docs/`.
+- **Within human-facing docs, partition by audience and altitude.**
+  - **Wiki**: user-facing documentation explaining Hydra's design *as it is* — conceptual
+    framing (LambdaGraph, type system), property-graph and RDF design, release policy.
+    Nothing provisional belongs here.
+  - **`docs/`**: contributor-facing procedural and implementation-level material — how to
+    extend the kernel, regenerate code, debug a failing build, understand the build/cache
+    system. Describes shipped behavior.
+  - **Outside the public documentation surface** (issues, branch plans, `docs/history/`):
+    sketches, in-flight proposals, exploration. Don't put any of these on the wiki.
 - **Add to other docs first.** When new guidance is needed, put it in the most specific
   applicable document and add a link here only if the topic is common enough.
 - **Review before expanding.** Before adding content, check whether it's already reachable

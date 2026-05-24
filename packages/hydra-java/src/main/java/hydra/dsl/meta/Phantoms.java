@@ -1,4 +1,5 @@
 package hydra.dsl.meta;
+import hydra.Scoping;
 import hydra.core.Binding;
 import hydra.core.Field;
 import hydra.core.Name;
@@ -13,6 +14,7 @@ import hydra.packaging.ModuleName;
 import hydra.packaging.TermDefinition;
 import hydra.phantoms.TBinding;
 import hydra.phantoms.TTerm;
+import hydra.typing.TermSignature;
 import hydra.util.Maybe;
 
 import java.math.BigInteger;
@@ -469,7 +471,7 @@ public final class Phantoms {
         return new Definition.Term(new TermDefinition(
             tb.name,
             tb.term.value,
-            Maybe.<TypeScheme>nothing()));
+            Maybe.<TermSignature>nothing()));
     }
 
     /** Build a Definition directly: namespace + localName + term, no TBinding. */
@@ -478,7 +480,7 @@ public final class Phantoms {
         return new Definition.Term(new TermDefinition(
             fqName,
             term.value,
-            Maybe.<TypeScheme>nothing()));
+            Maybe.<TermSignature>nothing()));
     }
 
     /** Build a Definition with a pre-computed TypeScheme (used for hydra.java.coder). */
@@ -488,6 +490,6 @@ public final class Phantoms {
         return new Definition.Term(new TermDefinition(
             fqName,
             term.value,
-            Maybe.<TypeScheme>just(ts)));
+            Maybe.<TermSignature>just(Scoping.typeSchemeToTermSignature(ts))));
     }
 }

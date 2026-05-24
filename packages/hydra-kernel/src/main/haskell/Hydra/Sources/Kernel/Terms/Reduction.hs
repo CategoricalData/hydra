@@ -187,7 +187,11 @@ etaExpandTerm = define "etaExpandTerm" $
   "tx0" ~> "term0" ~>
 
   -- Pre-compute primitive types map once (primitives don't change during recursion)
-  "primTypes" <~ (Graph.graphPrimitiveTypes $ var "tx0") $
+  "primTypes" <~ Maps.fromList (Lists.map
+    ("_gpt_p" ~> pair
+      (Packaging.primitiveDefinitionName $ Graph.primitiveDefinition $ var "_gpt_p")
+      (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition $ var "_gpt_p")))
+    (Maps.elems $ Graph.graphPrimitives $ var "tx0")) $
 
   -- termArityWithContext: compute arity of a term using Graph for lookups
   "termArityWithContext" <~ ("tx" ~> "term" ~>

@@ -81,6 +81,7 @@ import qualified Hydra.Sources.Kernel.Terms.Reflect      as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Names        as Names
 import qualified Hydra.Sources.Kernel.Terms.Resolution   as Resolution
+import qualified Hydra.Sources.Kernel.Terms.Scoping      as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Variables    as Variables
 import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors  as ShowError
@@ -561,7 +562,7 @@ inferTypeOfCollection = define "inferTypeOfCollection" $
   "fcx2" <~ Pairs.second (var "varResult") $
   "classConstraints" <~ Logic.ifElse (Sets.null $ var "classNames")
     Maps.empty
-    (Maps.singleton (var "var") (Core.typeVariableMetadata $ var "classNames")) $
+    (Maps.singleton (var "var") (Core.typeVariableMetadata $ Lists.map ("n" ~> Core.typeClassConstraintSimple (var "n")) $ Sets.toList $ var "classNames")) $
   Logic.ifElse (Lists.null $ var "els")
     (right (yieldWithConstraints
       @@ var "fcx2"
@@ -892,7 +893,7 @@ inferTypeOfMap = define "inferTypeOfMap" $
   "vvarResult" <~ Names.freshName @@ var "fcx2" $
   "vvar" <~ Pairs.first (var "vvarResult") $
   "fcx3" <~ Pairs.second (var "vvarResult") $
-  "keyConstraints" <~ Maps.singleton (var "kvar") (Core.typeVariableMetadata $ Sets.singleton $ Core.name (string "ordering")) $
+  "keyConstraints" <~ Maps.singleton (var "kvar") (Core.typeVariableMetadata $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]) $
   Logic.ifElse (Maps.null $ var "m")
     (right (yieldWithConstraints
       @@ var "fcx3"
@@ -995,7 +996,7 @@ inferTypeOfPrimitive = define "inferTypeOfPrimitive" $
         @@ Core.typeSchemeBody (var "ts")
         @@ Substitution.idTypeSubst
         @@ var "constraints"))
-    (Maybes.map (reify Graph.primitiveTypeScheme) $ Maps.lookup (var "name") (Graph.graphPrimitives $ var "cx"))
+    (Maybes.map ("_p" ~> Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "_p"))) $ Maps.lookup (var "name") (Graph.graphPrimitives $ var "cx"))
 
 inferTypeOfProjection :: TTermDefinition (Context -> Graph -> Projection -> Prelude.Either Error InferenceResult)
 inferTypeOfProjection = define "inferTypeOfProjection" $
@@ -1165,7 +1166,7 @@ inferTypeOfVariable = define "inferTypeOfVariable" $
           @@ Core.typeSchemeBody (var "ts")
           @@ Substitution.idTypeSubst
           @@ var "constraints"))
-      (Maybes.map (reify Graph.primitiveTypeScheme) $ Maps.lookup (var "name") (Graph.graphPrimitives $ var "cx")))
+      (Maybes.map ("_p" ~> Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "_p"))) $ Maps.lookup (var "name") (Graph.graphPrimitives $ var "cx")))
     -- Found in graphBoundTypes: use the type scheme directly
     ("scheme" ~>
       "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx" @@ var "scheme" $
@@ -1301,7 +1302,7 @@ mergeClassConstraints = define "mergeClassConstraints" $
       Maybes.maybe
         (Maps.insert (var "k") (var "v") (var "acc"))
         ("existing" ~>
-          "merged" <~ Core.typeVariableMetadata (Sets.union (Core.typeVariableMetadataClasses $ var "existing") (Core.typeVariableMetadataClasses $ var "v")) $
+          "merged" <~ Core.typeVariableMetadata (Lists.nub $ Lists.concat2 (Core.typeVariableMetadataClasses $ var "existing") (Core.typeVariableMetadataClasses $ var "v")) $
           Maps.insert (var "k") (var "merged") (var "acc"))
         (Maps.lookup (var "k") (var "acc")))
     (var "m1")

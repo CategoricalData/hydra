@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.json.yaml.encode.jsonToYaml",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.json.model.Value"}}],
+          "result": {"type": {"variable": "hydra.yaml.model.Node"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -166,13 +170,21 @@
                                 "parameter": "s"}}}],
                         "typeName": "hydra.json.model.Value"}}}},
                 "domain": {"variable": "hydra.json.model.Value"},
-                "parameter": "value"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.yaml.model.Node"}, "domain": {"variable": "hydra.json.model.Value"}}},
-          "variables": []}}},
+                "parameter": "value"}}}}}},
     {
       "term": {
         "name": "hydra.json.yaml.encode.toYaml",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Type"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "hydra.yaml.model.Node"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra term to a YAML node via JSON encoding."}}}],
@@ -217,22 +229,7 @@
                     "domain": {"variable": "hydra.core.Name"},
                     "parameter": "tname"}},
                 "domain": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}},
-                "parameter": "types"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "hydra.yaml.model.Node"}}},
-                          "domain": {"variable": "hydra.core.Term"}}},
-                      "domain": {"variable": "hydra.core.Type"}}},
-                  "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}}}},
-          "variables": []}}}],
+                "parameter": "types"}}}}}}],
   "dependencies": [
     {"module": "hydra.json.encode"},
     {"module": "hydra.yaml.model"},

@@ -4,22 +4,14 @@
 module Hydra.Dsl.Meta.Graph (
   module Hydra.Dsl.Graph,
   module Hydra.Dsl.Meta.Graph,
-  DslGraph.primitiveName,
-  DslGraph.primitiveTypeScheme,
-  DslGraph.graphPrimitives,
 ) where
 
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Phantoms
-import Hydra.Dsl.Graph hiding (primitiveName, primitiveType, graphPrimitives)
-import qualified Hydra.Dsl.Graph as DslGraph
+import Hydra.Dsl.Graph
 
-import qualified Hydra.Dsl.Meta.Lib.Lists as Lists
 import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
 import qualified Hydra.Dsl.Meta.Lib.Sets as Sets
-
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 
 -- | Non-standard helpers
@@ -44,7 +36,3 @@ emptyGraph = graph
     Maps.empty  -- schemaTypes
     Sets.empty  -- typeVariables
 
-graphPrimitiveTypes :: TTerm Graph -> TTerm (M.Map Name TypeScheme)
-graphPrimitiveTypes g = Maps.fromList (Lists.map
-    ("_gpt_p" ~> pair (DslGraph.primitiveName $ var "_gpt_p") (DslGraph.primitiveTypeScheme $ var "_gpt_p"))
-    (Maps.elems $ DslGraph.graphPrimitives g))

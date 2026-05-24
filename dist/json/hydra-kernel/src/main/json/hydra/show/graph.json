@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.show.graph.graph",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.core.Binding"}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Show a list of bindings as a string"}}}],
@@ -36,10 +40,7 @@
                             {"literal": {"string": "}"}}]},
                         "function": {"variable": "hydra.lib.strings.cat"}}}}},
                 "domain": {"list": {"variable": "hydra.core.Binding"}},
-                "parameter": "elements"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"list": {"variable": "hydra.core.Binding"}}}},
-          "variables": []}}}],
+                "parameter": "elements"}}}}}}],
   "dependencies": [
     {"module": "hydra.show.core"},
     {"module": "hydra.paths"},

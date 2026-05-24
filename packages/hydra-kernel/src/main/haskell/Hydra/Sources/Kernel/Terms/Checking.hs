@@ -718,7 +718,7 @@ typeOfPrimitive = define "typeOfPrimitive" $
   "cx" ~> "tx" ~> "typeArgs" ~> "name" ~>
   -- Look up the primitive directly in the graph's primitives map and extract its type.
   -- This avoids reconstructing a Map Name TypeScheme on every call (O(p) per call).
-  "rawTs" <~ Maybes.map ("_p" ~> Graph.primitiveTypeScheme (var "_p"))
+  "rawTs" <~ Maybes.map ("_p" ~> Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "_p")))
     (Maps.lookup (var "name") (Graph.graphPrimitives $ var "tx")) $
   Maybes.maybe
     (Ctx.failInContext (Error.errorUndefinedTermVariable $ ErrorsCore.undefinedTermVariableError (Paths.subtermPath $ list ([] :: [TTerm SubtermStep])) (var "name")) (var "cx"))
@@ -872,7 +872,7 @@ typeOfVariable = define "typeOfVariable" $
     (Maybes.maybe
       (Ctx.failInContext (Error.errorUntypedTermVariable $ ErrorsCore.untypedTermVariableError (Paths.subtermPath $ list ([] :: [TTerm SubtermStep])) (var "name")) (var "cx"))
       (var "forScheme")
-      (Maybes.map ("_p" ~> Graph.primitiveTypeScheme (var "_p"))
+      (Maybes.map ("_p" ~> Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "_p")))
         (Maps.lookup (var "name") (Graph.graphPrimitives $ var "tx"))))
     (var "forScheme")
     (var "rawTypeScheme")

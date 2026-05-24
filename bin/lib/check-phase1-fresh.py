@@ -6,13 +6,15 @@ Compares a recorded hash of every input that affects Phase 1's outputs
 against the current state.
 
 Inputs hashed:
-  - packages/*/src/main/haskell/Hydra/Sources/**.hs (DSL sources)
-  - heads/haskell/src/main/haskell/**.hs            (hand-written runtime)
-  - heads/haskell/src/test/haskell/**.hs            (hand-written test infra)
-  - heads/haskell/src/exec/**/*.hs                  (executables: transform-haskell-dsl-to-json, etc.)
-  - heads/haskell/package.yaml                      (build config)
-  - heads/haskell/stack.yaml                        (build config)
-  - heads/haskell/bin/sync-haskell.sh               (the runner itself)
+  - packages/*/src/main/haskell/Hydra/Sources/**.hs           (Haskell DSL sources)
+  - packages/hydra-java/src/main/java/hydra/sources/**/*.java (Java DSL sources, #344)
+  - packages/hydra-python/src/main/python/hydra/sources/**/*.py (Python DSL sources, #344)
+  - heads/haskell/src/main/haskell/**.hs                      (hand-written runtime)
+  - heads/haskell/src/test/haskell/**.hs                      (hand-written test infra)
+  - heads/haskell/src/exec/**/*.hs                            (executables: transform-haskell-dsl-to-json, etc.)
+  - heads/haskell/package.yaml                                (build config)
+  - heads/haskell/stack.yaml                                  (build config)
+  - heads/haskell/bin/sync-haskell.sh                         (the runner itself)
 
 Exit 0 if the current hash matches the recorded one in
 heads/haskell/.stack-work/phase1-input-cache.txt — every Phase 1
@@ -53,6 +55,19 @@ def collect_inputs(hydra_root: Path) -> list:
             if sources.is_dir():
                 for hs in sources.rglob("*.hs"):
                     paths.add(hs)
+    # Host-native DSL source trees (#344). The Java and Python coders are
+    # now authored host-native, so edits there change Phase 1 outputs even
+    # though no .hs file moved. Future host-native trees (Scala, TypeScript)
+    # should be added here when they exist.
+    host_native_dsl_dirs = (
+        ("hydra-java", "src/main/java/hydra/sources", "*.java"),
+        ("hydra-python", "src/main/python/hydra/sources", "*.py"),
+    )
+    for pkg_name, subdir, glob in host_native_dsl_dirs:
+        d = packages / pkg_name / subdir if packages.is_dir() else None
+        if d is not None and d.is_dir():
+            for src in d.rglob(glob):
+                paths.add(src)
     heads_haskell = hydra_root / "heads" / "haskell"
     for sub in ("src/main/haskell", "src/test/haskell", "src/exec"):
         d = heads_haskell / sub

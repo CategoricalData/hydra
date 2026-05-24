@@ -507,7 +507,7 @@ moduleDependencyNamespaces = define "moduleDependencyNamespaces" $
         just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td")),
       _Definition_term>>: "td" ~>
         just (Core.binding (Packaging.termDefinitionName $ var "td") (Packaging.termDefinitionTerm $ var "td")
-          (Packaging.termDefinitionTypeScheme $ var "td"))])
+          (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "td"))])
     (Packaging.moduleDefinitions (var "mod"))) $
   Eithers.map
     ("deps" ~> Sets.delete (Packaging.moduleName (var "mod")) (var "deps"))

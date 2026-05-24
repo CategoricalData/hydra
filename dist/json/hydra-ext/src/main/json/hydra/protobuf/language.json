@@ -3,6 +3,7 @@
     {
       "term": {
         "name": "hydra.protobuf.language.protobufLanguage",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for Protocol Buffers v3"}}}],
@@ -152,11 +153,11 @@
                               {"name": "typeVariants", "term": {"variable": "typeVariants"}},
                               {"name": "types", "term": {"variable": "typePredicate"}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
-                    "typeName": "hydra.coders.Language"}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}},
+                    "typeName": "hydra.coders.Language"}}}}}}}},
     {
       "term": {
         "name": "hydra.protobuf.language.protobufReservedWords",
+        "signature": {"parameters": [], "result": {"type": {"set": {"literal": {"string": {}}}}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "A set of reserved words in Protobuf"}}}],
@@ -204,8 +205,7 @@
                       "application": {
                         "argument": {"list": [{"variable": "fieldNames"}]},
                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"literal": {"string": {}}}}}}},
-                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}}}}}},
-        "typeScheme": {"body": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
+                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}}}}}}}}],
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.strip"},

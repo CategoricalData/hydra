@@ -20,8 +20,10 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Reflect as Reflect
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -56,7 +58,7 @@ isComplexVariable tc name =
         let typeLookup = Maps.lookup name (Graph.graphBoundTypes tc)
         in (Maybes.maybe (
           let primLookup = Maps.lookup name (Graph.graphPrimitives tc)
-          in (Maybes.maybe True (\prim -> Equality.gt (Arity.typeSchemeArity (Graph.primitiveTypeScheme prim)) 0) primLookup)) (\ts -> Equality.gt (Arity.typeSchemeArity ts) 0) typeLookup))))
+          in (Maybes.maybe True (\prim -> Equality.gt (Arity.typeSchemeArity (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim)))) 0) primLookup)) (\ts -> Equality.gt (Arity.typeSchemeArity ts) 0) typeLookup))))
 -- | Determines whether a given term is an encoded term (meta-level term)
 isEncodedTerm :: Core.Term -> Bool
 isEncodedTerm t =

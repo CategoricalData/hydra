@@ -108,7 +108,7 @@ mkDocumentedTermDef :: String -> TTerm Definition
 mkDocumentedTermDef fullName = Packaging.definitionTerm $ Packaging.termDefinition
   (nm fullName)
   documentedPlaceholderTerm
-  (Phantoms.nothing :: TTerm (Maybe TypeScheme))
+  (Phantoms.nothing :: TTerm (Maybe TermSignature))
 
 -- | Build a TermDefinition without a doc annotation (top-level term is a bare
 -- literal). Used to drive checkDefinitionDocumentation failures.
@@ -116,7 +116,7 @@ mkUndocumentedTermDef :: String -> TTerm Definition
 mkUndocumentedTermDef fullName = Packaging.definitionTerm $ Packaging.termDefinition
   (nm fullName)
   placeholderTerm
-  (Phantoms.nothing :: TTerm (Maybe TypeScheme))
+  (Phantoms.nothing :: TTerm (Maybe TermSignature))
 
 -- ============================================================================
 -- Expected-value helpers

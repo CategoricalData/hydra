@@ -4,6 +4,16 @@ CLAUDE.md keeps a short list of hard rules and a short list of mental models.
 This page covers specific gotchas — concrete known-issue notes that don't belong
 in the top-level orientation.
 
+> **Reader.** This file is primarily Claude-facing. Several issues here would
+> apply to any developer, not just an LLM session — the public, audience-neutral
+> versions live in `docs/troubleshooting.md`,
+> `docs/recipes/code-generation.md#troubleshooting`, and
+> `docs/recipes/maintenance.md`. Check those first if you're looking for the
+> shipped form of a workaround. The entries here describe Claude-specific
+> session dynamics (shell snapshot heredoc behavior, cross-worktree
+> contention, "is this process mine to kill," `pgrep` interpretation, etc.)
+> or are scratch-pad notes pending promotion.
+
 ## Specific known issues
 
 ### Primitive registration
@@ -275,14 +285,15 @@ concrete `FloatValue` callsites. Symptom:
 adapter callsite. Fix: list each remaining variant with an explicit
 `inject _Variant _variant_name` identity arm.
 
-### Digest conflicts on staging merges — no longer applies (#379)
+### Digest conflicts on staging merges — no longer applies (#379, merged 2026-05-20)
 
 Historical: digest files used to be tracked and would conflict on every
-multi-branch merge because hashes always diverge. As of #379 the entire
-`dist/**/build/` subtree is gitignored, so digests never enter the
-diff. Merges should now be clean for digests; if you encounter a digest
-file in conflict, you're on a pre-#379 branch — run the post-merge
-recovery: `rm -rf dist/**/build` then `bin/sync.sh`.
+multi-branch merge because hashes always diverge. As of #379 (merged
+2026-05-20) the entire `dist/**/build/` subtree is gitignored, so
+digests never enter the diff. Merges should be clean for digests on
+any branch that has #379 merged in. If you encounter a digest file in
+conflict, you're on a pre-#379 branch — run the post-merge recovery:
+`rm -rf dist/**/build` then `bin/sync.sh`.
 
 ### `run-benchmark-tests.sh` Python leg needs `.venv`
 
@@ -718,3 +729,26 @@ detect renamed kernel types as stale (it only prunes files no longer
 referenced *anywhere* in the manifest, and the file's basename is the
 type name not a path). Manual `rm` is required; safe because the next
 assemble regenerates the new-named file.
+
+### Deleting a `dist/json/<pkg>/build/main/digest.json` causes Phase 2 silent exit
+
+`assemble_refresh_digest` in `bin/lib/assemble-common.sh` is gated by
+`[ -f "$input_digest" ] && (cd ... && stack exec digest-check refresh ...)`.
+Under `set -e`, when the input digest file is missing the `[ -f ]` returns 1
+and the whole `&& (...)` returns 1, killing the calling `assemble-distribution.sh`
+silently — no error to stderr, no "FAILED" banner. The next package in the
+sync loop never runs.
+
+Symptom: `bin/sync.sh` Phase 2 exits EXIT=1 after writing the first package's
+files ("Done: N main files") with no error message and no Phase 3 banner.
+
+Recovery: when you nuke a `dist/json/<pkg>/build/main/digest.json` to force
+regen, also nuke `heads/haskell/.stack-work/phase1-input-cache.txt`. The
+Phase 1 cache miss triggers a full Phase 1 rerun, which regenerates the
+json digest as part of `update-json-manifest`. Without busting the Phase 1
+cache, Phase 1 stays skipped and the dist/json side never gets a new digest,
+so Phase 2 keeps re-failing the same way.
+
+Documented in the build-system cache model
+([docs/build-system.md §Cache files are not tracked](../docs/build-system.md#cache-files-are-not-tracked)),
+but the silent-exit mechanism deserves the explicit pitfall callout.

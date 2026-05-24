@@ -59,6 +59,51 @@ inferenceResult x =
         Core.Field {
           Core.fieldName = (Core.Name "context"),
           Core.fieldTerm = (Context.context (Typing.inferenceResultContext x))}]})
+-- | Encoder for hydra.typing.Parameter
+parameter :: Typing.Parameter -> Core.Term
+parameter x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.Parameter"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (EncodeCore.name (Typing.parameterName x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Typing.parameterDescription x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (EncodeCore.type_ (Typing.parameterType x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "isLazy"),
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (Typing.parameterIsLazy x))}]})
+-- | Encoder for hydra.typing.Result
+result :: Typing.Result -> Core.Term
+result x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.Result"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Typing.resultDescription x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (EncodeCore.type_ (Typing.resultType x))}]})
+-- | Encoder for hydra.typing.TermSignature
+termSignature :: Typing.TermSignature -> Core.Term
+termSignature x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.TermSignature"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "typeParameters"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map typeParameter xs)) (Typing.termSignatureTypeParameters x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "parameters"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map parameter xs)) (Typing.termSignatureParameters x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "result"),
+          Core.fieldTerm = (result (Typing.termSignatureResult x))}]})
 -- | Encoder for hydra.typing.TermSubst
 termSubst :: Typing.TermSubst -> Core.Term
 termSubst x =
@@ -89,6 +134,18 @@ typeConstraint x =
         Core.Field {
           Core.fieldName = (Core.Name "comment"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Typing.typeConstraintComment x))}]})
+-- | Encoder for hydra.typing.TypeParameter
+typeParameter :: Typing.TypeParameter -> Core.Term
+typeParameter x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.TypeParameter"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (EncodeCore.name (Typing.typeParameterName x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "constraints"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map EncodeCore.typeClassConstraint xs)) (Typing.typeParameterConstraints x))}]})
 -- | Encoder for hydra.typing.TypeSubst
 typeSubst :: Typing.TypeSubst -> Core.Term
 typeSubst x =

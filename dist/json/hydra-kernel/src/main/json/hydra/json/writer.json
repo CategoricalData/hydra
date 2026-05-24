@@ -3,6 +3,7 @@
     {
       "term": {
         "name": "hydra.json.writer.colonOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -27,11 +28,14 @@
                   {
                     "name": "associativity",
                     "term": {"inject": {"field": {"name": "none", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}}}],
-                "typeName": "hydra.ast.Op"}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                "typeName": "hydra.ast.Op"}}}}}},
     {
       "term": {
         "name": "hydra.json.writer.hexByte",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -128,13 +132,14 @@
                                 "argument": {"variable": "lo"},
                                 "function": {"application": {"argument": {"variable": "hi"}, "function": {"variable": "hydra.lib.strings.cat2"}}}}}}}}}}},
                 "domain": {"literal": {"integer": {"int32": {}}}},
-                "parameter": "c"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"integer": {"int32": {}}}}}},
-          "variables": []}}},
+                "parameter": "c"}}}}}},
     {
       "term": {
         "name": "hydra.json.writer.jsonString",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Escape and quote a string for JSON output"}}}],
@@ -325,13 +330,18 @@
                                         "function": {"application": {"argument": {"literal": {"string": "\""}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                     "function": {"variable": "hydra.lib.strings.cat2"}}}}}}}}}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+                "parameter": "s"}}}}}},
     {
       "term": {
         "name": "hydra.json.writer.keyValueToExpr",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"pair": {"first": {"literal": {"string": {}}}, "second": {"variable": "hydra.json.model.Value"}}}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a key-value pair to an AST expression"}}}],
@@ -375,16 +385,14 @@
                                 "function": {
                                   "application": {"argument": {"variable": "hydra.json.writer.colonOp"}, "function": {"variable": "hydra.serialization.ifx"}}}}}}}}}}},
                 "domain": {"pair": {"first": {"literal": {"string": {}}}, "second": {"variable": "hydra.json.model.Value"}}},
-                "parameter": "pair"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.ast.Expr"},
-              "domain": {"pair": {"first": {"literal": {"string": {}}}, "second": {"variable": "hydra.json.model.Value"}}}}},
-          "variables": []}}},
+                "parameter": "pair"}}}}}},
     {
       "term": {
         "name": "hydra.json.writer.printJson",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.json.model.Value"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a JSON value to a string"}}}],
@@ -395,13 +403,14 @@
                     "argument": {"application": {"argument": {"variable": "value"}, "function": {"variable": "hydra.json.writer.valueToExpr"}}},
                     "function": {"variable": "hydra.serialization.printExpr"}}},
                 "domain": {"variable": "hydra.json.model.Value"},
-                "parameter": "value"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.json.model.Value"}}},
-          "variables": []}}},
+                "parameter": "value"}}}}}},
     {
       "term": {
         "name": "hydra.json.writer.valueToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.json.model.Value"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -561,10 +570,7 @@
                                 "parameter": "s"}}}],
                         "typeName": "hydra.json.model.Value"}}}},
                 "domain": {"variable": "hydra.json.model.Value"},
-                "parameter": "value"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.json.model.Value"}}},
-          "variables": []}}}],
+                "parameter": "value"}}}}}}],
   "dependencies": [
     {"module": "hydra.serialization"},
     {"module": "hydra.paths"},

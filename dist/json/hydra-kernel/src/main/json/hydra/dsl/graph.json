@@ -3,6 +3,102 @@
     {
       "term": {
         "name": "hydra.dsl.graph.graph",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {
+                              "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}],
+                      "body": {"set": {"variable": "hydra.core.Name"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg4",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg5",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "All primitive functions and constants by name"}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.graph.Primitive"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg6",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg7",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}],
+                      "body": {"set": {"variable": "hydra.core.Name"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.graph.Graph"}}}],
@@ -179,96 +275,25 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}],
                         "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "boundTerms"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {
-                                "function": {
-                                  "codomain": {
-                                    "function": {
-                                      "codomain": {
-                                        "function": {
-                                          "codomain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                                          "domain": {
-                                            "application": {
-                                              "argument": {
-                                                "annotated": {
-                                                  "annotation": [
-                                                    {
-                                                      "key": "description",
-                                                      "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}],
-                                                  "body": {"set": {"variable": "hydra.core.Name"}}}},
-                                              "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                      "domain": {
-                                        "application": {
-                                          "argument": {
-                                            "annotated": {
-                                              "annotation": [{"key": "description", "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
-                                              "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
-                                          "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                  "domain": {
-                                    "application": {
-                                      "argument": {
-                                        "annotated": {
-                                          "annotation": [{"key": "description", "value": {"literal": {"string": "All primitive functions and constants by name"}}}],
-                                          "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.graph.Primitive"}}}}},
-                                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                              "domain": {
-                                "application": {
-                                  "argument": {
-                                    "annotated": {
-                                      "annotation": [{"key": "description", "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
-                                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
-                                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                          "domain": {
-                            "application": {
-                              "argument": {
-                                "annotated": {
-                                  "annotation": [
-                                    {
-                                      "key": "description",
-                                      "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}],
-                                  "body": {"set": {"variable": "hydra.core.Name"}}}},
-                              "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                      "domain": {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "key": "description",
-                                  "value": {
-                                    "literal": {
-                                      "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
-                              "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}],
-                          "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}],
-                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "boundTerms"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.graphBoundTerms",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}],
+                    "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the boundTerms field of hydra.graph.Graph"}}}],
@@ -305,22 +330,25 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}],
-                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.graphBoundTypes",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}],
+                    "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the boundTypes field of hydra.graph.Graph"}}}],
@@ -357,22 +385,30 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}],
-                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.graphClassConstraints",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {
+                          "literal": {
+                            "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
+                    "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -414,27 +450,28 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
-                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.graphLambdaVariables",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}],
+                    "body": {"set": {"variable": "hydra.core.Name"}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -476,25 +513,25 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}],
-                      "body": {"set": {"variable": "hydra.core.Name"}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.graphMetadata",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
+                    "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the metadata field of hydra.graph.Graph"}}}],
@@ -531,22 +568,25 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
-                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.graphPrimitives",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "All primitive functions and constants by name"}}}],
+                    "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.graph.Primitive"}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the primitives field of hydra.graph.Graph"}}}],
@@ -583,22 +623,25 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All primitive functions and constants by name"}}}],
-                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.graph.Primitive"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.graphSchemaTypes",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
+                    "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -636,22 +679,28 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
-                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.graphTypeVariables",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}],
+                    "body": {"set": {"variable": "hydra.core.Name"}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -693,25 +742,29 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}],
-                      "body": {"set": {"variable": "hydra.core.Name"}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.graphWithBoundTerms",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the boundTerms field of hydra.graph.Graph"}}}],
@@ -999,25 +1052,29 @@
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}],
-                          "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.graphWithBoundTypes",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the boundTypes field of hydra.graph.Graph"}}}],
@@ -1305,25 +1362,34 @@
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}],
-                          "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.graphWithClassConstraints",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {
+                              "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -1617,30 +1683,32 @@
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "key": "description",
-                              "value": {
-                                "literal": {
-                                  "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
-                          "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.graphWithLambdaVariables",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}],
+                      "body": {"set": {"variable": "hydra.core.Name"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -1932,28 +2000,29 @@
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "key": "description",
-                              "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}],
-                          "body": {"set": {"variable": "hydra.core.Name"}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.graphWithMetadata",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the metadata field of hydra.graph.Graph"}}}],
@@ -2241,25 +2310,29 @@
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
-                          "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.graphWithPrimitives",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "All primitive functions and constants by name"}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.graph.Primitive"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the primitives field of hydra.graph.Graph"}}}],
@@ -2547,25 +2620,29 @@
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "All primitive functions and constants by name"}}}],
-                          "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.graph.Primitive"}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.graphWithSchemaTypes",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the schemaTypes field of hydra.graph.Graph"}}}],
@@ -2853,25 +2930,32 @@
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
-                          "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.graphWithTypeVariables",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}],
+                      "body": {"set": {"variable": "hydra.core.Name"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3161,28 +3245,51 @@
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "key": "description",
-                              "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}],
-                          "body": {"set": {"variable": "hydra.core.Name"}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.library",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}],
+                      "body": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The primitives defined in this library"}}}],
+                      "body": {"list": {"variable": "hydra.graph.Primitive"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.graph.Library"}}}],
@@ -3264,46 +3371,28 @@
                             "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
                         "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "namespace"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                      "domain": {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [{"key": "description", "value": {"literal": {"string": "The primitives defined in this library"}}}],
-                              "body": {"list": {"variable": "hydra.graph.Primitive"}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "key": "description",
-                              "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}],
-                          "body": {"literal": {"string": {}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
-                      "body": {"variable": "hydra.packaging.ModuleName"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "namespace"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.libraryNamespace",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
+                    "body": {"variable": "hydra.packaging.ModuleName"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3341,25 +3430,28 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
-                      "body": {"variable": "hydra.packaging.ModuleName"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.libraryPrefix",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}],
+                    "body": {"literal": {"string": {}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the prefix field of hydra.graph.Library"}}}],
@@ -3396,25 +3488,25 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}],
-                      "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.libraryPrimitives",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The primitives defined in this library"}}}],
+                    "body": {"list": {"variable": "hydra.graph.Primitive"}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3452,22 +3544,32 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The primitives defined in this library"}}}],
-                      "body": {"list": {"variable": "hydra.graph.Primitive"}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.libraryWithNamespace",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the namespace field of hydra.graph.Library"}}}],
@@ -3582,28 +3684,32 @@
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "key": "description",
-                              "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
-                          "body": {"variable": "hydra.packaging.ModuleName"}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.libraryWithPrefix",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}],
+                      "body": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the prefix field of hydra.graph.Library"}}}],
@@ -3718,28 +3824,29 @@
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "key": "description",
-                              "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}],
-                          "body": {"literal": {"string": {}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.libraryWithPrimitives",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The primitives defined in this library"}}}],
+                      "body": {"list": {"variable": "hydra.graph.Primitive"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3852,25 +3959,54 @@
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The primitives defined in this library"}}}],
-                          "body": {"list": {"variable": "hydra.graph.Primitive"}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.primitive",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {
+                              "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}],
+                      "body": {"variable": "hydra.packaging.PrimitiveDefinition"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {
+                              "string": "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting."}}}],
+                      "body": {
+                        "function": {
+                          "codomain": {
+                            "function": {
+                              "codomain": {
+                                "function": {
+                                  "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
+                                  "domain": {"list": {"variable": "hydra.core.Term"}}}},
+                              "domain": {"variable": "hydra.graph.Graph"}}},
+                          "domain": {"variable": "hydra.context.Context"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.graph.Primitive"}}}],
@@ -3879,193 +4015,104 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "lambda": {
+                      "wrap": {
                         "body": {
-                          "wrap": {
-                            "body": {
-                              "inject": {
-                                "field": {
-                                  "name": "record",
-                                  "term": {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "typeName",
-                                          "term": {"wrap": {"body": {"literal": {"string": "hydra.graph.Primitive"}}, "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "fields",
-                                          "term": {
-                                            "list": [
-                                              {
-                                                "record": {
-                                                  "fields": [
-                                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
-                                                    {
-                                                      "name": "term",
-                                                      "term": {"application": {"argument": {"variable": "name"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                                  "typeName": "hydra.core.Field"}},
-                                              {
-                                                "record": {
-                                                  "fields": [
-                                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "typeScheme"}}, "typeName": "hydra.core.Name"}}},
-                                                    {
-                                                      "name": "term",
-                                                      "term": {"application": {"argument": {"variable": "typeScheme"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                                  "typeName": "hydra.core.Field"}},
-                                              {
-                                                "record": {
-                                                  "fields": [
-                                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "implementation"}}, "typeName": "hydra.core.Name"}}},
-                                                    {
-                                                      "name": "term",
-                                                      "term": {"application": {"argument": {"variable": "implementation"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                                  "typeName": "hydra.core.Field"}}]}}],
-                                      "typeName": "hydra.core.Record"}}},
-                                "typeName": "hydra.core.Term"}},
-                            "typeName": "hydra.phantoms.TTerm"}},
-                        "domain": {
-                          "application": {
-                            "argument": {
-                              "annotated": {
-                                "annotation": [
-                                  {
-                                    "key": "description",
-                                    "value": {
-                                      "literal": {
-                                        "string": "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting."}}}],
-                                "body": {
-                                  "function": {
-                                    "codomain": {
-                                      "function": {
-                                        "codomain": {
-                                          "function": {
-                                            "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
-                                            "domain": {"list": {"variable": "hydra.core.Term"}}}},
-                                        "domain": {"variable": "hydra.graph.Graph"}}},
-                                    "domain": {"variable": "hydra.context.Context"}}}}},
-                            "function": {"variable": "hydra.phantoms.TTerm"}}},
-                        "parameter": "implementation"}},
+                          "inject": {
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.graph.Primitive"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "definition"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "definition"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "implementation"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "implementation"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}}]}}],
+                                  "typeName": "hydra.core.Record"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "typeName": "hydra.phantoms.TTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The type scheme of the primitive function"}}}],
-                            "body": {"variable": "hydra.core.TypeScheme"}}},
+                            "annotation": [
+                              {
+                                "key": "description",
+                                "value": {
+                                  "literal": {
+                                    "string": "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting."}}}],
+                            "body": {
+                              "function": {
+                                "codomain": {
+                                  "function": {
+                                    "codomain": {
+                                      "function": {
+                                        "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
+                                        "domain": {"list": {"variable": "hydra.core.Term"}}}},
+                                    "domain": {"variable": "hydra.graph.Graph"}}},
+                                "domain": {"variable": "hydra.context.Context"}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
-                    "parameter": "typeScheme"}},
+                    "parameter": "implementation"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of the primitive function"}}}],
-                        "body": {"variable": "hydra.core.Name"}}},
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {
+                                "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}],
+                        "body": {"variable": "hydra.packaging.PrimitiveDefinition"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "name"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                      "domain": {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "key": "description",
-                                  "value": {
-                                    "literal": {
-                                      "string": "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting."}}}],
-                              "body": {
-                                "function": {
-                                  "codomain": {
-                                    "function": {
-                                      "codomain": {
-                                        "function": {
-                                          "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
-                                          "domain": {"list": {"variable": "hydra.core.Term"}}}},
-                                      "domain": {"variable": "hydra.graph.Graph"}}},
-                                  "domain": {"variable": "hydra.context.Context"}}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The type scheme of the primitive function"}}}],
-                          "body": {"variable": "hydra.core.TypeScheme"}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of the primitive function"}}}],
-                      "body": {"variable": "hydra.core.Name"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "definition"}}}}}},
     {
       "term": {
-        "name": "hydra.dsl.graph.primitiveName",
-        "term": {
-          "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the name field of hydra.graph.Primitive"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "wrap": {
-                    "body": {
-                      "inject": {
-                        "field": {
-                          "name": "application",
-                          "term": {
-                            "record": {
-                              "fields": [
-                                {
-                                  "name": "function",
-                                  "term": {
-                                    "inject": {
-                                      "field": {
-                                        "name": "project",
-                                        "term": {
-                                          "record": {
-                                            "fields": [
-                                              {
-                                                "name": "typeName",
-                                                "term": {"wrap": {"body": {"literal": {"string": "hydra.graph.Primitive"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}}],
-                                            "typeName": "hydra.core.Projection"}}},
-                                      "typeName": "hydra.core.Term"}}},
-                                {
-                                  "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                              "typeName": "hydra.core.Application"}}},
-                        "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of the primitive function"}}}],
-                      "body": {"variable": "hydra.core.Name"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsl.graph.primitiveTypeScheme",
+        "name": "hydra.dsl.graph.primitiveDefinition",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {
+                          "literal": {
+                            "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}],
+                    "body": {"variable": "hydra.packaging.PrimitiveDefinition"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the typeScheme field of hydra.graph.Primitive"}}}],
+                "value": {"literal": {"string": "DSL accessor for the definition field of hydra.graph.Primitive"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -4089,7 +4136,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.graph.Primitive"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "typeScheme"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "definition"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -4099,22 +4146,39 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type scheme of the primitive function"}}}],
-                      "body": {"variable": "hydra.core.TypeScheme"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.primitiveImplementation",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {
+                          "literal": {
+                            "string": "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting."}}}],
+                    "body": {
+                      "function": {
+                        "codomain": {
+                          "function": {
+                            "codomain": {
+                              "function": {
+                                "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
+                                "domain": {"list": {"variable": "hydra.core.Term"}}}},
+                            "domain": {"variable": "hydra.graph.Graph"}}},
+                        "domain": {"variable": "hydra.context.Context"}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -4156,11 +4220,135 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
+                "parameter": "x"}}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graph.primitiveWithDefinition",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {
+                              "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}],
+                      "body": {"variable": "hydra.packaging.PrimitiveDefinition"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL updater for the definition field of hydra.graph.Primitive"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "wrap": {
+                        "body": {
+                          "inject": {
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.graph.Primitive"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "definition"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "implementation"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.graph.Primitive"}}, "typeName": "hydra.core.Name"}}},
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "implementation"}}, "typeName": "hydra.core.Name"}}}],
+                                                                          "typeName": "hydra.core.Projection"}}},
+                                                                    "typeName": "hydra.core.Term"}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                            "typeName": "hydra.core.Application"}}},
+                                                      "typeName": "hydra.core.Term"}}}],
+                                              "typeName": "hydra.core.Field"}}]}}],
+                                  "typeName": "hydra.core.Record"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "typeName": "hydra.phantoms.TTerm"}},
+                    "domain": {
+                      "application": {
+                        "argument": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "key": "description",
+                                "value": {
+                                  "literal": {
+                                    "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}],
+                            "body": {"variable": "hydra.packaging.PrimitiveDefinition"}}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "original"}}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graph.primitiveWithImplementation",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
                 "application": {
                   "argument": {
                     "annotated": {
@@ -4180,279 +4368,10 @@
                                   "domain": {"list": {"variable": "hydra.core.Term"}}}},
                               "domain": {"variable": "hydra.graph.Graph"}}},
                           "domain": {"variable": "hydra.context.Context"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsl.graph.primitiveWithName",
-        "term": {
-          "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the name field of hydra.graph.Primitive"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "wrap": {
-                        "body": {
-                          "inject": {
-                            "field": {
-                              "name": "record",
-                              "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.graph.Primitive"}}, "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                              "typeName": "hydra.core.Field"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "typeScheme"}}, "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {
-                                                    "inject": {
-                                                      "field": {
-                                                        "name": "application",
-                                                        "term": {
-                                                          "record": {
-                                                            "fields": [
-                                                              {
-                                                                "name": "function",
-                                                                "term": {
-                                                                  "inject": {
-                                                                    "field": {
-                                                                      "name": "project",
-                                                                      "term": {
-                                                                        "record": {
-                                                                          "fields": [
-                                                                            {
-                                                                              "name": "typeName",
-                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.graph.Primitive"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "typeScheme"}}, "typeName": "hydra.core.Name"}}}],
-                                                                          "typeName": "hydra.core.Projection"}}},
-                                                                    "typeName": "hydra.core.Term"}}},
-                                                              {
-                                                                "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                                            "typeName": "hydra.core.Application"}}},
-                                                      "typeName": "hydra.core.Term"}}}],
-                                              "typeName": "hydra.core.Field"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "implementation"}}, "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {
-                                                    "inject": {
-                                                      "field": {
-                                                        "name": "application",
-                                                        "term": {
-                                                          "record": {
-                                                            "fields": [
-                                                              {
-                                                                "name": "function",
-                                                                "term": {
-                                                                  "inject": {
-                                                                    "field": {
-                                                                      "name": "project",
-                                                                      "term": {
-                                                                        "record": {
-                                                                          "fields": [
-                                                                            {
-                                                                              "name": "typeName",
-                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.graph.Primitive"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {
-                                                                              "name": "fieldName",
-                                                                              "term": {"wrap": {"body": {"literal": {"string": "implementation"}}, "typeName": "hydra.core.Name"}}}],
-                                                                          "typeName": "hydra.core.Projection"}}},
-                                                                    "typeName": "hydra.core.Term"}}},
-                                                              {
-                                                                "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                                            "typeName": "hydra.core.Application"}}},
-                                                      "typeName": "hydra.core.Term"}}}],
-                                              "typeName": "hydra.core.Field"}}]}}],
-                                  "typeName": "hydra.core.Record"}}},
-                            "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": {
-                      "application": {
-                        "argument": {
-                          "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of the primitive function"}}}],
-                            "body": {"variable": "hydra.core.Name"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
-                    "parameter": "newVal"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of the primitive function"}}}],
-                          "body": {"variable": "hydra.core.Name"}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsl.graph.primitiveWithTypeScheme",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the typeScheme field of hydra.graph.Primitive"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "wrap": {
-                        "body": {
-                          "inject": {
-                            "field": {
-                              "name": "record",
-                              "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.graph.Primitive"}}, "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {
-                                                    "inject": {
-                                                      "field": {
-                                                        "name": "application",
-                                                        "term": {
-                                                          "record": {
-                                                            "fields": [
-                                                              {
-                                                                "name": "function",
-                                                                "term": {
-                                                                  "inject": {
-                                                                    "field": {
-                                                                      "name": "project",
-                                                                      "term": {
-                                                                        "record": {
-                                                                          "fields": [
-                                                                            {
-                                                                              "name": "typeName",
-                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.graph.Primitive"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}}],
-                                                                          "typeName": "hydra.core.Projection"}}},
-                                                                    "typeName": "hydra.core.Term"}}},
-                                                              {
-                                                                "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                                            "typeName": "hydra.core.Application"}}},
-                                                      "typeName": "hydra.core.Term"}}}],
-                                              "typeName": "hydra.core.Field"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "typeScheme"}}, "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                              "typeName": "hydra.core.Field"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "implementation"}}, "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {
-                                                    "inject": {
-                                                      "field": {
-                                                        "name": "application",
-                                                        "term": {
-                                                          "record": {
-                                                            "fields": [
-                                                              {
-                                                                "name": "function",
-                                                                "term": {
-                                                                  "inject": {
-                                                                    "field": {
-                                                                      "name": "project",
-                                                                      "term": {
-                                                                        "record": {
-                                                                          "fields": [
-                                                                            {
-                                                                              "name": "typeName",
-                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.graph.Primitive"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {
-                                                                              "name": "fieldName",
-                                                                              "term": {"wrap": {"body": {"literal": {"string": "implementation"}}, "typeName": "hydra.core.Name"}}}],
-                                                                          "typeName": "hydra.core.Projection"}}},
-                                                                    "typeName": "hydra.core.Term"}}},
-                                                              {
-                                                                "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                                            "typeName": "hydra.core.Application"}}},
-                                                      "typeName": "hydra.core.Term"}}}],
-                                              "typeName": "hydra.core.Field"}}]}}],
-                                  "typeName": "hydra.core.Record"}}},
-                            "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": {
-                      "application": {
-                        "argument": {
-                          "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The type scheme of the primitive function"}}}],
-                            "body": {"variable": "hydra.core.TypeScheme"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
-                    "parameter": "newVal"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The type scheme of the primitive function"}}}],
-                          "body": {"variable": "hydra.core.TypeScheme"}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsl.graph.primitiveWithImplementation",
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -4482,7 +4401,7 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "definition"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
                                                   "term": {
@@ -4504,41 +4423,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.graph.Primitive"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}}],
-                                                                          "typeName": "hydra.core.Projection"}}},
-                                                                    "typeName": "hydra.core.Term"}}},
-                                                              {
-                                                                "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                                            "typeName": "hydra.core.Application"}}},
-                                                      "typeName": "hydra.core.Term"}}}],
-                                              "typeName": "hydra.core.Field"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "typeScheme"}}, "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {
-                                                    "inject": {
-                                                      "field": {
-                                                        "name": "application",
-                                                        "term": {
-                                                          "record": {
-                                                            "fields": [
-                                                              {
-                                                                "name": "function",
-                                                                "term": {
-                                                                  "inject": {
-                                                                    "field": {
-                                                                      "name": "project",
-                                                                      "term": {
-                                                                        "record": {
-                                                                          "fields": [
-                                                                            {
-                                                                              "name": "typeName",
-                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.graph.Primitive"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "typeScheme"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "definition"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -4581,39 +4466,63 @@
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "key": "description",
-                              "value": {
-                                "literal": {
-                                  "string": "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting."}}}],
-                          "body": {
-                            "function": {
-                              "codomain": {
-                                "function": {
-                                  "codomain": {
-                                    "function": {
-                                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
-                                      "domain": {"list": {"variable": "hydra.core.Term"}}}},
-                                  "domain": {"variable": "hydra.graph.Graph"}}},
-                              "domain": {"variable": "hydra.context.Context"}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.termCoder",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "An encode function from terms to native values"}}}],
+                      "body": {
+                        "function": {
+                          "codomain": {
+                            "function": {
+                              "codomain": {
+                                "function": {
+                                  "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "a"}}},
+                                  "domain": {"variable": "hydra.core.Term"}}},
+                              "domain": {"variable": "hydra.graph.Graph"}}},
+                          "domain": {"variable": "hydra.context.Context"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A decode function from native values to terms"}}}],
+                      "body": {
+                        "function": {
+                          "codomain": {
+                            "function": {
+                              "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
+                              "domain": {"variable": "a"}}},
+                          "domain": {"variable": "hydra.context.Context"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.graph.TermCoder"}}}],
@@ -4704,58 +4613,28 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
                         "body": {"variable": "hydra.core.Type"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "type"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "application": {
-                          "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}},
-                      "domain": {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [{"key": "description", "value": {"literal": {"string": "A decode function from native values to terms"}}}],
-                              "body": {
-                                "function": {
-                                  "codomain": {
-                                    "function": {
-                                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
-                                      "domain": {"variable": "a"}}},
-                                  "domain": {"variable": "hydra.context.Context"}}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "An encode function from terms to native values"}}}],
-                          "body": {
-                            "function": {
-                              "codomain": {
-                                "function": {
-                                  "codomain": {
-                                    "function": {
-                                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "a"}}},
-                                      "domain": {"variable": "hydra.core.Term"}}},
-                                  "domain": {"variable": "hydra.graph.Graph"}}},
-                              "domain": {"variable": "hydra.context.Context"}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": ["a"]}}},
+                "parameter": "type"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.termCoderType",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
+                    "body": {"variable": "hydra.core.Type"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the type field of hydra.graph.TermCoder"}}}],
@@ -4795,25 +4674,37 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": ["a"]}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.termCoderEncode",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "An encode function from terms to native values"}}}],
+                    "body": {
+                      "function": {
+                        "codomain": {
+                          "function": {
+                            "codomain": {
+                              "function": {
+                                "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "a"}}},
+                                "domain": {"variable": "hydra.core.Term"}}},
+                            "domain": {"variable": "hydra.graph.Graph"}}},
+                        "domain": {"variable": "hydra.context.Context"}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the encode field of hydra.graph.TermCoder"}}}],
@@ -4853,34 +4744,34 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An encode function from terms to native values"}}}],
-                      "body": {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {
-                                "function": {
-                                  "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "a"}}},
-                                  "domain": {"variable": "hydra.core.Term"}}},
-                              "domain": {"variable": "hydra.graph.Graph"}}},
-                          "domain": {"variable": "hydra.context.Context"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": ["a"]}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.termCoderDecode",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "A decode function from native values to terms"}}}],
+                    "body": {
+                      "function": {
+                        "codomain": {
+                          "function": {
+                            "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
+                            "domain": {"variable": "a"}}},
+                        "domain": {"variable": "hydra.context.Context"}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the decode field of hydra.graph.TermCoder"}}}],
@@ -4920,31 +4811,35 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A decode function from native values to terms"}}}],
-                      "body": {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
-                              "domain": {"variable": "a"}}},
-                          "domain": {"variable": "hydra.context.Context"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": ["a"]}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.termCoderWithType",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the type field of hydra.graph.TermCoder"}}}],
@@ -5059,31 +4954,44 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
-                          "body": {"variable": "hydra.core.Type"}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": ["a"]}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.termCoderWithEncode",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "An encode function from terms to native values"}}}],
+                      "body": {
+                        "function": {
+                          "codomain": {
+                            "function": {
+                              "codomain": {
+                                "function": {
+                                  "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "a"}}},
+                                  "domain": {"variable": "hydra.core.Term"}}},
+                              "domain": {"variable": "hydra.graph.Graph"}}},
+                          "domain": {"variable": "hydra.context.Context"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the encode field of hydra.graph.TermCoder"}}}],
@@ -5207,40 +5115,41 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "An encode function from terms to native values"}}}],
-                          "body": {
-                            "function": {
-                              "codomain": {
-                                "function": {
-                                  "codomain": {
-                                    "function": {
-                                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "a"}}},
-                                      "domain": {"variable": "hydra.core.Term"}}},
-                                  "domain": {"variable": "hydra.graph.Graph"}}},
-                              "domain": {"variable": "hydra.context.Context"}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": ["a"]}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.graph.termCoderWithDecode",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A decode function from native values to terms"}}}],
+                      "body": {
+                        "function": {
+                          "codomain": {
+                            "function": {
+                              "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
+                              "domain": {"variable": "a"}}},
+                          "domain": {"variable": "hydra.context.Context"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the decode field of hydra.graph.TermCoder"}}}],
@@ -5361,34 +5270,7 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "A decode function from native values to terms"}}}],
-                          "body": {
-                            "function": {
-                              "codomain": {
-                                "function": {
-                                  "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
-                                  "domain": {"variable": "a"}}},
-                              "domain": {"variable": "hydra.context.Context"}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": ["a"]}}}],
+                "parameter": "original"}}}}}}],
   "dependencies": [
     {"module": "hydra.graph"},
     {"module": "hydra.phantoms"},
