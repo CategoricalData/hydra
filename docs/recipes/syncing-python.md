@@ -14,8 +14,9 @@ the source of truth for `dist/json/hydra-python/`, exported via
 
 > A legacy Haskell-DSL copy of these same Python coder modules lives at
 > `packages/hydra-python/src/main/haskell/Hydra/Sources/Python/` and produces
-> byte-identical output. It is kept as a backup through 0.15 and will be deleted
-> before 0.16. Edits to the Python coder should go into the Python sources.
+> byte-identical output. It was kept as a backup through the 0.15 line and
+> is scheduled for removal during 0.16 development. Edits to the Python
+> coder should go into the Python sources.
 
 `bin/sync.sh` runs `bin/generate-hydra-python-from-python.sh` automatically in
 Phase 5 on every invocation. The native generator owns `dist/json/hydra-python/`;

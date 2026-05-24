@@ -117,6 +117,36 @@ entry to Hydra: you can pick the head you're most comfortable with and ignore th
 | [WebAssembly](packages/hydra-wasm/README.md) | In progress | ([WebAssembly](https://webassembly.org/)) |
 | [C++](packages/hydra-ext/src/main/haskell/Hydra/Sources/Cpp) | In progress | Coder lives in `hydra-ext`; the C++ head has not yet been split into its own package. ([C++](https://isocpp.org/)) |
 
+### Packages
+
+A Hydra **package** is a unit of DSL source code organized around a coherent area
+of functionality. Most packages are language-independent (described in a DSL,
+generated into every supported host); a few are domain models that build on the
+kernel.
+
+| Package | Purpose |
+|---|---|
+| [hydra-kernel](packages/hydra-kernel/README.md) | Core types, terms, type inference, validation, primitives, and the coder framework. Every other package depends on this. |
+| [hydra-ext](packages/hydra-ext/README.md) | Extension coders: Avro, Protobuf, GraphQL, Pegasus/PDL, JSON Schema, YAML, SQL, C++, Rust, Csharp, plus domain models. |
+| [hydra-pg](packages/hydra-pg/README.md) | Property-graph model and coders (GraphSON, Cypher, GQL, TinkerPop, Graphviz, RDF mappings); the PG validator. |
+| [hydra-rdf](packages/hydra-rdf/README.md) | RDF 1.1, SHACL, OWL 2, ShEx, and XML Schema syntax models; N-Triples serialization. |
+| [hydra-bench](packages/hydra-bench/README.md) | Synthetic inference benchmark workloads. Opt-in: not part of default sync. |
+| [hydra-haskell](packages/hydra-haskell/README.md), [hydra-java](packages/hydra-java/README.md), [hydra-python](packages/hydra-python/README.md), [hydra-scala](packages/hydra-scala/README.md), [hydra-lisp](packages/hydra-lisp/README.md), [hydra-typescript](packages/hydra-typescript/README.md), [hydra-go](packages/hydra-go/README.md), [hydra-coq](packages/hydra-coq/README.md), [hydra-wasm](packages/hydra-wasm/README.md) | Per-language coder packages (DSL sources for translating Hydra modules to each target). See the [Implementations](#implementations) table for head status. |
+
+#### Bindings
+
+A **binding** is a hand-written, host-specific artifact that connects a Hydra
+package to an external system. Bindings sit outside the `packages/heads/dist`
+pipeline; they have no DSL definition. See
+[Code organization § About `bindings/`](https://github.com/CategoricalData/hydra/wiki/Code-Organization#about-bindings)
+for the rules.
+
+| Binding | Purpose |
+|---|---|
+| [hydra-rdf4j](bindings/java/hydra-rdf4j/README.md) | Eclipse rdf4j integration for `hydra-rdf`. |
+| [hydra-neo4j](bindings/java/hydra-neo4j/README.md) | Cypher and openGQL parsers via ANTLR, converting to `hydra.pg.query.*`. |
+| [hydra-pg-dsl](bindings/java/hydra-pg-dsl/README.md) | Java fluent builders (`Graphs`, `Queries`, `Merging`) for `hydra-pg`. |
+
 ## Resources
 
 ### Getting started and using Hydra

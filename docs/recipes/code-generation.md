@@ -35,7 +35,7 @@ The authoring host language varies per package:
 
 | Package | Source of truth (Phase 1) | Self-host script |
 |---------|---------------------------|------------------|
-| hydra-kernel | Haskell (`src/main/haskell/Hydra/Sources/Kernel/`) | `bin/sync-haskell.sh` (Phase 1 of) |
+| hydra-kernel | Haskell (`src/main/haskell/Hydra/Sources/Kernel/`) | `heads/haskell/bin/sync-haskell.sh` (Phase 1 of) |
 | hydra-haskell | Haskell (`src/main/haskell/Hydra/Sources/Haskell/`) | (same as above) |
 | **hydra-java** | **Java (`src/main/java/hydra/sources/java/`)** | `bin/generate-hydra-java-from-java.sh` |
 | **hydra-python** | **Python (`src/main/python/hydra/sources/python/`)** | `bin/generate-hydra-python-from-python.sh` |
@@ -44,14 +44,14 @@ The authoring host language varies per package:
 > **Legacy backup for hydra-java and hydra-python:** the Haskell-DSL versions
 > of these two packages' coder modules still live under
 > `packages/hydra-{java,python}/src/main/haskell/Hydra/Sources/{Java,Python}/`.
-> They produce byte-identical Phase-1 output to the host-native sources today
-> and serve as a fallback through the 0.15 line. The main sync sequence
+> They produce byte-identical Phase-1 output to the host-native sources and
+> served as a fallback through the 0.15 line. The main sync sequence
 > (`bin/sync.sh`, `bin/sync-all.sh`, the per-language `bin/sync-<lang>.sh`
-> wrappers) still drives Phase 1 through the legacy Haskell path until that
-> integration lands; explicit Phase-1 regen via the
+> wrappers) still drives Phase 1 through the legacy Haskell path until the
+> host-native integration lands; explicit Phase-1 regen via the
 > `generate-hydra-<lang>-from-<lang>.sh` scripts already uses the host-native
-> source. Both copies will remain in lock-step through the 0.15 line; the
-> legacy backup will be deleted before 0.16.
+> source. Both copies remained in lock-step through the 0.15 line; the
+> legacy backup is scheduled for removal during 0.16 development.
 
 ## Per-package layout
 
@@ -193,56 +193,26 @@ bin/sync-all.sh --no-tests
 > in `sync.sh`, an expectation about pre-existing dist/ state in
 > `bootstrap`.
 
-### Phases
+### Phases and cache model
 
-Each `sync-packages.sh` (and therefore each `sync-all.sh`) invocation
-runs three phases in order:
+`bin/sync.sh` runs three phases (Phase 1: DSL → JSON; Phase 2: per-target
+assemble; Phase 3: tests). Each phase has its own freshness cache, and a
+warm-cache run completes in a few seconds.
 
-1. **Phase 1 — DSL → JSON.** Runs
-   `transform-haskell-dsl-to-json --all main` and `--all test` in a
-   single Haskell-universe load. Produces (or updates) `dist/json/`.
-   Idempotent.
+For the full model — phase contents, per-phase cache locations, skip
+conditions, what invalidates what, and per-target generator stamps —
+see [The Hydra build system](../build-system.md#phases-of-binsyncsh) and
+[The cache model](../build-system.md#the-cache-model).
 
-2. **Phase 2 — assemble.** For each target language, either
-   - calls `heads/<lang>/bin/assemble-all.sh` once when every package
-     is in scope (batch mode: one `bootstrap-from-json` invocation
-     handles all packages), or
-   - loops per-package over `heads/<lang>/bin/assemble-distribution.sh <pkg>`
-     for scoped runs.
-   Skips any (package, target) combination outside the package's
-   declared `targetLanguages`. Produces `dist/<lang>/<pkg>/`.
-
-3. **Phase 3 — test.** For each target, invokes
-   `heads/<lang>/bin/test-distribution.sh`. Fails fast on the first
-   failing target.
-
-### Warm-cache caching
-
-Each phase has a freshness cache. When nothing has changed relative to
-the last successful run, every step short-circuits and `sync-all` completes
-in a few seconds.
-
-| Phase | Cache | Skip condition |
-|-------|-------|----------------|
-| Phase 1 | `bin/lib/check-dsl-fresh.py` | Every DSL source file's hash matches the recorded digest at `dist/json/build/digest.json`. Skips stack startup + JSON regeneration entirely. |
-| Phase 2 (batch) | `bin/lib/batch-cache.sh` | Every `dist/<lang>/<pkg>/build/<set>/digest.json`'s recorded input hashes match the current `dist/json/<pkg>/build/<set>/digest.json`. Skips stack startup + `bootstrap-from-json`. |
-| Phase 2 (per-pkg) | `heads/haskell/bin/digest-check fresh` + Python pre-check | Per-package input hashes match and every recorded output file exists with its recorded hash. |
-| Phase 2 (generator) | Stage 7 per-module DSL-hash skip inside `bootstrap-from-json` | Modules with unchanged DSL-source hashes are excluded from regeneration even when overall cache missed. Active only when the per-target digest exists; the per-package `assemble-distribution.sh` deletes it before invoking the generator, so Stage 7 currently benefits direct callers (`sync-haskell.sh`, batch `assemble-all.sh`) only. |
-| Phase 3 | `bin/lib/test-cache.sh` (`dist/<lang>/test-cache.json`) | Every generated source under `dist/<lang>/*` plus every hand-written test helper under `heads/<lang>/src/test/*` plus the runner script are byte-identical since the last successful run. Skips `stack test` / `gradle test` / `pytest` / `sbt test` / lisp runners entirely. |
-
-Any single file change invalidates the relevant cache. For example,
-editing a DSL source invalidates Phase 1 (regenerates JSON), which
-invalidates Phase 2 for whichever packages own the changed namespace,
-which invalidates Phase 3 for whichever targets consume those packages.
-Targets not reached by the chain stay cached.
+The procedural how-to for running sync continues below.
 
 ## Host-native self-host scripts
 
 `hydra-java` and `hydra-python` are authored in their own host languages
 (Java and Python respectively, with legacy Haskell sources retained as a
-backup until 0.16; see [Overview](#overview)). The two corresponding
-scripts run Phase 1 directly from the host-native sources, no Haskell
-required:
+backup through the 0.15 line — scheduled for removal during 0.16
+development; see [Overview](#overview)). The two corresponding scripts
+run Phase 1 directly from the host-native sources, no Haskell required:
 
 ```bash
 # Regenerate dist/json/hydra-java/ from the Java DSL sources
@@ -288,8 +258,9 @@ and the legacy Haskell sources still agree.
 > **Sync integration:** the main sync scripts (`bin/sync.sh`,
 > `bin/sync-all.sh`, the `bin/sync-<lang>.sh` wrappers) still drive Phase 1
 > via the legacy Haskell pipeline; switching them over to the host-native
-> scripts is planned before 0.16. Until then, run the `generate-...` scripts
-> explicitly when editing the Java or Python DSL sources.
+> scripts is planned during 0.16 development. Until then, run the
+> `generate-...` scripts explicitly when editing the Java or Python DSL
+> sources.
 
 ## Generating from DSL modules directly
 
