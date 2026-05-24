@@ -1143,7 +1143,27 @@
                                                         "function": {
                                                           "application": {"argument": {"literal": {"boolean": true}}, "function": {"variable": "hydra.dependencies.termDependencyNames"}}}}}}}}},
                                             "domain": {"variable": "hydra.packaging.TermDefinition"},
-                                            "parameter": "termDef"}}}],
+                                            "parameter": "termDef"}}},
+                                      {
+                                        "name": "primitive",
+                                        "term": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "primDef"},
+                                                            "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.PrimitiveDefinition"}}}},
+                                                        "function": {"variable": "hydra.scoping.termSignatureToTypeScheme"}}},
+                                                    "function": {"project": {"fieldName": "body", "typeName": "hydra.core.TypeScheme"}}}},
+                                                "function": {
+                                                  "application": {"argument": {"literal": {"boolean": true}}, "function": {"variable": "hydra.dependencies.typeDependencyNames"}}}}},
+                                            "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
+                                            "parameter": "primDef"}}}],
                                     "typeName": "hydra.packaging.Definition"}}}},
                             "domain": {"variable": "hydra.packaging.Definition"},
                             "parameter": "def"}},

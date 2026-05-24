@@ -258,7 +258,9 @@ definitionDependencyNamespaces = define "definitionDependencyNamespaces" $
     _Definition_type>>: "typeDef" ~>
       Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "typeDef")),
     _Definition_term>>: "termDef" ~>
-      Dependencies.termDependencyNames @@ true @@ true @@ true @@ Packaging.termDefinitionTerm (var "termDef")]) $
+      Dependencies.termDependencyNames @@ true @@ true @@ true @@ Packaging.termDefinitionTerm (var "termDef"),
+    _Definition_primitive>>: "primDef" ~>
+      Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Scoping.termSignatureToTypeScheme @@ Packaging.primitiveDefinitionSignature (var "primDef"))]) $
   "allNames" <~ Sets.unions (Lists.map (var "defNames") (var "defs")) $
   Sets.fromList (Maybes.cat (Lists.map (Names.namespaceOf) (Sets.toList (var "allNames"))))
 
