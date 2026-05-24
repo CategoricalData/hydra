@@ -99,7 +99,7 @@ publishing {
 
             pom {
                 name = 'hydra'
-                description = 'The Hydra language for type-safe transformations'
+                description = 'A strongly typed intermediate language that maps programs and domain models seamlessly across major programming languages, data exchange formats, and graph data models'
                 url = 'https://github.com/CategoricalData/hydra'
                 licenses {
                     license {
