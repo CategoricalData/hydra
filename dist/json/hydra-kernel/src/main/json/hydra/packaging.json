@@ -7,7 +7,9 @@
           "body": {
             "annotated": {
               "annotation": [
-                {"key": "description", "value": {"literal": {"string": "A definition, which may be either a term or type definition"}}}],
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "A definition, which may be either a term, type, or primitive definition"}}}],
               "body": {
                 "union": [
                   {
@@ -21,7 +23,13 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A type definition"}}}],
-                        "body": {"variable": "hydra.packaging.TypeDefinition"}}}}]}}},
+                        "body": {"variable": "hydra.packaging.TypeDefinition"}}}},
+                  {
+                    "name": "primitive",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A primitive definition"}}}],
+                        "body": {"variable": "hydra.packaging.PrimitiveDefinition"}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -214,6 +222,73 @@
           "variables": []}}},
     {
       "type": {
+        "name": "hydra.packaging.PrimitiveDefinition",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {
+                      "string": "A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, description, signature, totality and purity flags, and an optional default implementation expressed as a Hydra term."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the primitive"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the primitive"}}}],
+                        "body": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "signature",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "The signature of the primitive (always explicit, never inferred)"}}}],
+                        "body": {"variable": "hydra.typing.TermSignature"}}}},
+                  {
+                    "name": "isPure",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {"string": "Whether the primitive is pure (referentially transparent, no observable side effects). Defaults to true."}}}],
+                        "body": {"literal": {"boolean": {}}}}}},
+                  {
+                    "name": "isTotal",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {"string": "Whether the primitive is total (terminates on every input of its declared type). Defaults to true."}}}],
+                        "body": {"literal": {"boolean": {}}}}}},
+                  {
+                    "name": "defaultImplementation",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {
+                                "string": "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation."}}}],
+                        "body": {"maybe": {"variable": "hydra.core.Term"}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
         "name": "hydra.packaging.QualifiedName",
         "typeScheme": {
           "body": {
@@ -246,7 +321,7 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {"literal": {"string": "A term-level definition, including a name, a term, and the type scheme of the term"}}}],
+                  "value": {"literal": {"string": "A term-level definition, including a name, a term, and an optional signature"}}}],
               "body": {
                 "record": [
                   {
@@ -262,12 +337,14 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The term being defined"}}}],
                         "body": {"variable": "hydra.core.Term"}}}},
                   {
-                    "name": "typeScheme",
+                    "name": "signature",
                     "type": {
                       "annotated": {
                         "annotation": [
-                          {"key": "description", "value": {"literal": {"string": "The type scheme of the term, including any class constraints"}}}],
-                        "body": {"maybe": {"variable": "hydra.core.TypeScheme"}}}}}]}}},
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "The optional signature of the term. When absent, the signature is to be inferred."}}}],
+                        "body": {"maybe": {"variable": "hydra.typing.TermSignature"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -294,6 +371,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type scheme being defined"}}}],
                         "body": {"variable": "hydra.core.TypeScheme"}}}}]}}},
           "variables": []}}}],
-  "dependencies": [{"module": "hydra.core"}],
+  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.typing"}],
   "description": "A model for Hydra namespaces, modules, and packages",
   "name": "hydra.packaging"}

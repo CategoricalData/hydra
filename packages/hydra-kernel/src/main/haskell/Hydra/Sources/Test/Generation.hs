@@ -25,6 +25,7 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 import qualified Hydra.Sources.Kernel.Terms.Generation as Generation
+import qualified Hydra.Sources.Kernel.Terms.Scoping    as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Show.Core  as ShowCore
 
 
@@ -88,7 +89,7 @@ untypedTermDef nm tm = Packaging.definitionTerm
 -- universe.
 typedTermDef :: TTerm Name -> TTerm Term -> TTerm TypeScheme -> TTerm Definition
 typedTermDef nm tm ts = Packaging.definitionTerm
-  (Packaging.termDefinition nm tm (Phantoms.just ts))
+  (Packaging.termDefinition nm tm (Phantoms.just (Scoping.typeSchemeToTermSignature @@ ts)))
 
 -- The scheme carried on `modA.idA`: forall a. a -> a.
 idAScheme :: TTerm TypeScheme
@@ -198,7 +199,7 @@ showDef d = Phantoms.cases _Definition d Nothing [
         Maybes.maybe
           (Phantoms.string "<no scheme>")
           ("ts" ~> ShowCore.typeScheme # var "ts")
-          (Packaging.termDefinitionTypeScheme (var "td")),
+          (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature (var "td"))),
         Phantoms.string " = ",
         ShowCore.term # (Packaging.termDefinitionTerm (var "td")),
         Phantoms.string "\n"]]

@@ -198,7 +198,7 @@ polyConstrained params constraints t = Phantoms.record _TypeScheme [
   Phantoms.field _TypeScheme_constraints constraintsTerm]
   where
     constraintsTerm = Phantoms.just $ Phantoms.map $ M.fromList
-      [(name v, Core.typeVariableMetadata (Phantoms.set (name <$> classes)))
+      [(name v, Core.typeVariableMetadata (Phantoms.list (Core.typeClassConstraintSimple . name <$> classes)))
       | (v, classes) <- constraints]
 
 -- | Create a term-encoded product type (tuple) with multiple components using nested pairs

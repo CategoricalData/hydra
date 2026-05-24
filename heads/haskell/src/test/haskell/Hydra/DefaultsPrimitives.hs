@@ -38,8 +38,13 @@ defaultLibraries = [
 
 mkPrim :: Name -> Int -> (Context -> Graph -> [Term] -> Either Error Term) -> Primitive
 mkPrim name arity impl = Primitive {
-  primitiveName = name,
-  primitiveTypeScheme = dummyType arity,
+  primitiveDefinition = PrimitiveDefinition {
+    primitiveDefinitionName = name,
+    primitiveDefinitionDescription = "",
+    primitiveDefinitionSignature = typeSchemeToTermSignature (dummyType arity),
+    primitiveDefinitionIsPure = True,
+    primitiveDefinitionIsTotal = True,
+    primitiveDefinitionDefaultImplementation = Nothing},
   primitiveImplementation = impl}
 
 dummyType :: Int -> TypeScheme

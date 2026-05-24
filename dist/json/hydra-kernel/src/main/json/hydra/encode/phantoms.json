@@ -3,6 +3,15 @@
     {
       "term": {
         "name": "hydra.encode.phantoms.tBinding",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TBinding"}}}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -71,19 +80,19 @@
                         "domain": {"variable": "t0"},
                         "parameter": "a"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.core.Term"},
-                  "domain": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TBinding"}}}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.encode.phantoms.tTerm",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -121,19 +130,19 @@
                         "domain": {"variable": "t0"},
                         "parameter": "a"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.core.Term"},
-                  "domain": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.encode.phantoms.tTermDefinition",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTermDefinition"}}}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -202,16 +211,7 @@
                         "domain": {"variable": "t0"},
                         "parameter": "a"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.core.Term"},
-                  "domain": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTermDefinition"}}}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}}],
+            "parameter": "t0"}}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.phantoms"}],
   "description": "Term encoders for hydra.phantoms",
   "name": "hydra.encode.phantoms"}

@@ -26,9 +26,13 @@ module_ = Module {
     definitions = [
       functionStructure,
       inferenceResult,
+      parameter,
+      result,
+      termSignature,
       termSubst,
       typeClass,
       typeConstraint,
+      typeParameter,
       typeSubst]
 
 inferenceResult :: Binding
@@ -114,3 +118,56 @@ functionStructure = define "FunctionStructure" $
     "environment">:
       doc "Updated environment after processing all bindings" $
       T.variable "env"]
+
+parameter :: Binding
+parameter = define "Parameter" $
+  doc "A named, typed parameter of a term, with optional human-readable description and a flag indicating whether the parameter requires lazy evaluation by hosts which support it." $
+  T.record [
+    "name">:
+      doc "The name of the parameter"
+      Core.name,
+    "description">:
+      doc "An optional human-readable description of the parameter" $
+      T.maybe T.string,
+    "type">:
+      doc "The type of the parameter"
+      Core.type_,
+    "isLazy">:
+      doc "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation"
+      T.boolean]
+
+result :: Binding
+result = define "Result" $
+  doc "The result of a term, consisting of a type and an optional human-readable description." $
+  T.record [
+    "description">:
+      doc "An optional human-readable description of the result" $
+      T.maybe T.string,
+    "type">:
+      doc "The type of the result"
+      Core.type_]
+
+termSignature :: Binding
+termSignature = define "TermSignature" $
+  doc "A structured signature for a term: an ordered list of type parameters (with optional class constraints), an ordered list of value parameters, and a result. TermSignature is a richer view of TypeScheme: every TermSignature can be converted to a TypeScheme by erasing parameter names, descriptions, and laziness flags." $
+  T.record [
+    "typeParameters">:
+      doc "The type parameters of the term, in order" $
+      T.list typeParameter,
+    "parameters">:
+      doc "The value parameters of the term, in order" $
+      T.list parameter,
+    "result">:
+      doc "The result of the term"
+      result]
+
+typeParameter :: Binding
+typeParameter = define "TypeParameter" $
+  doc "A type parameter of a term, with an optional list of type class constraints" $
+  T.record [
+    "name">:
+      doc "The name of the type parameter"
+      Core.name,
+    "constraints">:
+      doc "Any type class constraints on the type parameter" $
+      T.list Core.typeClassConstraint]
