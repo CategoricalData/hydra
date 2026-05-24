@@ -194,11 +194,11 @@ compileJava {
 This was added in commit `b2c046e87` after a Testing.java edit triggered the
 OOM. Adds 6g transient memory pressure only during compile — no runtime cost.
 
-Note: `gradle.properties` at the repo root is gitignored and exists as a
-developer-local escape hatch for `org.gradle.jvmargs` and other per-developer
-Gradle config — useful for local experimentation, but JVM args set there only
-affect the build daemon, not forked compiler workers, so it would not have
-fixed this OOM on its own.
+Note: `gradle.properties` (anywhere — `heads/java/gradle.properties` or the
+repo root) is gitignored and exists as a developer-local escape hatch for
+`org.gradle.jvmargs` and other per-developer Gradle config — useful for local
+experimentation, but JVM args set there only affect the build daemon, not
+forked compiler workers, so it would not have fixed this OOM on its own.
 
 ### Stale per-dialect Lisp `struct-compat.lisp`
 

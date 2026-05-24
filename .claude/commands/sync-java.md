@@ -23,3 +23,8 @@ if you need Java to emit other targets too (e.g., to populate
 `dist/java/hydra-{python,scala,lisp,...}/` for the rollup compile —
 see `claude/pitfalls.md`'s entry on `:hydra-java:test` needing all
 coder language packages).
+
+This script does **not** run the Java test suite. To validate the
+generated code, run `heads/java/bin/test-distribution.sh hydra-kernel`
+or do a `/bootstrap java`. (Pending #387: `/test java` will roll
+sync + tests into one step.)
