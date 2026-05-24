@@ -3,6 +3,20 @@
     {
       "term": {
         "name": "hydra.pg.rdf.mappings.edgeTypesToPropertyShapes",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "hydra.pg.model.EdgeLabel"}}}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.pg.model.VertexLabel"}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {"list": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.pg.model.EdgeType"}}}}}],
+          "result": {"type": {"list": {"variable": "hydra.shacl.model.CommonConstraint"}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -174,25 +188,22 @@
                         "domain": {"variable": "t0"},
                         "parameter": "encodeVertexLabel"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {"list": {"variable": "hydra.shacl.model.CommonConstraint"}},
-                          "domain": {"list": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.pg.model.EdgeType"}}}}}},
-                      "domain": {"variable": "hydra.pg.model.VertexLabel"}}},
-                  "domain": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "hydra.pg.model.EdgeLabel"}}}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.pg.rdf.mappings.encodeEdge",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.rdf.environment.PgRdfEnvironment"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Edge"}}}}],
+          "result": {"type": {"variable": "hydra.rdf.syntax.Description"}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -304,19 +315,22 @@
                         "parameter": "edge"}},
                     "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.rdf.environment.PgRdfEnvironment"}}},
                     "parameter": "env"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.rdf.syntax.Description"},
-                  "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Edge"}}}}},
-              "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.rdf.environment.PgRdfEnvironment"}}}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.pg.rdf.mappings.encodeLazyGraph",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.rdf.environment.PgRdfEnvironment"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.LazyGraph"}}}}],
+          "result": {"type": {"variable": "hydra.rdf.syntax.Graph"}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -388,19 +402,22 @@
                         "parameter": "lg"}},
                     "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.rdf.environment.PgRdfEnvironment"}}},
                     "parameter": "env"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.rdf.syntax.Graph"},
-                  "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.LazyGraph"}}}}},
-              "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.rdf.environment.PgRdfEnvironment"}}}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.pg.rdf.mappings.encodeVertex",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.rdf.environment.PgRdfEnvironment"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Vertex"}}}}],
+          "result": {"type": {"variable": "hydra.rdf.syntax.Description"}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -602,19 +619,34 @@
                         "parameter": "vertex"}},
                     "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.rdf.environment.PgRdfEnvironment"}}},
                     "parameter": "env"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.rdf.syntax.Description"},
-                  "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Vertex"}}}}},
-              "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.rdf.environment.PgRdfEnvironment"}}}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.pg.rdf.mappings.graphSchemaToShapesGraph",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "t0"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "hydra.pg.model.VertexLabel"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "hydra.pg.model.EdgeLabel"}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "hydra.pg.model.PropertyKey"}}}},
+            {
+              "isLazy": false,
+              "name": "arg4",
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.GraphSchema"}}}}],
+          "result": {"type": {"variable": "hydra.shacl.model.ShapesGraph"}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -921,28 +953,26 @@
                         "parameter": "encodeVertexLabel"}},
                     "domain": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "t0"}}},
                     "parameter": "encodeType"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {"variable": "hydra.shacl.model.ShapesGraph"},
-                              "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.GraphSchema"}}}}},
-                          "domain": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "hydra.pg.model.PropertyKey"}}}}},
-                      "domain": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "hydra.pg.model.EdgeLabel"}}}}},
-                  "domain": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "hydra.pg.model.VertexLabel"}}}}},
-              "domain": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "t0"}}}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.pg.rdf.mappings.propertyTypeToPropertyShape",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "t0"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "hydra.pg.model.PropertyKey"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.PropertyType"}}}}],
+          "result": {"type": {"variable": "hydra.shacl.model.PropertyShape"}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -1066,22 +1096,32 @@
                         "parameter": "encodeKey"}},
                     "domain": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "t0"}}},
                     "parameter": "encodeType"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"variable": "hydra.shacl.model.PropertyShape"},
-                      "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.PropertyType"}}}}},
-                  "domain": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "hydra.pg.model.PropertyKey"}}}}},
-              "domain": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "t0"}}}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.pg.rdf.mappings.vertexTypeToNodeShape",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "t0"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "hydra.pg.model.VertexLabel"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "hydra.pg.model.PropertyKey"}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.VertexType"}}}}],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Definition"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -1230,23 +1270,7 @@
                         "parameter": "encodeLabel"}},
                     "domain": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "t0"}}},
                     "parameter": "encodeType"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Definition"}}},
-                          "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.VertexType"}}}}},
-                      "domain": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "hydra.pg.model.PropertyKey"}}}}},
-                  "domain": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "hydra.pg.model.VertexLabel"}}}}},
-              "domain": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "t0"}}}}},
-          "variables": ["t0"]}}}],
+            "parameter": "t0"}}}}],
   "dependencies": [
     {"module": "hydra.rdf.utils"},
     {"module": "hydra.paths"},

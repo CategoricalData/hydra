@@ -277,7 +277,7 @@ moduleDependencyNamespaces cx graph binds withPrims withNoms withSchema mod =
                 Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                   Core.bindingName = (Packaging.termDefinitionName v0),
                   Core.bindingTerm = (Packaging.termDefinitionTerm v0),
-                  Core.bindingTypeScheme = (Packaging.termDefinitionTypeScheme v0)})
+                  Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
                 _ -> Nothing) (Packaging.moduleDefinitions mod))
       in (Eithers.map (\deps -> Sets.delete (Packaging.moduleName mod) deps) (dependencyNamespaces cx graph binds withPrims withNoms withSchema allBindings))
 -- | Create namespaces mapping for definitions

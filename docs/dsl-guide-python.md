@@ -40,7 +40,7 @@ Hydra-Python provides a layered DSL system for working with Hydra types and term
 |-------|--------|---------|
 | **Direct DSLs** | `hydra.dsl.types`, `hydra.dsl.terms` | Raw construction of `Type` and `Term` instances |
 | **Phantom-typed DSL** | `hydra.dsl.meta.phantoms` | Type safety via `TTerm[A]` phantom types |
-| **Domain-specific DSLs** | `hydra.dsl.meta.core`, `hydra.dsl.meta.graph`, `hydra.dsl.meta.compute` | Typed accessors for Hydra kernel types |
+| **Domain-specific DSLs** | `hydra.dsl.meta.core`, `hydra.dsl.meta.graph` | Typed accessors for Hydra kernel types |
 | **Library wrappers** | `hydra.dsl.meta.lib.*` | Typed wrappers around Hydra primitives (lists, sets, maps, etc.) |
 
 The Direct DSLs are suitable for casual use: constructing test fixtures, prototyping, or building types.
@@ -114,7 +114,7 @@ f(a, b, c)                        # Python-native call syntax (preferred)
 
 ### 4. Domain-specific DSLs
 
-**Modules**: `hydra.dsl.meta.core`, `hydra.dsl.meta.graph`, `hydra.dsl.meta.compute`
+**Modules**: `hydra.dsl.meta.core`, `hydra.dsl.meta.graph`
 
 Provide typed field accessors and constructors for Hydra kernel types.
 
@@ -170,7 +170,7 @@ folded = Lists.foldl(fn, init, my_list)
 import hydra.dsl.types as T
 from hydra.core import Name
 
-# Primitive types
+# Literal types
 string_type = T.string()
 int32_type = T.int32()
 boolean_type = T.boolean()
@@ -377,7 +377,7 @@ circle = inject("my.module.Shape", "circle", float64(3.14))
 f32 = inject_unit("hydra.core.FloatType", "float32")
 ```
 
-### Pattern matching (cases/match)
+### Pattern matching (`cases`/`match`)
 
 ```python
 # match creates a case elimination (unapplied)
@@ -482,7 +482,7 @@ documented = doc("Adds two numbers", var("add"))
 
 ## Domain-specific DSLs
 
-The domain-specific DSLs (`core`, `graph`, `compute`) provide typed accessors
+The domain-specific DSLs (`core`, `graph`) provide typed accessors
 for Hydra's kernel types.
 
 ### Core DSL (`hydra.dsl.meta.core`)
@@ -811,7 +811,7 @@ match result:
 Hydra maps use `FrozenDict` for immutability:
 
 ```python
-from hydra.dsl.frozen_dict import FrozenDict
+from hydra.dsl.python import FrozenDict
 
 d = FrozenDict({"key1": "value1", "key2": "value2"})
 value = d["key1"]
@@ -825,11 +825,8 @@ d2 = FrozenDict({**d, "key3": "value3"})
 | `heads/python/src/main/python/hydra/dsl/meta/phantoms.py` | Phantom-typed DSL (all operations) |
 | `heads/python/src/main/python/hydra/dsl/meta/core.py` | Core domain DSL (field accessors) |
 | `heads/python/src/main/python/hydra/dsl/meta/graph.py` | Graph domain DSL |
-| `heads/python/src/main/python/hydra/dsl/meta/compute.py` | Compute domain DSL |
 | `heads/python/src/main/python/hydra/dsl/meta/lib/sets.py` | Sets library wrapper |
 | `heads/python/src/main/python/hydra/dsl/meta/lib/lists.py` | Lists library wrapper |
-| `heads/python/src/main/python/hydra/dsl/meta/examples/core_types.py` | Complete hydra.core type definitions |
-| `heads/python/src/main/python/hydra/dsl/meta/examples/rewriting.py` | Partial hydra.rewriting term definitions |
 | `heads/python/src/main/python/hydra/dsl/types.py` | Direct Types DSL |
 | `heads/python/src/main/python/hydra/dsl/terms.py` | Direct Terms DSL |
 

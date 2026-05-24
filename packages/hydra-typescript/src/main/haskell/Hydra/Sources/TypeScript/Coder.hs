@@ -39,6 +39,7 @@ import qualified Hydra.Sources.Kernel.Terms.Environment    as Environment
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Scoping        as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
@@ -1602,8 +1603,8 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "asExport" <~ (lambda "stmt" $
       inject TS._ModuleItem TS._ModuleItem_export
         (inject TS._ExportDeclaration TS._ExportDeclaration_declaration (var "stmt"))) $
-    "mScheme" <~ (Maybes.bind (Packaging.termDefinitionTypeScheme (var "td"))
-      ("ts" ~> just (Core.typeSchemeBody (var "ts")))) $
+    "mScheme" <~ (Maybes.bind (Packaging.termDefinitionSignature (var "td"))
+      ("sig" ~> just (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme @@ var "sig")))) $
     -- Determine whether the term is a function (Term_lambda) or carries any
     -- typeLambda wrappers (the typical pattern for polymorphic top-level
     -- defs: `typeLambda T1. typeLambda T2. lambda x. body`). In both cases
@@ -1912,10 +1913,10 @@ moduleToTypeScript = def "moduleToTypeScript" $
     -- present in the term's free-variable set.
     "typeImportsFromTerms" <~ (Lists.foldl
       (lambda "acc" $ lambda "td" $
-        Maybes.cases (Packaging.termDefinitionTypeScheme (var "td"))
+        Maybes.cases (Packaging.termDefinitionSignature (var "td"))
           (var "acc")
-          (lambda "ts" $ Sets.union (var "acc")
-            (collectImports @@ var "currentNs" @@ (Core.typeSchemeBody (var "ts")))))
+          (lambda "sig" $ Sets.union (var "acc")
+            (collectImports @@ var "currentNs" @@ (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme @@ var "sig")))))
       (Sets.empty :: TTerm (S.Set Name))
       (var "termDefs")) $
     -- Also walk inside each term to find type references in inner lambda

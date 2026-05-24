@@ -188,6 +188,52 @@ expression appears inside a let binding rather than at top level) emits
 RHS again, every inline enum dispatch silently picks the first branch — see
 the entry in `docs/history/python-host-perf-investigation.md` for the full story.
 
+## Build and test issues across languages
+
+### `gradle :hydra-java:test` fails with "package X does not exist"
+
+The `hydra-java` Gradle build's `main` and `headsExtras` source sets import
+`hydra.haskell.*`, `hydra.python.*`, `hydra.scala.*`, `hydra.lisp.*`
+directly. The build fails with "package does not exist" if those
+`dist/java/<pkg>/` trees are missing.
+
+`bin/sync-java.sh` (and the narrow `bin/sync.sh --hosts java --targets java`)
+only populate `dist/java/{hydra-kernel, hydra-java, hydra-pg, hydra-rdf}` —
+not the cross-language coder dists. Run `bin/sync.sh` (full host × target)
+or `bin/sync.sh --hosts java --targets <every-language>` to produce all
+the per-language Java dist trees.
+
+### `sbt test` from `packages/hydra-scala/` fails on type mismatches
+
+Same shape as the Java issue. The Scala sbt project declares unmanaged
+source directories over `dist/scala/hydra-{kernel,haskell,java,python,scala,lisp}/`.
+`bin/sync-scala.sh` is narrow (host=scala × target=scala only) and does not
+populate `dist/scala/hydra-{haskell,java,python,lisp}/`. Use
+`bin/sync.sh --hosts scala --targets all` for a full Scala dist refresh.
+
+### `hydra-java:compileJava` OOM during incremental rebuild
+
+The Gradle build daemon's `-Xmx` setting does not apply to the forked
+compiler worker, which inherits a 512 MB default that's insufficient for
+the rollup's many classes during incremental analysis. The build file
+in `packages/hydra-java/build.gradle` already enables forking with a 6 GB
+cap (`compileJava { options.fork = true; options.forkOptions.memoryMaximumSize = '6g' }`).
+If you still see OOM, check that override hasn't been clobbered locally.
+
+### `bin/sync.sh` does not run target-language tests
+
+`bin/sync.sh` regenerates code into every target language but only runs
+the Haskell-side `stack test` step. To validate a target's runtime, run
+that head's own test driver:
+
+- Python: `heads/python/bin/test-distribution.sh hydra-kernel`
+- Java: `./gradlew :packages:hydra-java:test`
+- Scala: `heads/scala/bin/test-distribution.sh hydra-kernel`
+- Lisp dialect: `packages/hydra-lisp/bin/run-tests.sh <dialect>`
+
+The full cross-host bootstrap demo (`bin/run-bootstrapping-demo.sh`) is a
+heavier validation that exercises cross-host code generation plus tests.
+
 ## Bootstrap problems
 
 When extending core types, you face a circular dependency: the code generator must

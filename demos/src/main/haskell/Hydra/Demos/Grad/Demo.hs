@@ -41,7 +41,7 @@ main = do
 primGraph :: Graph
 primGraph = let
     allPrims = L.concatMap libraryPrimitives Lib.standardLibraries
-    primsMap = M.fromList $ fmap (\p -> (primitiveName p, p)) allPrims
+    primsMap = M.fromList $ fmap (\p -> (primitiveDefinitionName (primitiveDefinition p), p)) allPrims
   in emptyGraph { graphPrimitives = primsMap }
 
 -- | Evaluate a Term to a reduced form, or return an error message.

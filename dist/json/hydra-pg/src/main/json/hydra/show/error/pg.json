@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.show.error.pg.invalidEdgeError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.pg.InvalidEdgeError"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Show an invalid edge error as a string"}}}],
@@ -70,13 +74,14 @@
                                 "parameter": "p"}}}],
                         "typeName": "hydra.error.pg.InvalidEdgeError"}}}},
                 "domain": {"variable": "hydra.error.pg.InvalidEdgeError"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.error.pg.InvalidEdgeError"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.show.error.pg.invalidElementPropertyError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Show an invalid element property error as a string"}}}],
@@ -104,14 +109,22 @@
                             "function": {"variable": "hydra.show.error.pg.invalidPropertyError"}}}]},
                     "function": {"variable": "hydra.lib.strings.cat"}}},
                 "domain": {"variable": "hydra.error.pg.InvalidElementPropertyError"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.show.error.pg.invalidGraphEdgeError",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.error.pg.InvalidGraphEdgeError"}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -155,19 +168,22 @@
                         "parameter": "e"}},
                     "domain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}},
                     "parameter": "printValue"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"literal": {"string": {}}},
-                  "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.error.pg.InvalidGraphEdgeError"}}}}},
-              "domain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.show.error.pg.invalidGraphError",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.error.pg.InvalidGraphError"}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -220,19 +236,22 @@
                         "parameter": "e"}},
                     "domain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}},
                     "parameter": "printValue"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"literal": {"string": {}}},
-                  "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.error.pg.InvalidGraphError"}}}}},
-              "domain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.show.error.pg.invalidGraphVertexError",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.error.pg.InvalidGraphVertexError"}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -276,19 +295,14 @@
                         "parameter": "e"}},
                     "domain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}},
                     "parameter": "printValue"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"literal": {"string": {}}},
-                  "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.error.pg.InvalidGraphVertexError"}}}}},
-              "domain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.show.error.pg.invalidPropertyError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.pg.InvalidPropertyError"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Show an invalid property error as a string"}}}],
@@ -335,13 +349,14 @@
                                 "parameter": "k"}}}],
                         "typeName": "hydra.error.pg.InvalidPropertyError"}}}},
                 "domain": {"variable": "hydra.error.pg.InvalidPropertyError"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.error.pg.InvalidPropertyError"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.show.error.pg.invalidValueError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.pg.InvalidValueError"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Show an invalid value error as a string"}}}],
@@ -363,13 +378,14 @@
                             "function": {"project": {"fieldName": "value", "typeName": "hydra.error.pg.InvalidValueError"}}}}]},
                     "function": {"variable": "hydra.lib.strings.cat"}}},
                 "domain": {"variable": "hydra.error.pg.InvalidValueError"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.error.pg.InvalidValueError"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.show.error.pg.invalidVertexError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.pg.InvalidVertexError"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Show an invalid vertex error as a string"}}}],
@@ -409,13 +425,14 @@
                                 "parameter": "p"}}}],
                         "typeName": "hydra.error.pg.InvalidVertexError"}}}},
                 "domain": {"variable": "hydra.error.pg.InvalidVertexError"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.error.pg.InvalidVertexError"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.show.error.pg.noSuchEdgeLabelError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.pg.NoSuchEdgeLabelError"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Show a no-such-edge-label error as a string"}}}],
@@ -435,13 +452,14 @@
                             "function": {"unwrap": "hydra.pg.model.EdgeLabel"}}}]},
                     "function": {"variable": "hydra.lib.strings.cat"}}},
                 "domain": {"variable": "hydra.error.pg.NoSuchEdgeLabelError"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.error.pg.NoSuchEdgeLabelError"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.show.error.pg.noSuchVertexLabelError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.pg.NoSuchVertexLabelError"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Show a no-such-vertex-label error as a string"}}}],
@@ -461,13 +479,14 @@
                             "function": {"unwrap": "hydra.pg.model.VertexLabel"}}}]},
                     "function": {"variable": "hydra.lib.strings.cat"}}},
                 "domain": {"variable": "hydra.error.pg.NoSuchVertexLabelError"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.error.pg.NoSuchVertexLabelError"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.show.error.pg.wrongVertexLabelError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.pg.WrongVertexLabelError"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Show a wrong-vertex-label error as a string"}}}],
@@ -495,10 +514,7 @@
                             "function": {"unwrap": "hydra.pg.model.VertexLabel"}}}]},
                     "function": {"variable": "hydra.lib.strings.cat"}}},
                 "domain": {"variable": "hydra.error.pg.WrongVertexLabelError"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.error.pg.WrongVertexLabelError"}}},
-          "variables": []}}}],
+                "parameter": "e"}}}}}}],
   "dependencies": [
     {"module": "hydra.error.pg"},
     {"module": "hydra.paths"},

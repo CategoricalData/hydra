@@ -33,6 +33,7 @@ from hydra.core import (
     TypeMaybe,
     TypePair,
     TypeRecord,
+    TypeClassConstraintSimple,
     TypeScheme,
     TypeSet,
     TypeUnion,
@@ -195,7 +196,7 @@ def poly_constrained(vs_with_constraints: Sequence[tuple[str, list[Name]]], t: T
     """
     vars = tuple(Name(v) for v, _ in vs_with_constraints)
     constraint_map = FrozenDict({
-        Name(v): TypeVariableMetadata(frozenset(classes))
+        Name(v): TypeVariableMetadata(tuple(TypeClassConstraintSimple(c) for c in classes))
         for v, classes in vs_with_constraints if classes
     })
     return TypeScheme(vars, t, Just(constraint_map) if constraint_map else Nothing())
