@@ -1,7 +1,7 @@
 # Inference scaling — cross-host complexity-class analysis
 
 First conducted 2026-05-10 on `feature_344_self_hosting_coders` (post extendMetaForType fix).
-Records under [bench-records/](../../bench-records/).
+Records under [data/bench-records/](data/bench-records/).
 
 ## Setup
 
