@@ -71,6 +71,23 @@ const parseArgs = (argv: string[]): {
   return { target, jsonDir, output, includeCoders, includeTests, kernelOnly };
 };
 
+// Resolve dist-json-root from the kernel JSON dir. The CLI takes
+// --json-dir <root>/hydra-kernel/src/main/json; the root is two levels
+// up from "hydra-kernel". Used to locate sibling packages' JSON trees.
+const distJsonRootFromKernelDir = (kernelDir: string): string | null => {
+  // Match …/hydra-kernel/src/main/json
+  const m = kernelDir.match(/^(.*)\/hydra-kernel\/src\/main\/json\/?$/);
+  return m ? m[1]! : null;
+};
+
+// Packages whose main JSON tree we always co-load when target=haskell or
+// when a target-specific coder package needs cross-package type resolution
+// (e.g. hydra-typescript depends on hydra-haskell.syntax for ts-syntax
+// reuse). Mirrors the dependency order in `heads/haskell/src/exec/
+// bootstrap-from-json/Main.hs` Step 1: baseline packages first
+// (hydra-kernel always loaded; hydra-haskell as baseline coder package).
+const BASELINE_EXTRA_PACKAGES: readonly string[] = ["hydra-haskell"];
+
 // Read every .json under <root> and return its (relative-namespace, parsed-JSON) pairs.
 const readJsonTree = (root: string): Array<{ path: string; json: unknown }> => {
   const out: Array<{ path: string; json: unknown }> = [];
@@ -93,15 +110,44 @@ const readJsonTree = (root: string): Array<{ path: string; json: unknown }> => {
   return out;
 };
 
-// Coder dispatch: map --target lang to (importPath, exportName).
+// Coder dispatch: map --target lang to (coder, language, codegen flags) loaded
+// from `dist/typescript/hydra-<lang>/src/main/typescript/hydra/<lang>/{coder,language}.js`.
 // importPath is resolved from `dist/typescript/hydra-kernel/src/main/typescript/hydra/bootstrap.ts`,
 // so going up 5 levels lands at `dist/typescript/`, then dispatching into each sibling package.
-const CODER_DISPATCH: Record<string, { importPath: string; exportName: string }> = {
-  typescript: { importPath: "../../../../../hydra-typescript/src/main/typescript/hydra/typeScript/coder.js", exportName: "moduleToTypeScript" },
-  python:     { importPath: "../../../../../hydra-python/src/main/typescript/hydra/python/coder.js",         exportName: "moduleToPython" },
-  java:       { importPath: "../../../../../hydra-java/src/main/typescript/hydra/java/coder.js",             exportName: "moduleToJava" },
-  haskell:    { importPath: "../../../../../hydra-haskell/src/main/typescript/hydra/haskell/coder.js",       exportName: "moduleToHaskell" },
-  scala:      { importPath: "../../../../../hydra-scala/src/main/typescript/hydra/scala/coder.js",           exportName: "moduleToScala" },
+// Flags mirror the Haskell bootstrap-from-json switch (Main.hs): doInfer/doExpand/doHoistCase/doHoistPoly.
+const CODER_DISPATCH: Record<string, {
+  coderPath: string; coderExport: string;
+  languagePath: string; languageExport: string;
+  doInfer: boolean; doExpand: boolean; doHoistCase: boolean; doHoistPoly: boolean;
+}> = {
+  typescript: {
+    coderPath:    "../../../../../hydra-typescript/src/main/typescript/hydra/typeScript/coder.js",
+    coderExport:  "moduleToTypeScript",
+    languagePath: "../../../../../hydra-typescript/src/main/typescript/hydra/typeScript/language.js",
+    languageExport: "typeScriptLanguage",
+    doInfer: false, doExpand: true, doHoistCase: false, doHoistPoly: false,
+  },
+  python:     {
+    coderPath:    "../../../../../hydra-python/src/main/typescript/hydra/python/coder.js",
+    coderExport:  "moduleToPython",
+    languagePath: "../../../../../hydra-python/src/main/typescript/hydra/python/language.js",
+    languageExport: "pythonLanguage",
+    doInfer: false, doExpand: true, doHoistCase: true, doHoistPoly: false,
+  },
+  java:       {
+    coderPath:    "../../../../../hydra-java/src/main/typescript/hydra/java/coder.js",
+    coderExport:  "moduleToJava",
+    languagePath: "../../../../../hydra-java/src/main/typescript/hydra/java/language.js",
+    languageExport: "javaLanguage",
+    doInfer: false, doExpand: true, doHoistCase: false, doHoistPoly: true,
+  },
+  haskell:    {
+    coderPath:    "../../../../../hydra-haskell/src/main/typescript/hydra/haskell/coder.js",
+    coderExport:  "moduleToHaskell",
+    languagePath: "../../../../../hydra-haskell/src/main/typescript/hydra/haskell/language.js",
+    languageExport: "haskellLanguage",
+    doInfer: false, doExpand: false, doHoistCase: false, doHoistPoly: false,
+  },
 };
 
 const main = async (): Promise<void> => {
@@ -123,18 +169,25 @@ const main = async (): Promise<void> => {
 
   const t0 = Date.now();
 
-  // Step 1: load the target-language coder.
+  // Step 1: load the target-language coder + language record.
   let coderMod: Record<string, unknown>;
+  let langMod: Record<string, unknown>;
   try {
-    coderMod = await import(dispatch.importPath);
+    coderMod = await import(dispatch.coderPath);
+    langMod = await import(dispatch.languagePath);
   } catch (e) {
-    console.error(`error: failed to load coder ${dispatch.importPath}: ${(e as Error).message}`);
+    console.error(`error: failed to load coder/language for target=${opts.target}: ${(e as Error).message}`);
     console.error(`       (target=${opts.target} requires the corresponding hydra-${opts.target} package to be assembled into dist/typescript/)`);
     process.exit(1);
   }
-  const moduleTo = coderMod[dispatch.exportName] as ((m: unknown) => (defs: unknown[]) => (cx: unknown) => (g: unknown) => { tag: "left"; value: unknown } | { tag: "right"; value: Map<string, string> });
+  const moduleTo = coderMod[dispatch.coderExport] as ((m: unknown, defs: unknown[], cx: unknown, g: unknown) => { tag: "left"; value: unknown } | { tag: "right"; value: Map<string, string> });
+  const language = langMod[dispatch.languageExport];
   if (typeof moduleTo !== "function") {
-    console.error(`error: ${dispatch.exportName} not found in ${dispatch.importPath}`);
+    console.error(`error: ${dispatch.coderExport} not found in ${dispatch.coderPath}`);
+    process.exit(1);
+  }
+  if (!language) {
+    console.error(`error: ${dispatch.languageExport} not found in ${dispatch.languagePath}`);
     process.exit(1);
   }
 
@@ -143,14 +196,34 @@ const main = async (): Promise<void> => {
   // Test modules live in a parallel src/test/json/ tree.
   // Caller passes --json-dir pointing at the main tree; we also look for
   // a sibling test tree when --include-tests is set.
-  const mainJsonFiles = readJsonTree(opts.jsonDir);
-  const mainNames = new Set(mainJsonFiles.map((f) => f.path));
-  let testJsonFiles: Array<{ path: string; json: unknown }> = [];
+  // Load kernel JSON (always) plus any baseline-extra packages whose
+  // syntax/language/coder modules are imported by the chosen target's
+  // hand-written runtime. For target=haskell the generated DSL wrappers
+  // import `Hydra.Haskell.Syntax`, which lives in hydra-haskell's JSON
+  // tree, not hydra-kernel's; without loading it, the bootstrap output
+  // is missing files that the hand-written `Hydra.Dsl.Haskell.Syntax`
+  // imports. Mirrors `bootstrap-from-json/Main.hs` Step 1 — baseline
+  // packages always loaded into the universe; emission is filtered to
+  // only the packages the target needs (see step 4 below).
+  const distJsonRoot = distJsonRootFromKernelDir(opts.jsonDir);
+  const mainJsonFiles: Array<{ path: string; json: unknown; pkg: string }> =
+    readJsonTree(opts.jsonDir).map((f) => ({ ...f, pkg: "hydra-kernel" }));
+  if (distJsonRoot) {
+    for (const pkg of BASELINE_EXTRA_PACKAGES) {
+      const pkgDir = join(distJsonRoot, pkg, "src", "main", "json");
+      if (existsSync(pkgDir)) {
+        const extra = readJsonTree(pkgDir).map((f) => ({ ...f, pkg }));
+        mainJsonFiles.push(...extra);
+        console.log(`  Loaded ${extra.length} additional JSON files from ${pkg}`);
+      }
+    }
+  }
+  let testJsonFiles: Array<{ path: string; json: unknown; pkg: string }> = [];
   if (opts.includeTests) {
     // jsonDir is .../src/main/json; the test tree is .../src/test/json
     const testJsonDir = opts.jsonDir.replace(/src\/main\/json$/, "src/test/json");
     if (testJsonDir !== opts.jsonDir && existsSync(testJsonDir)) {
-      testJsonFiles = readJsonTree(testJsonDir);
+      testJsonFiles = readJsonTree(testJsonDir).map((f) => ({ ...f, pkg: "hydra-kernel" }));
       console.log(`  Loaded ${mainJsonFiles.length} main + ${testJsonFiles.length} test JSON files`);
     } else {
       console.log(`  Loaded ${mainJsonFiles.length} JSON files (no test tree at ${testJsonDir})`);
@@ -158,7 +231,6 @@ const main = async (): Promise<void> => {
   } else {
     console.log(`  Loaded ${mainJsonFiles.length} JSON files`);
   }
-  void mainNames;
   const jsonFiles = [...mainJsonFiles.map((f) => ({ ...f, isTest: false })),
                      ...testJsonFiles.map((f) => ({ ...f, isTest: true }))];
 
@@ -200,74 +272,95 @@ const main = async (): Promise<void> => {
   const schemaMap = (jsonBootstrap as { typesByName: unknown }).typesByName;
   const modName = { value: "hydra.packaging.Module" };
   const modType = { tag: "variable", value: modName };
-  const fromJson = (jsonDecode as { fromJson: (s: unknown) => (n: unknown) => (t: unknown) => (v: unknown) => { tag: "left"; value: unknown } | { tag: "right"; value: unknown } }).fromJson;
-  const modDecoder = (decodePackaging as { module_: (g: unknown) => (t: unknown) => { tag: "left"; value: unknown } | { tag: "right"; value: Module } }).module_;
-  const modulesByPath: Array<{ path: string; module: Module; isTest: boolean }> = [];
+  const fromJson = (jsonDecode as { fromJson: (s: unknown, n: unknown, t: unknown, v: unknown) => { tag: "left"; value: unknown } | { tag: "right"; value: unknown } }).fromJson;
+  const modDecoder = (decodePackaging as { module_: (g: unknown, t: unknown) => { tag: "left"; value: unknown } | { tag: "right"; value: Module } }).module_;
+  const modulesByPath: Array<{ path: string; module: Module; isTest: boolean; pkg: string }> = [];
 
-  for (const { path, json, isTest } of jsonFiles) {
+  for (const { path, json, isTest, pkg } of jsonFiles) {
     try {
       const hydraJson = toHydraJson(json);
-      const termResult = fromJson(schemaMap)(modName)(modType)(hydraJson);
+      const termResult = fromJson(schemaMap, modName, modType, hydraJson);
       if (termResult.tag === "left") {
         console.error(`  warning: JSON-to-Term decode failed for ${path}: ${JSON.stringify(termResult.value).slice(0, 200)}`);
         continue;
       }
-      const modResult = modDecoder(bsGraph)(termResult.value);
+      const modResult = modDecoder(bsGraph, termResult.value);
       if (modResult.tag === "left") {
         console.error(`  warning: Term-to-Module decode failed for ${path}: ${JSON.stringify(modResult.value).slice(0, 200)}`);
         continue;
       }
-      modulesByPath.push({ path, module: modResult.value, isTest });
+      modulesByPath.push({ path, module: modResult.value, isTest, pkg });
     } catch (e) {
       console.error(`  warning: exception decoding ${path}: ${(e as Error).message}`);
     }
   }
   console.log(`  Decoded ${modulesByPath.length} modules`);
 
-  // Step 4: build a schema-populated graph from all decoded modules.
-  // Coders for richer targets (Python, Java, ...) need the graph to know
-  // about every nominal type referenced in any module — e.g.
-  // `hydra.core.Term`, `hydra.core.Type` — so they can resolve field
-  // types when emitting class/record definitions. Without this, the
-  // Python coder fails with `noSuchBinding: hydra.core.Type` etc.
-  // Mirrors heads/python's modules_to_graph(bs_graph, kernel_modules).
+  // Step 4: drive code generation through `codegen.generateSourceFiles`,
+  // which applies adapt + eta-expand + hoist before calling the coder.
+  // Calling moduleTo directly skips eta-expansion, leaving partial
+  // applications like `capitalize = mapFirstLetter toUpper` emitted as
+  // `const capitalize = mapFirstLetter(toUpper);` which fails under the
+  // TS coder's flat-call ABI.
   const allModules = modulesByPath.map((m) => m.module);
-  const modulesToGraph = (codegen as { modulesToGraph: (g: unknown) => (universe: unknown[]) => (mods: unknown[]) => unknown }).modulesToGraph;
-  const populatedGraph = modulesToGraph(bsGraph)(allModules)(allModules);
-
-  // Step 5: for each module, call moduleTo(module)(defs)(cx)(graph),
-  // and write to src/main/<target>/ or src/test/<target>/ depending on
-  // which JSON tree the module came from.
   const cx = lexical.emptyContext;
   const outMain = join(opts.output, "src/main", opts.target);
   const outTest = join(opts.output, "src/test", opts.target);
-  let mainFileCount = 0;
-  let testFileCount = 0;
-  for (const { path, module, isTest } of modulesByPath) {
-    try {
-      const defs = (module as { definitions: unknown[] }).definitions;
-      const result = moduleTo(module)(defs)(cx)(populatedGraph);
-      if (result.tag === "left") {
-        console.error(`  warning: codegen failed for ${path}: ${JSON.stringify(result.value).slice(0, 200)}`);
-        continue;
-      }
-      const fileMap = result.value as Map<string, string>;
-      const entries = maps.toList(fileMap as never);
-      const targetBase = isTest ? outTest : outMain;
-      for (const [relPath, content] of entries) {
-        const outPath = join(targetBase, relPath as string);
-        mkdirSync(dirname(outPath), { recursive: true });
-        writeFileSync(outPath, content as string);
-        if (isTest) testFileCount++; else mainFileCount++;
-      }
-    } catch (e) {
-      const err = e as Error;
-      console.error(`  warning: exception in codegen for ${path}: ${err.message}`);
-      if (process.env.HYDRA_DEBUG) {
-        console.error(`    stack: ${err.stack?.split("\n").slice(0, 6).join("\n      ")}`);
+
+  // `generateSourceFiles` calls printDefinitions flat (mod, defs, cx, g),
+  // so the wrapper here just forwards. The result entries are
+  // [filePath, content] tuples from `maps.toList`.
+  const printDefinitions = (m: unknown, defs: unknown, c: unknown, g: unknown) =>
+    moduleTo(m, defs as unknown[], c, g);
+
+  const writeOne = (isTest: boolean, mods: unknown[]): number => {
+    if (mods.length === 0) return 0;
+    const generateSourceFiles = (codegen as { generateSourceFiles: (...args: unknown[]) => { tag: "left"; value: unknown } | { tag: "right"; value: ReadonlyArray<readonly [string, string]> } }).generateSourceFiles;
+    const targetBase = isTest ? outTest : outMain;
+    let count = 0;
+    // Process modules one at a time. Per-module isolation means a
+    // stack overflow on one module (the kernel TS type-checker
+    // recurses through deeply-nested Hydra terms; see analysis.ts
+    // bootstrap patch) doesn't abort the whole codegen — we record
+    // a warning and continue.
+    for (const m of mods) {
+      try {
+        const result = generateSourceFiles(
+          printDefinitions, language,
+          dispatch.doInfer, dispatch.doExpand, dispatch.doHoistCase, dispatch.doHoistPoly,
+          bsGraph, allModules, [m], cx);
+        if (result.tag === "left") {
+          console.error(`  warning: codegen failed for module: ${JSON.stringify(result.value).slice(0, 200)}`);
+          continue;
+        }
+        for (const entry of result.value) {
+          const [relPath, content] = entry;
+          const outPath = join(targetBase, relPath);
+          mkdirSync(dirname(outPath), { recursive: true });
+          writeFileSync(outPath, content);
+          count++;
+        }
+      } catch (e) {
+        const err = e as Error;
+        console.error(`  warning: ${isTest ? "test" : "main"} codegen exception on module: ${err.message}`);
       }
     }
-  }
+    return count;
+  };
+
+  // Filter emission to packages the target consumes. Other baseline-extra
+  // packages were loaded only into the universe (for type resolution); we
+  // do not emit them. Target=haskell additionally needs hydra-haskell
+  // emitted because the Haskell host's hand-written DSL wrappers
+  // (`Hydra.Dsl.Haskell.*`) import the corresponding generated modules
+  // (`Hydra.Haskell.*`).
+  const emitPkgs = new Set<string>(["hydra-kernel"]);
+  if (opts.target === "haskell") emitPkgs.add("hydra-haskell");
+  const mainMods = modulesByPath.filter((m) => !m.isTest && emitPkgs.has(m.pkg)).map((m) => m.module);
+  const testMods = modulesByPath.filter((m) => m.isTest && emitPkgs.has(m.pkg)).map((m) => m.module);
+  const mainFileCount = writeOne(false, mainMods);
+  const testFileCount = writeOne(true, testMods);
+
   const fileCount = mainFileCount + testFileCount;
 
   const elapsed = ((Date.now() - t0) / 1000).toFixed(1);

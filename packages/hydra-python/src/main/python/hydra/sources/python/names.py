@@ -236,6 +236,21 @@ def _encode_name_qualified():
             field("local",
                 packaging_qualified_name_local(var("qualName")),
             ),
+            field("pyNs",
+                lam(
+                    "nsVal",
+                    Strings.intercalate(
+                        string("."),
+                        Lists.map(
+                            formatting_convert_case(util_case_convention_camel, util_case_convention_lower_snake),
+                            Strings.split_on(
+                                string("."),
+                                packaging_un_module_name(var("nsVal")),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
         ],
         Maybes.maybe(
             # Not a bound type variable
@@ -253,19 +268,23 @@ def _encode_name_qualified():
                         var("hydra.python.serde.escapePythonString")(true(), var("local")),
                     ),
                 ),
-                # Different namespace - dotted with sanitization
-                wrap(
-                    _PY_NAME,
-                    Strings.intercalate(
-                        string("."),
-                        Lists.map(
-                            _local("sanitizePythonName"),
-                            Strings.split_on(
-                                string("."),
-                                Core.un_name(var("name")),
+                # Different namespace - snake-cased namespace + sanitized local
+                Maybes.maybe(
+                    wrap(_PY_NAME, _local("sanitizePythonName")(var("local"))),
+                    lam(
+                        "nsVal",
+                        wrap(
+                            _PY_NAME,
+                            Strings.cat2(
+                                apply(var("pyNs"), var("nsVal")),
+                                Strings.cat2(
+                                    string("."),
+                                    _local("sanitizePythonName")(var("local")),
+                                ),
                             ),
                         ),
                     ),
+                    var("mns"),
                 ),
             ),
             # Bound type variable

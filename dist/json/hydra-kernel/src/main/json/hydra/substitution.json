@@ -1654,7 +1654,6 @@
     {"module": "hydra.variables"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
-    {"module": "hydra.classes"},
     {"module": "hydra.coders"},
     {"module": "hydra.context"},
     {"module": "hydra.core"},

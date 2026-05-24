@@ -427,7 +427,7 @@ encodeType namespaces typ cx g =
           Errors.unexpectedShapeErrorExpected = "supported type",
           Errors.unexpectedShapeErrorActual = (ShowCore.type_ typ)})))
 -- | Encode a Hydra type as a Haskell type with typeclass assertions
-encodeTypeWithClassAssertions :: Util.Namespaces Syntax.ModuleName -> M.Map Core.Name (S.Set Classes.TypeClass) -> Core.Type -> t0 -> t1 -> Either Errors.Error Syntax.Type
+encodeTypeWithClassAssertions :: Util.Namespaces Syntax.ModuleName -> M.Map Core.Name (S.Set Core.Name) -> Core.Type -> t0 -> t1 -> Either Errors.Error Syntax.Type
 encodeTypeWithClassAssertions namespaces explicitClasses typ cx g =
 
       let classes = Maps.union explicitClasses (getImplicitTypeClasses typ)
@@ -437,9 +437,10 @@ encodeTypeWithClassAssertions namespaces explicitClasses typ cx g =
                     let name = Pairs.first pair
                         cls = Pairs.second pair
                         hname =
-                                Utils.rawName (case cls of
-                                  Classes.TypeClassEquality -> "Eq"
-                                  Classes.TypeClassOrdering -> "Ord")
+                                Utils.rawName (case Core.unName cls of
+                                  "equality" -> "Eq"
+                                  "ordering" -> "Ord"
+                                  other -> other)
                         htype = Syntax.TypeVariable (Utils.rawName (Core.unName name))
                     in (Syntax.ConstraintClass (Syntax.ClassConstraint {
                       Syntax.classConstraintName = hname,
@@ -517,11 +518,10 @@ gatherMetadata defs =
                   in (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) meta typ)
       in (Lists.foldl addDef emptyMetadata defs)
 -- | Get implicit typeclass constraints for type variables that need Ord
-getImplicitTypeClasses :: Core.Type -> M.Map Core.Name (S.Set Classes.TypeClass)
+getImplicitTypeClasses :: Core.Type -> M.Map Core.Name (S.Set Core.Name)
 getImplicitTypeClasses typ =
 
-      let toPair = \name -> (name, (Sets.fromList [
-            Classes.TypeClassOrdering]))
+      let toPair = \name -> (name, (Sets.fromList [Core.Name "ordering"]))
       in (Maps.fromList (Lists.map toPair (Sets.toList (findOrdVariables typ))))
 -- | Whether to include type definitions in generated Haskell modules
 includeTypeDefinitions :: Bool
@@ -818,18 +818,13 @@ typeDecl namespaces name typ cx g =
                       Syntax.simpleValueBindingLocalBindings = Nothing,
                       Syntax.simpleValueBindingComments = Nothing}))
         in (Right decl)))
--- | Convert type scheme constraints to a map of type variables to typeclasses
-typeSchemeConstraintsToClassMap :: Ord t0 => (Maybe (M.Map t0 Core.TypeVariableMetadata) -> M.Map t0 (S.Set Classes.TypeClass))
+-- | Project type scheme constraints to a map of type variables to typeclass names
+typeSchemeConstraintsToClassMap :: Ord t0 => (Maybe (M.Map t0 Core.TypeVariableMetadata) -> M.Map t0 (S.Set Core.Name))
 typeSchemeConstraintsToClassMap maybeConstraints =
-
-      let constraintToTypeClass =
+      let constraintToName =
               \tcc -> case tcc of
-                Core.TypeClassConstraintSimple v0 ->
-                  let classNameStr = Core.unName v0
-                      isEq = Equality.equal classNameStr (Core.unName (Core.Name "equality"))
-                      isOrd = Equality.equal classNameStr (Core.unName (Core.Name "ordering"))
-                  in (Logic.ifElse isEq (Just Classes.TypeClassEquality) (Logic.ifElse isOrd (Just Classes.TypeClassOrdering) Nothing))
-      in (Maybes.maybe Maps.empty (\constraints -> Maps.map (\meta -> Sets.fromList (Maybes.cat (Lists.map constraintToTypeClass (Sets.toList (Core.typeVariableMetadataClasses meta))))) constraints) maybeConstraints)
+                Core.TypeClassConstraintSimple className -> Just className
+      in (Maybes.maybe Maps.empty (\constraints -> Maps.map (\meta -> Sets.fromList (Maybes.cat (Lists.map constraintToName (Sets.toList (Core.typeVariableMetadataClasses meta))))) constraints) maybeConstraints)
 -- | Whether to use the Hydra core import in generated modules
 useCoreImport :: Bool
 useCoreImport = True

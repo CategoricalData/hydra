@@ -893,7 +893,7 @@ inferTypeOfMap = define "inferTypeOfMap" $
   "vvarResult" <~ Names.freshName @@ var "fcx2" $
   "vvar" <~ Pairs.first (var "vvarResult") $
   "fcx3" <~ Pairs.second (var "vvarResult") $
-  "keyConstraints" <~ Maps.singleton (var "kvar") (Core.typeVariableMetadata $ Sets.singleton $ Core.typeClassConstraintSimple $ Core.nameLift _TypeClass_ordering) $
+  "keyConstraints" <~ Maps.singleton (var "kvar") (Core.typeVariableMetadata $ Sets.singleton $ Core.typeClassConstraintSimple $ Core.name (string "ordering")) $
   Logic.ifElse (Maps.null $ var "m")
     (right (yieldWithConstraints
       @@ var "fcx3"
@@ -1070,7 +1070,7 @@ inferTypeOfSet = define "inferTypeOfSet" $
     @@ (reify Core.typeSet)
     @@ ("terms" ~> Core.termSet $ Sets.fromList $ var "terms")
     @@ (string "set element")
-    @@ (Sets.singleton $ Core.nameLift _TypeClass_ordering)
+    @@ (Sets.singleton $ Core.name (string "ordering"))
     @@ (Sets.toList $ var "s")
 
 inferTypeOfTerm :: TTermDefinition (Context -> Graph -> Term -> String -> Prelude.Either Error InferenceResult)

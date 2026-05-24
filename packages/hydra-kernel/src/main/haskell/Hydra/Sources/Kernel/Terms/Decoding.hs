@@ -913,7 +913,7 @@ decoderTypeScheme = define "decoderTypeScheme" $
       Logic.ifElse (Lists.null (var "ordVars"))
         Phantoms.nothing
         (just $ Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.typeClassConstraintSimple $ Core.nameLift _TypeClass_ordering))
+          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.typeClassConstraintSimple $ Core.name (string "ordering")))
           (var "ordVars"))) $
     Core.typeScheme
       (var "typeVars")
@@ -935,7 +935,7 @@ decoderTypeSchemeNamed = define "decoderTypeSchemeNamed" $
       Logic.ifElse (Lists.null (var "ordVars"))
         Phantoms.nothing
         (just $ Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.typeClassConstraintSimple $ Core.nameLift _TypeClass_ordering))
+          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.typeClassConstraintSimple $ Core.name (string "ordering")))
           (var "ordVars"))) $
     Core.typeScheme
       (var "typeVars")
