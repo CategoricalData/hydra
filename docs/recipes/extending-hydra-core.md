@@ -693,8 +693,8 @@ python3 -m py_compile dist/python/hydra-kernel/src/main/python/hydra/core.py
 python3 -m py_compile dist/python/hydra-kernel/src/main/python/hydra/meta.py
 python3 -m py_compile dist/python/hydra-kernel/src/main/python/hydra/util.py
 
-# Java (run from the worktree root)
-./gradlew :hydra-java:compileJava
+# Java (from heads/java)
+(cd heads/java && ./gradlew :hydra-java:compileJava)
 
 # Scala (if applicable)
 cd packages/hydra-scala
