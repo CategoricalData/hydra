@@ -588,7 +588,7 @@ When adding a new primitive function:
    Both steps are required for tests to run.
 
 6. **Type variable ordering**: When registering polymorphic primitives,
-   the order of type variables in the `[_x, _y]` list must match the order they appear in the type signature.
+   the order of type variables in the `[_x, _y]` list must match the order they appear in the type scheme.
    For example, `foldr :: (a -> b -> b) -> b -> [a] -> b` uses `[_x, _y]`
    where `x` corresponds to `a` (element type) and `y` to `b` (accumulator type).
    Compare with `foldl :: (b -> a -> b) -> b -> [a] -> b` which uses `[_y, _x]`

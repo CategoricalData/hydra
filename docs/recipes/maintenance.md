@@ -613,7 +613,7 @@ Several kinds of inconsistency can creep in:
 
 - A primitive exists in one language but is missing from another.
 - A primitive is implemented but not registered (invisible at runtime).
-- Type signatures differ subtly — especially the **order of `forall` type variables**,
+- Type schemes differ subtly — especially the **order of `forall` type variables**,
   which causes hard-to-diagnose inference and type-checking errors.
 - Documentation comments differ across languages.
 

@@ -163,7 +163,7 @@ static <R> TTerm<R> setsUnion(TTerm<?> s1, TTerm<?> s2) {
 import hydra.core.*;
 import hydra.dsl.Types;
 
-// Primitive types
+// Literal types
 Type stringType = Types.string();
 Type int32Type = Types.int32();
 Type booleanType = Types.boolean_();
@@ -354,7 +354,7 @@ TTerm<Object> circle = inject(Shape.TYPE_NAME, Shape.FIELD_NAME_CIRCLE,
 TTerm<Object> none = injectUnit(FloatType.TYPE_NAME, FloatType.FIELD_NAME_FLOAT32);
 ```
 
-### Pattern matching (cases/match)
+### Pattern matching (`cases`/`match`)
 
 ```java
 // match creates a case elimination (unapplied)

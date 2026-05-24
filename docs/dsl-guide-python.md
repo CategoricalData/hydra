@@ -170,7 +170,7 @@ folded = Lists.foldl(fn, init, my_list)
 import hydra.dsl.types as T
 from hydra.core import Name
 
-# Primitive types
+# Literal types
 string_type = T.string()
 int32_type = T.int32()
 boolean_type = T.boolean()
@@ -377,7 +377,7 @@ circle = inject("my.module.Shape", "circle", float64(3.14))
 f32 = inject_unit("hydra.core.FloatType", "float32")
 ```
 
-### Pattern matching (cases/match)
+### Pattern matching (`cases`/`match`)
 
 ```python
 # match creates a case elimination (unapplied)
