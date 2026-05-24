@@ -1039,6 +1039,32 @@ termSubst x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.typing.TermSubst"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+-- | DSL constructor for hydra.typing.TypeClass
+typeClass :: Phantoms.TTerm String -> Phantoms.TTerm Typing.TypeClass
+typeClass description =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.TypeClass"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Phantoms.unTTerm description)}]}))
+-- | DSL accessor for the description field of hydra.typing.TypeClass
+typeClassDescription :: Phantoms.TTerm Typing.TypeClass -> Phantoms.TTerm String
+typeClassDescription x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.TypeClass"),
+        Core.projectionFieldName = (Core.Name "description")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the description field of hydra.typing.TypeClass
+typeClassWithDescription :: Phantoms.TTerm Typing.TypeClass -> Phantoms.TTerm String -> Phantoms.TTerm Typing.TypeClass
+typeClassWithDescription original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.TypeClass"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL constructor for hydra.typing.TypeConstraint
 typeConstraint :: Phantoms.TTerm Core.Type -> Phantoms.TTerm Core.Type -> Phantoms.TTerm String -> Phantoms.TTerm Typing.TypeConstraint
 typeConstraint left right comment =

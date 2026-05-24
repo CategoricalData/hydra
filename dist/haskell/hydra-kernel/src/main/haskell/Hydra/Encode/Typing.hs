@@ -110,6 +110,15 @@ termSubst x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.typing.TermSubst"),
       Core.wrappedTermBody = ((\m -> Core.TermMap (Maps.bimap EncodeCore.name EncodeCore.term m)) (Typing.unTermSubst x))})
+-- | Encoder for hydra.typing.TypeClass
+typeClass :: Typing.TypeClass -> Core.Term
+typeClass x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.TypeClass"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Typing.typeClassDescription x))}]})
 -- | Encoder for hydra.typing.TypeConstraint
 typeConstraint :: Typing.TypeConstraint -> Core.Term
 typeConstraint x =

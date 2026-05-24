@@ -222,6 +222,27 @@
           "variables": []}}},
     {
       "type": {
+        "name": "hydra.typing.TypeClass",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {
+                      "string": "A type class identifier together with a human-readable description. Type classes are referenced as bare names (e.g. the local name \"equality\") in TypeVariableMetadata.classes; the canonical definitions live as term bindings under hydra.classes."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
+                        "body": {"literal": {"string": {}}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
         "name": "hydra.typing.TypeConstraint",
         "typeScheme": {
           "body": {

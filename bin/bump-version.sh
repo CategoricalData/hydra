@@ -14,7 +14,6 @@
 #   packages/hydra-scala/build.sbt
 #   heads/python/pyproject.toml
 #   demos/bootstrapping/resources/python/pyproject.toml
-#   pixi.toml
 #   README.md
 
 set -euo pipefail
@@ -101,10 +100,6 @@ patch "$REPO_ROOT/heads/python/pyproject.toml" \
     "s/^version = \".*\"/version = \"$VERSION\"/"
 
 patch "$REPO_ROOT/demos/bootstrapping/resources/python/pyproject.toml" \
-    "s/^version = \".*\"/version = \"$VERSION\"/"
-
-# Pixi (pixi.toml): version = "X.Y.Z"
-patch "$REPO_ROOT/pixi.toml" \
     "s/^version = \".*\"/version = \"$VERSION\"/"
 
 # README.md: version references

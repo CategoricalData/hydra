@@ -1942,6 +1942,40 @@ const eithersPrimitives = (): readonly Primitive[] => {
           }
           return right({ tag: "list", value: out } as never);
         })),
+    // bimap, foldl, mapList — used by Java/Python coders. Kernel kernel
+    // registers these in Libraries.hs; their type schemes (here transcribed)
+    // are what `analyzeFunctionTerm` consults to type top-level uses.
+    prim("hydra.lib.eithers.bimap", scheme(
+      tyFnCurried(tyFn(tyVar("a"), tyVar("c")), tyFn(tyVar("b"), tyVar("d")),
+        tyEither(tyVar("a"), tyVar("b")), tyEither(tyVar("c"), tyVar("d"))),
+      ["a", "b", "c", "d"]),
+      (_cx, _g, args) => left({ tag: "other", value: "bimap interpreter not implemented (kernel-only)" } as never)),
+    prim("hydra.lib.eithers.foldl", scheme(
+      tyFnCurried(
+        tyFn(tyVar("a"), tyFn(tyVar("b"), tyEither(tyVar("c"), tyVar("a")))),
+        tyVar("a"), tyList(tyVar("b")), tyEither(tyVar("c"), tyVar("a"))),
+      ["a", "b", "c"]),
+      (_cx, _g, args) => left({ tag: "other", value: "foldl interpreter not implemented (kernel-only)" } as never)),
+    prim("hydra.lib.eithers.mapList", scheme(
+      tyFnCurried(tyFn(tyVar("a"), tyEither(tyVar("c"), tyVar("b"))),
+        tyList(tyVar("a")), tyEither(tyVar("c"), tyList(tyVar("b")))),
+      ["a", "b", "c"]),
+      (_cx, _g, args) => left({ tag: "other", value: "mapList interpreter not implemented (kernel-only)" } as never)),
+    prim("hydra.lib.eithers.mapMaybe", scheme(
+      tyFnCurried(tyFn(tyVar("a"), tyEither(tyVar("c"), tyVar("b"))),
+        tyMaybe(tyVar("a")), tyEither(tyVar("c"), tyMaybe(tyVar("b")))),
+      ["a", "b", "c"]),
+      (_cx, _g, args) => left({ tag: "other", value: "mapMaybe interpreter not implemented (kernel-only)" } as never)),
+    prim("hydra.lib.eithers.mapSet", scheme(
+      tyFnCurried(tyFn(tyVar("a"), tyEither(tyVar("c"), tyVar("b"))),
+        tySet(tyVar("a")), tyEither(tyVar("c"), tySet(tyVar("b")))),
+      ["a", "b", "c"]),
+      (_cx, _g, args) => left({ tag: "other", value: "mapSet interpreter not implemented (kernel-only)" } as never)),
+    prim("hydra.lib.eithers.partitionEithers", scheme(
+      tyFn(tyList(tyEither(tyVar("a"), tyVar("b"))),
+        tyPair(tyList(tyVar("a")), tyList(tyVar("b")))),
+      ["a", "b"]),
+      (_cx, _g, args) => left({ tag: "other", value: "partitionEithers interpreter not implemented (kernel-only)" } as never)),
     // Unused: tLeft helper retained for symmetry.
     ...(function() { void tLeft; return []; })(),
   ];

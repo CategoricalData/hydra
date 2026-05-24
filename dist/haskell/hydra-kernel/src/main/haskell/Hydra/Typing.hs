@@ -101,6 +101,14 @@ newtype TermSubst =
     unTermSubst :: (M.Map Core.Name Core.Term)}
   deriving (Eq, Ord, Read, Show)
 _TermSubst = Core.Name "hydra.typing.TermSubst"
+-- | A type class identifier together with a human-readable description. Type classes are referenced as bare names (e.g. the local name "equality") in TypeVariableMetadata.classes; the canonical definitions live as term bindings under hydra.classes.
+data TypeClass =
+  TypeClass {
+    -- | A human-readable description of the type class
+    typeClassDescription :: String}
+  deriving (Eq, Ord, Read, Show)
+_TypeClass = Core.Name "hydra.typing.TypeClass"
+_TypeClass_description = Core.Name "description"
 -- | An assertion that two types can be unified into a single type
 data TypeConstraint =
   TypeConstraint {

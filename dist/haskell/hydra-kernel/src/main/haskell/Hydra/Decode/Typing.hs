@@ -91,6 +91,19 @@ termSubst cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermWrap v0 -> Eithers.map (\b -> Typing.TermSubst b) (ExtractCore.decodeMap DecodeCore.name DecodeCore.term cx (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.typing.TypeClass
+typeClass :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.TypeClass
+typeClass cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermRecord v0 ->
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "description" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+          Core.TermLiteral v1 -> case v1 of
+            Core.LiteralString v2 -> Right v2
+            _ -> Left (Errors.DecodingError "expected string literal")
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_description -> Right (Typing.TypeClass {
+          Typing.typeClassDescription = field_description})))
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.typing.TypeConstraint
 typeConstraint :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.TypeConstraint
 typeConstraint cx raw =

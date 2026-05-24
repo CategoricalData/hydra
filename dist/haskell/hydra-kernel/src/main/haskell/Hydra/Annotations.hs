@@ -2,7 +2,6 @@
 -- | Utilities for reading and writing type and term annotations
 
 module Hydra.Annotations where
-import qualified Hydra.Classes as Classes
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
@@ -20,7 +19,6 @@ import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -99,20 +97,12 @@ getType graph anns =
 -- | Get a type annotation
 getTypeAnnotation :: Core.Name -> Core.Type -> Maybe Core.Term
 getTypeAnnotation key typ = Maps.lookup key (typeAnnotationInternal typ)
--- | Get type classes from term
-getTypeClasses :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error (M.Map Core.Name (S.Set Classes.TypeClass))
+-- | Get type classes from term. Each Set Name contains bare class identifiers (#275).
+getTypeClasses :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error (M.Map Core.Name (S.Set Core.Name))
 getTypeClasses cx graph term =
 
-      let decodeClass =
-              \term2 ->
-                let byName =
-                        Maps.fromList [
-                          (Core.Name "equality", Classes.TypeClassEquality),
-                          (Core.Name "ordering", Classes.TypeClassOrdering)]
-                in (Eithers.bind (ExtractCore.unitVariant (Core.Name "hydra.classes.TypeClass") graph term2) (\fn -> Maybes.maybe (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-                  Errors.unexpectedShapeErrorExpected = "type class",
-                  Errors.unexpectedShapeErrorActual = (ShowCore.term term2)})))) (\x -> Right x) (Maps.lookup fn byName)))
-      in (Maybes.maybe (Right Maps.empty) (\term2 -> ExtractCore.map (\t -> Eithers.bimap (\de -> Errors.ErrorDecoding de) (\x -> x) (DecodeCore.name graph t)) (ExtractCore.setOf decodeClass graph) graph term2) (getTermAnnotation Constants.keyClasses term))
+      let decodeName = \term2 -> Eithers.bimap (\de -> Errors.ErrorDecoding de) (\x -> x) (DecodeCore.name graph term2)
+      in (Maybes.maybe (Right Maps.empty) (\term2 -> ExtractCore.map decodeName (ExtractCore.setOf decodeName graph) graph term2) (getTermAnnotation Constants.keyClasses term))
 -- | Get type description (Either version)
 getTypeDescription :: t0 -> Graph.Graph -> Core.Type -> Either Errors.Error (Maybe String)
 getTypeDescription cx graph typ = getDescription cx graph (typeAnnotationInternal typ)
@@ -215,27 +205,15 @@ setTypeAnnotation key val typ =
       in (Logic.ifElse (Maps.null anns) typ_ (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = typ_,
         Core.annotatedTypeAnnotation = anns})))
--- | Set type classes on term
-setTypeClasses :: M.Map Core.Name (S.Set Classes.TypeClass) -> Core.Term -> Core.Term
+-- | Set type classes on term. The Set Name carries bare class identifiers (#275).
+setTypeClasses :: M.Map Core.Name (S.Set Core.Name) -> Core.Term -> Core.Term
 setTypeClasses m term =
 
-      let encodeClass =
-              \tc -> case tc of
-                Classes.TypeClassEquality -> Core.TermInject (Core.Injection {
-                  Core.injectionTypeName = (Core.Name "hydra.classes.TypeClass"),
-                  Core.injectionField = Core.Field {
-                    Core.fieldName = (Core.Name "equality"),
-                    Core.fieldTerm = Core.TermUnit}})
-                Classes.TypeClassOrdering -> Core.TermInject (Core.Injection {
-                  Core.injectionTypeName = (Core.Name "hydra.classes.TypeClass"),
-                  Core.injectionField = Core.Field {
-                    Core.fieldName = (Core.Name "ordering"),
-                    Core.fieldTerm = Core.TermUnit}})
-          encodePair =
-                  \nameClasses ->
-                    let name = Pairs.first nameClasses
-                        classes = Pairs.second nameClasses
-                    in (EncodeCore.name name, (Core.TermSet (Sets.fromList (Lists.map encodeClass (Sets.toList classes)))))
+      let encodePair =
+              \nameClasses ->
+                let name = Pairs.first nameClasses
+                    classes = Pairs.second nameClasses
+                in (EncodeCore.name name, (Core.TermSet (Sets.fromList (Lists.map EncodeCore.name (Sets.toList classes)))))
           encoded = Logic.ifElse (Maps.null m) Nothing (Just (Core.TermMap (Maps.fromList (Lists.map encodePair (Maps.toList m)))))
       in (setTermAnnotation Constants.keyClasses encoded term)
 -- | Set type description

@@ -25,12 +25,6 @@ comparisonEqualTo = injectUnit _Comparison _Comparison_equalTo
 comparisonGreaterThan :: TTerm Comparison
 comparisonGreaterThan = injectUnit _Comparison _Comparison_greaterThan
 
-typeClassEquality :: TTerm TypeClass
-typeClassEquality = injectUnit _TypeClass _TypeClass_equality
-
-typeClassOrdering :: TTerm TypeClass
-typeClassOrdering = injectUnit _TypeClass _TypeClass_ordering
-
 emptyGraph :: TTerm Graph
 emptyGraph = graph
     Maps.empty  -- boundTerms
