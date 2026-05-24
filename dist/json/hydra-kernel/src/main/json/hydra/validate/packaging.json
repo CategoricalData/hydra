@@ -1109,7 +1109,26 @@
                                                                                         "default": {"literal": {"boolean": false}},
                                                                                         "typeName": "hydra.core.Type"}}}}}},
                                                                             "domain": {"variable": "hydra.packaging.TypeDefinition"},
-                                                                            "parameter": "td"}}}],
+                                                                            "parameter": "td"}}},
+                                                                      {
+                                                                        "name": "primitive",
+                                                                        "term": {
+                                                                          "lambda": {
+                                                                            "body": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"literal": {"string": ""}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "pd"},
+                                                                                            "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.PrimitiveDefinition"}}}},
+                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}}}}}},
+                                                                                "function": {"variable": "hydra.lib.logic.not"}}},
+                                                                            "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
+                                                                            "parameter": "pd"}}}],
                                                                     "default": {"literal": {"boolean": false}},
                                                                     "typeName": "hydra.packaging.Definition"}}}},
                                                             "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}}],
@@ -1379,6 +1398,13 @@
                                                                               "lambda": {
                                                                                 "body": {"inject": {"field": {"name": "pascal", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
                                                                                 "domain": {"variable": "hydra.packaging.TypeDefinition"},
+                                                                                "parameter": "_"}}},
+                                                                          {
+                                                                            "name": "primitive",
+                                                                            "term": {
+                                                                              "lambda": {
+                                                                                "body": {"inject": {"field": {"name": "camel", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
+                                                                                "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
                                                                                 "parameter": "_"}}}],
                                                                         "default": {"inject": {"field": {"name": "camel", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
                                                                         "typeName": "hydra.packaging.Definition"}}}},
@@ -1407,6 +1433,13 @@
                                                                                   "lambda": {
                                                                                     "body": {"variable": "hydra.constants.regexPascalCase"},
                                                                                     "domain": {"variable": "hydra.packaging.TypeDefinition"},
+                                                                                    "parameter": "_"}}},
+                                                                              {
+                                                                                "name": "primitive",
+                                                                                "term": {
+                                                                                  "lambda": {
+                                                                                    "body": {"variable": "hydra.constants.regexCamelCase"},
+                                                                                    "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
                                                                                     "parameter": "_"}}}],
                                                                             "default": {"variable": "hydra.constants.regexCamelCase"},
                                                                             "typeName": "hydra.packaging.Definition"}}}},
@@ -2198,7 +2231,17 @@
                                     "argument": {"variable": "td"},
                                     "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.TypeDefinition"}}}},
                                 "domain": {"variable": "hydra.packaging.TypeDefinition"},
-                                "parameter": "td"}}}],
+                                "parameter": "td"}}},
+                          {
+                            "name": "primitive",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"variable": "pd"},
+                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.PrimitiveDefinition"}}}},
+                                "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
+                                "parameter": "pd"}}}],
                         "typeName": "hydra.packaging.Definition"}}}},
                 "domain": {"variable": "hydra.packaging.Definition"},
                 "parameter": "def"}}}}}},
