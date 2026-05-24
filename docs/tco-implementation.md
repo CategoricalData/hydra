@@ -45,7 +45,7 @@ function = define "Function" $ T.union [
 
 elimination = define "Elimination" $ T.union [
     "record"         -- field projection
-    "union"          -- case/match statement
+    "union"          -- case statement (DSL: `match`)
     "wrap"           -- newtype unwrap
   ]
 ```
