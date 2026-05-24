@@ -5,7 +5,6 @@ module Hydra.Haskell.Coder where
 import qualified Hydra.Adapt as Adapt
 import qualified Hydra.Analysis as Analysis
 import qualified Hydra.Annotations as Annotations
-import qualified Hydra.Classes as Classes
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
@@ -436,11 +435,9 @@ encodeTypeWithClassAssertions namespaces explicitClasses typ cx g =
                   \pair ->
                     let name = Pairs.first pair
                         cls = Pairs.second pair
+                        classLocal = Core.unName cls
                         hname =
-                                Utils.rawName (case Core.unName cls of
-                                  "equality" -> "Eq"
-                                  "ordering" -> "Ord"
-                                  other -> other)
+                                Utils.rawName (Logic.ifElse (Equality.equal classLocal "equality") "Eq" (Logic.ifElse (Equality.equal classLocal "ordering") "Ord" (Formatting.capitalize classLocal)))
                         htype = Syntax.TypeVariable (Utils.rawName (Core.unName name))
                     in (Syntax.ConstraintClass (Syntax.ClassConstraint {
                       Syntax.classConstraintName = hname,
@@ -521,7 +518,8 @@ gatherMetadata defs =
 getImplicitTypeClasses :: Core.Type -> M.Map Core.Name (S.Set Core.Name)
 getImplicitTypeClasses typ =
 
-      let toPair = \name -> (name, (Sets.fromList [Core.Name "ordering"]))
+      let toPair = \name -> (name, (Sets.fromList [
+            Core.Name "ordering"]))
       in (Maps.fromList (Lists.map toPair (Sets.toList (findOrdVariables typ))))
 -- | Whether to include type definitions in generated Haskell modules
 includeTypeDefinitions :: Bool
@@ -821,9 +819,10 @@ typeDecl namespaces name typ cx g =
 -- | Project type scheme constraints to a map of type variables to typeclass names
 typeSchemeConstraintsToClassMap :: Ord t0 => (Maybe (M.Map t0 Core.TypeVariableMetadata) -> M.Map t0 (S.Set Core.Name))
 typeSchemeConstraintsToClassMap maybeConstraints =
+
       let constraintToName =
               \tcc -> case tcc of
-                Core.TypeClassConstraintSimple className -> Just className
+                Core.TypeClassConstraintSimple v0 -> Just v0
       in (Maybes.maybe Maps.empty (\constraints -> Maps.map (\meta -> Sets.fromList (Maybes.cat (Lists.map constraintToName (Core.typeVariableMetadataClasses meta)))) constraints) maybeConstraints)
 -- | Whether to use the Hydra core import in generated modules
 useCoreImport :: Bool

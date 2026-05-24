@@ -1765,7 +1765,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -1953,7 +1953,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -2170,7 +2170,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -2388,7 +2388,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -2537,7 +2537,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -2706,7 +2706,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -2876,7 +2876,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -3049,7 +3049,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -3242,7 +3242,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -3256,7 +3256,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -3434,7 +3434,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "equality"}}, "typeName": "hydra.core.Name"}}},
@@ -3599,7 +3599,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -3768,7 +3768,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -3924,7 +3924,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "equality"}}, "typeName": "hydra.core.Name"}}},
@@ -4094,7 +4094,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "equality"}}, "typeName": "hydra.core.Name"}}},
@@ -4342,7 +4342,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -4585,7 +4585,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -4798,7 +4798,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -5036,7 +5036,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "equality"}}, "typeName": "hydra.core.Name"}}},
@@ -5557,7 +5557,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -5816,7 +5816,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -6033,7 +6033,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -6318,7 +6318,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -6533,7 +6533,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -7160,7 +7160,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -7432,7 +7432,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -7687,7 +7687,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -7701,7 +7701,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -7973,7 +7973,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -7987,7 +7987,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -8215,7 +8215,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -8516,7 +8516,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -8715,7 +8715,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -8920,7 +8920,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -9307,7 +9307,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -9894,7 +9894,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -10150,7 +10150,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -10320,7 +10320,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -10527,7 +10527,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
@@ -10727,7 +10727,7 @@
                                                                                     {
                                                                                       "name": "classes",
                                                                                       "term": {
-                                                                                        "set": [
+                                                                                        "list": [
                                                                                           {
                                                                                             "inject": {
                                                                                               "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},

@@ -13572,8 +13572,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The set of typeclass constraints on this type variable"}}}],
-                      "body": {"set": {"variable": "hydra.core.TypeClassConstraint"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The typeclass constraints on this type variable"}}}],
+                      "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}],
           "result": {
             "type": {
@@ -13615,8 +13615,8 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The set of typeclass constraints on this type variable"}}}],
-                        "body": {"set": {"variable": "hydra.core.TypeClassConstraint"}}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The typeclass constraints on this type variable"}}}],
+                        "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "classes"}}}}}},
     {
@@ -13634,8 +13634,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The set of typeclass constraints on this type variable"}}}],
-                    "body": {"set": {"variable": "hydra.core.TypeClassConstraint"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The typeclass constraints on this type variable"}}}],
+                    "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}}},
           "typeParameters": []},
         "term": {
@@ -13696,8 +13696,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The set of typeclass constraints on this type variable"}}}],
-                      "body": {"set": {"variable": "hydra.core.TypeClassConstraint"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The typeclass constraints on this type variable"}}}],
+                      "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}],
           "result": {
             "type": {
@@ -13744,8 +13744,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The set of typeclass constraints on this type variable"}}}],
-                            "body": {"set": {"variable": "hydra.core.TypeClassConstraint"}}}},
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The typeclass constraints on this type variable"}}}],
+                            "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
