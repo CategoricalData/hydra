@@ -204,6 +204,18 @@ These refactoring patterns are especially prone to leaving orphans:
   (e.g., `FooTestCase`, `BarTestCase` → `TestCase`), the old per-type Java files remain.
 - **Module renames**: Any rename leaves the old file in every implementation
   plus in the JSON kernel, decoders, encoders, and DSL modules.
+- **Type-module nominalization changes**: When a type module that previously
+  had nominal types is reduced to only structural types (or all its types are
+  removed), `encodeModule` / `decodeModule` return `Right Nothing` and the
+  generator simply does not write `hydra/encode/<x>.<ext>` or
+  `hydra/decode/<x>.<ext>` files anymore. Stub files from an earlier sync run
+  (often a few lines of `(define-library ... (begin))` for Scheme, or the
+  equivalent empty wrapper for other targets) survive as orphans. They are
+  not detectable via the source-Module → dist-file cross-reference because the
+  Source modules still exist; only the *current generator output* identifies
+  them. To detect: snapshot `dist/<lang>/<pkg>/.../` before a clean rebuild,
+  rebuild from scratch, diff. Any file present in the snapshot but absent
+  from the rebuild is an orphan of this kind.
 
 ### Relationship to refactoring recipes
 
@@ -804,6 +816,24 @@ done
 
 If this prints anything, investigate whether the file is intentional or leftover
 from a pre-0.15 version.
+
+**Known false positives.** The `extend_path` stub is required only for directories
+that have a generated sibling tree (e.g. `hydra/`, `hydra/dsl/`, `hydra/sources/`,
+`hydra/python/`, `hydra/dsl/python/` — these merge with `src/gen-main/python/...`
+content). Directories that are *entirely hand-written* runtime trees, copied into
+`dist/python/hydra-kernel/` from `heads/python/src/main/python/` via
+`copy-kernel-runtime.sh`, do not need (and should not have) the stub. The
+following intentionally lack `extend_path`:
+
+- `hydra/lib/__init__.py` — docstring-only marker for the hand-written
+  primitive-implementation tree.
+- `hydra/dsl/meta/__init__.py` — empty marker for the hand-written meta-DSL.
+- `hydra/dsl/meta/lib/__init__.py` — empty marker for the hand-written meta-DSL
+  library helpers.
+- `hydra/python/util/__init__.py` (in `heads/python/` only; not copied into
+  `dist/`) — explicit re-exports for the persistent-collection types.
+
+The check above flags these by design; they are not stale.
 
 ---
 
