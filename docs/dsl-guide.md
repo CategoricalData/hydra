@@ -951,7 +951,7 @@ outermost layer, satisfying the same validator check as host-level `doc`.
 ```haskell
 import qualified Hydra.Dsl.Types as T
 
--- Primitive types
+-- Literal types
 T.int32
 T.int64
 T.bigint

@@ -518,7 +518,7 @@ inferTypeOfEitherDef = define "inferTypeOfEither" $
 
 **Features Demonstrated:**
 - `define` - Define a named function
-- `~>` - Lambda abstraction
+- `~>` - Function abstraction
 - `<~` - Let binding
 - `<<~` - `Either`-bind (bind into the error-handling monad-like combinator)
 - `@@` - Function application
@@ -657,7 +657,7 @@ prim2Interp _lists_map (Just mapInterp) ["x", "y"]
 The `Hydra.Dsl.Prims` module provides type coding:
 
 ```haskell
--- Primitive types
+-- Literal types
 int32, int64 :: TermCoder Int
 float32, float64 :: TermCoder Double
 bigint :: TermCoder Integer
@@ -990,7 +990,7 @@ encodeTerm :: Context -> Graph -> Aliases -> Term -> Either Error Java.Expressio
 -- - Unions (abstract class with visitors)
 -- - Variables (local variables or fields)
 -- - Let bindings (variable declarations)
--- - Case expressions (visitor pattern)
+-- - Case statements (visitor pattern)
 ```
 
 #### Step 2: Type Encoding
@@ -1194,6 +1194,9 @@ The modules compiled in the Haskell head are aggregated in `Hydra.Sources.All`
   type inference, type checking, term reduction, rewriting, code generation, etc.
   Hand-written DSL definitions in `Hydra.Sources.Kernel.Terms.*`.
   Also includes the encoder/decoder source modules (see below).
+  For the high-level framing of how inference and checking cooperate, see the
+  [Inference wiki page](https://github.com/CategoricalData/hydra/wiki/Inference);
+  this section covers only the build-system mechanics.
 
 - **Haskell modules** (`haskellModules`) — Both type modules (the Haskell AST model)
   and term modules (the Haskell coder, serializer, and utilities). These are specific
@@ -1276,6 +1279,12 @@ For detailed context on encoder/decoder modules, see
 [Issue #47: Per-Type Term Coders](https://github.com/CategoricalData/hydra/blob/main/docs/work/issues/issue-47-per-type-term-coders.md).
 
 ### Incremental inference
+
+This section covers how Hydra's build system *runs* inference at scale — caching,
+incremental skipping, per-package iteration. For what inference itself does
+(HM with elaboration to typed System F, the two cooperating modules
+`hydra.inference` and `hydra.checking`, the `Graph` as inference context), see
+the [Inference wiki page](https://github.com/CategoricalData/hydra/wiki/Inference).
 
 `inferModulesGiven` (in `Hydra.Codegen`) takes a universe and a target set
 and re-infers only the relevant subset. Bindings in the target modules or

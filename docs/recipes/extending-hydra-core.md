@@ -105,7 +105,7 @@ def "Term" $
       doc "An either value" $
       Types.either_ (core "Term") (core "Term"),  -- ← NEW
     "function">:
-      doc "A function term" $
+      doc "A function abstraction (lambda)" $
       core "Function",
     -- ... rest of cases
   ]
@@ -718,7 +718,7 @@ Add test cases in the "Type checking" describe block. Use helper functions for c
 ```haskell
 -- Helper functions (already defined in the file)
 tyapps :: TTerm a -> [Type] -> TTerm b          -- Multiple type applications
-tylams :: [Name] -> TTerm a -> TTerm b          -- Multiple type lambda abstractions
+tylams :: [Name] -> TTerm a -> TTerm b          -- Multiple type abstractions
 forAll :: Name -> Type -> Type                   -- Polymorphic type quantification
 ```
 
@@ -1024,7 +1024,7 @@ def "TypeContext" $
       doc "The set of term variables introduced by let bindings" $
       Types.set (core "Name"),
     "inferenceContext">:
-      doc "The schema types, primitive types, and data types of the graph" $
+      doc "The schema type schemes, type schemes of primitives, and let-bound type schemes of the graph" $
       typing "InferenceContext"]
 ```
 
