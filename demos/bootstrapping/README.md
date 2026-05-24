@@ -99,15 +99,17 @@ for more details.
 
 ### Java
 
-Install JDK 11 or later. Build with Gradle from the repository root:
+Install JDK 11 or later. Build with Gradle from the Java head:
 
 ```bash
+cd heads/java
 ./gradlew :hydra-java:compileJava
 ```
 
 You may need to set `JAVA_HOME` if your default Java version is too old:
 
 ```bash
+cd heads/java
 JAVA_HOME=/path/to/java11 ./gradlew :hydra-java:compileJava
 ```
 

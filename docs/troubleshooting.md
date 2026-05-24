@@ -50,11 +50,11 @@ full checklist.
 ### Running tests
 
 ```bash
-# From the repo root
-./gradlew :packages:hydra-java:test
+# From the Java head
+(cd heads/java && ./gradlew :hydra-java:test)
 
 # With detailed failure output
-./gradlew :packages:hydra-java:test --tests "*TestSuiteRunner*" --info 2>&1 | grep -A 20 "FAILED"
+(cd heads/java && ./gradlew :hydra-java:test --tests "*TestSuiteRunner*" --info) 2>&1 | grep -A 20 "FAILED"
 ```
 
 The test runner is at `heads/java/src/test/java/hydra/TestSuiteRunner.java`. It dispatches

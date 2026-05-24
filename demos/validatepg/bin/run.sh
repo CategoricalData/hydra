@@ -51,8 +51,9 @@ RUN_DIR=$(create_run_dir /tmp/hydra-validatepg "$TAG")
 # ============================================================================
 
 demo_header "Building Java"
-cd "$REPO_ROOT"
+cd "$REPO_ROOT/heads/java"
 ./gradlew :hydra-java:compileJava :hydra-java:compileJava --quiet 2>&1
+cd "$REPO_ROOT"
 
 JAVA_CP="$REPO_ROOT/packages/hydra-java/build/classes/java/main:$REPO_ROOT/packages/hydra-java/build/classes/java/main"
 

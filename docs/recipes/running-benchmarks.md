@@ -21,7 +21,7 @@ empty/stub results that the dashboard then chokes on:
 - **Python**: `cd heads/python && uv sync` once so `heads/python/.venv`
   exists. Without the venv the bench falls back to bare `python3`, which
   usually lacks `pytest`.
-- **Java**: a successful `./gradlew :hydra-java:test` from the repo root.
+- **Java**: a successful `(cd heads/java && ./gradlew :hydra-java:test)`.
 - **Common Lisp**: native arm64 SBCL on Apple Silicon (the Rosetta-x86
   build also works but is ~1.4× slower); see
   [hydra-common-lisp README](../../packages/hydra-lisp/hydra-common-lisp/README.md).

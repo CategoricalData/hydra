@@ -127,7 +127,7 @@ run_lang() {
             ;;
         java)
             echo "=== Running Java benchmark tests (run $i/$REPEAT) ==="
-            cd "$REPO_ROOT"
+            cd "$REPO_ROOT/heads/java"
             HYDRA_BENCHMARK_OUTPUT="$outfile" \
                 ./gradlew :hydra-java:test --rerun
             ;;
