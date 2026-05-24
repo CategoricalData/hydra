@@ -13,8 +13,6 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HYDRA_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 
-cd "$HYDRA_ROOT"
-
 # headsExtras compiles hydra/Generation.java + friends, which import
 # hydra.{python,haskell,lisp,scala,go}.* from dist/java/hydra-*/. Run a
 # full sync first to ensure every per-language tree is current; warm-cache
@@ -24,6 +22,8 @@ if [ "${HYDRA_IN_SYNC:-0}" != "1" ]; then
     echo "=== Running bin/sync.sh to ensure all dist trees are current ==="
     "$HYDRA_ROOT/bin/sync.sh"
 fi
+
+cd "$HYDRA_ROOT/heads/java"
 
 # Ensure headsExtras is compiled.
 ./gradlew --quiet :hydra-java:compileHeadsExtrasJava

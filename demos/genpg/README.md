@@ -118,10 +118,10 @@ The `sales` argument is the default, so it can be omitted.
 
 ### Java mode
 
-Java 11+ is required. From the repository root:
+Java 11+ is required. From the Java head:
 
 ```bash
-./gradlew compileJava
+(cd heads/java && ./gradlew compileJava)
 ```
 
 Then run the demo:
@@ -177,7 +177,7 @@ Python (driver not yet checked in; the run script skips this host with a "driver
 python3 demos/src/main/python/hydra/demos/genpg/rdf.py sales
 ```
 
-Java (after `./gradlew compileJava`):
+Java (after `(cd heads/java && ./gradlew compileJava)`):
 ```bash
 java -cp <classpath> hydra.demos.genpg.RdfDemo sales
 ```
