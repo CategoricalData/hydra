@@ -3,6 +3,7 @@
     {
       "term": {
         "name": "hydra.yaml.language.yamlLanguage",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for YAML"}}}],
@@ -119,8 +120,7 @@
                               {"name": "typeVariants", "term": {"variable": "typeVariants"}},
                               {"name": "types", "term": {"variable": "typePredicate"}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
-                    "typeName": "hydra.coders.Language"}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}}],
+                    "typeName": "hydra.coders.Language"}}}}}}}}],
   "dependencies": [
     {"module": "hydra.strip"},
     {"module": "hydra.paths"},

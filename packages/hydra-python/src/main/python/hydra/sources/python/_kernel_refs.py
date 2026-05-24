@@ -137,6 +137,7 @@ environment_with_type_lambda_context = var("hydra.environment.withTypeLambdaCont
 
 # hydra.scoping / hydra.strip / hydra.variables
 scoping_extend_graph_for_lambda = var("hydra.scoping.extendGraphForLambda")
+scoping_term_signature_to_type_scheme = var("hydra.scoping.termSignatureToTypeScheme")
 reduction_alpha_convert = var("hydra.reduction.alphaConvert")
 strip_deannotate_type = var("hydra.strip.deannotateType")
 strip_deannotate_and_detype_term = var("hydra.strip.deannotateAndDetypeTerm")

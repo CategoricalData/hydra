@@ -3,36 +3,37 @@
     {
       "term": {
         "name": "hydra.java.names.acceptMethodName",
-        "term": {"literal": {"string": "accept"}},
-        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []},
+        "term": {"literal": {"string": "accept"}}}},
     {
       "term": {
         "name": "hydra.java.names.applyMethodName",
-        "term": {"literal": {"string": "apply"}},
-        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []},
+        "term": {"literal": {"string": "apply"}}}},
     {
       "term": {
         "name": "hydra.java.names.compareToMethodName",
-        "term": {"literal": {"string": "compareTo"}},
-        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []},
+        "term": {"literal": {"string": "compareTo"}}}},
     {
       "term": {
         "name": "hydra.java.names.equalsMethodName",
-        "term": {"literal": {"string": "equals"}},
-        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []},
+        "term": {"literal": {"string": "equals"}}}},
     {
       "term": {
         "name": "hydra.java.names.getMethodName",
-        "term": {"literal": {"string": "get"}},
-        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []},
+        "term": {"literal": {"string": "get"}}}},
     {
       "term": {
         "name": "hydra.java.names.hashCodeMethodName",
-        "term": {"literal": {"string": "hashCode"}},
-        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []},
+        "term": {"literal": {"string": "hashCode"}}}},
     {
       "term": {
         "name": "hydra.java.names.hydraCorePackageName",
+        "signature": {"parameters": [], "result": {"type": {"maybe": {"variable": "hydra.java.syntax.PackageName"}}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "The hydra.core package name"}}}],
@@ -40,11 +41,11 @@
               "maybe": {
                 "application": {
                   "argument": {"list": [{"literal": {"string": "hydra"}}, {"literal": {"string": "core"}}]},
-                  "function": {"variable": "hydra.java.names.javaPackageName"}}}}}},
-        "typeScheme": {"body": {"maybe": {"variable": "hydra.java.syntax.PackageName"}}, "variables": []}}},
+                  "function": {"variable": "hydra.java.names.javaPackageName"}}}}}}}},
     {
       "term": {
         "name": "hydra.java.names.hydraUtilPackageName",
+        "signature": {"parameters": [], "result": {"type": {"maybe": {"variable": "hydra.java.syntax.PackageName"}}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "The hydra.util package name"}}}],
@@ -52,16 +53,16 @@
               "maybe": {
                 "application": {
                   "argument": {"list": [{"literal": {"string": "hydra"}}, {"literal": {"string": "util"}}]},
-                  "function": {"variable": "hydra.java.names.javaPackageName"}}}}}},
-        "typeScheme": {"body": {"maybe": {"variable": "hydra.java.syntax.PackageName"}}, "variables": []}}},
+                  "function": {"variable": "hydra.java.names.javaPackageName"}}}}}}}},
     {
       "term": {
         "name": "hydra.java.names.instanceName",
-        "term": {"literal": {"string": "instance"}},
-        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []},
+        "term": {"literal": {"string": "instance"}}}},
     {
       "term": {
         "name": "hydra.java.names.javaLangPackageName",
+        "signature": {"parameters": [], "result": {"type": {"maybe": {"variable": "hydra.java.syntax.PackageName"}}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "The java.lang package name"}}}],
@@ -69,11 +70,14 @@
               "maybe": {
                 "application": {
                   "argument": {"list": [{"literal": {"string": "java"}}, {"literal": {"string": "lang"}}]},
-                  "function": {"variable": "hydra.java.names.javaPackageName"}}}}}},
-        "typeScheme": {"body": {"maybe": {"variable": "hydra.java.syntax.PackageName"}}, "variables": []}}},
+                  "function": {"variable": "hydra.java.names.javaPackageName"}}}}}}}},
     {
       "term": {
         "name": "hydra.java.names.javaPackageName",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"literal": {"string": {}}}}}],
+          "result": {"type": {"variable": "hydra.java.syntax.PackageName"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Construct a Java package name from a list of string parts"}}}],
@@ -97,14 +101,11 @@
                                 "type": {"variable": "hydra.java.syntax.Identifier"}}}}}}},
                     "typeName": "hydra.java.syntax.PackageName"}},
                 "domain": {"list": {"literal": {"string": {}}}},
-                "parameter": "parts"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.java.syntax.PackageName"}, "domain": {"list": {"literal": {"string": {}}}}}},
-          "variables": []}}},
+                "parameter": "parts"}}}}}},
     {
       "term": {
         "name": "hydra.java.names.javaUtilFunctionPackageName",
+        "signature": {"parameters": [], "result": {"type": {"maybe": {"variable": "hydra.java.syntax.PackageName"}}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "The java.util.function package name"}}}],
@@ -112,11 +113,11 @@
               "maybe": {
                 "application": {
                   "argument": {"list": [{"literal": {"string": "java"}}, {"literal": {"string": "util"}}, {"literal": {"string": "function"}}]},
-                  "function": {"variable": "hydra.java.names.javaPackageName"}}}}}},
-        "typeScheme": {"body": {"maybe": {"variable": "hydra.java.syntax.PackageName"}}, "variables": []}}},
+                  "function": {"variable": "hydra.java.names.javaPackageName"}}}}}}}},
     {
       "term": {
         "name": "hydra.java.names.javaUtilPackageName",
+        "signature": {"parameters": [], "result": {"type": {"maybe": {"variable": "hydra.java.syntax.PackageName"}}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "The java.util package name"}}}],
@@ -124,48 +125,47 @@
               "maybe": {
                 "application": {
                   "argument": {"list": [{"literal": {"string": "java"}}, {"literal": {"string": "util"}}]},
-                  "function": {"variable": "hydra.java.names.javaPackageName"}}}}}},
-        "typeScheme": {"body": {"maybe": {"variable": "hydra.java.syntax.PackageName"}}, "variables": []}}},
+                  "function": {"variable": "hydra.java.names.javaPackageName"}}}}}}}},
     {
       "term": {
         "name": "hydra.java.names.otherInstanceName",
-        "term": {"literal": {"string": "other"}},
-        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []},
+        "term": {"literal": {"string": "other"}}}},
     {
       "term": {
         "name": "hydra.java.names.otherwiseMethodName",
-        "term": {"literal": {"string": "otherwise"}},
-        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []},
+        "term": {"literal": {"string": "otherwise"}}}},
     {
       "term": {
         "name": "hydra.java.names.partialVisitorName",
-        "term": {"literal": {"string": "PartialVisitor"}},
-        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []},
+        "term": {"literal": {"string": "PartialVisitor"}}}},
     {
       "term": {
         "name": "hydra.java.names.setMethodName",
-        "term": {"literal": {"string": "set"}},
-        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []},
+        "term": {"literal": {"string": "set"}}}},
     {
       "term": {
         "name": "hydra.java.names.valueFieldName",
-        "term": {"literal": {"string": "value"}},
-        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []},
+        "term": {"literal": {"string": "value"}}}},
     {
       "term": {
         "name": "hydra.java.names.visitMethodName",
-        "term": {"literal": {"string": "visit"}},
-        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []},
+        "term": {"literal": {"string": "visit"}}}},
     {
       "term": {
         "name": "hydra.java.names.visitorName",
-        "term": {"literal": {"string": "Visitor"}},
-        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []},
+        "term": {"literal": {"string": "Visitor"}}}},
     {
       "term": {
         "name": "hydra.java.names.visitorReturnParameter",
-        "term": {"literal": {"string": "R"}},
-        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}}],
+        "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []},
+        "term": {"literal": {"string": "R"}}}}],
   "dependencies": [
     {"module": "hydra.java.syntax"},
     {"module": "hydra.paths"},

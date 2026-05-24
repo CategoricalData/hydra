@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.show.util.caseConvention",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.util.CaseConvention"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Show a case convention as a string"}}}],
@@ -28,13 +32,14 @@
                             "term": {"lambda": {"body": {"literal": {"string": "PascalCase"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                         "typeName": "hydra.util.CaseConvention"}}}},
                 "domain": {"variable": "hydra.util.CaseConvention"},
-                "parameter": "c"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.util.CaseConvention"}}},
-          "variables": []}}},
+                "parameter": "c"}}}}}},
     {
       "term": {
         "name": "hydra.show.util.comparison",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.util.Comparison"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Show a comparison result as a string"}}}],
@@ -57,10 +62,7 @@
                             "term": {"lambda": {"body": {"literal": {"string": "greaterThan"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                         "typeName": "hydra.util.Comparison"}}}},
                 "domain": {"variable": "hydra.util.Comparison"},
-                "parameter": "c"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.util.Comparison"}}},
-          "variables": []}}}],
+                "parameter": "c"}}}}}}],
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

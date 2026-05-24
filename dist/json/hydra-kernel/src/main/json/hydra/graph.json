@@ -112,21 +112,25 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A built-in function or constant"}}}],
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {
+                      "string": "A built-in function or constant, consisting of the host-independent PrimitiveDefinition (name, signature, metadata) plus a host-specific implementation."}}}],
               "body": {
                 "record": [
                   {
-                    "name": "name",
+                    "name": "definition",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of the primitive function"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}},
-                  {
-                    "name": "typeScheme",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The type scheme of the primitive function"}}}],
-                        "body": {"variable": "hydra.core.TypeScheme"}}}},
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {
+                                "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}],
+                        "body": {"variable": "hydra.packaging.PrimitiveDefinition"}}}},
                   {
                     "name": "implementation",
                     "type": {

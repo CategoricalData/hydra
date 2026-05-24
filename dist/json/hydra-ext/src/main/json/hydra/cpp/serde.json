@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.cpp.serde.accessSpecifierToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.AccessSpecifier"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an access specifier to an expression"}}}],
@@ -44,13 +48,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.cpp.syntax.AccessSpecifier"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.AccessSpecifier"},
-                "parameter": "a"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.AccessSpecifier"}}},
-          "variables": []}}},
+                "parameter": "a"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.addOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.AddOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an add operation to an expression"}}}],
@@ -84,13 +89,14 @@
                               "application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.cpp.serde.multiplicativeExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.AddOperation"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.AddOperation"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.additiveExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.AdditiveExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an additive expression to an expression"}}}],
@@ -126,14 +132,14 @@
                                 "parameter": "s"}}}],
                         "typeName": "hydra.cpp.syntax.AdditiveExpression"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.AdditiveExpression"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.AdditiveExpression"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.andExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.AndExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an and expression to an expression"}}}],
@@ -161,13 +167,14 @@
                                 "parameter": "a"}}}],
                         "typeName": "hydra.cpp.syntax.AndExpression"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.AndExpression"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.AndExpression"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.assignmentExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.AssignmentExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an assignment expression to an expression"}}}],
@@ -196,14 +203,14 @@
                                 "parameter": "e"}}}],
                         "typeName": "hydra.cpp.syntax.AssignmentExpression"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.AssignmentExpression"},
-                "parameter": "a"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.AssignmentExpression"}}},
-          "variables": []}}},
+                "parameter": "a"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.assignmentOperatorToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.AssignmentOperator"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an assignment operator to an expression"}}}],
@@ -294,14 +301,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.cpp.syntax.AssignmentOperator"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.AssignmentOperator"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.AssignmentOperator"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.baseSpecifierToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.BaseSpecifier"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a base specifier to an expression"}}}],
@@ -332,13 +339,14 @@
                             {"application": {"argument": {"variable": "name"}, "function": {"variable": "hydra.serialization.cst"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.BaseSpecifier"},
-                "parameter": "bs"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.BaseSpecifier"}}},
-          "variables": []}}},
+                "parameter": "bs"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.basicTypeToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.BasicType"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a basic type to an expression"}}}],
@@ -416,13 +424,14 @@
                                 "parameter": "name"}}}],
                         "typeName": "hydra.cpp.syntax.BasicType"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.BasicType"},
-                "parameter": "t"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.BasicType"}}},
-          "variables": []}}},
+                "parameter": "t"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.bitwiseAndOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.BitwiseAndOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a bitwise and operation to an expression"}}}],
@@ -455,14 +464,14 @@
                               "application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.cpp.serde.equalityExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.BitwiseAndOperation"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.BitwiseAndOperation"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.bitwiseOrOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.BitwiseOrOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a bitwise or operation to an expression"}}}],
@@ -496,14 +505,14 @@
                               "application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.cpp.serde.exclusiveOrExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.BitwiseOrOperation"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.BitwiseOrOperation"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.bitwiseXorOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.BitwiseXorOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a bitwise xor operation to an expression"}}}],
@@ -536,14 +545,14 @@
                             {"application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.cpp.serde.andExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.BitwiseXorOperation"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.BitwiseXorOperation"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.booleanLiteralToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.BooleanLiteral"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a boolean literal to an expression"}}}],
@@ -560,13 +569,14 @@
                             "argument": {"application": {"argument": {"variable": "bl"}, "function": {"unwrap": "hydra.cpp.syntax.BooleanLiteral"}}},
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.BooleanLiteral"},
-                "parameter": "bl"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.BooleanLiteral"}}},
-          "variables": []}}},
+                "parameter": "bl"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.captureToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.Capture"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a capture to an expression"}}}],
@@ -606,13 +616,14 @@
                                 "argument": {"variable": "byRef"},
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.Capture"},
-                "parameter": "cap"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.Capture"}}},
-          "variables": []}}},
+                "parameter": "cap"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.captureListToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.CaptureList"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a capture list to an expression"}}}],
@@ -655,13 +666,14 @@
                                 "parameter": "cs"}}}],
                         "typeName": "hydra.cpp.syntax.CaptureList"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.CaptureList"},
-                "parameter": "cl"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.CaptureList"}}},
-          "variables": []}}},
+                "parameter": "cl"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.caseStatementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.CaseStatement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a case statement to an expression"}}}],
@@ -695,13 +707,14 @@
                                 "parameter": "s"}}}],
                         "typeName": "hydra.cpp.syntax.CaseStatement"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.CaseStatement"},
-                "parameter": "stmt"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.CaseStatement"}}},
-          "variables": []}}},
+                "parameter": "stmt"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.caseValueToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.CaseValue"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a case value to an expression"}}}],
@@ -739,13 +752,16 @@
                             {"application": {"argument": {"variable": "statement"}, "function": {"variable": "hydra.cpp.serde.statementToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.CaseValue"},
-                "parameter": "cv"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.CaseValue"}}},
-          "variables": []}}},
+                "parameter": "cv"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.classBodyToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.cpp.syntax.ClassBody"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a class body to an expression"}}}],
@@ -777,16 +793,14 @@
                     "domain": {"variable": "hydra.cpp.syntax.ClassBody"},
                     "parameter": "cb"}},
                 "domain": {"literal": {"boolean": {}}},
-                "parameter": "commas"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.ClassBody"}}},
-              "domain": {"literal": {"boolean": {}}}}},
-          "variables": []}}},
+                "parameter": "commas"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.classDeclarationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.ClassDeclaration"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a class declaration to an expression"}}}],
@@ -871,13 +885,14 @@
                             "function": {"variable": "hydra.serialization.spaceSep"}}},
                         "function": {"variable": "hydra.serialization.withSemi"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.ClassDeclaration"},
-                "parameter": "cd"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.ClassDeclaration"}}},
-          "variables": []}}},
+                "parameter": "cd"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.classKeyToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.ClassKey"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a class key to an expression"}}}],
@@ -920,13 +935,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.cpp.syntax.ClassKey"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.ClassKey"},
-                "parameter": "k"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.ClassKey"}}},
-          "variables": []}}},
+                "parameter": "k"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.classSpecifierToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.ClassSpecifier"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a class specifier to an expression"}}}],
@@ -1000,13 +1016,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.ClassSpecifier"},
-                "parameter": "cs"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.ClassSpecifier"}}},
-          "variables": []}}},
+                "parameter": "cs"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.commaExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.CommaExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a comma expression to an expression"}}}],
@@ -1039,13 +1056,14 @@
                               "application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.cpp.serde.assignmentExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.CommaExpression"},
-                "parameter": "ce"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.CommaExpression"}}},
-          "variables": []}}},
+                "parameter": "ce"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.commentToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.Comment"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a comment to an expression"}}}],
@@ -1074,13 +1092,14 @@
                             "function": {"application": {"argument": {"variable": "text"}, "function": {"variable": "hydra.cpp.serde.toCppComments"}}}}},
                         "function": {"variable": "hydra.serialization.cst"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.Comment"},
-                "parameter": "c"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.Comment"}}},
-          "variables": []}}},
+                "parameter": "c"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.compoundStatementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.CompoundStatement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a compound statement to an expression"}}}],
@@ -1104,13 +1123,14 @@
                         "function": {
                           "application": {"argument": {"maybe": {"literal": {"string": ""}}}, "function": {"variable": "hydra.serialization.curlyBracesList"}}}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.CompoundStatement"},
-                "parameter": "cs"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.CompoundStatement"}}},
-          "variables": []}}},
+                "parameter": "cs"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.conditionalExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.ConditionalExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a conditional expression to an expression"}}}],
@@ -1138,14 +1158,14 @@
                                 "parameter": "t"}}}],
                         "typeName": "hydra.cpp.syntax.ConditionalExpression"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.ConditionalExpression"},
-                "parameter": "c"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.ConditionalExpression"}}},
-          "variables": []}}},
+                "parameter": "c"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.constructorDeclarationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.ConstructorDeclaration"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a constructor declaration to an expression"}}}],
@@ -1248,14 +1268,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.ConstructorDeclaration"},
-                "parameter": "cd"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.ConstructorDeclaration"}}},
-          "variables": []}}},
+                "parameter": "cd"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.declarationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.Declaration"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a declaration to an expression"}}}],
@@ -1323,13 +1343,14 @@
                                 "parameter": "t"}}}],
                         "typeName": "hydra.cpp.syntax.Declaration"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.Declaration"},
-                "parameter": "d"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.Declaration"}}},
-          "variables": []}}},
+                "parameter": "d"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.defineDirectiveToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.DefineDirective"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a define directive to an expression"}}}],
@@ -1424,13 +1445,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.DefineDirective"},
-                "parameter": "dd"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.DefineDirective"}}},
-          "variables": []}}},
+                "parameter": "dd"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.destructorDeclarationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.DestructorDeclaration"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a destructor declaration to an expression"}}}],
@@ -1518,14 +1540,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.DestructorDeclaration"},
-                "parameter": "dd"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.DestructorDeclaration"}}},
-          "variables": []}}},
+                "parameter": "dd"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.divideOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.DivideOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a divide operation to an expression"}}}],
@@ -1558,13 +1580,14 @@
                             {"application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.cpp.serde.unaryExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.DivideOperation"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.DivideOperation"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.doStatementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.DoStatement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a do statement to an expression"}}}],
@@ -1608,13 +1631,14 @@
                                 "function": {"variable": "hydra.serialization.withSemi"}}}]},
                         "function": {"variable": "hydra.serialization.newlineSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.DoStatement"},
-                "parameter": "ds"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.DoStatement"}}},
-          "variables": []}}},
+                "parameter": "ds"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.elifDirectiveToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.ElifDirective"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an elif directive to an expression"}}}],
@@ -1634,13 +1658,14 @@
                             "function": {"variable": "hydra.serialization.cst"}}}]},
                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                 "domain": {"variable": "hydra.cpp.syntax.ElifDirective"},
-                "parameter": "ed"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.ElifDirective"}}},
-          "variables": []}}},
+                "parameter": "ed"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.elseDirectiveToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "t0"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -1651,11 +1676,14 @@
                     "body": {"application": {"argument": {"literal": {"string": "#else"}}, "function": {"variable": "hydra.serialization.cst"}}},
                     "domain": {"variable": "t0"},
                     "parameter": "ed"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {"body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "t0"}}}, "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.endifDirectiveToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "t0"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -1666,11 +1694,14 @@
                     "body": {"application": {"argument": {"literal": {"string": "#endif"}}, "function": {"variable": "hydra.serialization.cst"}}},
                     "domain": {"variable": "t0"},
                     "parameter": "ed"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {"body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "t0"}}}, "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.equalOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.EqualOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an equal operation to an expression"}}}],
@@ -1704,13 +1735,14 @@
                               "application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.cpp.serde.relationalExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.EqualOperation"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.EqualOperation"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.equalityExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.EqualityExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an equality expression to an expression"}}}],
@@ -1745,14 +1777,14 @@
                                 "parameter": "ne"}}}],
                         "typeName": "hydra.cpp.syntax.EqualityExpression"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.EqualityExpression"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.EqualityExpression"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.errorDirectiveToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.ErrorDirective"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an error directive to an expression"}}}],
@@ -1772,13 +1804,14 @@
                             "function": {"variable": "hydra.serialization.cst"}}}]},
                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                 "domain": {"variable": "hydra.cpp.syntax.ErrorDirective"},
-                "parameter": "ed"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.ErrorDirective"}}},
-          "variables": []}}},
+                "parameter": "ed"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.exclusiveOrExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.ExclusiveOrExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an exclusive or expression to an expression"}}}],
@@ -1806,14 +1839,14 @@
                                 "parameter": "x"}}}],
                         "typeName": "hydra.cpp.syntax.ExclusiveOrExpression"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.ExclusiveOrExpression"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.ExclusiveOrExpression"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.explicitAssignmentToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.ExplicitAssignment"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an explicit assignment to an expression"}}}],
@@ -1854,14 +1887,14 @@
                               "application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.cpp.serde.assignmentExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.ExplicitAssignment"},
-                "parameter": "ea"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.ExplicitAssignment"}}},
-          "variables": []}}},
+                "parameter": "ea"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.expressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.Expression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an expression to an expression"}}}],
@@ -1889,13 +1922,14 @@
                                 "parameter": "c"}}}],
                         "typeName": "hydra.cpp.syntax.Expression"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.Expression"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.Expression"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.forInitToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.ForInit"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a for-init to an expression"}}}],
@@ -1934,13 +1968,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.cpp.syntax.ForInit"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.ForInit"},
-                "parameter": "i"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.ForInit"}}},
-          "variables": []}}},
+                "parameter": "i"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.forStatementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.ForStatement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a for statement to an expression"}}}],
@@ -2003,13 +2038,14 @@
                             {"application": {"argument": {"variable": "body"}, "function": {"variable": "hydra.cpp.serde.statementToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.newlineSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.ForStatement"},
-                "parameter": "fs"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.ForStatement"}}},
-          "variables": []}}},
+                "parameter": "fs"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.functionApplicationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.FunctionApplication"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a function application to an expression"}}}],
@@ -2053,14 +2089,14 @@
                                 "function": {"variable": "hydra.serialization.parenListAdaptive"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.FunctionApplication"},
-                "parameter": "fa"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.FunctionApplication"}}},
-          "variables": []}}},
+                "parameter": "fa"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.functionBodyToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.FunctionBody"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a function body to an expression"}}}],
@@ -2108,13 +2144,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.cpp.syntax.FunctionBody"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.FunctionBody"},
-                "parameter": "b"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.FunctionBody"}}},
-          "variables": []}}},
+                "parameter": "b"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.functionCallOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.FunctionCallOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a function call operation to an expression"}}}],
@@ -2157,14 +2194,14 @@
                                 "function": {"variable": "hydra.serialization.parenListAdaptive"}}}]},
                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.FunctionCallOperation"},
-                "parameter": "fco"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.FunctionCallOperation"}}},
-          "variables": []}}},
+                "parameter": "fco"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.functionDeclarationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.FunctionDeclaration"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a function declaration to an expression"}}}],
@@ -2270,14 +2307,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.FunctionDeclaration"},
-                "parameter": "fd"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.FunctionDeclaration"}}},
-          "variables": []}}},
+                "parameter": "fd"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.functionIdentifierToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.FunctionIdentifier"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a function identifier to an expression"}}}],
@@ -2305,14 +2342,14 @@
                                 "parameter": "q"}}}],
                         "typeName": "hydra.cpp.syntax.FunctionIdentifier"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.FunctionIdentifier"},
-                "parameter": "f"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.FunctionIdentifier"}}},
-          "variables": []}}},
+                "parameter": "f"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.functionSpecifierPrefixToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.FunctionSpecifierPrefix"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a function specifier prefix to an expression"}}}],
@@ -2354,14 +2391,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.cpp.syntax.FunctionSpecifierPrefix"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.FunctionSpecifierPrefix"},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.FunctionSpecifierPrefix"}}},
-          "variables": []}}},
+                "parameter": "s"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.functionSpecifierSuffixToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.FunctionSpecifierSuffix"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a function specifier suffix to an expression"}}}],
@@ -2403,14 +2440,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.cpp.syntax.FunctionSpecifierSuffix"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.FunctionSpecifierSuffix"},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.FunctionSpecifierSuffix"}}},
-          "variables": []}}},
+                "parameter": "s"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.functionTypeToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.FunctionType"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a function type to an expression"}}}],
@@ -2453,13 +2490,14 @@
                                 "function": {"variable": "hydra.serialization.parenListAdaptive"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.FunctionType"},
-                "parameter": "ft"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.FunctionType"}}},
-          "variables": []}}},
+                "parameter": "ft"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.greaterEqualOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.GreaterEqualOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a greater-than-or-equal operation to an expression"}}}],
@@ -2492,14 +2530,14 @@
                             {"application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.cpp.serde.shiftExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.GreaterEqualOperation"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.GreaterEqualOperation"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.greaterOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.GreaterOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a greater-than operation to an expression"}}}],
@@ -2532,13 +2570,14 @@
                             {"application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.cpp.serde.shiftExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.GreaterOperation"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.GreaterOperation"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.ifDirectiveToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.IfDirective"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an if directive to an expression"}}}],
@@ -2558,13 +2597,14 @@
                             "function": {"variable": "hydra.serialization.cst"}}}]},
                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                 "domain": {"variable": "hydra.cpp.syntax.IfDirective"},
-                "parameter": "ifd"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.IfDirective"}}},
-          "variables": []}}},
+                "parameter": "ifd"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.ifdefDirectiveToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.IfdefDirective"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an ifdef directive to an expression"}}}],
@@ -2584,13 +2624,14 @@
                             "function": {"variable": "hydra.serialization.cst"}}}]},
                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                 "domain": {"variable": "hydra.cpp.syntax.IfdefDirective"},
-                "parameter": "id"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.IfdefDirective"}}},
-          "variables": []}}},
+                "parameter": "id"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.ifndefDirectiveToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.IfndefDirective"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an ifndef directive to an expression"}}}],
@@ -2610,13 +2651,14 @@
                             "function": {"variable": "hydra.serialization.cst"}}}]},
                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                 "domain": {"variable": "hydra.cpp.syntax.IfndefDirective"},
-                "parameter": "ind"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.IfndefDirective"}}},
-          "variables": []}}},
+                "parameter": "ind"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.includeDirectiveToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.IncludeDirective"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an include directive to an expression"}}}],
@@ -2662,13 +2704,14 @@
                                 "argument": {"variable": "isSystem"},
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.IncludeDirective"},
-                "parameter": "incl"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.IncludeDirective"}}},
-          "variables": []}}},
+                "parameter": "incl"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.inclusiveOrExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.InclusiveOrExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an inclusive or expression to an expression"}}}],
@@ -2697,14 +2740,14 @@
                                 "parameter": "o"}}}],
                         "typeName": "hydra.cpp.syntax.InclusiveOrExpression"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.InclusiveOrExpression"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.InclusiveOrExpression"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.integerLiteralToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.IntegerLiteral"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an integer literal to an expression"}}}],
@@ -2767,13 +2810,14 @@
                                 "parameter": "b"}}}],
                         "typeName": "hydra.cpp.syntax.IntegerLiteral"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.IntegerLiteral"},
-                "parameter": "i"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.IntegerLiteral"}}},
-          "variables": []}}},
+                "parameter": "i"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.iterationStatementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.IterationStatement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an iteration statement to an expression"}}}],
@@ -2815,14 +2859,14 @@
                                 "parameter": "r"}}}],
                         "typeName": "hydra.cpp.syntax.IterationStatement"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.IterationStatement"},
-                "parameter": "i"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.IterationStatement"}}},
-          "variables": []}}},
+                "parameter": "i"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.jumpStatementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.JumpStatement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a jump statement to an expression"}}}],
@@ -2898,13 +2942,14 @@
                                 "parameter": "e"}}}],
                         "typeName": "hydra.cpp.syntax.JumpStatement"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.JumpStatement"},
-                "parameter": "j"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.JumpStatement"}}},
-          "variables": []}}},
+                "parameter": "j"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.labeledStatementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.LabeledStatement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a labeled statement to an expression"}}}],
@@ -2941,13 +2986,14 @@
                             {"application": {"argument": {"variable": "stmt"}, "function": {"variable": "hydra.cpp.serde.statementToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.newlineSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.LabeledStatement"},
-                "parameter": "ls"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.LabeledStatement"}}},
-          "variables": []}}},
+                "parameter": "ls"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.lambdaExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.LambdaExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a lambda expression to an expression"}}}],
@@ -3043,13 +3089,14 @@
                             {"application": {"argument": {"variable": "body"}, "function": {"variable": "hydra.cpp.serde.compoundStatementToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.LambdaExpression"},
-                "parameter": "le"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.LambdaExpression"}}},
-          "variables": []}}},
+                "parameter": "le"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.leftShiftOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.LeftShiftOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a left shift operation to an expression"}}}],
@@ -3082,14 +3129,14 @@
                               "application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.cpp.serde.additiveExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.LeftShiftOperation"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.LeftShiftOperation"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.lessEqualOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.LessEqualOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a less-than-or-equal operation to an expression"}}}],
@@ -3122,14 +3169,14 @@
                             {"application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.cpp.serde.shiftExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.LessEqualOperation"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.LessEqualOperation"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.lessOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.LessOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a less-than operation to an expression"}}}],
@@ -3162,13 +3209,14 @@
                             {"application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.cpp.serde.shiftExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.LessOperation"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.LessOperation"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.lineDirectiveToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.LineDirective"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a line directive to an expression"}}}],
@@ -3232,13 +3280,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.LineDirective"},
-                "parameter": "ld"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.LineDirective"}}},
-          "variables": []}}},
+                "parameter": "ld"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.literalToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.Literal"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a literal to an expression"}}}],
@@ -3320,13 +3369,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.cpp.syntax.Literal"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.Literal"},
-                "parameter": "l"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.Literal"}}},
-          "variables": []}}},
+                "parameter": "l"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.logicalAndExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.LogicalAndExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a logical and expression to an expression"}}}],
@@ -3355,14 +3405,14 @@
                                 "parameter": "a"}}}],
                         "typeName": "hydra.cpp.syntax.LogicalAndExpression"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.LogicalAndExpression"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.LogicalAndExpression"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.logicalAndOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.LogicalAndOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a logical and operation to an expression"}}}],
@@ -3396,14 +3446,14 @@
                               "application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.cpp.serde.inclusiveOrExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.LogicalAndOperation"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.LogicalAndOperation"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.logicalOrExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.LogicalOrExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a logical or expression to an expression"}}}],
@@ -3431,14 +3481,14 @@
                                 "parameter": "o"}}}],
                         "typeName": "hydra.cpp.syntax.LogicalOrExpression"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.LogicalOrExpression"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.LogicalOrExpression"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.logicalOrOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.LogicalOrOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a logical or operation to an expression"}}}],
@@ -3472,14 +3522,14 @@
                               "application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.cpp.serde.logicalAndExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.LogicalOrOperation"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.LogicalOrOperation"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.mapToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.Map"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a map to an expression"}}}],
@@ -3538,13 +3588,14 @@
                                         "function": {"variable": "hydra.serialization.curlyBracesList"}}}}}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.Map"},
-                "parameter": "m"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.Map"}}},
-          "variables": []}}},
+                "parameter": "m"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.mapEntryToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.MapEntry"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a map entry to an expression"}}}],
@@ -3584,13 +3635,14 @@
                             {"application": {"argument": {"variable": "val"}, "function": {"variable": "hydra.cpp.serde.expressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.MapEntry"},
-                "parameter": "me"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.MapEntry"}}},
-          "variables": []}}},
+                "parameter": "me"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.memInitializerToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.MemInitializer"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a member initializer to an expression"}}}],
@@ -3633,13 +3685,14 @@
                                 "function": {"variable": "hydra.serialization.parenListAdaptive"}}}]},
                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.MemInitializer"},
-                "parameter": "mi"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.MemInitializer"}}},
-          "variables": []}}},
+                "parameter": "mi"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.memberAccessOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.MemberAccessOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a member access operation to an expression"}}}],
@@ -3671,14 +3724,16 @@
                             {"application": {"argument": {"variable": "member"}, "function": {"variable": "hydra.serialization.cst"}}}]},
                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.MemberAccessOperation"},
-                "parameter": "mao"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.MemberAccessOperation"}}},
-          "variables": []}}},
+                "parameter": "mao"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.memberDeclarationToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.cpp.syntax.MemberDeclaration"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a member declaration to an expression"}}}],
@@ -3744,16 +3799,16 @@
                     "domain": {"variable": "hydra.cpp.syntax.MemberDeclaration"},
                     "parameter": "m"}},
                 "domain": {"literal": {"boolean": {}}},
-                "parameter": "commas"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.MemberDeclaration"}}},
-              "domain": {"literal": {"boolean": {}}}}},
-          "variables": []}}},
+                "parameter": "commas"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.memberSpecificationToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.cpp.syntax.MemberSpecification"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a member specification to an expression"}}}],
@@ -3795,17 +3850,14 @@
                     "domain": {"variable": "hydra.cpp.syntax.MemberSpecification"},
                     "parameter": "m"}},
                 "domain": {"literal": {"boolean": {}}},
-                "parameter": "commas"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.MemberSpecification"}}},
-              "domain": {"literal": {"boolean": {}}}}},
-          "variables": []}}},
+                "parameter": "commas"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.moduloOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.ModuloOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a modulo operation to an expression"}}}],
@@ -3838,13 +3890,14 @@
                             {"application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.cpp.serde.unaryExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.ModuloOperation"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.ModuloOperation"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.multiplicativeExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.MultiplicativeExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a multiplicative expression to an expression"}}}],
@@ -3886,14 +3939,14 @@
                                 "parameter": "m"}}}],
                         "typeName": "hydra.cpp.syntax.MultiplicativeExpression"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.MultiplicativeExpression"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.MultiplicativeExpression"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.multiplyOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.MultiplyOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a multiply operation to an expression"}}}],
@@ -3926,13 +3979,14 @@
                             {"application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.cpp.serde.unaryExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.MultiplyOperation"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.MultiplyOperation"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.namespaceDeclarationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.NamespaceDeclaration"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a namespace declaration to an expression"}}}],
@@ -3987,14 +4041,14 @@
                                     "function": {"variable": "hydra.serialization.curlyBlock"}}}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.NamespaceDeclaration"},
-                "parameter": "nd"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.NamespaceDeclaration"}}},
-          "variables": []}}},
+                "parameter": "nd"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.notEqualOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.NotEqualOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a not-equal operation to an expression"}}}],
@@ -4028,13 +4082,14 @@
                               "application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.cpp.serde.relationalExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.NotEqualOperation"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.NotEqualOperation"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.optionalToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.Optional"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an optional to an expression"}}}],
@@ -4094,13 +4149,14 @@
                                             "type": {"variable": "hydra.cpp.syntax.Expression"}}}}}}}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.Optional"},
-                "parameter": "opt"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.Optional"}}},
-          "variables": []}}},
+                "parameter": "opt"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.overloadedLambdasToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.OverloadedLambdas"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert overloaded lambdas to an expression"}}}],
@@ -4134,13 +4190,14 @@
                                 "function": {"variable": "hydra.serialization.curlyBlock"}}}}}]},
                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                 "domain": {"variable": "hydra.cpp.syntax.OverloadedLambdas"},
-                "parameter": "ol"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.OverloadedLambdas"}}},
-          "variables": []}}},
+                "parameter": "ol"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.parameterToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.Parameter"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a parameter to an expression"}}}],
@@ -4229,13 +4286,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.Parameter"},
-                "parameter": "p"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.Parameter"}}},
-          "variables": []}}},
+                "parameter": "p"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.patternMatchToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.PatternMatch"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a pattern match to an expression"}}}],
@@ -4273,13 +4331,14 @@
                                 "function": {"variable": "hydra.serialization.parenListAdaptive"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.PatternMatch"},
-                "parameter": "pm"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.PatternMatch"}}},
-          "variables": []}}},
+                "parameter": "pm"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.pointerMemberAccessOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.PointerMemberAccessOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a pointer member access operation to an expression"}}}],
@@ -4311,14 +4370,14 @@
                             {"application": {"argument": {"variable": "member"}, "function": {"variable": "hydra.serialization.cst"}}}]},
                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.PointerMemberAccessOperation"},
-                "parameter": "pmao"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.PointerMemberAccessOperation"}}},
-          "variables": []}}},
+                "parameter": "pmao"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.postfixExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.PostfixExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a postfix expression to an expression"}}}],
@@ -4404,13 +4463,14 @@
                                 "parameter": "p"}}}],
                         "typeName": "hydra.cpp.syntax.PostfixExpression"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.PostfixExpression"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.PostfixExpression"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.pragmaDirectiveToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.PragmaDirective"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a pragma directive to an expression"}}}],
@@ -4427,13 +4487,14 @@
                         "function": {"application": {"argument": {"literal": {"string": "#pragma "}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                     "function": {"variable": "hydra.serialization.cst"}}},
                 "domain": {"variable": "hydra.cpp.syntax.PragmaDirective"},
-                "parameter": "pd"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.PragmaDirective"}}},
-          "variables": []}}},
+                "parameter": "pd"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.preprocessorDirectiveToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.PreprocessorDirective"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a preprocessor directive to an expression"}}}],
@@ -4546,14 +4607,14 @@
                                 "parameter": "w"}}}],
                         "typeName": "hydra.cpp.syntax.PreprocessorDirective"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.PreprocessorDirective"},
-                "parameter": "d"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.PreprocessorDirective"}}},
-          "variables": []}}},
+                "parameter": "d"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.primaryExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.PrimaryExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a primary expression to an expression"}}}],
@@ -4598,13 +4659,14 @@
                                 "parameter": "l"}}}],
                         "typeName": "hydra.cpp.syntax.PrimaryExpression"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.PrimaryExpression"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.PrimaryExpression"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.programToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.Program"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a program to an expression"}}}],
@@ -4737,13 +4799,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.doubleNewlineSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.Program"},
-                "parameter": "prog"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.Program"}}},
-          "variables": []}}},
+                "parameter": "prog"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.qualifiedIdentifierToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.QualifiedIdentifier"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a qualified identifier to an expression"}}}],
@@ -4774,14 +4837,14 @@
                             "function": {"variable": "hydra.lib.strings.cat"}}},
                         "function": {"variable": "hydra.serialization.cst"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.QualifiedIdentifier"},
-                "parameter": "qi"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.QualifiedIdentifier"}}},
-          "variables": []}}},
+                "parameter": "qi"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.qualifiedTypeToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.QualifiedType"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a qualified type to an expression"}}}],
@@ -4868,13 +4931,14 @@
                                     "parameter": "_"}}}],
                             "typeName": "hydra.cpp.syntax.TypeQualifier"}}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.QualifiedType"},
-                "parameter": "qt"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.QualifiedType"}}},
-          "variables": []}}},
+                "parameter": "qt"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.rangeForStatementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.RangeForStatement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a range-for statement to an expression"}}}],
@@ -4936,13 +5000,14 @@
                             {"application": {"argument": {"variable": "body"}, "function": {"variable": "hydra.cpp.serde.statementToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.newlineSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.RangeForStatement"},
-                "parameter": "rfs"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.RangeForStatement"}}},
-          "variables": []}}},
+                "parameter": "rfs"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.relationalExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.RelationalExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a relational expression to an expression"}}}],
@@ -4992,14 +5057,14 @@
                                 "parameter": "ge"}}}],
                         "typeName": "hydra.cpp.syntax.RelationalExpression"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.RelationalExpression"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.RelationalExpression"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.rightShiftOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.RightShiftOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a right shift operation to an expression"}}}],
@@ -5032,14 +5097,14 @@
                               "application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.cpp.serde.additiveExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.RightShiftOperation"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.RightShiftOperation"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.selectionStatementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.SelectionStatement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a selection statement to an expression"}}}],
@@ -5109,14 +5174,14 @@
                                             "type": {"variable": "hydra.cpp.syntax.Statement"}}}}}}}}}]},
                         "function": {"variable": "hydra.serialization.newlineSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.SelectionStatement"},
-                "parameter": "ss"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.SelectionStatement"}}},
-          "variables": []}}},
+                "parameter": "ss"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.setToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.Set"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a set to an expression"}}}],
@@ -5166,13 +5231,14 @@
                                         "function": {"variable": "hydra.serialization.curlyBracesList"}}}}}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.Set"},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.Set"}}},
-          "variables": []}}},
+                "parameter": "s"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.shiftExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.ShiftExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a shift expression to an expression"}}}],
@@ -5207,13 +5273,14 @@
                                 "parameter": "rs"}}}],
                         "typeName": "hydra.cpp.syntax.ShiftExpression"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.ShiftExpression"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.ShiftExpression"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.sizeofExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.SizeofExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a sizeof expression to an expression"}}}],
@@ -5233,13 +5300,14 @@
                             "function": {"variable": "hydra.serialization.parens"}}}]},
                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                 "domain": {"variable": "hydra.cpp.syntax.SizeofExpression"},
-                "parameter": "se"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.SizeofExpression"}}},
-          "variables": []}}},
+                "parameter": "se"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.statementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.Statement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a statement to an expression"}}}],
@@ -5319,13 +5387,14 @@
                                 "parameter": "e"}}}],
                         "typeName": "hydra.cpp.syntax.Statement"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.Statement"},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.Statement"}}},
-          "variables": []}}},
+                "parameter": "s"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.subscriptOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.SubscriptOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a subscript operation to an expression"}}}],
@@ -5359,14 +5428,14 @@
                             {"application": {"argument": {"literal": {"string": "]"}}, "function": {"variable": "hydra.serialization.cst"}}}]},
                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.SubscriptOperation"},
-                "parameter": "so"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.SubscriptOperation"}}},
-          "variables": []}}},
+                "parameter": "so"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.subtractOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.SubtractOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a subtract operation to an expression"}}}],
@@ -5400,13 +5469,14 @@
                               "application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.cpp.serde.multiplicativeExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.SubtractOperation"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.SubtractOperation"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.switchStatementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.SwitchStatement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a switch statement to an expression"}}}],
@@ -5460,13 +5530,14 @@
                                     "function": {"variable": "hydra.serialization.curlyBlock"}}}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.SwitchStatement"},
-                "parameter": "ss"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.SwitchStatement"}}},
-          "variables": []}}},
+                "parameter": "ss"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.templateArgumentToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.TemplateArgument"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a template argument to an expression"}}}],
@@ -5494,13 +5565,14 @@
                                 "parameter": "e"}}}],
                         "typeName": "hydra.cpp.syntax.TemplateArgument"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.TemplateArgument"},
-                "parameter": "a"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.TemplateArgument"}}},
-          "variables": []}}},
+                "parameter": "a"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.templateDeclarationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.TemplateDeclaration"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a template declaration to an expression"}}}],
@@ -5582,14 +5654,14 @@
                               "application": {"argument": {"variable": "declaration"}, "function": {"variable": "hydra.cpp.serde.declarationToExpr"}}}]},
                         "function": {"variable": "sep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.TemplateDeclaration"},
-                "parameter": "td"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.TemplateDeclaration"}}},
-          "variables": []}}},
+                "parameter": "td"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.templateFunctionCallOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.TemplateFunctionCallOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -5657,14 +5729,14 @@
                                 "function": {"variable": "hydra.serialization.parenListAdaptive"}}}]},
                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.TemplateFunctionCallOperation"},
-                "parameter": "tfco"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.TemplateFunctionCallOperation"}}},
-          "variables": []}}},
+                "parameter": "tfco"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.templateTypeToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.TemplateType"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a template type to an expression"}}}],
@@ -5711,13 +5783,14 @@
                                     "function": {"variable": "hydra.serialization.angleBracesList"}}}}}]},
                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.TemplateType"},
-                "parameter": "tt"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.TemplateType"}}},
-          "variables": []}}},
+                "parameter": "tt"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.ternaryExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.TernaryExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a ternary expression to an expression"}}}],
@@ -5760,13 +5833,16 @@
                               "application": {"argument": {"variable": "falseExpr"}, "function": {"variable": "hydra.cpp.serde.conditionalExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.TernaryExpression"},
-                "parameter": "te"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.TernaryExpression"}}},
-          "variables": []}}},
+                "parameter": "te"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.toCppComments",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"boolean": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -5811,16 +5887,14 @@
                     "domain": {"literal": {"boolean": {}}},
                     "parameter": "isMultiline"}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"boolean": {}}}}},
-              "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+                "parameter": "s"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.typeExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.TypeExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a type expression to an expression"}}}],
@@ -5869,13 +5943,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.cpp.syntax.TypeExpression"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.TypeExpression"},
-                "parameter": "t"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
-          "variables": []}}},
+                "parameter": "t"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.typedefDeclarationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.TypedefDeclaration"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a typedef declaration to an expression"}}}],
@@ -5942,14 +6017,14 @@
                                 "argument": {"variable": "isUsing"},
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.TypedefDeclaration"},
-                "parameter": "td"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.TypedefDeclaration"}}},
-          "variables": []}}},
+                "parameter": "td"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.unaryExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.UnaryExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a unary expression to an expression"}}}],
@@ -5984,13 +6059,14 @@
                                 "parameter": "s"}}}],
                         "typeName": "hydra.cpp.syntax.UnaryExpression"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.UnaryExpression"},
-                "parameter": "e"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.UnaryExpression"}}},
-          "variables": []}}},
+                "parameter": "e"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.unaryOperationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.UnaryOperation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a unary operation to an expression"}}}],
@@ -6022,13 +6098,14 @@
                               "application": {"argument": {"variable": "operand"}, "function": {"variable": "hydra.cpp.serde.unaryExpressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.UnaryOperation"},
-                "parameter": "uo"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.UnaryOperation"}}},
-          "variables": []}}},
+                "parameter": "uo"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.unaryOperatorToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.UnaryOperator"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a unary operator to an expression"}}}],
@@ -6098,13 +6175,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.cpp.syntax.UnaryOperator"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.UnaryOperator"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.UnaryOperator"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.undefDirectiveToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.UndefDirective"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an undef directive to an expression"}}}],
@@ -6124,13 +6202,16 @@
                             "function": {"variable": "hydra.serialization.cst"}}}]},
                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                 "domain": {"variable": "hydra.cpp.syntax.UndefDirective"},
-                "parameter": "ud"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.UndefDirective"}}},
-          "variables": []}}},
+                "parameter": "ud"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.variableDeclarationToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.cpp.syntax.VariableDeclaration"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a variable declaration to an expression"}}}],
@@ -6250,17 +6331,14 @@
                     "domain": {"variable": "hydra.cpp.syntax.VariableDeclaration"},
                     "parameter": "vd"}},
                 "domain": {"literal": {"boolean": {}}},
-                "parameter": "commas"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.VariableDeclaration"}}},
-              "domain": {"literal": {"boolean": {}}}}},
-          "variables": []}}},
+                "parameter": "commas"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.vectorToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.Vector"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a vector to an expression"}}}],
@@ -6313,13 +6391,14 @@
                                         "function": {"variable": "hydra.serialization.curlyBracesList"}}}}}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.Vector"},
-                "parameter": "v"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.Vector"}}},
-          "variables": []}}},
+                "parameter": "v"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.visitorToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.Visitor"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a visitor to an expression"}}}],
@@ -6347,13 +6426,14 @@
                                 "parameter": "o"}}}],
                         "typeName": "hydra.cpp.syntax.Visitor"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.Visitor"},
-                "parameter": "v"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.Visitor"}}},
-          "variables": []}}},
+                "parameter": "v"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.warningDirectiveToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.WarningDirective"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a warning directive to an expression"}}}],
@@ -6373,13 +6453,14 @@
                             "function": {"variable": "hydra.serialization.cst"}}}]},
                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                 "domain": {"variable": "hydra.cpp.syntax.WarningDirective"},
-                "parameter": "wd"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.WarningDirective"}}},
-          "variables": []}}},
+                "parameter": "wd"}}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.whileStatementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.cpp.syntax.WhileStatement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a while statement to an expression"}}}],
@@ -6419,10 +6500,7 @@
                             {"application": {"argument": {"variable": "body"}, "function": {"variable": "hydra.cpp.serde.statementToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.newlineSep"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.WhileStatement"},
-                "parameter": "ws"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.WhileStatement"}}},
-          "variables": []}}}],
+                "parameter": "ws"}}}}}}],
   "dependencies": [
     {"module": "hydra.serialization"},
     {"module": "hydra.cpp.syntax"},

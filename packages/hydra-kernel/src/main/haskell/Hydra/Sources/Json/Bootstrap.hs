@@ -21,6 +21,7 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Errors as Error
 import qualified Hydra.Sources.Kernel.Types.Graph as Graph
 import qualified Hydra.Sources.Kernel.Types.Packaging as Packaging
+import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 import qualified Hydra.Sources.Kernel.Types.Util as Util
 
 import qualified Data.Map as M
@@ -39,13 +40,14 @@ bootstrapTypeModules = [
   Error.module_,
   Graph.module_,
   Packaging.module_,
+  Typing.module_,
   Util.module_]
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = [DefinitionTerm typesByNameDefinition],
-            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core", ModuleName "hydra.coders", ModuleName "hydra.context", ModuleName "hydra.error.checking", ModuleName "hydra.error.core", ModuleName "hydra.errors", ModuleName "hydra.graph", ModuleName "hydra.packaging", ModuleName "hydra.paths", ModuleName "hydra.util", ModuleName "hydra.variants"],
+            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core", ModuleName "hydra.coders", ModuleName "hydra.context", ModuleName "hydra.error.checking", ModuleName "hydra.error.core", ModuleName "hydra.errors", ModuleName "hydra.graph", ModuleName "hydra.packaging", ModuleName "hydra.paths", ModuleName "hydra.typing", ModuleName "hydra.util", ModuleName "hydra.variants"],
             moduleDescription = Just ("A module which provides a minimal typing environment for decoding other modules from JSON."
       ++ " This avoids certain problems with generating entire source modules into target languages like Java,"
       ++ " which is subject to method size limits for large modules like hydra.core.")}
@@ -53,7 +55,7 @@ typesByNameDefinition :: TermDefinition
 typesByNameDefinition = TermDefinition {
     termDefinitionName = Name "hydra.json.bootstrap.typesByName",
     termDefinitionTerm = typesByNameTerm,
-    termDefinitionTypeScheme = Nothing}
+    termDefinitionSignature = Nothing}
 
 -- | Build a Term-level map from Name to Type, by extracting all type
 -- definitions from the bootstrap type modules. Each type definition's

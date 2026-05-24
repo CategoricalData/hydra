@@ -58,6 +58,7 @@ import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Hydra.Sources.Kernel.Terms.Predicates as Predicates
+import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 import           Prelude hiding ((++))
@@ -504,7 +505,7 @@ decodeModule = define "decodeModule" $
             (var "allDecodedDeps")))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-            (Core.bindingTypeScheme $ var "b")))
+            (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
             (var "decodedBindings")))))
 
 -- | Generate a decoder module namespace from a source module namespace
@@ -912,7 +913,7 @@ decoderTypeScheme = define "decoderTypeScheme" $
       Logic.ifElse (Lists.null (var "ordVars"))
         Phantoms.nothing
         (just $ Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.name (string "ordering")))
+          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
           (var "ordVars"))) $
     Core.typeScheme
       (var "typeVars")
@@ -934,7 +935,7 @@ decoderTypeSchemeNamed = define "decoderTypeSchemeNamed" $
       Logic.ifElse (Lists.null (var "ordVars"))
         Phantoms.nothing
         (just $ Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.name (string "ordering")))
+          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
           (var "ordVars"))) $
     Core.typeScheme
       (var "typeVars")

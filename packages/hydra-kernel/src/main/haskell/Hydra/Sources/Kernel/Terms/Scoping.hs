@@ -8,7 +8,9 @@ import Hydra.Kernel hiding (
   extendGraphForTypeLambda,
   extendGraphWithBindings,
   fTypeToTypeScheme,
-  typeSchemeToFType)
+  termSignatureToTypeScheme,
+  typeSchemeToFType,
+  typeSchemeToTermSignature)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths        as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -79,7 +81,9 @@ module_ = Module {
      toDefinition extendGraphForTypeLambda,
      toDefinition extendGraphWithBindings,
      toDefinition fTypeToTypeScheme,
-     toDefinition typeSchemeToFType]
+     toDefinition termSignatureToTypeScheme,
+     toDefinition typeSchemeToFType,
+     toDefinition typeSchemeToTermSignature]
 
 fTypeToTypeScheme :: TTermDefinition (Type -> TypeScheme)
 fTypeToTypeScheme = define "fTypeToTypeScheme" $
@@ -105,6 +109,79 @@ typeSchemeToFType = define "typeSchemeToFType" $
     ("t" ~> "v" ~> Core.typeForall $ Core.forallType (var "v") (var "t"))
     (var "body")
     (Lists.reverse $ var "vars")
+
+termSignatureToTypeScheme :: TTermDefinition (TermSignature -> TypeScheme)
+termSignatureToTypeScheme = define "termSignatureToTypeScheme" $
+  doc "Convert a TermSignature to a TypeScheme, erasing parameter names, descriptions, and laziness flags." $
+  "sig" ~>
+  "typeParams" <~ Typing.termSignatureTypeParameters (var "sig") $
+  "params" <~ Typing.termSignatureParameters (var "sig") $
+  "result" <~ Typing.termSignatureResult (var "sig") $
+  "variables" <~ Lists.map ("tp" ~> Typing.typeParameterName (var "tp")) (var "typeParams") $
+  -- Right-fold the parameter types into a chain of Function arrows, terminating in the result type.
+  "body" <~ Lists.foldl
+    ("acc" ~> "p" ~> Core.typeFunction $ Core.functionType (Typing.parameterType $ var "p") (var "acc"))
+    (Typing.resultType $ var "result")
+    (Lists.reverse $ var "params") $
+  -- Build the optional constraints map. If no type parameter carries any constraints, emit nothing;
+  -- otherwise build a map from each type parameter's name to its TypeVariableMetadata.
+  "hasConstraints" <~ Lists.foldl
+    ("acc" ~> "tp" ~> Logic.or (var "acc") (Logic.not $ Lists.null $ Typing.typeParameterConstraints $ var "tp"))
+    false
+    (var "typeParams") $
+  "constraints" <~ Logic.ifElse (var "hasConstraints")
+    (Phantoms.just $ Maps.fromList $ Lists.map
+      ("tp" ~> pair (Typing.typeParameterName $ var "tp")
+        (Core.typeVariableMetadata $ Typing.typeParameterConstraints $ var "tp"))
+      (var "typeParams"))
+    Phantoms.nothing $
+  Core.typeScheme (var "variables") (var "body") (var "constraints")
+
+typeSchemeToTermSignature :: TTermDefinition (TypeScheme -> TermSignature)
+typeSchemeToTermSignature = define "typeSchemeToTermSignature" $
+  doc ("Convert a TypeScheme to a TermSignature. Type variables and class constraints are preserved exactly."
+    <> " Value-parameter names are synthesized as arg0, arg1, .... Per-parameter descriptions are nothing"
+    <> " and isLazy defaults to false.") $
+  "ts" ~>
+  "variables" <~ Core.typeSchemeVariables (var "ts") $
+  "body" <~ Core.typeSchemeBody (var "ts") $
+  "constraintsMap" <~ Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints $ var "ts") $
+  -- Build TypeParameters, looking up each variable's class constraints in the constraints map.
+  "typeParams" <~ Lists.map
+    ("v" ~> Typing.typeParameter (var "v") $ optCases
+      (Maps.lookup (var "v") (var "constraintsMap"))
+      (list ([] :: [TTerm TypeClassConstraint]))
+      ("tvm" ~> Core.typeVariableMetadataClasses $ var "tvm"))
+    (var "variables") $
+  -- Peel function arrows off the body, accumulating parameter types in reverse order.
+  "peel" <~ ("acc" ~> "t" ~> cases _Type (var "t")
+    (Just $ pair (Lists.reverse $ var "acc") (var "t")) [
+    _Type_function>>: "ft" ~> var "peel" @@
+      (Lists.cons (Core.functionTypeDomain $ var "ft") (var "acc")) @@
+      (Core.functionTypeCodomain $ var "ft")]) $
+  "peeled" <~ (var "peel" @@ list ([] :: [TTerm Type]) @@ var "body") $
+  "paramTypes" <~ Pairs.first (var "peeled") $
+  "resultType" <~ Pairs.second (var "peeled") $
+  -- Build Parameters with synthetic names arg0, arg1, .... We iterate via
+  -- (length-1)-indexed fold to assign each parameter an index, since there is
+  -- no DSL `range` helper.
+  "params" <~ Lists.reverse (Pairs.first $ Lists.foldl
+    ("acc" ~> "ty" ~>
+      "pairAcc" <~ Pairs.first (var "acc") $
+      "i" <~ Pairs.second (var "acc") $
+      pair
+        (Lists.cons
+          (Typing.parameter
+            (Core.name $ Strings.cat (list [string "arg", Literals.showInt32 (var "i")]))
+            Phantoms.nothing
+            (var "ty")
+            false)
+          (var "pairAcc"))
+        (Math.add (var "i") (int32 1)))
+    (pair (list ([] :: [TTerm Parameter])) (int32 0))
+    (var "paramTypes")) $
+  "result" <~ Typing.result Phantoms.nothing (var "resultType") $
+  Typing.termSignature (var "typeParams") (var "params") (var "result")
 
 extendGraphForLambda :: TTermDefinition (Graph -> Lambda -> Graph)
 extendGraphForLambda = define "extendGraphForLambda" $

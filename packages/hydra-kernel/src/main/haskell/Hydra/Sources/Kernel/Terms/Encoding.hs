@@ -56,6 +56,7 @@ import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Predicates as Predicates
+import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 import qualified Hydra.Dsl.Meta.DeepCore as DeepCore
 import           Hydra.Dsl.Meta.DeepCore ((@@@))
 import           Prelude hiding ((++))
@@ -372,7 +373,7 @@ encodeModule = define "encodeModule" $
             (list [Packaging.moduleName (var "mod")]))))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-            (Core.bindingTypeScheme $ var "b")))
+            (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
             (var "encodedBindings")))))
 
 -- | Encode a Name as a Term (produces a wrapped term of type hydra.core.Name)
@@ -846,7 +847,7 @@ encoderTypeScheme = define "encoderTypeScheme" $
       Logic.ifElse (Lists.null (var "ordVars"))
         nothing
         (just $ Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.name (string "ordering")))
+          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
           (var "ordVars"))] $
   Core.typeScheme (var "typeVars") (var "encoderFunType") (var "constraints")
 
@@ -872,7 +873,7 @@ encoderTypeSchemeNamed = define "encoderTypeSchemeNamed" $
       Logic.ifElse (Lists.null (var "ordVars"))
         nothing
         (just $ Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.name (string "ordering")))
+          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
           (var "ordVars"))] $
   Core.typeScheme (var "typeVars") (var "encoderFunType") (var "constraints")
 -- | Filter bindings to only encodable type definitions

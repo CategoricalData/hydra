@@ -7,6 +7,7 @@ import hydra.core.Binding;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
+import hydra.typing.TermSignature;
 
 import hydra.graph.Graph;
 import hydra.graph.Primitive;
@@ -533,11 +534,15 @@ public class Generation {
                 @Override public Void visit(Definition.Term td) {
                     TermDefinition t = td.value;
                     Term newTerm = Strip.removeTypesFromTerm(t.term);
-                    Maybe<TypeScheme> newType = Maybe.nothing();
+                    Maybe<TermSignature> newType = Maybe.nothing();
                     stripped.add(new Definition.Term(new TermDefinition(t.name, newTerm, newType)));
                     return null;
                 }
                 @Override public Void visit(Definition.Type td) {
+                    stripped.add(d);
+                    return null;
+                }
+                @Override public Void visit(Definition.Primitive td) {
                     stripped.add(d);
                     return null;
                 }

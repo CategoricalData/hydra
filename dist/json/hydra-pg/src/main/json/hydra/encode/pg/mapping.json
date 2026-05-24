@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.encode.pg.mapping.annotationSchema",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.pg.mapping.AnnotationSchema"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.pg.mapping.AnnotationSchema"}}}],
@@ -370,13 +374,14 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.pg.mapping.AnnotationSchema"},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.pg.mapping.AnnotationSchema"}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.encode.pg.mapping.edgeSpec",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.pg.mapping.EdgeSpec"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.pg.mapping.EdgeSpec"}}}],
@@ -482,13 +487,14 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.pg.mapping.EdgeSpec"},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.pg.mapping.EdgeSpec"}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.encode.pg.mapping.elementSpec",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.pg.mapping.ElementSpec"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.pg.mapping.ElementSpec"}}}],
@@ -551,13 +557,14 @@
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.pg.mapping.EdgeSpec"},
                         "parameter": "y"}}}],
-                "typeName": "hydra.pg.mapping.ElementSpec"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.pg.mapping.ElementSpec"}}},
-          "variables": []}}},
+                "typeName": "hydra.pg.mapping.ElementSpec"}}}}}},
     {
       "term": {
         "name": "hydra.encode.pg.mapping.propertySpec",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.pg.mapping.PropertySpec"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.pg.mapping.PropertySpec"}}}],
@@ -608,13 +615,14 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.pg.mapping.PropertySpec"},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.pg.mapping.PropertySpec"}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.encode.pg.mapping.valueSpec",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.pg.mapping.ValueSpec"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.pg.mapping.ValueSpec"}}}],
@@ -696,13 +704,14 @@
                             "typeName": "hydra.core.Term"}},
                         "domain": {"literal": {"string": {}}},
                         "parameter": "y"}}}],
-                "typeName": "hydra.pg.mapping.ValueSpec"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.pg.mapping.ValueSpec"}}},
-          "variables": []}}},
+                "typeName": "hydra.pg.mapping.ValueSpec"}}}}}},
     {
       "term": {
         "name": "hydra.encode.pg.mapping.vertexSpec",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.pg.mapping.VertexSpec"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.pg.mapping.VertexSpec"}}}],
@@ -784,10 +793,7 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.pg.mapping.VertexSpec"},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.pg.mapping.VertexSpec"}}},
-          "variables": []}}}],
+                "parameter": "x"}}}}}}],
   "dependencies": [
     {"module": "hydra.encode.pg.model"},
     {"module": "hydra.encode.coders"},

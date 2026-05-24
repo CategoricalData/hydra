@@ -67,6 +67,7 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Analysis       as Analysis
 import qualified Hydra.Sources.Kernel.Terms.Predicates     as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Resolution     as Resolution
+import qualified Hydra.Sources.Kernel.Terms.Scoping        as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Variables      as Variables
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
@@ -768,7 +769,7 @@ gatherMetadata = haskellCoderDefinition "gatherMetadata" $
             ("ts" ~>
               Rewriting.foldOverType @@ Coders.traversalOrderPre
                 @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "metaWithTerm" @@ (Core.typeSchemeBody $ var "ts"))
-            (Packaging.termDefinitionTypeScheme $ var "termDef"),
+            (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "termDef"),
         _Definition_type>>: "typeDef" ~>
           "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "typeDef")) $
           Rewriting.foldOverType @@ Coders.traversalOrderPre
@@ -877,7 +878,7 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
   "namespaces" ~> "def" ~> "cx" ~> "g" ~> lets [
     "name">: Packaging.termDefinitionName $ var "def",
     "term">: Packaging.termDefinitionTerm $ var "def",
-    "typ">: Packaging.termDefinitionTypeScheme $ var "def",
+    "typ">: Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "def",
     "hname">: HaskellUtilsSource.simpleName @@ (Names.localNameOf @@ var "name"),
     "rewriteValueBinding">: "vb" ~>
       cases H._ValueBinding (var "vb") Nothing [
@@ -1112,16 +1113,19 @@ typeDecl = haskellCoderDefinition "typeDecl" $
 
 -- | Extract TypeScheme class constraints into the Map format used by encodeTypeWithClassAssertions.
 -- TypeScheme constraints are Maybe (Map Name TypeVariableMetadata), where TypeVariableMetadata
--- has a 'classes' field of type Set Name. Under the bare-name representation introduced for #275,
--- the inner Set is already the right shape; we just unwrap Maybe and pull out the classes field.
+-- has a 'classes' field of type Set TypeClassConstraint. Each TypeClassConstraint.simple
+-- carries the name of a built-in type class binding under hydra.classes.
 typeSchemeConstraintsToClassMap :: TTermDefinition (Maybe (M.Map Name TypeVariableMetadata) -> M.Map Name (S.Set Name))
 typeSchemeConstraintsToClassMap = haskellCoderDefinition "typeSchemeConstraintsToClassMap" $
   doc "Project type scheme constraints to a map of type variables to typeclass names" $
-  "maybeConstraints" ~>
+  "maybeConstraints" ~> lets [
+    "constraintToName">: "tcc" ~> match _TypeClassConstraint Nothing [
+      _TypeClassConstraint_simple>>: "className" ~> just (var "className")] @@ (var "tcc")] $
     Maybes.maybe
       Maps.empty
       ("constraints" ~>
         Maps.map
-          ("meta" ~> Core.typeVariableMetadataClasses (var "meta"))
+          ("meta" ~> Sets.fromList $
+            Maybes.cat $ Lists.map (var "constraintToName") $ Core.typeVariableMetadataClasses (var "meta"))
           (var "constraints"))
       (var "maybeConstraints")

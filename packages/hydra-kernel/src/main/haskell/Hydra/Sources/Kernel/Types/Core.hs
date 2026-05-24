@@ -66,6 +66,7 @@ module_ = Module {
       term,
       type_,
       typeApplicationTerm,
+      typeClassConstraint,
       typeLambda,
       typeScheme,
       typeVariableMetadata,
@@ -535,6 +536,14 @@ typeApplicationTerm = define "TypeApplicationTerm" $
       doc "The type argument"
       type_]
 
+typeClassConstraint :: Binding
+typeClassConstraint = define "TypeClassConstraint" $
+  doc "A type class constraint on a type variable. Currently has only one variant, but designed to be forward-compatible with multi-parameter type classes and constraints on type expressions." $
+  T.union [
+    "simple">:
+      doc "A simple type class constraint, naming a single type class"
+      name]
+
 typeLambda :: Binding
 typeLambda = define "TypeLambda" $
   doc "A System F type abstraction term" $
@@ -565,8 +574,8 @@ typeVariableMetadata = define "TypeVariableMetadata" $
   doc "Metadata associated with a type variable, including typeclass constraints" $
   T.record [
     "classes">:
-      doc "The set of typeclass constraints on this type variable" $
-      T.set name]
+      doc "The typeclass constraints on this type variable" $
+      T.list typeClassConstraint]
 
 wrappedTerm :: Binding
 wrappedTerm = define "WrappedTerm" $
