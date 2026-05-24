@@ -746,6 +746,10 @@
     {
       "term": {
         "name": "hydra.encode.typing.typeClass",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.TypeClass"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.typing.TypeClass"}}}],
@@ -791,10 +795,7 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.typing.TypeClass"},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.typing.TypeClass"}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.encode.typing.typeConstraint",

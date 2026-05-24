@@ -1090,8 +1090,8 @@
                     "name": "classes",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The set of typeclass constraints on this type variable"}}}],
-                        "body": {"set": {"variable": "hydra.core.TypeClassConstraint"}}}}}]}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The typeclass constraints on this type variable"}}}],
+                        "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}}}}}]}}},
           "variables": []}}},
     {
       "type": {

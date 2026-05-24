@@ -348,7 +348,8 @@ encodeTermDefinition cx g currentNs td =
           lname = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Names.localNameOf name)
           rawTerm = Packaging.termDefinitionTerm td
           asExport = \stmt -> Syntax.ModuleItemExport (Syntax.ExportDeclarationDeclaration stmt)
-          mScheme = Maybes.bind (Packaging.termDefinitionSignature td) (\sig -> Just (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme sig)))
+          mScheme =
+                  Maybes.bind (Packaging.termDefinitionSignature td) (\sig -> Just (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme sig)))
           dterm = Strip.deannotateTerm rawTerm
           funDecl = functionDeclarationFromTerm cx g currentNs lname rawTerm mScheme
           asFunDecl = asExport (Syntax.StatementFunctionDeclaration funDecl)

@@ -6074,20 +6074,15 @@
                                                           "application": {
                                                             "argument": {
                                                               "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "td"},
-                                                                    "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.TermDefinition"}}}},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "hydra.scoping.termSignatureToTypeScheme"},
-                                                                    "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.typing.TermSignature"}}},
-                                                                        "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
+                                                                "argument": {"variable": "td"},
+                                                                "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.TermDefinition"}}}},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {"lambda": {"body": {"variable": "x"}, "domain": {"variable": "hydra.core.TypeScheme"}, "parameter": "x"}},
+                                                                "argument": {
+                                                                  "lambda": {
+                                                                    "body": {"application": {"argument": {"variable": "sig"}, "function": {"variable": "hydra.scoping.termSignatureToTypeScheme"}}},
+                                                                    "domain": {"variable": "hydra.typing.TermSignature"},
+                                                                    "parameter": "sig"}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {
@@ -6112,7 +6107,7 @@
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.core.TypeScheme"}}},
-                                                                        "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}},
+                                                                        "type": {"variable": "hydra.typing.TermSignature"}}}}}}}}},
                                                         "typeScheme": {"body": {"variable": "hydra.core.TypeScheme"}, "variables": []}}],
                                                     "body": {
                                                       "application": {
@@ -19478,20 +19473,18 @@
                                                                       "application": {
                                                                         "argument": {
                                                                           "application": {
-                                                                            "argument": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "termDef"},
-                                                                                "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.TermDefinition"}}}},
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.scoping.termSignatureToTypeScheme"},
-                                                                                "function": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.typing.TermSignature"}}},
-                                                                                    "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
+                                                                            "argument": {"variable": "termDef"},
+                                                                            "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.TermDefinition"}}}},
                                                                         "function": {
                                                                           "application": {
-                                                                            "argument": {"project": {"fieldName": "body", "typeName": "hydra.core.TypeScheme"}},
+                                                                            "argument": {
+                                                                              "lambda": {
+                                                                                "body": {
+                                                                                  "application": {
+                                                                                    "argument": {"application": {"argument": {"variable": "sig"}, "function": {"variable": "hydra.scoping.termSignatureToTypeScheme"}}},
+                                                                                    "function": {"project": {"fieldName": "body", "typeName": "hydra.core.TypeScheme"}}}},
+                                                                                "domain": {"variable": "hydra.typing.TermSignature"},
+                                                                                "parameter": "sig"}},
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {
@@ -19503,7 +19496,7 @@
                                                                                 "function": {
                                                                                   "typeApplication": {
                                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.core.Type"}}},
-                                                                                    "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}},
+                                                                                    "type": {"variable": "hydra.typing.TermSignature"}}}}}}}}},
                                                                     "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                                                 "body": {
                                                                   "let": {
@@ -26258,7 +26251,11 @@
                                                                                       "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.TermDefinition"}}}},
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.scoping.termSignatureToTypeScheme"},
+                                                                                      "argument": {
+                                                                                        "lambda": {
+                                                                                          "body": {"application": {"argument": {"variable": "sig"}, "function": {"variable": "hydra.scoping.termSignatureToTypeScheme"}}},
+                                                                                          "domain": {"variable": "hydra.typing.TermSignature"},
+                                                                                          "parameter": "sig"}},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.typing.TermSignature"}}},

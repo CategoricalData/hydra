@@ -6495,6 +6495,21 @@
     {
       "term": {
         "name": "hydra.dsl.typing.typeClass",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
+                      "body": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.TypeClass"}}}],
@@ -6534,22 +6549,25 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "description"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
-                      "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "description"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.typing.typeClassDescription",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
+                    "body": {"literal": {"string": {}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -6589,22 +6607,29 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
+                "parameter": "x"}}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.typing.typeClassWithDescription",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
                 "application": {
                   "argument": {
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
                       "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.typeClassWithDescription",
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -6651,22 +6676,7 @@
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
-                          "body": {"literal": {"string": {}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.typing.typeConstraint",

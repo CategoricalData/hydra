@@ -4306,7 +4306,10 @@
                                                                             "name": "classes",
                                                                             "term": {
                                                                               "application": {
-                                                                                "argument": {"variable": "classNames"},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "classNames"},
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.core.Name"}}}}},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {
@@ -4316,7 +4319,7 @@
                                                                                         "parameter": "n"}},
                                                                                     "function": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.sets.map"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.Name"}}},
                                                                                         "type": {"variable": "hydra.core.TypeClassConstraint"}}}}}}}}],
                                                                         "typeName": "hydra.core.TypeVariableMetadata"}},
                                                                     "function": {
@@ -7899,13 +7902,11 @@
                                                                   {
                                                                     "name": "classes",
                                                                     "term": {
-                                                                      "application": {
-                                                                        "argument": {
+                                                                      "list": [
+                                                                        {
                                                                           "inject": {
                                                                             "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
-                                                                            "typeName": "hydra.core.TypeClassConstraint"}},
-                                                                        "function": {
-                                                                          "typeApplication": {"body": {"variable": "hydra.lib.sets.singleton"}, "type": {"variable": "hydra.core.TypeClassConstraint"}}}}}}],
+                                                                            "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                 "typeName": "hydra.core.TypeVariableMetadata"}},
                                                             "function": {
                                                               "application": {
@@ -12617,16 +12618,20 @@
                                                                                   "application": {
                                                                                     "argument": {
                                                                                       "application": {
-                                                                                        "argument": {"variable": "v"},
-                                                                                        "function": {"project": {"fieldName": "classes", "typeName": "hydra.core.TypeVariableMetadata"}}}},
-                                                                                    "function": {
-                                                                                      "application": {
                                                                                         "argument": {
                                                                                           "application": {
-                                                                                            "argument": {"variable": "existing"},
+                                                                                            "argument": {"variable": "v"},
                                                                                             "function": {"project": {"fieldName": "classes", "typeName": "hydra.core.TypeVariableMetadata"}}}},
                                                                                         "function": {
-                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.sets.union"}, "type": {"variable": "hydra.core.TypeClassConstraint"}}}}}}}}],
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "existing"},
+                                                                                                "function": {"project": {"fieldName": "classes", "typeName": "hydra.core.TypeVariableMetadata"}}}},
+                                                                                            "function": {
+                                                                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.core.TypeClassConstraint"}}}}}}},
+                                                                                    "function": {
+                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.nub"}, "type": {"variable": "hydra.core.TypeClassConstraint"}}}}}}],
                                                                             "typeName": "hydra.core.TypeVariableMetadata"}},
                                                                         "typeScheme": {"body": {"variable": "hydra.core.TypeVariableMetadata"}, "variables": []}}],
                                                                     "body": {

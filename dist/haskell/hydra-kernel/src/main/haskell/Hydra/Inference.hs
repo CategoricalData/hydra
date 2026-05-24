@@ -703,7 +703,8 @@ inferTypeOfMap fcx cx m =
           fcx3 = Pairs.second vvarResult
           keyConstraints =
                   Maps.singleton kvar (Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = [Core.TypeClassConstraintSimple (Core.Name "ordering")]})
+                    Core.typeVariableMetadataClasses = [
+                      Core.TypeClassConstraintSimple (Core.Name "ordering")]})
       in (Logic.ifElse (Maps.null m) (Right (yieldWithConstraints fcx3 (buildTypeApplicationTerm [
         kvar,
         vvar] (Core.TermMap Maps.empty)) (Core.TypeMap (Core.MapType {
