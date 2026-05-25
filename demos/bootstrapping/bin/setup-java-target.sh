@@ -31,8 +31,8 @@ echo "  Copying build files..."
 cp "$JAVA_RESOURCES/build.gradle" "$OUTPUT_DIR/"
 cp "$JAVA_RESOURCES/settings.gradle" "$OUTPUT_DIR/"
 cp "$JAVA_RESOURCES/README.md" "$OUTPUT_DIR/"
-cp "$HYDRA_ROOT/gradlew" "$OUTPUT_DIR/"
-cp -r "$HYDRA_ROOT/gradle" "$OUTPUT_DIR/"
+cp "$HYDRA_JAVA_DIR/gradlew" "$OUTPUT_DIR/"
+cp -r "$HYDRA_JAVA_DIR/gradle" "$OUTPUT_DIR/"
 
 # Hand-written source files
 echo "  Copying hand-written source files..."
