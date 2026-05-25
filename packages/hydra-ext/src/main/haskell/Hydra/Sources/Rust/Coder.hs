@@ -20,13 +20,13 @@ import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Coders                     as Coders
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
+import qualified Hydra.Sources.Kernel.Terms.Scoping        as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Variables      as Variables
 import qualified Hydra.Sources.Kernel.Terms.Environment   as Environment
@@ -91,7 +91,7 @@ module_ = Module {
 -- =============================================================================
 
 -- | Encode a Hydra union field as a Rust enum variant
-encodeEnumVariant :: TTermDefinition (Context -> Graph -> FieldType -> Either Error R.EnumVariant)
+encodeEnumVariant :: TTermDefinition (InferenceContext -> Graph -> FieldType -> Either Error R.EnumVariant)
 encodeEnumVariant = def "encodeEnumVariant" $
   "cx" ~> "g" ~> lambda "ft" $
     "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
@@ -243,7 +243,7 @@ encodeLiteralType = def "encodeLiteralType" $
 
 -- | Encode a Hydra record projection as a Rust expression.
 -- Takes an optional argument for applied projections.
-encodeProjectionElim :: TTermDefinition (Context -> Graph -> Projection -> Maybe Term -> Either Error R.Expression)
+encodeProjectionElim :: TTermDefinition (InferenceContext -> Graph -> Projection -> Maybe Term -> Either Error R.Expression)
 encodeProjectionElim = def "encodeProjectionElim" $
   "cx" ~> "g" ~> lambda "proj" $ lambda "marg" $
         "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionFieldName (var "proj"))) $
@@ -262,7 +262,7 @@ encodeProjectionElim = def "encodeProjectionElim" $
                   R._FieldAccessExpr_field>>: var "fname"]))
 
 -- | Encode a Hydra record field as a Rust struct field
-encodeStructField :: TTermDefinition (Context -> Graph -> FieldType -> Either Error R.StructField)
+encodeStructField :: TTermDefinition (InferenceContext -> Graph -> FieldType -> Either Error R.StructField)
 encodeStructField = def "encodeStructField" $
   "cx" ~> "g" ~> lambda "ft" $
     "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
@@ -279,11 +279,11 @@ encodeStructField = def "encodeStructField" $
 -- =============================================================================
 
 -- | Encode a Hydra term as a Rust expression
-encodeTerm :: TTermDefinition (Context -> Graph -> Term -> Either Error R.Expression)
+encodeTerm :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error R.Expression)
 encodeTerm = def "encodeTerm" $
   "cx" ~> "g" ~> lambda "term" $
     cases _Term (var "term") (Just $
-      Ctx.failInContext (Error.errorOther $ Error.otherError $ string "unexpected term variant") (var "cx"))
+      left (Error.errorOther $ Error.otherError $ string "unexpected term variant"))
     [_Term_annotated>>: lambda "at" $
        encodeTerm @@ var "cx" @@ var "g" @@ Core.annotatedTermBody (var "at"),
      _Term_application>>: lambda "app" $
@@ -401,7 +401,7 @@ encodeTerm = def "encodeTerm" $
 -- =============================================================================
 
 -- | Encode a Hydra term definition as a Rust function item
-encodeTermDefinition :: TTermDefinition (Context -> Graph -> TermDefinition -> Either Error R.ItemWithComments)
+encodeTermDefinition :: TTermDefinition (InferenceContext -> Graph -> TermDefinition -> Either Error R.ItemWithComments)
 encodeTermDefinition = def "encodeTermDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.termDefinitionName (var "tdef") $
@@ -410,7 +410,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "typ" <~ Maybes.maybe
       (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
       (reify Core.typeSchemeBody)
-      (Packaging.termDefinitionTypeScheme (var "tdef")) $
+      (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "tdef")) $
     "body" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "term") $
     "retType" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
       right (record R._ItemWithComments [
@@ -437,7 +437,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
 -- =============================================================================
 
 -- | Encode a Hydra type as a Rust syntax type
-encodeType :: TTermDefinition (Context -> Graph -> Type -> Either Error R.Type)
+encodeType :: TTermDefinition (InferenceContext -> Graph -> Type -> Either Error R.Type)
 encodeType = def "encodeType" $
   "cx" ~> "g" ~> lambda "t" $
     "typ" <~ (Strip.deannotateType @@ var "t") $
@@ -490,11 +490,11 @@ encodeType = def "encodeType" $
                             R._ParenthesizedArgs_inputs>>: list [var "dom"],
                             R._ParenthesizedArgs_output>>: just (var "cod")]]]]])),
       _Type_record>>: lambda "_" $
-        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous record type")) (var "cx"),
+        left (Error.errorOther $ Error.otherError (string "unexpected anonymous record type")),
       _Type_union>>: lambda "_" $
-        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous union type")) (var "cx"),
+        left (Error.errorOther $ Error.otherError (string "unexpected anonymous union type")),
       _Type_wrap>>: lambda "_" $
-        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous wrap type")) (var "cx"),
+        left (Error.errorOther $ Error.otherError (string "unexpected anonymous wrap type")),
       _Type_variable>>: lambda "name" $
         right (rustPath @@ (Formatting.capitalize @@ Core.unName (var "name"))),
       _Type_forall>>: lambda "fa" $
@@ -505,7 +505,7 @@ encodeType = def "encodeType" $
 -- =============================================================================
 
 -- | Encode a Hydra type definition as a Rust item
-encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> Either Error R.ItemWithComments)
+encodeTypeDefinition :: TTermDefinition (InferenceContext -> Graph -> TypeDefinition -> Either Error R.ItemWithComments)
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.typeDefinitionName (var "tdef") $
@@ -578,7 +578,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
 
 -- | Encode a Hydra case statement (union elimination) as a Rust expression.
 -- Takes an optional argument for applied case statements.
-encodeUnionElim :: TTermDefinition (Context -> Graph -> CaseStatement -> Maybe Term -> Either Error R.Expression)
+encodeUnionElim :: TTermDefinition (InferenceContext -> Graph -> CaseStatement -> Maybe Term -> Either Error R.Expression)
 encodeUnionElim = def "encodeUnionElim" $
   "cx" ~> "g" ~> lambda "cs" $ lambda "marg" $
         "tname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ Core.caseStatementTypeName (var "cs"))) $
@@ -635,7 +635,7 @@ encodeUnionElim = def "encodeUnionElim" $
 
 -- | Encode a Hydra wrap elimination (unwrap) as a Rust expression.
 -- Takes an optional argument for applied unwraps.
-encodeUnwrapElim :: TTermDefinition (Context -> Graph -> Name -> Maybe Term -> Either Error R.Expression)
+encodeUnwrapElim :: TTermDefinition (InferenceContext -> Graph -> Name -> Maybe Term -> Either Error R.Expression)
 encodeUnwrapElim = def "encodeUnwrapElim" $
   "cx" ~> "g" ~> lambda "name" $ lambda "marg" $
         Maybes.cases (var "marg")
@@ -657,7 +657,7 @@ encodeUnwrapElim = def "encodeUnwrapElim" $
 -- =============================================================================
 
 -- | Convert a Hydra module to a map of file paths to Rust source code strings.
-moduleToRust :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
+moduleToRust :: TTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
 moduleToRust = def "moduleToRust" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
     "partitioned" <~ (Environment.partitionDefinitions @@ var "defs") $

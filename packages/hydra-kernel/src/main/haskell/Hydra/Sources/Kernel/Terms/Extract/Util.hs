@@ -51,7 +51,6 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
-import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
@@ -76,7 +75,7 @@ define = definitionInModule module_
 formatError :: TTerm (Error -> String)
 formatError = "e" ~> ShowError.error_ @@ var "e"
 
-comparison :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either Error Comparison)
+comparison :: TTermDefinition (InferenceContext -> Graph -> Term -> Prelude.Either Error Comparison)
 comparison = define "comparison" $
   doc "Extract a comparison from a term" $
   "cx" ~> "graph" ~> "term" ~>
@@ -87,4 +86,4 @@ comparison = define "comparison" $
             (right Graph.comparisonLessThan)
             (Logic.ifElse (Equality.equal (Core.unName $ var "fname") (string $ unName _Comparison_greaterThan))
               (right Graph.comparisonGreaterThan)
-              (Ctx.failInContext (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "comparison") (Core.unName (var "fname"))) (var "cx"))))
+              (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "comparison") (Core.unName (var "fname"))))))

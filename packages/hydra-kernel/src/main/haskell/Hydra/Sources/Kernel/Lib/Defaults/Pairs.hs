@@ -74,7 +74,7 @@ module_ = Module {
 
 -- | Interpreter-friendly bimap for Pair terms.
 -- Applies firstFun to the first element and secondFun to the second element.
-bimap_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either Error Term)
+bimap_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
 bimap_ = define "bimap" $
   doc "Interpreter-friendly bimap for Pair terms." $
   "cx" ~> "g" ~>
@@ -90,7 +90,7 @@ bimap_ = define "bimap" $
 
 -- | Interpreter-friendly first for Pair terms.
 -- Extracts the first element of a pair.
-first_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+first_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 first_ = define "first" $
   doc "Interpreter-friendly first for Pair terms." $
   "cx" ~> "g" ~>
@@ -102,7 +102,7 @@ first_ = define "first" $
 
 -- | Interpreter-friendly second for Pair terms.
 -- Extracts the second element of a pair.
-second_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+second_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 second_ = define "second" $
   doc "Interpreter-friendly second for Pair terms." $
   "cx" ~> "g" ~>

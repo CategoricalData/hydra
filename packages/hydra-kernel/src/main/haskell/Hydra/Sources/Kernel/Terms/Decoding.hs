@@ -45,7 +45,6 @@ import qualified Hydra.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
@@ -58,6 +57,7 @@ import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Hydra.Sources.Kernel.Terms.Predicates as Predicates
+import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 import           Prelude hiding ((++))
@@ -295,7 +295,7 @@ collectTypeVariablesFromType = define "collectTypeVariablesFromType" $
 -- The 'Graph' parameter is used for dereferencing term variables
 -- | Decode a single type binding into a decoder binding
 -- Decodes the Type from the binding's term, then generates decoder
-decodeBinding :: TTermDefinition (Context -> Graph -> Binding -> Either DecodingError Binding)
+decodeBinding :: TTermDefinition (InferenceContext -> Graph -> Binding -> Either DecodingError Binding)
 decodeBinding = define "decodeBinding" $
   doc "Transform a type binding into a decoder binding" $
   "cx" ~> "graph" ~> "b" ~>
@@ -466,7 +466,7 @@ decodeMaybeType = define "decodeMaybeType" $
 -- | Generate a decoder for a pair type
 -- | Transform a type module into a decoder module
 -- Returns Nothing if the module has no decodable type definitions
-decodeModule :: TTermDefinition (Context -> Graph -> Module -> Prelude.Either Error (Maybe Module))
+decodeModule :: TTermDefinition (InferenceContext -> Graph -> Module -> Prelude.Either Error (Maybe Module))
 decodeModule = define "decodeModule" $
   doc "Transform a type module into a decoder module" $
   "cx" ~> "graph" ~> "mod" ~>
@@ -504,7 +504,7 @@ decodeModule = define "decodeModule" $
             (var "allDecodedDeps")))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-            (Core.bindingTypeScheme $ var "b")))
+            (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
             (var "decodedBindings")))))
 
 -- | Generate a decoder module namespace from a source module namespace
@@ -912,7 +912,7 @@ decoderTypeScheme = define "decoderTypeScheme" $
       Logic.ifElse (Lists.null (var "ordVars"))
         Phantoms.nothing
         (just $ Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.name (string "ordering")))
+          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
           (var "ordVars"))) $
     Core.typeScheme
       (var "typeVars")
@@ -934,7 +934,7 @@ decoderTypeSchemeNamed = define "decoderTypeSchemeNamed" $
       Logic.ifElse (Lists.null (var "ordVars"))
         Phantoms.nothing
         (just $ Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.name (string "ordering")))
+          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
           (var "ordVars"))) $
     Core.typeScheme
       (var "typeVars")
@@ -943,7 +943,7 @@ decoderTypeSchemeNamed = define "decoderTypeSchemeNamed" $
 
 -- | Build decoder function type with element name
 -- | Filter bindings to only decodable type definitions
-filterTypeBindings :: TTermDefinition (Context -> Graph -> [Binding] -> Prelude.Either Error [Binding])
+filterTypeBindings :: TTermDefinition (InferenceContext -> Graph -> [Binding] -> Prelude.Either Error [Binding])
 filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only decodable type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
@@ -953,7 +953,7 @@ filterTypeBindings = define "filterTypeBindings" $
 
 -- | Check if a binding is decodable and return Just binding if so, Nothing otherwise
 -- | Check if a binding is decodable and return Just binding if so, Nothing otherwise
-isDecodableBinding :: TTermDefinition (Context -> Graph -> Binding -> Prelude.Either Error (Maybe Binding))
+isDecodableBinding :: TTermDefinition (InferenceContext -> Graph -> Binding -> Prelude.Either Error (Maybe Binding))
 isDecodableBinding = define "isDecodableBinding" $
   doc "Check if a binding is decodable (serializable type)" $
   "cx" ~> "graph" ~> "b" ~>

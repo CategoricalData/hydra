@@ -15,7 +15,6 @@ import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
@@ -149,7 +148,7 @@ elementIri = define "elementIri" $
     nameToIri @@ (Core.bindingName (var "el"))
 
 -- | Encode a record field as RDF triples
-encodeField :: TTermDefinition (Name -> Rdf.Resource -> Field -> Context -> Graph -> Either Error ([Rdf.Triple], Context))
+encodeField :: TTermDefinition (Name -> Rdf.Resource -> Field -> I.Int32 -> Graph -> Either Error ([Rdf.Triple], I.Int32))
 encodeField = define "encodeField" $
   doc "Encode a record field as RDF triples with a given subject" $
   lambda "rname" $ lambda "subject" $ lambda "field" $ lambda "cx" $ lambda "g" $ lets [
@@ -170,7 +169,7 @@ encodeField = define "encodeField" $
           (var "cx2")))
 
 -- | Encode a FieldType as a SHACL property shape definition
-encodeFieldType :: TTermDefinition (Name -> Maybe Integer -> FieldType -> Context -> Either Error (Shacl.Definition Shacl.PropertyShape))
+encodeFieldType :: TTermDefinition (Name -> Maybe Integer -> FieldType -> I.Int32 -> Either Error (Shacl.Definition Shacl.PropertyShape))
 encodeFieldType = define "encodeFieldType" $
   doc "Encode a FieldType as a SHACL property shape Definition" $
   lambda "rname" $ lambda "order" $ lambda "ft" $ lambda "cx" $ lets [
@@ -208,7 +207,7 @@ encodeFieldType = define "encodeFieldType" $
     var "forType" @@ (just (bigint 1)) @@ (just (bigint 1)) @@ var "ftype"
 
 -- | Helper for encoding lists as RDF (recursive)
-encodeList :: TTermDefinition (Rdf.Resource -> [Term] -> Context -> Graph -> Either Error ([Rdf.Description], Context))
+encodeList :: TTermDefinition (Rdf.Resource -> [Term] -> I.Int32 -> Graph -> Either Error ([Rdf.Description], I.Int32))
 encodeList = define "encodeList" $
   doc "Encode a list of terms as RDF list structure" $
   lambda "subj" $ lambda "terms" $ lambda "cx0" $ lambda "g" $
@@ -279,11 +278,11 @@ encodeLiteralType = define "encodeLiteralType" $
       _LiteralType_string>>: constant $ var "xsd" @@ string "string"]
 
 -- | Encode a Hydra Term as a list of RDF Descriptions
-encodeTerm :: TTermDefinition (Rdf.Resource -> Term -> Context -> Graph -> Either Error ([Rdf.Description], Context))
+encodeTerm :: TTermDefinition (Rdf.Resource -> Term -> I.Int32 -> Graph -> Either Error ([Rdf.Description], I.Int32))
 encodeTerm = define "encodeTerm" $
   doc "Encode a Hydra term as a list of RDF Descriptions" $
   lambda "subject" $ lambda "term" $ lambda "cx" $ lambda "g" $
-    cases _Term (var "term") (Just (unexpectedE @@ var "cx" @@ string "RDF-compatible term" @@ string "unsupported term variant")) [
+    cases _Term (var "term") (Just (unexpectedE @@ string "RDF-compatible term" @@ string "unsupported term variant")) [
       _Term_annotated>>: lambda "at" $
         encodeTerm @@ var "subject" @@ (Core.annotatedTermBody (var "at")) @@ var "cx" @@ var "g",
       _Term_list>>: lambda "terms" $
@@ -374,12 +373,12 @@ encodeTerm = define "encodeTerm" $
           (encodeField @@ var "rname" @@ var "subject" @@ var "field" @@ var "cx" @@ var "g")]
 
 -- | Encode a Hydra Type as SHACL CommonProperties
-encodeType :: TTermDefinition (Name -> Type -> Context -> Either Error Shacl.CommonProperties)
+encodeType :: TTermDefinition (Name -> Type -> I.Int32 -> Either Error Shacl.CommonProperties)
 encodeType = define "encodeType" $
   doc "Encode a Hydra type as SHACL CommonProperties" $
   lambda "tname" $ lambda "typ" $ lambda "cx" $ lets [
     "any">: right (common @@ (list ([] :: [TTerm Shacl.CommonConstraint])))] $
-    cases _Type (Strip.deannotateType @@ var "typ") (Just (unexpectedE @@ var "cx" @@ string "type" @@ string "unsupported type variant")) [
+    cases _Type (Strip.deannotateType @@ var "typ") (Just (unexpectedE @@ string "type" @@ string "unsupported type variant")) [
       _Type_either>>: lambda "_" $ var "any",
       _Type_list>>: lambda "_" $ var "any",
       _Type_literal>>: lambda "lt" $ right (encodeLiteralType @@ var "lt"),
@@ -417,14 +416,14 @@ encodeType = define "encodeType" $
               inject Shacl._Reference Shacl._Reference_named (nameToIri @@ var "vname")]))])]
 
 -- | Construct a Left Error
-err :: TTermDefinition (Context -> String -> Either Error a)
+err :: TTermDefinition (String -> Either Error a)
 err = define "err" $
-  doc "Construct an error result with a context and message" $
-  lambda "cx" $ lambda "msg" $
+  doc "Construct an error result with the given message" $
+  lambda "msg" $
     left (Error.errorOther $ Error.otherError (var "msg"))
 
 -- | Fold over a list, accumulating results and threading context
-foldAccumResult :: TTermDefinition ((Context -> a -> Either Error (b, Context)) -> Context -> [a] -> Either Error ([b], Context))
+foldAccumResult :: TTermDefinition ((I.Int32 -> a -> Either Error (b, I.Int32)) -> I.Int32 -> [a] -> Either Error ([b], I.Int32))
 foldAccumResult = define "foldAccumResult" $
   doc "Fold over a list, accumulating results and threading context through each step" $
   lambda "f" $ lambda "cx" $ lambda "xs" $
@@ -463,7 +462,7 @@ property = define "property" $
       Shacl._PropertyShape_path>>: var "iri"]
 
 -- | Main SHACL coder: encode a module's type elements into a ShapesGraph
-shaclCoder :: TTermDefinition (Module -> Context -> Graph -> Either Error (Shacl.ShapesGraph, Context))
+shaclCoder :: TTermDefinition (Module -> I.Int32 -> Graph -> Either Error (Shacl.ShapesGraph, I.Int32))
 shaclCoder = define "shaclCoder" $
   doc "Encode a module's type elements as a SHACL ShapesGraph" $
   lambda "mod" $ lambda "cx" $ lambda "g" $ lets [
@@ -491,11 +490,11 @@ shaclCoder = define "shaclCoder" $
       (Eithers.mapList (var "toShape") (var "typeEls"))
 
 -- | Construct an 'expected X, found Y' error
-unexpectedE :: TTermDefinition (Context -> String -> String -> Either Error a)
+unexpectedE :: TTermDefinition (String -> String -> Either Error a)
 unexpectedE = define "unexpectedE" $
   doc "Construct an error for unexpected input, given expected and found descriptions" $
-  lambda "cx" $ lambda "expected" $ lambda "found" $
-    err @@ var "cx" @@ (Strings.cat $ list [
+  lambda "expected" $ lambda "found" $
+    err @@ (Strings.cat $ list [
       string "Expected ",
       var "expected",
       string ", found: ",
@@ -528,7 +527,7 @@ nameToIri :: TTerm (Name -> Rdf.Iri)
 nameToIri = TTerm $ TermVariable $ Name "hydra.rdf.utils.nameToIri"
 
 -- | Get the next blank node, updating the context
-nextBlankNode :: TTerm (Context -> (Rdf.Resource, Context))
+nextBlankNode :: TTerm (I.Int32 -> (Rdf.Resource, I.Int32))
 nextBlankNode = TTerm $ TermVariable $ Name "hydra.rdf.utils.nextBlankNode"
 
 -- | Construct triples from a subject, predicate IRI, and list of object nodes

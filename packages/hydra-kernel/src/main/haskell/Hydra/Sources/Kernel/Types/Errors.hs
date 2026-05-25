@@ -5,7 +5,6 @@ import           Hydra.Dsl.Annotations (doc)
 import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:))
 import qualified Hydra.Dsl.Types as T
-import qualified Hydra.Sources.Kernel.Types.Context as Context
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Error.Checking as ErrorsChecking
 import qualified Hydra.Sources.Kernel.Types.Error.Core as ErrorsCore
@@ -24,7 +23,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = unqualifiedDep <$> [Context.ns, Core.ns, ErrorsChecking.ns, ErrorsCore.ns, Paths.ns, Typing.ns, Variants.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns, ErrorsChecking.ns, ErrorsCore.ns, Paths.ns, Typing.ns, Variants.ns],
             moduleDescription = Just "Top-level error types for the Hydra kernel"}
   where
     definitions = [
