@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.encode.coders.coderDirection",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.coders.CoderDirection"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.coders.CoderDirection"}}}],
@@ -79,13 +83,14 @@
                             "typeName": "hydra.core.Term"}},
                         "domain": {"unit": {}},
                         "parameter": "y"}}}],
-                "typeName": "hydra.coders.CoderDirection"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.coders.CoderDirection"}}},
-          "variables": []}}},
+                "typeName": "hydra.coders.CoderDirection"}}}}}},
     {
       "term": {
         "name": "hydra.encode.coders.languageName",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.coders.LanguageName"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.coders.LanguageName"}}}],
@@ -119,13 +124,14 @@
                           "typeName": "hydra.core.WrappedTerm"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.coders.LanguageName"},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.coders.LanguageName"}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.encode.coders.traversalOrder",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.coders.TraversalOrder"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.coders.TraversalOrder"}}}],
@@ -202,10 +208,7 @@
                             "typeName": "hydra.core.Term"}},
                         "domain": {"unit": {}},
                         "parameter": "y"}}}],
-                "typeName": "hydra.coders.TraversalOrder"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.coders.TraversalOrder"}}},
-          "variables": []}}}],
+                "typeName": "hydra.coders.TraversalOrder"}}}}}}],
   "dependencies": [
     {"module": "hydra.encode.context"},
     {"module": "hydra.encode.errors"},

@@ -18,11 +18,11 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Predicates as Predicates
+import qualified Hydra.Scoping as Scoping
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Collect forall type variable names from a type
@@ -1077,7 +1077,7 @@ decodeModule cx graph mod =
         Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.bindingName b),
           Packaging.termDefinitionTerm = (Core.bindingTerm b),
-          Packaging.termDefinitionTypeScheme = (Core.bindingTypeScheme b)})) decodedBindings)}))))))
+          Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) decodedBindings)}))))))
 -- | Generate a decoder module namespace from a source module namespace
 decodeNamespace :: Packaging.ModuleName -> Packaging.ModuleName
 decodeNamespace ns =
@@ -1562,8 +1562,11 @@ decoderTypeScheme typ =
           allOrdVars = collectOrdConstrainedVariables typ
           ordVars = Lists.filter (\v -> Lists.elem v typeVars) allOrdVars
           constraints =
-                  Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (v, Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = (Sets.singleton (Core.Name "ordering"))})) ordVars)))
+                  Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (
+                    v,
+                    Core.TypeVariableMetadata {
+                      Core.typeVariableMetadataClasses = [
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")]})) ordVars)))
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeBody = (decoderType typ),
@@ -1576,8 +1579,11 @@ decoderTypeSchemeNamed ename typ =
           allOrdVars = collectOrdConstrainedVariables typ
           ordVars = Lists.filter (\v -> Lists.elem v typeVars) allOrdVars
           constraints =
-                  Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (v, Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = (Sets.singleton (Core.Name "ordering"))})) ordVars)))
+                  Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (
+                    v,
+                    Core.TypeVariableMetadata {
+                      Core.typeVariableMetadataClasses = [
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")]})) ordVars)))
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeBody = (decoderTypeNamed ename typ),

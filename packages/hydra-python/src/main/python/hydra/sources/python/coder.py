@@ -2081,8 +2081,8 @@ def _encode_definition():
                         ),
                         nothing(),
                     ),
-                    lam("x", var("x")),
-                    _proj("hydra.packaging.TermDefinition", "typeScheme", "td"),
+                    lam("sig", _kref.scoping_term_signature_to_type_scheme(var("sig"))),
+                    _proj("hydra.packaging.TermDefinition", "signature", "td"),
                 ),
             ),
         ],
@@ -5526,7 +5526,9 @@ def _encode_variable():
                     [
                         (
                             "ts",
-                            _proj("hydra.graph.Primitive", "typeScheme", "prim"),
+                            _kref.scoping_term_signature_to_type_scheme(
+                                project(Name("hydra.packaging.PrimitiveDefinition"), Name("signature"))(
+                                    _proj("hydra.graph.Primitive", "definition", "prim"))),
                         ),
                         (
                             "asFunctionRef",
@@ -6491,10 +6493,12 @@ def _gather_metadata():
                                                 string("hydra.core.Unit"),
                                             )
                                         ),
-                                        unary_function(
-                                            Core.type_scheme_body
+                                        lam("sig",
+                                            Core.type_scheme_body(
+                                                _kref.scoping_term_signature_to_type_scheme(var("sig"))
+                                            )
                                         ),
-                                        Pkg.term_definition_type_scheme(
+                                        Pkg.term_definition_signature(
                                             var("termDef")
                                         ),
                                     ),
@@ -7736,10 +7740,13 @@ def _with_definitions():
                                                             "term",
                                                             "td",
                                                         ),
-                                                        _proj(
-                                                            "hydra.packaging.TermDefinition",
-                                                            "typeScheme",
-                                                            "td",
+                                                        Maybes.map(
+                                                            lam("sig", _kref.scoping_term_signature_to_type_scheme(var("sig"))),
+                                                            _proj(
+                                                                "hydra.packaging.TermDefinition",
+                                                                "signature",
+                                                                "td",
+                                                            ),
                                                         ),
                                                     )
                                                 ),

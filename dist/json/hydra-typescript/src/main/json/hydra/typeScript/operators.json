@@ -3,6 +3,7 @@
     {
       "term": {
         "name": "hydra.typeScript.operators.appOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Function application (whitespace)"}}}],
@@ -24,11 +25,11 @@
                   {
                     "name": "associativity",
                     "term": {"inject": {"field": {"name": "left", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}}}],
-                "typeName": "hydra.ast.Op"}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                "typeName": "hydra.ast.Op"}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.memberOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Member access operator (.)"}}}],
@@ -50,11 +51,11 @@
                   {
                     "name": "associativity",
                     "term": {"inject": {"field": {"name": "left", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}}}],
-                "typeName": "hydra.ast.Op"}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                "typeName": "hydra.ast.Op"}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.optionalChainOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Optional chaining operator (?.)"}}}],
@@ -76,11 +77,11 @@
                   {
                     "name": "associativity",
                     "term": {"inject": {"field": {"name": "left", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}}}],
-                "typeName": "hydra.ast.Op"}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                "typeName": "hydra.ast.Op"}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.exponentiateOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Exponentiation operator (**)"}}}],
@@ -90,11 +91,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 16}}},
-                    "function": {"application": {"argument": {"literal": {"string": "**"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "**"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.multiplyOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Multiplication operator (*)"}}}],
@@ -104,11 +105,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 15}}},
-                    "function": {"application": {"argument": {"literal": {"string": "*"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "*"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.divideOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Division operator (/)"}}}],
@@ -118,11 +119,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 15}}},
-                    "function": {"application": {"argument": {"literal": {"string": "/"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "/"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.moduloOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Modulo operator (%)"}}}],
@@ -132,11 +133,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 15}}},
-                    "function": {"application": {"argument": {"literal": {"string": "%"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "%"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.addOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Addition operator (+)"}}}],
@@ -146,11 +147,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 14}}},
-                    "function": {"application": {"argument": {"literal": {"string": "+"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "+"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.subtractOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Subtraction operator (-)"}}}],
@@ -160,11 +161,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 14}}},
-                    "function": {"application": {"argument": {"literal": {"string": "-"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "-"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.lessThanOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Less than operator (<)"}}}],
@@ -174,11 +175,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 12}}},
-                    "function": {"application": {"argument": {"literal": {"string": "<"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "<"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.lessThanOrEqualOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Less than or equal operator (<=)"}}}],
@@ -188,11 +189,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 12}}},
-                    "function": {"application": {"argument": {"literal": {"string": "<="}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "<="}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.greaterThanOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Greater than operator (>)"}}}],
@@ -202,11 +203,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 12}}},
-                    "function": {"application": {"argument": {"literal": {"string": ">"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": ">"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.greaterThanOrEqualOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Greater than or equal operator (>=)"}}}],
@@ -216,11 +217,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 12}}},
-                    "function": {"application": {"argument": {"literal": {"string": ">="}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": ">="}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.inOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "In operator (in)"}}}],
@@ -230,11 +231,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 12}}},
-                    "function": {"application": {"argument": {"literal": {"string": "in"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "in"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.instanceOfOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Instance of operator (instanceof)"}}}],
@@ -244,11 +245,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 12}}},
-                    "function": {"application": {"argument": {"literal": {"string": "instanceof"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "instanceof"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.equalOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Equality operator (==)"}}}],
@@ -258,11 +259,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 11}}},
-                    "function": {"application": {"argument": {"literal": {"string": "=="}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "=="}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.notEqualOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Inequality operator (!=)"}}}],
@@ -272,11 +273,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 11}}},
-                    "function": {"application": {"argument": {"literal": {"string": "!="}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "!="}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.strictEqualOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Strict equality operator (===)"}}}],
@@ -286,11 +287,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 11}}},
-                    "function": {"application": {"argument": {"literal": {"string": "==="}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "==="}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.strictNotEqualOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Strict inequality operator (!==)"}}}],
@@ -300,11 +301,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 11}}},
-                    "function": {"application": {"argument": {"literal": {"string": "!=="}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "!=="}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.bitwiseAndOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Bitwise AND operator (&)"}}}],
@@ -314,11 +315,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 10}}},
-                    "function": {"application": {"argument": {"literal": {"string": "&"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "&"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.bitwiseXorOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Bitwise XOR operator (^)"}}}],
@@ -328,11 +329,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 9}}},
-                    "function": {"application": {"argument": {"literal": {"string": "^"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "^"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.bitwiseOrOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Bitwise OR operator (|)"}}}],
@@ -342,11 +343,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 8}}},
-                    "function": {"application": {"argument": {"literal": {"string": "|"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "|"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.leftShiftOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Left shift operator (<<)"}}}],
@@ -356,11 +357,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 13}}},
-                    "function": {"application": {"argument": {"literal": {"string": "<<"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "<<"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.rightShiftOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Right shift operator (>>)"}}}],
@@ -370,11 +371,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 13}}},
-                    "function": {"application": {"argument": {"literal": {"string": ">>"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": ">>"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.unsignedRightShiftOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Unsigned right shift operator (>>>)"}}}],
@@ -384,11 +385,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 13}}},
-                    "function": {"application": {"argument": {"literal": {"string": ">>>"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": ">>>"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.logicalAndOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Logical AND operator (&&)"}}}],
@@ -398,11 +399,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 6}}},
-                    "function": {"application": {"argument": {"literal": {"string": "&&"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "&&"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.logicalOrOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Logical OR operator (||)"}}}],
@@ -412,11 +413,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 5}}},
-                    "function": {"application": {"argument": {"literal": {"string": "||"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "||"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.nullishCoalescingOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Nullish coalescing operator (??)"}}}],
@@ -426,11 +427,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 4}}},
-                    "function": {"application": {"argument": {"literal": {"string": "??"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "??"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.assignOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Assignment operator (=)"}}}],
@@ -440,11 +441,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 2}}},
-                    "function": {"application": {"argument": {"literal": {"string": "="}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "="}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.arrowOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Arrow function operator (=>)"}}}],
@@ -454,11 +455,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 2}}},
-                    "function": {"application": {"argument": {"literal": {"string": "=>"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "=>"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.ternaryOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Ternary operator (?:) - represents the ? part"}}}],
@@ -468,11 +469,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 3}}},
-                    "function": {"application": {"argument": {"literal": {"string": "?"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "?"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.commaOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Comma operator (,)"}}}],
@@ -482,11 +483,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 1}}},
-                    "function": {"application": {"argument": {"literal": {"string": ","}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": ","}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.defineOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Definition operator (= in const x = ...)"}}}],
@@ -496,11 +497,11 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 0}}},
-                    "function": {"application": {"argument": {"literal": {"string": "="}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+                    "function": {"application": {"argument": {"literal": {"string": "="}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.typeScript.operators.colonOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Type annotation colon (:)"}}}],
@@ -510,8 +511,7 @@
                 "function": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 0}}},
-                    "function": {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}}],
+                    "function": {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}}],
   "dependencies": [
     {"module": "hydra.serialization"},
     {"module": "hydra.paths"},
