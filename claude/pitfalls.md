@@ -104,31 +104,61 @@ wiping it is always safe and never affects shared history.
 
 Then sync forward into whatever target language consumes the regenerated coder.
 
-### `gradle :hydra-java:test` needs all coder language packages in `dist/java/`
+### Scoped `bin/sync.sh --hosts X --targets X` is narrow — cross-language dists are not populated
 
-The `hydra-java` Gradle build has two main source sets: `main` (the
-generated kernel + every coder package's generated Java) and `headsExtras`
-(developer drivers like `Generation.java` plus demos). Both source sets
-import `hydra.haskell.*`, `hydra.python.*`, `hydra.scala.*`, `hydra.lisp.*`
-directly, so the compile fails with "package does not exist" if those
-`dist/java/<pkg>/` trees are missing.
+Every per-host sync wrapper (`bin/sync-java.sh`, `bin/sync-python.sh`,
+`bin/sync-scala.sh`, the four Lisp dialects, `bin/sync-typescript.sh`,
+`bin/sync-go.sh`) just delegates to `bin/sync.sh --hosts X --targets X`.
+That scoped invocation populates only:
 
-`bin/sync.sh --hosts java --targets java` (and by extension
-`bin/sync-java.sh`) only populates
-`dist/java/{hydra-kernel, hydra-java, hydra-pg, hydra-rdf}`, **not** the
-cross-language coder dists `dist/java/hydra-{haskell,python,scala,lisp}/`.
-To produce all the per-language Java dist trees you need
-`bin/sync.sh` (full host × target sync) or
-`bin/sync.sh --hosts java --targets <every-language>`.
+- **Phase 3** — `dist/X/{hydra-kernel, hydra-pg, hydra-rdf}/`
+- **Phase 4** — `dist/X/hydra-X/` (X's own coder in X)
 
-User-callable wrapper scripts that compile cross-language Java code
-(`bin/generate-hydra-java-from-java.sh`, `heads/java/bin/inference-bench.sh`)
-**self-heal**: they call `bin/sync.sh` themselves before invoking gradle.
-Warm-cache full sync is ~3 minutes; cold-cache is whatever a real first
-build takes. See the next entry for the convention.
+It does **not** populate `dist/X/hydra-{the other languages}/`. So any
+downstream consumer that needs the cross-language coder dists for X
+will fail until a broader sync has run. To fully populate `dist/X/`,
+use one of:
 
-Symptom (without self-heal): `compileHeadsExtrasJava FAILED` with many
-"package hydra.lisp.syntax does not exist" errors.
+```bash
+bin/sync.sh --hosts X --targets all        # every coder dist under dist/X/
+bin/sync.sh                                # full all × all (most thorough)
+heads/<lang>/bin/assemble-distribution.sh hydra-<other>   # per-package
+```
+
+Downstream consumers that trip on this:
+
+- **Java rollup** (`packages/hydra-java/build.gradle`). Both `main` and
+  `headsExtras` source sets import `hydra.{haskell,python,scala,lisp,typescript}.*`
+  directly. Symptom: `compileHeadsExtrasJava FAILED` with many
+  `package hydra.lisp.syntax does not exist` errors.
+- **Scala sbt** (`packages/hydra-scala/build.sbt`). Declares
+  `unmanagedSourceDirectories` over
+  `dist/scala/hydra-{kernel,haskell,java,python,scala,lisp}/...`.
+  Symptom: `sbt compile` reports `Type Mismatch Error: Found (Unit =>
+  String), Required: String` (or similar) in a generated
+  `dist/scala/hydra-<lang>/.../*.scala` file whose mtime predates a
+  recent kernel-type change.
+- **Layer 2.5 testers** (`heads/<lang>/bin/test-distribution.sh`) for
+  any language whose build references cross-target dists, e.g.
+  `heads/scala/bin/test-distribution.sh hydra-kernel` triggers the
+  Scala sbt issue above.
+- **Java/Python Phase 5 self-host** (`bin/generate-hydra-{java,python}-from-{java,python}.sh`).
+  The Phase 5 driver compiles the gradle rollup before running
+  JavaSelfHostDemo, so it hits the Java rollup issue.
+
+User-callable wrapper scripts that compile cross-language code
+(`bin/generate-hydra-java-from-java.sh`,
+`heads/java/bin/inference-bench.sh`) **self-heal** — they call
+`bin/sync.sh` themselves before invoking gradle, gated by
+`HYDRA_IN_SYNC` to avoid recursion. See the next entry for the
+convention. Warm-cache full sync is ~3 minutes; cold-cache is whatever
+a real first build takes.
+
+> When `/test` lands (issue #387), the per-language `/test X` skill
+> will own the right pre-sync scope automatically. Until then, prefer
+> `bin/sync.sh --hosts X --targets all` over the host-only wrapper
+> whenever the downstream consumer compiles or tests cross-language
+> code.
 
 ### Wrapper scripts auto-sync; testers don't
 
@@ -159,29 +189,6 @@ same pattern. When in doubt, prefer a full `bin/sync.sh` call over a
 scoped one — warm-cache sync is cheap and being too narrow is what made
 this bug class possible in the first place.
 
-### `sbt test` from `packages/hydra-scala/` needs cross-target dist trees
-
-Same shape as the `hydra-java` issue above. The Scala sbt project at
-`packages/hydra-scala/build.sbt` declares `unmanagedSourceDirectories` over
-`dist/scala/hydra-{kernel,haskell,java,python,scala,lisp}/...`. If any of
-those cross-target dists is stale (e.g., a kernel-type change like #311's
-thunked `UniversalTestCase.actual` doesn't propagate because `dist/scala/`
-is gitignored), `sbt compile` fails on type mismatches in code that hasn't
-been regenerated. `heads/scala/bin/test-distribution.sh hydra-kernel`
-exhibits the same.
-
-`bin/sync-scala.sh` is **narrow**: it only covers `host=scala × target=scala`,
-so it populates `dist/scala/hydra-scala/` (and `hydra-kernel`/`hydra-pg`/`hydra-rdf`
-via Phase 3), but **not** `dist/scala/hydra-{haskell,java,python,lisp}/`. The
-package README's "Full sync" label is misleading; that command is a self-host
-self-target refresh, not a comprehensive one.
-
-To fully refresh Scala dist, use `bin/sync.sh --hosts scala --targets all`
-(or per-package `heads/scala/bin/assemble-distribution.sh hydra-haskell` etc.).
-Symptom: `sbt test` reports `Type Mismatch Error: Found (Unit => String),
-Required: String` or similar in a generated `dist/scala/hydra-<lang>/.../*.scala`
-file with an mtime predating a kernel-type change.
-
 ### `hydra-java:compileJava` OOM during incremental rebuild
 
 Symptom: `Exception: java.lang.OutOfMemoryError thrown from the
@@ -204,11 +211,11 @@ compileJava {
 This was added in commit `b2c046e87` after a Testing.java edit triggered the
 OOM. Adds 6g transient memory pressure only during compile — no runtime cost.
 
-Note: `gradle.properties` at the repo root is gitignored and exists as a
-developer-local escape hatch for `org.gradle.jvmargs` and other per-developer
-Gradle config — useful for local experimentation, but JVM args set there only
-affect the build daemon, not forked compiler workers, so it would not have
-fixed this OOM on its own.
+Note: `gradle.properties` (anywhere — `heads/java/gradle.properties` or the
+repo root) is gitignored and exists as a developer-local escape hatch for
+`org.gradle.jvmargs` and other per-developer Gradle config — useful for local
+experimentation, but JVM args set there only affect the build daemon, not
+forked compiler workers, so it would not have fixed this OOM on its own.
 
 ### Stale per-dialect Lisp `struct-compat.lisp`
 

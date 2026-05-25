@@ -469,7 +469,7 @@ stack test
 
 ### Java
 ```bash
-./gradlew :hydra-java:test
+(cd heads/java && ./gradlew :hydra-java:test)
 ```
 
 ### Python
@@ -525,7 +525,7 @@ cd heads/haskell
 stack test 2>&1 | grep -i '<your-primitive-name>'
 
 # Java: run tests and confirm your cases are included
-./gradlew :hydra-java:test --tests "*TestSuiteRunner*" --info 2>&1 | grep -i '<your-primitive-name>'
+(cd heads/java && ./gradlew :hydra-java:test --tests "*TestSuiteRunner*" --info) 2>&1 | grep -i '<your-primitive-name>'
 
 # Python: run tests and confirm your cases are included
 cd heads/python
