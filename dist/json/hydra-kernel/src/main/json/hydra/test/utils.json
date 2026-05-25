@@ -3,6 +3,12 @@
     {
       "term": {
         "name": "hydra.test.utils.inferTestGroupTerms",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.testing.TestGroup"}}],
+          "result": {"type": {"either": {"left": {"variable": "t1"}, "right": {"variable": "hydra.testing.TestGroup"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -142,19 +148,16 @@
                         "domain": {"variable": "t0"},
                         "parameter": "g"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"either": {"left": {"variable": "t1"}, "right": {"variable": "hydra.testing.TestGroup"}}},
-                  "domain": {"variable": "hydra.testing.TestGroup"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.test.utils.inferTestCase",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}],
+          "result": {"type": {"either": {"left": {"variable": "t1"}, "right": {"variable": "hydra.testing.TestCaseWithMetadata"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -229,19 +232,16 @@
                         "domain": {"variable": "t0"},
                         "parameter": "g"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"either": {"left": {"variable": "t1"}, "right": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
-                  "domain": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.test.utils.inferTerm",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "hydra.core.Term"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Run type inference on a single term"}}}],
@@ -259,7 +259,7 @@
                                 "argument": {"variable": "g"},
                                 "function": {
                                   "application": {
-                                    "argument": {"variable": "hydra.lexical.emptyContext"},
+                                    "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                     "function": {"variable": "hydra.inference.inferInGraphContext"}}}}}}},
                         "function": {
                           "application": {
@@ -291,16 +291,7 @@
                     "domain": {"variable": "hydra.core.Term"},
                     "parameter": "term"}},
                 "domain": {"variable": "hydra.graph.Graph"},
-                "parameter": "g"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "hydra.core.Term"}}},
-                  "domain": {"variable": "hydra.core.Term"}}},
-              "domain": {"variable": "hydra.graph.Graph"}}},
-          "variables": []}}}],
+                "parameter": "g"}}}}}}],
   "dependencies": [
     {"module": "hydra.inference"},
     {"module": "hydra.show.errors"},
@@ -308,7 +299,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

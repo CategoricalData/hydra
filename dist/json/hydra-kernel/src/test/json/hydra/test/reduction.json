@@ -3,6 +3,7 @@
     {
       "term": {
         "name": "hydra.test.reduction.allTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Test cases for term reduction mechanics"}}}],
@@ -6353,7 +6354,7 @@
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.test.testGraph.testContext"},
                                                                               "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -6426,7 +6427,7 @@
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.test.testGraph.testContext"},
                                                                               "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -6509,7 +6510,7 @@
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.test.testGraph.testContext"},
                                                                               "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -6638,7 +6639,7 @@
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.test.testGraph.testContext"},
                                                                               "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -6771,7 +6772,7 @@
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.test.testGraph.testContext"},
                                                                               "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -6917,7 +6918,7 @@
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.test.testGraph.testContext"},
                                                                               "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -7111,7 +7112,7 @@
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.test.testGraph.testContext"},
                                                                               "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -7252,7 +7253,7 @@
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.test.testGraph.testContext"},
                                                                               "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -7374,7 +7375,7 @@
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.test.testGraph.testContext"},
                                                                               "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -9278,13 +9279,12 @@
                   {
                     "name": "cases",
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-                "typeName": "hydra.testing.TestGroup"}}}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+                "typeName": "hydra.testing.TestGroup"}}}}}}],
   "dependencies": [
     {"module": "hydra.reduction"},
     {"module": "hydra.inference"},
     {"module": "hydra.show.core"},
-    {"module": "hydra.context"},
+    {"module": "hydra.typing"},
     {"module": "hydra.core"},
     {"module": "hydra.errors"},
     {"module": "hydra.test.testGraph"},

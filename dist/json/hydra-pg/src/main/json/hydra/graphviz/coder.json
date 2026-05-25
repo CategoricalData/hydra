@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.graphviz.coder.labelAttr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"variable": "hydra.graphviz.dot.EqualityPair"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Create a DOT label attribute"}}}],
@@ -15,13 +19,16 @@
                       {"name": "right", "term": {"wrap": {"body": {"variable": "lab"}, "typeName": "hydra.graphviz.dot.Id"}}}],
                     "typeName": "hydra.graphviz.dot.EqualityPair"}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "lab"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.graphviz.dot.EqualityPair"}, "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+                "parameter": "lab"}}}}}},
     {
       "term": {
         "name": "hydra.graphviz.coder.labelAttrs",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"variable": "hydra.graphviz.dot.AttrList"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Create DOT label attributes with a node style"}}}],
@@ -142,48 +149,46 @@
                     "domain": {"literal": {"string": {}}},
                     "parameter": "lab"}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "style"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.graphviz.dot.AttrList"}, "domain": {"literal": {"string": {}}}}},
-              "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+                "parameter": "style"}}}}}},
     {
       "term": {
         "name": "hydra.graphviz.coder.nodeStyleElement",
+        "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "The 'element' node style"}}}],
-            "body": {"literal": {"string": "element"}}}},
-        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
+            "body": {"literal": {"string": "element"}}}}}},
     {
       "term": {
         "name": "hydra.graphviz.coder.nodeStylePrimitive",
+        "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "The 'primitive' node style"}}}],
-            "body": {"literal": {"string": "primitive"}}}},
-        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
+            "body": {"literal": {"string": "primitive"}}}}}},
     {
       "term": {
         "name": "hydra.graphviz.coder.nodeStyleSimple",
+        "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "The 'simple' node style"}}}],
-            "body": {"literal": {"string": "simple"}}}},
-        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
+            "body": {"literal": {"string": "simple"}}}}}},
     {
       "term": {
         "name": "hydra.graphviz.coder.nodeStyleVariable",
+        "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "The 'variable' node style"}}}],
-            "body": {"literal": {"string": "variable"}}}},
-        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
+            "body": {"literal": {"string": "variable"}}}}}},
     {
       "term": {
         "name": "hydra.graphviz.coder.standardNamespaces",
+        "signature": {
+          "parameters": [],
+          "result": {"type": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -230,13 +235,20 @@
                   "value": {"literal": {"string": "sets"}}},
                 {
                   "key": {"wrap": {"body": {"literal": {"string": "hydra.lib.strings"}}, "typeName": "hydra.packaging.ModuleName"}},
-                  "value": {"literal": {"string": "strings"}}}]}}},
-        "typeScheme": {
-          "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}},
-          "variables": []}}},
+                  "value": {"literal": {"string": "strings"}}}]}}}}},
     {
       "term": {
         "name": "hydra.graphviz.coder.termLabel",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"pair": {"first": {"literal": {"string": {}}}, "second": {"literal": {"string": {}}}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Compute a label and node style for a term"}}}],
@@ -706,22 +718,14 @@
                     "domain": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}},
                     "parameter": "namespaces"}},
                 "domain": {"literal": {"boolean": {}}},
-                "parameter": "compact"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"pair": {"first": {"literal": {"string": {}}}, "second": {"literal": {"string": {}}}}},
-                      "domain": {"variable": "hydra.core.Term"}}},
-                  "domain": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}}}},
-              "domain": {"literal": {"boolean": {}}}}},
-          "variables": []}}},
+                "parameter": "compact"}}}}}},
     {
       "term": {
         "name": "hydra.graphviz.coder.termToDotGraph",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"variable": "hydra.graphviz.dot.Graph"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a term to a full DOT graph"}}}],
@@ -744,13 +748,19 @@
                                 "function": {"variable": "hydra.graphviz.coder.termToDotStmts"}}}}}}],
                     "typeName": "hydra.graphviz.dot.Graph"}},
                 "domain": {"variable": "hydra.core.Term"},
-                "parameter": "term"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.graphviz.dot.Graph"}, "domain": {"variable": "hydra.core.Term"}}},
-          "variables": []}}},
+                "parameter": "term"}}}}}},
     {
       "term": {
         "name": "hydra.graphviz.coder.termToDotStmts",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -1812,16 +1822,14 @@
                     "domain": {"variable": "hydra.core.Term"},
                     "parameter": "term"}},
                 "domain": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}},
-                "parameter": "namespaces"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}, "domain": {"variable": "hydra.core.Term"}}},
-              "domain": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}}}},
-          "variables": []}}},
+                "parameter": "namespaces"}}}}}},
     {
       "term": {
         "name": "hydra.graphviz.coder.termToSubtermDotGraph",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"variable": "hydra.graphviz.dot.Graph"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a term to an subterm-style DOT graph"}}}],
@@ -1844,13 +1852,19 @@
                                 "function": {"variable": "hydra.graphviz.coder.termToSubtermDotStmts"}}}}}}],
                     "typeName": "hydra.graphviz.dot.Graph"}},
                 "domain": {"variable": "hydra.core.Term"},
-                "parameter": "term"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.graphviz.dot.Graph"}, "domain": {"variable": "hydra.core.Term"}}},
-          "variables": []}}},
+                "parameter": "term"}}}}}},
     {
       "term": {
         "name": "hydra.graphviz.coder.termToSubtermDotStmts",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a term to subterm-style DOT statements"}}}],
@@ -2034,16 +2048,17 @@
                     "domain": {"variable": "hydra.core.Term"},
                     "parameter": "term"}},
                 "domain": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}},
-                "parameter": "namespaces"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}, "domain": {"variable": "hydra.core.Term"}}},
-              "domain": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}}}},
-          "variables": []}}},
+                "parameter": "namespaces"}}}}}},
     {
       "term": {
         "name": "hydra.graphviz.coder.toEdgeStmt",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graphviz.dot.Id"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graphviz.dot.Id"}},
+            {"isLazy": false, "name": "arg2", "type": {"maybe": {"variable": "hydra.graphviz.dot.AttrList"}}}],
+          "result": {"type": {"variable": "hydra.graphviz.dot.Stmt"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Create a DOT edge statement"}}}],
@@ -2075,20 +2090,14 @@
                     "domain": {"variable": "hydra.graphviz.dot.Id"},
                     "parameter": "i2"}},
                 "domain": {"variable": "hydra.graphviz.dot.Id"},
-                "parameter": "i1"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {"codomain": {"variable": "hydra.graphviz.dot.Stmt"}, "domain": {"maybe": {"variable": "hydra.graphviz.dot.AttrList"}}}},
-                  "domain": {"variable": "hydra.graphviz.dot.Id"}}},
-              "domain": {"variable": "hydra.graphviz.dot.Id"}}},
-          "variables": []}}},
+                "parameter": "i1"}}}}}},
     {
       "term": {
         "name": "hydra.graphviz.coder.toNodeId",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graphviz.dot.Id"}}],
+          "result": {"type": {"variable": "hydra.graphviz.dot.NodeId"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Create a DOT NodeId from an Id"}}}],
@@ -2103,13 +2112,14 @@
                         "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.graphviz.dot.Port"}}}}],
                     "typeName": "hydra.graphviz.dot.NodeId"}},
                 "domain": {"variable": "hydra.graphviz.dot.Id"},
-                "parameter": "i"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.graphviz.dot.NodeId"}, "domain": {"variable": "hydra.graphviz.dot.Id"}}},
-          "variables": []}}},
+                "parameter": "i"}}}}}},
     {
       "term": {
         "name": "hydra.graphviz.coder.toNodeOrSubgraph",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graphviz.dot.Id"}}],
+          "result": {"type": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Create a DOT NodeOrSubgraph from an Id"}}}],
@@ -2122,11 +2132,7 @@
                       "term": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.graphviz.coder.toNodeId"}}}},
                     "typeName": "hydra.graphviz.dot.NodeOrSubgraph"}},
                 "domain": {"variable": "hydra.graphviz.dot.Id"},
-                "parameter": "i"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}, "domain": {"variable": "hydra.graphviz.dot.Id"}}},
-          "variables": []}}}],
+                "parameter": "i"}}}}}}],
   "dependencies": [
     {"module": "hydra.show.paths"},
     {"module": "hydra.names"},
@@ -2135,7 +2141,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

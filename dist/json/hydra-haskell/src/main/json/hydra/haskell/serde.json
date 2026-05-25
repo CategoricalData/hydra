@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.haskell.serde.alternativeToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Alternative"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -30,13 +34,14 @@
                             "function": {"variable": "hydra.haskell.serde.caseRhsToExpr"}}}]},
                     "function": {"variable": "hydra.serialization.structuralSpaceSep"}}},
                 "domain": {"variable": "hydra.haskell.syntax.Alternative"},
-                "parameter": "alt"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.Alternative"}}},
-          "variables": []}}},
+                "parameter": "alt"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.applicationExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.ApplicationExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -66,14 +71,14 @@
                         "function": {
                           "application": {"argument": {"variable": "hydra.haskell.operators.appOp"}, "function": {"variable": "hydra.serialization.ifx"}}}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.ApplicationExpression"},
-                "parameter": "app"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.ApplicationExpression"}}},
-          "variables": []}}},
+                "parameter": "app"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.applicationPatternToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.ApplicationPattern"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an application pattern to an AST expression"}}}],
@@ -116,14 +121,14 @@
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.ast.Expr"}}}}}}},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.ApplicationPattern"},
-                "parameter": "appPat"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.ApplicationPattern"}}},
-          "variables": []}}},
+                "parameter": "appPat"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.constraintToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Constraint"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a type class constraint to an AST expression"}}}],
@@ -166,13 +171,14 @@
                                 "parameter": "serts"}}}],
                         "typeName": "hydra.haskell.syntax.Constraint"}}}},
                 "domain": {"variable": "hydra.haskell.syntax.Constraint"},
-                "parameter": "sert"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.Constraint"}}},
-          "variables": []}}},
+                "parameter": "sert"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.caseExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.CaseExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a case expression to an AST expression"}}}],
@@ -254,14 +260,14 @@
                             "argument": {"variable": "lhs"},
                             "function": {"application": {"argument": {"variable": "ofOp"}, "function": {"variable": "hydra.serialization.ifx"}}}}}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.CaseExpression"},
-                "parameter": "caseExpr"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.CaseExpression"}}},
-          "variables": []}}},
+                "parameter": "caseExpr"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.caseRhsToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.CaseRhs"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a case right-hand side to an AST expression"}}}],
@@ -272,13 +278,14 @@
                     "argument": {"application": {"argument": {"variable": "rhs"}, "function": {"unwrap": "hydra.haskell.syntax.CaseRhs"}}},
                     "function": {"variable": "hydra.haskell.serde.expressionToExpr"}}},
                 "domain": {"variable": "hydra.haskell.syntax.CaseRhs"},
-                "parameter": "rhs"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.CaseRhs"}}},
-          "variables": []}}},
+                "parameter": "rhs"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.classConstraintToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.ClassConstraint"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a class constraint to an AST expression"}}}],
@@ -329,14 +336,14 @@
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.ast.Expr"}}}}}}},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.ClassConstraint"},
-                "parameter": "clsAsrt"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.ClassConstraint"}}},
-          "variables": []}}},
+                "parameter": "clsAsrt"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.recordExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.RecordExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -436,14 +443,14 @@
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.ast.Expr"}}}}}}},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.RecordExpression"},
-                "parameter": "constructRecord"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.RecordExpression"}}},
-          "variables": []}}},
+                "parameter": "constructRecord"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.constructorToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Constructor"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a data constructor to an AST expression"}}}],
@@ -622,13 +629,14 @@
                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
                                     "type": {"literal": {"string": {}}}}}}}}}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.Constructor"},
-                "parameter": "cons"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.Constructor"}}},
-          "variables": []}}},
+                "parameter": "cons"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.dataKeywordToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.DataKeyword"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a data/newtype keyword to an AST expression"}}}],
@@ -656,13 +664,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.haskell.syntax.DataKeyword"}}}},
                 "domain": {"variable": "hydra.haskell.syntax.DataKeyword"},
-                "parameter": "kw"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.DataKeyword"}}},
-          "variables": []}}},
+                "parameter": "kw"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.declarationHeadToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.DeclarationHead"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a declaration head to an AST expression"}}}],
@@ -718,14 +727,14 @@
                                 "parameter": "name"}}}],
                         "typeName": "hydra.haskell.syntax.DeclarationHead"}}}},
                 "domain": {"variable": "hydra.haskell.syntax.DeclarationHead"},
-                "parameter": "hd"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.DeclarationHead"}}},
-          "variables": []}}},
+                "parameter": "hd"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.declarationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Declaration"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a declaration to an AST expression"}}}],
@@ -1092,13 +1101,14 @@
                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
                                     "type": {"literal": {"string": {}}}}}}}}}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.Declaration"},
-                "parameter": "decl"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.Declaration"}}},
-          "variables": []}}},
+                "parameter": "decl"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.expressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Expression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Haskell expression to an AST expression"}}}],
@@ -1327,13 +1337,14 @@
                                 "parameter": "name"}}}],
                         "typeName": "hydra.haskell.syntax.Expression"}}}},
                 "domain": {"variable": "hydra.haskell.syntax.Expression"},
-                "parameter": "expr"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.Expression"}}},
-          "variables": []}}},
+                "parameter": "expr"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.fieldToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Field"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a field declaration to an AST expression"}}}],
@@ -1413,13 +1424,14 @@
                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
                                     "type": {"literal": {"string": {}}}}}}}}}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.Field"},
-                "parameter": "field"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.Field"}}},
-          "variables": []}}},
+                "parameter": "field"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.ifExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.IfExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an if-then-else expression to an AST expression"}}}],
@@ -1526,13 +1538,14 @@
                                 "function": {"variable": "hydra.serialization.spaceSep"}}},
                             "function": {"application": {"argument": {"variable": "ifOp"}, "function": {"variable": "hydra.serialization.ifx"}}}}}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.IfExpression"},
-                "parameter": "ifExpr"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.IfExpression"}}},
-          "variables": []}}},
+                "parameter": "ifExpr"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.namedImportExportToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.NamedImportExport"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -1547,14 +1560,14 @@
                         "function": {"project": {"fieldName": "name", "typeName": "hydra.haskell.syntax.NamedImportExport"}}}},
                     "function": {"variable": "hydra.haskell.serde.nameToExpr"}}},
                 "domain": {"variable": "hydra.haskell.syntax.NamedImportExport"},
-                "parameter": "spec"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.NamedImportExport"}}},
-          "variables": []}}},
+                "parameter": "spec"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.importToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Import"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an import statement to an AST expression"}}}],
@@ -1702,13 +1715,14 @@
                         "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                     "body": {"application": {"argument": {"variable": "parts"}, "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.Import"},
-                "parameter": "import"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.Import"}}},
-          "variables": []}}},
+                "parameter": "import"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.lambdaExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.LambdaExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a lambda expression to an AST expression"}}}],
@@ -1763,14 +1777,14 @@
                             "function": {
                               "application": {"argument": {"variable": "hydra.haskell.operators.lambdaOp"}, "function": {"variable": "hydra.serialization.ifx"}}}}}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.LambdaExpression"},
-                "parameter": "lambdaExpr"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.LambdaExpression"}}},
-          "variables": []}}},
+                "parameter": "lambdaExpr"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.literalToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Literal"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a literal value to an AST expression"}}}],
@@ -2006,13 +2020,14 @@
                                     "typeName": "hydra.haskell.syntax.Literal"}}}},
                             "function": {"variable": "hydra.serialization.cst"}}}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.Literal"},
-                "parameter": "lit"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.Literal"}}},
-          "variables": []}}},
+                "parameter": "lit"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.localBindingToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.LocalBinding"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a local binding to an AST expression"}}}],
@@ -2040,13 +2055,14 @@
                                 "parameter": "vb"}}}],
                         "typeName": "hydra.haskell.syntax.LocalBinding"}}}},
                 "domain": {"variable": "hydra.haskell.syntax.LocalBinding"},
-                "parameter": "binding"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.LocalBinding"}}},
-          "variables": []}}},
+                "parameter": "binding"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.moduleHeadToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.ModuleHead"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a module head to an AST expression"}}}],
@@ -2129,13 +2145,14 @@
                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
                                     "type": {"literal": {"string": {}}}}}}}}}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.ModuleHead"},
-                "parameter": "moduleHead"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.ModuleHead"}}},
-          "variables": []}}},
+                "parameter": "moduleHead"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.moduleToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Module"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Haskell module to an AST expression"}}}],
@@ -2250,13 +2267,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.doubleNewlineSep"}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.Module"},
-                "parameter": "module"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.Module"}}},
-          "variables": []}}},
+                "parameter": "module"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.nameToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Name"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Haskell name to an AST expression"}}}],
@@ -2290,13 +2308,14 @@
                             "typeName": "hydra.haskell.syntax.Name"}}}},
                     "function": {"variable": "hydra.serialization.cst"}}},
                 "domain": {"variable": "hydra.haskell.syntax.Name"},
-                "parameter": "name"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.Name"}}},
-          "variables": []}}},
+                "parameter": "name"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.patternToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Pattern"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a pattern to an AST expression"}}}],
@@ -2380,13 +2399,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.haskell.syntax.Pattern"}}}},
                 "domain": {"variable": "hydra.haskell.syntax.Pattern"},
-                "parameter": "pat"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.Pattern"}}},
-          "variables": []}}},
+                "parameter": "pat"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.rightHandSideToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.RightHandSide"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a right-hand side to an AST expression"}}}],
@@ -2397,13 +2417,14 @@
                     "argument": {"application": {"argument": {"variable": "rhs"}, "function": {"unwrap": "hydra.haskell.syntax.RightHandSide"}}},
                     "function": {"variable": "hydra.haskell.serde.expressionToExpr"}}},
                 "domain": {"variable": "hydra.haskell.syntax.RightHandSide"},
-                "parameter": "rhs"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.RightHandSide"}}},
-          "variables": []}}},
+                "parameter": "rhs"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.statementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Statement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a statement to an AST expression"}}}],
@@ -2414,13 +2435,14 @@
                     "argument": {"application": {"argument": {"variable": "stmt"}, "function": {"unwrap": "hydra.haskell.syntax.Statement"}}},
                     "function": {"variable": "hydra.haskell.serde.expressionToExpr"}}},
                 "domain": {"variable": "hydra.haskell.syntax.Statement"},
-                "parameter": "stmt"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.Statement"}}},
-          "variables": []}}},
+                "parameter": "stmt"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.toHaskellComments",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -2467,13 +2489,14 @@
                                 "type": {"literal": {"string": {}}}}}}}}},
                     "function": {"application": {"argument": {"literal": {"string": "\n"}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "c"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+                "parameter": "c"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.toSimpleComments",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -2520,13 +2543,14 @@
                                 "type": {"literal": {"string": {}}}}}}}}},
                     "function": {"application": {"argument": {"literal": {"string": "\n"}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "c"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+                "parameter": "c"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.typeSignatureToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.TypeSignature"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a type signature to an AST expression"}}}],
@@ -2591,13 +2615,14 @@
                                 "argument": {"variable": "hydra.serialization.maxLineWidth"},
                                 "function": {"variable": "hydra.serialization.chooseLayout"}}}}}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.TypeSignature"},
-                "parameter": "typeSig"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.TypeSignature"}}},
-          "variables": []}}},
+                "parameter": "typeSig"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.typeToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Type"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Haskell type to an AST expression"}}}],
@@ -2744,13 +2769,14 @@
                                 "parameter": "name"}}}],
                         "typeName": "hydra.haskell.syntax.Type"}}}},
                 "domain": {"variable": "hydra.haskell.syntax.Type"},
-                "parameter": "htype"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.Type"}}},
-          "variables": []}}},
+                "parameter": "htype"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.valueBindingToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.ValueBinding"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a value binding to an AST expression"}}}],
@@ -2893,13 +2919,14 @@
                                 "parameter": "simpleVB"}}}],
                         "typeName": "hydra.haskell.syntax.ValueBinding"}}}},
                 "domain": {"variable": "hydra.haskell.syntax.ValueBinding"},
-                "parameter": "vb"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.ValueBinding"}}},
-          "variables": []}}},
+                "parameter": "vb"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.variableToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Variable"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a type variable to an AST expression"}}}],
@@ -2910,13 +2937,14 @@
                     "argument": {"application": {"argument": {"variable": "variable"}, "function": {"unwrap": "hydra.haskell.syntax.Variable"}}},
                     "function": {"variable": "hydra.haskell.serde.nameToExpr"}}},
                 "domain": {"variable": "hydra.haskell.syntax.Variable"},
-                "parameter": "variable"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.haskell.syntax.Variable"}}},
-          "variables": []}}},
+                "parameter": "variable"}}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.writeQualifiedName",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.QualifiedName"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Write a qualified name as a string"}}}],
@@ -2974,10 +3002,7 @@
                         "argument": {"variable": "allParts"},
                         "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.QualifiedName"},
-                "parameter": "qname"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.haskell.syntax.QualifiedName"}}},
-          "variables": []}}}],
+                "parameter": "qname"}}}}}}],
   "dependencies": [
     {"module": "hydra.constants"},
     {"module": "hydra.serialization"},
@@ -2986,7 +3011,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

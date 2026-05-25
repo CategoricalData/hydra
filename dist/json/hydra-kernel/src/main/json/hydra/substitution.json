@@ -3,6 +3,12 @@
     {
       "term": {
         "name": "hydra.substitution.composeTypeSubst",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.TypeSubst"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.typing.TypeSubst"}}],
+          "result": {"type": {"variable": "hydra.typing.TypeSubst"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Compose two type substitutions"}}}],
@@ -48,16 +54,14 @@
                     "domain": {"variable": "hydra.typing.TypeSubst"},
                     "parameter": "s2"}},
                 "domain": {"variable": "hydra.typing.TypeSubst"},
-                "parameter": "s1"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.typing.TypeSubst"}, "domain": {"variable": "hydra.typing.TypeSubst"}}},
-              "domain": {"variable": "hydra.typing.TypeSubst"}}},
-          "variables": []}}},
+                "parameter": "s1"}}}}}},
     {
       "term": {
         "name": "hydra.substitution.composeTypeSubstList",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.typing.TypeSubst"}}}],
+          "result": {"type": {"variable": "hydra.typing.TypeSubst"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Compose a list of type substitutions"}}}],
@@ -70,14 +74,16 @@
                     "function": {
                       "typeApplication": {
                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"variable": "hydra.typing.TypeSubst"}}},
-                        "type": {"variable": "hydra.typing.TypeSubst"}}}}}}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.typing.TypeSubst"}, "domain": {"list": {"variable": "hydra.typing.TypeSubst"}}}},
-          "variables": []}}},
+                        "type": {"variable": "hydra.typing.TypeSubst"}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.substitution.composeTypeSubstNonEmpty",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.TypeSubst"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.typing.TypeSubst"}}],
+          "result": {"type": {"variable": "hydra.typing.TypeSubst"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Compose two non-empty type substitutions (internal helper)"}}}],
@@ -161,16 +167,11 @@
                     "domain": {"variable": "hydra.typing.TypeSubst"},
                     "parameter": "s2"}},
                 "domain": {"variable": "hydra.typing.TypeSubst"},
-                "parameter": "s1"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.typing.TypeSubst"}, "domain": {"variable": "hydra.typing.TypeSubst"}}},
-              "domain": {"variable": "hydra.typing.TypeSubst"}}},
-          "variables": []}}},
+                "parameter": "s1"}}}}}},
     {
       "term": {
         "name": "hydra.substitution.idTypeSubst",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.typing.TypeSubst"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "The identity type substitution"}}}],
@@ -180,11 +181,16 @@
                   "typeApplication": {
                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.empty"}, "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
-                "typeName": "hydra.typing.TypeSubst"}}}},
-        "typeScheme": {"body": {"variable": "hydra.typing.TypeSubst"}, "variables": []}}},
+                "typeName": "hydra.typing.TypeSubst"}}}}}},
     {
       "term": {
         "name": "hydra.substitution.singletonTypeSubst",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"variable": "hydra.typing.TypeSubst"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Create a type substitution with a single variable mapping"}}}],
@@ -208,16 +214,19 @@
                     "domain": {"variable": "hydra.core.Type"},
                     "parameter": "t"}},
                 "domain": {"variable": "hydra.core.Name"},
-                "parameter": "v"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.typing.TypeSubst"}, "domain": {"variable": "hydra.core.Type"}}},
-              "domain": {"variable": "hydra.core.Name"}}},
-          "variables": []}}},
+                "parameter": "v"}}}}}},
     {
       "term": {
         "name": "hydra.substitution.substInClassConstraints",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.TypeSubst"}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}],
+          "result": {"type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -278,15 +287,20 @@
                                                                               "application": {
                                                                                 "argument": {
                                                                                   "application": {
-                                                                                    "argument": {"variable": "metadata"},
-                                                                                    "function": {"project": {"fieldName": "classes", "typeName": "hydra.core.TypeVariableMetadata"}}}},
-                                                                                "function": {
-                                                                                  "application": {
                                                                                     "argument": {
                                                                                       "application": {
-                                                                                        "argument": {"variable": "existing"},
+                                                                                        "argument": {"variable": "metadata"},
                                                                                         "function": {"project": {"fieldName": "classes", "typeName": "hydra.core.TypeVariableMetadata"}}}},
-                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.union"}, "type": {"variable": "hydra.core.Name"}}}}}}}}],
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "existing"},
+                                                                                            "function": {"project": {"fieldName": "classes", "typeName": "hydra.core.TypeVariableMetadata"}}}},
+                                                                                        "function": {
+                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.core.TypeClassConstraint"}}}}}}},
+                                                                                "function": {
+                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.nub"}, "type": {"variable": "hydra.core.TypeClassConstraint"}}}}}}],
                                                                         "typeName": "hydra.core.TypeVariableMetadata"}},
                                                                     "typeScheme": {"body": {"variable": "hydra.core.TypeVariableMetadata"}, "variables": []}}],
                                                                 "body": {
@@ -344,7 +358,7 @@
                                               "domain": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
                                           "domain": {"variable": "hydra.core.TypeVariableMetadata"}}},
                                       "domain": {"variable": "t0"}}},
-                                  "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
+                                  "constraints": [{"key": "t0", "value": {"classes": [{"simple": "ordering"}]}}],
                                   "variables": ["t0"]}}],
                             "body": {
                               "application": {
@@ -488,19 +502,16 @@
                     "domain": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}},
                     "parameter": "constraints"}},
                 "domain": {"variable": "hydra.typing.TypeSubst"},
-                "parameter": "subst"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}},
-                  "domain": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
-              "domain": {"variable": "hydra.typing.TypeSubst"}}},
-          "variables": []}}},
+                "parameter": "subst"}}}}}},
     {
       "term": {
         "name": "hydra.substitution.substInContext",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.TypeSubst"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}}],
+          "result": {"type": {"variable": "hydra.graph.Graph"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -636,16 +647,16 @@
                     "domain": {"variable": "hydra.graph.Graph"},
                     "parameter": "cx"}},
                 "domain": {"variable": "hydra.typing.TypeSubst"},
-                "parameter": "subst"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.graph.Graph"}, "domain": {"variable": "hydra.graph.Graph"}}},
-              "domain": {"variable": "hydra.typing.TypeSubst"}}},
-          "variables": []}}},
+                "parameter": "subst"}}}}}},
     {
       "term": {
         "name": "hydra.substitution.substInType",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.TypeSubst"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"variable": "hydra.core.Type"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Apply a type substitution to a type"}}}],
@@ -675,16 +686,16 @@
                     "domain": {"variable": "hydra.core.Type"},
                     "parameter": "typ0"}},
                 "domain": {"variable": "hydra.typing.TypeSubst"},
-                "parameter": "subst"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.Type"}, "domain": {"variable": "hydra.core.Type"}}},
-              "domain": {"variable": "hydra.typing.TypeSubst"}}},
-          "variables": []}}},
+                "parameter": "subst"}}}}}},
     {
       "term": {
         "name": "hydra.substitution.substInTypeNonEmpty",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.TypeSubst"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"variable": "hydra.core.Type"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -844,16 +855,16 @@
                     "domain": {"variable": "hydra.core.Type"},
                     "parameter": "typ0"}},
                 "domain": {"variable": "hydra.typing.TypeSubst"},
-                "parameter": "subst"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.Type"}, "domain": {"variable": "hydra.core.Type"}}},
-              "domain": {"variable": "hydra.typing.TypeSubst"}}},
-          "variables": []}}},
+                "parameter": "subst"}}}}}},
     {
       "term": {
         "name": "hydra.substitution.substInTypeScheme",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.TypeSubst"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.TypeScheme"}}],
+          "result": {"type": {"variable": "hydra.core.TypeScheme"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -950,16 +961,16 @@
                     "domain": {"variable": "hydra.core.TypeScheme"},
                     "parameter": "ts"}},
                 "domain": {"variable": "hydra.typing.TypeSubst"},
-                "parameter": "subst"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.TypeScheme"}, "domain": {"variable": "hydra.core.TypeScheme"}}},
-              "domain": {"variable": "hydra.typing.TypeSubst"}}},
-          "variables": []}}},
+                "parameter": "subst"}}}}}},
     {
       "term": {
         "name": "hydra.substitution.substTypesInTerm",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.TypeSubst"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -1247,16 +1258,16 @@
                     "domain": {"variable": "hydra.core.Term"},
                     "parameter": "term0"}},
                 "domain": {"variable": "hydra.typing.TypeSubst"},
-                "parameter": "subst"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.Term"}}},
-              "domain": {"variable": "hydra.typing.TypeSubst"}}},
-          "variables": []}}},
+                "parameter": "subst"}}}}}},
     {
       "term": {
         "name": "hydra.substitution.substituteInBinding",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.TermSubst"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Binding"}}],
+          "result": {"type": {"variable": "hydra.core.Binding"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Apply a term substitution to a binding"}}}],
@@ -1286,16 +1297,16 @@
                     "domain": {"variable": "hydra.core.Binding"},
                     "parameter": "b"}},
                 "domain": {"variable": "hydra.typing.TermSubst"},
-                "parameter": "subst"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.Binding"}, "domain": {"variable": "hydra.core.Binding"}}},
-              "domain": {"variable": "hydra.typing.TermSubst"}}},
-          "variables": []}}},
+                "parameter": "subst"}}}}}},
     {
       "term": {
         "name": "hydra.substitution.substituteInConstraint",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.TypeSubst"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.typing.TypeConstraint"}}],
+          "result": {"type": {"variable": "hydra.typing.TypeConstraint"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Apply a type substitution to a type constraint"}}}],
@@ -1334,17 +1345,16 @@
                     "domain": {"variable": "hydra.typing.TypeConstraint"},
                     "parameter": "c"}},
                 "domain": {"variable": "hydra.typing.TypeSubst"},
-                "parameter": "subst"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {"codomain": {"variable": "hydra.typing.TypeConstraint"}, "domain": {"variable": "hydra.typing.TypeConstraint"}}},
-              "domain": {"variable": "hydra.typing.TypeSubst"}}},
-          "variables": []}}},
+                "parameter": "subst"}}}}}},
     {
       "term": {
         "name": "hydra.substitution.substituteInConstraints",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.TypeSubst"}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}],
+          "result": {"type": {"list": {"variable": "hydra.typing.TypeConstraint"}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Apply a type substitution to a list of type constraints"}}}],
@@ -1366,19 +1376,16 @@
                     "domain": {"list": {"variable": "hydra.typing.TypeConstraint"}},
                     "parameter": "cs"}},
                 "domain": {"variable": "hydra.typing.TypeSubst"},
-                "parameter": "subst"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"list": {"variable": "hydra.typing.TypeConstraint"}},
-                  "domain": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
-              "domain": {"variable": "hydra.typing.TypeSubst"}}},
-          "variables": []}}},
+                "parameter": "subst"}}}}}},
     {
       "term": {
         "name": "hydra.substitution.substituteInTerm",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.TermSubst"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Apply a term substitution to a term"}}}],
@@ -1645,20 +1652,13 @@
                     "domain": {"variable": "hydra.core.Term"},
                     "parameter": "term0"}},
                 "domain": {"variable": "hydra.typing.TermSubst"},
-                "parameter": "subst"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.Term"}}},
-              "domain": {"variable": "hydra.typing.TermSubst"}}},
-          "variables": []}}}],
+                "parameter": "subst"}}}}}}],
   "dependencies": [
     {"module": "hydra.rewriting"},
     {"module": "hydra.variables"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
