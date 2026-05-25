@@ -7,7 +7,6 @@ import qualified Hydra.Analysis as Analysis
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Encode.Core as EncodeCore
@@ -36,6 +35,7 @@ import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Predicates as Predicates
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
@@ -65,7 +65,7 @@ constantForFieldName tname fname =
 constantForTypeName :: Core.Name -> String
 constantForTypeName tname = Strings.cat2 "_" (Names.localNameOf tname)
 -- | Construct a Haskell module from a Hydra module and its definitions
-constructModule :: Util.Namespaces Syntax.ModuleName -> Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Module
+constructModule :: Util.Namespaces Syntax.ModuleName -> Packaging.Module -> [Packaging.Definition] -> t0 -> Graph.Graph -> Either Errors.Error Syntax.Module
 constructModule namespaces mod defs cx g =
 
       let h = \namespace -> Packaging.unModuleName namespace
@@ -508,7 +508,7 @@ gatherMetadata defs =
                 Packaging.DefinitionTerm v0 ->
                   let term = Packaging.termDefinitionTerm v0
                       metaWithTerm = Rewriting.foldOverTerm Coders.TraversalOrderPre (\m -> \t -> extendMetaForTerm m t) meta term
-                  in (Maybes.maybe metaWithTerm (\ts -> Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) metaWithTerm (Core.typeSchemeBody ts)) (Packaging.termDefinitionTypeScheme v0))
+                  in (Maybes.maybe metaWithTerm (\ts -> Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) metaWithTerm (Core.typeSchemeBody ts)) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0)))
                 Packaging.DefinitionType v0 ->
                   let typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)
                   in (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) meta typ)
@@ -527,14 +527,14 @@ includeTypeDefinitions = False
 keyHaskellVar :: Core.Name
 keyHaskellVar = Core.Name "haskellVar"
 -- | Convert a Hydra module to Haskell source code as a filepath-to-content map
-moduleToHaskell :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either Errors.Error (M.Map String String)
+moduleToHaskell :: Packaging.Module -> [Packaging.Definition] -> t0 -> Graph.Graph -> Either Errors.Error (M.Map String String)
 moduleToHaskell mod defs cx g =
     Eithers.bind (moduleToHaskellModule mod defs cx g) (\hsmod ->
       let s = Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr hsmod))
           filepath = Names.namespaceToFilePath Util.CaseConventionPascal (Packaging.FileExtension "hs") (Packaging.moduleName mod)
       in (Right (Maps.singleton filepath s)))
 -- | Convert a Hydra module and definitions to a Haskell module AST
-moduleToHaskellModule :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Module
+moduleToHaskellModule :: Packaging.Module -> [Packaging.Definition] -> t0 -> Graph.Graph -> Either Errors.Error Syntax.Module
 moduleToHaskellModule mod defs cx g =
     Eithers.bind (Utils.namespacesForModule mod cx g) (\namespaces -> constructModule namespaces mod defs cx g)
 -- | Generate Haskell declarations for type and field name constants
@@ -594,7 +594,7 @@ toDataDeclaration namespaces def cx g =
 
       let name = Packaging.termDefinitionName def
           term = Packaging.termDefinitionTerm def
-          typ = Packaging.termDefinitionTypeScheme def
+          typ = Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature def)
           hname = Utils.simpleName (Names.localNameOf name)
           rewriteValueBinding =
                   \vb -> case vb of
@@ -651,7 +651,7 @@ toDataDeclaration namespaces def cx g =
                           in (Right decl))))))
       in (Eithers.bind (Annotations.getTermDescription cx g term) (\comments -> toDecl comments hname term Nothing))
 -- | Convert a Hydra type definition to Haskell declarations
-toTypeDeclarationsFrom :: Util.Namespaces Syntax.ModuleName -> Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either Errors.Error [Syntax.Declaration]
+toTypeDeclarationsFrom :: Util.Namespaces Syntax.ModuleName -> Core.Name -> Core.Type -> t0 -> Graph.Graph -> Either Errors.Error [Syntax.Declaration]
 toTypeDeclarationsFrom namespaces elementName typ cx g =
 
       let lname = Names.localNameOf elementName
@@ -818,7 +818,11 @@ typeDecl namespaces name typ cx g =
 -- | Project type scheme constraints to a map of type variables to typeclass names
 typeSchemeConstraintsToClassMap :: Ord t0 => (Maybe (M.Map t0 Core.TypeVariableMetadata) -> M.Map t0 (S.Set Core.Name))
 typeSchemeConstraintsToClassMap maybeConstraints =
-    Maybes.maybe Maps.empty (\constraints -> Maps.map (\meta -> Core.typeVariableMetadataClasses meta) constraints) maybeConstraints
+
+      let constraintToName =
+              \tcc -> case tcc of
+                Core.TypeClassConstraintSimple v0 -> Just v0
+      in (Maybes.maybe Maps.empty (\constraints -> Maps.map (\meta -> Sets.fromList (Maybes.cat (Lists.map constraintToName (Core.typeVariableMetadataClasses meta)))) constraints) maybeConstraints)
 -- | Whether to use the Hydra core import in generated modules
 useCoreImport :: Bool
 useCoreImport = True

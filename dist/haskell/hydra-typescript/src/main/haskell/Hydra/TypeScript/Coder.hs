@@ -3,7 +3,6 @@
 
 module Hydra.TypeScript.Coder where
 import qualified Hydra.Analysis as Analysis
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Environment as Environment
 import qualified Hydra.Formatting as Formatting
@@ -22,6 +21,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
@@ -35,7 +35,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
-analyzeTypeScriptFunction :: Context.Context -> Graph.Graph -> Core.Term -> Either t0 (Typing.FunctionStructure Graph.Graph)
+analyzeTypeScriptFunction :: Typing.InferenceContext -> Graph.Graph -> Core.Term -> Either t0 (Typing.FunctionStructure Graph.Graph)
 analyzeTypeScriptFunction cx g term = Analysis.analyzeFunctionTerm cx tsEnvGetGraph tsEnvSetGraph g term
 collectForallParams :: Core.Type -> [Core.Name]
 collectForallParams t =
@@ -67,7 +67,7 @@ collectTermImports currentNs t =
 
       let vars = Variables.freeVariablesInTerm t
       in (filterNonLocalNames currentNs vars)
-encodeBindingAsStatement :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> Core.Binding -> Syntax.Statement
+encodeBindingAsStatement :: Typing.InferenceContext -> Graph.Graph -> Packaging.ModuleName -> Core.Binding -> Syntax.Statement
 encodeBindingAsStatement cx g currentNs b =
 
       let bname = Core.bindingName b
@@ -91,7 +91,7 @@ encodeBindingAsStatement cx g currentNs b =
                         Syntax.variableDeclarationDeclarations = [
                           declarator]}
           in (Syntax.StatementVariableDeclaration varDecl)
-encodeLazyCall :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> Core.Term -> [Core.Term] -> [Bool] -> Syntax.Expression
+encodeLazyCall :: Typing.InferenceContext -> Graph.Graph -> Packaging.ModuleName -> Core.Term -> [Core.Term] -> [Bool] -> Syntax.Expression
 encodeLazyCall cx g currentNs headTerm args lazyFlags =
 
       let headExpr = encodeTerm cx g currentNs headTerm
@@ -165,7 +165,7 @@ encodeParam cx g pname dom =
       in case (Strip.deannotateType dom) of
         Core.TypeVariable _ -> tsTypedIdent nstr Syntax.TypeExpressionAny
         _ -> tsTypedIdent nstr (encodeTypeOrAny cx g dom)
-encodeTerm :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> Core.Term -> Syntax.Expression
+encodeTerm :: Typing.InferenceContext -> Graph.Graph -> Packaging.ModuleName -> Core.Term -> Syntax.Expression
 encodeTerm cx g currentNs term =
     case term of
       Core.TermAnnotated v0 -> encodeTerm cx g currentNs (Core.annotatedTermBody v0)
@@ -340,14 +340,15 @@ encodeTerm cx g currentNs term =
         ("tag", (tsExprStr "right")),
         ("value", (encodeTerm cx g currentNs r))])) v0
       _ -> tsExprIdent "null"
-encodeTermDefinition :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> Packaging.TermDefinition -> Syntax.ModuleItem
+encodeTermDefinition :: Typing.InferenceContext -> Graph.Graph -> Packaging.ModuleName -> Packaging.TermDefinition -> Syntax.ModuleItem
 encodeTermDefinition cx g currentNs td =
 
       let name = Packaging.termDefinitionName td
           lname = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Names.localNameOf name)
           rawTerm = Packaging.termDefinitionTerm td
           asExport = \stmt -> Syntax.ModuleItemExport (Syntax.ExportDeclarationDeclaration stmt)
-          mScheme = Maybes.bind (Packaging.termDefinitionTypeScheme td) (\ts -> Just (Core.typeSchemeBody ts))
+          mScheme =
+                  Maybes.bind (Packaging.termDefinitionSignature td) (\sig -> Just (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme sig)))
           dterm = Strip.deannotateTerm rawTerm
           funDecl = functionDeclarationFromTerm cx g currentNs lname rawTerm mScheme
           asFunDecl = asExport (Syntax.StatementFunctionDeclaration funDecl)
@@ -503,7 +504,7 @@ flattenApplication t =
               prevArgs = Pairs.second inner
           in (head_, (Lists.concat2 prevArgs (Lists.singleton (Core.applicationArgument v0))))
         _ -> (t, [])
-functionDeclarationFromTerm :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> String -> Core.Term -> Maybe Core.Type -> Syntax.FunctionDeclaration
+functionDeclarationFromTerm :: Typing.InferenceContext -> Graph.Graph -> Packaging.ModuleName -> String -> Core.Term -> Maybe Core.Type -> Syntax.FunctionDeclaration
 functionDeclarationFromTerm cx g currentNs lname term _mScheme =
 
       let fsE = analyzeTypeScriptFunction cx g term
@@ -583,7 +584,7 @@ importsToText kind currentNs names =
                       targetPath,
                       ".js\";\n"]))) (Maps.toList grouped)
       in (Strings.cat lines)
-moduleToTypeScript :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either t0 (M.Map String String)
+moduleToTypeScript :: Packaging.Module -> [Packaging.Definition] -> Typing.InferenceContext -> Graph.Graph -> Either t0 (M.Map String String)
 moduleToTypeScript mod defs cx g =
 
       let currentNs = Packaging.moduleName mod
@@ -594,7 +595,7 @@ moduleToTypeScript mod defs cx g =
           typeImportsFromTypes =
                   Lists.foldl (\acc -> \td -> Sets.union acc (collectImports currentNs (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme td)))) Sets.empty typeDefs
           typeImportsFromTerms =
-                  Lists.foldl (\acc -> \td -> Maybes.cases (Packaging.termDefinitionTypeScheme td) acc (\ts -> Sets.union acc (collectImports currentNs (Core.typeSchemeBody ts)))) Sets.empty termDefs
+                  Lists.foldl (\acc -> \td -> Maybes.cases (Packaging.termDefinitionSignature td) acc (\sig -> Sets.union acc (collectImports currentNs (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme sig))))) Sets.empty termDefs
           typeImportsFromInner =
                   Lists.foldl (\acc -> \td -> Sets.union acc (collectInnerTypeImports currentNs (Packaging.termDefinitionTerm td))) Sets.empty termDefs
           typeImports = Sets.union (Sets.union typeImportsFromTypes typeImportsFromTerms) typeImportsFromInner

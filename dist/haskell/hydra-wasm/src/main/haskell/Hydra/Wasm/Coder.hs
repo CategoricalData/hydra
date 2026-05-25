@@ -25,6 +25,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Util as Util
@@ -78,10 +79,10 @@ buildFunctionSignatures cx g termDefs =
                     sigEither = extractSignature cx g (Core.typeSchemeBody ts)
                 in (Eithers.either (\_err -> Nothing) (\sig -> Just (snakeName, sig)) sigEither)
           primEntries =
-                  Maybes.cat (Lists.map (\kv -> toSigEntry (Pairs.first kv, (Graph.primitiveTypeScheme (Pairs.second kv)))) (Maps.toList (Graph.graphPrimitives g)))
+                  Maybes.cat (Lists.map (\kv -> toSigEntry (Pairs.first kv, (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition (Pairs.second kv)))))) (Maps.toList (Graph.graphPrimitives g)))
           boundEntries = Maybes.cat (Lists.map (\kv -> toSigEntry kv) (Maps.toList (Graph.graphBoundTypes g)))
           localEntries =
-                  Maybes.cat (Lists.map (\td -> Maybes.bind (Packaging.termDefinitionTypeScheme td) (\ts -> toSigEntry (Packaging.termDefinitionName td, ts))) termDefs)
+                  Maybes.cat (Lists.map (\td -> Maybes.bind (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature td)) (\ts -> toSigEntry (Packaging.termDefinitionName td, ts))) termDefs)
       in (Maps.fromList (Lists.concat [
         primEntries,
         boundEntries,
@@ -672,7 +673,7 @@ encodeTermDefinition cx g stringOffsets fieldOffsets variantIndexes funcSigs tde
       let name = Packaging.termDefinitionName tdef
           term = Packaging.termDefinitionTerm tdef
           lname = Formatting.convertCaseCamelToLowerSnake (Core.unName name)
-          typ = Maybes.maybe Core.TypeUnit Core.typeSchemeBody (Packaging.termDefinitionTypeScheme tdef)
+          typ = Maybes.maybe Core.TypeUnit Core.typeSchemeBody (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature tdef))
           extracted = extractLambdaParams term
           paramNames = Pairs.first extracted
           innerBody = Pairs.second extracted

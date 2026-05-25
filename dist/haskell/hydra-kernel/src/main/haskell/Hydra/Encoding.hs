@@ -4,7 +4,6 @@
 module Hydra.Encoding where
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Constants as Constants
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
@@ -17,11 +16,11 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Predicates as Predicates
+import qualified Hydra.Scoping as Scoping
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Transform a type binding into an encoder binding
@@ -247,7 +246,7 @@ encodeMapType mt =
               Core.applicationArgument = (encodeType (Core.mapTypeValues mt))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}}))})
 -- | Transform a type module into an encoder module
-encodeModule :: Context.Context -> Graph.Graph -> Packaging.Module -> Either Errors.Error (Maybe Packaging.Module)
+encodeModule :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error (Maybe Packaging.Module)
 encodeModule cx graph mod =
     Eithers.bind (filterTypeBindings cx graph (Maybes.cat (Lists.map (\d -> case d of
       Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
@@ -276,7 +275,7 @@ encodeModule cx graph mod =
       Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
         Packaging.termDefinitionName = (Core.bindingName b),
         Packaging.termDefinitionTerm = (Core.bindingTerm b),
-        Packaging.termDefinitionTypeScheme = (Core.bindingTypeScheme b)})) encodedBindings)})))))
+        Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) encodedBindings)})))))
 -- | Encode a Name as a term
 encodeName :: Core.Name -> Core.Term
 encodeName n =
@@ -640,8 +639,11 @@ encoderTypeScheme typ =
           allOrdVars = encoderCollectOrdVars typ
           ordVars = Lists.filter (\v -> Lists.elem v typeVars) allOrdVars
           constraints =
-                  Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (v, Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = (Sets.singleton (Core.Name "ordering"))})) ordVars)))
+                  Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (
+                    v,
+                    Core.TypeVariableMetadata {
+                      Core.typeVariableMetadataClasses = [
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")]})) ordVars)))
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeBody = encoderFunType,
@@ -655,18 +657,21 @@ encoderTypeSchemeNamed ename typ =
           allOrdVars = encoderCollectOrdVars typ
           ordVars = Lists.filter (\v -> Lists.elem v typeVars) allOrdVars
           constraints =
-                  Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (v, Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = (Sets.singleton (Core.Name "ordering"))})) ordVars)))
+                  Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (
+                    v,
+                    Core.TypeVariableMetadata {
+                      Core.typeVariableMetadataClasses = [
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")]})) ordVars)))
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeBody = encoderFunType,
         Core.typeSchemeConstraints = constraints}
 -- | Filter bindings to only encodable type definitions
-filterTypeBindings :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either Errors.Error [Core.Binding]
+filterTypeBindings :: t0 -> Graph.Graph -> [Core.Binding] -> Either Errors.Error [Core.Binding]
 filterTypeBindings cx graph bindings =
     Eithers.map Maybes.cat (Eithers.mapList (isEncodableBinding cx graph) (Lists.filter Annotations.isNativeType bindings))
 -- | Check if a binding is encodable (serializable type)
-isEncodableBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either Errors.Error (Maybe Core.Binding)
+isEncodableBinding :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.Error (Maybe Core.Binding)
 isEncodableBinding cx graph b =
     Eithers.bind (Predicates.isSerializableByName cx graph (Core.bindingName b)) (\serializable -> Right (Logic.ifElse serializable (Just b) Nothing))
 -- | Check whether a type is the unit type
