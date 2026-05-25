@@ -105,7 +105,7 @@ def "Term" $
       doc "An either value" $
       Types.either_ (core "Term") (core "Term"),  -- ← NEW
     "function">:
-      doc "A function term" $
+      doc "A function abstraction (lambda)" $
       core "Function",
     -- ... rest of cases
   ]
@@ -492,7 +492,7 @@ Add the inference function. Translate from the DSL source to plain Haskell:
 
 ```haskell
 -- Around line 570
-inferTypeOfEither :: (Context.Context -> Graph.Graph -> Either Core.Term Core.Term -> Either Errors.Error Typing_.InferenceResult)
+inferTypeOfEither :: (Typing_.InferenceContext -> Graph.Graph -> Either Core.Term Core.Term -> Either Errors.Error Typing_.InferenceResult)
 inferTypeOfEither cx e = ((\x -> case x of
     Left l -> (Eithers.bind (inferTypeOfTerm cx l "either left value") (\r1 ->
       let leftType = (Typing_.inferenceResultType r1)
@@ -526,7 +526,7 @@ Core.TermEither v1 -> (inferTypeOfEither cx v1)
 Similarly, add the type checking function. This requires exact type arguments:
 
 ```haskell
-typeOfEither :: (Context.Context -> Graph.Graph -> [Core.Type] -> Either Core.Term Core.Term -> Either Errors.Error (Core.Type, Context.Context))
+typeOfEither :: (Typing_.InferenceContext -> Graph.Graph -> [Core.Type] -> Either Core.Term Core.Term -> Either Errors.Error (Core.Type, Typing_.InferenceContext))
 typeOfEither tx typeArgs et = -- Implementation similar to Checking.hs source
 ```
 
@@ -718,7 +718,7 @@ Add test cases in the "Type checking" describe block. Use helper functions for c
 ```haskell
 -- Helper functions (already defined in the file)
 tyapps :: TTerm a -> [Type] -> TTerm b          -- Multiple type applications
-tylams :: [Name] -> TTerm a -> TTerm b          -- Multiple type lambda abstractions
+tylams :: [Name] -> TTerm a -> TTerm b          -- Multiple type abstractions
 forAll :: Name -> Type -> Type                   -- Polymorphic type quantification
 ```
 
@@ -1024,7 +1024,7 @@ def "TypeContext" $
       doc "The set of term variables introduced by let bindings" $
       Types.set (core "Name"),
     "inferenceContext">:
-      doc "The schema types, primitive types, and data types of the graph" $
+      doc "The schema type schemes, type schemes of primitives, and let-bound type schemes of the graph" $
       typing "InferenceContext"]
 ```
 

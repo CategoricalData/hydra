@@ -645,7 +645,7 @@
                                                native-d)))]
                   (((deref (or (resolve 'hydra_annotations_set_term_description) (ns-resolve 'hydra.annotations 'hydra_annotations_set_term_description))) native-str-d) term)))
               [] t t t)
-     ;; getTermDescription :: Context -> Graph -> Term -> Either (Maybe String)
+     ;; getTermDescription :: InferenceContext -> Graph -> Term -> Either (Maybe String)
      "hydra.annotations.getTermDescription"
      (p/prim3 "hydra.annotations.getTermDescription"
               (fn [cx graph term]

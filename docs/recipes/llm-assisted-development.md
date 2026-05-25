@@ -11,7 +11,7 @@ functions.
 It contains:
 
 - **Types**: All type definitions from Hydra's kernel, showing their structure
-- **Terms**: Type signatures for all kernel constants and functions
+- **Terms**: Type schemes for all kernel constants and functions
 - **Primitives**: Built-in primitive functions with their type signatures
 
 The lexicon serves as a compact reference that can be included in an LLM's context window,
@@ -41,14 +41,14 @@ Types:
 
 Terms:
   ...
-  hydra.inference.freshVariableType : ((hydra.context.Context → (hydra.core.Type, hydra.context.Context)))
+  hydra.inference.freshVariableType : ((hydra.typing.InferenceContext → (hydra.core.Type, hydra.typing.InferenceContext)))
   hydra.inference.generalize : ((hydra.graph.Graph → hydra.core.Type → hydra.core.TypeScheme))
-  hydra.inference.inferGraphTypes : ((hydra.context.Context → list<hydra.core.Binding> → hydra.graph.Graph → either<hydra.errors.Error, ((hydra.graph.Graph, list<hydra.core.Binding>), hydra.context.Context)>))
+  hydra.inference.inferGraphTypes : ((hydra.typing.InferenceContext → list<hydra.core.Binding> → hydra.graph.Graph → either<hydra.errors.Error, ((hydra.graph.Graph, list<hydra.core.Binding>), hydra.typing.InferenceContext)>))
   ...
 ```
 
 Type definitions use `=` to show their actual structure (union, record, wrap, etc.),
-while terms and primitives use `:` to show their type signatures with inferred type schemes.
+while terms use `:` to show their inferred type schemes, and primitives show their type signatures.
 
 ### Generating the lexicon
 

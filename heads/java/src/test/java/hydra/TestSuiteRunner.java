@@ -54,11 +54,8 @@ public class TestSuiteRunner {
         return testGraph;
     }
 
-    private static hydra.context.Context emptyContext() {
-        return new hydra.context.Context(
-            hydra.util.ConsList.empty(),
-            hydra.util.ConsList.empty(),
-            hydra.util.PersistentMap.empty());
+    private static hydra.typing.InferenceContext emptyContext() {
+        return new hydra.typing.InferenceContext(0, new java.util.ArrayList<>());
     }
 
     /**
@@ -298,7 +295,7 @@ public class TestSuiteRunner {
                 new FieldType(new Name("encode"), new Type.Unit()),
                 new FieldType(new Name("decode"), new Type.Unit()))));
 
-        Name contextName = new Name("hydra.context.Context");
+        Name contextName = new Name("hydra.typing.InferenceContext");
         Name errorName = new Name("hydra.errors.Error");
         java.util.function.Function<Type, Type> eitherError = v ->
             new Type.Either(new EitherType(new Type.Variable(errorName), v));

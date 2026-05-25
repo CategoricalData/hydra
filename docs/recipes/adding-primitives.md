@@ -94,7 +94,7 @@ in `Libraries.hs`, in DSL wrappers, and in test files.
 
 ### 3. Register the primitive
 
-Update `/heads/haskell/src/main/haskell/Hydra/Sources/Libraries.hs`:
+Update `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`:
 
 ```haskell
 -- Add import at the top
@@ -161,7 +161,7 @@ module_ = Module {
     definitions = [toDefinition bimap_]
 
 -- | Interpreter-friendly bimap for Either terms.
-bimap_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either Error Term)
+bimap_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
 bimap_ = define "bimap" $
   doc "Interpreter-friendly bimap for Either terms." $
   "leftFun" ~> "rightFun" ~> "eitherTerm" ~>
@@ -251,7 +251,7 @@ Create `/heads/java/src/main/java/hydra/lib/<library>/<FunctionName>.java`:
 ```java
 package hydra.lib.chars;
 
-import hydra.context.Context;
+import hydra.typing.InferenceContext;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
@@ -280,7 +280,7 @@ public class IsAlphaNum extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error, Term>>>> implementation() {
+    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
                 c -> Terms.boolean_(apply(c)),
                 hydra.extract.Core.int32(cx, graph, args.get(0)));
@@ -296,7 +296,7 @@ public class IsAlphaNum extends PrimitiveFunction {
 - `name()`: Returns the fully qualified Hydra name
 - `type()`: Declares the type scheme (use type parameters for polymorphic functions)
 - `implementation()`: Either-based wrapper that extracts arguments and wraps results,
-  taking `Context` and `Graph` parameters
+  taking `InferenceContext` and `Graph` parameters
 - `apply()`: Static method(s) for direct Java usage
 
 **Higher-order primitives in Java:** When the primitive takes function arguments,
@@ -588,7 +588,7 @@ When adding a new primitive function:
    Both steps are required for tests to run.
 
 6. **Type variable ordering**: When registering polymorphic primitives,
-   the order of type variables in the `[_x, _y]` list must match the order they appear in the type signature.
+   the order of type variables in the `[_x, _y]` list must match the order they appear in the type scheme.
    For example, `foldr :: (a -> b -> b) -> b -> [a] -> b` uses `[_x, _y]`
    where `x` corresponds to `a` (element type) and `y` to `b` (accumulator type).
    Compare with `foldl :: (b -> a -> b) -> b -> [a] -> b` which uses `[_y, _x]`

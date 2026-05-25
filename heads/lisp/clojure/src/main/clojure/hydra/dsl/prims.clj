@@ -1,7 +1,7 @@
 (ns hydra.dsl.prims
   (:require [hydra.core :refer :all]
             [hydra.graph :refer :all]
-            [hydra.context :refer :all]
+            [hydra.typing :refer :all]
             [hydra.errors :refer :all])
   (:import [hydra.core hydra_core_function_type hydra_core_type_scheme
                        hydra_core_application hydra_core_injection hydra_core_field]

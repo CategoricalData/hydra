@@ -424,7 +424,7 @@ and potentially incorrect evaluation of recursive kernel functions like `freeVar
 
 Beyond primitive thunking, Haskell's lazy `let` bindings can cause performance issues when
 translated to eager languages. If a kernel function computes a default value in a `let` binding
-but only uses it in some branches of a case expression, the default is evaluated unconditionally
+but only uses it in some branches of a case statement, the default is evaluated unconditionally
 in eager languages. For example, `freeVariablesInTerm` originally computed a `dfltVars` fold over
 all subterms in a `let`, then used it only in the default case — meaning the expensive fold ran
 even for `Variable` nodes where the result is trivially a singleton set. The fix was to wrap the
@@ -450,7 +450,7 @@ being passed. See `wrapLazyArguments` in the Python coder and `wrapInThunk`/`enc
 in the Lisp coder for examples. The coder must detect specific primitive names (e.g.
 `hydra.lib.maybes.fromMaybe`) in application chains and wrap the appropriate positional argument.
 
-When auto-detecting type variables from primitive type schemes, be aware that type variable names
+When auto-detecting type variables from the type schemes of primitives, be aware that type variable names
 containing dots (e.g. `hydra.util.Comparison`) are nominal type references, not universally
 quantified type parameters. Exclude qualified names to avoid incorrect generalization.
 
