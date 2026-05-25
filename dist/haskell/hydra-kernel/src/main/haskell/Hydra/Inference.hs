@@ -181,7 +181,9 @@ inferGraphTypes fcx0 bindings0 g0 =
             term = Typing.inferenceResultTerm result
         in (Eithers.bind (finalizeInferredTerm fcx2 g0 term) (\finalized -> case finalized of
           Core.TermLet v0 -> Right (fromLetTerm v0, fcx2)
-          Core.TermVariable _ -> Left (Errors.ErrorOther (Errors.OtherError "Expected inferred graph as let term"))))))
+          Core.TermVariable _ -> Left (Errors.ErrorInference (Errors.InferenceErrorOther (Errors.OtherInferenceError {
+            Errors.otherInferenceErrorPath = (Paths.SubtermPath (Lists.reverse (Typing.inferenceContextTrace fcx2))),
+            Errors.otherInferenceErrorMessage = "Expected inferred graph as let term"})))))))
 -- | Infer the type of a term in a given inference context
 inferInGraphContext :: Typing.InferenceContext -> Graph.Graph -> Core.Term -> Either Errors.Error Typing.InferenceResult
 inferInGraphContext fcx cx term = inferTypeOfTerm fcx cx term "single term"
@@ -234,18 +236,23 @@ inferTypeOf fcx cx term =
           in (Logic.ifElse (Equality.equal 1 (Lists.length bindings)) (Eithers.bind (headOrFail "inferTypeOf: single binding expected" bindings) (\binding ->
             let term1 = Core.bindingTerm binding
                 mts = Core.bindingTypeScheme binding
-            in (Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError "Expected a type scheme"))) (\ts -> Right ((term1, ts), fcx2)) mts))) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
-            "Expected a single binding with a type scheme, but got: ",
-            (Literals.showInt32 (Lists.length bindings)),
-            " bindings"]))))))))))
+            in (Maybes.maybe (Left (Errors.ErrorInference (Errors.InferenceErrorOther (Errors.OtherInferenceError {
+              Errors.otherInferenceErrorPath = (Paths.SubtermPath (Lists.reverse (Typing.inferenceContextTrace fcx2))),
+              Errors.otherInferenceErrorMessage = "Expected a type scheme"})))) (\ts -> Right ((term1, ts), fcx2)) mts))) (Left (Errors.ErrorInference (Errors.InferenceErrorOther (Errors.OtherInferenceError {
+            Errors.otherInferenceErrorPath = (Paths.SubtermPath (Lists.reverse (Typing.inferenceContextTrace fcx2))),
+            Errors.otherInferenceErrorMessage = (Strings.cat [
+              "Expected a single binding with a type scheme, but got: ",
+              (Literals.showInt32 (Lists.length bindings)),
+              " bindings"])}))))))))))
 -- | Infer the type of an annotated term (Either version)
 inferTypeOfAnnotatedTerm :: Typing.InferenceContext -> Graph.Graph -> Core.AnnotatedTerm -> Either Errors.Error Typing.InferenceResult
 inferTypeOfAnnotatedTerm fcx cx at =
 
       let term = Core.annotatedTermBody at
           ann = Core.annotatedTermAnnotation at
-      in (Eithers.bind (inferTypeOfTerm fcx cx term "annotated term") (\result ->
-        let fcx2 = Typing.inferenceResultContext result
+          fcxBody = Names.pushSubtermStep Paths.SubtermStepAnnotatedBody fcx
+      in (Eithers.bind (inferTypeOfTerm fcxBody cx term "annotated term") (\result ->
+        let fcx2 = Names.restoreTrace fcx (Typing.inferenceResultContext result)
             iterm = Typing.inferenceResultTerm result
             itype = Typing.inferenceResultType result
             isubst = Typing.inferenceResultSubst result
@@ -318,58 +325,60 @@ inferTypeOfCaseStatement fcx cx caseStmt =
             fcx2 = Pairs.second stRp
             svars = Core.typeSchemeVariables schemaType
             stype = Core.typeSchemeBody schemaType
-        in (Eithers.bind (ExtractCore.unionType tname stype) (\sfields -> Eithers.bind (Eithers.mapMaybe (\t -> inferTypeOfTerm fcx2 cx t (Strings.cat [
-          "case ",
-          (Core.unName tname),
-          ".<default>"])) dflt) (\dfltRp ->
-          let dfltResult = dfltRp
-              fcx3 = Maybes.fromMaybe fcx2 (Maybes.map Typing.inferenceResultContext dfltRp)
-          in (Eithers.bind (inferMany fcx3 cx (Lists.map (\f -> (
-            Core.fieldTerm f,
-            (Strings.cat [
-              "case ",
-              (Core.unName tname),
-              ".",
-              (Core.unName (Core.fieldName f))]))) cases)) (\caseRp ->
-            let caseResults = Pairs.first caseRp
-                fcx4 = Pairs.second caseRp
-                iterms = Pairs.first caseResults
-                itypes = Pairs.first (Pairs.second caseResults)
-                isubst = Pairs.first (Pairs.second (Pairs.second caseResults))
-                caseElemConstraints = Pairs.second (Pairs.second (Pairs.second caseResults))
-                codvResult = Names.freshName fcx4
-                codv = Pairs.first codvResult
-                fcx5 = Pairs.second codvResult
-                cod = Core.TypeVariable codv
-                caseMap = Maps.fromList (Lists.map (\ft -> (Core.fieldTypeName ft, (Core.fieldTypeType ft))) sfields)
-                dfltConstraints =
-                        Maybes.toList (Maybes.map (\r -> Typing.TypeConstraint {
-                          Typing.typeConstraintLeft = cod,
-                          Typing.typeConstraintRight = (Substitution.substInType isubst (Typing.inferenceResultType r)),
-                          Typing.typeConstraintComment = "match default"}) dfltResult)
-                caseConstraints =
-                        Maybes.cat (Lists.zipWith (\fname -> \itype -> Maybes.map (\ftype -> Typing.TypeConstraint {
-                          Typing.typeConstraintLeft = itype,
-                          Typing.typeConstraintRight = (Core.TypeFunction (Core.FunctionType {
-                            Core.functionTypeDomain = ftype,
-                            Core.functionTypeCodomain = cod})),
-                          Typing.typeConstraintComment = "case type"}) (Maps.lookup fname caseMap)) fnames itypes)
-                dfltClassConstraints = Maybes.fromMaybe Maps.empty (Maybes.map Typing.inferenceResultClassConstraints dfltResult)
-                allElemConstraints = mergeClassConstraints caseElemConstraints dfltClassConstraints
-            in (Eithers.bind (mapConstraints fcx5 cx (\subst -> yieldWithConstraints fcx5 (buildTypeApplicationTerm svars (Core.TermCases (Core.CaseStatement {
-              Core.caseStatementTypeName = tname,
-              Core.caseStatementDefault = (Maybes.map Typing.inferenceResultTerm dfltResult),
-              Core.caseStatementCases = (Lists.zipWith (\n -> \t -> Core.Field {
-                Core.fieldName = n,
-                Core.fieldTerm = t}) fnames iterms)}))) (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Resolution.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
-              Core.functionTypeCodomain = cod})) (Substitution.composeTypeSubstList (Lists.concat [
-              Maybes.toList (Maybes.map Typing.inferenceResultSubst dfltResult),
-              [
-                isubst,
-                subst]])) (Substitution.substInClassConstraints subst allElemConstraints)) (Lists.concat [
-              dfltConstraints,
-              caseConstraints])) (\mcResult -> Right mcResult)))))))))
+        in (Eithers.bind (ExtractCore.unionType tname stype) (\sfields ->
+          let fcxDflt = Names.pushSubtermStep Paths.SubtermStepUnionCasesDefault fcx2
+          in (Eithers.bind (Eithers.mapMaybe (\t -> inferTypeOfTerm fcxDflt cx t (Strings.cat [
+            "case ",
+            (Core.unName tname),
+            ".<default>"])) dflt) (\dfltRp ->
+            let dfltResult = dfltRp
+                fcx3 = Maybes.fromMaybe fcx2 (Maybes.map (\_r -> Names.restoreTrace fcx2 (Typing.inferenceResultContext _r)) dfltRp)
+            in (Eithers.bind (inferMany fcx3 cx (Lists.map (\f -> (
+              Core.fieldTerm f,
+              (Strings.cat [
+                "case ",
+                (Core.unName tname),
+                ".",
+                (Core.unName (Core.fieldName f))]))) cases)) (\caseRp ->
+              let caseResults = Pairs.first caseRp
+                  fcx4 = Pairs.second caseRp
+                  iterms = Pairs.first caseResults
+                  itypes = Pairs.first (Pairs.second caseResults)
+                  isubst = Pairs.first (Pairs.second (Pairs.second caseResults))
+                  caseElemConstraints = Pairs.second (Pairs.second (Pairs.second caseResults))
+                  codvResult = Names.freshName fcx4
+                  codv = Pairs.first codvResult
+                  fcx5 = Pairs.second codvResult
+                  cod = Core.TypeVariable codv
+                  caseMap = Maps.fromList (Lists.map (\ft -> (Core.fieldTypeName ft, (Core.fieldTypeType ft))) sfields)
+                  dfltConstraints =
+                          Maybes.toList (Maybes.map (\r -> Typing.TypeConstraint {
+                            Typing.typeConstraintLeft = cod,
+                            Typing.typeConstraintRight = (Substitution.substInType isubst (Typing.inferenceResultType r)),
+                            Typing.typeConstraintComment = "match default"}) dfltResult)
+                  caseConstraints =
+                          Maybes.cat (Lists.zipWith (\fname -> \itype -> Maybes.map (\ftype -> Typing.TypeConstraint {
+                            Typing.typeConstraintLeft = itype,
+                            Typing.typeConstraintRight = (Core.TypeFunction (Core.FunctionType {
+                              Core.functionTypeDomain = ftype,
+                              Core.functionTypeCodomain = cod})),
+                            Typing.typeConstraintComment = "case type"}) (Maps.lookup fname caseMap)) fnames itypes)
+                  dfltClassConstraints = Maybes.fromMaybe Maps.empty (Maybes.map Typing.inferenceResultClassConstraints dfltResult)
+                  allElemConstraints = mergeClassConstraints caseElemConstraints dfltClassConstraints
+              in (Eithers.bind (mapConstraints fcx5 cx (\subst -> yieldWithConstraints fcx5 (buildTypeApplicationTerm svars (Core.TermCases (Core.CaseStatement {
+                Core.caseStatementTypeName = tname,
+                Core.caseStatementDefault = (Maybes.map Typing.inferenceResultTerm dfltResult),
+                Core.caseStatementCases = (Lists.zipWith (\n -> \t -> Core.Field {
+                  Core.fieldName = n,
+                  Core.fieldTerm = t}) fnames iterms)}))) (Core.TypeFunction (Core.FunctionType {
+                Core.functionTypeDomain = (Resolution.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
+                Core.functionTypeCodomain = cod})) (Substitution.composeTypeSubstList (Lists.concat [
+                Maybes.toList (Maybes.map Typing.inferenceResultSubst dfltResult),
+                [
+                  isubst,
+                  subst]])) (Substitution.substInClassConstraints subst allElemConstraints)) (Lists.concat [
+                dfltConstraints,
+                caseConstraints])) (\mcResult -> Right mcResult))))))))))
 -- | Infer the type of a collection. The classNames parameter specifies type classes (e.g. ordering) that the element type variable must satisfy.
 inferTypeOfCollection :: Typing.InferenceContext -> Graph.Graph -> (Core.Type -> Core.Type) -> ([Core.Term] -> Core.Term) -> String -> S.Set Core.Name -> [Core.Term] -> Either Errors.Error Typing.InferenceResult
 inferTypeOfCollection fcx cx typCons trmCons desc classNames els =
@@ -455,8 +464,9 @@ inferTypeOfInjection fcx cx injection =
           field = Core.injectionField injection
           fname = Core.fieldName field
           term = Core.fieldTerm field
-      in (Eithers.bind (inferTypeOfTerm fcx cx term "injected term") (\result ->
-        let fcx2 = Typing.inferenceResultContext result
+          fcxInj = Names.pushSubtermStep Paths.SubtermStepSumTerm fcx
+      in (Eithers.bind (inferTypeOfTerm fcxInj cx term "injected term") (\result ->
+        let fcx2 = Names.restoreTrace fcx (Typing.inferenceResultContext result)
         in (Eithers.bind (Resolution.requireSchemaType fcx2 (Graph.graphSchemaTypes cx) tname) (\stRp ->
           let schemaType = Pairs.first stRp
               fcx3 = Pairs.second stRp
@@ -492,8 +502,9 @@ inferTypeOfLambda fcx cx lambda =
                         Core.typeSchemeVariables = [],
                         Core.typeSchemeBody = dom,
                         Core.typeSchemeConstraints = Nothing})] cx
-      in (Eithers.bind (inferTypeOfTerm fcx2 cx2 body "lambda body") (\result ->
-        let fcx3 = Typing.inferenceResultContext result
+          fcxBody = Names.pushSubtermStep Paths.SubtermStepLambdaBody fcx2
+      in (Eithers.bind (inferTypeOfTerm fcxBody cx2 body "lambda body") (\result ->
+        let fcx3 = Names.restoreTrace fcx2 (Typing.inferenceResultContext result)
             iterm = Typing.inferenceResultTerm result
             icod = Typing.inferenceResultType result
             isubst = Typing.inferenceResultSubst result
@@ -628,8 +639,9 @@ inferTypeOfLetNormalized fcx0 cx0 letTerm =
                         Graph.graphTypeVariables = (Graph.graphTypeVariables g2base)}
               bterms1Subst = Lists.map (Substitution.substTypesInTerm s2) bterms1
               tsbins1 = Lists.zip bnames (Lists.map (\t -> generalize g2 (Substitution.substInType s2 t)) tbins1)
-          in (Eithers.bind (inferTypeOfTerm fcx3 (extendContext tsbins1 g2) body0 "let body") (\bodyResult ->
-            let fcx4 = Typing.inferenceResultContext bodyResult
+              fcx3Body = Names.pushSubtermStep Paths.SubtermStepLetBody fcx3
+          in (Eithers.bind (inferTypeOfTerm fcx3Body (extendContext tsbins1 g2) body0 "let body") (\bodyResult ->
+            let fcx4 = Names.restoreTrace fcx3 (Typing.inferenceResultContext bodyResult)
                 body1 = Typing.inferenceResultTerm bodyResult
                 tbody = Typing.inferenceResultType bodyResult
                 sbody = Typing.inferenceResultSubst bodyResult
@@ -852,10 +864,30 @@ inferTypeOfTerm fcx cx term desc =
         Core.TermWrap v0 -> inferTypeOfWrappedTerm fcx2 cx v0
 -- | Infer the type of a type application (Either version)
 inferTypeOfTypeApplication :: Typing.InferenceContext -> Graph.Graph -> Core.TypeApplicationTerm -> Either Errors.Error Typing.InferenceResult
-inferTypeOfTypeApplication fcx cx tt = inferTypeOfTerm fcx cx (Core.typeApplicationTermBody tt) "type application term"
+inferTypeOfTypeApplication fcx cx tt =
+
+      let fcxBody = Names.pushSubtermStep Paths.SubtermStepTypeApplicationTerm fcx
+      in (Eithers.bind (inferTypeOfTerm fcxBody cx (Core.typeApplicationTermBody tt) "type application term") (\result ->
+        let fcx2 = Names.restoreTrace fcx (Typing.inferenceResultContext result)
+        in (Right (Typing.InferenceResult {
+          Typing.inferenceResultTerm = (Typing.inferenceResultTerm result),
+          Typing.inferenceResultType = (Typing.inferenceResultType result),
+          Typing.inferenceResultSubst = (Typing.inferenceResultSubst result),
+          Typing.inferenceResultClassConstraints = (Typing.inferenceResultClassConstraints result),
+          Typing.inferenceResultContext = fcx2}))))
 -- | Infer the type of a type abstraction (Either version)
 inferTypeOfTypeLambda :: Typing.InferenceContext -> Graph.Graph -> Core.TypeLambda -> Either Errors.Error Typing.InferenceResult
-inferTypeOfTypeLambda fcx cx ta = inferTypeOfTerm fcx cx (Core.typeLambdaBody ta) "type abstraction"
+inferTypeOfTypeLambda fcx cx ta =
+
+      let fcxBody = Names.pushSubtermStep Paths.SubtermStepTypeLambdaBody fcx
+      in (Eithers.bind (inferTypeOfTerm fcxBody cx (Core.typeLambdaBody ta) "type abstraction") (\result ->
+        let fcx2 = Names.restoreTrace fcx (Typing.inferenceResultContext result)
+        in (Right (Typing.InferenceResult {
+          Typing.inferenceResultTerm = (Typing.inferenceResultTerm result),
+          Typing.inferenceResultType = (Typing.inferenceResultType result),
+          Typing.inferenceResultSubst = (Typing.inferenceResultSubst result),
+          Typing.inferenceResultClassConstraints = (Typing.inferenceResultClassConstraints result),
+          Typing.inferenceResultContext = fcx2}))))
 -- | The trivial inference rule for the unit term
 inferTypeOfUnit :: Typing.InferenceContext -> Typing.InferenceResult
 inferTypeOfUnit fcx =
@@ -905,8 +937,9 @@ inferTypeOfWrappedTerm fcx cx wt =
       in (Eithers.bind (Resolution.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->
         let schemaType = Pairs.first stRp
             fcx2 = Pairs.second stRp
-        in (Eithers.bind (inferTypeOfTerm fcx2 cx term "wrapped term") (\result ->
-          let fcx3 = Typing.inferenceResultContext result
+            fcxBody = Names.pushSubtermStep Paths.SubtermStepWrappedTerm fcx2
+        in (Eithers.bind (inferTypeOfTerm fcxBody cx term "wrapped term") (\result ->
+          let fcx3 = Names.restoreTrace fcx2 (Typing.inferenceResultContext result)
               svars = Core.typeSchemeVariables schemaType
               stype = Core.typeSchemeBody schemaType
               iterm = Typing.inferenceResultTerm result
@@ -930,11 +963,12 @@ inferTypesOfTemporaryBindings fcx cx bins =
             tl = Pairs.second binsUc
             k = Core.bindingName binding
             v = Core.bindingTerm binding
-        in (Eithers.bind (inferTypeOfTerm fcx cx v (Strings.cat [
+            fcxBind = Names.pushSubtermStep (Paths.SubtermStepLetBinding k) fcx
+        in (Eithers.bind (inferTypeOfTerm fcxBind cx v (Strings.cat [
           "temporary let binding '",
           (Core.unName k),
           "'"])) (\result1 ->
-          let fcx2 = Typing.inferenceResultContext result1
+          let fcx2 = Names.restoreTrace fcx (Typing.inferenceResultContext result1)
               j = Typing.inferenceResultTerm result1
               u_prime = Typing.inferenceResultType result1
               u = Typing.inferenceResultSubst result1
