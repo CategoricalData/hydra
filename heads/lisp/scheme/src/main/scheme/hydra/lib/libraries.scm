@@ -33,6 +33,10 @@
         (lambda (cx g t) ((((hydra_reduction_reduce_term cx) g) #t) t))
         dom cod))
 
+    ;; Wrap class names into TypeClassConstraint.simple variants (#156).
+    (define (constraints . classes)
+      (map (lambda (c) (list 'simple c)) classes))
+
     ;; ============================================================================
     ;; Chars
     ;; ============================================================================
@@ -103,8 +107,8 @@
     (define (register-equality)
       (let ((ns "hydra.lib.equality")
             (x (tc-variable "x"))
-            (ord-x (list (cons "x" (make-hydra_core_type_variable_metadata (list "ordering")))))
-            (eq-x  (list (cons "x" (make-hydra_core_type_variable_metadata (list "equality"))))))
+            (ord-x (list (list "x" (make-hydra_core_type_variable_metadata (constraints "ordering")))))
+            (eq-x  (list (list "x" (make-hydra_core_type_variable_metadata (constraints "equality"))))))
         (list
           (cons (qname ns "compare")  (prim2 (qname ns "compare")  hydra_lib_equality_compare  #f x x (tc-comparison) ord-x))
           (cons (qname ns "equal")    (prim2 (qname ns "equal")    hydra_lib_equality_equal    #f x x (tc-boolean) eq-x))
@@ -125,8 +129,8 @@
             (a (tc-variable "a"))
             (b (tc-variable "b"))
             (c (tc-variable "c"))
-            (ord-a (list (cons "a" (make-hydra_core_type_variable_metadata (list "ordering")))))
-            (eq-a  (list (cons "a" (make-hydra_core_type_variable_metadata (list "equality"))))))
+            (ord-a (list (list "a" (make-hydra_core_type_variable_metadata (constraints "ordering")))))
+            (eq-a  (list (list "a" (make-hydra_core_type_variable_metadata (constraints "equality"))))))
         (list
           (cons (qname ns "apply")      (prim2 (qname ns "apply")
                                                  hydra_lib_lists_apply
@@ -254,9 +258,9 @@
             (v  (tc-variable "v"))
             (v1 (tc-variable "v1"))
             (v2 (tc-variable "v2"))
-            (ord-k (list (cons "k" (make-hydra_core_type_variable_metadata (list "ordering")))))
-            (ord-k1k2 (list (cons "k1" (make-hydra_core_type_variable_metadata (list "ordering")))
-                            (cons "k2" (make-hydra_core_type_variable_metadata (list "ordering"))))))
+            (ord-k (list (list "k" (make-hydra_core_type_variable_metadata (constraints "ordering")))))
+            (ord-k1k2 (list (list "k1" (make-hydra_core_type_variable_metadata (constraints "ordering")))
+                            (list "k2" (make-hydra_core_type_variable_metadata (constraints "ordering"))))))
         (let ((map-kv (tc-map k v)))
           (list
             (cons (qname ns "alter")          (prim3 (qname ns "alter")
@@ -432,9 +436,9 @@
       (let ((ns "hydra.lib.sets")
             (a (tc-variable "a"))
             (b (tc-variable "b"))
-            (ord-a (list (cons "a" (make-hydra_core_type_variable_metadata (list "ordering")))))
-            (ord-ab (list (cons "a" (make-hydra_core_type_variable_metadata (list "ordering")))
-                          (cons "b" (make-hydra_core_type_variable_metadata (list "ordering"))))))
+            (ord-a (list (list "a" (make-hydra_core_type_variable_metadata (constraints "ordering")))))
+            (ord-ab (list (list "a" (make-hydra_core_type_variable_metadata (constraints "ordering")))
+                          (list "b" (make-hydra_core_type_variable_metadata (constraints "ordering"))))))
         (list
           (cons (qname ns "delete")       (prim2 (qname ns "delete")
                                                   hydra_lib_sets_delete
