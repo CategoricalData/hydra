@@ -21,7 +21,6 @@ import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Coders       as Coders
 import qualified Hydra.Dsl.Util      as Util
-import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
@@ -71,6 +70,7 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations     as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Inference       as Inference
 import qualified Hydra.Sources.Kernel.Terms.Lexical         as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Names           as Names
+import qualified Hydra.Sources.Kernel.Terms.Scoping         as Scoping
 
 import qualified Hydra.Sources.Kernel.Terms.Environment     as Environment
 import qualified Hydra.Sources.Kernel.Terms.Strip           as Strip
@@ -138,7 +138,7 @@ moduleTermBindings m = Maybes.cat $ Lists.map
       just (Core.binding
         (Packaging.termDefinitionName $ var "td")
         (Packaging.termDefinitionTerm $ var "td")
-        (Packaging.termDefinitionTypeScheme $ var "td"))])
+        (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "td"))])
   (Packaging.moduleDefinitions m)
 
 -- | Extract all definitions from a module as Bindings.
@@ -242,8 +242,9 @@ formatPrimitive :: TTermDefinition (Primitive -> String)
 formatPrimitive = define "formatPrimitive" $
   doc "Format a primitive for the lexicon" $
   "prim" ~>
-  "name" <~ Core.unName (Graph.primitiveName $ var "prim") $
-  "typeStr" <~ ShowCore.typeScheme @@ (Graph.primitiveTypeScheme $ var "prim") $
+  "name" <~ Core.unName (Packaging.primitiveDefinitionName $ Graph.primitiveDefinition $ var "prim") $
+  "typ" <~ (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition $ var "prim")) $
+  "typeStr" <~ ShowCore.typeScheme @@ var "typ" $
   (string "  ") ++ var "name" ++ (string " : ") ++ var "typeStr"
 
 -- | Format a type binding for the lexicon: "  name = type"
@@ -260,11 +261,11 @@ formatTermBinding = define "formatTermBinding" $
 
 -- | Format a primitive for the lexicon: "  name : typeScheme"
 generateSourceFiles
-  :: TTermDefinition ((Module -> [Definition] -> Context -> Graph -> Prelude.Either Error (M.Map String String))
+  :: TTermDefinition ((Module -> [Definition] -> InferenceContext -> Graph -> Prelude.Either Error (M.Map String String))
     -> Language
     -> Bool -> Bool -> Bool -> Bool
     -> Graph -> [Module] -> [Module]
-    -> Context -> Prelude.Either Error [(String, String)])
+    -> InferenceContext -> Prelude.Either Error [(String, String)])
 -- | Format a type binding for the lexicon: "  name = type"
 formatTypeBinding :: TTermDefinition (Graph -> Binding -> Prelude.Either Error String)
 formatTypeBinding = define "formatTypeBinding" $
@@ -310,7 +311,7 @@ generateLexicon = define "generateLexicon" $
   "partitioned" <~ Lists.partition ("b" ~> Annotations.isNativeType @@ var "b") (var "bindings") $ -- TODO: refactor lexicon to use Definition directly
   "typeBindings" <~ Pairs.first (var "partitioned") $
   "termBindings" <~ Pairs.second (var "partitioned") $
-  "sortedPrimitives" <~ Lists.sortOn ("p" ~> Graph.primitiveName (var "p")) (var "primitives") $
+  "sortedPrimitives" <~ Lists.sortOn ("p" ~> Packaging.primitiveDefinitionName $ Graph.primitiveDefinition (var "p")) (var "primitives") $
   "sortedTypes" <~ Lists.sortOn ("b" ~> Core.bindingName (var "b")) (var "typeBindings") $
   "sortedTerms" <~ Lists.sortOn ("b" ~> Core.bindingName (var "b")) (var "termBindings") $
   "typeLines" <<~ Eithers.mapList ("b" ~> formatTypeBinding @@ var "graph" @@ var "b") (var "sortedTypes") $
@@ -395,7 +396,7 @@ generateSourceFiles = define "generateSourceFiles" $
                 ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
                   (Core.bindingName $ var "b")
                   (Core.bindingTerm $ var "b")
-                  (Core.bindingTypeScheme $ var "b")))
+                  (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
                 (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td")) (var "els"))])
             (Packaging.moduleDefinitions $ var "m"))) $
       "allBindings" <~ Lexical.graphToBindings @@ var "g1" $
@@ -417,7 +418,7 @@ generateSourceFiles = define "generateSourceFiles" $
 -- | Format a term binding for the lexicon: "  name : typeScheme"
 -- | Perform type inference on a graph and generate its lexicon.
 -- Composes inferGraphTypes and generateLexicon into a single computation.
-inferAndGenerateLexicon :: TTermDefinition (Context -> Graph -> [Module] -> Prelude.Either Error String)
+inferAndGenerateLexicon :: TTermDefinition (InferenceContext -> Graph -> [Module] -> Prelude.Either Error String)
 inferAndGenerateLexicon = define "inferAndGenerateLexicon" $
   doc "Perform type inference and generate the lexicon for a set of modules" $
   "cx" ~> "bsGraph" ~> "kernelModules" ~>
@@ -434,7 +435,7 @@ inferAndGenerateLexicon = define "inferAndGenerateLexicon" $
 -- | Perform type inference on a set of modules and reconstruct the target modules
 -- with inferred types. Type-only modules (containing only native type definitions)
 -- are passed through unchanged.
-inferModules :: TTermDefinition (Context -> Graph -> [Module] -> [Module] -> Prelude.Either Error [Module])
+inferModules :: TTermDefinition (InferenceContext -> Graph -> [Module] -> [Module] -> Prelude.Either Error [Module])
 inferModules = define "inferModules" $
   doc "Perform type inference on modules and reconstruct with inferred types" $
   "cx" ~> "bsGraph" ~> "universeMods" ~> "targetMods" ~>
@@ -493,7 +494,7 @@ inferModules = define "inferModules" $
 -- identical behavior to 'inferModules'. When a caching layer pre-populates schemes on clean
 -- modules, only the target set plus any transitively-reachable untyped binding is actually
 -- re-solved — the point of issue #247.
-inferModulesGiven :: TTermDefinition (Context -> Graph -> [Module] -> [Module] -> Prelude.Either Error [Module])
+inferModulesGiven :: TTermDefinition (InferenceContext -> Graph -> [Module] -> [Module] -> Prelude.Either Error [Module])
 inferModulesGiven = define "inferModulesGiven" $
   doc "Infer types for target modules in the context of a typed universe" $
   "cx" ~> "bsGraph" ~> "universeMods" ~> "targetMods" ~>
@@ -585,7 +586,7 @@ moduleToSourceModule = define "moduleToSourceModule" $
   "moduleDef" <~ Packaging.definitionTerm (Packaging.termDefinition
     (wrap _Name (Packaging.unModuleName (var "sourceNs") ++ (string ".module_")))
     (encoderFor _Module @@ var "m")
-    (just (Core.typeScheme
+    (just (Scoping.typeSchemeToTermSignature @@ Core.typeScheme
       (list ([] :: [TTerm Name]))
       (Core.typeVariable (wrap _Name (string "hydra.packaging.Module")))
       nothing))) $
@@ -601,8 +602,8 @@ moduleToSourceModule = define "moduleToSourceModule" $
 -- inference run) are installed as the graph's boundTypes so incremental inference
 -- can use them as a read-only lookup.
 generateCoderModules
-  :: TTermDefinition ((Context -> Graph -> Module -> Prelude.Either Error (Maybe Module)) -> Graph -> [Module] -> [Module]
-    -> Context -> Prelude.Either Error [Module])
+  :: TTermDefinition ((InferenceContext -> Graph -> Module -> Prelude.Either Error (Maybe Module)) -> Graph -> [Module] -> [Module]
+    -> InferenceContext -> Prelude.Either Error [Module])
 -- | Build a graph from a list of modules, using an explicit bootstrap graph.
 -- Type definitions become schema elements and term definitions become data elements.
 -- Any type schemes already present on universe term bindings (e.g. from a prior
@@ -671,7 +672,7 @@ refreshModule = define "refreshModule" $
             ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
               (Core.bindingName $ var "b")
               (Core.bindingTerm $ var "b")
-              (Core.bindingTypeScheme $ var "b")))
+              (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
             (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td"))
               (var "inferredElements"))])
         (Packaging.moduleDefinitions $ var "m")))

@@ -11,7 +11,6 @@ import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
@@ -245,7 +244,7 @@ addInScopeVars = def "addInScopeVars" $
       (var "aliases") (var "names")
 
 -- | Add a reference type as a type argument to an existing Java type
-addJavaTypeParameter :: TTermDefinition (Java.ReferenceType -> Java.Type -> Context -> Either Error Java.Type)
+addJavaTypeParameter :: TTermDefinition (Java.ReferenceType -> Java.Type -> InferenceContext -> Either Error Java.Type)
 addJavaTypeParameter = def "addJavaTypeParameter" $
   lambda "rt" $ lambda "t" $ "cx" ~>
   cases Java._Type (var "t") Nothing [
@@ -264,13 +263,13 @@ addJavaTypeParameter = def "addJavaTypeParameter" $
                     (JavaDsl.classType (var "anns") (var "qual") (var "id")
                       (Lists.concat2 (var "args") (list [JavaDsl.typeArgumentReference (var "rt")])))))),
             Java._ClassOrInterfaceType_interface>>: constant $
-              Ctx.failInContext (Error.errorOther $ Error.otherError $ string "expected a Java class type") (var "cx")],
+              left (Error.errorOther $ Error.otherError $ string "expected a Java class type")],
         Java._ReferenceType_variable>>: lambda "tv" $
           right (javaTypeVariableToType @@ var "tv"),
         Java._ReferenceType_array>>: constant $
-          Ctx.failInContext (Error.errorOther $ Error.otherError $ string "expected a Java class or interface type, or a variable") (var "cx")],
+          left (Error.errorOther $ Error.otherError $ string "expected a Java class or interface type, or a variable")],
     Java._Type_primitive>>: constant $
-      Ctx.failInContext (Error.errorOther $ Error.otherError $ string "expected a reference type") (var "cx")]
+      left (Error.errorOther $ Error.otherError $ string "expected a reference type")]
 
 -- | Register a variable rename
 addVarRename :: TTermDefinition (Name -> Name -> JavaHelpers.Aliases -> JavaHelpers.Aliases)
@@ -897,13 +896,13 @@ javaTypeToJavaFormalParameter = def "javaTypeToJavaFormalParameter" $
         (fieldNameToJavaVariableDeclaratorId @@ var "fname"))
 
 -- | Extract the reference type from a Java type, failing if it's a primitive type
-javaTypeToJavaReferenceType :: TTermDefinition (Java.Type -> Context -> Either Error Java.ReferenceType)
+javaTypeToJavaReferenceType :: TTermDefinition (Java.Type -> InferenceContext -> Either Error Java.ReferenceType)
 javaTypeToJavaReferenceType = def "javaTypeToJavaReferenceType" $
   lambda "t" $ "cx" ~>
   cases Java._Type (var "t") Nothing [
     Java._Type_reference>>: lambda "rt" $ right (var "rt"),
     Java._Type_primitive>>: constant $
-      Ctx.failInContext (Error.errorOther $ Error.otherError $ string "expected a Java reference type") (var "cx")]
+      left (Error.errorOther $ Error.otherError $ string "expected a Java reference type")]
 
 javaTypeToJavaResult :: TTermDefinition (Java.Type -> Java.Result)
 javaTypeToJavaResult = def "javaTypeToJavaResult" $
@@ -1172,7 +1171,7 @@ toAssignStmt = def "toAssignStmt" $
     javaAssignmentStatement @@ var "lhs" @@ var "rhs"
 
 -- | Convert a Java Type to an array type
-toJavaArrayType :: TTermDefinition (Java.Type -> Context -> Either Error Java.Type)
+toJavaArrayType :: TTermDefinition (Java.Type -> InferenceContext -> Either Error Java.Type)
 toJavaArrayType = def "toJavaArrayType" $
   lambda "t" $ "cx" ~>
   cases Java._Type (var "t") Nothing [
@@ -1190,9 +1189,9 @@ toJavaArrayType = def "toJavaArrayType" $
           right (JavaDsl.typeReference (JavaDsl.referenceTypeArray
             (JavaDsl.arrayType (var "newDims") (var "variant")))),
         Java._ReferenceType_variable>>: constant $
-          Ctx.failInContext (Error.errorOther $ Error.otherError $ string "don't know how to make Java reference type into array type") (var "cx")],
+          left (Error.errorOther $ Error.otherError $ string "don't know how to make Java reference type into array type")],
     Java._Type_primitive>>: constant $
-      Ctx.failInContext (Error.errorOther $ Error.otherError $ string "don't know how to make Java type into array type") (var "cx")]
+      left (Error.errorOther $ Error.otherError $ string "don't know how to make Java type into array type")]
 
 typeParameterToReferenceType :: TTermDefinition (Java.TypeParameter -> Java.ReferenceType)
 typeParameterToReferenceType = def "typeParameterToReferenceType" $

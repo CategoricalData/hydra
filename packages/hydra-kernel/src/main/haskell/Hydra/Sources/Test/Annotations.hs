@@ -30,9 +30,9 @@ import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 testState :: TTerm Term
 testState = metaref Lexical.emptyGraph
 
--- | Empty Context for Either-based function tests
+-- | Empty InferenceContext for Either-based function tests
 testContext :: TTerm Term
-testContext = metaref Lexical.emptyContext
+testContext = metaref Lexical.emptyInferenceContext
 
 
 
