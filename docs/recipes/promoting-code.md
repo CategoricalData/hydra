@@ -50,7 +50,7 @@ This is the recommended workflow:
    This is critical: the commented-out version serves as the authoritative reference for what the generated code should
    do. Import and use the generated version instead.
    The comment format should include the full function signature and body, not just the name.
-6. **Test** — run the relevant test suite (e.g., `bin/sync-python.sh` or `./gradlew test`).
+6. **Test** — run the relevant test suite (e.g., `bin/sync-python.sh` or `(cd heads/java && ./gradlew test)`).
    Verify the generated code produces the same results.
 7. **Repeat** steps 3–6 for the next function.
    The commented-out originals serve as a reference in case issues arise later in the promotion process.

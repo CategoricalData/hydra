@@ -17,6 +17,8 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -141,7 +143,7 @@ graphToBindings g =
 graphWithPrimitives :: [Graph.Primitive] -> [Graph.Primitive] -> Graph.Graph
 graphWithPrimitives builtIn userProvided =
 
-      let toMap = \ps -> Maps.fromList (Lists.map (\p -> (Graph.primitiveName p, p)) ps)
+      let toMap = \ps -> Maps.fromList (Lists.map (\p -> (Packaging.primitiveDefinitionName (Graph.primitiveDefinition p), p)) ps)
           prims = Maps.union (toMap userProvided) (toMap builtIn)
       in (buildGraph [] Maps.empty prims)
 -- | Look up a binding in a graph by name
@@ -215,7 +217,8 @@ requirePrimitive graph name =
 requirePrimitiveType :: Graph.Graph -> Core.Name -> Either Errors.Error Core.TypeScheme
 requirePrimitiveType tx name =
 
-      let mts = Maybes.map (\_p -> Graph.primitiveTypeScheme _p) (Maps.lookup name (Graph.graphPrimitives tx))
+      let mts =
+              Maybes.map (\_p -> Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition _p))) (Maps.lookup name (Graph.graphPrimitives tx))
       in (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchPrimitive (Errors.NoSuchPrimitiveError {
         Errors.noSuchPrimitiveErrorName = name})))) (\ts -> Right ts) mts)
 -- | Resolve a name to a term in the graph, following variable references, and fail if the name is not bound

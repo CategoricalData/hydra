@@ -26,7 +26,7 @@ For Java and Python DSL usage, see:
 
 1. [Introduction](#introduction)
 2. [Quick start](#quick-start)
-3. [The four DSL variants](#the-four-dsl-variants)
+3. [The five DSL variants](#the-five-dsl-variants)
 4. [When to use each variant](#when-to-use-each-variant)
 5. [What belongs under `Sources/`](#what-belongs-under-sources)
 6. [Untyped DSL](#untyped-dsl)
@@ -118,9 +118,9 @@ greet = lambda "person" $
 In real modules defined with the meta DSLs, you use generated constants like `_Person` and `_Person_name`
 instead of constructing `Name`s manually (see the Meta DSLs section below).
 
-## The four DSL variants
+## The five DSL variants
 
-Hydra has four DSL variants, each serving a specific purpose:
+Hydra has five DSL variants, each serving a specific purpose:
 
 ### 1. Direct DSLs
 
@@ -951,7 +951,7 @@ outermost layer, satisfying the same validator check as host-level `doc`.
 ```haskell
 import qualified Hydra.Dsl.Types as T
 
--- Primitive types
+-- Literal types
 T.int32
 T.int64
 T.bigint

@@ -382,9 +382,17 @@ adaptPrimitive :: TTermDefinition (LanguageConstraints -> M.Map LiteralType Lite
 adaptPrimitive = define "adaptPrimitive" $
   doc "Adapt a primitive to the given language constraints, prior to inference" $
   "constraints" ~> "litmap" ~> "prim0" ~>
-  "ts0" <~ Graph.primitiveTypeScheme (var "prim0") $
+  "def0" <~ Graph.primitiveDefinition (var "prim0") $
+  "ts0" <~ (Scoping.termSignatureToTypeScheme @@ Packaging.primitiveDefinitionSignature (var "def0")) $
   "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts0" $
-  right $ Graph.primitiveWithTypeScheme (var "prim0") (var "ts1")
+  "def1" <~ Packaging.primitiveDefinition
+    (Packaging.primitiveDefinitionName (var "def0"))
+    (Packaging.primitiveDefinitionDescription (var "def0"))
+    (Scoping.typeSchemeToTermSignature @@ var "ts1")
+    (Packaging.primitiveDefinitionIsPure (var "def0"))
+    (Packaging.primitiveDefinitionIsTotal (var "def0"))
+    (Packaging.primitiveDefinitionDefaultImplementation (var "def0")) $
+  right $ Graph.primitiveWithDefinition (var "prim0") (var "def1")
 
 -- Note: this function could be made more efficient through precomputation of alternatives,
 --       similar to what is done for literals.
@@ -676,7 +684,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       ("ts" ~> Packaging.termDefinition
         (Core.bindingName $ var "el")
         (Core.bindingTerm $ var "el")
-        (just $ var "ts"))
+        (just $ Scoping.typeSchemeToTermSignature @@ var "ts"))
       (Core.bindingTypeScheme $ var "el")) $
   -- Filter to elements in the requested namespaces
   "selectedElements" <~ Lists.filter

@@ -150,7 +150,7 @@ evalCoreGraph :: Graph
 evalCoreGraph = hydraCoreGraph {
   graphPrimitives = M.union evalPrimMap (graphPrimitives hydraCoreGraph)}
   where
-    evalPrimMap = M.fromList $ fmap (\p -> (primitiveName p, p))
+    evalPrimMap = M.fromList $ fmap (\p -> (primitiveDefinitionName (primitiveDefinition p), p))
       (L.concat (libraryPrimitives <$> DefaultPrims.defaultLibraries))
 
 evalEval :: Term -> Either String Term

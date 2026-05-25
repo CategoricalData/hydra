@@ -3,6 +3,7 @@
     {
       "term": {
         "name": "hydra.test.inference.classes.allTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Type class constraint inference tests"}}}],
@@ -25,11 +26,11 @@
                   {
                     "name": "cases",
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-                "typeName": "hydra.testing.TestGroup"}}}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+                "typeName": "hydra.testing.TestGroup"}}}}}},
     {
       "term": {
         "name": "hydra.test.inference.classes.testGroupForMonomorphicConstraints",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -1565,11 +1566,11 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.inference.classes.testGroupForPrimitiveReferences",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -1763,7 +1764,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -1946,7 +1952,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -2158,7 +2169,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -2371,7 +2387,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -2515,7 +2536,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -2679,7 +2705,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -2844,7 +2875,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -3012,7 +3048,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -3200,7 +3241,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}},
                                                                             {
                                                                               "key": {"wrap": {"body": {"literal": {"string": "t1"}}, "typeName": "hydra.core.Name"}},
@@ -3209,7 +3255,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -3382,7 +3433,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "equality"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "equality"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -3542,7 +3598,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -3706,7 +3767,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -3857,7 +3923,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "equality"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "equality"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -4022,7 +4093,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "equality"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "equality"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -4037,11 +4113,11 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.inference.classes.testGroupForPartialApplication",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -4265,7 +4341,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -4503,7 +4584,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -4711,7 +4797,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -4944,7 +5035,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "equality"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "equality"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -5173,11 +5269,11 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.inference.classes.testGroupForLetBindings",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -5460,7 +5556,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -5714,7 +5815,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -5926,7 +6032,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -6206,7 +6317,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -6416,7 +6532,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -6764,11 +6885,11 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.inference.classes.testGroupForComposition",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -7038,7 +7159,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -7305,7 +7431,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -7555,7 +7686,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}},
                                                                             {
                                                                               "key": {"wrap": {"body": {"literal": {"string": "t1"}}, "typeName": "hydra.core.Name"}},
@@ -7564,7 +7700,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -7579,11 +7720,11 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.inference.classes.testGroupForNestedContainers",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -7831,7 +7972,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}},
                                                                             {
                                                                               "key": {"wrap": {"body": {"literal": {"string": "t1"}}, "typeName": "hydra.core.Name"}},
@@ -7840,7 +7986,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -8063,7 +8214,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -8359,7 +8515,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -8374,11 +8535,11 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.inference.classes.testGroupForCollectionTerms",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -8553,7 +8714,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -8753,7 +8919,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -9135,7 +9306,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -9717,7 +9893,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -9968,7 +10149,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -10133,7 +10319,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -10335,7 +10526,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -10530,7 +10726,12 @@
                                                                                   "fields": [
                                                                                     {
                                                                                       "name": "classes",
-                                                                                      "term": {"set": [{"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}]}}],
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"body": {"literal": {"string": "ordering"}}, "typeName": "hydra.core.Name"}}},
+                                                                                              "typeName": "hydra.core.TypeClassConstraint"}}]}}],
                                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}]}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -10547,8 +10748,7 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+            "typeName": "hydra.testing.TestGroup"}}}}],
   "dependencies": [
     {"module": "hydra.test.testGraph"},
     {"module": "hydra.inference"},

@@ -1,7 +1,7 @@
 module Hydra.Sources.Avro.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
-import Hydra.Kernel
+import Hydra.Kernel hiding (Result)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms

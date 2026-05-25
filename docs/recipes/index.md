@@ -1,6 +1,13 @@
-# Hydra Developer Recipes
+# Hydra developer recipes
 
-Step-by-step guides for common Hydra development tasks. These recipes provide practical, hands-on instructions for extending Hydra, implementing new features, and working with Hydra's architecture.
+Step-by-step guides for common Hydra development tasks. These recipes provide practical, hands-on instructions
+for extending Hydra, implementing new features, and working with Hydra's architecture.
+
+> **Where docs live.** `docs/` (this directory) is for developers working with the code: procedural recipes,
+> implementation-level details, build-system mechanics, troubleshooting. The
+> [Hydra wiki](https://github.com/CategoricalData/hydra/wiki) is for user-facing documentation that explains
+> Hydra's design as it is — conceptual framing, property-graph and RDF design, release policy. Provisional
+> material — sketches, in-flight proposals — belongs in issues or branch plans, not here.
 
 ## Available Recipes
 
@@ -21,9 +28,9 @@ Step-by-step guides for common Hydra development tasks. These recipes provide pr
 
 ### Refactoring
 
-- **[Refactoring the Hydra kernel](refactoring.md)** - How to create, rename, or delete kernel elements or modules, and propagate the change across all implementations
-- **[Promoting raw code to Hydra modules](promoting-code.md)** - Convert raw Haskell code into Hydra source modules that can be generated to multiple target languages
-- **[Refactoring Hydra namespaces](refactoring-namespaces.md)** - Rename or move a Hydra namespace across all implementations
+- **[Refactoring the Hydra kernel](refactoring.md)** — how to create, rename, or delete kernel elements or modules, and propagate the change across all implementations. Includes
+  [moving or renaming modules (namespace refactoring)](refactoring.md#moving-or-renaming-modules-namespace-refactoring).
+- **[Promoting raw code to Hydra modules](promoting-code.md)** — convert raw Haskell code into Hydra source modules that can be generated to multiple target languages.
 
 ### Code Generation
 
@@ -45,6 +52,28 @@ Step-by-step guides for common Hydra development tasks. These recipes provide pr
 ### Troubleshooting
 
 - **[Troubleshooting guide](../troubleshooting.md)** - Debugging strategies, primitive dispatch tracing, and common errors across all implementations
+
+### Historical investigations
+
+Completed work products from past investigations, kept for reference. These are *not* current recipes; they
+capture what was tried, what worked, and what didn't.
+
+- **[Python host performance investigation](../history/python-host-perf-investigation.md)** — multi-session
+  work that brought Hydra-Python from "unusable for term-level workloads" to "competitive with Haskell and
+  Java." Lessons likely apply to other hosts.
+- **[Emacs Lisp collections and lazy-let performance fix](../history/emacs-lisp-collections-perf.md)** —
+  #361, mirroring the Common Lisp (#360) and Python (#344) collection fixes. Captures the three-host
+  structural similarity.
+- **[Inference scaling — cross-host complexity-class analysis](../history/inference-bench-complexity-analysis.md)** —
+  hydra-bench-driven scaling study across implementations; cross-link from
+  [Running benchmarks](running-benchmarks.md).
+- **[Attempted per-SCC fold rewrite of `inferModules`](../history/inferModules-per-scc-attempt.md)** —
+  measured-failed experiment to address the cold-CI heap overflow; documents the ~4× peak-memory and ~2×
+  wall-time regression of a naive per-SCC fold. Useful if anyone revisits incremental inference. Preserved
+  on local branch `wip_per_scc_inferModules`.
+- **[Lazy fix design: Coder.hs edits](../history/lazy-fix-design.md)** — pre-edit design sketch for replacing
+  the eager-walrus + `@lru_cache(1)` pattern with `hydra.python.util.Lazy` in the *legacy Haskell* Python
+  coder. **Status: likely superseded** by the Python-native coder rewrite (#344). Kept pending review.
 
 ## About Recipes
 
