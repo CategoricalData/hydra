@@ -480,6 +480,13 @@ data TypeApplicationTerm =
 _TypeApplicationTerm = Name "hydra.core.TypeApplicationTerm"
 _TypeApplicationTerm_body = Name "body"
 _TypeApplicationTerm_type = Name "type"
+-- | A type class constraint on a type variable. Currently has only one variant, but designed to be forward-compatible with multi-parameter type classes and constraints on type expressions.
+data TypeClassConstraint =
+  -- | A simple type class constraint, naming a single type class
+  TypeClassConstraintSimple Name
+  deriving (Eq, Ord, Read, Show)
+_TypeClassConstraint = Name "hydra.core.TypeClassConstraint"
+_TypeClassConstraint_simple = Name "simple"
 -- | A System F type abstraction term
 data TypeLambda =
   TypeLambda {
@@ -508,8 +515,8 @@ _TypeScheme_constraints = Name "constraints"
 -- | Metadata associated with a type variable, including typeclass constraints
 data TypeVariableMetadata =
   TypeVariableMetadata {
-    -- | The set of typeclass constraints on this type variable
-    typeVariableMetadataClasses :: (S.Set Name)}
+    -- | The typeclass constraints on this type variable
+    typeVariableMetadataClasses :: [TypeClassConstraint]}
   deriving (Eq, Ord, Read, Show)
 _TypeVariableMetadata = Name "hydra.core.TypeVariableMetadata"
 _TypeVariableMetadata_classes = Name "classes"

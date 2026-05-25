@@ -2,10 +2,10 @@
 -- | The extension to graphs of Hydra's core type system (hydra.core)
 
 module Hydra.Graph where
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -51,18 +51,15 @@ _Library = Core.Name "hydra.graph.Library"
 _Library_namespace = Core.Name "namespace"
 _Library_prefix = Core.Name "prefix"
 _Library_primitives = Core.Name "primitives"
--- | A built-in function or constant
+-- | A built-in function or constant, consisting of the host-independent PrimitiveDefinition (name, signature, metadata) plus a host-specific implementation.
 data Primitive =
   Primitive {
-    -- | The unique name of the primitive function
-    primitiveName :: Core.Name,
-    -- | The type scheme of the primitive function
-    primitiveTypeScheme :: Core.TypeScheme,
-    -- | A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting.
-    primitiveImplementation :: (Context.Context -> Graph -> [Core.Term] -> Either Errors.Error Core.Term)}
+    -- | The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation.
+    primitiveDefinition :: Packaging.PrimitiveDefinition,
+    -- | A concrete implementation of the primitive function. The InferenceContext and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the InferenceContext supports subterm-path tracing for error reporting.
+    primitiveImplementation :: (Typing.InferenceContext -> Graph -> [Core.Term] -> Either Errors.Error Core.Term)}
 _Primitive = Core.Name "hydra.graph.Primitive"
-_Primitive_name = Core.Name "name"
-_Primitive_typeScheme = Core.Name "typeScheme"
+_Primitive_definition = Core.Name "definition"
 _Primitive_implementation = Core.Name "implementation"
 -- | A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms.
 data TermCoder a =
@@ -70,9 +67,9 @@ data TermCoder a =
     -- | The Hydra type of encoded terms
     termCoderType :: Core.Type,
     -- | An encode function from terms to native values
-    termCoderEncode :: (Context.Context -> Graph -> Core.Term -> Either Errors.Error a),
+    termCoderEncode :: (Typing.InferenceContext -> Graph -> Core.Term -> Either Errors.Error a),
     -- | A decode function from native values to terms
-    termCoderDecode :: (Context.Context -> a -> Either Errors.Error Core.Term)}
+    termCoderDecode :: (Typing.InferenceContext -> a -> Either Errors.Error Core.Term)}
 _TermCoder = Core.Name "hydra.graph.TermCoder"
 _TermCoder_type = Core.Name "type"
 _TermCoder_encode = Core.Name "encode"

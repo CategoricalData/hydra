@@ -2,7 +2,6 @@
 -- | Type dereference, lookup, requirements, and instantiation
 
 module Hydra.Resolution where
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Errors as Errors
@@ -101,14 +100,14 @@ fullyStripType typ =
     case (Strip.deannotateType typ) of
       Core.TypeForall v0 -> fullyStripType (Core.forallTypeBody v0)
       _ -> typ
--- | Instantiate a type by replacing all forall-bound type variables with fresh variables, threading Context
-instantiateType :: Context.Context -> Core.Type -> (Core.Type, Context.Context)
+-- | Instantiate a type by replacing all forall-bound type variables with fresh variables, threading InferenceContext
+instantiateType :: Typing.InferenceContext -> Core.Type -> (Core.Type, Typing.InferenceContext)
 instantiateType cx typ =
 
       let result = instantiateTypeScheme cx (typeToTypeScheme typ)
       in (Scoping.typeSchemeToFType (Pairs.first result), (Pairs.second result))
--- | Instantiate a type scheme with fresh variables, threading Context
-instantiateTypeScheme :: Context.Context -> Core.TypeScheme -> (Core.TypeScheme, Context.Context)
+-- | Instantiate a type scheme with fresh variables, threading InferenceContext
+instantiateTypeScheme :: Typing.InferenceContext -> Core.TypeScheme -> (Core.TypeScheme, Typing.InferenceContext)
 instantiateTypeScheme cx scheme =
 
       let oldVars = Core.typeSchemeVariables scheme
@@ -152,8 +151,8 @@ requireRowType cx label getter graph name =
       in (Eithers.bind (requireType cx graph name) (\t -> Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = (Strings.cat2 label " type"),
         Errors.unexpectedShapeErrorActual = (Strings.cat2 (Core.unName name) (Strings.cat2 ": " (ShowCore.type_ t)))})))) (\x -> Right x) (getter (rawType t))))
--- | Look up a schema type and instantiate it, threading Context
-requireSchemaType :: Context.Context -> M.Map Core.Name Core.TypeScheme -> Core.Name -> Either Errors.Error (Core.TypeScheme, Context.Context)
+-- | Look up a schema type and instantiate it, threading InferenceContext
+requireSchemaType :: Typing.InferenceContext -> M.Map Core.Name Core.TypeScheme -> Core.Name -> Either Errors.Error (Core.TypeScheme, Typing.InferenceContext)
 requireSchemaType cx types tname =
     Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchBinding (Errors.NoSuchBindingError {
       Errors.noSuchBindingErrorName = tname})))) (\ts -> Right (instantiateTypeScheme cx (Strip.deannotateTypeSchemeRecursive ts))) (Maps.lookup tname types)

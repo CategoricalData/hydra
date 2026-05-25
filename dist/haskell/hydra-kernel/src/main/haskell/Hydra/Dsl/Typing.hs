@@ -2,8 +2,8 @@
 -- | DSL functions for hydra.typing
 
 module Hydra.Dsl.Typing where
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -449,8 +449,68 @@ functionStructureWithTypeParams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
               Core.projectionFieldName = (Core.Name "environment")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL constructor for hydra.typing.InferenceContext
+inferenceContext :: Phantoms.TTerm Int -> Phantoms.TTerm [Paths.SubtermStep] -> Phantoms.TTerm Typing.InferenceContext
+inferenceContext freshTypeVariableCount trace =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.InferenceContext"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "freshTypeVariableCount"),
+          Core.fieldTerm = (Phantoms.unTTerm freshTypeVariableCount)},
+        Core.Field {
+          Core.fieldName = (Core.Name "trace"),
+          Core.fieldTerm = (Phantoms.unTTerm trace)}]}))
+-- | DSL accessor for the freshTypeVariableCount field of hydra.typing.InferenceContext
+inferenceContextFreshTypeVariableCount :: Phantoms.TTerm Typing.InferenceContext -> Phantoms.TTerm Int
+inferenceContextFreshTypeVariableCount x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.InferenceContext"),
+        Core.projectionFieldName = (Core.Name "freshTypeVariableCount")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the trace field of hydra.typing.InferenceContext
+inferenceContextTrace :: Phantoms.TTerm Typing.InferenceContext -> Phantoms.TTerm [Paths.SubtermStep]
+inferenceContextTrace x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.InferenceContext"),
+        Core.projectionFieldName = (Core.Name "trace")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the freshTypeVariableCount field of hydra.typing.InferenceContext
+inferenceContextWithFreshTypeVariableCount :: Phantoms.TTerm Typing.InferenceContext -> Phantoms.TTerm Int -> Phantoms.TTerm Typing.InferenceContext
+inferenceContextWithFreshTypeVariableCount original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.InferenceContext"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "freshTypeVariableCount"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "trace"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceContext"),
+              Core.projectionFieldName = (Core.Name "trace")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the trace field of hydra.typing.InferenceContext
+inferenceContextWithTrace :: Phantoms.TTerm Typing.InferenceContext -> Phantoms.TTerm [Paths.SubtermStep] -> Phantoms.TTerm Typing.InferenceContext
+inferenceContextWithTrace original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.InferenceContext"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "freshTypeVariableCount"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceContext"),
+              Core.projectionFieldName = (Core.Name "freshTypeVariableCount")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "trace"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL constructor for hydra.typing.InferenceResult
-inferenceResult :: Phantoms.TTerm Core.Term -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Typing.TypeSubst -> Phantoms.TTerm (M.Map Core.Name Core.TypeVariableMetadata) -> Phantoms.TTerm Context.Context -> Phantoms.TTerm Typing.InferenceResult
+inferenceResult :: Phantoms.TTerm Core.Term -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Typing.TypeSubst -> Phantoms.TTerm (M.Map Core.Name Core.TypeVariableMetadata) -> Phantoms.TTerm Typing.InferenceContext -> Phantoms.TTerm Typing.InferenceResult
 inferenceResult term type_ subst classConstraints context =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.typing.InferenceResult"),
@@ -479,7 +539,7 @@ inferenceResultClassConstraints x =
         Core.projectionFieldName = (Core.Name "classConstraints")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the context field of hydra.typing.InferenceResult
-inferenceResultContext :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm Context.Context
+inferenceResultContext :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm Typing.InferenceContext
 inferenceResultContext x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -548,7 +608,7 @@ inferenceResultWithClassConstraints original newVal =
               Core.projectionFieldName = (Core.Name "context")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the context field of hydra.typing.InferenceResult
-inferenceResultWithContext :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm Context.Context -> Phantoms.TTerm Typing.InferenceResult
+inferenceResultWithContext :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm Typing.InferenceContext -> Phantoms.TTerm Typing.InferenceResult
 inferenceResultWithContext original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.typing.InferenceResult"),
@@ -695,6 +755,344 @@ inferenceResultWithType original newVal =
               Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
               Core.projectionFieldName = (Core.Name "context")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL constructor for hydra.typing.Parameter
+parameter :: Phantoms.TTerm Core.Name -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Typing.Parameter
+parameter name description type_ isLazy =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.Parameter"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm name)},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Phantoms.unTTerm description)},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm type_)},
+        Core.Field {
+          Core.fieldName = (Core.Name "isLazy"),
+          Core.fieldTerm = (Phantoms.unTTerm isLazy)}]}))
+-- | DSL accessor for the description field of hydra.typing.Parameter
+parameterDescription :: Phantoms.TTerm Typing.Parameter -> Phantoms.TTerm (Maybe String)
+parameterDescription x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.Parameter"),
+        Core.projectionFieldName = (Core.Name "description")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the isLazy field of hydra.typing.Parameter
+parameterIsLazy :: Phantoms.TTerm Typing.Parameter -> Phantoms.TTerm Bool
+parameterIsLazy x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.Parameter"),
+        Core.projectionFieldName = (Core.Name "isLazy")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the name field of hydra.typing.Parameter
+parameterName :: Phantoms.TTerm Typing.Parameter -> Phantoms.TTerm Core.Name
+parameterName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.Parameter"),
+        Core.projectionFieldName = (Core.Name "name")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the type field of hydra.typing.Parameter
+parameterType :: Phantoms.TTerm Typing.Parameter -> Phantoms.TTerm Core.Type
+parameterType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.Parameter"),
+        Core.projectionFieldName = (Core.Name "type")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the description field of hydra.typing.Parameter
+parameterWithDescription :: Phantoms.TTerm Typing.Parameter -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Typing.Parameter
+parameterWithDescription original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.Parameter"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.Parameter"),
+              Core.projectionFieldName = (Core.Name "name")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.Parameter"),
+              Core.projectionFieldName = (Core.Name "type")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "isLazy"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.Parameter"),
+              Core.projectionFieldName = (Core.Name "isLazy")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the isLazy field of hydra.typing.Parameter
+parameterWithIsLazy :: Phantoms.TTerm Typing.Parameter -> Phantoms.TTerm Bool -> Phantoms.TTerm Typing.Parameter
+parameterWithIsLazy original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.Parameter"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.Parameter"),
+              Core.projectionFieldName = (Core.Name "name")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.Parameter"),
+              Core.projectionFieldName = (Core.Name "description")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.Parameter"),
+              Core.projectionFieldName = (Core.Name "type")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "isLazy"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL updater for the name field of hydra.typing.Parameter
+parameterWithName :: Phantoms.TTerm Typing.Parameter -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Typing.Parameter
+parameterWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.Parameter"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.Parameter"),
+              Core.projectionFieldName = (Core.Name "description")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.Parameter"),
+              Core.projectionFieldName = (Core.Name "type")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "isLazy"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.Parameter"),
+              Core.projectionFieldName = (Core.Name "isLazy")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the type field of hydra.typing.Parameter
+parameterWithType :: Phantoms.TTerm Typing.Parameter -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Typing.Parameter
+parameterWithType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.Parameter"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.Parameter"),
+              Core.projectionFieldName = (Core.Name "name")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.Parameter"),
+              Core.projectionFieldName = (Core.Name "description")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "isLazy"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.Parameter"),
+              Core.projectionFieldName = (Core.Name "isLazy")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL constructor for hydra.typing.Result
+result :: Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Typing.Result
+result description type_ =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.Result"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Phantoms.unTTerm description)},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm type_)}]}))
+-- | DSL accessor for the description field of hydra.typing.Result
+resultDescription :: Phantoms.TTerm Typing.Result -> Phantoms.TTerm (Maybe String)
+resultDescription x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.Result"),
+        Core.projectionFieldName = (Core.Name "description")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the type field of hydra.typing.Result
+resultType :: Phantoms.TTerm Typing.Result -> Phantoms.TTerm Core.Type
+resultType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.Result"),
+        Core.projectionFieldName = (Core.Name "type")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the description field of hydra.typing.Result
+resultWithDescription :: Phantoms.TTerm Typing.Result -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Typing.Result
+resultWithDescription original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.Result"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.Result"),
+              Core.projectionFieldName = (Core.Name "type")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the type field of hydra.typing.Result
+resultWithType :: Phantoms.TTerm Typing.Result -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Typing.Result
+resultWithType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.Result"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.Result"),
+              Core.projectionFieldName = (Core.Name "description")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL constructor for hydra.typing.TermSignature
+termSignature :: Phantoms.TTerm [Typing.TypeParameter] -> Phantoms.TTerm [Typing.Parameter] -> Phantoms.TTerm Typing.Result -> Phantoms.TTerm Typing.TermSignature
+termSignature typeParameters parameters result =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.TermSignature"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "typeParameters"),
+          Core.fieldTerm = (Phantoms.unTTerm typeParameters)},
+        Core.Field {
+          Core.fieldName = (Core.Name "parameters"),
+          Core.fieldTerm = (Phantoms.unTTerm parameters)},
+        Core.Field {
+          Core.fieldName = (Core.Name "result"),
+          Core.fieldTerm = (Phantoms.unTTerm result)}]}))
+-- | DSL accessor for the parameters field of hydra.typing.TermSignature
+termSignatureParameters :: Phantoms.TTerm Typing.TermSignature -> Phantoms.TTerm [Typing.Parameter]
+termSignatureParameters x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.TermSignature"),
+        Core.projectionFieldName = (Core.Name "parameters")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the result field of hydra.typing.TermSignature
+termSignatureResult :: Phantoms.TTerm Typing.TermSignature -> Phantoms.TTerm Typing.Result
+termSignatureResult x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.TermSignature"),
+        Core.projectionFieldName = (Core.Name "result")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the typeParameters field of hydra.typing.TermSignature
+termSignatureTypeParameters :: Phantoms.TTerm Typing.TermSignature -> Phantoms.TTerm [Typing.TypeParameter]
+termSignatureTypeParameters x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.TermSignature"),
+        Core.projectionFieldName = (Core.Name "typeParameters")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the parameters field of hydra.typing.TermSignature
+termSignatureWithParameters :: Phantoms.TTerm Typing.TermSignature -> Phantoms.TTerm [Typing.Parameter] -> Phantoms.TTerm Typing.TermSignature
+termSignatureWithParameters original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.TermSignature"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "typeParameters"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.TermSignature"),
+              Core.projectionFieldName = (Core.Name "typeParameters")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "parameters"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "result"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.TermSignature"),
+              Core.projectionFieldName = (Core.Name "result")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the result field of hydra.typing.TermSignature
+termSignatureWithResult :: Phantoms.TTerm Typing.TermSignature -> Phantoms.TTerm Typing.Result -> Phantoms.TTerm Typing.TermSignature
+termSignatureWithResult original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.TermSignature"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "typeParameters"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.TermSignature"),
+              Core.projectionFieldName = (Core.Name "typeParameters")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "parameters"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.TermSignature"),
+              Core.projectionFieldName = (Core.Name "parameters")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "result"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL updater for the typeParameters field of hydra.typing.TermSignature
+termSignatureWithTypeParameters :: Phantoms.TTerm Typing.TermSignature -> Phantoms.TTerm [Typing.TypeParameter] -> Phantoms.TTerm Typing.TermSignature
+termSignatureWithTypeParameters original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.TermSignature"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "typeParameters"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "parameters"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.TermSignature"),
+              Core.projectionFieldName = (Core.Name "parameters")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "result"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.TermSignature"),
+              Core.projectionFieldName = (Core.Name "result")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for the hydra.typing.TermSubst wrapper
 termSubst :: Phantoms.TTerm (M.Map Core.Name Core.Term) -> Phantoms.TTerm Typing.TermSubst
 termSubst x =
@@ -834,6 +1232,66 @@ typeConstraintWithRight original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.typing.TypeConstraint"),
               Core.projectionFieldName = (Core.Name "comment")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL constructor for hydra.typing.TypeParameter
+typeParameter :: Phantoms.TTerm Core.Name -> Phantoms.TTerm [Core.TypeClassConstraint] -> Phantoms.TTerm Typing.TypeParameter
+typeParameter name constraints =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.TypeParameter"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm name)},
+        Core.Field {
+          Core.fieldName = (Core.Name "constraints"),
+          Core.fieldTerm = (Phantoms.unTTerm constraints)}]}))
+-- | DSL accessor for the constraints field of hydra.typing.TypeParameter
+typeParameterConstraints :: Phantoms.TTerm Typing.TypeParameter -> Phantoms.TTerm [Core.TypeClassConstraint]
+typeParameterConstraints x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.TypeParameter"),
+        Core.projectionFieldName = (Core.Name "constraints")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the name field of hydra.typing.TypeParameter
+typeParameterName :: Phantoms.TTerm Typing.TypeParameter -> Phantoms.TTerm Core.Name
+typeParameterName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.TypeParameter"),
+        Core.projectionFieldName = (Core.Name "name")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the constraints field of hydra.typing.TypeParameter
+typeParameterWithConstraints :: Phantoms.TTerm Typing.TypeParameter -> Phantoms.TTerm [Core.TypeClassConstraint] -> Phantoms.TTerm Typing.TypeParameter
+typeParameterWithConstraints original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.TypeParameter"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.TypeParameter"),
+              Core.projectionFieldName = (Core.Name "name")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "constraints"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL updater for the name field of hydra.typing.TypeParameter
+typeParameterWithName :: Phantoms.TTerm Typing.TypeParameter -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Typing.TypeParameter
+typeParameterWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.TypeParameter"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "constraints"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.TypeParameter"),
+              Core.projectionFieldName = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for the hydra.typing.TypeSubst wrapper
 typeSubst :: Phantoms.TTerm (M.Map Core.Name Core.Type) -> Phantoms.TTerm Typing.TypeSubst

@@ -3,7 +3,6 @@
 
 module Hydra.Adapt where
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Environment as Environment
@@ -32,6 +31,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -197,11 +197,20 @@ adaptNestedTypes constraints litmap recurse term =
 adaptPrimitive :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Graph.Primitive -> Either Errors.Error Graph.Primitive
 adaptPrimitive constraints litmap prim0 =
 
-      let ts0 = Graph.primitiveTypeScheme prim0
-      in (Eithers.bind (adaptTypeScheme constraints litmap ts0) (\ts1 -> Right (Graph.Primitive {
-        Graph.primitiveName = (Graph.primitiveName prim0),
-        Graph.primitiveTypeScheme = ts1,
-        Graph.primitiveImplementation = (Graph.primitiveImplementation prim0)})))
+      let def0 = Graph.primitiveDefinition prim0
+          ts0 = Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature def0)
+      in (Eithers.bind (adaptTypeScheme constraints litmap ts0) (\ts1 ->
+        let def1 =
+                Packaging.PrimitiveDefinition {
+                  Packaging.primitiveDefinitionName = (Packaging.primitiveDefinitionName def0),
+                  Packaging.primitiveDefinitionDescription = (Packaging.primitiveDefinitionDescription def0),
+                  Packaging.primitiveDefinitionSignature = (Scoping.typeSchemeToTermSignature ts1),
+                  Packaging.primitiveDefinitionIsPure = (Packaging.primitiveDefinitionIsPure def0),
+                  Packaging.primitiveDefinitionIsTotal = (Packaging.primitiveDefinitionIsTotal def0),
+                  Packaging.primitiveDefinitionDefaultImplementation = (Packaging.primitiveDefinitionDefaultImplementation def0)}
+        in (Right (Graph.Primitive {
+          Graph.primitiveDefinition = def1,
+          Graph.primitiveImplementation = (Graph.primitiveImplementation prim0)}))))
 -- | Adapt a term using the given language constraints
 adaptTerm :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 adaptTerm constraints litmap cx graph term0 =
@@ -283,7 +292,7 @@ composeCoders c1 c2 =
       Coders.coderEncode = (\cx -> \a -> Eithers.bind (Coders.coderEncode c1 cx a) (\b1 -> Coders.coderEncode c2 cx b1)),
       Coders.coderDecode = (\cx -> \c -> Eithers.bind (Coders.coderDecode c2 cx c) (\b2 -> Coders.coderDecode c1 cx b2))}
 -- | Given a data graph along with language constraints, original ordered bindings, and a designated list of namespaces, adapt the graph to the language constraints, then return the processed graph along with term definitions grouped by namespace (in the order of the input namespaces). Inference is performed before adaptation if bindings lack type annotations. Hoisting must preserve type schemes; if any binding loses its type scheme after hoisting, the pipeline fails. Adaptation preserves type application/lambda wrappers and adapts embedded types. Post-adaptation inference is performed to ensure binding TypeSchemes are fully consistent. The doExpand flag controls eta expansion. The doHoistCaseStatements flag controls case statement hoisting (needed for Python). The doHoistPolymorphicLetBindings flag controls polymorphic let binding hoisting (needed for Java). The originalBindings parameter provides the original ordered bindings (from module elements).
-dataGraphToDefinitions :: Coders.LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Graph.Graph -> [Packaging.ModuleName] -> Context.Context -> Either Errors.Error (Graph.Graph, [[Packaging.TermDefinition]])
+dataGraphToDefinitions :: Coders.LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Graph.Graph -> [Packaging.ModuleName] -> Typing.InferenceContext -> Either Errors.Error (Graph.Graph, [[Packaging.TermDefinition]])
 dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings originalBindings graph0 namespaces cx =
 
       let namespacesSet = Sets.fromList namespaces
@@ -381,7 +390,7 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                       \el -> Maybes.map (\ts -> Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.bindingName el),
                         Packaging.termDefinitionTerm = (Core.bindingTerm el),
-                        Packaging.termDefinitionTypeScheme = (Just ts)}) (Core.bindingTypeScheme el)
+                        Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature ts))}) (Core.bindingTypeScheme el)
               selectedElements =
                       Lists.filter (\el -> Maybes.maybe False (\ns -> Sets.member ns namespacesSet) (Names.namespaceOf (Core.bindingName el))) bins5
               elementsByNamespace =

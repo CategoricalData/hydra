@@ -2,7 +2,6 @@
 -- | A module for lexical operations over graphs.
 
 module Hydra.Lexical where
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
@@ -17,8 +16,11 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -93,13 +95,6 @@ elementsToGraph parent schemaTypes elements =
         Graph.graphPrimitives = (Graph.graphPrimitives g),
         Graph.graphSchemaTypes = schemaTypes,
         Graph.graphTypeVariables = (Graph.graphTypeVariables g)}
--- | An empty context; no trace, no messages, no other data.
-emptyContext :: Context.Context
-emptyContext =
-    Context.Context {
-      Context.contextTrace = [],
-      Context.contextMessages = [],
-      Context.contextOther = Maps.empty}
 -- | An empty graph; no elements, no primitives, no schema.
 emptyGraph :: Graph.Graph
 emptyGraph =
@@ -112,6 +107,12 @@ emptyGraph =
       Graph.graphPrimitives = Maps.empty,
       Graph.graphSchemaTypes = Maps.empty,
       Graph.graphTypeVariables = Sets.empty}
+-- | An empty inference context; fresh-variable counter at zero and empty trace.
+emptyInferenceContext :: Typing.InferenceContext
+emptyInferenceContext =
+    Typing.InferenceContext {
+      Typing.inferenceContextFreshTypeVariableCount = 0,
+      Typing.inferenceContextTrace = []}
 -- | Extract the fields of a record or union type
 fieldsOf :: Core.Type -> [Core.FieldType]
 fieldsOf t =
@@ -141,7 +142,7 @@ graphToBindings g =
 graphWithPrimitives :: [Graph.Primitive] -> [Graph.Primitive] -> Graph.Graph
 graphWithPrimitives builtIn userProvided =
 
-      let toMap = \ps -> Maps.fromList (Lists.map (\p -> (Graph.primitiveName p, p)) ps)
+      let toMap = \ps -> Maps.fromList (Lists.map (\p -> (Packaging.primitiveDefinitionName (Graph.primitiveDefinition p), p)) ps)
           prims = Maps.union (toMap userProvided) (toMap builtIn)
       in (buildGraph [] Maps.empty prims)
 -- | Look up a binding in a graph by name
@@ -215,7 +216,8 @@ requirePrimitive graph name =
 requirePrimitiveType :: Graph.Graph -> Core.Name -> Either Errors.Error Core.TypeScheme
 requirePrimitiveType tx name =
 
-      let mts = Maybes.map (\_p -> Graph.primitiveTypeScheme _p) (Maps.lookup name (Graph.graphPrimitives tx))
+      let mts =
+              Maybes.map (\_p -> Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition _p))) (Maps.lookup name (Graph.graphPrimitives tx))
       in (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchPrimitive (Errors.NoSuchPrimitiveError {
         Errors.noSuchPrimitiveErrorName = name})))) (\ts -> Right ts) mts)
 -- | Resolve a name to a term in the graph, following variable references, and fail if the name is not bound
