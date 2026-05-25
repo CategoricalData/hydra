@@ -21,11 +21,10 @@
 (require 'hydra.json.bootstrap)
 (require 'hydra.annotation-bindings)
 
-;; Empty context: alist-style structure matching hydra_context_context.
+;; Empty context: alist-style structure matching hydra_typing_inference_context.
 (defvar hydra_test_test_env_test_context
-  (list (cons :functions nil)
-        (cons :annotations nil)
-        (cons :variable_types nil)))
+  (list (cons :fresh_type_variable_count 0)
+        (cons :trace nil)))
 
 ;; Test graph builder. Curried to match the Emacs Lisp coder's emission
 ;; for multi-arg DSL functions: testGraph :: Map Name Type -> Map Name

@@ -5,11 +5,13 @@ module Hydra.Dsl.Prims where
 
 import Hydra.Core
 import Hydra.Graph
+import Hydra.Packaging
+import Hydra.Scoping (typeSchemeToTermSignature)
 import Hydra.Util
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Extract.Core as ExtractCore
-import qualified Hydra.Context as Context
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Errors as Error
 import qualified Hydra.Extract.Util as ExtractUtil
 import qualified Hydra.Dsl.Terms as Terms
@@ -28,7 +30,7 @@ import Data.String(IsString(..))
 import Data.Either (Either)
 
 -- | A helper to create an Error from a string message and context
-otherErr :: Context.Context -> String -> Error.Error
+otherErr :: Typing.InferenceContext -> String -> Error.Error
 otherErr _cx msg = Error.ErrorOther (Error.OtherError msg)
 
 -- | A type variable specification with optional class constraints
@@ -149,7 +151,7 @@ function dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType 
 -- | A TermCoder for function types, using a reducer to bridge term-level functions to native functions.
 --   The reducer is called to evaluate function application at the term level.
 --   Failures in reduction or encoding/decoding will result in a runtime error.
-functionWithReduce :: (Context.Context -> Graph -> Term -> Either Error.Error Term) -> TermCoder x -> TermCoder y -> TermCoder (x -> y)
+functionWithReduce :: (Typing.InferenceContext -> Graph -> Term -> Either Error.Error Term) -> TermCoder x -> TermCoder y -> TermCoder (x -> y)
 functionWithReduce reduce dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType cod)) encode decode
   where
     encode cx g funTerm = Right $ \x ->
@@ -250,14 +252,27 @@ pair xCoder yCoder = TermCoder (Types.pair (termCoderType xCoder) (termCoderType
       yTerm <- termCoderDecode yCoder cx y
       return $ Terms.pair xTerm yTerm
 
+-- | Synthesize a minimal PrimitiveDefinition from a name and TypeScheme.
+-- Used by the prim0/prim1/prim2/prim3 helpers to bridge the kernel-shape change
+-- before the per-primitive metadata audit (description, isPure/isTotal exceptions,
+-- defaultImplementation) is performed.
+defaultPrimitiveDefinition :: Name -> TypeScheme -> PrimitiveDefinition
+defaultPrimitiveDefinition name typ = PrimitiveDefinition {
+  primitiveDefinitionName = name,
+  primitiveDefinitionDescription = "",
+  primitiveDefinitionSignature = typeSchemeToTermSignature typ,
+  primitiveDefinitionIsPure = True,
+  primitiveDefinitionIsTotal = True,
+  primitiveDefinitionDefaultImplementation = Nothing}
+
 prim0 :: Name -> x -> [TypeVar] -> TermCoder x -> Primitive
-prim0 name value vars output = Primitive name typ impl
+prim0 name value vars output = Primitive (defaultPrimitiveDefinition name typ) impl
   where
     typ = buildTypeScheme vars $ termCoderType output
     impl cx _g _args = termCoderDecode output cx value
 
 prim1 :: Name -> (x -> y) -> [TypeVar] -> TermCoder x -> TermCoder y -> Primitive
-prim1 name compute vars input1 output = Primitive name typ impl
+prim1 name compute vars input1 output = Primitive (defaultPrimitiveDefinition name typ) impl
   where
     typ = buildTypeScheme vars $ Types.functionMany [
       termCoderType input1,
@@ -268,7 +283,7 @@ prim1 name compute vars input1 output = Primitive name typ impl
       termCoderDecode output cx $ compute arg1
 
 prim2 :: Name -> (x -> y -> z) -> [TypeVar] -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
-prim2 name compute vars input1 input2 output = Primitive name typ impl
+prim2 name compute vars input1 input2 output = Primitive (defaultPrimitiveDefinition name typ) impl
   where
     typ = buildTypeScheme vars $ Types.functionMany [
       termCoderType input1,
@@ -281,7 +296,7 @@ prim2 name compute vars input1 input2 output = Primitive name typ impl
       termCoderDecode output cx $ compute arg1 arg2
 
 prim3 :: Name -> (w -> x -> y -> z) -> [TypeVar] -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
-prim3 name compute vars input1 input2 input3 output = Primitive name typ impl
+prim3 name compute vars input1 input2 input3 output = Primitive (defaultPrimitiveDefinition name typ) impl
   where
     typ = buildTypeScheme vars $ Types.functionMany [
       termCoderType input1,

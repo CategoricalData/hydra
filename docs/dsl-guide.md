@@ -26,7 +26,7 @@ For Java and Python DSL usage, see:
 
 1. [Introduction](#introduction)
 2. [Quick start](#quick-start)
-3. [The four DSL variants](#the-four-dsl-variants)
+3. [The five DSL variants](#the-five-dsl-variants)
 4. [When to use each variant](#when-to-use-each-variant)
 5. [What belongs under `Sources/`](#what-belongs-under-sources)
 6. [Untyped DSL](#untyped-dsl)
@@ -118,9 +118,9 @@ greet = lambda "person" $
 In real modules defined with the meta DSLs, you use generated constants like `_Person` and `_Person_name`
 instead of constructing `Name`s manually (see the Meta DSLs section below).
 
-## The four DSL variants
+## The five DSL variants
 
-Hydra has four DSL variants, each serving a specific purpose:
+Hydra has five DSL variants, each serving a specific purpose:
 
 ### 1. Direct DSLs
 
@@ -951,7 +951,7 @@ outermost layer, satisfying the same validator check as host-level `doc`.
 ```haskell
 import qualified Hydra.Dsl.Types as T
 
--- Primitive types
+-- Literal types
 T.int32
 T.int64
 T.bigint
@@ -1079,8 +1079,9 @@ match _Result Nothing [
 ## Error handling with Either
 
 Hydra uses `Either Error a` for computations that can fail. `Error` is a structured union
-type from `hydra.errors`; a `Context` value carrying trace messages and metadata is threaded
-alongside the graph as an explicit parameter.
+type from `hydra.errors`; an `InferenceContext` value carrying the fresh-type-variable
+counter and the current subterm-path trace is threaded alongside the graph as an
+explicit parameter.
 
 ### Basic Either operations
 
@@ -1109,10 +1110,11 @@ Eithers.map (lambda "x" (Math.add (var "x") (int32 1))) eitherExpr
 right (Math.add (var "x") (var "y"))
 ```
 
-### Context for debug traces
+### Subterm-path tracing
 
-The `Context` type carries debug trace information (stack of messages, metadata) through computations.
-Functions that need tracing accept a `Context` parameter explicitly.
+The `InferenceContext` type carries a `trace` field (a list of `SubtermStep`s,
+accumulated backward as inference descends into a term) used for error reporting.
+Functions that need tracing accept an `InferenceContext` parameter explicitly.
 
 ## Primitive functions
 
