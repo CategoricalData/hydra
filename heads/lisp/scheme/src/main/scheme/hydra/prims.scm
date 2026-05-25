@@ -3,6 +3,8 @@
           (hydra core)
           (hydra context)
           (hydra graph)
+          (hydra packaging)
+          (hydra scoping)
           (hydra extract core)
           (hydra lib maps)
           (hydra lib pairs)
@@ -86,7 +88,22 @@
              (vars (if (and (pair? variables) (not (null? variables)))
                        variables
                        detected-vars)))
-        (make-hydra_core_type_scheme vars fun-type constraints)))
+        (make-hydra_core_type_scheme vars fun-type (alist->maybe-constraints constraints))))
+
+    (define (build-prim-def pname variables inputs output . rest)
+      "Build a PrimitiveDefinition from name + TermCoder types (#156 shape)."
+      (let* ((constraints (if (pair? rest) (car rest) #f))
+             (ts (build-type-scheme variables inputs output constraints))
+             (sig (hydra_scoping_type_scheme_to_term_signature ts)))
+        (make-hydra_packaging_primitive_definition pname "" sig #t #t (list 'nothing))))
+
+    ;; Convert an alist of (varname . TypeVariableMetadata) into the wrapped
+    ;; Option[Map[Name, TypeVariableMetadata]] shape that TypeScheme expects.
+    ;; Returns (nothing) for no constraints or (just <map>).
+    (define (alist->maybe-constraints alist)
+      (if (or (not alist) (null? alist))
+          (list 'nothing)
+          (list 'just (hydra_lib_maps_from_list alist))))
 
     ;; ============================================================================
     ;; Error helpers
@@ -398,7 +415,7 @@
 
     (define (prim0 pname value-fn variables output . rest)
       (let ((constraints (if (pair? rest) (car rest) #f)))
-        (make-hydra_graph_primitive pname (build-type-scheme variables '() output constraints)
+        (make-hydra_graph_primitive (build-prim-def pname variables '() output constraints)
           (lambda (cx)
             (lambda (g)
               (lambda (args)
@@ -407,7 +424,7 @@
 
     (define (prim1 pname compute variables input1 output . rest)
       (let ((constraints (if (pair? rest) (car rest) #f)))
-      (make-hydra_graph_primitive pname (build-type-scheme variables (list input1) output constraints)
+      (make-hydra_graph_primitive (build-prim-def pname variables (list input1) output constraints)
         (lambda (cx)
           (lambda (g)
             (lambda (args)
@@ -420,7 +437,7 @@
 
     (define (prim2 pname compute variables input1 input2 output . rest)
       (let ((constraints (if (pair? rest) (car rest) #f)))
-      (make-hydra_graph_primitive pname (build-type-scheme variables (list input1 input2) output constraints)
+      (make-hydra_graph_primitive (build-prim-def pname variables (list input1 input2) output constraints)
         (lambda (cx)
           (lambda (g)
             (lambda (args)
@@ -435,7 +452,7 @@
 
     (define (prim3 pname compute variables input1 input2 input3 output . rest)
       (let ((constraints (if (pair? rest) (car rest) #f)))
-      (make-hydra_graph_primitive pname (build-type-scheme variables (list input1 input2 input3) output constraints)
+      (make-hydra_graph_primitive (build-prim-def pname variables (list input1 input2 input3) output constraints)
         (lambda (cx)
           (lambda (g)
             (lambda (args)

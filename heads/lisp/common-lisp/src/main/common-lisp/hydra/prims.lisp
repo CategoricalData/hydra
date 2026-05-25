@@ -55,6 +55,10 @@
       (visit typ)
       (nreverse result))))
 
+(defun wrap-constraints (classes)
+  "Convert class-name strings to TypeClassConstraint.simple variants (#156)."
+  (mapcar (lambda (c) (list :simple c)) classes))
+
 (defun build-type-scheme (variables inputs output &optional constraints)
   "Build a TypeScheme from TermCoder types. Uses the actual types from
    the TermCoders to construct proper function types for inference.
@@ -70,16 +74,27 @@
          (all-vars (collect-type-vars-ordered fun-type))
          (detected-vars (remove-if (lambda (v) (find #\. v)) all-vars))
          (vars (if variables variables detected-vars))
-         ;; Build constraints map
+         ;; Build constraints map. After #156, TypeVariableMetadata.classes is
+         ;; a Seq[TypeClassConstraint], not Set[String]; wrap each class name.
          (constraint-map
           (when constraints
             (funcall hydra_lib_maps_from_list
                      (mapcar (lambda (entry)
                                (list (first entry)
                                      (make-type_variable_metadata
-                                      (funcall hydra_lib_sets_from_list (cdr entry)))))
-                             constraints)))))
-    (make-type_scheme vars fun-type constraint-map)))
+                                      (wrap-constraints (cdr entry)))))
+                             constraints))))
+         ;; TypeScheme.constraints is Maybe(Map): wrap as (:just m) or (:nothing).
+         (maybe-constraints (if constraint-map
+                                (list :just constraint-map)
+                                (list :nothing))))
+    (make-type_scheme vars fun-type maybe-constraints)))
+
+(defun build-prim-def (pname variables inputs output constraints)
+  "Build a PrimitiveDefinition (#156 shape) from name + signature."
+  (let* ((ts (build-type-scheme variables inputs output constraints))
+         (sig (funcall hydra_scoping_type_scheme_to_term_signature ts)))
+    (make-hydra_packaging_primitive_definition pname "" sig t t (list :nothing))))
 
 ;; ============================================================================
 ;; Error helpers
@@ -368,7 +383,7 @@
 
 (defun prim0 (pname value-fn variables output &optional constraints)
   "Create a 0-argument primitive function."
-  (make-primitive pname (build-type-scheme variables nil output constraints)
+  (make-primitive (build-prim-def pname variables nil output constraints)
     (lambda (cx)
       (lambda (g)
         (declare (ignore g))
@@ -379,7 +394,7 @@
 
 (defun prim1 (pname compute variables input1 output &optional constraints)
   "Create a 1-argument primitive function."
-  (make-primitive pname (build-type-scheme variables (list input1) output constraints)
+  (make-primitive (build-prim-def pname variables (list input1) output constraints)
     (lambda (cx)
       (lambda (g)
         (lambda (args)
@@ -392,7 +407,7 @@
 
 (defun prim2 (pname compute variables input1 input2 output &optional constraints)
   "Create a 2-argument primitive function."
-  (make-primitive pname (build-type-scheme variables (list input1 input2) output constraints)
+  (make-primitive (build-prim-def pname variables (list input1 input2) output constraints)
     (lambda (cx)
       (lambda (g)
         (lambda (args)
@@ -407,7 +422,7 @@
 
 (defun prim3 (pname compute variables input1 input2 input3 output &optional constraints)
   "Create a 3-argument primitive function."
-  (make-primitive pname (build-type-scheme variables (list input1 input2 input3) output constraints)
+  (make-primitive (build-prim-def pname variables (list input1 input2 input3) output constraints)
     (lambda (cx)
       (lambda (g)
         (lambda (args)

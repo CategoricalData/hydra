@@ -141,14 +141,15 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: gradle-${{ hashFiles('**/*.gradle', 'gradle/wrapper/gradle-wrapper.properties') }}
+          key: gradle-${{ hashFiles('**/*.gradle', 'heads/java/gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: gradle-
       - name: Download dist/java built by Haskell job
         uses: actions/download-artifact@v4
         with:
           name: dist-java
           path: dist/java/
-      - run: ./gradlew :hydra-java:test
+      - working-directory: heads/java
+        run: ./gradlew :hydra-java:test
 
   python:
     name: Python tests
