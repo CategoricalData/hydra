@@ -45,7 +45,6 @@ import qualified Hydra.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
@@ -56,6 +55,7 @@ import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Predicates as Predicates
+import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 import qualified Hydra.Dsl.Meta.DeepCore as DeepCore
 import           Hydra.Dsl.Meta.DeepCore ((@@@))
 import           Prelude hiding ((++))
@@ -127,7 +127,7 @@ formatDecodingError = "e" ~> unwrap _DecodingError @@ var "e"
 -- This decodes the term to a Type, then generates an encoder function.
 -- Type variables that appear as Map keys or Set elements get Ord constraints
 -- via the encoder type scheme.
-encodeBinding :: TTermDefinition (Context -> Graph -> Binding -> Either DecodingError Binding)
+encodeBinding :: TTermDefinition (InferenceContext -> Graph -> Binding -> Either DecodingError Binding)
 encodeBinding = define "encodeBinding" $
   doc "Transform a type binding into an encoder binding" $
   "cx" ~> "graph" ~> "b" ~>
@@ -344,7 +344,7 @@ encodeMapType = define "encodeMapType" $
 -- Generates a case match over Left/Right variants
 -- | Transform a type module into an encoder module
 -- Returns Nothing if the module has no encodable type definitions
-encodeModule :: TTermDefinition (Context -> Graph -> Module -> Prelude.Either Error (Maybe Module))
+encodeModule :: TTermDefinition (InferenceContext -> Graph -> Module -> Prelude.Either Error (Maybe Module))
 encodeModule = define "encodeModule" $
   doc "Transform a type module into an encoder module" $
   "cx" ~> "graph" ~> "mod" ~>
@@ -372,7 +372,7 @@ encodeModule = define "encodeModule" $
             (list [Packaging.moduleName (var "mod")]))))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-            (Core.bindingTypeScheme $ var "b")))
+            (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
             (var "encodedBindings")))))
 
 -- | Encode a Name as a Term (produces a wrapped term of type hydra.core.Name)
@@ -846,7 +846,7 @@ encoderTypeScheme = define "encoderTypeScheme" $
       Logic.ifElse (Lists.null (var "ordVars"))
         nothing
         (just $ Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.name (string "ordering")))
+          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
           (var "ordVars"))] $
   Core.typeScheme (var "typeVars") (var "encoderFunType") (var "constraints")
 
@@ -872,12 +872,12 @@ encoderTypeSchemeNamed = define "encoderTypeSchemeNamed" $
       Logic.ifElse (Lists.null (var "ordVars"))
         nothing
         (just $ Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.name (string "ordering")))
+          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
           (var "ordVars"))] $
   Core.typeScheme (var "typeVars") (var "encoderFunType") (var "constraints")
 -- | Filter bindings to only encodable type definitions
 -- A binding is encodable if it is a native type AND is serializable (no function types in dependencies)
-filterTypeBindings :: TTermDefinition (Context -> Graph -> [Binding] -> Prelude.Either Error [Binding])
+filterTypeBindings :: TTermDefinition (InferenceContext -> Graph -> [Binding] -> Prelude.Either Error [Binding])
 filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only encodable type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
@@ -888,7 +888,7 @@ filterTypeBindings = define "filterTypeBindings" $
 
 -- | Check if a binding is encodable and return Just binding if so, Nothing otherwise
 -- | Check if a binding is encodable and return Just binding if so, Nothing otherwise
-isEncodableBinding :: TTermDefinition (Context -> Graph -> Binding -> Prelude.Either Error (Maybe Binding))
+isEncodableBinding :: TTermDefinition (InferenceContext -> Graph -> Binding -> Prelude.Either Error (Maybe Binding))
 isEncodableBinding = define "isEncodableBinding" $
   doc "Check if a binding is encodable (serializable type)" $
   "cx" ~> "graph" ~> "b" ~>

@@ -24,12 +24,12 @@ import           Hydra.Dsl.Meta.Phantoms     as Phantoms hiding (
   elimination, field, fieldType, floatType, floatValue, function, injection, integerType, integerValue, lambda, literal,
   literalType, record, term, type_, typeScheme, wrap)
 import qualified Hydra.Dsl.Terms             as Terms
-import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Errors       as Error
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
+import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Dsl.Meta.DeepCore as DeepCore
@@ -276,7 +276,7 @@ dslDefinitionName = define "dslDefinitionName" $
 --   annotatedTerm body annotation = Core.TermRecord (Core.Record { ... })
 -- | Transform a type module into a DSL module.
 -- Returns Nothing if the module has no eligible type definitions.
-dslModule :: TTermDefinition (Context -> Graph -> Module -> Either Error (Maybe Module))
+dslModule :: TTermDefinition (InferenceContext -> Graph -> Module -> Either Error (Maybe Module))
 dslModule = define "dslModule" $
   doc "Transform a type module into a DSL module" $
   "cx" ~> "graph" ~> "mod" ~>
@@ -308,7 +308,7 @@ dslModule = define "dslModule" $
               (primitive _lists_map @@ dslNamespace @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))))))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-            (Core.bindingTypeScheme $ var "b")))
+            (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
             (deduplicateBindings @@ Lists.concat (var "dslBindings"))))))
 -- | Generate a DSL module namespace from a source module namespace
 -- For example, "hydra.core" -> "hydra.dsl.core"
@@ -353,7 +353,7 @@ dslTypeScheme = define "dslTypeScheme" $
 
 -- | Collect forall type variables from a type (stripping annotations)
 -- | Filter bindings to only DSL-eligible type definitions
-filterTypeBindings :: TTermDefinition (Context -> Graph -> [Binding] -> Either Error [Binding])
+filterTypeBindings :: TTermDefinition (InferenceContext -> Graph -> [Binding] -> Either Error [Binding])
 filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only DSL-eligible type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
@@ -368,7 +368,7 @@ filterTypeBindings = define "filterTypeBindings" $
 -- - Records: constructor + accessors + withXxx updaters
 -- - Unions: injection helpers
 -- - Wrapped types: wrap + unwrap
-generateBindingsForType :: TTermDefinition (Context -> Graph -> Binding -> Either DecodingError [Binding])
+generateBindingsForType :: TTermDefinition (InferenceContext -> Graph -> Binding -> Either DecodingError [Binding])
 generateBindingsForType = define "generateBindingsForType" $
   doc "Generate all DSL bindings for a type binding" $
   "cx" ~> "graph" ~> "b" ~>
@@ -633,7 +633,7 @@ generateWrappedTypeAccessors = define "generateWrappedTypeAccessors" $
 -- - Wrapped types: wrap + unwrap
 -- | Check if a binding is eligible for DSL generation.
 -- Excludes phantom types (TTerm, TBinding) since they are meta-infrastructure.
-isDslEligibleBinding :: TTermDefinition (Context -> Graph -> Binding -> Either Error (Maybe Binding))
+isDslEligibleBinding :: TTermDefinition (InferenceContext -> Graph -> Binding -> Either Error (Maybe Binding))
 isDslEligibleBinding = define "isDslEligibleBinding" $
   doc "Check if a binding is eligible for DSL generation" $
   "cx" ~> "graph" ~> "b" ~>
