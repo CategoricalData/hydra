@@ -5,9 +5,12 @@
             [hydra.context :refer :all]
             [hydra.errors :refer :all]
             [hydra.graph :refer :all]
+            [hydra.packaging :refer :all]
+            [hydra.scoping :refer [hydra_scoping_type_scheme_to_term_signature]]
             [hydra.typing :refer :all])
   (:import [hydra.core hydra_core_wrapped_term hydra_core_injection hydra_core_field]
-           [hydra.graph hydra_graph_primitive hydra_graph_term_coder]))
+           [hydra.graph hydra_graph_primitive hydra_graph_term_coder]
+           [hydra.packaging hydra_packaging_primitive_definition]))
 
 ;; ==========================================================================
 ;; Annotation primitives (native Clojure, operating on meta-encoded terms)
@@ -122,14 +125,21 @@
   (let [make-type (fn make-type [n]
                     (if (<= n 0) (list :unit)
                         (list :function {:domain (list :unit) :codomain (make-type (dec n))})))]
-    {:variables [] :type (make-type arity) :constraints []}))
+    (->hydra_core_type_scheme [] (make-type arity) (list :nothing))))
+
+(defn- make-prim-def
+  "Build a PrimitiveDefinition (#156 shape) from name + arity."
+  [name arity]
+  (let [ts (make-type-scheme arity)
+        sig (hydra_scoping_type_scheme_to_term_signature ts)]
+    (->hydra_packaging_primitive_definition name "" sig true true (list :nothing))))
 
 (defn- make-annotation-primitive
   "Create a Primitive that takes raw term arguments and returns a term result.
    The implementation receives args as a list of terms and must return Either.
    After #368 InContext removal, errors flow through as Either Left Error directly."
   [name arity impl-fn]
-  (->hydra_graph_primitive name (make-type-scheme arity)
+  (->hydra_graph_primitive (make-prim-def name arity)
     (fn [cx] (fn [g] (fn [args]
       (try
         (impl-fn cx g args)
