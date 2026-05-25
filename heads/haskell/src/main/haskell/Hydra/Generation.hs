@@ -15,7 +15,6 @@ import Hydra.Testing (TestGroup(..))
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
 import Hydra.Sources.Libraries
-import qualified Hydra.Context as Context
 import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Digest as Digest
 import qualified Hydra.Dsls as Dsls
@@ -50,13 +49,16 @@ import Data.Char (isAlphaNum, toUpper)
 showError :: Error.Error -> String
 showError = ShowError.error
 
+-- | An initial InferenceContext (fresh-variable counter at 0, empty subterm-path trace).
+-- Note: emptyInferenceContext is now re-exported from Hydra.Kernel via Hydra.Lexical.
+
 -- | Generate source files and write them to disk.
 -- Returns the relative paths the run wrote (joinable with the basePath argument
 -- to get full paths). Callers that only care about the count can take 'length'
 -- of the result; callers driving stale-output pruning (#357) use the path set
 -- as the keep-set for their post-generation walk.
 generateSources
-  :: (Module -> [Definition] -> Context.Context -> Graph -> Either Error.Error (M.Map FilePath String))
+  :: (Module -> [Definition] -> InferenceContext -> Graph -> Either Error.Error (M.Map FilePath String))
   -> Language
   -> Bool  -- ^ doInfer
   -> Bool  -- ^ doExpand
@@ -76,7 +78,7 @@ generateSources = generateSourcesWithTransform id
 -- within scalac's stack-friendly threshold.
 generateSourcesWithTransform
   :: (String -> String)  -- ^ Per-file content transform (id for no-op)
-  -> (Module -> [Definition] -> Context.Context -> Graph -> Either Error.Error (M.Map FilePath String))
+  -> (Module -> [Definition] -> InferenceContext -> Graph -> Either Error.Error (M.Map FilePath String))
   -> Language
   -> Bool
   -> Bool
@@ -87,7 +89,7 @@ generateSourcesWithTransform
   -> [Module]
   -> IO [FilePath]
 generateSourcesWithTransform transform printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings basePath universeModules modulesToGenerate = do
-    let cx = Context.Context [] [] M.empty
+    let cx = emptyInferenceContext
     case CodeGeneration.generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bootstrapGraph universeModules modulesToGenerate cx of
       Left err -> fail $ "Failed to generate source files: " ++ showError err
       Right files -> do
@@ -136,7 +138,7 @@ definitionAsBinding :: Definition -> Binding
 definitionAsBinding (DefinitionTerm td) = Binding {
     bindingName = termDefinitionName td,
     bindingTerm = termDefinitionTerm td,
-    bindingTypeScheme = termDefinitionTypeScheme td}
+    bindingTypeScheme = termSignatureToTypeScheme <$> termDefinitionSignature td}
 definitionAsBinding (DefinitionType td) = Binding {
     bindingName = typeDefinitionName td,
     bindingTerm = TermAnnotated $ AnnotatedTerm {
@@ -144,6 +146,11 @@ definitionAsBinding (DefinitionType td) = Binding {
       annotatedTermAnnotation = M.fromList [
         (Name "type", TermVariable (Name "hydra.core.Type"))]},
     bindingTypeScheme = Just (TypeScheme [] (TypeVariable (Name "hydra.core.Type")) Nothing)}
+-- TODO(#156): Implement DefinitionPrimitive handling once primitive modules land. For now, primitives don't appear in modules that go through this function.
+definitionAsBinding (DefinitionPrimitive pd) = Binding {
+    bindingName = primitiveDefinitionName pd,
+    bindingTerm = TermLiteral (LiteralString (primitiveDefinitionDescription pd)),
+    bindingTypeScheme = Just (termSignatureToTypeScheme (primitiveDefinitionSignature pd))}
 
 -- | Extract a module's definitions in the legacy Binding view, suitable for
 -- feeding elementsToGraph or any other API that still operates on Bindings.
@@ -154,7 +161,7 @@ moduleAsBindings = map definitionAsBinding . moduleDefinitions
 -- | Generate and write the lexicon file (IO wrapper).
 writeLexicon :: FilePath -> [Module] -> IO ()
 writeLexicon path kernelModules = do
-  case CodeGeneration.inferAndGenerateLexicon (Context [] [] M.empty) bootstrapGraph kernelModules of
+  case CodeGeneration.inferAndGenerateLexicon emptyInferenceContext bootstrapGraph kernelModules of
     Left err -> fail $ "Lexicon generation failed: " ++ showError err
     Right content -> do
       writeFile path content
@@ -163,9 +170,9 @@ writeLexicon path kernelModules = do
 ----------------------------------------
 
 -- | IO wrapper for generateCoderModules. Evaluates the Either and handles errors.
-generateCoderModulesIO :: (Context.Context -> Graph -> Module -> Either Error.Error (Maybe Module)) -> String -> [Module] -> [Module] -> IO [Module]
+generateCoderModulesIO :: (InferenceContext -> Graph -> Module -> Either Error.Error (Maybe Module)) -> String -> [Module] -> [Module] -> IO [Module]
 generateCoderModulesIO codec label universeModules typeModules = do
-    let cx = Context.Context [] [] M.empty
+    let cx = emptyInferenceContext
     case CodeGeneration.generateCoderModules codec bootstrapGraph universeModules typeModules cx of
       Left err -> fail $ "Failed to generate " ++ label ++ " modules: " ++ showError err
       Right results -> return results
@@ -205,7 +212,7 @@ generateDslModules = generateCoderModulesIO Dsls.dslModule "DSL"
 -- | IO wrapper for inferModules. Evaluates the Either and handles errors.
 inferModulesIO :: [Module] -> [Module] -> IO [Module]
 inferModulesIO universeMods targetMods = do
-  case CodeGeneration.inferModules (Context [] [] M.empty) bootstrapGraph universeMods targetMods of
+  case CodeGeneration.inferModules emptyInferenceContext bootstrapGraph universeMods targetMods of
     Left err -> fail $ "Type inference failed: " ++ showError err
     Right mods -> return mods
 
@@ -215,7 +222,7 @@ inferModulesIO universeMods targetMods = do
 -- using the typed universe as context.
 inferModulesGivenIO :: [Module] -> [Module] -> IO [Module]
 inferModulesGivenIO universeMods targetMods = do
-  case CodeGeneration.inferModulesGiven (Context [] [] M.empty) bootstrapGraph universeMods targetMods of
+  case CodeGeneration.inferModulesGiven emptyInferenceContext bootstrapGraph universeMods targetMods of
     Left err -> fail $ "Incremental type inference failed: " ++ showError err
     Right mods -> return mods
 
@@ -345,7 +352,7 @@ inferAndWriteByPackageSeeded
         inferred <- if null inferTargets
           then return []
           else case inferModulesGivenSchemes
-                    (Context [] [] M.empty) bootstrapGraph
+                    (InferenceContext 0 []) bootstrapGraph
                     accBindingSchemes accSchemaSchemes
                     pkgUniverse inferTargets of
                   Left err -> fail $ "Per-package inference failed for "
@@ -375,7 +382,7 @@ inferAndWriteByPackageSeeded
               [ (termDefinitionName td, ts)
               | m <- inferred
               , DefinitionTerm td <- moduleDefinitions m
-              , Just ts <- [termDefinitionTypeScheme td]
+              , Just ts <- [termSignatureToTypeScheme <$> termDefinitionSignature td]
               ]
             !newSchemaSchemes = M.fromList
               [ (typeDefinitionName td, normalizeTypeScheme (typeDefinitionTypeScheme td))
@@ -424,7 +431,7 @@ normalizeTypeScheme ts =
 -- graphSchemaTypes is augmented with the caller's accumulated type-def
 -- schemes, and (c) the universe is sized to the current package only.
 inferModulesGivenSchemes
-  :: Context
+  :: InferenceContext
   -> Graph
   -> M.Map Name TypeScheme  -- ^ accumulated term-binding schemes from prior packages
   -> M.Map Name TypeScheme  -- ^ accumulated type-def schemes (graphSchemaTypes)
@@ -443,7 +450,7 @@ inferModulesGivenSchemes cx bsGraph accBindingSchemes accSchemaSchemes universeM
         termBindingsOf m =
           [ Binding { bindingName = termDefinitionName td
                     , bindingTerm = termDefinitionTerm td
-                    , bindingTypeScheme = termDefinitionTypeScheme td
+                    , bindingTypeScheme = termSignatureToTypeScheme <$> termDefinitionSignature td
                     }
           | DefinitionTerm td <- moduleDefinitions m ]
         (bindingsToInfer, untouchedTypedBindings) =
@@ -940,7 +947,7 @@ tryIncrementalInference distJsonRoot universeMods targetMods = do
                         [ (termDefinitionName td, ts)
                         | m <- cleanLoaded
                         , DefinitionTerm td <- moduleDefinitions m
-                        , Just ts <- [termDefinitionTypeScheme td]
+                        , Just ts <- [termSignatureToTypeScheme <$> termDefinitionSignature td]
                         ]
                       seedSchemaSchemes = M.fromList
                         [ (typeDefinitionName td, normalizeTypeScheme (typeDefinitionTypeScheme td))

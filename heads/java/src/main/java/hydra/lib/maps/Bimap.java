@@ -15,7 +15,7 @@ import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.map;
-import hydra.context.Context;
+import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 import hydra.util.PersistentMap;
@@ -48,16 +48,16 @@ public class Bimap extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph ->
             hydra.lib.eithers.Bind.apply(hydra.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), mp -> {
                 PersistentMap<Term, Term> result = PersistentMap.<Term, Term>empty();
                 for (Map.Entry<Term, Term> entry : mp.entrySet()) {
                     Either<Error_, Term> kr = hydra.Reduction.reduceTerm(
-                        hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), entry.getKey()));
+                        hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(0), entry.getKey()));
                     if (kr.isLeft()) return (Either) kr;
                     Either<Error_, Term> vr = hydra.Reduction.reduceTerm(
-                        hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(1), entry.getValue()));
+                        hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(1), entry.getValue()));
                     if (vr.isLeft()) return (Either) vr;
                     result = result.insert(((Either.Right<Error_, Term>) kr).value,
                                             ((Either.Right<Error_, Term>) vr).value);

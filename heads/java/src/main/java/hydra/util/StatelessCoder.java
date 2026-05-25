@@ -1,6 +1,6 @@
 package hydra.util;
 import hydra.coders.Coder;
-import hydra.context.Context;
+import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.errors.OtherError;
 import hydra.util.Either;
@@ -11,7 +11,7 @@ import java.util.function.Function;
  * A convenience class for stateless coders that wraps simple encode/decode functions.
  * Since Coder no longer has state type parameters, this class provides convenience
  * constructors that accept simple functions and adapt them to the Coder signature
- * (which takes a Context parameter and returns Either).
+ * (which takes a InferenceContext parameter and returns Either).
  *
  * @param <V1> the source value type
  * @param <V2> the target value type
@@ -20,7 +20,7 @@ public class StatelessCoder<V1, V2> extends Coder<V1, V2> {
 
     /**
      * Construct a stateless coder from simple Either-based encode/decode functions.
-     * The Context parameter is ignored.
+     * The InferenceContext parameter is ignored.
      * @param encode the encoding function
      * @param decode the decoding function
      */
@@ -58,9 +58,9 @@ public class StatelessCoder<V1, V2> extends Coder<V1, V2> {
 
     /**
      * Convert a simple Either-based function to the Coder encode/decode signature.
-     * The Context parameter is ignored; Either Left strings are as Error_.
+     * The InferenceContext parameter is ignored; Either Left strings are as Error_.
      */
-    private static <A, B> Function<Context, Function<A, Either<Error_, B>>>
+    private static <A, B> Function<InferenceContext, Function<A, Either<Error_, B>>>
             toCoderFn(Function<A, Either<String, B>> fn) {
         return cx -> a -> {
             Either<String, B> result = fn.apply(a);

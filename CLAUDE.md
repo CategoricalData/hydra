@@ -106,13 +106,24 @@ At the beginning of every new session, follow these steps **before doing any oth
 ### During the session
 
 - **Save progress periodically**: Update the branch plan at milestones or approach changes.
-- **Commit workflow**: Make frequent `WIP:` checkpoint commits when code is stable.
-  All commit messages must be short (120 characters or less), single-line, no
-  "Co-Authored-By:" line. Include the issue number at the end of the message
-  when on a feature branch (e.g., `Regenerated hydra-haskell after kernel changes. For #137`).
-  When ready to finalize, ask the user about squashing:
-  soft-reset WIP commits, re-commit as focused topic groups, source changes first,
-  generated files last.
+- **Commit workflow**:
+  - **Every interim commit starts with `WIP:`** — the prefix marks unfinalized work
+    that has not yet been squashed. No exceptions while iterating on a feature branch:
+    fix-up, regen, test-green, and checkpoint commits all need it.
+  - **Squashed commits drop the `WIP:` prefix** — once a topic group has been
+    consolidated via the squash workflow, it represents shippable history.
+    The absence of `WIP:` is what tells a reader the work is finalized.
+    See [.claude/commands/squash.md](.claude/commands/squash.md).
+  - **All commit messages are short (≤120 chars), single-line, no body.**
+    No `Co-Authored-By` line. End with `For #<issue>` (or `Resolves #<issue>`
+    if this branch closes it). Example:
+    `Regenerated hydra-haskell after kernel changes. For #137`.
+  - **If one line isn't enough, use more commits, not a body.** Each commit
+    should be one focused change with a one-line summary. Splitting into
+    several focused commits is always better than appending a body.
+  - **When ready to finalize**: ask the user about squashing. Soft-reset
+    WIP commits, re-commit as focused topic groups, source changes first,
+    generated files last. See [.claude/commands/squash.md](.claude/commands/squash.md).
 
 ### When waiting on long-running work
 
@@ -227,7 +238,7 @@ Primary entry point — the doc most likely to answer the question by task:
 | Add or modify tests | [docs/recipes/extending-tests.md](docs/recipes/extending-tests.md) |
 | Regenerate code | [docs/recipes/code-generation.md](docs/recipes/code-generation.md) |
 | Debug test failures | [docs/troubleshooting.md](docs/troubleshooting.md) |
-| Refactor modules/namespaces | [docs/recipes/refactoring.md](docs/recipes/refactoring.md) / [refactoring-namespaces.md](docs/recipes/refactoring-namespaces.md) |
+| Refactor modules/namespaces | [docs/recipes/refactoring.md](docs/recipes/refactoring.md) (includes namespace refactoring) |
 | Clean up repo / find stale files | [docs/recipes/maintenance.md](docs/recipes/maintenance.md) |
 | New target language | [docs/recipes/new-implementation.md](docs/recipes/new-implementation.md) |
 | Test suite structure | [docs/test-suite-architecture.md](docs/test-suite-architecture.md) |
@@ -391,6 +402,15 @@ context usage. Keep it lean by following these principles:
   - **`claude/`**: deeper Claude-specific protocols and gotchas, loaded on demand.
   - **`docs/`** + wiki + READMEs: human-facing documentation. Don't mix Claude-specific
     content into `docs/`.
+- **Within human-facing docs, partition by audience and altitude.**
+  - **Wiki**: user-facing documentation explaining Hydra's design *as it is* — conceptual
+    framing (LambdaGraph, type system), property-graph and RDF design, release policy.
+    Nothing provisional belongs here.
+  - **`docs/`**: contributor-facing procedural and implementation-level material — how to
+    extend the kernel, regenerate code, debug a failing build, understand the build/cache
+    system. Describes shipped behavior.
+  - **Outside the public documentation surface** (issues, branch plans, `docs/history/`):
+    sketches, in-flight proposals, exploration. Don't put any of these on the wiki.
 - **Add to other docs first.** When new guidance is needed, put it in the most specific
   applicable document and add a link here only if the topic is common enough.
 - **Review before expanding.** Before adding content, check whether it's already reachable
