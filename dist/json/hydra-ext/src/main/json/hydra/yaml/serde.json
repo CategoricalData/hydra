@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.yaml.serde.escapeSingleQuotes",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Escape single quotes by doubling them"}}}],
@@ -49,13 +53,14 @@
                                     "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                         "function": {"variable": "hydra.lib.strings.fromList"}}}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+                "parameter": "s"}}}}}},
     {
       "term": {
         "name": "hydra.yaml.serde.hasLeadingTrailingSpace",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Check if a string has leading or trailing whitespace"}}}],
@@ -122,13 +127,14 @@
                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"literal": {"boolean": {}}}}}}}}},
                             "function": {"variable": "hydra.lib.logic.or"}}}}}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+                "parameter": "s"}}}}}},
     {
       "term": {
         "name": "hydra.yaml.serde.hydraYamlToString",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.yaml.model.Node"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a YAML node to a string"}}}],
@@ -136,13 +142,14 @@
               "lambda": {
                 "body": {"application": {"argument": {"variable": "node"}, "function": {"variable": "hydra.yaml.serde.writeNode"}}},
                 "domain": {"variable": "hydra.yaml.model.Node"},
-                "parameter": "node"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.yaml.model.Node"}}},
-          "variables": []}}},
+                "parameter": "node"}}}}}},
     {
       "term": {
         "name": "hydra.yaml.serde.indentString",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Indent all lines of a string by 2 spaces"}}}],
@@ -178,13 +185,14 @@
                                 "type": {"literal": {"string": {}}}}}}}}},
                     "function": {"variable": "hydra.lib.strings.cat"}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+                "parameter": "s"}}}}}},
     {
       "term": {
         "name": "hydra.yaml.serde.isDecimalString",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"literal": {"integer": {"int32": {}}}}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Check if character codes represent a decimal number"}}}],
@@ -376,13 +384,14 @@
                                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"literal": {"integer": {"int32": {}}}}}}}},
                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"boolean": {}}}}}}}}}}}}}}}}}}},
                 "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
-                "parameter": "chars"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"list": {"literal": {"integer": {"int32": {}}}}}}},
-          "variables": []}}},
+                "parameter": "chars"}}}}}},
     {
       "term": {
         "name": "hydra.yaml.serde.looksLikeNumber",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Check if a string looks like a number"}}}],
@@ -536,13 +545,14 @@
                             "argument": {"literal": {"boolean": false}},
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"literal": {"boolean": {}}}}}}}}}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+                "parameter": "s"}}}}}},
     {
       "term": {
         "name": "hydra.yaml.serde.needsQuoting",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Check if a string needs quoting in YAML"}}}],
@@ -636,13 +646,18 @@
                             "argument": {"application": {"argument": {"variable": "s"}, "function": {"variable": "hydra.lib.strings.null"}}},
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"boolean": {}}}}}}}}}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+                "parameter": "s"}}}}}},
     {
       "term": {
         "name": "hydra.yaml.serde.writeMappingEntry",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"pair": {"first": {"variable": "hydra.yaml.model.Node"}, "second": {"variable": "hydra.yaml.model.Node"}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Write a mapping entry in block style"}}}],
@@ -776,16 +791,18 @@
                                         "parameter": "m"}}}],
                                 "typeName": "hydra.yaml.model.Node"}}}}}}}},
                 "domain": {"pair": {"first": {"variable": "hydra.yaml.model.Node"}, "second": {"variable": "hydra.yaml.model.Node"}}},
-                "parameter": "entry"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"literal": {"string": {}}},
-              "domain": {"pair": {"first": {"variable": "hydra.yaml.model.Node"}, "second": {"variable": "hydra.yaml.model.Node"}}}}},
-          "variables": []}}},
+                "parameter": "entry"}}}}}},
     {
       "term": {
         "name": "hydra.yaml.serde.writeMappingEntryInline",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"pair": {"first": {"variable": "hydra.yaml.model.Node"}, "second": {"variable": "hydra.yaml.model.Node"}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -922,16 +939,14 @@
                                         "parameter": "m"}}}],
                                 "typeName": "hydra.yaml.model.Node"}}}}}}}},
                 "domain": {"pair": {"first": {"variable": "hydra.yaml.model.Node"}, "second": {"variable": "hydra.yaml.model.Node"}}},
-                "parameter": "entry"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"literal": {"string": {}}},
-              "domain": {"pair": {"first": {"variable": "hydra.yaml.model.Node"}, "second": {"variable": "hydra.yaml.model.Node"}}}}},
-          "variables": []}}},
+                "parameter": "entry"}}}}}},
     {
       "term": {
         "name": "hydra.yaml.serde.writeNode",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.yaml.model.Node"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Write a YAML node as a top-level value in block style"}}}],
@@ -1046,13 +1061,14 @@
                                 "parameter": "m"}}}],
                         "typeName": "hydra.yaml.model.Node"}}}},
                 "domain": {"variable": "hydra.yaml.model.Node"},
-                "parameter": "node"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.yaml.model.Node"}}},
-          "variables": []}}},
+                "parameter": "node"}}}}}},
     {
       "term": {
         "name": "hydra.yaml.serde.writeNodeInline",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.yaml.model.Node"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Write a node inline (for use as a mapping key)"}}}],
@@ -1179,13 +1195,14 @@
                                 "parameter": "m"}}}],
                         "typeName": "hydra.yaml.model.Node"}}}},
                 "domain": {"variable": "hydra.yaml.model.Node"},
-                "parameter": "node"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.yaml.model.Node"}}},
-          "variables": []}}},
+                "parameter": "node"}}}}}},
     {
       "term": {
         "name": "hydra.yaml.serde.writeScalar",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.yaml.model.Scalar"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Write a scalar value"}}}],
@@ -1246,13 +1263,14 @@
                                 "parameter": "str"}}}],
                         "typeName": "hydra.yaml.model.Scalar"}}}},
                 "domain": {"variable": "hydra.yaml.model.Scalar"},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.yaml.model.Scalar"}}},
-          "variables": []}}},
+                "parameter": "s"}}}}}},
     {
       "term": {
         "name": "hydra.yaml.serde.writeSequenceItem",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.yaml.model.Node"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Write a sequence item in block style"}}}],
@@ -1450,13 +1468,14 @@
                                 "parameter": "m"}}}],
                         "typeName": "hydra.yaml.model.Node"}}}},
                 "domain": {"variable": "hydra.yaml.model.Node"},
-                "parameter": "node"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.yaml.model.Node"}}},
-          "variables": []}}},
+                "parameter": "node"}}}}}},
     {
       "term": {
         "name": "hydra.yaml.serde.writeString",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Write a string value, quoting if necessary"}}}],
@@ -1480,13 +1499,11 @@
                             "argument": {"application": {"argument": {"variable": "s"}, "function": {"variable": "hydra.yaml.serde.needsQuoting"}}},
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+                "parameter": "s"}}}}}},
     {
       "term": {
         "name": "hydra.yaml.serde.yamlReservedWords",
+        "signature": {"parameters": [], "result": {"type": {"list": {"literal": {"string": {}}}}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "YAML reserved words that need quoting"}}}],
@@ -1513,21 +1530,19 @@
                 {"literal": {"string": "YES"}},
                 {"literal": {"string": "NO"}},
                 {"literal": {"string": "ON"}},
-                {"literal": {"string": "OFF"}}]}}},
-        "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}},
+                {"literal": {"string": "OFF"}}]}}}}},
     {
       "term": {
         "name": "hydra.yaml.serde.yamlSpecialChars",
+        "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "YAML special characters that trigger quoting"}}}],
-            "body": {"literal": {"string": ": {}[]#,&*!|>'\"%@`"}}}},
-        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}}],
+            "body": {"literal": {"string": ": {}[]#,&*!|>'\"%@`"}}}}}}],
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

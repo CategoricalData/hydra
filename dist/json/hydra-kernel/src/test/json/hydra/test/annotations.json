@@ -3,6 +3,7 @@
     {
       "term": {
         "name": "hydra.test.annotations.allTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Test cases for hydra.annotations functions"}}}],
@@ -9650,7 +9651,7 @@
                                                                                                                   "inject": {
                                                                                                                     "field": {
                                                                                                                       "name": "variable",
-                                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.lexical.emptyContext"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.lexical.emptyInferenceContext"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                                                             "typeName": "hydra.core.Application"}}},
                                                                                                       "typeName": "hydra.core.Term"}}},
@@ -9914,7 +9915,7 @@
                                                                                                                   "inject": {
                                                                                                                     "field": {
                                                                                                                       "name": "variable",
-                                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.lexical.emptyContext"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.lexical.emptyInferenceContext"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                                                             "typeName": "hydra.core.Application"}}},
                                                                                                       "typeName": "hydra.core.Term"}}},
@@ -10151,7 +10152,7 @@
                                                                                                                   "inject": {
                                                                                                                     "field": {
                                                                                                                       "name": "variable",
-                                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.lexical.emptyContext"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.lexical.emptyInferenceContext"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                                                             "typeName": "hydra.core.Application"}}},
                                                                                                       "typeName": "hydra.core.Term"}}},
@@ -10388,7 +10389,7 @@
                                                                                                                   "inject": {
                                                                                                                     "field": {
                                                                                                                       "name": "variable",
-                                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.lexical.emptyContext"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.lexical.emptyInferenceContext"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                                                             "typeName": "hydra.core.Application"}}},
                                                                                                       "typeName": "hydra.core.Term"}}},
@@ -10600,7 +10601,7 @@
                                                                                                                   "inject": {
                                                                                                                     "field": {
                                                                                                                       "name": "variable",
-                                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.lexical.emptyContext"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.lexical.emptyInferenceContext"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                                                             "typeName": "hydra.core.Application"}}},
                                                                                                       "typeName": "hydra.core.Term"}}},
@@ -10786,7 +10787,7 @@
                                                                                                                   "inject": {
                                                                                                                     "field": {
                                                                                                                       "name": "variable",
-                                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.lexical.emptyContext"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.lexical.emptyInferenceContext"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                                                             "typeName": "hydra.core.Application"}}},
                                                                                                       "typeName": "hydra.core.Term"}}},
@@ -15600,8 +15601,7 @@
                   {
                     "name": "cases",
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-                "typeName": "hydra.testing.TestGroup"}}}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+                "typeName": "hydra.testing.TestGroup"}}}}}}],
   "dependencies": [
     {"module": "hydra.annotations"},
     {"module": "hydra.lexical"},

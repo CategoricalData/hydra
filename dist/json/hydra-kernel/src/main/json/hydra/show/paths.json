@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.show.paths.subtermStep",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.paths.SubtermStep"}}],
+          "result": {"type": {"maybe": {"literal": {"string": {}}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a subterm step to a string representation"}}}],
@@ -241,13 +245,19 @@
                                         "parameter": "_"}}}],
                                 "typeName": "hydra.paths.SubtermStep"}}}}}}}},
                 "domain": {"variable": "hydra.paths.SubtermStep"},
-                "parameter": "step"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"maybe": {"literal": {"string": {}}}}, "domain": {"variable": "hydra.paths.SubtermStep"}}},
-          "variables": []}}},
+                "parameter": "step"}}}}}},
     {
       "term": {
         "name": "hydra.show.paths.termToSubtermGraph",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"variable": "hydra.paths.SubtermGraph"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Build a subterm graph from a term"}}}],
@@ -1072,7 +1082,7 @@
                                 "pair": {
                                   "first": {"pair": {"first": {"list": {"variable": "t0"}}, "second": {"list": {"variable": "t1"}}}},
                                   "second": {"set": {"variable": "t2"}}}},
-                              "constraints": [{"key": "t2", "value": {"classes": ["ordering"]}}],
+                              "constraints": [{"key": "t2", "value": {"classes": [{"simple": "ordering"}]}}],
                               "variables": ["t0", "t1", "t2"]}},
                           {
                             "name": "result",
@@ -1166,20 +1176,13 @@
                     "domain": {"variable": "hydra.core.Term"},
                     "parameter": "term"}},
                 "domain": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}},
-                "parameter": "namespaces"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.paths.SubtermGraph"}, "domain": {"variable": "hydra.core.Term"}}},
-              "domain": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}}}},
-          "variables": []}}}],
+                "parameter": "namespaces"}}}}}}],
   "dependencies": [
     {"module": "hydra.names"},
     {"module": "hydra.rewriting"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

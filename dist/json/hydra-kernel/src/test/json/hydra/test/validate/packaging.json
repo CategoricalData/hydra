@@ -3,6 +3,7 @@
     {
       "term": {
         "name": "hydra.test.validate.packaging.allTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "All test cases for hydra.validate.packaging"}}}],
@@ -31,11 +32,11 @@
                   {
                     "name": "cases",
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-                "typeName": "hydra.testing.TestGroup"}}}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+                "typeName": "hydra.testing.TestGroup"}}}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.checkConflictingModuleNamesTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -462,11 +463,11 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.checkConflictingVariantNamesTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -561,11 +562,11 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.checkDefinitionDocumentationTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -749,8 +750,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}}]}}],
                                                           "typeName": "hydra.packaging.Module"}},
@@ -853,8 +854,8 @@
                                                                                       "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "value"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}}]}}],
                                                           "typeName": "hydra.packaging.Module"}},
@@ -918,11 +919,11 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.checkDefinitionNameConventionTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -1108,8 +1109,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}}]}}],
                                                           "typeName": "hydra.packaging.Module"}},
@@ -1249,8 +1250,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}}]}}],
                                                           "typeName": "hydra.packaging.Module"}},
@@ -1392,8 +1393,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}}]}}],
                                                           "typeName": "hydra.packaging.Module"}},
@@ -1553,8 +1554,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}}]}}],
                                                           "typeName": "hydra.packaging.Module"}},
@@ -1623,11 +1624,11 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.checkDefinitionModuleNamesTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -1811,8 +1812,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}}]}}],
                                                           "typeName": "hydra.packaging.Module"}},
@@ -1952,8 +1953,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}}]}}],
                                                           "typeName": "hydra.packaging.Module"}},
@@ -2017,11 +2018,11 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.checkDefinitionOrderingTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -2205,8 +2206,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}}]}}],
                                                           "typeName": "hydra.packaging.Module"}},
@@ -2346,8 +2347,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}},
                                                                   {
@@ -2404,8 +2405,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}}]}}],
                                                           "typeName": "hydra.packaging.Module"}},
@@ -2545,8 +2546,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}},
                                                                   {
@@ -2603,8 +2604,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}}]}}],
                                                           "typeName": "hydra.packaging.Module"}},
@@ -2764,8 +2765,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}},
                                                                   {
@@ -2824,8 +2825,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}}]}}],
                                                           "typeName": "hydra.packaging.Module"}},
@@ -2894,11 +2895,11 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.checkDuplicateDefinitionNamesTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -3082,8 +3083,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}},
                                                                   {
@@ -3140,8 +3141,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}}]}}],
                                                           "typeName": "hydra.packaging.Module"}},
@@ -3281,8 +3282,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}},
                                                                   {
@@ -3339,8 +3340,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}}]}}],
                                                           "typeName": "hydra.packaging.Module"}},
@@ -3404,11 +3405,11 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.checkDuplicateModuleNamesTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -3735,11 +3736,11 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.checkModuleNameConventionTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -4184,11 +4185,11 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.checkPackageNameConventionTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -4637,11 +4638,11 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.kernelModuleTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -4743,8 +4744,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}}]}}],
                                                           "typeName": "hydra.packaging.Module"}},
@@ -4847,8 +4848,8 @@
                                                                                       "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "value"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}}]}}],
                                                           "typeName": "hydra.packaging.Module"}},
@@ -5001,8 +5002,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}},
                                                                   {
@@ -5059,8 +5060,8 @@
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
-                                                                                "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "name": "signature",
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                       "typeName": "hydra.packaging.Definition"}}]}}],
                                                           "typeName": "hydra.packaging.Module"}},
@@ -5129,11 +5130,11 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.kernelPackageTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -5245,8 +5246,8 @@
                                                                                                       "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "typeScheme",
-                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                            "name": "signature",
+                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                                         "typeName": "hydra.packaging.TermDefinition"}}},
                                                                                   "typeName": "hydra.packaging.Definition"}}]}}],
                                                                       "typeName": "hydra.packaging.Module"}}]}},
@@ -5401,8 +5402,8 @@
                                                                                                       "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "typeScheme",
-                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                            "name": "signature",
+                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                                         "typeName": "hydra.packaging.TermDefinition"}}},
                                                                                   "typeName": "hydra.packaging.Definition"}}]}}],
                                                                       "typeName": "hydra.packaging.Module"}}]}},
@@ -5596,11 +5597,11 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.profileBehaviourTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -5678,8 +5679,8 @@
                                                                                                               "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "value"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "typeScheme",
-                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                                        "name": "signature",
+                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                                                     "typeName": "hydra.packaging.TermDefinition"}}},
                                                                                               "typeName": "hydra.packaging.Definition"}},
                                                                                           {
@@ -5699,8 +5700,8 @@
                                                                                                               "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "value"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "typeScheme",
-                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                                        "name": "signature",
+                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                                                     "typeName": "hydra.packaging.TermDefinition"}}},
                                                                                               "typeName": "hydra.packaging.Definition"}}]}}],
                                                                                   "typeName": "hydra.packaging.Module"}},
@@ -5818,8 +5819,8 @@
                                                                                                                   "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "value"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                           {
-                                                                                                            "name": "typeScheme",
-                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                                            "name": "signature",
+                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                                                         "typeName": "hydra.packaging.TermDefinition"}}},
                                                                                                   "typeName": "hydra.packaging.Definition"}},
                                                                                               {
@@ -5839,8 +5840,8 @@
                                                                                                                   "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "value"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                           {
-                                                                                                            "name": "typeScheme",
-                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                                            "name": "signature",
+                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                                                         "typeName": "hydra.packaging.TermDefinition"}}},
                                                                                                   "typeName": "hydra.packaging.Definition"}}]}}],
                                                                                       "typeName": "hydra.packaging.Module"}},
@@ -6140,8 +6141,8 @@
                                                                                                               "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "value"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "typeScheme",
-                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                                        "name": "signature",
+                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                                                     "typeName": "hydra.packaging.TermDefinition"}}},
                                                                                               "typeName": "hydra.packaging.Definition"}},
                                                                                           {
@@ -6161,8 +6162,8 @@
                                                                                                               "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "value"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "typeScheme",
-                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                                        "name": "signature",
+                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                                                     "typeName": "hydra.packaging.TermDefinition"}}},
                                                                                               "typeName": "hydra.packaging.Definition"}}]}}],
                                                                                   "typeName": "hydra.packaging.Module"}},
@@ -6280,8 +6281,8 @@
                                                                                                                   "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "value"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                           {
-                                                                                                            "name": "typeScheme",
-                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                                            "name": "signature",
+                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                                                         "typeName": "hydra.packaging.TermDefinition"}}},
                                                                                                   "typeName": "hydra.packaging.Definition"}},
                                                                                               {
@@ -6301,8 +6302,8 @@
                                                                                                                   "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "value"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                           {
-                                                                                                            "name": "typeScheme",
-                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                                            "name": "signature",
+                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                                                         "typeName": "hydra.packaging.TermDefinition"}}},
                                                                                                   "typeName": "hydra.packaging.Definition"}}]}}],
                                                                                       "typeName": "hydra.packaging.Module"}},
@@ -6602,8 +6603,8 @@
                                                                                                               "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "value"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "typeScheme",
-                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                                        "name": "signature",
+                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                                                     "typeName": "hydra.packaging.TermDefinition"}}},
                                                                                               "typeName": "hydra.packaging.Definition"}},
                                                                                           {
@@ -6623,8 +6624,8 @@
                                                                                                               "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "value"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "typeScheme",
-                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                                        "name": "signature",
+                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                                                     "typeName": "hydra.packaging.TermDefinition"}}},
                                                                                               "typeName": "hydra.packaging.Definition"}}]}}],
                                                                                   "typeName": "hydra.packaging.Module"}},
@@ -6738,8 +6739,8 @@
                                                                                                                   "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "value"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                           {
-                                                                                                            "name": "typeScheme",
-                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                                            "name": "signature",
+                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                                                         "typeName": "hydra.packaging.TermDefinition"}}},
                                                                                                   "typeName": "hydra.packaging.Definition"}},
                                                                                               {
@@ -6759,8 +6760,8 @@
                                                                                                                   "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "value"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                           {
-                                                                                                            "name": "typeScheme",
-                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                                            "name": "signature",
+                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                                                         "typeName": "hydra.packaging.TermDefinition"}}},
                                                                                                   "typeName": "hydra.packaging.Definition"}}]}}],
                                                                                       "typeName": "hydra.packaging.Module"}},
@@ -7030,8 +7031,8 @@
                                                                                                               "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "value"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "typeScheme",
-                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                                        "name": "signature",
+                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                                                     "typeName": "hydra.packaging.TermDefinition"}}},
                                                                                               "typeName": "hydra.packaging.Definition"}},
                                                                                           {
@@ -7051,8 +7052,8 @@
                                                                                                               "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "value"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "typeScheme",
-                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                                        "name": "signature",
+                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                                                     "typeName": "hydra.packaging.TermDefinition"}}},
                                                                                               "typeName": "hydra.packaging.Definition"}}]}}],
                                                                                   "typeName": "hydra.packaging.Module"}},
@@ -7170,8 +7171,8 @@
                                                                                                                   "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "value"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                           {
-                                                                                                            "name": "typeScheme",
-                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                                            "name": "signature",
+                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                                                         "typeName": "hydra.packaging.TermDefinition"}}},
                                                                                                   "typeName": "hydra.packaging.Definition"}},
                                                                                               {
@@ -7191,8 +7192,8 @@
                                                                                                                   "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "value"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                           {
-                                                                                                            "name": "typeScheme",
-                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                                            "name": "signature",
+                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typing.TermSignature"}}}}],
                                                                                                         "typeName": "hydra.packaging.TermDefinition"}}},
                                                                                                   "typeName": "hydra.packaging.Definition"}}]}}],
                                                                                       "typeName": "hydra.packaging.Module"}},
@@ -7401,15 +7402,13 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+            "typeName": "hydra.testing.TestGroup"}}}}],
   "dependencies": [
     {"module": "hydra.validate.packaging"},
     {"module": "hydra.show.error.packaging"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
