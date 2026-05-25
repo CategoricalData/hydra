@@ -187,7 +187,7 @@ rm <stale-files>
 
 # Verify each implementation still builds
 cd heads/haskell && stack build && stack test
-./gradlew :hydra-java:compileTestJava
+(cd heads/java && ./gradlew :hydra-java:compileTestJava)
 cd heads/python && uv run pytest
 # etc.
 ```
@@ -712,7 +712,7 @@ All implementations should have the same number of passing tests
    cd heads/haskell && stack test 2>&1 | tail -5
 
    # Java
-   ./gradlew :hydra-java:test 2>&1 | grep -E 'tests.*passed'
+   (cd heads/java && ./gradlew :hydra-java:test) 2>&1 | grep -E 'tests.*passed'
 
    # Python
    cd heads/python && uv run pytest --tb=no -q 2>&1 | tail -3

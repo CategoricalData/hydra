@@ -26,6 +26,11 @@ TypeScript is a "head bud" — Phase 4 (`host=typescript`) is skipped
 because the TS runtime cannot yet host generation of coder packages in
 TypeScript's own language. See issue #126.
 
+This script does **not** run the TypeScript test suite. To validate the
+generated code, run the TypeScript head's test entry point or do a
+`/bootstrap typescript`. (Pending #387: `/test typescript` will roll
+sync + tests into one step.)
+
 ## First-run gotcha
 
 `bin/sync-packages.sh` does not build `hydra:exe:digest-check` itself.

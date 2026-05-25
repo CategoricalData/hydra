@@ -9,7 +9,7 @@
 # Files patched:
 #   heads/haskell/package.yaml
 #   demos/bootstrapping/resources/haskell/package.yaml
-#   build.gradle
+#   heads/java/build.gradle
 #   demos/bootstrapping/resources/java/build.gradle
 #   packages/hydra-scala/build.sbt
 #   heads/python/pyproject.toml
@@ -85,7 +85,7 @@ patch "$REPO_ROOT/demos/bootstrapping/resources/haskell/package.yaml" \
     "s/^version:.*$/version:      $VERSION/"
 
 # Java (build.gradle): version = 'X.Y.Z'
-patch "$REPO_ROOT/build.gradle" \
+patch "$REPO_ROOT/heads/java/build.gradle" \
     "s/version = '.*'/version = '$VERSION'/"
 
 patch "$REPO_ROOT/demos/bootstrapping/resources/java/build.gradle" \
