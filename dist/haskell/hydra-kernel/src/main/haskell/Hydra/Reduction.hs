@@ -4,7 +4,6 @@
 module Hydra.Reduction where
 import qualified Hydra.Arity as Arity
 import qualified Hydra.Checking as Checking
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Errors as Errors
@@ -22,11 +21,13 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Show.Errors as ShowErrors
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -90,7 +91,9 @@ etaExpandTerm :: Graph.Graph -> Core.Term -> Core.Term
 etaExpandTerm tx0 term0 =
 
       let primTypes =
-              Maps.fromList (Lists.map (\_gpt_p -> (Graph.primitiveName _gpt_p, (Graph.primitiveTypeScheme _gpt_p))) (Maps.elems (Graph.graphPrimitives tx0)))
+              Maps.fromList (Lists.map (\_gpt_p -> (
+                Packaging.primitiveDefinitionName (Graph.primitiveDefinition _gpt_p),
+                (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition _gpt_p))))) (Maps.elems (Graph.graphPrimitives tx0)))
           termArityWithContext =
                   \tx -> \term -> case term of
                     Core.TermAnnotated v0 -> termArityWithContext tx (Core.annotatedTermBody v0)
@@ -289,7 +292,7 @@ etaExpandTerm tx0 term0 =
                         Core.wrappedTermBody = (recurse tx (Core.wrappedTermBody v0))}))
       in (contractTerm (rewriteWithArgs [] tx0 term0))
 -- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', eliminating partial application. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references. It also assumes that type inference has already been performed. After eta expansion, type inference needs to be performed again, as new, untyped lambdas may have been added.
-etaExpandTypedTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
+etaExpandTypedTerm :: Typing.InferenceContext -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 etaExpandTypedTerm cx tx0 term0 =
 
       let rewrite =
@@ -447,7 +450,7 @@ etaReduceTerm term =
         Core.TermLambda v0 -> reduceLambda v0
         _ -> noChange
 -- | A term evaluation function which is alternatively lazy or eager
-reduceTerm :: Context.Context -> Graph.Graph -> Bool -> Core.Term -> Either Errors.Error Core.Term
+reduceTerm :: Typing.InferenceContext -> Graph.Graph -> Bool -> Core.Term -> Either Errors.Error Core.Term
 reduceTerm cx graph eager term =
 
       let reduce = \eager2 -> reduceTerm cx graph eager2
