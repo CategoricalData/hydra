@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.python.serde.annotatedRhsToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.AnnotatedRhs"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an annotated RHS"}}}],
@@ -50,13 +54,14 @@
                                 "typeName": "hydra.python.syntax.AnnotatedRhs"}}}}]},
                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                 "domain": {"variable": "hydra.python.syntax.AnnotatedRhs"},
-                "parameter": "arhs"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.AnnotatedRhs"}}},
-          "variables": []}}},
+                "parameter": "arhs"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.annotatedStatementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.AnnotatedStatement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -91,14 +96,14 @@
                             {"application": {"argument": {"variable": "stmt"}, "function": {"variable": "hydra.python.serde.statementToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.newlineSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.AnnotatedStatement"},
-                "parameter": "as_"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.AnnotatedStatement"}}},
-          "variables": []}}},
+                "parameter": "as_"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.annotationToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Annotation"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a type annotation"}}}],
@@ -115,13 +120,14 @@
                             "function": {"variable": "hydra.python.serde.expressionToExpr"}}}]},
                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                 "domain": {"variable": "hydra.python.syntax.Annotation"},
-                "parameter": "ann"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Annotation"}}},
-          "variables": []}}},
+                "parameter": "ann"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.argsToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Args"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize function arguments"}}}],
@@ -192,13 +198,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.commaSepAdaptive"}}}}},
                 "domain": {"variable": "hydra.python.syntax.Args"},
-                "parameter": "args"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Args"}}},
-          "variables": []}}},
+                "parameter": "args"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.assignmentToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Assignment"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an assignment"}}}],
@@ -234,13 +241,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.python.syntax.Assignment"}}}},
                 "domain": {"variable": "hydra.python.syntax.Assignment"},
-                "parameter": "a"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Assignment"}}},
-          "variables": []}}},
+                "parameter": "a"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.assignmentExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.AssignmentExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an assignment expression (walrus operator)"}}}],
@@ -272,14 +280,14 @@
                             {"application": {"argument": {"variable": "expr"}, "function": {"variable": "hydra.python.serde.expressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.AssignmentExpression"},
-                "parameter": "ae"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.AssignmentExpression"}}},
-          "variables": []}}},
+                "parameter": "ae"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.atomToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Atom"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python atom (literal or basic expression)"}}}],
@@ -405,13 +413,14 @@
                                 "parameter": "t"}}}],
                         "typeName": "hydra.python.syntax.Atom"}}}},
                 "domain": {"variable": "hydra.python.syntax.Atom"},
-                "parameter": "atom"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Atom"}}},
-          "variables": []}}},
+                "parameter": "atom"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.attributeToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Attribute"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an attribute access"}}}],
@@ -431,13 +440,14 @@
                                 "type": {"variable": "hydra.ast.Expr"}}}}}}},
                     "function": {"variable": "hydra.serialization.dotSep"}}},
                 "domain": {"variable": "hydra.python.syntax.Attribute"},
-                "parameter": "attr"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Attribute"}}},
-          "variables": []}}},
+                "parameter": "attr"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.awaitPrimaryToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.AwaitPrimary"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an await primary expression"}}}],
@@ -477,13 +487,14 @@
                                 "argument": {"variable": "await_"},
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}},
                 "domain": {"variable": "hydra.python.syntax.AwaitPrimary"},
-                "parameter": "ap"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.AwaitPrimary"}}},
-          "variables": []}}},
+                "parameter": "ap"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.bitwiseAndToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a bitwise AND expression"}}}],
@@ -538,13 +549,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.BitwiseAnd"},
-                "parameter": "band"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.BitwiseAnd"}}},
-          "variables": []}}},
+                "parameter": "band"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.bitwiseOrToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.BitwiseOr"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a bitwise OR expression"}}}],
@@ -599,13 +611,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.BitwiseOr"},
-                "parameter": "bor"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.BitwiseOr"}}},
-          "variables": []}}},
+                "parameter": "bor"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.bitwiseXorToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.BitwiseXor"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a bitwise XOR expression"}}}],
@@ -660,13 +673,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.BitwiseXor"},
-                "parameter": "bxor"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.BitwiseXor"}}},
-          "variables": []}}},
+                "parameter": "bxor"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.blockToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Block"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a block"}}}],
@@ -737,13 +751,14 @@
                                 "parameter": "ss"}}}],
                         "typeName": "hydra.python.syntax.Block"}}}},
                 "domain": {"variable": "hydra.python.syntax.Block"},
-                "parameter": "b"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Block"}}},
-          "variables": []}}},
+                "parameter": "b"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.capturePatternToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.CapturePattern"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a capture pattern"}}}],
@@ -754,13 +769,14 @@
                     "argument": {"application": {"argument": {"variable": "cp"}, "function": {"unwrap": "hydra.python.syntax.CapturePattern"}}},
                     "function": {"variable": "hydra.python.serde.patternCaptureTargetToExpr"}}},
                 "domain": {"variable": "hydra.python.syntax.CapturePattern"},
-                "parameter": "cp"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.CapturePattern"}}},
-          "variables": []}}},
+                "parameter": "cp"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.caseBlockToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.CaseBlock"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a case block"}}}],
@@ -825,13 +841,14 @@
                             {"application": {"argument": {"variable": "body"}, "function": {"variable": "hydra.python.serde.blockToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.newlineSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.CaseBlock"},
-                "parameter": "cb"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.CaseBlock"}}},
-          "variables": []}}},
+                "parameter": "cb"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.classDefinitionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.ClassDefinition"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a class definition"}}}],
@@ -934,14 +951,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.newlineSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.ClassDefinition"},
-                "parameter": "cd"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.ClassDefinition"}}},
-          "variables": []}}},
+                "parameter": "cd"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.classPatternToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.ClassPattern"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a class pattern"}}}],
@@ -1008,13 +1025,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.ClassPattern"},
-                "parameter": "cp"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.ClassPattern"}}},
-          "variables": []}}},
+                "parameter": "cp"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.closedPatternToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.ClosedPattern"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a closed pattern"}}}],
@@ -1084,13 +1102,14 @@
                                 "parameter": "c"}}}],
                         "typeName": "hydra.python.syntax.ClosedPattern"}}}},
                 "domain": {"variable": "hydra.python.syntax.ClosedPattern"},
-                "parameter": "cp"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.ClosedPattern"}}},
-          "variables": []}}},
+                "parameter": "cp"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.compareOpBitwiseOrPairToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a (compare-op, bitwise-or) pair as `<op> <rhs>`"}}}],
@@ -1119,14 +1138,14 @@
                             "function": {"variable": "hydra.python.serde.bitwiseOrToExpr"}}}]},
                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                 "domain": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"},
-                "parameter": "pair"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}},
-          "variables": []}}},
+                "parameter": "pair"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.compareOpToString",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.CompareOp"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -1155,13 +1174,14 @@
                           {"name": "is", "term": {"lambda": {"body": {"literal": {"string": "is"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                         "typeName": "hydra.python.syntax.CompareOp"}}}},
                 "domain": {"variable": "hydra.python.syntax.CompareOp"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.python.syntax.CompareOp"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.comparisonToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Comparison"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -1223,13 +1243,14 @@
                                       "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}}}},
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}},
                 "domain": {"variable": "hydra.python.syntax.Comparison"},
-                "parameter": "cmp"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Comparison"}}},
-          "variables": []}}},
+                "parameter": "cmp"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.compoundStatementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.CompoundStatement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a compound (multi-line) Python statement"}}}],
@@ -1300,14 +1321,14 @@
                                 "parameter": "m"}}}],
                         "typeName": "hydra.python.syntax.CompoundStatement"}}}},
                 "domain": {"variable": "hydra.python.syntax.CompoundStatement"},
-                "parameter": "cs"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.CompoundStatement"}}},
-          "variables": []}}},
+                "parameter": "cs"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.conditionalToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Conditional"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a conditional expression (ternary)"}}}],
@@ -1348,13 +1369,14 @@
                             {"application": {"argument": {"variable": "elseExpr"}, "function": {"variable": "hydra.python.serde.expressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.Conditional"},
-                "parameter": "c"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Conditional"}}},
-          "variables": []}}},
+                "parameter": "c"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.conjunctionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Conjunction"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a conjunction (and expression)"}}}],
@@ -1378,13 +1400,14 @@
                         "argument": {"variable": "hydra.serialization.inlineStyle"},
                         "function": {"application": {"argument": {"literal": {"string": "and"}}, "function": {"variable": "hydra.serialization.symbolSep"}}}}}}},
                 "domain": {"variable": "hydra.python.syntax.Conjunction"},
-                "parameter": "c"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Conjunction"}}},
-          "variables": []}}},
+                "parameter": "c"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.decoratorsToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Decorators"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize decorators"}}}],
@@ -1415,13 +1438,14 @@
                                 "type": {"variable": "hydra.ast.Expr"}}}}}}},
                     "function": {"variable": "hydra.serialization.newlineSep"}}},
                 "domain": {"variable": "hydra.python.syntax.Decorators"},
-                "parameter": "decs"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Decorators"}}},
-          "variables": []}}},
+                "parameter": "decs"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.dictToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Dict"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python dictionary"}}}],
@@ -1448,13 +1472,14 @@
                             "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
                             "function": {"variable": "hydra.serialization.curlyBracesList"}}}}}}},
                 "domain": {"variable": "hydra.python.syntax.Dict"},
-                "parameter": "d"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Dict"}}},
-          "variables": []}}},
+                "parameter": "d"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.disjunctionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Disjunction"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a disjunction (or expression)"}}}],
@@ -1478,13 +1503,14 @@
                         "argument": {"variable": "hydra.serialization.inlineStyle"},
                         "function": {"application": {"argument": {"literal": {"string": "or"}}, "function": {"variable": "hydra.serialization.symbolSep"}}}}}}},
                 "domain": {"variable": "hydra.python.syntax.Disjunction"},
-                "parameter": "d"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Disjunction"}}},
-          "variables": []}}},
+                "parameter": "d"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.dottedAsNameToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.DottedAsName"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a dotted as name"}}}],
@@ -1538,13 +1564,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.DottedAsName"},
-                "parameter": "dan"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.DottedAsName"}}},
-          "variables": []}}},
+                "parameter": "dan"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.dottedNameToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.DottedName"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a dotted name (e.g., module.submodule)"}}}],
@@ -1571,13 +1598,14 @@
                         "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
                     "function": {"variable": "hydra.serialization.cst"}}},
                 "domain": {"variable": "hydra.python.syntax.DottedName"},
-                "parameter": "dn"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.DottedName"}}},
-          "variables": []}}},
+                "parameter": "dn"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.doubleStarredKvpairToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.DoubleStarredKvpair"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a double-starred key-value pair"}}}],
@@ -1611,14 +1639,14 @@
                                 "parameter": "e"}}}],
                         "typeName": "hydra.python.syntax.DoubleStarredKvpair"}}}},
                 "domain": {"variable": "hydra.python.syntax.DoubleStarredKvpair"},
-                "parameter": "dskv"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.DoubleStarredKvpair"}}},
-          "variables": []}}},
+                "parameter": "dskv"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.expressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Expression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python expression"}}}],
@@ -1653,13 +1681,14 @@
                                 "parameter": "l"}}}],
                         "typeName": "hydra.python.syntax.Expression"}}}},
                 "domain": {"variable": "hydra.python.syntax.Expression"},
-                "parameter": "expr"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Expression"}}},
-          "variables": []}}},
+                "parameter": "expr"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.factorToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Factor"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a factor expression"}}}],
@@ -1719,13 +1748,14 @@
                                 "parameter": "p"}}}],
                         "typeName": "hydra.python.syntax.Factor"}}}},
                 "domain": {"variable": "hydra.python.syntax.Factor"},
-                "parameter": "f"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Factor"}}},
-          "variables": []}}},
+                "parameter": "f"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.functionDefRawToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.FunctionDefRaw"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a raw function definition"}}}],
@@ -1904,13 +1934,14 @@
                             {"application": {"argument": {"variable": "block"}, "function": {"variable": "hydra.python.serde.blockToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.newlineSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.FunctionDefRaw"},
-                "parameter": "fdr"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.FunctionDefRaw"}}},
-          "variables": []}}},
+                "parameter": "fdr"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.functionDefinitionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.FunctionDefinition"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a function definition"}}}],
@@ -1955,14 +1986,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.newlineSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.FunctionDefinition"},
-                "parameter": "fd"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.FunctionDefinition"}}},
-          "variables": []}}},
+                "parameter": "fd"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.groupToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Group"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a parenthesized group"}}}],
@@ -1991,13 +2022,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.python.syntax.Group"}}}},
                 "domain": {"variable": "hydra.python.syntax.Group"},
-                "parameter": "g"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Group"}}},
-          "variables": []}}},
+                "parameter": "g"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.guardToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Guard"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a guard clause"}}}],
@@ -2014,13 +2046,14 @@
                             "function": {"variable": "hydra.python.serde.namedExpressionToExpr"}}}]},
                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                 "domain": {"variable": "hydra.python.syntax.Guard"},
-                "parameter": "g"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Guard"}}},
-          "variables": []}}},
+                "parameter": "g"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.importFromToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.ImportFrom"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an import from statement"}}}],
@@ -2105,13 +2138,14 @@
                               "application": {"argument": {"variable": "targets"}, "function": {"variable": "hydra.python.serde.importFromTargetsToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.ImportFrom"},
-                "parameter": "if_"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.ImportFrom"}}},
-          "variables": []}}},
+                "parameter": "if_"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.importFromAsNameToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.ImportFromAsName"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an import from as name"}}}],
@@ -2159,14 +2193,14 @@
                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
                                     "type": {"variable": "hydra.python.syntax.Name"}}}}}}}}}}},
                 "domain": {"variable": "hydra.python.syntax.ImportFromAsName"},
-                "parameter": "ifan"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.ImportFromAsName"}}},
-          "variables": []}}},
+                "parameter": "ifan"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.importFromTargetsToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.ImportFromTargets"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize import from targets"}}}],
@@ -2236,14 +2270,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.python.syntax.ImportFromTargets"}}}},
                 "domain": {"variable": "hydra.python.syntax.ImportFromTargets"},
-                "parameter": "t"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.ImportFromTargets"}}},
-          "variables": []}}},
+                "parameter": "t"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.importNameToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.ImportName"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an import name"}}}],
@@ -2271,13 +2305,14 @@
                               "application": {"argument": {"variable": "hydra.serialization.inlineStyle"}, "function": {"variable": "hydra.serialization.commaSep"}}}}}]},
                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                 "domain": {"variable": "hydra.python.syntax.ImportName"},
-                "parameter": "in_"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.ImportName"}}},
-          "variables": []}}},
+                "parameter": "in_"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.importStatementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.ImportStatement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an import statement"}}}],
@@ -2305,14 +2340,14 @@
                                 "parameter": "f"}}}],
                         "typeName": "hydra.python.syntax.ImportStatement"}}}},
                 "domain": {"variable": "hydra.python.syntax.ImportStatement"},
-                "parameter": "is_"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.ImportStatement"}}},
-          "variables": []}}},
+                "parameter": "is_"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.inversionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Inversion"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an inversion (not expression)"}}}],
@@ -2346,13 +2381,14 @@
                                 "parameter": "c"}}}],
                         "typeName": "hydra.python.syntax.Inversion"}}}},
                 "domain": {"variable": "hydra.python.syntax.Inversion"},
-                "parameter": "i"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Inversion"}}},
-          "variables": []}}},
+                "parameter": "i"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.keywordPatternToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.KeywordPattern"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a keyword pattern"}}}],
@@ -2384,13 +2420,14 @@
                             {"application": {"argument": {"variable": "pat"}, "function": {"variable": "hydra.python.serde.patternToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.KeywordPattern"},
-                "parameter": "kp"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.KeywordPattern"}}},
-          "variables": []}}},
+                "parameter": "kp"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.keywordPatternsToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.KeywordPatterns"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize keyword patterns"}}}],
@@ -2412,14 +2449,14 @@
                     "function": {
                       "application": {"argument": {"variable": "hydra.serialization.inlineStyle"}, "function": {"variable": "hydra.serialization.commaSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.KeywordPatterns"},
-                "parameter": "kp"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.KeywordPatterns"}}},
-          "variables": []}}},
+                "parameter": "kp"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.kvpairToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Kvpair"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a key-value pair"}}}],
@@ -2456,13 +2493,14 @@
                             {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.python.serde.expressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.Kvpair"},
-                "parameter": "kv"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Kvpair"}}},
-          "variables": []}}},
+                "parameter": "kv"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.kwargToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Kwarg"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a keyword argument"}}}],
@@ -2492,13 +2530,14 @@
                             {"application": {"argument": {"variable": "expr"}, "function": {"variable": "hydra.python.serde.expressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.Kwarg"},
-                "parameter": "k"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Kwarg"}}},
-          "variables": []}}},
+                "parameter": "k"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.kwargOrDoubleStarredToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.KwargOrDoubleStarred"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a kwarg or double starred"}}}],
@@ -2532,14 +2571,14 @@
                                 "parameter": "e"}}}],
                         "typeName": "hydra.python.syntax.KwargOrDoubleStarred"}}}},
                 "domain": {"variable": "hydra.python.syntax.KwargOrDoubleStarred"},
-                "parameter": "kds"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.KwargOrDoubleStarred"}}},
-          "variables": []}}},
+                "parameter": "kds"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.kwargOrStarredToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.KwargOrStarred"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a kwarg or starred"}}}],
@@ -2568,13 +2607,14 @@
                                 "parameter": "se"}}}],
                         "typeName": "hydra.python.syntax.KwargOrStarred"}}}},
                 "domain": {"variable": "hydra.python.syntax.KwargOrStarred"},
-                "parameter": "ks"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.KwargOrStarred"}}},
-          "variables": []}}},
+                "parameter": "ks"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.lambdaToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Lambda"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a lambda expression"}}}],
@@ -2616,13 +2656,14 @@
                             "function": {"variable": "hydra.serialization.spaceSep"}}},
                         "function": {"variable": "hydra.serialization.parens"}}}}},
                 "domain": {"variable": "hydra.python.syntax.Lambda"},
-                "parameter": "l"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Lambda"}}},
-          "variables": []}}},
+                "parameter": "l"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.lambdaParamNoDefaultToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.LambdaParamNoDefault"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a lambda parameter without default"}}}],
@@ -2633,14 +2674,14 @@
                     "argument": {"application": {"argument": {"variable": "p"}, "function": {"unwrap": "hydra.python.syntax.LambdaParamNoDefault"}}},
                     "function": {"variable": "hydra.python.serde.nameToExpr"}}},
                 "domain": {"variable": "hydra.python.syntax.LambdaParamNoDefault"},
-                "parameter": "p"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.LambdaParamNoDefault"}}},
-          "variables": []}}},
+                "parameter": "p"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.lambdaParametersToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.LambdaParameters"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize lambda parameters"}}}],
@@ -2672,14 +2713,14 @@
                         "function": {
                           "application": {"argument": {"variable": "hydra.serialization.inlineStyle"}, "function": {"variable": "hydra.serialization.commaSep"}}}}}}},
                 "domain": {"variable": "hydra.python.syntax.LambdaParameters"},
-                "parameter": "lp"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.LambdaParameters"}}},
-          "variables": []}}},
+                "parameter": "lp"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.lambdaStarEtcToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.LambdaStarEtc"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize lambda star etc"}}}],
@@ -2722,13 +2763,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.python.syntax.LambdaStarEtc"}}}},
                 "domain": {"variable": "hydra.python.syntax.LambdaStarEtc"},
-                "parameter": "lse"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.LambdaStarEtc"}}},
-          "variables": []}}},
+                "parameter": "lse"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.listToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.List"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python list"}}}],
@@ -2749,13 +2791,14 @@
                                 "type": {"variable": "hydra.ast.Expr"}}}}}}},
                     "function": {"variable": "hydra.serialization.bracketListAdaptive"}}},
                 "domain": {"variable": "hydra.python.syntax.List"},
-                "parameter": "l"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.List"}}},
-          "variables": []}}},
+                "parameter": "l"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.matchStatementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.MatchStatement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a match statement"}}}],
@@ -2812,13 +2855,14 @@
                                 "function": {"variable": "hydra.serialization.tabIndentDoubleSpace"}}}]},
                         "function": {"variable": "hydra.serialization.newlineSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.MatchStatement"},
-                "parameter": "ms"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.MatchStatement"}}},
-          "variables": []}}},
+                "parameter": "ms"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.moduleToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Module"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python module to an AST expression"}}}],
@@ -2879,13 +2923,14 @@
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.ast.Expr"}}}}}}},
                         "function": {"variable": "hydra.serialization.doubleNewlineSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.Module"},
-                "parameter": "mod"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Module"}}},
-          "variables": []}}},
+                "parameter": "mod"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.nameToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Name"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python name/identifier"}}}],
@@ -2896,13 +2941,14 @@
                     "argument": {"application": {"argument": {"variable": "n"}, "function": {"unwrap": "hydra.python.syntax.Name"}}},
                     "function": {"variable": "hydra.serialization.cst"}}},
                 "domain": {"variable": "hydra.python.syntax.Name"},
-                "parameter": "n"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Name"}}},
-          "variables": []}}},
+                "parameter": "n"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.nameOrAttributeToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.NameOrAttribute"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a name or attribute"}}}],
@@ -2922,14 +2968,14 @@
                                 "type": {"variable": "hydra.ast.Expr"}}}}}}},
                     "function": {"variable": "hydra.serialization.dotSep"}}},
                 "domain": {"variable": "hydra.python.syntax.NameOrAttribute"},
-                "parameter": "noa"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.NameOrAttribute"}}},
-          "variables": []}}},
+                "parameter": "noa"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.namedExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.NamedExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a named expression"}}}],
@@ -2958,14 +3004,14 @@
                                 "parameter": "ae"}}}],
                         "typeName": "hydra.python.syntax.NamedExpression"}}}},
                 "domain": {"variable": "hydra.python.syntax.NamedExpression"},
-                "parameter": "ne"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.NamedExpression"}}},
-          "variables": []}}},
+                "parameter": "ne"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.numberToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Number"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python number literal"}}}],
@@ -3021,13 +3067,14 @@
                                 "parameter": "i"}}}],
                         "typeName": "hydra.python.syntax.Number"}}}},
                 "domain": {"variable": "hydra.python.syntax.Number"},
-                "parameter": "num"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Number"}}},
-          "variables": []}}},
+                "parameter": "num"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.orPatternToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.OrPattern"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an or pattern"}}}],
@@ -3051,13 +3098,14 @@
                         "argument": {"variable": "hydra.serialization.inlineStyle"},
                         "function": {"application": {"argument": {"literal": {"string": "|"}}, "function": {"variable": "hydra.serialization.symbolSep"}}}}}}},
                 "domain": {"variable": "hydra.python.syntax.OrPattern"},
-                "parameter": "op"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.OrPattern"}}},
-          "variables": []}}},
+                "parameter": "op"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.paramToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Param"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a parameter"}}}],
@@ -3100,13 +3148,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.Param"},
-                "parameter": "p"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Param"}}},
-          "variables": []}}},
+                "parameter": "p"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.paramNoDefaultToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.ParamNoDefault"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a parameter without default"}}}],
@@ -3120,13 +3169,14 @@
                         "function": {"project": {"fieldName": "param", "typeName": "hydra.python.syntax.ParamNoDefault"}}}},
                     "function": {"variable": "hydra.python.serde.paramToExpr"}}},
                 "domain": {"variable": "hydra.python.syntax.ParamNoDefault"},
-                "parameter": "pnd"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.ParamNoDefault"}}},
-          "variables": []}}},
+                "parameter": "pnd"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.paramNoDefaultParametersToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.ParamNoDefaultParameters"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize parameters without defaults"}}}],
@@ -3157,14 +3207,14 @@
                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
                         "function": {"variable": "hydra.serialization.commaSepAdaptive"}}}}},
                 "domain": {"variable": "hydra.python.syntax.ParamNoDefaultParameters"},
-                "parameter": "pndp"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.ParamNoDefaultParameters"}}},
-          "variables": []}}},
+                "parameter": "pndp"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.parametersToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Parameters"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize function parameters"}}}],
@@ -3200,13 +3250,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.python.syntax.Parameters"}}}},
                 "domain": {"variable": "hydra.python.syntax.Parameters"},
-                "parameter": "p"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Parameters"}}},
-          "variables": []}}},
+                "parameter": "p"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.patternToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Pattern"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a pattern"}}}],
@@ -3235,13 +3286,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.python.syntax.Pattern"}}}},
                 "domain": {"variable": "hydra.python.syntax.Pattern"},
-                "parameter": "p"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Pattern"}}},
-          "variables": []}}},
+                "parameter": "p"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.patternCaptureTargetToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.PatternCaptureTarget"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a pattern capture target"}}}],
@@ -3252,14 +3304,14 @@
                     "argument": {"application": {"argument": {"variable": "pct"}, "function": {"unwrap": "hydra.python.syntax.PatternCaptureTarget"}}},
                     "function": {"variable": "hydra.python.serde.nameToExpr"}}},
                 "domain": {"variable": "hydra.python.syntax.PatternCaptureTarget"},
-                "parameter": "pct"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.PatternCaptureTarget"}}},
-          "variables": []}}},
+                "parameter": "pct"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.patternsToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Patterns"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize patterns"}}}],
@@ -3287,13 +3339,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.python.syntax.Patterns"}}}},
                 "domain": {"variable": "hydra.python.syntax.Patterns"},
-                "parameter": "ps"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Patterns"}}},
-          "variables": []}}},
+                "parameter": "ps"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.posArgToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.PosArg"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a positional argument"}}}],
@@ -3330,13 +3383,14 @@
                                 "parameter": "e"}}}],
                         "typeName": "hydra.python.syntax.PosArg"}}}},
                 "domain": {"variable": "hydra.python.syntax.PosArg"},
-                "parameter": "pa"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.PosArg"}}},
-          "variables": []}}},
+                "parameter": "pa"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.positionalPatternsToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.PositionalPatterns"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize positional patterns"}}}],
@@ -3357,14 +3411,14 @@
                     "function": {
                       "application": {"argument": {"variable": "hydra.serialization.inlineStyle"}, "function": {"variable": "hydra.serialization.commaSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.PositionalPatterns"},
-                "parameter": "pp"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.PositionalPatterns"}}},
-          "variables": []}}},
+                "parameter": "pp"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.powerToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Power"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a power expression"}}}],
@@ -3414,13 +3468,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.Power"},
-                "parameter": "p"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Power"}}},
-          "variables": []}}},
+                "parameter": "p"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.primaryToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Primary"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a primary expression"}}}],
@@ -3448,13 +3503,14 @@
                                 "parameter": "pwr"}}}],
                         "typeName": "hydra.python.syntax.Primary"}}}},
                 "domain": {"variable": "hydra.python.syntax.Primary"},
-                "parameter": "p"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Primary"}}},
-          "variables": []}}},
+                "parameter": "p"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.primaryRhsToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.PrimaryRhs"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a primary RHS"}}}],
@@ -3516,13 +3572,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.python.syntax.PrimaryRhs"}}}},
                 "domain": {"variable": "hydra.python.syntax.PrimaryRhs"},
-                "parameter": "rhs"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.PrimaryRhs"}}},
-          "variables": []}}},
+                "parameter": "rhs"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.primaryWithRhsToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.PrimaryWithRhs"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a primary with RHS"}}}],
@@ -3553,13 +3610,14 @@
                             {"application": {"argument": {"variable": "rhs"}, "function": {"variable": "hydra.python.serde.primaryRhsToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.PrimaryWithRhs"},
-                "parameter": "pwr"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.PrimaryWithRhs"}}},
-          "variables": []}}},
+                "parameter": "pwr"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.raiseExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.RaiseExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a raise expression"}}}],
@@ -3614,14 +3672,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.RaiseExpression"},
-                "parameter": "re"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.RaiseExpression"}}},
-          "variables": []}}},
+                "parameter": "re"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.raiseStatementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.RaiseStatement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a raise statement"}}}],
@@ -3649,13 +3707,14 @@
                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                 "domain": {"variable": "hydra.python.syntax.RaiseStatement"},
-                "parameter": "rs"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.RaiseStatement"}}},
-          "variables": []}}},
+                "parameter": "rs"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.relativeImportPrefixToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.RelativeImportPrefix"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a relative import prefix"}}}],
@@ -3683,14 +3742,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.python.syntax.RelativeImportPrefix"}}}},
                 "domain": {"variable": "hydra.python.syntax.RelativeImportPrefix"},
-                "parameter": "p"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.RelativeImportPrefix"}}},
-          "variables": []}}},
+                "parameter": "p"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.returnStatementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.ReturnStatement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a return statement"}}}],
@@ -3718,14 +3777,14 @@
                               "application": {"argument": {"variable": "hydra.serialization.inlineStyle"}, "function": {"variable": "hydra.serialization.commaSep"}}}}}]},
                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                 "domain": {"variable": "hydra.python.syntax.ReturnStatement"},
-                "parameter": "rs"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.ReturnStatement"}}},
-          "variables": []}}},
+                "parameter": "rs"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.setToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Set"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python set"}}}],
@@ -3746,13 +3805,14 @@
                                 "type": {"variable": "hydra.ast.Expr"}}}}}}},
                     "function": {"variable": "hydra.serialization.bracesListAdaptive"}}},
                 "domain": {"variable": "hydra.python.syntax.Set"},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Set"}}},
-          "variables": []}}},
+                "parameter": "s"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.shiftExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.ShiftExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a shift expression"}}}],
@@ -3766,14 +3826,14 @@
                         "function": {"project": {"fieldName": "rhs", "typeName": "hydra.python.syntax.ShiftExpression"}}}},
                     "function": {"variable": "hydra.python.serde.sumToExpr"}}},
                 "domain": {"variable": "hydra.python.syntax.ShiftExpression"},
-                "parameter": "se"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.ShiftExpression"}}},
-          "variables": []}}},
+                "parameter": "se"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.simpleStatementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.SimpleStatement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a simple (single-line) Python statement"}}}],
@@ -3894,14 +3954,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.python.syntax.SimpleStatement"}}}},
                 "domain": {"variable": "hydra.python.syntax.SimpleStatement"},
-                "parameter": "ss"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.SimpleStatement"}}},
-          "variables": []}}},
+                "parameter": "ss"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.simpleTypeParameterToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.SimpleTypeParameter"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a simple type parameter"}}}],
@@ -3915,14 +3975,14 @@
                         "function": {"project": {"fieldName": "name", "typeName": "hydra.python.syntax.SimpleTypeParameter"}}}},
                     "function": {"variable": "hydra.python.serde.nameToExpr"}}},
                 "domain": {"variable": "hydra.python.syntax.SimpleTypeParameter"},
-                "parameter": "stp"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.SimpleTypeParameter"}}},
-          "variables": []}}},
+                "parameter": "stp"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.singleTargetToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.SingleTarget"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a single target"}}}],
@@ -3957,13 +4017,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.python.syntax.SingleTarget"}}}},
                 "domain": {"variable": "hydra.python.syntax.SingleTarget"},
-                "parameter": "st"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.SingleTarget"}}},
-          "variables": []}}},
+                "parameter": "st"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.sliceToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Slice"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a slice"}}}],
@@ -3991,13 +4052,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.python.syntax.Slice"}}}},
                 "domain": {"variable": "hydra.python.syntax.Slice"},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Slice"}}},
-          "variables": []}}},
+                "parameter": "s"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.sliceOrStarredExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.SliceOrStarredExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a slice or starred expression"}}}],
@@ -4026,14 +4088,14 @@
                                 "parameter": "se"}}}],
                         "typeName": "hydra.python.syntax.SliceOrStarredExpression"}}}},
                 "domain": {"variable": "hydra.python.syntax.SliceOrStarredExpression"},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.SliceOrStarredExpression"}}},
-          "variables": []}}},
+                "parameter": "s"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.slicesToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Slices"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize slices"}}}],
@@ -4078,13 +4140,14 @@
                         "function": {
                           "application": {"argument": {"variable": "hydra.serialization.inlineStyle"}, "function": {"variable": "hydra.serialization.commaSep"}}}}}}},
                 "domain": {"variable": "hydra.python.syntax.Slices"},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Slices"}}},
-          "variables": []}}},
+                "parameter": "s"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.starAtomToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.StarAtom"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a star atom"}}}],
@@ -4126,13 +4189,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.python.syntax.StarAtom"}}}},
                 "domain": {"variable": "hydra.python.syntax.StarAtom"},
-                "parameter": "sa"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.StarAtom"}}},
-          "variables": []}}},
+                "parameter": "sa"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.starExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.StarExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a star expression"}}}],
@@ -4166,13 +4230,14 @@
                                 "parameter": "e"}}}],
                         "typeName": "hydra.python.syntax.StarExpression"}}}},
                 "domain": {"variable": "hydra.python.syntax.StarExpression"},
-                "parameter": "se"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.StarExpression"}}},
-          "variables": []}}},
+                "parameter": "se"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.starNamedExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.StarNamedExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a star named expression"}}}],
@@ -4206,14 +4271,14 @@
                                 "parameter": "ne"}}}],
                         "typeName": "hydra.python.syntax.StarNamedExpression"}}}},
                 "domain": {"variable": "hydra.python.syntax.StarNamedExpression"},
-                "parameter": "sne"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.StarNamedExpression"}}},
-          "variables": []}}},
+                "parameter": "sne"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.starTargetToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.StarTarget"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a star target"}}}],
@@ -4248,13 +4313,14 @@
                                 "parameter": "inner"}}}],
                         "typeName": "hydra.python.syntax.StarTarget"}}}},
                 "domain": {"variable": "hydra.python.syntax.StarTarget"},
-                "parameter": "st"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.StarTarget"}}},
-          "variables": []}}},
+                "parameter": "st"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.starredExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.StarredExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a starred expression"}}}],
@@ -4271,14 +4337,14 @@
                             "function": {"variable": "hydra.python.serde.expressionToExpr"}}}]},
                     "function": {"variable": "hydra.serialization.noSep"}}},
                 "domain": {"variable": "hydra.python.syntax.StarredExpression"},
-                "parameter": "se"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.StarredExpression"}}},
-          "variables": []}}},
+                "parameter": "se"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.statementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Statement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python statement"}}}],
@@ -4327,13 +4393,14 @@
                                 "parameter": "c"}}}],
                         "typeName": "hydra.python.syntax.Statement"}}}},
                 "domain": {"variable": "hydra.python.syntax.Statement"},
-                "parameter": "stmt"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Statement"}}},
-          "variables": []}}},
+                "parameter": "stmt"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.stringPrefixToText",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.StringPrefix"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -4358,13 +4425,14 @@
                             "term": {"lambda": {"body": {"literal": {"string": "u"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                         "typeName": "hydra.python.syntax.StringPrefix"}}}},
                 "domain": {"variable": "hydra.python.syntax.StringPrefix"},
-                "parameter": "p"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.python.syntax.StringPrefix"}}},
-          "variables": []}}},
+                "parameter": "p"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.stringToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.String"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python string literal"}}}],
@@ -4488,13 +4556,14 @@
                                     "parameter": "_"}}}],
                             "typeName": "hydra.python.syntax.QuoteStyle"}}}}}},
                 "domain": {"variable": "hydra.python.syntax.String"},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.String"}}},
-          "variables": []}}},
+                "parameter": "s"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.subjectExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.SubjectExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a subject expression"}}}],
@@ -4522,14 +4591,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.python.syntax.SubjectExpression"}}}},
                 "domain": {"variable": "hydra.python.syntax.SubjectExpression"},
-                "parameter": "se"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.SubjectExpression"}}},
-          "variables": []}}},
+                "parameter": "se"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.sumToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Sum"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a sum expression"}}}],
@@ -4541,13 +4610,14 @@
                       "application": {"argument": {"variable": "s"}, "function": {"project": {"fieldName": "rhs", "typeName": "hydra.python.syntax.Sum"}}}},
                     "function": {"variable": "hydra.python.serde.termToExpr"}}},
                 "domain": {"variable": "hydra.python.syntax.Sum"},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Sum"}}},
-          "variables": []}}},
+                "parameter": "s"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.tPrimaryToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.TPrimary"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a target-side primary expression"}}}],
@@ -4596,13 +4666,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.python.syntax.TPrimary"}}}},
                 "domain": {"variable": "hydra.python.syntax.TPrimary"},
-                "parameter": "tp"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.TPrimary"}}},
-          "variables": []}}},
+                "parameter": "tp"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.tPrimaryAndNameToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.TPrimaryAndName"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a TPrimaryAndName as primary.name"}}}],
@@ -4634,14 +4705,14 @@
                             {"application": {"argument": {"variable": "name_"}, "function": {"variable": "hydra.python.serde.nameToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.TPrimaryAndName"},
-                "parameter": "pn"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.TPrimaryAndName"}}},
-          "variables": []}}},
+                "parameter": "pn"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.targetWithStarAtomToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.TargetWithStarAtom"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a target with star atom"}}}],
@@ -4676,14 +4747,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.python.syntax.TargetWithStarAtom"}}}},
                 "domain": {"variable": "hydra.python.syntax.TargetWithStarAtom"},
-                "parameter": "t"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.TargetWithStarAtom"}}},
-          "variables": []}}},
+                "parameter": "t"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.termToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Term"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a term expression"}}}],
@@ -4695,13 +4766,14 @@
                       "application": {"argument": {"variable": "t"}, "function": {"project": {"fieldName": "rhs", "typeName": "hydra.python.syntax.Term"}}}},
                     "function": {"variable": "hydra.python.serde.factorToExpr"}}},
                 "domain": {"variable": "hydra.python.syntax.Term"},
-                "parameter": "t"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Term"}}},
-          "variables": []}}},
+                "parameter": "t"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.tupleToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Tuple"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python tuple"}}}],
@@ -4795,13 +4867,14 @@
                                 "function": {"variable": "hydra.serialization.parenListAdaptive"}}},
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
                 "domain": {"variable": "hydra.python.syntax.Tuple"},
-                "parameter": "t"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Tuple"}}},
-          "variables": []}}},
+                "parameter": "t"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.typeAliasToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.TypeAlias"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a type alias"}}}],
@@ -4885,13 +4958,14 @@
                             {"application": {"argument": {"variable": "expr"}, "function": {"variable": "hydra.python.serde.expressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.TypeAlias"},
-                "parameter": "ta"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.TypeAlias"}}},
-          "variables": []}}},
+                "parameter": "ta"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.typeParameterToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.TypeParameter"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a type parameter"}}}],
@@ -4927,13 +5001,14 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.python.syntax.TypeParameter"}}}},
                 "domain": {"variable": "hydra.python.syntax.TypeParameter"},
-                "parameter": "tp"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.TypeParameter"}}},
-          "variables": []}}},
+                "parameter": "tp"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.typedAssignmentToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.TypedAssignment"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a typed assignment"}}}],
@@ -4993,14 +5068,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.TypedAssignment"},
-                "parameter": "ta"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.TypedAssignment"}}},
-          "variables": []}}},
+                "parameter": "ta"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.untypedAssignmentToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.UntypedAssignment"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an untyped assignment"}}}],
@@ -5045,14 +5120,14 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.UntypedAssignment"},
-                "parameter": "ua"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.UntypedAssignment"}}},
-          "variables": []}}},
+                "parameter": "ua"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.valuePatternToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.ValuePattern"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a value pattern"}}}],
@@ -5063,13 +5138,14 @@
                     "argument": {"application": {"argument": {"variable": "vp"}, "function": {"unwrap": "hydra.python.syntax.ValuePattern"}}},
                     "function": {"variable": "hydra.python.serde.attributeToExpr"}}},
                 "domain": {"variable": "hydra.python.syntax.ValuePattern"},
-                "parameter": "vp"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.ValuePattern"}}},
-          "variables": []}}},
+                "parameter": "vp"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.whileStatementToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.WhileStatement"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a while statement"}}}],
@@ -5149,13 +5225,16 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.newlineSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.WhileStatement"},
-                "parameter": "ws"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.WhileStatement"}}},
-          "variables": []}}},
+                "parameter": "ws"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.escapePythonString",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -5297,16 +5376,14 @@
                     "domain": {"literal": {"string": {}}},
                     "parameter": "s"}},
                 "domain": {"literal": {"boolean": {}}},
-                "parameter": "doubleQuoted"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
-              "domain": {"literal": {"boolean": {}}}}},
-          "variables": []}}},
+                "parameter": "doubleQuoted"}}}}}},
     {
       "term": {
         "name": "hydra.python.serde.pythonFloatLiteralText",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -5356,13 +5433,14 @@
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}}}}}},
                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}},
             "domain": {"literal": {"string": {}}},
-            "parameter": "s"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+            "parameter": "s"}}}},
     {
       "term": {
         "name": "hydra.python.serde.toPythonComments",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -5424,10 +5502,7 @@
                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}}}}}},
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "doc_"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
-          "variables": []}}}],
+                "parameter": "doc_"}}}}}}],
   "dependencies": [
     {"module": "hydra.constants"},
     {"module": "hydra.serialization"},
@@ -5436,7 +5511,6 @@
     {"module": "hydra.ast"},
     {"module": "hydra.classes"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

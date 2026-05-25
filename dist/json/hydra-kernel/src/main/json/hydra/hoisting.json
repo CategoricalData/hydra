@@ -3,6 +3,14 @@
     {
       "term": {
         "name": "hydra.hoisting.augmentBindingsWithNewFreeVars",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg1", "type": {"set": {"variable": "hydra.core.Name"}}},
+            {"isLazy": false, "name": "arg2", "type": {"list": {"variable": "hydra.core.Binding"}}}],
+          "result": {
+            "type": {"pair": {"first": {"list": {"variable": "hydra.core.Binding"}}, "second": {"variable": "hydra.typing.TermSubst"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -533,22 +541,14 @@
                     "domain": {"set": {"variable": "hydra.core.Name"}},
                     "parameter": "boundVars"}},
                 "domain": {"variable": "hydra.graph.Graph"},
-                "parameter": "cx"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"pair": {"first": {"list": {"variable": "hydra.core.Binding"}}, "second": {"variable": "hydra.typing.TermSubst"}}},
-                      "domain": {"list": {"variable": "hydra.core.Binding"}}}},
-                  "domain": {"set": {"variable": "hydra.core.Name"}}}},
-              "domain": {"variable": "hydra.graph.Graph"}}},
-          "variables": []}}},
+                "parameter": "cx"}}}}}},
     {
       "term": {
         "name": "hydra.hoisting.bindingIsPolymorphic",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Binding"}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -587,13 +587,16 @@
                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"boolean": {}}}}},
                                 "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}},
                 "domain": {"variable": "hydra.core.Binding"},
-                "parameter": "binding"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Binding"}}},
-          "variables": []}}},
+                "parameter": "binding"}}}}}},
     {
       "term": {
         "name": "hydra.hoisting.bindingUsesContextTypeVars",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Binding"}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -662,16 +665,16 @@
                     "domain": {"variable": "hydra.core.Binding"},
                     "parameter": "binding"}},
                 "domain": {"variable": "hydra.graph.Graph"},
-                "parameter": "cx"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Binding"}}},
-              "domain": {"variable": "hydra.graph.Graph"}}},
-          "variables": []}}},
+                "parameter": "cx"}}}}}},
     {
       "term": {
         "name": "hydra.hoisting.countVarOccurrences",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -751,16 +754,14 @@
                     "domain": {"variable": "hydra.core.Term"},
                     "parameter": "term"}},
                 "domain": {"variable": "hydra.core.Name"},
-                "parameter": "name"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"literal": {"integer": {"int32": {}}}}, "domain": {"variable": "hydra.core.Term"}}},
-              "domain": {"variable": "hydra.core.Name"}}},
-          "variables": []}}},
+                "parameter": "name"}}}}}},
     {
       "term": {
         "name": "hydra.hoisting.hoistAllLetBindings",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Let"}}],
+          "result": {"type": {"variable": "hydra.core.Let"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -840,13 +841,16 @@
                                     "argument": {"lambda": {"body": {"literal": {"boolean": true}}, "domain": {"variable": "hydra.core.Binding"}, "parameter": "_"}},
                                     "function": {"variable": "hydra.hoisting.hoistLetBindingsWithPredicate"}}}}}}}}}}},
                 "domain": {"variable": "hydra.core.Let"},
-                "parameter": "let0"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Let"}, "domain": {"variable": "hydra.core.Let"}}},
-          "variables": []}}},
+                "parameter": "let0"}}}}}},
     {
       "term": {
         "name": "hydra.hoisting.hoistCaseStatements",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -858,16 +862,14 @@
             "body": {
               "application": {
                 "argument": {"variable": "hydra.hoisting.shouldHoistCaseStatement"},
-                "function": {"variable": "hydra.hoisting.hoistSubterms"}}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.Term"}}},
-              "domain": {"variable": "hydra.graph.Graph"}}},
-          "variables": []}}},
+                "function": {"variable": "hydra.hoisting.hoistSubterms"}}}}}}},
     {
       "term": {
         "name": "hydra.hoisting.hoistCaseStatementsInGraph",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.core.Binding"}}}],
+          "result": {"type": {"list": {"variable": "hydra.core.Binding"}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -959,14 +961,20 @@
                                 "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                             "body": {"application": {"argument": {"variable": "term1"}, "function": {"variable": "hydra.environment.termAsBindings"}}}}}}}}},
                 "domain": {"list": {"variable": "hydra.core.Binding"}},
-                "parameter": "bindings"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"list": {"variable": "hydra.core.Binding"}}, "domain": {"list": {"variable": "hydra.core.Binding"}}}},
-          "variables": []}}},
+                "parameter": "bindings"}}}}}},
     {
       "term": {
         "name": "hydra.hoisting.hoistLetBindingsWithContext",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Binding"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Let"}}],
+          "result": {"type": {"variable": "hydra.core.Let"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -997,19 +1005,27 @@
                     "domain": {"variable": "hydra.graph.Graph"},
                     "parameter": "cx"}},
                 "domain": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Binding"}}},
-                "parameter": "isParentBinding"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"function": {"codomain": {"variable": "hydra.core.Let"}, "domain": {"variable": "hydra.core.Let"}}},
-                  "domain": {"variable": "hydra.graph.Graph"}}},
-              "domain": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Binding"}}}}},
-          "variables": []}}},
+                "parameter": "isParentBinding"}}}}}},
     {
       "term": {
         "name": "hydra.hoisting.hoistLetBindingsWithPredicate",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Binding"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "function": {
+                  "codomain": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Binding"}}},
+                  "domain": {"variable": "hydra.graph.Graph"}}}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Let"}}],
+          "result": {"type": {"variable": "hydra.core.Let"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3265,25 +3281,19 @@
                         "domain": {"variable": "hydra.graph.Graph"}}},
                     "parameter": "shouldHoistBinding"}},
                 "domain": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Binding"}}},
-                "parameter": "isParentBinding"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"function": {"codomain": {"variable": "hydra.core.Let"}, "domain": {"variable": "hydra.core.Let"}}},
-                      "domain": {"variable": "hydra.graph.Graph"}}},
-                  "domain": {
-                    "function": {
-                      "codomain": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Binding"}}},
-                      "domain": {"variable": "hydra.graph.Graph"}}}}},
-              "domain": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Binding"}}}}},
-          "variables": []}}},
+                "parameter": "isParentBinding"}}}}}},
     {
       "term": {
         "name": "hydra.hoisting.hoistPolymorphicLetBindings",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Binding"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Let"}}],
+          "result": {"type": {"variable": "hydra.core.Let"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3362,16 +3372,23 @@
                     "domain": {"variable": "hydra.core.Let"},
                     "parameter": "let0"}},
                 "domain": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Binding"}}},
-                "parameter": "isParentBinding"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.Let"}, "domain": {"variable": "hydra.core.Let"}}},
-              "domain": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Binding"}}}}},
-          "variables": []}}},
+                "parameter": "isParentBinding"}}}}}},
     {
       "term": {
         "name": "hydra.hoisting.hoistSubterms",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "function": {
+                  "codomain": {"literal": {"boolean": {}}},
+                  "domain": {"pair": {"first": {"list": {"variable": "hydra.paths.SubtermStep"}}, "second": {"variable": "hydra.core.Term"}}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -4597,22 +4614,14 @@
                   "function": {
                     "codomain": {"literal": {"boolean": {}}},
                     "domain": {"pair": {"first": {"list": {"variable": "hydra.paths.SubtermStep"}}, "second": {"variable": "hydra.core.Term"}}}}},
-                "parameter": "shouldHoist"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.Term"}}},
-                  "domain": {"variable": "hydra.graph.Graph"}}},
-              "domain": {
-                "function": {
-                  "codomain": {"literal": {"boolean": {}}},
-                  "domain": {"pair": {"first": {"list": {"variable": "hydra.paths.SubtermStep"}}, "second": {"variable": "hydra.core.Term"}}}}}}},
-          "variables": []}}},
+                "parameter": "shouldHoist"}}}}}},
     {
       "term": {
         "name": "hydra.hoisting.isApplicationFunction",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.paths.SubtermStep"}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -4631,13 +4640,14 @@
                         "default": {"literal": {"boolean": false}},
                         "typeName": "hydra.paths.SubtermStep"}}}},
                 "domain": {"variable": "hydra.paths.SubtermStep"},
-                "parameter": "acc"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.paths.SubtermStep"}}},
-          "variables": []}}},
+                "parameter": "acc"}}}}}},
     {
       "term": {
         "name": "hydra.hoisting.isLambdaBody",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.paths.SubtermStep"}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Check whether a SubtermStep is the lambdaBody step"}}}],
@@ -4655,13 +4665,14 @@
                         "default": {"literal": {"boolean": false}},
                         "typeName": "hydra.paths.SubtermStep"}}}},
                 "domain": {"variable": "hydra.paths.SubtermStep"},
-                "parameter": "acc"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.paths.SubtermStep"}}},
-          "variables": []}}},
+                "parameter": "acc"}}}}}},
     {
       "term": {
         "name": "hydra.hoisting.isUnionElimination",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Check if a term is a union elimination (case statement)"}}}],
@@ -4680,13 +4691,14 @@
                         "default": {"literal": {"boolean": false}},
                         "typeName": "hydra.core.Term"}}}},
                 "domain": {"variable": "hydra.core.Term"},
-                "parameter": "term"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Term"}}},
-          "variables": []}}},
+                "parameter": "term"}}}}}},
     {
       "term": {
         "name": "hydra.hoisting.isUnionEliminationApplication",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -4721,13 +4733,14 @@
                         "default": {"literal": {"boolean": false}},
                         "typeName": "hydra.core.Term"}}}},
                 "domain": {"variable": "hydra.core.Term"},
-                "parameter": "term"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Term"}}},
-          "variables": []}}},
+                "parameter": "term"}}}}}},
     {
       "term": {
         "name": "hydra.hoisting.normalizePathForHoisting",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}],
+          "result": {"type": {"list": {"variable": "hydra.paths.SubtermStep"}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -4880,16 +4893,16 @@
                           "variables": []}}],
                     "body": {"application": {"argument": {"variable": "path"}, "function": {"variable": "go"}}}}},
                 "domain": {"list": {"variable": "hydra.paths.SubtermStep"}},
-                "parameter": "path"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"list": {"variable": "hydra.paths.SubtermStep"}},
-              "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
-          "variables": []}}},
+                "parameter": "path"}}}}}},
     {
       "term": {
         "name": "hydra.hoisting.shouldHoistAll",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -4906,16 +4919,18 @@
                         "domain": {"variable": "t0"},
                         "parameter": "_"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.hoisting.shouldHoistCaseStatement",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"pair": {"first": {"list": {"variable": "hydra.paths.SubtermStep"}}, "second": {"variable": "hydra.core.Term"}}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -5023,16 +5038,16 @@
                                         "function": {"variable": "hydra.lib.logic.not"}}},
                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"boolean": {}}}}}}}}}}}}}}},
                 "domain": {"pair": {"first": {"list": {"variable": "hydra.paths.SubtermStep"}}, "second": {"variable": "hydra.core.Term"}}},
-                "parameter": "pathAndTerm"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"literal": {"boolean": {}}},
-              "domain": {"pair": {"first": {"list": {"variable": "hydra.paths.SubtermStep"}}, "second": {"variable": "hydra.core.Term"}}}}},
-          "variables": []}}},
+                "parameter": "pathAndTerm"}}}}}},
     {
       "term": {
         "name": "hydra.hoisting.shouldHoistPolymorphic",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Binding"}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -5058,16 +5073,19 @@
                     "domain": {"variable": "hydra.core.Binding"},
                     "parameter": "binding"}},
                 "domain": {"variable": "hydra.graph.Graph"},
-                "parameter": "cx"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Binding"}}},
-              "domain": {"variable": "hydra.graph.Graph"}}},
-          "variables": []}}},
+                "parameter": "cx"}}}}}},
     {
       "term": {
         "name": "hydra.hoisting.updateHoistState",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.paths.SubtermStep"}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"pair": {"first": {"literal": {"boolean": {}}}, "second": {"literal": {"boolean": {}}}}}}],
+          "result": {"type": {"pair": {"first": {"literal": {"boolean": {}}}, "second": {"literal": {"boolean": {}}}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -5317,16 +5335,7 @@
                     "domain": {"pair": {"first": {"literal": {"boolean": {}}}, "second": {"literal": {"boolean": {}}}}},
                     "parameter": "state"}},
                 "domain": {"variable": "hydra.paths.SubtermStep"},
-                "parameter": "accessor"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"pair": {"first": {"literal": {"boolean": {}}}, "second": {"literal": {"boolean": {}}}}},
-                  "domain": {"pair": {"first": {"literal": {"boolean": {}}}, "second": {"literal": {"boolean": {}}}}}}},
-              "domain": {"variable": "hydra.paths.SubtermStep"}}},
-          "variables": []}}}],
+                "parameter": "accessor"}}}}}}],
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.rewriting"},
@@ -5340,7 +5349,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

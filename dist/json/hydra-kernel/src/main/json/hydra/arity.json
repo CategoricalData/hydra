@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.arity.primitiveArity",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graph.Primitive"}}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -15,25 +19,24 @@
                   "application": {
                     "argument": {
                       "application": {
-                        "argument": {"variable": "arg_"},
-                        "function": {"project": {"fieldName": "typeScheme", "typeName": "hydra.graph.Primitive"}}}},
-                    "function": {
-                      "lambda": {
-                        "body": {
+                        "argument": {
                           "application": {
                             "argument": {
-                              "application": {"argument": {"variable": "arg_"}, "function": {"project": {"fieldName": "body", "typeName": "hydra.core.TypeScheme"}}}},
-                            "function": {"variable": "hydra.arity.typeArity"}}},
-                        "domain": {"variable": "hydra.core.TypeScheme"},
-                        "parameter": "arg_"}}}},
+                              "application": {
+                                "argument": {"variable": "prim"},
+                                "function": {"project": {"fieldName": "definition", "typeName": "hydra.graph.Primitive"}}}},
+                            "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.PrimitiveDefinition"}}}},
+                        "function": {"project": {"fieldName": "parameters", "typeName": "hydra.typing.TermSignature"}}}},
+                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.typing.Parameter"}}}}},
                 "domain": {"variable": "hydra.graph.Primitive"},
-                "parameter": "arg_"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"integer": {"int32": {}}}}, "domain": {"variable": "hydra.graph.Primitive"}}},
-          "variables": []}}},
+                "parameter": "prim"}}}}}},
     {
       "term": {
         "name": "hydra.arity.termArity",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Find the arity (expected number of arguments) of a term"}}}],
@@ -108,13 +111,14 @@
                     "term": {
                       "lambda": {"body": {"literal": {"integer": {"int32": 1}}}, "domain": {"variable": "hydra.core.Name"}, "parameter": "_"}}}],
                 "default": {"literal": {"integer": {"int32": 0}}},
-                "typeName": "hydra.core.Term"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"integer": {"int32": {}}}}, "domain": {"variable": "hydra.core.Term"}}},
-          "variables": []}}},
+                "typeName": "hydra.core.Term"}}}}}},
     {
       "term": {
         "name": "hydra.arity.typeArity",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Find the arity (expected number of arguments) of a type"}}}],
@@ -182,13 +186,14 @@
                         "domain": {"variable": "hydra.core.FunctionType"},
                         "parameter": "f"}}}],
                 "default": {"literal": {"integer": {"int32": 0}}},
-                "typeName": "hydra.core.Type"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"integer": {"int32": {}}}}, "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "typeName": "hydra.core.Type"}}}}}},
     {
       "term": {
         "name": "hydra.arity.typeSchemeArity",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.TypeScheme"}}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -203,13 +208,14 @@
                       "application": {"argument": {"variable": "arg_"}, "function": {"project": {"fieldName": "body", "typeName": "hydra.core.TypeScheme"}}}},
                     "function": {"variable": "hydra.arity.typeArity"}}},
                 "domain": {"variable": "hydra.core.TypeScheme"},
-                "parameter": "arg_"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"integer": {"int32": {}}}}, "domain": {"variable": "hydra.core.TypeScheme"}}},
-          "variables": []}}},
+                "parameter": "arg_"}}}}}},
     {
       "term": {
         "name": "hydra.arity.uncurryType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"list": {"variable": "hydra.core.Type"}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -294,15 +300,11 @@
                         "default": {"list": [{"variable": "t"}]},
                         "typeName": "hydra.core.Type"}}}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "t"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"list": {"variable": "hydra.core.Type"}}, "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}}],
+                "parameter": "t"}}}}}}],
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

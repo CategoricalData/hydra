@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.show.typing.typeConstraint",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.TypeConstraint"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Show a type constraint as a string"}}}],
@@ -34,13 +38,14 @@
                             {"application": {"argument": {"variable": "rtyp"}, "function": {"variable": "hydra.show.core.type"}}}]},
                         "function": {"variable": "hydra.lib.strings.cat"}}}}},
                 "domain": {"variable": "hydra.typing.TypeConstraint"},
-                "parameter": "tc"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.typing.TypeConstraint"}}},
-          "variables": []}}},
+                "parameter": "tc"}}}}}},
     {
       "term": {
         "name": "hydra.show.typing.typeSubst",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.TypeSubst"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Show a type substitution as a string"}}}],
@@ -139,16 +144,12 @@
                             {"literal": {"string": "}"}}]},
                         "function": {"variable": "hydra.lib.strings.cat"}}}}},
                 "domain": {"variable": "hydra.typing.TypeSubst"},
-                "parameter": "ts"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.typing.TypeSubst"}}},
-          "variables": []}}}],
+                "parameter": "ts"}}}}}}],
   "dependencies": [
     {"module": "hydra.show.core"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

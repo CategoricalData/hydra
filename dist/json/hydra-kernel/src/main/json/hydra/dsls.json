@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.dsls.collectForallVars",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"list": {"variable": "hydra.core.Name"}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Collect forall type variable names from a type"}}}],
@@ -48,13 +52,14 @@
                         "default": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}},
                         "typeName": "hydra.core.Type"}}}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "typ"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"list": {"variable": "hydra.core.Name"}}, "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "parameter": "typ"}}}}}},
     {
       "term": {
         "name": "hydra.dsls.deduplicateBindings",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.core.Binding"}}}],
+          "result": {"type": {"list": {"variable": "hydra.core.Binding"}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -141,14 +146,14 @@
                                   "typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"list": {"variable": "hydra.core.Binding"}}}},
                                 "type": {"variable": "hydra.core.Binding"}}}}}}}}},
                 "domain": {"list": {"variable": "hydra.core.Binding"}},
-                "parameter": "bindings"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"list": {"variable": "hydra.core.Binding"}}, "domain": {"list": {"variable": "hydra.core.Binding"}}}},
-          "variables": []}}},
+                "parameter": "bindings"}}}}}},
     {
       "term": {
         "name": "hydra.dsls.dslBindingName",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"variable": "hydra.core.Name"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -280,13 +285,16 @@
                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.core.Name"}}},
                                             "type": {"list": {"literal": {"string": {}}}}}}}}}}}}}}}}}},
                 "domain": {"variable": "hydra.core.Name"},
-                "parameter": "n"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Name"}, "domain": {"variable": "hydra.core.Name"}}},
-          "variables": []}}},
+                "parameter": "n"}}}}}},
     {
       "term": {
         "name": "hydra.dsls.dslDefinitionName",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"variable": "hydra.core.Name"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -407,16 +415,18 @@
                     "domain": {"literal": {"string": {}}},
                     "parameter": "localName"}},
                 "domain": {"variable": "hydra.core.Name"},
-                "parameter": "typeName"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.Name"}, "domain": {"literal": {"string": {}}}}},
-              "domain": {"variable": "hydra.core.Name"}}},
-          "variables": []}}},
+                "parameter": "typeName"}}}}}},
     {
       "term": {
         "name": "hydra.dsls.dslModule",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.packaging.Module"}}],
+          "result": {
+            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"maybe": {"variable": "hydra.packaging.Module"}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -593,9 +603,18 @@
                                                                                                 "term": {
                                                                                                   "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "term", "typeName": "hydra.core.Binding"}}}}},
                                                                                               {
-                                                                                                "name": "typeScheme",
+                                                                                                "name": "signature",
                                                                                                 "term": {
-                                                                                                  "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "typeScheme", "typeName": "hydra.core.Binding"}}}}}],
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "typeScheme", "typeName": "hydra.core.Binding"}}}},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "hydra.scoping.typeSchemeToTermSignature"},
+                                                                                                        "function": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                                                                            "type": {"variable": "hydra.typing.TermSignature"}}}}}}}}],
                                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
                                                                                       "typeName": "hydra.packaging.Definition"}},
                                                                                   "domain": {"variable": "hydra.core.Binding"},
@@ -853,22 +872,14 @@
                         "parameter": "graph"}},
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"maybe": {"variable": "hydra.packaging.Module"}}}},
-                      "domain": {"variable": "hydra.packaging.Module"}}},
-                  "domain": {"variable": "hydra.graph.Graph"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.dsls.dslNamespace",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.ModuleName"}}],
+          "result": {"type": {"variable": "hydra.packaging.ModuleName"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -965,14 +976,17 @@
                                           "typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
                                         "type": {"pair": {"first": {"literal": {"string": {}}}, "second": {"list": {"literal": {"string": {}}}}}}}}}}}}}}}}}},
                 "domain": {"variable": "hydra.packaging.ModuleName"},
-                "parameter": "ns"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.packaging.ModuleName"}, "domain": {"variable": "hydra.packaging.ModuleName"}}},
-          "variables": []}}},
+                "parameter": "ns"}}}}}},
     {
       "term": {
         "name": "hydra.dsls.dslTypeScheme",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.core.Type"}}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"variable": "hydra.core.TypeScheme"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -1089,19 +1103,17 @@
                     "domain": {"list": {"variable": "hydra.core.Type"}},
                     "parameter": "paramTypes"}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "origType"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"function": {"codomain": {"variable": "hydra.core.TypeScheme"}, "domain": {"variable": "hydra.core.Type"}}},
-                  "domain": {"list": {"variable": "hydra.core.Type"}}}},
-              "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "parameter": "origType"}}}}}},
     {
       "term": {
         "name": "hydra.dsls.filterTypeBindings",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg2", "type": {"list": {"variable": "hydra.core.Binding"}}}],
+          "result": {"type": {"either": {"left": {"variable": "t2"}, "right": {"list": {"variable": "hydra.core.Binding"}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}, {"constraints": [], "name": "t2"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -1169,22 +1181,18 @@
                             "parameter": "cx"}}}},
                     "parameter": "t2"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "t2"}, "right": {"list": {"variable": "hydra.core.Binding"}}}},
-                      "domain": {"list": {"variable": "hydra.core.Binding"}}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1", "t2"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.dsls.generateBindingsForType",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Binding"}}],
+          "result": {
+            "type": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"list": {"variable": "hydra.core.Binding"}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -1337,22 +1345,17 @@
                         "parameter": "graph"}},
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"list": {"variable": "hydra.core.Binding"}}}},
-                      "domain": {"variable": "hydra.core.Binding"}}},
-                  "domain": {"variable": "hydra.graph.Graph"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.dsls.generateRecordAccessor",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.FieldType"}}],
+          "result": {"type": {"variable": "hydra.core.Binding"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a record field accessor function"}}}],
@@ -1709,19 +1712,17 @@
                     "domain": {"variable": "hydra.core.Name"},
                     "parameter": "typeName"}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "origType"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"function": {"codomain": {"variable": "hydra.core.Binding"}, "domain": {"variable": "hydra.core.FieldType"}}},
-                  "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "parameter": "origType"}}}}}},
     {
       "term": {
         "name": "hydra.dsls.generateRecordConstructor",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg2", "type": {"list": {"variable": "hydra.core.FieldType"}}}],
+          "result": {"type": {"list": {"variable": "hydra.core.Binding"}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a record constructor function"}}}],
@@ -2147,20 +2148,18 @@
                     "domain": {"variable": "hydra.core.Name"},
                     "parameter": "typeName"}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "origType"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {"codomain": {"list": {"variable": "hydra.core.Binding"}}, "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
-                  "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "parameter": "origType"}}}}}},
     {
       "term": {
         "name": "hydra.dsls.generateRecordWithUpdater",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg2", "type": {"list": {"variable": "hydra.core.FieldType"}}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.FieldType"}}],
+          "result": {"type": {"variable": "hydra.core.Binding"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a withXxx record field updater function"}}}],
@@ -2776,22 +2775,17 @@
                     "domain": {"variable": "hydra.core.Name"},
                     "parameter": "typeName"}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "origType"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"function": {"codomain": {"variable": "hydra.core.Binding"}, "domain": {"variable": "hydra.core.FieldType"}}},
-                      "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
-                  "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "parameter": "origType"}}}}}},
     {
       "term": {
         "name": "hydra.dsls.generateUnionInjector",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.FieldType"}}],
+          "result": {"type": {"variable": "hydra.core.Binding"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a union injection helper"}}}],
@@ -3224,19 +3218,17 @@
                     "domain": {"variable": "hydra.core.Name"},
                     "parameter": "typeName"}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "origType"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"function": {"codomain": {"variable": "hydra.core.Binding"}, "domain": {"variable": "hydra.core.FieldType"}}},
-                  "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "parameter": "origType"}}}}}},
     {
       "term": {
         "name": "hydra.dsls.generateWrappedTypeAccessors",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"list": {"variable": "hydra.core.Binding"}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate wrap/unwrap accessors for a wrapped type"}}}],
@@ -3726,19 +3718,17 @@
                     "domain": {"variable": "hydra.core.Name"},
                     "parameter": "typeName"}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "origType"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"function": {"codomain": {"list": {"variable": "hydra.core.Binding"}}, "domain": {"variable": "hydra.core.Type"}}},
-                  "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+                "parameter": "origType"}}}}}},
     {
       "term": {
         "name": "hydra.dsls.isDslEligibleBinding",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Binding"}}],
+          "result": {"type": {"either": {"left": {"variable": "t2"}, "right": {"maybe": {"variable": "hydra.core.Binding"}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}, {"constraints": [], "name": "t2"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -3813,22 +3803,16 @@
                             "parameter": "cx"}}}},
                     "parameter": "t2"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "t2"}, "right": {"maybe": {"variable": "hydra.core.Binding"}}}},
-                      "domain": {"variable": "hydra.core.Binding"}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1", "t2"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.dsls.nominalResultType",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"variable": "hydra.core.Type"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3882,13 +3866,7 @@
                     "domain": {"variable": "hydra.core.Type"},
                     "parameter": "origType"}},
                 "domain": {"variable": "hydra.core.Name"},
-                "parameter": "typeName"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.Type"}, "domain": {"variable": "hydra.core.Type"}}},
-              "domain": {"variable": "hydra.core.Name"}}},
-          "variables": []}}}],
+                "parameter": "typeName"}}}}}}],
   "dependencies": [
     {"module": "hydra.annotations"},
     {"module": "hydra.formatting"},
@@ -3901,7 +3879,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

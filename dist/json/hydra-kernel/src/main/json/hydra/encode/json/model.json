@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.encode.json.model.value",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.json.model.Value"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.json.model.Value"}}}],
@@ -280,10 +284,7 @@
                             "typeName": "hydra.core.Term"}},
                         "domain": {"literal": {"string": {}}},
                         "parameter": "y"}}}],
-                "typeName": "hydra.json.model.Value"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.json.model.Value"}}},
-          "variables": []}}}],
+                "typeName": "hydra.json.model.Value"}}}}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.json.model"}],
   "description": "Term encoders for hydra.json.model",
   "name": "hydra.encode.json.model"}
