@@ -39,7 +39,7 @@ bootstrapGraph = Graph {
   graphClassConstraints = M.empty,
   graphLambdaVariables = S.empty,
   graphMetadata = M.empty,
-  graphPrimitives = M.fromList $ fmap (\p -> (primitiveName p, p)) (L.concat (libraryPrimitives <$> standardLibraries)),
+  graphPrimitives = M.fromList $ fmap (\p -> (primitiveDefinitionName (primitiveDefinition p), p)) (L.concat (libraryPrimitives <$> standardLibraries)),
   graphSchemaTypes = M.empty,
   graphTypeVariables = S.empty}
 

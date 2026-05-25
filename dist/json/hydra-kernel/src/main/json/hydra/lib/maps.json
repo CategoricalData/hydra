@@ -1,0 +1,281 @@
+{
+  "definitions": [
+    {
+      "primitive": {
+        "description": "Alter a value at a key using a function which sees the optional current value.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maps.alter",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"maybe": {"variable": "v"}}, "domain": {"maybe": {"variable": "v"}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "k"}},
+            {"isLazy": false, "name": "arg2", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
+          "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}},
+          "typeParameters": [{"constraints": [], "name": "v"}, {"constraints": [{"simple": "ordering"}], "name": "k"}]}}},
+    {
+      "primitive": {
+        "description": "Map functions over both the keys and values of a map.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maps.bimap",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "k2"}, "domain": {"variable": "k1"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"function": {"codomain": {"variable": "v2"}, "domain": {"variable": "v1"}}}},
+            {"isLazy": false, "name": "arg2", "type": {"map": {"keys": {"variable": "k1"}, "values": {"variable": "v1"}}}}],
+          "result": {"type": {"map": {"keys": {"variable": "k2"}, "values": {"variable": "v2"}}}},
+          "typeParameters": [
+            {"constraints": [{"simple": "ordering"}], "name": "k1"},
+            {"constraints": [{"simple": "ordering"}], "name": "k2"},
+            {"constraints": [], "name": "v1"},
+            {"constraints": [], "name": "v2"}]}}},
+    {
+      "primitive": {
+        "description": "Remove a key from a map.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maps.delete",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "k"}},
+            {"isLazy": false, "name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
+          "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
+    {
+      "primitive": {
+        "description": "Return the values of a map (in key order).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maps.elems",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
+          "result": {"type": {"list": {"variable": "v"}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
+    {
+      "primitive": {
+        "description": "The empty map.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maps.empty",
+        "signature": {
+          "parameters": [],
+          "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
+    {
+      "primitive": {
+        "description": "Filter a map by value.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maps.filter",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "v"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
+          "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}},
+          "typeParameters": [{"constraints": [], "name": "v"}, {"constraints": [{"simple": "ordering"}], "name": "k"}]}}},
+    {
+      "primitive": {
+        "description": "Filter a map by key and value.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maps.filterWithKey",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "function": {
+                  "codomain": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "v"}}},
+                  "domain": {"variable": "k"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
+          "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
+    {
+      "primitive": {
+        "description": "Look up a value with a default if the key is absent.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maps.findWithDefault",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "v"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "k"}},
+            {"isLazy": false, "name": "arg2", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
+          "result": {"type": {"variable": "v"}},
+          "typeParameters": [{"constraints": [], "name": "v"}, {"constraints": [{"simple": "ordering"}], "name": "k"}]}}},
+    {
+      "primitive": {
+        "description": "Build a map from a list of key-value pairs.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maps.fromList",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"list": {"pair": {"first": {"variable": "k"}, "second": {"variable": "v"}}}}}],
+          "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
+    {
+      "primitive": {
+        "description": "Insert a key-value pair into a map.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maps.insert",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "k"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "v"}},
+            {"isLazy": false, "name": "arg2", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
+          "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
+    {
+      "primitive": {
+        "description": "Return the keys of a map (in key order).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maps.keys",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
+          "result": {"type": {"list": {"variable": "k"}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
+    {
+      "primitive": {
+        "description": "Look up a value in a map by key, returning Nothing if absent.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maps.lookup",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "k"}},
+            {"isLazy": false, "name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
+          "result": {"type": {"maybe": {"variable": "v"}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
+    {
+      "primitive": {
+        "description": "Map a function over the values of a map.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maps.map",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "v2"}, "domain": {"variable": "v1"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v1"}}}}],
+          "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v2"}}}},
+          "typeParameters": [
+            {"constraints": [], "name": "v1"},
+            {"constraints": [], "name": "v2"},
+            {"constraints": [{"simple": "ordering"}], "name": "k"}]}}},
+    {
+      "primitive": {
+        "description": "Map a function over the keys of a map.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maps.mapKeys",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "k2"}, "domain": {"variable": "k1"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"map": {"keys": {"variable": "k1"}, "values": {"variable": "v"}}}}],
+          "result": {"type": {"map": {"keys": {"variable": "k2"}, "values": {"variable": "v"}}}},
+          "typeParameters": [
+            {"constraints": [{"simple": "ordering"}], "name": "k1"},
+            {"constraints": [{"simple": "ordering"}], "name": "k2"},
+            {"constraints": [], "name": "v"}]}}},
+    {
+      "primitive": {
+        "description": "Test whether a key is present in a map.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maps.member",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "k"}},
+            {"isLazy": false, "name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
+    {
+      "primitive": {
+        "description": "Test whether a map is empty.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maps.null",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
+    {
+      "primitive": {
+        "description": "Construct a map with a single key-value pair.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maps.singleton",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "k"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "v"}}],
+          "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
+    {
+      "primitive": {
+        "description": "Return the number of key-value pairs in a map.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maps.size",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
+    {
+      "primitive": {
+        "description": "Convert a map to a list of key-value pairs (in key order).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maps.toList",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
+          "result": {"type": {"list": {"pair": {"first": {"variable": "k"}, "second": {"variable": "v"}}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
+    {
+      "primitive": {
+        "description": "Compute the union of two maps; the first map's bindings take precedence on key collision.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.maps.union",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
+          "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}}],
+  "dependencies": [
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "description": "Primitives in the hydra.lib.maps namespace.",
+  "name": "hydra.lib.maps"}

@@ -85,7 +85,7 @@ worksAt and founded edges) along with the graphs listed above.
 To generate data separately:
 
 ```bash
-./gradlew :hydra-java:jar
+(cd heads/java && ./gradlew :hydra-java:jar)
 java -cp "packages/hydra-java/build/libs/*.jar" \
   hydra.demos.validatepg.GenerateData /path/to/output
 ```

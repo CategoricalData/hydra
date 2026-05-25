@@ -31,10 +31,11 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: gradle-${{ hashFiles('**/*.gradle', 'gradle/wrapper/gradle-wrapper.properties') }}
+          key: gradle-${{ hashFiles('**/*.gradle', 'heads/java/gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: gradle-
 
       - name: Generate JavaDocs
+        working-directory: heads/java
         run: ./gradlew :hydra-java:javadoc :hydra-ext:javadoc
 
       - name: Assemble site

@@ -197,11 +197,20 @@ object Libraries:
 
   // --- Primitive constructors ---
 
+  private def mkPrimDef(name: String, ts: TypeScheme): hydra.packaging.PrimitiveDefinition =
+    hydra.packaging.PrimitiveDefinition(
+      name,
+      "",
+      hydra.scoping.typeSchemeToTermSignature(ts),
+      true,
+      true,
+      None)
+
   private def mkPrim(name: String, ts: TypeScheme): Primitive =
-    Primitive(name, ts, stubImpl)
+    Primitive(mkPrimDef(name, ts), stubImpl)
 
   private def mkPrimImpl(name: String, ts: TypeScheme, impl: Impl): Primitive =
-    Primitive(name, ts, impl)
+    Primitive(mkPrimDef(name, ts), impl)
 
   // Type construction helpers
   private def tVar(n: String): Type = Type.variable(n)
@@ -236,7 +245,7 @@ object Libraries:
   private def tSchemeConstrained(vars: Seq[(String, Seq[String])], t: Type): TypeScheme =
     val varNames = vars.map(_._1)
     val constraints = vars.collect { case (name, classes) if classes.nonEmpty =>
-      name -> TypeVariableMetadata(classes.toSet)
+      name -> TypeVariableMetadata(classes.map(c => TypeClassConstraint.simple(c)))
     }.toMap
     TypeScheme(varNames, t, if constraints.isEmpty then None else Some(constraints))
 
