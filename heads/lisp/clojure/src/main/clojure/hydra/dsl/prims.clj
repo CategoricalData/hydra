@@ -2,10 +2,14 @@
   (:require [hydra.core :refer :all]
             [hydra.graph :refer :all]
             [hydra.context :refer :all]
-            [hydra.errors :refer :all])
+            [hydra.errors :refer :all]
+            [hydra.packaging :refer :all]
+            [hydra.scoping :refer [hydra_scoping_type_scheme_to_term_signature]])
   (:import [hydra.core hydra_core_function_type hydra_core_type_scheme
-                       hydra_core_application hydra_core_injection hydra_core_field]
+                       hydra_core_application hydra_core_injection hydra_core_field
+                       hydra_core_type_variable_metadata]
            [hydra.graph hydra_graph_primitive hydra_graph_term_coder]
+           [hydra.packaging hydra_packaging_primitive_definition]
            [hydra.errors hydra_errors_other_error]))
 
 ;; Type scheme helpers -- the reducer uses primitive arity (from TypeScheme)
@@ -55,11 +59,16 @@
     (visit typ)
     @result))
 
+(defn- wrap-constraints
+  "Convert class-name strings to TypeClassConstraint.simple variants (#156)."
+  [classes]
+  (mapv (fn [c] (list :simple c)) classes))
+
 (defn- build-type-scheme
   "Build a TypeScheme from TermCoder types. Uses the actual types from
    the TermCoders to construct proper function types for inference.
    Auto-detects type variables from the types.
-   Optional constraints: map of var-name -> set of class names."
+   Optional constraints: map of var-name -> seq of class names."
   ([variables inputs output] (build-type-scheme variables inputs output nil))
   ([variables inputs output constraints]
    (let [out-type (or (:type output) (list :unit))
@@ -72,12 +81,24 @@
          ;; Exclude qualified names (containing dots) — those are nominal type references, not parameters.
          detected-vars (filterv #(not (.contains ^String % ".")) (collect-type-vars-ordered fun-type))
          vars (if (seq variables) (vec variables) (vec detected-vars))
-         ;; Build constraints map: {name -> TypeVariableMetadata}
-         constraint-map (when constraints
+         ;; Build constraints map: {name -> TypeVariableMetadata}. Wrap each class name
+         ;; into a TypeClassConstraint.simple variant per #156.
+         constraint-map (when (seq constraints)
                           (into {} (map (fn [[k v]]
-                                         [k (->hydra_core_type_variable_metadata (set v))])
-                                       constraints)))]
-     (->hydra_core_type_scheme vars fun-type constraint-map))))
+                                         [k (->hydra_core_type_variable_metadata (wrap-constraints v))])
+                                       constraints)))
+         ;; TypeScheme.constraints is Maybe(Map): wrap as (:just m) or (:nothing).
+         maybe-constraints (if constraint-map
+                             (list :just constraint-map)
+                             (list :nothing))]
+     (->hydra_core_type_scheme vars fun-type maybe-constraints))))
+
+(defn- build-prim-def
+  "Build a PrimitiveDefinition (#156 shape) from name + signature."
+  [pname variables inputs output constraints]
+  (let [ts (build-type-scheme variables inputs output constraints)
+        sig (hydra_scoping_type_scheme_to_term_signature ts)]
+    (->hydra_packaging_primitive_definition pname "" sig true true (list :nothing))))
 
 ;; Error helpers
 
@@ -373,8 +394,7 @@
    (prim0 pname value-fn _variables output nil))
   ([pname value-fn _variables output constraints]
    (->hydra_graph_primitive
-    pname
-    (build-type-scheme _variables [] output constraints)
+    (build-prim-def pname _variables [] output constraints)
     (fn [cx] (fn [g] (fn [args]
       (let [result ((.decode output) cx (value-fn))]
         (wrap-other result))))))))
@@ -385,8 +405,7 @@
    (prim1 pname compute _variables input1 output nil))
   ([pname compute _variables input1 output constraints]
    (->hydra_graph_primitive
-    pname
-    (build-type-scheme _variables [input1] output constraints)
+    (build-prim-def pname _variables [input1] output constraints)
     (fn [cx] (fn [g] (fn [args]
       (let [check (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_n_args) pname) 1) args)]
         (if (= (first check) :left)
@@ -403,8 +422,7 @@
    (prim2 pname compute _variables input1 input2 output nil))
   ([pname compute _variables input1 input2 output constraints]
   (->hydra_graph_primitive
-   pname
-   (build-type-scheme _variables [input1 input2] output constraints)
+   (build-prim-def pname _variables [input1 input2] output constraints)
    (fn [cx] (fn [g] (fn [args]
      (let [check (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_n_args) pname) 2) args)]
        (if (= (first check) :left)
@@ -424,8 +442,7 @@
    (prim3 pname compute _variables input1 input2 input3 output nil))
   ([pname compute _variables input1 input2 input3 output constraints]
   (->hydra_graph_primitive
-   pname
-   (build-type-scheme _variables [input1 input2 input3] output constraints)
+   (build-prim-def pname _variables [input1 input2 input3] output constraints)
    (fn [cx] (fn [g] (fn [args]
      (let [check (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_n_args) pname) 3) args)]
        (if (= (first check) :left)

@@ -342,9 +342,9 @@
                        (test-mods-to-emit
                          (remove-if
                            (lambda (m)
-                             (let* ((ns (hydra_packaging_module-namespace m))
+                             (let* ((ns (hydra_packaging_module-name m))
                                     (ns-str (if (stringp ns) ns
-                                                (hydra_packaging_namespace-value ns))))
+                                                (hydra_packaging_module_name-value ns))))
                                (string= ns-str "hydra.test.testEnv")))
                            test-mods))
                        (out-test (format nil "~A/common-lisp-to-~A/src/test/~A"

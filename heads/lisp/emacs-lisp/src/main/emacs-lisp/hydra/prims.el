@@ -14,7 +14,13 @@
     (list :function (make-hydra_core_function_type (list :unit) (make-arity-type (1- n))))))
 
 (defun make-prim-type-scheme (arity)
-  (make-hydra_core_type_scheme nil (make-arity-type arity) nil))
+  (make-hydra_core_type_scheme nil (make-arity-type arity) (list :nothing)))
+
+(defun make-prim-def-from-arity (name arity)
+  "Build a PrimitiveDefinition (#156 shape) from name + arity (for annotation primitives)."
+  (let* ((ts (make-prim-type-scheme arity))
+         (sig (funcall hydra_scoping_type_scheme_to_term_signature ts)))
+    (make-hydra_packaging_primitive_definition name "" sig t t (list :nothing))))
 
 (defun collect-type-vars-ordered (typ)
   "Collect type variable names from a Hydra type in order of first appearance."
@@ -51,6 +57,10 @@
       (visit typ)
       (nreverse result))))
 
+(defun wrap-constraints (classes)
+  "Convert class-name strings to TypeClassConstraint.simple variants (#156)."
+  (mapcar (lambda (c) (list :simple c)) classes))
+
 (defun build-type-scheme (variables inputs output &optional constraints)
   "Build a TypeScheme from TermCoder types."
   (let* ((out-type (or (hydra_graph_term_coder-type output) (list :unit)))
@@ -62,15 +72,26 @@
          ;; Exclude qualified names (containing dots) — those are nominal type references
          (detected-vars (cl-remove-if (lambda (v) (string-match-p "\\." v)) all-vars))
          (vars (if variables variables detected-vars))
+         ;; After #156, TypeVariableMetadata.classes is Seq[TypeClassConstraint].
          (constraint-map
           (when constraints
             (funcall hydra_lib_maps_from_list
                      (mapcar (lambda (entry)
                                (list (car entry)
                                      (make-hydra_core_type_variable_metadata
-                                      (funcall hydra_lib_sets_from_list (cdr entry)))))
-                             constraints)))))
-    (make-hydra_core_type_scheme vars fun-type constraint-map)))
+                                      (wrap-constraints (cdr entry)))))
+                             constraints))))
+         ;; TypeScheme.constraints is Maybe(Map): wrap as (:just m) or (:nothing).
+         (maybe-constraints (if constraint-map
+                                (list :just constraint-map)
+                                (list :nothing))))
+    (make-hydra_core_type_scheme vars fun-type maybe-constraints)))
+
+(defun build-prim-def (pname variables inputs output constraints)
+  "Build a PrimitiveDefinition (#156 shape) from name + signature."
+  (let* ((ts (build-type-scheme variables inputs output constraints))
+         (sig (funcall hydra_scoping_type_scheme_to_term_signature ts)))
+    (make-hydra_packaging_primitive_definition pname "" sig t t (list :nothing))))
 
 ;; ============================================================================
 ;; Error helpers
@@ -324,13 +345,13 @@
 ;; ============================================================================
 
 (defun prim0 (pname value-fn variables output &optional constraints)
-  (make-hydra_graph_primitive pname (build-type-scheme variables nil output constraints)
+  (make-hydra_graph_primitive (build-prim-def pname variables nil output constraints)
     (lambda (cx) (lambda (_g) (lambda (_args)
       (let ((result (funcall (funcall (hydra_graph_term_coder-decode output) cx) (funcall value-fn))))
         (wrap-other-error cx result)))))))
 
 (defun prim1 (pname compute variables input1 output &optional constraints)
-  (make-hydra_graph_primitive pname (build-type-scheme variables (list input1) output constraints)
+  (make-hydra_graph_primitive (build-prim-def pname variables (list input1) output constraints)
     (lambda (cx) (lambda (g) (lambda (args)
       (let ((check (funcall (funcall (funcall hydra_extract_core_n_args pname) 1) args)))
         (if (eq (car check) :left) check
@@ -340,7 +361,7 @@
                 (wrap-other-error cx result)))))))))))
 
 (defun prim2 (pname compute variables input1 input2 output &optional constraints)
-  (make-hydra_graph_primitive pname (build-type-scheme variables (list input1 input2) output constraints)
+  (make-hydra_graph_primitive (build-prim-def pname variables (list input1 input2) output constraints)
     (lambda (cx) (lambda (g) (lambda (args)
       (let ((check (funcall (funcall (funcall hydra_extract_core_n_args pname) 2) args)))
         (if (eq (car check) :left) check
@@ -353,7 +374,7 @@
                     (wrap-other-error cx result)))))))))))))
 
 (defun prim3 (pname compute variables input1 input2 input3 output &optional constraints)
-  (make-hydra_graph_primitive pname (build-type-scheme variables (list input1 input2 input3) output constraints)
+  (make-hydra_graph_primitive (build-prim-def pname variables (list input1 input2 input3) output constraints)
     (lambda (cx) (lambda (g) (lambda (args)
       (let ((check (funcall (funcall (funcall hydra_extract_core_n_args pname) 3) args)))
         (if (eq (car check) :left) check
