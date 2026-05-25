@@ -1,0 +1,11 @@
+rootProject.name = 'hydra'
+
+include 'hydra-java'
+include 'hydra-rdf4j'
+include 'hydra-neo4j'
+include 'hydra-pg-dsl'
+
+project(':hydra-java').projectDir = file('../../packages/hydra-java')
+project(':hydra-rdf4j').projectDir = file('../../bindings/java/hydra-rdf4j')
+project(':hydra-neo4j').projectDir = file('../../bindings/java/hydra-neo4j')
+project(':hydra-pg-dsl').projectDir = file('../../bindings/java/hydra-pg-dsl')

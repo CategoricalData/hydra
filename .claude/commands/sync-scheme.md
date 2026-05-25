@@ -13,3 +13,8 @@ allowed-tools:
 ```bash
 bin/sync-scheme.sh
 ```
+
+This script does **not** run the Scheme test suite. To validate the
+generated code, run `packages/hydra-lisp/bin/run-tests.sh scheme` or
+do a `/bootstrap scheme`. (Pending #387: `/test scheme` will roll
+sync + tests into one step.)

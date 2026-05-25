@@ -247,6 +247,108 @@
           "variables": []}}},
     {
       "type": {
+        "name": "hydra.typing.Parameter",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {
+                      "string": "A named, typed parameter of a term, with optional human-readable description and a flag indicating whether the parameter requires lazy evaluation by hosts which support it."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the parameter"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the parameter"}}}],
+                        "body": {"maybe": {"literal": {"string": {}}}}}}},
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the parameter"}}}],
+                        "body": {"variable": "hydra.core.Type"}}}},
+                  {
+                    "name": "isLazy",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {
+                                "string": "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation"}}}],
+                        "body": {"literal": {"boolean": {}}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.typing.Result",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "The result of a term, consisting of a type and an optional human-readable description."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the result"}}}],
+                        "body": {"maybe": {"literal": {"string": {}}}}}}},
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the result"}}}],
+                        "body": {"variable": "hydra.core.Type"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.typing.TermSignature",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {
+                      "string": "A structured signature for a term: an ordered list of type parameters (with optional class constraints), an ordered list of value parameters, and a result. TermSignature is a richer view of TypeScheme: every TermSignature can be converted to a TypeScheme by erasing parameter names, descriptions, and laziness flags."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "typeParameters",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The type parameters of the term, in order"}}}],
+                        "body": {"list": {"variable": "hydra.typing.TypeParameter"}}}}},
+                  {
+                    "name": "parameters",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The value parameters of the term, in order"}}}],
+                        "body": {"list": {"variable": "hydra.typing.Parameter"}}}}},
+                  {
+                    "name": "result",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The result of the term"}}}],
+                        "body": {"variable": "hydra.typing.Result"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
         "name": "hydra.typing.TermSubst",
         "typeScheme": {
           "body": {

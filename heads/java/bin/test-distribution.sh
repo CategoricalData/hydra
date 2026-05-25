@@ -35,7 +35,7 @@ if test_cache_check java "$HYDRA_ROOT_DIR/dist/java" "$HYDRA_ROOT_DIR/heads/java
     exit 0
 fi
 
-cd "$HYDRA_ROOT_DIR"
+cd "$HYDRA_ROOT_DIR/heads/java"
 ./gradlew :hydra-java:compileJava
 ./gradlew :hydra-java:compileTestJava
 ./gradlew :hydra-java:test

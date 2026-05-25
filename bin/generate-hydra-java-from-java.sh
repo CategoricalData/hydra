@@ -73,7 +73,7 @@ if [ ! -d "$SOURCES_DIR" ]; then
 fi
 
 # Compile the Java rollup (which includes JavaSelfHostDemo) and get classpath.
-cd "$HYDRA_ROOT"
+cd "$HYDRA_ROOT/heads/java"
 echo ""
 echo "=== Compiling Java head (rollup) ==="
 ./gradlew --quiet :hydra-java:compileHeadsExtrasJava

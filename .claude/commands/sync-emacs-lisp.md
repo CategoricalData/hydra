@@ -16,3 +16,8 @@ bin/sync-emacs-lisp.sh
 
 Note: the Emacs Lisp regex matcher needs `case-fold-search` bound to
 nil — see `claude/pitfalls.md` for the gotcha.
+
+This script does **not** run the Emacs Lisp test suite. To validate
+the generated code, run `packages/hydra-lisp/bin/run-tests.sh emacs-lisp`
+or do a `/bootstrap emacs-lisp`. (Pending #387: `/test emacs-lisp`
+will roll sync + tests into one step.)

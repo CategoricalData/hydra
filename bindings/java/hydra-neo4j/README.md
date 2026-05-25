@@ -38,7 +38,7 @@ the Java compile step. No checked-in generated code.
 
 ## Status (2026-05-06)
 
-**Compiles cleanly** via `./gradlew :hydra-neo4j:compileJava`. ANTLR generates
+**Compiles cleanly** via `(cd heads/java && ./gradlew :hydra-neo4j:compileJava)`. ANTLR generates
 each grammar's classes from its `@header { package ...; }` directive — Cypher
 classes land in `org.neo4j`, GQL classes in `net.fortytwo.hydra.gql.parser`.
 
