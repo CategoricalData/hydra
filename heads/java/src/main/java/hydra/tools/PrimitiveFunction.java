@@ -1,14 +1,16 @@
 package hydra.tools;
 
+import hydra.Scoping;
 import hydra.context.Context;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
 import hydra.errors.Error_;
-import hydra.errors.Error_;
 import hydra.graph.Graph;
 import hydra.graph.Primitive;
+import hydra.packaging.PrimitiveDefinition;
 import hydra.util.Either;
+import hydra.util.Maybe;
 
 import java.util.List;
 import java.util.function.Function;
@@ -61,6 +63,13 @@ public abstract class PrimitiveFunction {
                     return Either.left(ic);
                 }
             };
-        return new Primitive(name(), type(), nativeImpl);
+        PrimitiveDefinition definition = new PrimitiveDefinition(
+            name(),
+            "",
+            Scoping.typeSchemeToTermSignature(type()),
+            Boolean.TRUE,
+            Boolean.TRUE,
+            Maybe.nothing());
+        return new Primitive(definition, nativeImpl);
     }
 }

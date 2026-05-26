@@ -2,14 +2,17 @@
 
 This guide explains Hydra's domain-specific language (DSL) utilities for constructing types and terms in Java.
 
-> **Status note (0.15):** the **direct DSLs** (`hydra.dsl.Types`, `hydra.dsl.Terms`,
+> **Status note (0.15+).** The **direct DSLs** (`hydra.dsl.Types`, `hydra.dsl.Terms`,
 > `hydra.dsl.Literals`, `hydra.dsl.LiteralTypes`, and the `hydra.dsl.prims.*` wrappers)
-> are current and in wide use. The **phantom-typed Java DSL**
-> (`hydra.dsl.meta.*` — `Phantoms`, `Core`, `Graph`, `Compute`, library wrappers) is
-> described throughout this guide but **does not currently exist in the codebase**;
-> writing Hydra kernel source code in Java is not a supported path, and the
-> meta-DSL sections below are aspirational. Use the Haskell DSL
-> ([DSL Guide (Haskell)](dsl-guide.md)) for kernel-source development.
+> are current and in wide use. The **phantom-typed Java DSL** — `hydra.dsl.meta.Phantoms`
+> plus library wrappers under `hydra.dsl.meta.lib.*` (`Lists`, `Maps`, `Sets`, `Logic`,
+> `Maths`, `Maybes`, `Strings`, `Literals`) — is also current and is the foundation for
+> the host-native Java coder sources at `packages/hydra-java/src/main/java/hydra/sources/`
+> (post-#344). The domain-specific DSLs sketched in §4 below (`hydra.dsl.meta.Core`,
+> `Graph`, `Compute`) and the `examples/` files in §"File reference" are **aspirational
+> — not present in the current codebase**. For full kernel-source authoring, use the
+> Haskell DSL ([DSL Guide (Haskell)](dsl-guide.md)); the Java DSL covers Java-coder
+> authoring only.
 
 **Note**: Hydra provides DSLs in all five implementation languages (Haskell, Java, Python, Scala, and Lisp).
 This guide focuses on the Java DSLs.
@@ -99,14 +102,16 @@ TTerm<Integer> age = int32(30);
 TTerm<Object> identity = lambda("x", var("x"));
 ```
 
-### 4. Domain-specific DSLs
+### 4. Domain-specific DSLs (aspirational — not yet implemented)
 
-**Modules**: `hydra.dsl.meta.Core`, `hydra.dsl.meta.Graph`, `hydra.dsl.meta.Compute`
+**Planned modules**: `hydra.dsl.meta.Core`, `hydra.dsl.meta.Graph`, `hydra.dsl.meta.Compute`.
 
-Provide typed field accessors and constructors for Hydra kernel types.
-For example, `Core.lambdaParameter(t)` extracts the `parameter` field from a Lambda term.
+These would provide typed field accessors and constructors for Hydra kernel types,
+parallel to the Haskell `Hydra.Dsl.Meta.Core` / `Hydra.Dsl.Meta.Graph` modules. They
+do not currently exist in the Java codebase. The example below is provisional:
 
 ```java
+// Hypothetical — these classes don't exist yet:
 import static hydra.dsl.meta.Core.*;
 
 // Extract the body of a lambda term
@@ -118,6 +123,10 @@ TTerm<Object> lam = lambda_(
     nothing(),
     var("body"));
 ```
+
+For now, use direct `Terms.*` constructors or the host-native sources at
+`packages/hydra-java/src/main/java/hydra/sources/` as concrete examples of
+authoring Java coder DSL code with `Phantoms` only.
 
 ### 5. Library wrappers
 
@@ -154,7 +163,7 @@ static <R> TTerm<R> setsUnion(TTerm<?> s1, TTerm<?> s2) {
 import hydra.core.*;
 import hydra.dsl.Types;
 
-// Primitive types
+// Literal types
 Type stringType = Types.string();
 Type int32Type = Types.int32();
 Type booleanType = Types.boolean_();
@@ -345,7 +354,7 @@ TTerm<Object> circle = inject(Shape.TYPE_NAME, Shape.FIELD_NAME_CIRCLE,
 TTerm<Object> none = injectUnit(FloatType.TYPE_NAME, FloatType.FIELD_NAME_FLOAT32);
 ```
 
-### Pattern matching (cases/match)
+### Pattern matching (`cases`/`match`)
 
 ```java
 // match creates a case elimination (unapplied)
@@ -570,8 +579,10 @@ Binding lambda = define("Lambda",
 
 ### Complete example: hydra.core
 
-See `heads/java/src/main/java/hydra/dsl/meta/examples/CoreTypes.java` for a complete
-implementation of all `hydra.core` types using this pattern.
+The `examples/` directory is aspirational — the file does not yet exist. For a
+real reference, see the host-native Java coder sources at
+`packages/hydra-java/src/main/java/hydra/sources/`, which use the same Phantoms
+idiom against the full Hydra kernel.
 
 ## Term definitions
 
@@ -618,17 +629,12 @@ apply(var("my.namespace.deannotateTerm"), annotatedTermBody(var("at")))
 
 ### Complete example: hydra.rewriting
 
-See `heads/java/src/main/java/hydra/dsl/meta/examples/Rewriting.java` for a partial
-implementation of `hydra.rewriting` demonstrating:
-
-- Simple pattern matching (`deannotateTerm`)
-- Multiple case branches (`deannotateAndDetypeTerm`)
-- Composition with projection (`deannotateType`)
-- Let-bindings and recursive rewriting (`deannotateTypeRecursive`)
-- Nested pattern matching (`isLambda`)
-- Complex operations with sets, folds, and binding-aware rewriting (`freeVariablesInTerm`)
-- Structural rewriting patterns (`removeTermAnnotations`)
-- TraversalOrder dispatching (`foldOverTerm`)
+The `examples/` directory is aspirational — the file does not yet exist. The same
+patterns (simple pattern matching, case branches, composition with projection,
+let-bindings, nested pattern matching, sets/folds/binding-aware rewriting,
+structural rewriting, traversal-order dispatching) appear throughout the
+host-native Java coder sources at `packages/hydra-java/src/main/java/hydra/sources/`,
+which serve as the live working examples.
 
 ## Common patterns
 
@@ -766,14 +772,12 @@ if (result.isRight()) {
 
 | File | Description |
 |------|-------------|
-| `heads/java/src/main/java/hydra/dsl/meta/Phantoms.java` | Phantom-typed DSL (all operations) |
-| `heads/java/src/main/java/hydra/dsl/meta/Core.java` | Core domain DSL (field accessors) |
-| `heads/java/src/main/java/hydra/dsl/meta/Graph.java` | Graph domain DSL |
-| `heads/java/src/main/java/hydra/dsl/meta/Compute.java` | Compute domain DSL |
-| `heads/java/src/main/java/hydra/dsl/meta/examples/CoreTypes.java` | Complete hydra.core type definitions |
-| `heads/java/src/main/java/hydra/dsl/meta/examples/Rewriting.java` | Partial hydra.rewriting term definitions |
-| `heads/java/src/main/java/hydra/dsl/Types.java` | Direct Types DSL |
-| `heads/java/src/main/java/hydra/dsl/Terms.java` | Direct Terms DSL |
+| `packages/hydra-java/src/main/java/hydra/dsl/meta/Phantoms.java` | Phantom-typed DSL (all operations) |
+| `packages/hydra-java/src/main/java/hydra/dsl/meta/Defs.java` | Module-definition helpers for the Java coder DSL |
+| `packages/hydra-java/src/main/java/hydra/dsl/meta/lib/Lists.java`, `Maps.java`, `Sets.java`, `Logic.java`, `Maths.java`, `Maybes.java`, `Strings.java`, `Literals.java` | Library wrappers |
+| `packages/hydra-java/src/main/java/hydra/sources/` | Live host-native Java coder DSL sources (reference for current Phantoms idiom) |
+| `heads/java/src/main/java/hydra/dsl/Types.java` | Direct Types DSL (runtime) |
+| `heads/java/src/main/java/hydra/dsl/Terms.java` | Direct Terms DSL (runtime) |
 
 ## Related Documentation
 

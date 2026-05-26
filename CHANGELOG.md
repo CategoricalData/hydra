@@ -19,7 +19,8 @@ they are documented here for completeness.
 
 In progress on the `staging` branch.
 Major themes: kernel-oriented validation rules, JSON Schema coder promotion,
-homogenization of writer conventions, and a unified `Module.dependencies` field.
+homogenization of writer conventions, a unified `Module.dependencies` field,
+and primitive-metadata reification.
 
 ### Highlights
 
@@ -27,6 +28,7 @@ homogenization of writer conventions, and a unified `Module.dependencies` field.
 - **JSON Schema coder promoted** to a fully functional DSL coder (#350).
 - **Homogenized writer conventions** across all target languages (#339).
 - **Unified `Module.dependencies`** (replaces split term/type dependency fields) (#354).
+- **`PrimitiveDefinition` and per-namespace registry modules** (#156).
 
 ### New features
 
@@ -35,6 +37,14 @@ homogenization of writer conventions, and a unified `Module.dependencies` field.
   `doc` annotations on every kernel definition (#352).
 - JSON Schema coder promotion (#350): full DSL-based coder; `forall` and type
   application support; schema/language namespaces lifted.
+- `PrimitiveDefinition` reified in `hydra.packaging` and per-namespace
+  registry modules under `Hydra/Sources/Kernel/Lib/<Sub>.hs` (#156):
+  the 13 `hydra.lib.<sub>` modules are the canonical primitive registry,
+  declaring name, description, signature, isPure / isTotal flags, and an
+  optional `defaultImplementation` per primitive. Adds `TermSignature`
+  and `TypeClassConstraint`; `Primitive` restructured to
+  `{ definition, implementation }`; `TermDefinition.typeScheme` replaced
+  by `TermDefinition.signature`. Resolves #156.
 
 ### Improvements
 

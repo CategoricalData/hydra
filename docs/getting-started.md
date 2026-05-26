@@ -124,16 +124,7 @@ read [HydraPop's `Validate.java`](https://github.com/CategoricalData/HydraPop/bl
 Hydra 0.15+ publishes one conda-forge package per Hydra package: `hydra-kernel`, `hydra-pg`, `hydra-pg-dsl`, etc.
 PyPI publication is tracked by [#290](https://github.com/CategoricalData/hydra/issues/290).
 
-### conda / pixi
-
-```toml
-# pixi.toml
-[dependencies]
-hydra-kernel = "==0.16.0"
-hydra-pg     = "==0.16.0"
-```
-
-Or directly with conda:
+### conda
 
 ```bash
 conda install -c conda-forge hydra-kernel hydra-pg
@@ -250,7 +241,7 @@ A handful of namespaces you'll touch most often as a library user:
 
 The full primitive lexicon is in
 [`docs/hydra-lexicon.txt`](https://github.com/CategoricalData/hydra/blob/main/docs/hydra-lexicon.txt)
-(~180 primitives with their type signatures).
+(241 primitives with their type signatures, organized into 13 `hydra.lib.<sub>` namespaces).
 
 ---
 

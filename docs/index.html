@@ -6,18 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Hydra</title>
-  <meta name="description" content="Hydra: a language-agnostic data modeling and code generation framework">
+  <meta name="description" content="Hydra: a strongly typed intermediate language for data, schemas, and code, built on the LambdaGraph data model">
   <meta name="author" content="Joshua Shinavier et al.">
 
   <meta property="og:title" content="Hydra">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://categoricaldata.github.io/hydra/">
-  <meta property="og:description" content="Hydra: a language-agnostic data modeling and code generation framework">
+  <meta property="og:description" content="Hydra: a strongly typed intermediate language for data, schemas, and code">
 
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      max-width: 720px;
+      max-width: 760px;
       margin: 40px auto;
       padding: 0 20px;
       line-height: 1.6;
@@ -26,12 +26,30 @@
     h1 { margin-bottom: 0.2em; }
     h1 a { color: inherit; text-decoration: none; }
     .tagline { color: #666; margin-top: 0; font-size: 1.1em; }
-    h2 { margin-top: 1.5em; border-bottom: 1px solid #ddd; padding-bottom: 0.3em; }
+    h2 { margin-top: 1.8em; border-bottom: 1px solid #ddd; padding-bottom: 0.3em; }
+    h3 { margin-top: 1.2em; margin-bottom: 0.4em; font-size: 1.05em; }
     ul { padding-left: 1.5em; }
     li { margin-bottom: 0.4em; }
     a { color: #0366d6; }
     a:hover { text-decoration: underline; }
+    .audience-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.2em;
+      margin-top: 1em;
+    }
+    @media (max-width: 640px) {
+      .audience-grid { grid-template-columns: 1fr; }
+    }
+    .audience-card {
+      border: 1px solid #e1e4e8;
+      border-radius: 6px;
+      padding: 0.8em 1em;
+    }
+    .audience-card h3 { margin-top: 0; }
+    .audience-card p { font-size: 0.92em; margin: 0.3em 0; }
     footer { margin-top: 3em; padding-top: 1em; border-top: 1px solid #ddd; color: #888; font-size: 0.9em; }
+    code { background: #f3f3f3; padding: 0.1em 0.3em; border-radius: 3px; font-size: 0.9em; }
   </style>
 
 </head>
@@ -39,34 +57,82 @@
 <body>
 
 <h1><a href="https://github.com/CategoricalData/hydra">Hydra</a></h1>
-<p class="tagline">A language-agnostic data modeling and code generation framework based on typed lambda calculus</p>
+<p class="tagline">A strongly typed intermediate language for data, schemas, and code, built on the LambdaGraph data model.</p>
 
-<h2>API Documentation</h2>
+<p>
+  Programs and domain models written in Hydra map seamlessly to major programming
+  languages (Java, Python, Scala, Lisp, Haskell, and others), data-exchange formats
+  (Protobuf, Avro, JSON, YAML), and graph data models (RDF, SHACL, TinkerPop-style
+  property graphs). Hydra is <em>mutually self-hosting</em>: its own kernel runs
+  natively in any of its complete implementations.
+</p>
+
+<h2>Start here</h2>
+
+<div class="audience-grid">
+  <div class="audience-card">
+    <h3>I want to use Hydra</h3>
+    <p><a href="https://github.com/CategoricalData/hydra/blob/main/docs/getting-started.md">Getting started</a> — install the library and pull in a few packages.</p>
+    <p><a href="https://github.com/CategoricalData/hydra/blob/main/docs/demos.md">Demos</a> — runnable examples with input data and expected output.</p>
+  </div>
+  <div class="audience-card">
+    <h3>I want to understand Hydra</h3>
+    <p><a href="https://github.com/CategoricalData/hydra/wiki/Concepts">Concepts</a> — the type system, LambdaGraph, design principles.</p>
+    <p><a href="https://bit.ly/hydra-design-doc">Design paper</a> — the original LambdaGraph framing.</p>
+  </div>
+  <div class="audience-card">
+    <h3>I want to contribute</h3>
+    <p><a href="https://github.com/CategoricalData/hydra">Source code</a> — the main GitHub repository.</p>
+    <p><a href="https://github.com/CategoricalData/hydra/blob/main/docs/recipes/index.md">Developer recipes</a> — step-by-step guides for extending the kernel.</p>
+  </div>
+</div>
+
+<h2>Published artifacts</h2>
+
+<p>All Hydra packages share a single version number across registries.</p>
+
 <ul>
-  <li><a href="hydra-java/javadoc/">hydra-java JavaDoc</a> &mdash; core Hydra library for Java</li>
-  <li><a href="hydra-ext/javadoc/">hydra-ext JavaDoc</a> &mdash; language adapters and extensions</li>
+  <li><strong>Hackage (Haskell)</strong> — <a href="https://hackage.haskell.org/package/hydra"><code>hydra</code></a></li>
+  <li><strong>Maven Central (Java)</strong> — <code>net.fortytwo.hydra:</code>
+    <a href="https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-kernel">hydra-kernel</a>,
+    <a href="https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-java">hydra-java</a>,
+    <a href="https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-pg">hydra-pg</a>,
+    <a href="https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-rdf">hydra-rdf</a></li>
+  <li><strong>PyPI (Python)</strong> —
+    <a href="https://pypi.org/project/hydra-kernel/">hydra-kernel</a>,
+    <a href="https://pypi.org/project/hydra-python/">hydra-python</a>,
+    <a href="https://pypi.org/project/hydra-pg/">hydra-pg</a>,
+    <a href="https://pypi.org/project/hydra-rdf/">hydra-rdf</a></li>
+  <li><strong>conda-forge (Python)</strong> —
+    <a href="https://prefix.dev/channels/conda-forge/packages/hydra-kernel">hydra-kernel</a>,
+    <a href="https://prefix.dev/channels/conda-forge/packages/hydra-python">hydra-python</a>,
+    <a href="https://prefix.dev/channels/conda-forge/packages/hydra-pg">hydra-pg</a>,
+    <a href="https://prefix.dev/channels/conda-forge/packages/hydra-rdf">hydra-rdf</a></li>
 </ul>
 
-<h2>Project</h2>
+<h3>API documentation</h3>
+
 <ul>
-  <li><a href="https://github.com/CategoricalData/hydra">Source code</a> (GitHub)</li>
-  <li><a href="https://github.com/CategoricalData/hydra/wiki/Concepts">Concepts</a> (wiki)</li>
-  <li><a href="https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-java">hydra-java on Maven Central</a></li>
-  <li><a href="https://hackage.haskell.org/package/hydra">hydra on Hackage</a></li>
+  <li><a href="hydra-java/javadoc/">hydra-java JavaDoc</a> — core Hydra library for Java</li>
+  <li><a href="hydra-ext/javadoc/">hydra-ext JavaDoc</a> — language adapters and extensions</li>
 </ul>
 
-<h2>Documentation</h2>
+<h2>Learn more</h2>
+
 <ul>
-  <li><a href="https://bit.ly/hydra-design-doc">Design document</a> &mdash; the original LambdaGraph / Hydra design paper</li>
+  <li><a href="https://bit.ly/hydra-design-doc">Design document</a> — the original LambdaGraph / Hydra design paper</li>
   <li><a href="https://bit.ly/lg-kgc2024">LambdaGraph at KGC 2024</a> (presentation)</li>
+  <li><a href="https://gdotv.com/blog/introducing-hydra/">Introducing Hydra</a> — blog post by G.V (Amber Lennox)</li>
   <li><a href="https://www.slideshare.net/joshsh/transpilers-gone-wild-introducing-hydra">Transpilers Gone Wild: Introducing Hydra</a> (slides)</li>
   <li><a href="https://docs.google.com/presentation/d/1PF0K3KtopV0tMVa0sGBW2hDA7nw-cSwQm6h1AED1VSA">Extended slide deck</a></li>
   <li><a href="https://drive.google.com/file/d/1p2R6WWc1cW02eb7O8l-4cV1htDb84Y43/view">Demo video</a></li>
 </ul>
 
 <h2>Community</h2>
+
 <ul>
-  <li><a href="https://bit.ly/lg-discord">Discord</a></li>
+  <li><a href="https://bit.ly/lg-discord">Discord</a> — the LambdaGraph community server</li>
+  <li><a href="https://github.com/CategoricalData/HydraPop">HydraPop</a> — translingual TinkerPop validation built on Hydra</li>
 </ul>
 
 <footer>

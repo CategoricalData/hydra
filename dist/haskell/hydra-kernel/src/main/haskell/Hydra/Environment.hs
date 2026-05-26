@@ -55,10 +55,12 @@ partitionDefinitions defs =
               \def -> case def of
                 Packaging.DefinitionType v0 -> Just v0
                 Packaging.DefinitionTerm _ -> Nothing
+                Packaging.DefinitionPrimitive _ -> Nothing
           getTerm =
                   \def -> case def of
                     Packaging.DefinitionType _ -> Nothing
                     Packaging.DefinitionTerm v0 -> Just v0
+                    Packaging.DefinitionPrimitive _ -> Nothing
       in (Maybes.cat (Lists.map getType defs), (Maybes.cat (Lists.map getTerm defs)))
 -- | Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms
 reorderDefs :: [Packaging.Definition] -> [Packaging.Definition]

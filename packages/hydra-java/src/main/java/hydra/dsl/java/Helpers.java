@@ -1,4 +1,5 @@
 package hydra.dsl.java;
+import hydra.Scoping;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
@@ -10,6 +11,7 @@ import hydra.packaging.Definition;
 import hydra.packaging.ModuleName;
 import hydra.packaging.TermDefinition;
 import hydra.packaging.TypeDefinition;
+import hydra.typing.TermSignature;
 import hydra.util.Maybe;
 
 import java.util.Collections;
@@ -77,7 +79,7 @@ public final class Helpers {
         return new Definition.Term(new TermDefinition(
             fqName,
             term,
-            Maybe.<TypeScheme>nothing()));
+            Maybe.<TermSignature>nothing()));
     }
 
     /** Build a term Definition with a pre-computed TypeScheme. */
@@ -86,7 +88,7 @@ public final class Helpers {
         return new Definition.Term(new TermDefinition(
             fqName,
             term,
-            Maybe.<TypeScheme>just(ts)));
+            Maybe.<TermSignature>just(Scoping.typeSchemeToTermSignature(ts))));
     }
 
     /** Build a TypeScheme from a variables list and a body type. */

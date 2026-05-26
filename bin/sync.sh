@@ -427,6 +427,18 @@ native_generate_and_report() {
         echo "  skipping: $json_dir not present"
         return 0
     fi
+
+    # Phase 5 freshness gate: skip the demo entirely when every input is
+    # byte-identical to the last successful run. The demo's outputs are a
+    # pure function of the hashed inputs, so a hash match guarantees the
+    # current dist/json/hydra-<lang>/ is correct. Set HYDRA_FORCE_PHASE5=1
+    # to bypass (e.g. to validate the cached output really is reproducible).
+    if [ "${HYDRA_FORCE_PHASE5:-0}" != "1" ]; then
+        if python3 "$HYDRA_ROOT/bin/lib/check-phase5-fresh.py" "$HYDRA_ROOT" "$lang"; then
+            return 0
+        fi
+    fi
+
     local snap_dir; snap_dir=$(mktemp -d)
     cp -R "$json_dir"/. "$snap_dir/"
 
@@ -455,6 +467,10 @@ native_generate_and_report() {
     else
         echo "  hydra-$lang: native output matches snapshot on all $total JSON files."
     fi
+
+    # Record the input hash so the next sync can skip this demo when
+    # nothing relevant has changed.
+    python3 "$HYDRA_ROOT/bin/lib/check-phase5-fresh.py" "$HYDRA_ROOT" "$lang" --record
 }
 
 # Phase 5 is always run for hydra-java and hydra-python (#344): the native
