@@ -163,10 +163,12 @@ and [docs/implementation.md](docs/implementation.md).
 
 Two hard rules:
 
-- **Read freely from other worktrees; modify only your assigned one.**
-  Reading sibling worktrees and `wiki/` is fine.
-  Edits, commits, branch operations, and `git add`/`restore`/`reset` happen
-  only inside your assigned worktree. The sole exception is the
+- **Read freely from other worktrees; modify only your assigned one — except
+  the wiki, which is OK to edit.** Reading sibling worktrees is fine. Edits,
+  commits, branch operations, and `git add`/`restore`/`reset` for branch code
+  happen only inside your assigned worktree. **`wiki/` is an exception**:
+  editing wiki pages is fine and expected when keeping user-facing
+  documentation in sync with the branch's work. The other exception is the
   cross-worktree inbox (see [claude/cross-worktree-messages.md](claude/cross-worktree-messages.md)).
 - **Never edit files under `hydra.git/` directly.** It is the shared object
   store; only git commands modify it.

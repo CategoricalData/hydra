@@ -211,7 +211,8 @@ definitionName = define "definitionName" $
   "def" ~>
   cases _Definition (var "def") Nothing [
     _Definition_term>>: "td" ~> Packaging.termDefinitionName (var "td"),
-    _Definition_type>>: "td" ~> Packaging.typeDefinitionName (var "td")]
+    _Definition_type>>: "td" ~> Packaging.typeDefinitionName (var "td"),
+    _Definition_primitive>>: "pd" ~> Packaging.primitiveDefinitionName (var "pd")]
 
 -- | Check for module namespaces that would conflict when mapped to a target language's
 -- directory structure. Two namespaces conflict if they are identical when lowercased,
@@ -320,7 +321,9 @@ checkDefinitionDocumentation = define "checkDefinitionDocumentation" $
               "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "td")) $
               cases _Type (var "typ") (Just false) [
                 _Type_annotated>>: "at" ~>
-                  Annotations.hasDescription @@ (Core.annotatedTypeAnnotation $ var "at")]] $
+                  Annotations.hasDescription @@ (Core.annotatedTypeAnnotation $ var "at")],
+            _Definition_primitive>>: "pd" ~>
+              Logic.not (Equality.equal (Packaging.primitiveDefinitionDescription $ var "pd") (string ""))] $
           Logic.ifElse (var "documented")
             nothing
             (just $ ErrorPackaging.invalidModuleErrorMissingDocumentation $
@@ -370,10 +373,12 @@ checkDefinitionNameConvention = define "checkDefinitionNameConvention" $
           "local" <~ (Names.localNameOf @@ var "name") $
           "expected" <~ cases _Definition (var "def") (Just Util.caseConventionCamel) [
             _Definition_term>>: constant Util.caseConventionCamel,
-            _Definition_type>>: constant Util.caseConventionPascal] $
+            _Definition_type>>: constant Util.caseConventionPascal,
+            _Definition_primitive>>: constant Util.caseConventionCamel] $
           "pattern" <~ cases _Definition (var "def") (Just (Phantoms.asTerm Constants.regexCamelCase)) [
             _Definition_term>>: constant (Phantoms.asTerm Constants.regexCamelCase),
-            _Definition_type>>: constant (Phantoms.asTerm Constants.regexPascalCase)] $
+            _Definition_type>>: constant (Phantoms.asTerm Constants.regexPascalCase),
+            _Definition_primitive>>: constant (Phantoms.asTerm Constants.regexCamelCase)] $
           Logic.ifElse (Regex.matches (var "pattern") (var "local"))
             nothing
             (just $ ErrorPackaging.invalidModuleErrorInvalidDefinitionName $

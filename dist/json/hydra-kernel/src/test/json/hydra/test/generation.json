@@ -389,7 +389,26 @@
                                                                                                                                   {"literal": {"string": "\n"}}]},
                                                                                                                               "function": {"variable": "hydra.lib.strings.cat"}}},
                                                                                                                           "domain": {"variable": "hydra.packaging.TermDefinition"},
-                                                                                                                          "parameter": "td"}}}],
+                                                                                                                          "parameter": "td"}}},
+                                                                                                                    {
+                                                                                                                      "name": "primitive",
+                                                                                                                      "term": {
+                                                                                                                        "lambda": {
+                                                                                                                          "body": {
+                                                                                                                            "application": {
+                                                                                                                              "argument": {
+                                                                                                                                "list": [
+                                                                                                                                  {
+                                                                                                                                    "application": {
+                                                                                                                                      "argument": {
+                                                                                                                                        "application": {
+                                                                                                                                          "argument": {"variable": "pd"},
+                                                                                                                                          "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.PrimitiveDefinition"}}}},
+                                                                                                                                      "function": {"unwrap": "hydra.core.Name"}}},
+                                                                                                                                  {"literal": {"string": " :: <primitive>\n"}}]},
+                                                                                                                              "function": {"variable": "hydra.lib.strings.cat"}}},
+                                                                                                                          "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
+                                                                                                                          "parameter": "pd"}}}],
                                                                                                                   "typeName": "hydra.packaging.Definition"}}}},
                                                                                                           "domain": {"variable": "hydra.packaging.Definition"},
                                                                                                           "parameter": "d"}},
@@ -766,7 +785,26 @@
                                                                                                                                   {"literal": {"string": "\n"}}]},
                                                                                                                               "function": {"variable": "hydra.lib.strings.cat"}}},
                                                                                                                           "domain": {"variable": "hydra.packaging.TermDefinition"},
-                                                                                                                          "parameter": "td"}}}],
+                                                                                                                          "parameter": "td"}}},
+                                                                                                                    {
+                                                                                                                      "name": "primitive",
+                                                                                                                      "term": {
+                                                                                                                        "lambda": {
+                                                                                                                          "body": {
+                                                                                                                            "application": {
+                                                                                                                              "argument": {
+                                                                                                                                "list": [
+                                                                                                                                  {
+                                                                                                                                    "application": {
+                                                                                                                                      "argument": {
+                                                                                                                                        "application": {
+                                                                                                                                          "argument": {"variable": "pd"},
+                                                                                                                                          "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.PrimitiveDefinition"}}}},
+                                                                                                                                      "function": {"unwrap": "hydra.core.Name"}}},
+                                                                                                                                  {"literal": {"string": " :: <primitive>\n"}}]},
+                                                                                                                              "function": {"variable": "hydra.lib.strings.cat"}}},
+                                                                                                                          "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
+                                                                                                                          "parameter": "pd"}}}],
                                                                                                                   "typeName": "hydra.packaging.Definition"}}}},
                                                                                                           "domain": {"variable": "hydra.packaging.Definition"},
                                                                                                           "parameter": "d"}},
@@ -1251,7 +1289,26 @@
                                                                                                                                   {"literal": {"string": "\n"}}]},
                                                                                                                               "function": {"variable": "hydra.lib.strings.cat"}}},
                                                                                                                           "domain": {"variable": "hydra.packaging.TermDefinition"},
-                                                                                                                          "parameter": "td"}}}],
+                                                                                                                          "parameter": "td"}}},
+                                                                                                                    {
+                                                                                                                      "name": "primitive",
+                                                                                                                      "term": {
+                                                                                                                        "lambda": {
+                                                                                                                          "body": {
+                                                                                                                            "application": {
+                                                                                                                              "argument": {
+                                                                                                                                "list": [
+                                                                                                                                  {
+                                                                                                                                    "application": {
+                                                                                                                                      "argument": {
+                                                                                                                                        "application": {
+                                                                                                                                          "argument": {"variable": "pd"},
+                                                                                                                                          "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.PrimitiveDefinition"}}}},
+                                                                                                                                      "function": {"unwrap": "hydra.core.Name"}}},
+                                                                                                                                  {"literal": {"string": " :: <primitive>\n"}}]},
+                                                                                                                              "function": {"variable": "hydra.lib.strings.cat"}}},
+                                                                                                                          "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
+                                                                                                                          "parameter": "pd"}}}],
                                                                                                                   "typeName": "hydra.packaging.Definition"}}}},
                                                                                                           "domain": {"variable": "hydra.packaging.Definition"},
                                                                                                           "parameter": "d"}},
@@ -1716,7 +1773,26 @@
                                                                                                                                   {"literal": {"string": "\n"}}]},
                                                                                                                               "function": {"variable": "hydra.lib.strings.cat"}}},
                                                                                                                           "domain": {"variable": "hydra.packaging.TermDefinition"},
-                                                                                                                          "parameter": "td"}}}],
+                                                                                                                          "parameter": "td"}}},
+                                                                                                                    {
+                                                                                                                      "name": "primitive",
+                                                                                                                      "term": {
+                                                                                                                        "lambda": {
+                                                                                                                          "body": {
+                                                                                                                            "application": {
+                                                                                                                              "argument": {
+                                                                                                                                "list": [
+                                                                                                                                  {
+                                                                                                                                    "application": {
+                                                                                                                                      "argument": {
+                                                                                                                                        "application": {
+                                                                                                                                          "argument": {"variable": "pd"},
+                                                                                                                                          "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.PrimitiveDefinition"}}}},
+                                                                                                                                      "function": {"unwrap": "hydra.core.Name"}}},
+                                                                                                                                  {"literal": {"string": " :: <primitive>\n"}}]},
+                                                                                                                              "function": {"variable": "hydra.lib.strings.cat"}}},
+                                                                                                                          "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
+                                                                                                                          "parameter": "pd"}}}],
                                                                                                                   "typeName": "hydra.packaging.Definition"}}}},
                                                                                                           "domain": {"variable": "hydra.packaging.Definition"},
                                                                                                           "parameter": "d"}},
@@ -2267,7 +2343,26 @@
                                                                                                                                   {"literal": {"string": "\n"}}]},
                                                                                                                               "function": {"variable": "hydra.lib.strings.cat"}}},
                                                                                                                           "domain": {"variable": "hydra.packaging.TermDefinition"},
-                                                                                                                          "parameter": "td"}}}],
+                                                                                                                          "parameter": "td"}}},
+                                                                                                                    {
+                                                                                                                      "name": "primitive",
+                                                                                                                      "term": {
+                                                                                                                        "lambda": {
+                                                                                                                          "body": {
+                                                                                                                            "application": {
+                                                                                                                              "argument": {
+                                                                                                                                "list": [
+                                                                                                                                  {
+                                                                                                                                    "application": {
+                                                                                                                                      "argument": {
+                                                                                                                                        "application": {
+                                                                                                                                          "argument": {"variable": "pd"},
+                                                                                                                                          "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.PrimitiveDefinition"}}}},
+                                                                                                                                      "function": {"unwrap": "hydra.core.Name"}}},
+                                                                                                                                  {"literal": {"string": " :: <primitive>\n"}}]},
+                                                                                                                              "function": {"variable": "hydra.lib.strings.cat"}}},
+                                                                                                                          "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
+                                                                                                                          "parameter": "pd"}}}],
                                                                                                                   "typeName": "hydra.packaging.Definition"}}}},
                                                                                                           "domain": {"variable": "hydra.packaging.Definition"},
                                                                                                           "parameter": "d"}},

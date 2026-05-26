@@ -21,13 +21,66 @@ in the top-level orientation.
 A primitive class can exist but be invisible at runtime if it isn't registered
 in `Libraries.java` / `Libraries.hs` / `libraries.py` /
 `Libraries.scala` / `libraries.clj`.
-Always check registration when debugging "unknown primitive" errors.
+
+Two-tier check (post-#156): the **canonical registry** is the
+`PrimitiveDefinition` in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs`.
+The **host-side registries** (e.g. `Libraries.hs` `hydraLib<Sub>` lists)
+pair each primitive's universal metadata with a native impl. A primitive
+is "unknown" if either:
+- The canonical `PrimitiveDefinition` is missing (validator-time error during sync).
+- The host registry doesn't bind the name to a native impl (runtime "unknown primitive").
+
+Always check both layers when debugging.
 
 ### Primitive `implementation()` must not throw (Java)
 
-Even higher-order (`prim2Eval`) primitives need a working `implementation()`
-that constructs term-level results.
+Higher-order primitives (those that take function arguments and use
+`Reduction.reduceTerm` internally) need a working `implementation()` that
+constructs term-level results, not one that throws on missing arg shapes.
 See [docs/recipes/adding-primitives.md](../docs/recipes/adding-primitives.md).
+
+### Primitive definition list alphabetical-order trap
+
+The kernel validator (`hydra.validate.packaging`) requires the
+`definitions` list in each `Hydra/Sources/Kernel/Lib/<Sub>.hs` module to be
+in lexical alphabetical order by primitive name. Numeric suffixes
+sort lexically, not numerically: `bigintToInt16` < `bigintToInt32` <
+`bigintToInt64` < `bigintToInt8` (because `'1' < '3' < '6' < '8'`).
+
+The validator fails with `definitions out of order: <X> precedes <Y>`.
+
+### Empty `description` field fails the documentation validator
+
+`hydra.validate.packaging`'s documentation rule (`checkDefinitionDocumentation`)
+flags any `PrimitiveDefinition` whose `description` is the empty string. The
+description is a required field on the type but the validator treats `""` as
+"undocumented". When using `toPrimitive` or `primNoDef`, always pass a
+non-empty description.
+
+### `unary_function` is shallow — it only extracts the outer call
+
+In `Hydra.Dsl.Meta.Phantoms`, `unary_function f` builds a TTerm representing
+a unary lambda by calling `f (var "x")` and pattern-matching the result as
+`TermApplication (lhs, _)`, then returning `lhs`. If `f` does more than a
+single application (e.g. composes two operations), only the outer-most
+function survives; the inner one is silently discarded. The bug manifests
+as a type-inference failure that says "unify `<inner-output-type>` with
+`<outer-input-type>`" downstream. Use `lam "x" (...)` directly to build a
+real lambda body containing nested calls.
+
+### Definition.primitive arm: every Definition consumer needs updating
+
+When adding `DefinitionPrimitive` to the `Definition` union, every site
+that does `cases _Definition (var "def") Nothing [...]` with a missing
+arm becomes a runtime crash (non-exhaustive pattern). Even with a
+`(Just default)` fall-through, semantics are usually wrong for the
+primitive arm. Sites to audit in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/`:
+`Analysis.hs`, `Environment.hs`, `Generation.hs`, `Validate/Packaging.hs`,
+plus `Sources/Test/Generation.hs`. The original kernel migration left
+these incomplete and surfaced as a `Non-exhaustive patterns in case`
+crash inside `Validate/Packaging.hs:definitionName` during the first
+sync after adding the first `hydra.lib.<sub>` module that emitted
+primitives.
 
 ### Floating-point test portability
 
