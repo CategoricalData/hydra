@@ -234,6 +234,21 @@ el = toBinding
 toDefinition :: TTermDefinition a -> Definition
 toDefinition (TTermDefinition name (TTerm term)) = DefinitionTerm $ TermDefinition name term Nothing
 
+-- | Convert a phantom-typed term definition to a primitive Definition, using the term body as the
+-- declarative default implementation. The TermSignature describes the primitive's logical type.
+-- isPure / isTotal default to True; use withImpurity / withPartiality to flag exceptions.
+-- Example: toPrimitive "logical AND" andSig and_
+toPrimitive :: String -> TermSignature -> TTermDefinition a -> Definition
+toPrimitive description sig (TTermDefinition name (TTerm term)) =
+  DefinitionPrimitive $ PrimitiveDefinition name description sig True True (Just term)
+
+-- | Convert a Name to a primitive Definition with no default implementation. Used for primitives
+-- whose meaning is host-native and not expressible as a Hydra term (e.g. currentUnixTimeSeconds).
+-- Example: toPrimitiveNoDefault "Current UNIX time, in seconds" sig (Name "hydra.lib.math.currentUnixTimeSeconds")
+toPrimitiveNoDefault :: String -> TermSignature -> Name -> Definition
+toPrimitiveNoDefault description sig name =
+  DefinitionPrimitive $ PrimitiveDefinition name description sig True True Nothing
+
 
 
 -- | Create a field with the given name and value

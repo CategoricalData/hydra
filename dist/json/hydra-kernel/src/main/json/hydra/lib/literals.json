@@ -1,0 +1,578 @@
+{
+  "definitions": [
+    {
+      "primitive": {
+        "description": "Convert a bigint to a decimal.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.bigintToDecimal",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}}],
+          "result": {"type": {"literal": {"decimal": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a bigint to an int16 (truncating).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.bigintToInt16",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"int16": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a bigint to an int32 (truncating).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.bigintToInt32",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a bigint to an int64 (truncating).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.bigintToInt64",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"int64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a bigint to an int8 (truncating).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.bigintToInt8",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"int8": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a bigint to a uint16 (truncating).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.bigintToUint16",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"uint16": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a bigint to a uint32 (truncating).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.bigintToUint32",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"uint32": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a bigint to a uint64 (truncating).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.bigintToUint64",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"uint64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a bigint to a uint8 (truncating).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.bigintToUint8",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"uint8": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert binary data to a list of byte values.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.binaryToBytes",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"binary": {}}}}],
+          "result": {"type": {"list": {"literal": {"integer": {"int32": {}}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert binary data to a UTF-8 string.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.binaryToString",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"binary": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a decimal to a bigint (truncating).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.decimalToBigint",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"decimal": {}}}}],
+          "result": {"type": {"literal": {"integer": {"bigint": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a decimal to a float32.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.decimalToFloat32",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"decimal": {}}}}],
+          "result": {"type": {"literal": {"float": {"float32": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a decimal to a float64.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.decimalToFloat64",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"decimal": {}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a float32 to a decimal.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.float32ToDecimal",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float32": {}}}}}],
+          "result": {"type": {"literal": {"decimal": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a float32 to a float64.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.float32ToFloat64",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float32": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a float64 to a decimal.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.float64ToDecimal",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"decimal": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a float64 to a float32 (lossy).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.float64ToFloat32",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float32": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert an int16 to a bigint.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.int16ToBigint",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int16": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"bigint": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert an int32 to a bigint.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.int32ToBigint",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"bigint": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert an int64 to a bigint.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.int64ToBigint",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int64": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"bigint": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert an int8 to a bigint.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.int8ToBigint",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int8": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"bigint": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Parse a string as a bigint.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.readBigint",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"maybe": {"literal": {"integer": {"bigint": {}}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Parse a string as a boolean.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.readBoolean",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"maybe": {"literal": {"boolean": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Parse a string as a decimal.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.readDecimal",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"maybe": {"literal": {"decimal": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Parse a string as a float32.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.readFloat32",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"maybe": {"literal": {"float": {"float32": {}}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Parse a string as a float64.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.readFloat64",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"maybe": {"literal": {"float": {"float64": {}}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Parse a string as an int16.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.readInt16",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"maybe": {"literal": {"integer": {"int16": {}}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Parse a string as an int32.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.readInt32",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"maybe": {"literal": {"integer": {"int32": {}}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Parse a string as an int64.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.readInt64",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"maybe": {"literal": {"integer": {"int64": {}}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Parse a string as an int8.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.readInt8",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"maybe": {"literal": {"integer": {"int8": {}}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Parse a string-literal token to a plain string (Just) or Nothing on parse failure.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.readString",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"maybe": {"literal": {"string": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Parse a string as a uint16.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.readUint16",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"maybe": {"literal": {"integer": {"uint16": {}}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Parse a string as a uint32.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.readUint32",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"maybe": {"literal": {"integer": {"uint32": {}}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Parse a string as a uint64.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.readUint64",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"maybe": {"literal": {"integer": {"uint64": {}}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Parse a string as a uint8.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.readUint8",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"maybe": {"literal": {"integer": {"uint8": {}}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Render a bigint as a string.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.showBigint",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Render a boolean as a string.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.showBoolean",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Render a decimal as a string.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.showDecimal",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"decimal": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Render a float32 as a string.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.showFloat32",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float32": {}}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Render a float64 as a string.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.showFloat64",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Render an int16 as a string.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.showInt16",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int16": {}}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Render an int32 as a string.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.showInt32",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Render an int64 as a string.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.showInt64",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int64": {}}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Render an int8 as a string.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.showInt8",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int8": {}}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Render a string as a string-literal token (escaped and quoted).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.showString",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Render a uint16 as a string.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.showUint16",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"uint16": {}}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Render a uint32 as a string.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.showUint32",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"uint32": {}}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Render a uint64 as a string.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.showUint64",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"uint64": {}}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Render a uint8 as a string.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.showUint8",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"uint8": {}}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a UTF-8 string to binary data.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.stringToBinary",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"binary": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a uint16 to a bigint.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.uint16ToBigint",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"uint16": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"bigint": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a uint32 to a bigint.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.uint32ToBigint",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"uint32": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"bigint": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a uint64 to a bigint.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.uint64ToBigint",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"uint64": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"bigint": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a uint8 to a bigint.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.literals.uint8ToBigint",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"uint8": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"bigint": {}}}}},
+          "typeParameters": []}}}],
+  "dependencies": [
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "description": "Primitives in the hydra.lib.literals namespace.",
+  "name": "hydra.lib.literals"}
