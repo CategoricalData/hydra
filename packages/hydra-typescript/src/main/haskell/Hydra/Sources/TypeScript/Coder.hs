@@ -1388,45 +1388,82 @@ encodeTerm = def "encodeTerm" $
      -- The arm bodies are applied to `u.value` (or to `u` itself for
      -- unit-shaped arms); the default handler is a bare value, not a fn.
      _Term_cases>>: lambda "cs" $
+       -- Emit a switch-statement IIFE rather than a right-fold of
+       -- ternaries. The previous nested-ternary form (`tag === "a" ?
+       -- armA(u.value) : tag === "b" ? armB(u.value) : default`) compiles
+       -- correctly but adds two stack frames per arm (one ternary, one
+       -- IIFE-application). For a 21-arm `cases` like the kernel's
+       -- `typeOf` dispatcher, that's 42 extra frames per call — and
+       -- typeOf chains through deeply-nested terms blow V8's ~8K-frame
+       -- stack when running under Rosetta-emulated Node on Apple Silicon.
+       -- The switch-statement form has constant per-arm overhead (one
+       -- call frame per arm body) and is also clearer.
+       --
+       -- Emitted shape:
+       --   ((u) => {
+       --     switch ((u as any).tag) {
+       --       case "<arm1Name>": return arm1Expr((u as any).value);
+       --       ...
+       --       default: return defaultExpr;  // or throw
+       --     }
+       --   })
+       --
+       -- Hosts that prefer hoisting `cases` out of inline positions can
+       -- still do so via `doHoistCase`; this emission then naturally
+       -- becomes the body of a top-level `function name(u) { switch ...
+       -- }` instead of an IIFE.
        "armFields" <~ Core.caseStatementCases (var "cs") $
        "defaultMaybe" <~ Core.caseStatementDefault (var "cs") $
-       "tail" <~ Maybes.cases (var "defaultMaybe")
-         -- No default: emit a throw-IIFE so unmatched cases fail loudly
-         -- at runtime rather than silently returning undefined. The
-         -- IIFE's body is `throw new Error(...)`. Since the AST has no
-         -- ThrowExpression, we approximate via `((() => { throw ... })())`.
-         -- Practically rare: kernel `cases` almost always provides a default.
-         (tsCall @@ (tsArrow @@ list ([] :: [TTerm String])
-           @@ (tsCall @@ (tsExprIdent @@ string "(() => { throw new Error('unmatched case'); })")
-                       @@ list ([] :: [TTerm TS.Expression])))
-           @@ list ([] :: [TTerm TS.Expression]))
-         (lambda "dt" $ encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "dt") $
        "uVar" <~ string "u" $
-       -- Cast `u` to any before destructuring so tsc doesn't reject
-       -- `.value` access on unit-shaped variants (`{tag: "X"}` with no
-       -- payload) — the arm-side lambda ignores `undefined` at runtime.
+       -- Cast `u` to any so `.value` works for unit-shaped variants too.
        "uExpr" <~ (tsAsAny @@ (tsExprIdent @@ var "uVar")) $
        "uTag" <~ (tsMember @@ var "uExpr" @@ string "tag") $
        "uValue" <~ (tsMember @@ var "uExpr" @@ string "value") $
-       -- Fold arms right-to-left into a nested conditional: the innermost
-       -- conditional has the default as its alternate.
-       "reversedArms" <~ Lists.reverse (var "armFields") $
-       "body" <~ Lists.foldl
-         (lambda "acc" $ lambda "f" $
+       -- Build one `SwitchCase` per arm: `case "<fname>": return
+       -- <armExpr>(u.value);`.
+       "armCases" <~ Lists.map
+         (lambda "f" $
            "fname" <~ Core.unName (Core.fieldName (var "f")) $
            "armExpr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.fieldTerm (var "f")) $
-           tsCond
-             @@ (inject TS._Expression TS._Expression_binary
-                  (record TS._BinaryExpression [
-                    TS._BinaryExpression_operator>>:
-                      inject TS._BinaryOperator TS._BinaryOperator_strictEqual unit,
-                    TS._BinaryExpression_left>>: var "uTag",
-                    TS._BinaryExpression_right>>: tsExprStr @@ var "fname"]))
-             @@ (tsCall @@ var "armExpr" @@ list [var "uValue"])
-             @@ var "acc")
-         (var "tail")
-         (var "reversedArms") $
-       tsArrow @@ list [var "uVar"] @@ var "body",
+           "callExpr" <~ (tsCall @@ var "armExpr" @@ list [var "uValue"]) $
+           record TS._SwitchCase [
+             TS._SwitchCase_test>>: just (tsExprStr @@ var "fname"),
+             TS._SwitchCase_consequent>>: list [
+               inject TS._Statement TS._Statement_return (just (var "callExpr"))]])
+         (var "armFields") $
+       -- Default arm: emit either `default: return <default-expr>;` if
+       -- the user supplied one, or `default: throw new Error("unmatched
+       -- case");` otherwise.
+       "defaultCase" <~ Maybes.cases (var "defaultMaybe")
+         -- No default: throw. The TS AST doesn't have a Throw statement
+         -- variant, so emit the throw via an unsanitized identifier
+         -- inside an Expression statement (return of an IIFE that
+         -- throws); see the older fold form for the same trick.
+         (record TS._SwitchCase [
+           TS._SwitchCase_test>>: (nothing :: TTerm (Maybe TS.Expression)),
+           TS._SwitchCase_consequent>>: list [
+             inject TS._Statement TS._Statement_return (just
+               (tsCall @@ (tsExprIdent @@ string "(() => { throw new Error('unmatched case'); })")
+                       @@ list ([] :: [TTerm TS.Expression])))]])
+         (lambda "dt" $
+           "dExpr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "dt") $
+           record TS._SwitchCase [
+             TS._SwitchCase_test>>: (nothing :: TTerm (Maybe TS.Expression)),
+             TS._SwitchCase_consequent>>: list [
+               inject TS._Statement TS._Statement_return (just (var "dExpr"))]]) $
+       "allCases" <~ (Lists.concat2 (var "armCases") (list [var "defaultCase"])) $
+       -- Assemble the switch statement and wrap in a block-bodied arrow.
+       "switchStmt" <~ (inject TS._Statement TS._Statement_switch
+         (record TS._SwitchStatement [
+           TS._SwitchStatement_discriminant>>: var "uTag",
+           TS._SwitchStatement_cases>>: var "allCases"])) $
+       inject TS._Expression TS._Expression_arrow
+         (record TS._ArrowFunctionExpression [
+           TS._ArrowFunctionExpression_params>>: list [
+             inject TS._Pattern TS._Pattern_identifier (tsIdent @@ var "uVar")],
+           TS._ArrowFunctionExpression_body>>:
+             inject TS._ArrowFunctionBody TS._ArrowFunctionBody_block (list [var "switchStmt"]),
+           TS._ArrowFunctionExpression_async>>: boolean False]),
      -- Either constructor at the term level: { tag: "left", value: l } or
      -- { tag: "right", value: r }.
      _Term_either>>: lambda "e" $
