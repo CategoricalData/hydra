@@ -3071,191 +3071,244 @@
                                                   "let": {
                                                     "bindings": [
                                                       {
-                                                        "name": "tail",
-                                                        "term": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "lambda": {
-                                                                "body": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "dt"},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "currentNs"},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "g"},
-                                                                            "function": {"application": {"argument": {"variable": "cx"}, "function": {"variable": "hydra.typeScript.coder.encodeTerm"}}}}}}}}},
-                                                                "domain": {"variable": "hydra.core.Term"},
-                                                                "parameter": "dt"}},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.typeScript.syntax.Expression"}}},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {
-                                                                              "application": {
-                                                                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.typeScript.syntax.Expression"}}},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "argument": {"literal": {"string": "(() => { throw new Error('unmatched case'); })"}},
-                                                                                        "function": {"variable": "hydra.typeScript.coder.tsExprIdent"}}},
-                                                                                    "function": {"variable": "hydra.typeScript.coder.tsCall"}}}}},
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}},
-                                                                                "function": {"variable": "hydra.typeScript.coder.tsArrow"}}}}},
-                                                                        "function": {"variable": "hydra.typeScript.coder.tsCall"}}}}},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "defaultMaybe"},
-                                                                    "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.core.Term"}}},
-                                                                        "type": {"variable": "hydra.typeScript.syntax.Expression"}}}}}}}}},
-                                                        "typeScheme": {"body": {"variable": "hydra.typeScript.syntax.Expression"}, "variables": []}}],
+                                                        "name": "uVar",
+                                                        "term": {"literal": {"string": "u"}},
+                                                        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                                     "body": {
                                                       "let": {
                                                         "bindings": [
                                                           {
-                                                            "name": "uVar",
-                                                            "term": {"literal": {"string": "u"}},
-                                                            "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
+                                                            "name": "uExpr",
+                                                            "term": {
+                                                              "application": {
+                                                                "argument": {"application": {"argument": {"variable": "uVar"}, "function": {"variable": "hydra.typeScript.coder.tsExprIdent"}}},
+                                                                "function": {"variable": "hydra.typeScript.coder.tsAsAny"}}},
+                                                            "typeScheme": {"body": {"variable": "hydra.typeScript.syntax.Expression"}, "variables": []}}],
                                                         "body": {
                                                           "let": {
                                                             "bindings": [
                                                               {
-                                                                "name": "uExpr",
+                                                                "name": "uTag",
                                                                 "term": {
                                                                   "application": {
-                                                                    "argument": {"application": {"argument": {"variable": "uVar"}, "function": {"variable": "hydra.typeScript.coder.tsExprIdent"}}},
-                                                                    "function": {"variable": "hydra.typeScript.coder.tsAsAny"}}},
+                                                                    "argument": {"literal": {"string": "tag"}},
+                                                                    "function": {"application": {"argument": {"variable": "uExpr"}, "function": {"variable": "hydra.typeScript.coder.tsMember"}}}}},
                                                                 "typeScheme": {"body": {"variable": "hydra.typeScript.syntax.Expression"}, "variables": []}}],
                                                             "body": {
                                                               "let": {
                                                                 "bindings": [
                                                                   {
-                                                                    "name": "uTag",
+                                                                    "name": "uValue",
                                                                     "term": {
                                                                       "application": {
-                                                                        "argument": {"literal": {"string": "tag"}},
+                                                                        "argument": {"literal": {"string": "value"}},
                                                                         "function": {"application": {"argument": {"variable": "uExpr"}, "function": {"variable": "hydra.typeScript.coder.tsMember"}}}}},
                                                                     "typeScheme": {"body": {"variable": "hydra.typeScript.syntax.Expression"}, "variables": []}}],
                                                                 "body": {
                                                                   "let": {
                                                                     "bindings": [
                                                                       {
-                                                                        "name": "uValue",
+                                                                        "name": "armCases",
                                                                         "term": {
                                                                           "application": {
-                                                                            "argument": {"literal": {"string": "value"}},
-                                                                            "function": {"application": {"argument": {"variable": "uExpr"}, "function": {"variable": "hydra.typeScript.coder.tsMember"}}}}},
-                                                                        "typeScheme": {"body": {"variable": "hydra.typeScript.syntax.Expression"}, "variables": []}}],
+                                                                            "argument": {"variable": "armFields"},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "lambda": {
+                                                                                    "body": {
+                                                                                      "let": {
+                                                                                        "bindings": [
+                                                                                          {
+                                                                                            "name": "fname",
+                                                                                            "term": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Field"}}}},
+                                                                                                "function": {"unwrap": "hydra.core.Name"}}},
+                                                                                            "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
+                                                                                        "body": {
+                                                                                          "let": {
+                                                                                            "bindings": [
+                                                                                              {
+                                                                                                "name": "armExpr",
+                                                                                                "term": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "term", "typeName": "hydra.core.Field"}}}},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "currentNs"},
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "g"},
+                                                                                                            "function": {"application": {"argument": {"variable": "cx"}, "function": {"variable": "hydra.typeScript.coder.encodeTerm"}}}}}}}}},
+                                                                                                "typeScheme": {"body": {"variable": "hydra.typeScript.syntax.Expression"}, "variables": []}}],
+                                                                                            "body": {
+                                                                                              "let": {
+                                                                                                "bindings": [
+                                                                                                  {
+                                                                                                    "name": "callExpr",
+                                                                                                    "term": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"list": [{"variable": "uValue"}]},
+                                                                                                        "function": {"application": {"argument": {"variable": "armExpr"}, "function": {"variable": "hydra.typeScript.coder.tsCall"}}}}},
+                                                                                                    "typeScheme": {"body": {"variable": "hydra.typeScript.syntax.Expression"}, "variables": []}}],
+                                                                                                "body": {
+                                                                                                  "record": {
+                                                                                                    "fields": [
+                                                                                                      {
+                                                                                                        "name": "test",
+                                                                                                        "term": {
+                                                                                                          "maybe": {"application": {"argument": {"variable": "fname"}, "function": {"variable": "hydra.typeScript.coder.tsExprStr"}}}}},
+                                                                                                      {
+                                                                                                        "name": "consequent",
+                                                                                                        "term": {
+                                                                                                          "list": [
+                                                                                                            {
+                                                                                                              "inject": {
+                                                                                                                "field": {"name": "return", "term": {"maybe": {"variable": "callExpr"}}},
+                                                                                                                "typeName": "hydra.typeScript.syntax.Statement"}}]}}],
+                                                                                                    "typeName": "hydra.typeScript.syntax.SwitchCase"}}}}}}}},
+                                                                                    "domain": {"variable": "hydra.core.Field"},
+                                                                                    "parameter": "f"}},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.Field"}}},
+                                                                                    "type": {"variable": "hydra.typeScript.syntax.SwitchCase"}}}}}}},
+                                                                        "typeScheme": {"body": {"list": {"variable": "hydra.typeScript.syntax.SwitchCase"}}, "variables": []}}],
                                                                     "body": {
                                                                       "let": {
                                                                         "bindings": [
                                                                           {
-                                                                            "name": "reversedArms",
+                                                                            "name": "defaultCase",
                                                                             "term": {
                                                                               "application": {
-                                                                                "argument": {"variable": "armFields"},
-                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.reverse"}, "type": {"variable": "hydra.core.Field"}}}}},
-                                                                            "typeScheme": {"body": {"list": {"variable": "hydra.core.Field"}}, "variables": []}}],
+                                                                                "argument": {
+                                                                                  "lambda": {
+                                                                                    "body": {
+                                                                                      "let": {
+                                                                                        "bindings": [
+                                                                                          {
+                                                                                            "name": "dExpr",
+                                                                                            "term": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "dt"},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "currentNs"},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "g"},
+                                                                                                        "function": {"application": {"argument": {"variable": "cx"}, "function": {"variable": "hydra.typeScript.coder.encodeTerm"}}}}}}}}},
+                                                                                            "typeScheme": {"body": {"variable": "hydra.typeScript.syntax.Expression"}, "variables": []}}],
+                                                                                        "body": {
+                                                                                          "record": {
+                                                                                            "fields": [
+                                                                                              {
+                                                                                                "name": "test",
+                                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typeScript.syntax.Expression"}}}},
+                                                                                              {
+                                                                                                "name": "consequent",
+                                                                                                "term": {
+                                                                                                  "list": [
+                                                                                                    {
+                                                                                                      "inject": {"field": {"name": "return", "term": {"maybe": {"variable": "dExpr"}}}, "typeName": "hydra.typeScript.syntax.Statement"}}]}}],
+                                                                                            "typeName": "hydra.typeScript.syntax.SwitchCase"}}}},
+                                                                                    "domain": {"variable": "hydra.core.Term"},
+                                                                                    "parameter": "dt"}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "record": {
+                                                                                        "fields": [
+                                                                                          {
+                                                                                            "name": "test",
+                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.typeScript.syntax.Expression"}}}},
+                                                                                          {
+                                                                                            "name": "consequent",
+                                                                                            "term": {
+                                                                                              "list": [
+                                                                                                {
+                                                                                                  "inject": {
+                                                                                                    "field": {
+                                                                                                      "name": "return",
+                                                                                                      "term": {
+                                                                                                        "maybe": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "argument": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"literal": {"string": "(() => { throw new Error('unmatched case'); })"}},
+                                                                                                                    "function": {"variable": "hydra.typeScript.coder.tsExprIdent"}}},
+                                                                                                                "function": {"variable": "hydra.typeScript.coder.tsCall"}}}}}}},
+                                                                                                    "typeName": "hydra.typeScript.syntax.Statement"}}]}}],
+                                                                                        "typeName": "hydra.typeScript.syntax.SwitchCase"}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "defaultMaybe"},
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                            "type": {"variable": "hydra.typeScript.syntax.SwitchCase"}}}}}}}}},
+                                                                            "typeScheme": {"body": {"variable": "hydra.typeScript.syntax.SwitchCase"}, "variables": []}}],
                                                                         "body": {
                                                                           "let": {
                                                                             "bindings": [
                                                                               {
-                                                                                "name": "body",
+                                                                                "name": "allCases",
                                                                                 "term": {
                                                                                   "application": {
-                                                                                    "argument": {"variable": "reversedArms"},
+                                                                                    "argument": {"list": [{"variable": "defaultCase"}]},
                                                                                     "function": {
                                                                                       "application": {
-                                                                                        "argument": {"variable": "tail"},
+                                                                                        "argument": {"variable": "armCases"},
                                                                                         "function": {
-                                                                                          "application": {
-                                                                                            "argument": {
-                                                                                              "lambda": {
-                                                                                                "body": {
-                                                                                                  "lambda": {
-                                                                                                    "body": {
-                                                                                                      "let": {
-                                                                                                        "bindings": [
-                                                                                                          {
-                                                                                                            "name": "fname",
-                                                                                                            "term": {
-                                                                                                              "application": {
-                                                                                                                "argument": {
-                                                                                                                  "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Field"}}}},
-                                                                                                                "function": {"unwrap": "hydra.core.Name"}}},
-                                                                                                            "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
-                                                                                                        "body": {
-                                                                                                          "let": {
-                                                                                                            "bindings": [
-                                                                                                              {
-                                                                                                                "name": "armExpr",
-                                                                                                                "term": {
-                                                                                                                  "application": {
-                                                                                                                    "argument": {
-                                                                                                                      "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "term", "typeName": "hydra.core.Field"}}}},
-                                                                                                                    "function": {
-                                                                                                                      "application": {
-                                                                                                                        "argument": {"variable": "currentNs"},
-                                                                                                                        "function": {
-                                                                                                                          "application": {
-                                                                                                                            "argument": {"variable": "g"},
-                                                                                                                            "function": {"application": {"argument": {"variable": "cx"}, "function": {"variable": "hydra.typeScript.coder.encodeTerm"}}}}}}}}},
-                                                                                                                "typeScheme": {"body": {"variable": "hydra.typeScript.syntax.Expression"}, "variables": []}}],
-                                                                                                            "body": {
-                                                                                                              "application": {
-                                                                                                                "argument": {"variable": "acc"},
-                                                                                                                "function": {
-                                                                                                                  "application": {
-                                                                                                                    "argument": {
-                                                                                                                      "application": {
-                                                                                                                        "argument": {"list": [{"variable": "uValue"}]},
-                                                                                                                        "function": {"application": {"argument": {"variable": "armExpr"}, "function": {"variable": "hydra.typeScript.coder.tsCall"}}}}},
-                                                                                                                    "function": {
-                                                                                                                      "application": {
-                                                                                                                        "argument": {
-                                                                                                                          "inject": {
-                                                                                                                            "field": {
-                                                                                                                              "name": "binary",
-                                                                                                                              "term": {
-                                                                                                                                "record": {
-                                                                                                                                  "fields": [
-                                                                                                                                    {
-                                                                                                                                      "name": "operator",
-                                                                                                                                      "term": {
-                                                                                                                                        "inject": {"field": {"name": "strictEqual", "term": {"unit": {}}}, "typeName": "hydra.typeScript.syntax.BinaryOperator"}}},
-                                                                                                                                    {"name": "left", "term": {"variable": "uTag"}},
-                                                                                                                                    {
-                                                                                                                                      "name": "right",
-                                                                                                                                      "term": {"application": {"argument": {"variable": "fname"}, "function": {"variable": "hydra.typeScript.coder.tsExprStr"}}}}],
-                                                                                                                                  "typeName": "hydra.typeScript.syntax.BinaryExpression"}}},
-                                                                                                                            "typeName": "hydra.typeScript.syntax.Expression"}},
-                                                                                                                        "function": {"variable": "hydra.typeScript.coder.tsCond"}}}}}}}}}}},
-                                                                                                    "domain": {"variable": "hydra.core.Field"},
-                                                                                                    "parameter": "f"}},
-                                                                                                "domain": {"variable": "hydra.typeScript.syntax.Expression"},
-                                                                                                "parameter": "acc"}},
-                                                                                            "function": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {
-                                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"variable": "hydra.typeScript.syntax.Expression"}}},
-                                                                                                "type": {"variable": "hydra.core.Field"}}}}}}}}},
-                                                                                "typeScheme": {"body": {"variable": "hydra.typeScript.syntax.Expression"}, "variables": []}}],
+                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.typeScript.syntax.SwitchCase"}}}}}}},
+                                                                                "typeScheme": {"body": {"list": {"variable": "hydra.typeScript.syntax.SwitchCase"}}, "variables": []}}],
                                                                             "body": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "body"},
-                                                                                "function": {
-                                                                                  "application": {"argument": {"list": [{"variable": "uVar"}]}, "function": {"variable": "hydra.typeScript.coder.tsArrow"}}}}}}}}}}}}}}}}}}}}}}},
+                                                                              "let": {
+                                                                                "bindings": [
+                                                                                  {
+                                                                                    "name": "switchStmt",
+                                                                                    "term": {
+                                                                                      "inject": {
+                                                                                        "field": {
+                                                                                          "name": "switch",
+                                                                                          "term": {
+                                                                                            "record": {
+                                                                                              "fields": [{"name": "discriminant", "term": {"variable": "uTag"}}, {"name": "cases", "term": {"variable": "allCases"}}],
+                                                                                              "typeName": "hydra.typeScript.syntax.SwitchStatement"}}},
+                                                                                        "typeName": "hydra.typeScript.syntax.Statement"}},
+                                                                                    "typeScheme": {"body": {"variable": "hydra.typeScript.syntax.Statement"}, "variables": []}}],
+                                                                                "body": {
+                                                                                  "inject": {
+                                                                                    "field": {
+                                                                                      "name": "arrow",
+                                                                                      "term": {
+                                                                                        "record": {
+                                                                                          "fields": [
+                                                                                            {
+                                                                                              "name": "params",
+                                                                                              "term": {
+                                                                                                "list": [
+                                                                                                  {
+                                                                                                    "inject": {
+                                                                                                      "field": {
+                                                                                                        "name": "identifier",
+                                                                                                        "term": {"application": {"argument": {"variable": "uVar"}, "function": {"variable": "hydra.typeScript.coder.tsIdent"}}}},
+                                                                                                      "typeName": "hydra.typeScript.syntax.Pattern"}}]}},
+                                                                                            {
+                                                                                              "name": "body",
+                                                                                              "term": {
+                                                                                                "inject": {
+                                                                                                  "field": {"name": "block", "term": {"list": [{"variable": "switchStmt"}]}},
+                                                                                                  "typeName": "hydra.typeScript.syntax.ArrowFunctionBody"}}},
+                                                                                            {"name": "async", "term": {"literal": {"boolean": false}}}],
+                                                                                          "typeName": "hydra.typeScript.syntax.ArrowFunctionExpression"}}},
+                                                                                    "typeName": "hydra.typeScript.syntax.Expression"}}}}}}}}}}}}}}}}}}}}}},
                                         "domain": {"variable": "hydra.core.CaseStatement"},
                                         "parameter": "cs"}}},
                                   {

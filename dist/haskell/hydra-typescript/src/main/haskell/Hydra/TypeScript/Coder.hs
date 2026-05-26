@@ -316,24 +316,42 @@ encodeTerm cx g currentNs term =
       Core.TermCases v0 ->
         let armFields = Core.caseStatementCases v0
             defaultMaybe = Core.caseStatementDefault v0
-            tail =
-                    Maybes.cases defaultMaybe (tsCall (tsArrow [] (tsCall (tsExprIdent "(() => { throw new Error('unmatched case'); })") [])) []) (\dt -> encodeTerm cx g currentNs dt)
             uVar = "u"
             uExpr = tsAsAny (tsExprIdent uVar)
             uTag = tsMember uExpr "tag"
             uValue = tsMember uExpr "value"
-            reversedArms = Lists.reverse armFields
-            body =
-                    Lists.foldl (\acc -> \f ->
+            armCases =
+                    Lists.map (\f ->
                       let fname = Core.unName (Core.fieldName f)
                           armExpr = encodeTerm cx g currentNs (Core.fieldTerm f)
-                      in (tsCond (Syntax.ExpressionBinary (Syntax.BinaryExpression {
-                        Syntax.binaryExpressionOperator = Syntax.BinaryOperatorStrictEqual,
-                        Syntax.binaryExpressionLeft = uTag,
-                        Syntax.binaryExpressionRight = (tsExprStr fname)})) (tsCall armExpr [
-                        uValue]) acc)) tail reversedArms
-        in (tsArrow [
-          uVar] body)
+                          callExpr = tsCall armExpr [
+                                uValue]
+                      in Syntax.SwitchCase {
+                        Syntax.switchCaseTest = (Just (tsExprStr fname)),
+                        Syntax.switchCaseConsequent = [
+                          Syntax.StatementReturn (Just callExpr)]}) armFields
+            defaultCase =
+                    Maybes.cases defaultMaybe (Syntax.SwitchCase {
+                      Syntax.switchCaseTest = Nothing,
+                      Syntax.switchCaseConsequent = [
+                        Syntax.StatementReturn (Just (tsCall (tsExprIdent "(() => { throw new Error('unmatched case'); })") []))]}) (\dt ->
+                      let dExpr = encodeTerm cx g currentNs dt
+                      in Syntax.SwitchCase {
+                        Syntax.switchCaseTest = Nothing,
+                        Syntax.switchCaseConsequent = [
+                          Syntax.StatementReturn (Just dExpr)]})
+            allCases = Lists.concat2 armCases [
+                  defaultCase]
+            switchStmt =
+                    Syntax.StatementSwitch (Syntax.SwitchStatement {
+                      Syntax.switchStatementDiscriminant = uTag,
+                      Syntax.switchStatementCases = allCases})
+        in (Syntax.ExpressionArrow (Syntax.ArrowFunctionExpression {
+          Syntax.arrowFunctionExpressionParams = [
+            Syntax.PatternIdentifier (tsIdent uVar)],
+          Syntax.arrowFunctionExpressionBody = (Syntax.ArrowFunctionBodyBlock [
+            switchStmt]),
+          Syntax.arrowFunctionExpressionAsync = False}))
       Core.TermEither v0 -> Eithers.either (\l -> tsAsAny (tsObject [
         ("tag", (tsExprStr "left")),
         ("value", (encodeTerm cx g currentNs l))])) (\r -> tsAsAny (tsObject [
