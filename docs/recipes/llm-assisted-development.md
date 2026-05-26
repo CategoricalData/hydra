@@ -11,7 +11,7 @@ functions.
 It contains:
 
 - **Types**: All type definitions from Hydra's kernel, showing their structure
-- **Terms**: Type signatures for all kernel constants and functions
+- **Terms**: Type schemes for all kernel constants and functions
 - **Primitives**: Built-in primitive functions with their type signatures
 
 The lexicon serves as a compact reference that can be included in an LLM's context window,
@@ -48,7 +48,7 @@ Terms:
 ```
 
 Type definitions use `=` to show their actual structure (union, record, wrap, etc.),
-while terms and primitives use `:` to show their type signatures with inferred type schemes.
+while terms use `:` to show their inferred type schemes, and primitives show their type signatures.
 
 ### Generating the lexicon
 

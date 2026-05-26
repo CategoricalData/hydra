@@ -3,6 +3,11 @@
     {
       "term": {
         "name": "hydra.dsl.classes.typeClassEquality",
+        "signature": {
+          "parameters": [],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.classes.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -31,13 +36,15 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.phantoms.TTerm"}}}},
-        "typeScheme": {
-          "body": {"application": {"argument": {"variable": "hydra.classes.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-          "variables": []}}},
+                "typeName": "hydra.phantoms.TTerm"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.classes.typeClassOrdering",
+        "signature": {
+          "parameters": [],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.classes.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -66,10 +73,7 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.phantoms.TTerm"}}}},
-        "typeScheme": {
-          "body": {"application": {"argument": {"variable": "hydra.classes.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-          "variables": []}}}],
+                "typeName": "hydra.phantoms.TTerm"}}}}}}],
   "dependencies": [{"module": "hydra.classes"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.classes",
   "name": "hydra.dsl.classes"}

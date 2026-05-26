@@ -79,22 +79,20 @@ echo ""
 CANONICAL_VERSION=$(tr -d '[:space:]' < VERSION 2>/dev/null || echo "")
 HASKELL_VERSION=$(grep '^version:' heads/haskell/package.yaml | awk '{print $2}')
 BOOT_HASKELL_VERSION=$(grep '^version:' demos/bootstrapping/resources/haskell/package.yaml | awk '{print $2}')
-JAVA_VERSION=$(grep "version = " build.gradle | head -1 | sed "s/.*version = '\\(.*\\)'/\\1/")
+JAVA_VERSION=$(grep "version = " heads/java/build.gradle | head -1 | sed "s/.*version = '\\(.*\\)'/\\1/")
 BOOT_JAVA_VERSION=$(grep "version = " demos/bootstrapping/resources/java/build.gradle | head -1 | sed "s/.*version = '\\(.*\\)'/\\1/")
 PYTHON_VERSION=$(grep '^version' heads/python/pyproject.toml | sed 's/.*"\(.*\)"/\1/')
 BOOT_PYTHON_VERSION=$(grep '^version' demos/bootstrapping/resources/python/pyproject.toml | sed 's/.*"\(.*\)"/\1/')
 SCALA_VERSION=$(grep 'version :=' packages/hydra-scala/build.sbt | sed 's/.*"\(.*\)".*/\1/' 2>/dev/null || echo "")
-PIXI_VERSION=$(grep '^version' pixi.toml | sed 's/.*"\(.*\)"/\1/')
 
 echo "  VERSION:                              $CANONICAL_VERSION"
 echo "  heads/haskell/package.yaml:           $HASKELL_VERSION"
 echo "  demos/bootstrapping/.../haskell:      $BOOT_HASKELL_VERSION"
-echo "  build.gradle:                         $JAVA_VERSION"
+echo "  heads/java/build.gradle:              $JAVA_VERSION"
 echo "  demos/bootstrapping/.../java:         $BOOT_JAVA_VERSION"
 echo "  heads/python/pyproject.toml:          $PYTHON_VERSION"
 echo "  demos/bootstrapping/.../python:       $BOOT_PYTHON_VERSION"
 echo "  packages/hydra-scala/build.sbt:       $SCALA_VERSION"
-echo "  pixi.toml:                            $PIXI_VERSION"
 echo ""
 
 EXPECTED="$CANONICAL_VERSION"
@@ -107,12 +105,11 @@ VERSION_MISMATCH=false
 for pair in \
     "heads/haskell/package.yaml:$HASKELL_VERSION" \
     "demos/bootstrapping/.../haskell:$BOOT_HASKELL_VERSION" \
-    "build.gradle:$JAVA_VERSION" \
+    "heads/java/build.gradle:$JAVA_VERSION" \
     "demos/bootstrapping/.../java:$BOOT_JAVA_VERSION" \
     "heads/python/pyproject.toml:$PYTHON_VERSION" \
     "demos/bootstrapping/.../python:$BOOT_PYTHON_VERSION" \
-    "packages/hydra-scala/build.sbt:$SCALA_VERSION" \
-    "pixi.toml:$PIXI_VERSION"; do
+    "packages/hydra-scala/build.sbt:$SCALA_VERSION"; do
     file="${pair%%:*}"
     ver="${pair##*:}"
     if [ "$ver" != "$EXPECTED" ]; then
@@ -150,7 +147,7 @@ fi
 step 3 $TOTAL_STEPS "Running Java build and tests"
 echo ""
 
-cd "$HYDRA_ROOT"
+cd "$HYDRA_ROOT/heads/java"
 if ./gradlew test 2>&1 | tee "$LOG_DIR/java.log"; then
     echo ""
     echo "  OK: Java tests passed"

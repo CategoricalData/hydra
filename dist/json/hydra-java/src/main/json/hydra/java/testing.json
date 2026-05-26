@@ -3,6 +3,13 @@
     {
       "term": {
         "name": "hydra.java.testing.buildJavaTestModule",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.testing.TestGroup"}},
+            {"isLazy": false, "name": "arg2", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Build the complete Java test module content"}}}],
@@ -123,19 +130,11 @@
                     "domain": {"variable": "hydra.testing.TestGroup"},
                     "parameter": "testGroup"}},
                 "domain": {"variable": "hydra.packaging.Module"},
-                "parameter": "testModule"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
-                  "domain": {"variable": "hydra.testing.TestGroup"}}},
-              "domain": {"variable": "hydra.packaging.Module"}}},
-          "variables": []}}},
+                "parameter": "testModule"}}}}}},
     {
       "term": {
         "name": "hydra.java.testing.findJavaImports",
+        "signature": {"parameters": [], "result": {"type": {"list": {"literal": {"string": {}}}}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Standard imports for Java JUnit test files"}}}],
@@ -143,11 +142,14 @@
               "list": [
                 {"literal": {"string": "import org.junit.jupiter.api.Test;"}},
                 {"literal": {"string": "import static org.junit.jupiter.api.Assertions.*;"}},
-                {"literal": {"string": "import java.util.*;"}}]}}},
-        "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}},
+                {"literal": {"string": "import java.util.*;"}}]}}}}},
     {
       "term": {
         "name": "hydra.java.testing.formatJavaTestName",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -227,13 +229,16 @@
                         "argument": {"variable": "pascal_"},
                         "function": {"application": {"argument": {"literal": {"string": "test"}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "name"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+                "parameter": "name"}}}}}},
     {
       "term": {
         "name": "hydra.java.testing.generateJavaTestCase",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"list": {"literal": {"string": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}],
+          "result": {"type": {"either": {"left": {"variable": "t0"}, "right": {"list": {"literal": {"string": {}}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -358,19 +363,21 @@
                         "parameter": "tcm"}},
                     "domain": {"list": {"literal": {"string": {}}}},
                     "parameter": "groupPath"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"either": {"left": {"variable": "t0"}, "right": {"list": {"literal": {"string": {}}}}}},
-                  "domain": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
-              "domain": {"list": {"literal": {"string": {}}}}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.java.testing.generateJavaTestFile",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.testing.TestGroup"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "t0"}}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "t1"},
+                "right": {"pair": {"first": {"literal": {"string": {}}}, "second": {"literal": {"string": {}}}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -399,25 +406,16 @@
                         "domain": {"variable": "hydra.packaging.Module"},
                         "parameter": "testModule"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "either": {
-                          "left": {"variable": "t1"},
-                          "right": {"pair": {"first": {"literal": {"string": {}}}, "second": {"literal": {"string": {}}}}}}},
-                      "domain": {"variable": "t0"}}},
-                  "domain": {"variable": "hydra.testing.TestGroup"}}},
-              "domain": {"variable": "hydra.packaging.Module"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.java.testing.generateJavaTestGroupHierarchy",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"list": {"literal": {"string": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.testing.TestGroup"}}],
+          "result": {"type": {"either": {"left": {"variable": "t0"}, "right": {"literal": {"string": {}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -648,19 +646,20 @@
                         "parameter": "testGroup"}},
                     "domain": {"list": {"literal": {"string": {}}}},
                     "parameter": "groupPath"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"either": {"left": {"variable": "t0"}, "right": {"literal": {"string": {}}}}},
-                  "domain": {"variable": "hydra.testing.TestGroup"}}},
-              "domain": {"list": {"literal": {"string": {}}}}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.java.testing.generateTestFileWithJavaCodec",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.testing.TestGroup"}}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "t0"},
+                "right": {"pair": {"first": {"literal": {"string": {}}}, "second": {"literal": {"string": {}}}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -794,22 +793,14 @@
                         "parameter": "testGroup"}},
                     "domain": {"variable": "hydra.packaging.Module"},
                     "parameter": "testModule"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "either": {
-                      "left": {"variable": "t0"},
-                      "right": {"pair": {"first": {"literal": {"string": {}}}, "second": {"literal": {"string": {}}}}}}},
-                  "domain": {"variable": "hydra.testing.TestGroup"}}},
-              "domain": {"variable": "hydra.packaging.Module"}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.java.testing.namespaceToJavaClassName",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.ModuleName"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert namespace to Java class name"}}}],
@@ -832,10 +823,7 @@
                                 "type": {"literal": {"string": {}}}}}}}}},
                     "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
                 "domain": {"variable": "hydra.packaging.ModuleName"},
-                "parameter": "ns_"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.packaging.ModuleName"}}},
-          "variables": []}}}],
+                "parameter": "ns_"}}}}}}],
   "dependencies": [
     {"module": "hydra.serialization"},
     {"module": "hydra.test.utils"},

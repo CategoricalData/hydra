@@ -36,6 +36,7 @@ import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Predicates as Predicates
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
@@ -508,7 +509,7 @@ gatherMetadata defs =
                 Packaging.DefinitionTerm v0 ->
                   let term = Packaging.termDefinitionTerm v0
                       metaWithTerm = Rewriting.foldOverTerm Coders.TraversalOrderPre (\m -> \t -> extendMetaForTerm m t) meta term
-                  in (Maybes.maybe metaWithTerm (\ts -> Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) metaWithTerm (Core.typeSchemeBody ts)) (Packaging.termDefinitionTypeScheme v0))
+                  in (Maybes.maybe metaWithTerm (\ts -> Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) metaWithTerm (Core.typeSchemeBody ts)) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0)))
                 Packaging.DefinitionType v0 ->
                   let typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)
                   in (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) meta typ)
@@ -594,7 +595,7 @@ toDataDeclaration namespaces def cx g =
 
       let name = Packaging.termDefinitionName def
           term = Packaging.termDefinitionTerm def
-          typ = Packaging.termDefinitionTypeScheme def
+          typ = Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature def)
           hname = Utils.simpleName (Names.localNameOf name)
           rewriteValueBinding =
                   \vb -> case vb of
@@ -818,7 +819,11 @@ typeDecl namespaces name typ cx g =
 -- | Project type scheme constraints to a map of type variables to typeclass names
 typeSchemeConstraintsToClassMap :: Ord t0 => (Maybe (M.Map t0 Core.TypeVariableMetadata) -> M.Map t0 (S.Set Core.Name))
 typeSchemeConstraintsToClassMap maybeConstraints =
-    Maybes.maybe Maps.empty (\constraints -> Maps.map (\meta -> Core.typeVariableMetadataClasses meta) constraints) maybeConstraints
+
+      let constraintToName =
+              \tcc -> case tcc of
+                Core.TypeClassConstraintSimple v0 -> Just v0
+      in (Maybes.maybe Maps.empty (\constraints -> Maps.map (\meta -> Sets.fromList (Maybes.cat (Lists.map constraintToName (Core.typeVariableMetadataClasses meta)))) constraints) maybeConstraints)
 -- | Whether to use the Hydra core import in generated modules
 useCoreImport :: Bool
 useCoreImport = True

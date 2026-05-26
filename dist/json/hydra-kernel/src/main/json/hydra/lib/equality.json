@@ -1,0 +1,188 @@
+{
+  "definitions": [
+    {
+      "primitive": {
+        "description": "Compare two values and return a Comparison.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.equality.compare",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "x"}}],
+          "result": {"type": {"variable": "hydra.util.Comparison"}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Check whether two values are equal.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.equality.equal",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "x"}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": [{"constraints": [{"simple": "equality"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Check whether the first value is greater than the second.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.equality.gt",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "x"}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Check whether the first value is greater than or equal to the second.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.equality.gte",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "x"}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Return a value unchanged."}}}],
+            "body": {"lambda": {"body": {"variable": "x"}, "parameter": "x"}}}},
+        "description": "Return a value unchanged.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.equality.identity",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "x"}}],
+          "result": {"type": {"variable": "x"}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Check whether the first value is less than the second.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.equality.lt",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "x"}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Check whether the first value is less than or equal to the second.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.equality.lte",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "x"}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "Return the maximum of two values, defined in terms of gte and ifElse."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {"variable": "y"},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "x"},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "y"},
+                                    "function": {"application": {"argument": {"variable": "x"}, "function": {"variable": "hydra.lib.equality.gte"}}}}},
+                                "function": {"variable": "hydra.lib.logic.ifElse"}}}}}}},
+                    "parameter": "y"}},
+                "parameter": "x"}}}},
+        "description": "Return the maximum of two values.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.equality.max",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "x"}}],
+          "result": {"type": {"variable": "x"}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "Return the minimum of two values, defined in terms of lte and ifElse."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {"variable": "y"},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "x"},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "y"},
+                                    "function": {"application": {"argument": {"variable": "x"}, "function": {"variable": "hydra.lib.equality.lte"}}}}},
+                                "function": {"variable": "hydra.lib.logic.ifElse"}}}}}}},
+                    "parameter": "y"}},
+                "parameter": "x"}}}},
+        "description": "Return the minimum of two values.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.equality.min",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "x"}}],
+          "result": {"type": {"variable": "x"}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}}],
+  "dependencies": [
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "description": "Primitives in the hydra.lib.equality namespace.",
+  "name": "hydra.lib.equality"}

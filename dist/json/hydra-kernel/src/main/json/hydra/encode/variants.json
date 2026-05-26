@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.encode.variants.literalVariant",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.variants.LiteralVariant"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.variants.LiteralVariant"}}}],
@@ -219,13 +223,14 @@
                             "typeName": "hydra.core.Term"}},
                         "domain": {"unit": {}},
                         "parameter": "y"}}}],
-                "typeName": "hydra.variants.LiteralVariant"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.variants.LiteralVariant"}}},
-          "variables": []}}},
+                "typeName": "hydra.variants.LiteralVariant"}}}}}},
     {
       "term": {
         "name": "hydra.encode.variants.termVariant",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.variants.TermVariant"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.variants.TermVariant"}}}],
@@ -967,13 +972,14 @@
                             "typeName": "hydra.core.Term"}},
                         "domain": {"unit": {}},
                         "parameter": "y"}}}],
-                "typeName": "hydra.variants.TermVariant"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.variants.TermVariant"}}},
-          "variables": []}}},
+                "typeName": "hydra.variants.TermVariant"}}}}}},
     {
       "term": {
         "name": "hydra.encode.variants.typeVariant",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.variants.TypeVariant"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.variants.TypeVariant"}}}],
@@ -1575,10 +1581,7 @@
                             "typeName": "hydra.core.Term"}},
                         "domain": {"unit": {}},
                         "parameter": "y"}}}],
-                "typeName": "hydra.variants.TypeVariant"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.variants.TypeVariant"}}},
-          "variables": []}}}],
+                "typeName": "hydra.variants.TypeVariant"}}}}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.variants"}],
   "description": "Term encoders for hydra.variants",
   "name": "hydra.encode.variants"}
