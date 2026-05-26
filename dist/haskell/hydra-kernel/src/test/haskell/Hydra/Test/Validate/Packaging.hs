@@ -166,7 +166,7 @@ checkDefinitionDocumentationTests =
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing})]}))),
+                  Packaging.termDefinitionSignature = Nothing})]}))),
             Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -181,7 +181,7 @@ checkDefinitionDocumentationTests =
                 Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.bar"),
                   Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
-                  Packaging.termDefinitionTypeScheme = Nothing})]}))),
+                  Packaging.termDefinitionSignature = Nothing})]}))),
             Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (Just (ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
               ErrorPackaging.missingDocumentationErrorModuleName = (Packaging.ModuleName "hydra.foo"),
               ErrorPackaging.missingDocumentationErrorName = (Core.Name "hydra.foo.bar")}))))})),
@@ -219,7 +219,7 @@ checkDefinitionModuleNamesTests =
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing})]}))),
+                  Packaging.termDefinitionSignature = Nothing})]}))),
             Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -237,7 +237,7 @@ checkDefinitionModuleNamesTests =
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing})]}))),
+                  Packaging.termDefinitionSignature = Nothing})]}))),
             Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (Just (ErrorPackaging.InvalidModuleErrorDefinitionNotInModuleName (ErrorPackaging.DefinitionNotInModuleNameError {
               ErrorPackaging.definitionNotInModuleNameErrorModuleName = (Packaging.ModuleName "hydra.foo"),
               ErrorPackaging.definitionNotInModuleNameErrorName = (Core.Name "hydra.baz.qux")}))))})),
@@ -275,7 +275,7 @@ checkDefinitionNameConventionTests =
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing})]}))),
+                  Packaging.termDefinitionSignature = Nothing})]}))),
             Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -293,7 +293,7 @@ checkDefinitionNameConventionTests =
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing})]}))),
+                  Packaging.termDefinitionSignature = Nothing})]}))),
             Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -311,7 +311,7 @@ checkDefinitionNameConventionTests =
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing})]}))),
+                  Packaging.termDefinitionSignature = Nothing})]}))),
             Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (Just (ErrorPackaging.InvalidModuleErrorInvalidDefinitionName (ErrorPackaging.InvalidDefinitionNameError {
               ErrorPackaging.invalidDefinitionNameErrorModuleName = (Packaging.ModuleName "hydra.foo"),
               ErrorPackaging.invalidDefinitionNameErrorName = (Core.Name "hydra.foo.bad_name"),
@@ -332,7 +332,7 @@ checkDefinitionNameConventionTests =
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing})]}))),
+                  Packaging.termDefinitionSignature = Nothing})]}))),
             Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (Just (ErrorPackaging.InvalidModuleErrorInvalidDefinitionName (ErrorPackaging.InvalidDefinitionNameError {
               ErrorPackaging.invalidDefinitionNameErrorModuleName = (Packaging.ModuleName "hydra.foo"),
               ErrorPackaging.invalidDefinitionNameErrorName = (Core.Name "hydra.foo.BadName"),
@@ -371,7 +371,7 @@ checkDefinitionOrderingTests =
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing})]}))),
+                  Packaging.termDefinitionSignature = Nothing})]}))),
             Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -389,14 +389,14 @@ checkDefinitionOrderingTests =
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing}),
+                  Packaging.termDefinitionSignature = Nothing}),
                 (Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.bbb"),
                   Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing}))]}))),
+                  Packaging.termDefinitionSignature = Nothing}))]}))),
             Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -414,14 +414,14 @@ checkDefinitionOrderingTests =
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing}),
+                  Packaging.termDefinitionSignature = Nothing}),
                 (Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
                   Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing}))]}))),
+                  Packaging.termDefinitionSignature = Nothing}))]}))),
             Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (Just (ErrorPackaging.InvalidModuleErrorDefinitionsOutOfOrder (ErrorPackaging.DefinitionsOutOfOrderError {
               ErrorPackaging.definitionsOutOfOrderErrorModuleName = (Packaging.ModuleName "hydra.foo"),
               ErrorPackaging.definitionsOutOfOrderErrorPrecedingName = (Core.Name "hydra.foo.bbb"),
@@ -442,14 +442,14 @@ checkDefinitionOrderingTests =
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing}),
+                  Packaging.termDefinitionSignature = Nothing}),
                 (Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.IndentStyle"),
                   Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing}))]}))),
+                  Packaging.termDefinitionSignature = Nothing}))]}))),
             Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (Just (ErrorPackaging.InvalidModuleErrorDefinitionsOutOfOrder (ErrorPackaging.DefinitionsOutOfOrderError {
               ErrorPackaging.definitionsOutOfOrderErrorModuleName = (Packaging.ModuleName "hydra.foo"),
               ErrorPackaging.definitionsOutOfOrderErrorPrecedingName = (Core.Name "hydra.foo.IndentedExpression"),
@@ -488,14 +488,14 @@ checkDuplicateDefinitionNamesTests =
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing}),
+                  Packaging.termDefinitionSignature = Nothing}),
                 (Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.bbb"),
                   Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing}))]}))),
+                  Packaging.termDefinitionSignature = Nothing}))]}))),
             Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -513,14 +513,14 @@ checkDuplicateDefinitionNamesTests =
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing}),
+                  Packaging.termDefinitionSignature = Nothing}),
                 (Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
                   Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing}))]}))),
+                  Packaging.termDefinitionSignature = Nothing}))]}))),
             Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (Just (ErrorPackaging.InvalidModuleErrorDuplicateDefinitionName (ErrorPackaging.DuplicateDefinitionNameError {
               ErrorPackaging.duplicateDefinitionNameErrorModuleName = (Packaging.ModuleName "hydra.foo"),
               ErrorPackaging.duplicateDefinitionNameErrorName = (Core.Name "hydra.foo.aaa")}))))})),
@@ -737,7 +737,7 @@ kernelModuleTests =
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing})]}))),
+                  Packaging.termDefinitionSignature = Nothing})]}))),
             Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -752,7 +752,7 @@ kernelModuleTests =
                 Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.bar"),
                   Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
-                  Packaging.termDefinitionTypeScheme = Nothing})]}))),
+                  Packaging.termDefinitionSignature = Nothing})]}))),
             Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (Just (ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
               ErrorPackaging.missingDocumentationErrorModuleName = (Packaging.ModuleName "hydra.foo"),
               ErrorPackaging.missingDocumentationErrorName = (Core.Name "hydra.foo.bar")}))))})),
@@ -772,14 +772,14 @@ kernelModuleTests =
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing}),
+                  Packaging.termDefinitionSignature = Nothing}),
                 (Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
                   Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Maps.fromList [
                       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                  Packaging.termDefinitionTypeScheme = Nothing}))]}))),
+                  Packaging.termDefinitionSignature = Nothing}))]}))),
             Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (Just (ErrorPackaging.InvalidModuleErrorDefinitionsOutOfOrder (ErrorPackaging.DefinitionsOutOfOrderError {
               ErrorPackaging.definitionsOutOfOrderErrorModuleName = (Packaging.ModuleName "hydra.foo"),
               ErrorPackaging.definitionsOutOfOrderErrorPrecedingName = (Core.Name "hydra.foo.bbb"),
@@ -810,7 +810,7 @@ kernelPackageTests =
                         Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                         Core.annotatedTermAnnotation = (Maps.fromList [
                           (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                      Packaging.termDefinitionTypeScheme = Nothing})]}],
+                      Packaging.termDefinitionSignature = Nothing})]}],
               Packaging.packageDependencies = [],
               Packaging.packageDescription = (Just "Test package test-pkg")}))),
             Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) Nothing)})),
@@ -833,7 +833,7 @@ kernelPackageTests =
                         Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                         Core.annotatedTermAnnotation = (Maps.fromList [
                           (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))])})),
-                      Packaging.termDefinitionTypeScheme = Nothing})]}],
+                      Packaging.termDefinitionSignature = Nothing})]}],
               Packaging.packageDependencies = [],
               Packaging.packageDescription = (Just "Test package BadName")}))),
             Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (Just (ErrorPackaging.InvalidPackageErrorInvalidPackageName (ErrorPackaging.InvalidPackageNameError {
@@ -889,11 +889,11 @@ profileBehaviourTests =
                 Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
                   Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
-                  Packaging.termDefinitionTypeScheme = Nothing}),
+                  Packaging.termDefinitionSignature = Nothing}),
                 (Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
                   Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
-                  Packaging.termDefinitionTypeScheme = Nothing}))]}))))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorPackaging.invalidModuleError w) (Validation.validationResultWarnings (ValidatePackaging.module_ (Validation.ValidationProfile {
+                  Packaging.termDefinitionSignature = Nothing}))]}))))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorPackaging.invalidModuleError w) (Validation.validationResultWarnings (ValidatePackaging.module_ (Validation.ValidationProfile {
               Validation.validationProfileErrorRules = (Sets.fromList [
                 Core.Name "hydra.error.packaging.InvalidModuleError.missingDocumentation",
                 (Core.Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName")]),
@@ -909,11 +909,11 @@ profileBehaviourTests =
                 Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
                   Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
-                  Packaging.termDefinitionTypeScheme = Nothing}),
+                  Packaging.termDefinitionSignature = Nothing}),
                 (Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
                   Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
-                  Packaging.termDefinitionTypeScheme = Nothing}))]}))))) "]"))),
+                  Packaging.termDefinitionSignature = Nothing}))]}))))) "]"))),
             Testing.universalTestCaseExpected = (\_ -> Strings.cat2 (Strings.cat2 "errors=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidModuleError e) (Validation.validationResultErrors (Validation.ValidationResult {
               Validation.validationResultErrors = [
                 ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
@@ -952,11 +952,11 @@ profileBehaviourTests =
                 Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
                   Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
-                  Packaging.termDefinitionTypeScheme = Nothing}),
+                  Packaging.termDefinitionSignature = Nothing}),
                 (Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
                   Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
-                  Packaging.termDefinitionTypeScheme = Nothing}))]}))))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorPackaging.invalidModuleError w) (Validation.validationResultWarnings (ValidatePackaging.module_ (Validation.ValidationProfile {
+                  Packaging.termDefinitionSignature = Nothing}))]}))))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorPackaging.invalidModuleError w) (Validation.validationResultWarnings (ValidatePackaging.module_ (Validation.ValidationProfile {
               Validation.validationProfileErrorRules = (Sets.fromList []),
               Validation.validationProfileWarningRules = (Sets.fromList [
                 Core.Name "hydra.error.packaging.InvalidModuleError.missingDocumentation",
@@ -972,11 +972,11 @@ profileBehaviourTests =
                 Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
                   Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
-                  Packaging.termDefinitionTypeScheme = Nothing}),
+                  Packaging.termDefinitionSignature = Nothing}),
                 (Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
                   Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
-                  Packaging.termDefinitionTypeScheme = Nothing}))]}))))) "]"))),
+                  Packaging.termDefinitionSignature = Nothing}))]}))))) "]"))),
             Testing.universalTestCaseExpected = (\_ -> Strings.cat2 (Strings.cat2 "errors=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidModuleError e) (Validation.validationResultErrors (Validation.ValidationResult {
               Validation.validationResultErrors = [],
               Validation.validationResultWarnings = [
@@ -1014,11 +1014,11 @@ profileBehaviourTests =
                 Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
                   Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
-                  Packaging.termDefinitionTypeScheme = Nothing}),
+                  Packaging.termDefinitionSignature = Nothing}),
                 (Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
                   Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
-                  Packaging.termDefinitionTypeScheme = Nothing}))]}))))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorPackaging.invalidModuleError w) (Validation.validationResultWarnings (ValidatePackaging.module_ (Validation.ValidationProfile {
+                  Packaging.termDefinitionSignature = Nothing}))]}))))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorPackaging.invalidModuleError w) (Validation.validationResultWarnings (ValidatePackaging.module_ (Validation.ValidationProfile {
               Validation.validationProfileErrorRules = (Sets.fromList [
                 Core.Name "hydra.error.packaging.InvalidModuleError.missingDocumentation"]),
               Validation.validationProfileWarningRules = (Sets.fromList []),
@@ -1033,11 +1033,11 @@ profileBehaviourTests =
                 Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
                   Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
-                  Packaging.termDefinitionTypeScheme = Nothing}),
+                  Packaging.termDefinitionSignature = Nothing}),
                 (Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
                   Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
-                  Packaging.termDefinitionTypeScheme = Nothing}))]}))))) "]"))),
+                  Packaging.termDefinitionSignature = Nothing}))]}))))) "]"))),
             Testing.universalTestCaseExpected = (\_ -> Strings.cat2 (Strings.cat2 "errors=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidModuleError e) (Validation.validationResultErrors (Validation.ValidationResult {
               Validation.validationResultErrors = [
                 ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
@@ -1070,11 +1070,11 @@ profileBehaviourTests =
                 Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
                   Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
-                  Packaging.termDefinitionTypeScheme = Nothing}),
+                  Packaging.termDefinitionSignature = Nothing}),
                 (Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
                   Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
-                  Packaging.termDefinitionTypeScheme = Nothing}))]}))))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorPackaging.invalidModuleError w) (Validation.validationResultWarnings (ValidatePackaging.module_ (Validation.ValidationProfile {
+                  Packaging.termDefinitionSignature = Nothing}))]}))))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorPackaging.invalidModuleError w) (Validation.validationResultWarnings (ValidatePackaging.module_ (Validation.ValidationProfile {
               Validation.validationProfileErrorRules = (Sets.fromList [
                 Core.Name "hydra.error.packaging.InvalidModuleError.missingDocumentation",
                 (Core.Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName")]),
@@ -1090,11 +1090,11 @@ profileBehaviourTests =
                 Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
                   Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
-                  Packaging.termDefinitionTypeScheme = Nothing}),
+                  Packaging.termDefinitionSignature = Nothing}),
                 (Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
                   Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
-                  Packaging.termDefinitionTypeScheme = Nothing}))]}))))) "]"))),
+                  Packaging.termDefinitionSignature = Nothing}))]}))))) "]"))),
             Testing.universalTestCaseExpected = (\_ -> Strings.cat2 (Strings.cat2 "errors=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidModuleError e) (Validation.validationResultErrors (Validation.ValidationResult {
               Validation.validationResultErrors = [
                 ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {

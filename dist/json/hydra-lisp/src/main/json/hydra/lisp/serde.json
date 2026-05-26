@@ -3,6 +3,12 @@
     {
       "term": {
         "name": "hydra.lisp.serde.andExpressionToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.AndExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -36,16 +42,16 @@
                 "domain": {"variable": "hydra.lisp.syntax.AndExpression"},
                 "parameter": "andExpr"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.AndExpression"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.applicationToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.Application"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -151,16 +157,16 @@
                 "domain": {"variable": "hydra.lisp.syntax.Application"},
                 "parameter": "app"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.Application"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.caseExpressionToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.CaseExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -296,16 +302,14 @@
                 "domain": {"variable": "hydra.lisp.syntax.CaseExpression"},
                 "parameter": "caseExpr"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.CaseExpression"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.commentToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Comment"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -339,13 +343,16 @@
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}},
                     "function": {"variable": "hydra.serialization.cst"}}}}},
             "domain": {"variable": "hydra.lisp.syntax.Comment"},
-            "parameter": "c"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.Comment"}}},
-          "variables": []}}},
+            "parameter": "c"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.condExpressionToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.CondExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -750,16 +757,16 @@
                 "domain": {"variable": "hydra.lisp.syntax.CondExpression"},
                 "parameter": "condExpr"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.CondExpression"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.constantDefinitionToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.ConstantDefinition"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -804,17 +811,14 @@
                 "domain": {"variable": "hydra.lisp.syntax.ConstantDefinition"},
                 "parameter": "cdef"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.ConstantDefinition"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.defKeyword",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -837,13 +841,14 @@
                         "term": {"lambda": {"body": {"literal": {"string": "define"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                     "typeName": "hydra.lisp.syntax.Dialect"}}}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.defconstKeyword",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -866,13 +871,14 @@
                         "term": {"lambda": {"body": {"literal": {"string": "define"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                     "typeName": "hydra.lisp.syntax.Dialect"}}}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.defnKeyword",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -895,13 +901,14 @@
                         "term": {"lambda": {"body": {"literal": {"string": "define"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                     "typeName": "hydra.lisp.syntax.Dialect"}}}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.defrecordKeyword",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -924,13 +931,16 @@
                         "term": {"lambda": {"body": {"literal": {"string": "define-record-type"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                     "typeName": "hydra.lisp.syntax.Dialect"}}}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.doExpressionToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.DoExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -988,16 +998,14 @@
                 "domain": {"variable": "hydra.lisp.syntax.DoExpression"},
                 "parameter": "doExpr"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.DoExpression"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.docstringToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Docstring"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -1030,13 +1038,16 @@
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}},
                     "function": {"variable": "hydra.serialization.cst"}}}}},
             "domain": {"variable": "hydra.lisp.syntax.Docstring"},
-            "parameter": "ds"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.Docstring"}}},
-          "variables": []}}},
+            "parameter": "ds"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.exportDeclarationToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.ExportDeclaration"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -1174,17 +1185,16 @@
                 "domain": {"variable": "hydra.lisp.syntax.ExportDeclaration"},
                 "parameter": "edecl"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.ExportDeclaration"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.expressionToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.Expression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -1695,16 +1705,14 @@
                 "domain": {"variable": "hydra.lisp.syntax.Expression"},
                 "parameter": "expr"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.Expression"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.falseExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -1743,13 +1751,16 @@
                             "parameter": "_"}}}],
                     "typeName": "hydra.lisp.syntax.Dialect"}}}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.fieldAccessToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.FieldAccess"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -1888,16 +1899,16 @@
                 "domain": {"variable": "hydra.lisp.syntax.FieldAccess"},
                 "parameter": "fa"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.FieldAccess"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.formatLispFloat",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -2012,16 +2023,16 @@
                 "domain": {"literal": {"float": {"float64": {}}}},
                 "parameter": "v"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"float": {"float64": {}}}}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.functionDefinitionToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.FunctionDefinition"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -2206,17 +2217,16 @@
                 "domain": {"variable": "hydra.lisp.syntax.FunctionDefinition"},
                 "parameter": "fdef"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.FunctionDefinition"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.ifExpressionToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.IfExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -2296,16 +2306,16 @@
                 "domain": {"variable": "hydra.lisp.syntax.IfExpression"},
                 "parameter": "ifExpr"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.IfExpression"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.importDeclarationToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.ImportDeclaration"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -2424,17 +2434,16 @@
                 "domain": {"variable": "hydra.lisp.syntax.ImportDeclaration"},
                 "parameter": "idecl"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.ImportDeclaration"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.keywordToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.Keyword"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -2503,16 +2512,14 @@
                 "domain": {"variable": "hydra.lisp.syntax.Keyword"},
                 "parameter": "k"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.Keyword"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.lambdaKeyword",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -2535,13 +2542,16 @@
                         "term": {"lambda": {"body": {"literal": {"string": "lambda"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                     "typeName": "hydra.lisp.syntax.Dialect"}}}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.lambdaToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.Lambda"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -2751,16 +2761,16 @@
                 "domain": {"variable": "hydra.lisp.syntax.Lambda"},
                 "parameter": "lam"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.Lambda"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.letExpressionToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.LetExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -3475,16 +3485,14 @@
                 "domain": {"variable": "hydra.lisp.syntax.LetExpression"},
                 "parameter": "letExpr"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.LetExpression"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.listKeyword",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -3507,13 +3515,16 @@
                         "term": {"lambda": {"body": {"literal": {"string": "list"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                     "typeName": "hydra.lisp.syntax.Dialect"}}}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.listLiteralToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.ListLiteral"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -3583,16 +3594,16 @@
                 "domain": {"variable": "hydra.lisp.syntax.ListLiteral"},
                 "parameter": "ll"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.ListLiteral"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.literalToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.Literal"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -4060,16 +4071,16 @@
                 "domain": {"variable": "hydra.lisp.syntax.Literal"},
                 "parameter": "lit"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.Literal"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.macroDefinitionToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.MacroDefinition"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -4242,16 +4253,16 @@
                 "domain": {"variable": "hydra.lisp.syntax.MacroDefinition"},
                 "parameter": "mdef"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.MacroDefinition"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.mapLiteralToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.MapLiteral"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -4479,16 +4490,16 @@
                 "domain": {"variable": "hydra.lisp.syntax.MapLiteral"},
                 "parameter": "ml"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.MapLiteral"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.moduleDeclarationToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -4640,17 +4651,14 @@
                 "domain": {"variable": "hydra.lisp.syntax.ModuleDeclaration"},
                 "parameter": "mdecl"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.nilExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -4689,13 +4697,16 @@
                             "parameter": "_"}}}],
                     "typeName": "hydra.lisp.syntax.Dialect"}}}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.notExpressionToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.NotExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -4719,16 +4730,16 @@
                 "domain": {"variable": "hydra.lisp.syntax.NotExpression"},
                 "parameter": "notExpr"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.NotExpression"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.orExpressionToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.OrExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -4762,16 +4773,14 @@
                 "domain": {"variable": "hydra.lisp.syntax.OrExpression"},
                 "parameter": "orExpr"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.OrExpression"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.programToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Program"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -5735,13 +5744,16 @@
                                 "parameter": "_"}}}],
                         "typeName": "hydra.lisp.syntax.Dialect"}}}}}},
             "domain": {"variable": "hydra.lisp.syntax.Program"},
-            "parameter": "prog"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.Program"}}},
-          "variables": []}}},
+            "parameter": "prog"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.recordTypeDefinitionToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.RecordTypeDefinition"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -6131,17 +6143,14 @@
                 "domain": {"variable": "hydra.lisp.syntax.RecordTypeDefinition"},
                 "parameter": "rdef"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.RecordTypeDefinition"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.sExpressionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.SExpression"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -6182,13 +6191,16 @@
                             "parameter": "elems"}}}],
                     "typeName": "hydra.lisp.syntax.SExpression"}}}},
             "domain": {"variable": "hydra.lisp.syntax.SExpression"},
-            "parameter": "sexpr"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.SExpression"}}},
-          "variables": []}}},
+            "parameter": "sexpr"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.setLiteralToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.SetLiteral"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -6302,16 +6314,14 @@
                 "domain": {"variable": "hydra.lisp.syntax.SetLiteral"},
                 "parameter": "sl"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.SetLiteral"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.symbolToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Symbol"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -6319,13 +6329,16 @@
                 "argument": {"application": {"argument": {"variable": "s"}, "function": {"unwrap": "hydra.lisp.syntax.Symbol"}}},
                 "function": {"variable": "hydra.serialization.cst"}}},
             "domain": {"variable": "hydra.lisp.syntax.Symbol"},
-            "parameter": "s"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.Symbol"}}},
-          "variables": []}}},
+            "parameter": "s"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.topLevelFormToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.TopLevelForm"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -6401,16 +6414,16 @@
                 "domain": {"variable": "hydra.lisp.syntax.TopLevelForm"},
                 "parameter": "form"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.TopLevelForm"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.topLevelFormWithCommentsToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.TopLevelFormWithComments"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -6497,17 +6510,14 @@
                 "domain": {"variable": "hydra.lisp.syntax.TopLevelFormWithComments"},
                 "parameter": "fwc"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.TopLevelFormWithComments"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.trueExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -6546,13 +6556,16 @@
                             "parameter": "_"}}}],
                     "typeName": "hydra.lisp.syntax.Dialect"}}}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.variableDefinitionToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.VariableDefinition"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -6597,17 +6610,16 @@
                 "domain": {"variable": "hydra.lisp.syntax.VariableDefinition"},
                 "parameter": "vdef"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.VariableDefinition"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.variableReferenceToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.VariableReference"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -6667,17 +6679,16 @@
                 "domain": {"variable": "hydra.lisp.syntax.VariableReference"},
                 "parameter": "vref"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.VariableReference"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}},
+            "parameter": "d"}}}},
     {
       "term": {
         "name": "hydra.lisp.serde.vectorLiteralToExpr",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.lisp.syntax.Dialect"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.lisp.syntax.VectorLiteral"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -6775,13 +6786,7 @@
                 "domain": {"variable": "hydra.lisp.syntax.VectorLiteral"},
                 "parameter": "vl"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
-            "parameter": "d"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.lisp.syntax.VectorLiteral"}}},
-              "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
-          "variables": []}}}],
+            "parameter": "d"}}}}],
   "dependencies": [
     {"module": "hydra.constants"},
     {"module": "hydra.formatting"},

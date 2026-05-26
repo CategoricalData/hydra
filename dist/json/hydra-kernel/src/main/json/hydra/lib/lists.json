@@ -1,0 +1,478 @@
+{
+  "definitions": [
+    {
+      "primitive": {
+        "description": "Apply a list of functions to a list of values (applicative style).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.apply",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"list": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"list": {"variable": "y"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
+    {
+      "primitive": {
+        "description": "Apply a function that returns lists to each element and flatten the results.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.bind",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"function": {"codomain": {"list": {"variable": "y"}}, "domain": {"variable": "x"}}}}],
+          "result": {"type": {"list": {"variable": "y"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
+    {
+      "primitive": {
+        "description": "Concatenate a list of lists.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.concat",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"list": {"variable": "x"}}}}],
+          "result": {"type": {"list": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Concatenate two lists.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.concat2",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"list": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Prepend a value to a list.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.cons",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"list": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Drop the first n elements from a list.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.drop",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"list": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Drop elements from the beginning of a list while the predicate is true.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.dropWhile",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "x"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"list": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Test whether an element is in a list.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.elem",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": [{"constraints": [{"simple": "equality"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Filter a list by a predicate.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.filter",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "x"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"list": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Find the first element matching a predicate.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.find",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "x"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"maybe": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Left-fold a list with an accumulator.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.foldl",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "function": {"codomain": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}, "domain": {"variable": "y"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "y"}},
+            {"isLazy": false, "name": "arg2", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"variable": "y"}},
+          "typeParameters": [{"constraints": [], "name": "y"}, {"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Right-fold a list with an accumulator.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.foldr",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "function": {"codomain": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "y"}}}, "domain": {"variable": "x"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "y"}},
+            {"isLazy": false, "name": "arg2", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"variable": "y"}},
+          "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
+    {
+      "primitive": {
+        "description": "Group consecutive equal elements.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.group",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"list": {"list": {"variable": "x"}}}},
+          "typeParameters": [{"constraints": [{"simple": "equality"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Intercalate a list of lists with a separator list between each.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.intercalate",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"list": {"variable": "x"}}}}],
+          "result": {"type": {"list": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Intersperse a value between consecutive elements of a list.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.intersperse",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"list": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Return the length of a list.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.length",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Map a function over a list.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.map",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"list": {"variable": "y"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
+    {
+      "primitive": {
+        "description": "Return the element at the given index, or Nothing if out of bounds.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.maybeAt",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"maybe": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Return the first element, or Nothing if the list is empty.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.maybeHead",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"maybe": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Return all elements except the last, or Nothing if the list is empty.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.maybeInit",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"maybe": {"list": {"variable": "x"}}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Return the last element, or Nothing if the list is empty.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.maybeLast",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"maybe": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Return all elements except the first, or Nothing if the list is empty.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.maybeTail",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"maybe": {"list": {"variable": "x"}}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Remove duplicate elements from a list.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.nub",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"list": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [{"simple": "equality"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Test whether a list is empty.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.null",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Partition a list into elements that satisfy a predicate and those that do not.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.partition",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "x"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"pair": {"first": {"list": {"variable": "x"}}, "second": {"list": {"variable": "x"}}}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Wrap a value in a single-element list.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.pure",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "x"}}],
+          "result": {"type": {"list": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Build a list of n copies of a value.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.replicate",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "x"}}],
+          "result": {"type": {"list": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Reverse a list.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.reverse",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"list": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Construct a single-element list.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.singleton",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "x"}}],
+          "result": {"type": {"list": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Sort a list.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.sort",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"list": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Sort a list using a key-extraction function.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.sortOn",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"list": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [{"simple": "ordering"}], "name": "y"}]}}},
+    {
+      "primitive": {
+        "description": "Split a list at the first element where the predicate fails.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.span",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "x"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"pair": {"first": {"list": {"variable": "x"}}, "second": {"list": {"variable": "x"}}}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Take the first n elements of a list.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.take",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"list": {"variable": "x"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Transpose a list of lists.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.transpose",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"list": {"variable": "x"}}}}],
+          "result": {"type": {"list": {"list": {"variable": "x"}}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Decompose a list into its head and tail, or Nothing if empty.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.uncons",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
+          "result": {"type": {"maybe": {"pair": {"first": {"variable": "x"}, "second": {"list": {"variable": "x"}}}}}},
+          "typeParameters": [{"constraints": [], "name": "x"}]}}},
+    {
+      "primitive": {
+        "description": "Zip two lists element-wise into pairs.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.zip",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "y"}}}],
+          "result": {"type": {"list": {"pair": {"first": {"variable": "x"}, "second": {"variable": "y"}}}}},
+          "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
+    {
+      "primitive": {
+        "description": "Zip two lists with a combining function.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.lists.zipWith",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "function": {"codomain": {"function": {"codomain": {"variable": "z"}, "domain": {"variable": "y"}}}, "domain": {"variable": "x"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "x"}}},
+            {"isLazy": false, "name": "arg2", "type": {"list": {"variable": "y"}}}],
+          "result": {"type": {"list": {"variable": "z"}}},
+          "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}, {"constraints": [], "name": "z"}]}}}],
+  "dependencies": [
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "description": "Primitives in the hydra.lib.lists namespace.",
+  "name": "hydra.lib.lists"}

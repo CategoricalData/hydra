@@ -81,7 +81,7 @@ object Generation:
   private def decodeBinaryInModule(mod: Module): Module =
     Module(mod.description, mod.name, mod.dependencies, mod.definitions.map {
       case Definition.term(td) =>
-        Definition.term(hydra.packaging.TermDefinition(td.name, decodeBinaryLiterals(td.term), td.typeScheme))
+        Definition.term(hydra.packaging.TermDefinition(td.name, decodeBinaryLiterals(td.term), td.signature))
       case other => other
     })
 
@@ -128,7 +128,7 @@ object Generation:
 
   /** Filter to kernel-only modules (exclude hydra.*) */
   def filterKernelModules(mods: Seq[Module]): Seq[Module] =
-    mods.filter(m => !m.name.value.startsWith("hydra.") && !m.name.value.startsWith("hydra.json.yaml."))
+    mods.filter(m => !m.name.startsWith("hydra.") && !m.name.startsWith("hydra.json.yaml."))
 
   /** Generate source files and write them to disk. Returns number of files written. */
   def generateSources(

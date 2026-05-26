@@ -679,20 +679,25 @@ libraryWithPrimitives original newVal =
           Core.fieldName = (Core.Name "primitives"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL constructor for hydra.graph.Primitive
-primitive :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either Errors.Error Core.Term) -> Phantoms.TTerm Graph.Primitive
-primitive name typeScheme implementation =
+primitive :: Phantoms.TTerm Packaging.PrimitiveDefinition -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either Errors.Error Core.Term) -> Phantoms.TTerm Graph.Primitive
+primitive definition implementation =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.graph.Primitive"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
-        Core.Field {
-          Core.fieldName = (Core.Name "typeScheme"),
-          Core.fieldTerm = (Phantoms.unTTerm typeScheme)},
+          Core.fieldName = (Core.Name "definition"),
+          Core.fieldTerm = (Phantoms.unTTerm definition)},
         Core.Field {
           Core.fieldName = (Core.Name "implementation"),
           Core.fieldTerm = (Phantoms.unTTerm implementation)}]}))
+-- | DSL accessor for the definition field of hydra.graph.Primitive
+primitiveDefinition :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm Packaging.PrimitiveDefinition
+primitiveDefinition x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
+        Core.projectionFieldName = (Core.Name "definition")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the implementation field of hydra.graph.Primitive
 primitiveImplementation :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either Errors.Error Core.Term)
 primitiveImplementation x =
@@ -701,22 +706,22 @@ primitiveImplementation x =
         Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
         Core.projectionFieldName = (Core.Name "implementation")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the name field of hydra.graph.Primitive
-primitiveName :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm Core.Name
-primitiveName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
-        Core.projectionFieldName = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the typeScheme field of hydra.graph.Primitive
-primitiveTypeScheme :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm Core.TypeScheme
-primitiveTypeScheme x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
-        Core.projectionFieldName = (Core.Name "typeScheme")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the definition field of hydra.graph.Primitive
+primitiveWithDefinition :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm Packaging.PrimitiveDefinition -> Phantoms.TTerm Graph.Primitive
+primitiveWithDefinition original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.graph.Primitive"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "definition"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "implementation"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
+              Core.projectionFieldName = (Core.Name "implementation")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the implementation field of hydra.graph.Primitive
 primitiveWithImplementation :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either Errors.Error Core.Term) -> Phantoms.TTerm Graph.Primitive
 primitiveWithImplementation original newVal =
@@ -724,68 +729,15 @@ primitiveWithImplementation original newVal =
       Core.recordTypeName = (Core.Name "hydra.graph.Primitive"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "name"),
+          Core.fieldName = (Core.Name "definition"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
-              Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "typeScheme"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
-              Core.projectionFieldName = (Core.Name "typeScheme")})),
+              Core.projectionFieldName = (Core.Name "definition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "implementation"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
--- | DSL updater for the name field of hydra.graph.Primitive
-primitiveWithName :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Graph.Primitive
-primitiveWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.graph.Primitive"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "typeScheme"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
-              Core.projectionFieldName = (Core.Name "typeScheme")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "implementation"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
-              Core.projectionFieldName = (Core.Name "implementation")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL updater for the typeScheme field of hydra.graph.Primitive
-primitiveWithTypeScheme :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm Graph.Primitive
-primitiveWithTypeScheme original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.graph.Primitive"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
-              Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "typeScheme"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "implementation"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
-              Core.projectionFieldName = (Core.Name "implementation")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.graph.TermCoder
 termCoder :: Phantoms.TTerm Core.Type -> Phantoms.TTerm (Context.Context -> Graph.Graph -> Core.Term -> Either Errors.Error a) -> Phantoms.TTerm (Context.Context -> a -> Either Errors.Error Core.Term) -> Phantoms.TTerm (Graph.TermCoder a)
 termCoder type_ encode decode =

@@ -4,6 +4,16 @@ CLAUDE.md keeps a short list of hard rules and a short list of mental models.
 This page covers specific gotchas — concrete known-issue notes that don't belong
 in the top-level orientation.
 
+> **Reader.** This file is primarily Claude-facing. Several issues here would
+> apply to any developer, not just an LLM session — the public, audience-neutral
+> versions live in `docs/troubleshooting.md`,
+> `docs/recipes/code-generation.md#troubleshooting`, and
+> `docs/recipes/maintenance.md`. Check those first if you're looking for the
+> shipped form of a workaround. The entries here describe Claude-specific
+> session dynamics (shell snapshot heredoc behavior, cross-worktree
+> contention, "is this process mine to kill," `pgrep` interpretation, etc.)
+> or are scratch-pad notes pending promotion.
+
 ## Specific known issues
 
 ### Primitive registration
@@ -11,13 +21,66 @@ in the top-level orientation.
 A primitive class can exist but be invisible at runtime if it isn't registered
 in `Libraries.java` / `Libraries.hs` / `libraries.py` /
 `Libraries.scala` / `libraries.clj`.
-Always check registration when debugging "unknown primitive" errors.
+
+Two-tier check (post-#156): the **canonical registry** is the
+`PrimitiveDefinition` in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs`.
+The **host-side registries** (e.g. `Libraries.hs` `hydraLib<Sub>` lists)
+pair each primitive's universal metadata with a native impl. A primitive
+is "unknown" if either:
+- The canonical `PrimitiveDefinition` is missing (validator-time error during sync).
+- The host registry doesn't bind the name to a native impl (runtime "unknown primitive").
+
+Always check both layers when debugging.
 
 ### Primitive `implementation()` must not throw (Java)
 
-Even higher-order (`prim2Eval`) primitives need a working `implementation()`
-that constructs term-level results.
+Higher-order primitives (those that take function arguments and use
+`Reduction.reduceTerm` internally) need a working `implementation()` that
+constructs term-level results, not one that throws on missing arg shapes.
 See [docs/recipes/adding-primitives.md](../docs/recipes/adding-primitives.md).
+
+### Primitive definition list alphabetical-order trap
+
+The kernel validator (`hydra.validate.packaging`) requires the
+`definitions` list in each `Hydra/Sources/Kernel/Lib/<Sub>.hs` module to be
+in lexical alphabetical order by primitive name. Numeric suffixes
+sort lexically, not numerically: `bigintToInt16` < `bigintToInt32` <
+`bigintToInt64` < `bigintToInt8` (because `'1' < '3' < '6' < '8'`).
+
+The validator fails with `definitions out of order: <X> precedes <Y>`.
+
+### Empty `description` field fails the documentation validator
+
+`hydra.validate.packaging`'s documentation rule (`checkDefinitionDocumentation`)
+flags any `PrimitiveDefinition` whose `description` is the empty string. The
+description is a required field on the type but the validator treats `""` as
+"undocumented". When using `toPrimitive` or `primNoDef`, always pass a
+non-empty description.
+
+### `unary_function` is shallow — it only extracts the outer call
+
+In `Hydra.Dsl.Meta.Phantoms`, `unary_function f` builds a TTerm representing
+a unary lambda by calling `f (var "x")` and pattern-matching the result as
+`TermApplication (lhs, _)`, then returning `lhs`. If `f` does more than a
+single application (e.g. composes two operations), only the outer-most
+function survives; the inner one is silently discarded. The bug manifests
+as a type-inference failure that says "unify `<inner-output-type>` with
+`<outer-input-type>`" downstream. Use `lam "x" (...)` directly to build a
+real lambda body containing nested calls.
+
+### Definition.primitive arm: every Definition consumer needs updating
+
+When adding `DefinitionPrimitive` to the `Definition` union, every site
+that does `cases _Definition (var "def") Nothing [...]` with a missing
+arm becomes a runtime crash (non-exhaustive pattern). Even with a
+`(Just default)` fall-through, semantics are usually wrong for the
+primitive arm. Sites to audit in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/`:
+`Analysis.hs`, `Environment.hs`, `Generation.hs`, `Validate/Packaging.hs`,
+plus `Sources/Test/Generation.hs`. The original kernel migration left
+these incomplete and surfaced as a `Non-exhaustive patterns in case`
+crash inside `Validate/Packaging.hs:definitionName` during the first
+sync after adding the first `hydra.lib.<sub>` module that emitted
+primitives.
 
 ### Floating-point test portability
 
@@ -94,31 +157,61 @@ wiping it is always safe and never affects shared history.
 
 Then sync forward into whatever target language consumes the regenerated coder.
 
-### `gradle :hydra-java:test` needs all coder language packages in `dist/java/`
+### Scoped `bin/sync.sh --hosts X --targets X` is narrow — cross-language dists are not populated
 
-The `hydra-java` Gradle build has two main source sets: `main` (the
-generated kernel + every coder package's generated Java) and `headsExtras`
-(developer drivers like `Generation.java` plus demos). Both source sets
-import `hydra.haskell.*`, `hydra.python.*`, `hydra.scala.*`, `hydra.lisp.*`
-directly, so the compile fails with "package does not exist" if those
-`dist/java/<pkg>/` trees are missing.
+Every per-host sync wrapper (`bin/sync-java.sh`, `bin/sync-python.sh`,
+`bin/sync-scala.sh`, the four Lisp dialects, `bin/sync-typescript.sh`,
+`bin/sync-go.sh`) just delegates to `bin/sync.sh --hosts X --targets X`.
+That scoped invocation populates only:
 
-`bin/sync.sh --hosts java --targets java` (and by extension
-`bin/sync-java.sh`) only populates
-`dist/java/{hydra-kernel, hydra-java, hydra-pg, hydra-rdf}`, **not** the
-cross-language coder dists `dist/java/hydra-{haskell,python,scala,lisp}/`.
-To produce all the per-language Java dist trees you need
-`bin/sync.sh` (full host × target sync) or
-`bin/sync.sh --hosts java --targets <every-language>`.
+- **Phase 3** — `dist/X/{hydra-kernel, hydra-pg, hydra-rdf}/`
+- **Phase 4** — `dist/X/hydra-X/` (X's own coder in X)
 
-User-callable wrapper scripts that compile cross-language Java code
-(`bin/generate-hydra-java-from-java.sh`, `heads/java/bin/inference-bench.sh`)
-**self-heal**: they call `bin/sync.sh` themselves before invoking gradle.
-Warm-cache full sync is ~3 minutes; cold-cache is whatever a real first
-build takes. See the next entry for the convention.
+It does **not** populate `dist/X/hydra-{the other languages}/`. So any
+downstream consumer that needs the cross-language coder dists for X
+will fail until a broader sync has run. To fully populate `dist/X/`,
+use one of:
 
-Symptom (without self-heal): `compileHeadsExtrasJava FAILED` with many
-"package hydra.lisp.syntax does not exist" errors.
+```bash
+bin/sync.sh --hosts X --targets all        # every coder dist under dist/X/
+bin/sync.sh                                # full all × all (most thorough)
+heads/<lang>/bin/assemble-distribution.sh hydra-<other>   # per-package
+```
+
+Downstream consumers that trip on this:
+
+- **Java rollup** (`packages/hydra-java/build.gradle`). Both `main` and
+  `headsExtras` source sets import `hydra.{haskell,python,scala,lisp,typescript}.*`
+  directly. Symptom: `compileHeadsExtrasJava FAILED` with many
+  `package hydra.lisp.syntax does not exist` errors.
+- **Scala sbt** (`packages/hydra-scala/build.sbt`). Declares
+  `unmanagedSourceDirectories` over
+  `dist/scala/hydra-{kernel,haskell,java,python,scala,lisp}/...`.
+  Symptom: `sbt compile` reports `Type Mismatch Error: Found (Unit =>
+  String), Required: String` (or similar) in a generated
+  `dist/scala/hydra-<lang>/.../*.scala` file whose mtime predates a
+  recent kernel-type change.
+- **Layer 2.5 testers** (`heads/<lang>/bin/test-distribution.sh`) for
+  any language whose build references cross-target dists, e.g.
+  `heads/scala/bin/test-distribution.sh hydra-kernel` triggers the
+  Scala sbt issue above.
+- **Java/Python Phase 5 self-host** (`bin/generate-hydra-{java,python}-from-{java,python}.sh`).
+  The Phase 5 driver compiles the gradle rollup before running
+  JavaSelfHostDemo, so it hits the Java rollup issue.
+
+User-callable wrapper scripts that compile cross-language code
+(`bin/generate-hydra-java-from-java.sh`,
+`heads/java/bin/inference-bench.sh`) **self-heal** — they call
+`bin/sync.sh` themselves before invoking gradle, gated by
+`HYDRA_IN_SYNC` to avoid recursion. See the next entry for the
+convention. Warm-cache full sync is ~3 minutes; cold-cache is whatever
+a real first build takes.
+
+> When `/test` lands (issue #387), the per-language `/test X` skill
+> will own the right pre-sync scope automatically. Until then, prefer
+> `bin/sync.sh --hosts X --targets all` over the host-only wrapper
+> whenever the downstream consumer compiles or tests cross-language
+> code.
 
 ### Wrapper scripts auto-sync; testers don't
 
@@ -149,29 +242,6 @@ same pattern. When in doubt, prefer a full `bin/sync.sh` call over a
 scoped one — warm-cache sync is cheap and being too narrow is what made
 this bug class possible in the first place.
 
-### `sbt test` from `packages/hydra-scala/` needs cross-target dist trees
-
-Same shape as the `hydra-java` issue above. The Scala sbt project at
-`packages/hydra-scala/build.sbt` declares `unmanagedSourceDirectories` over
-`dist/scala/hydra-{kernel,haskell,java,python,scala,lisp}/...`. If any of
-those cross-target dists is stale (e.g., a kernel-type change like #311's
-thunked `UniversalTestCase.actual` doesn't propagate because `dist/scala/`
-is gitignored), `sbt compile` fails on type mismatches in code that hasn't
-been regenerated. `heads/scala/bin/test-distribution.sh hydra-kernel`
-exhibits the same.
-
-`bin/sync-scala.sh` is **narrow**: it only covers `host=scala × target=scala`,
-so it populates `dist/scala/hydra-scala/` (and `hydra-kernel`/`hydra-pg`/`hydra-rdf`
-via Phase 3), but **not** `dist/scala/hydra-{haskell,java,python,lisp}/`. The
-package README's "Full sync" label is misleading; that command is a self-host
-self-target refresh, not a comprehensive one.
-
-To fully refresh Scala dist, use `bin/sync.sh --hosts scala --targets all`
-(or per-package `heads/scala/bin/assemble-distribution.sh hydra-haskell` etc.).
-Symptom: `sbt test` reports `Type Mismatch Error: Found (Unit => String),
-Required: String` or similar in a generated `dist/scala/hydra-<lang>/.../*.scala`
-file with an mtime predating a kernel-type change.
-
 ### `hydra-java:compileJava` OOM during incremental rebuild
 
 Symptom: `Exception: java.lang.OutOfMemoryError thrown from the
@@ -194,11 +264,11 @@ compileJava {
 This was added in commit `b2c046e87` after a Testing.java edit triggered the
 OOM. Adds 6g transient memory pressure only during compile — no runtime cost.
 
-Note: `gradle.properties` at the repo root is gitignored and exists as a
-developer-local escape hatch for `org.gradle.jvmargs` and other per-developer
-Gradle config — useful for local experimentation, but JVM args set there only
-affect the build daemon, not forked compiler workers, so it would not have
-fixed this OOM on its own.
+Note: `gradle.properties` (anywhere — `heads/java/gradle.properties` or the
+repo root) is gitignored and exists as a developer-local escape hatch for
+`org.gradle.jvmargs` and other per-developer Gradle config — useful for local
+experimentation, but JVM args set there only affect the build daemon, not
+forked compiler workers, so it would not have fixed this OOM on its own.
 
 ### Stale per-dialect Lisp `struct-compat.lisp`
 
@@ -275,14 +345,15 @@ concrete `FloatValue` callsites. Symptom:
 adapter callsite. Fix: list each remaining variant with an explicit
 `inject _Variant _variant_name` identity arm.
 
-### Digest conflicts on staging merges — no longer applies (#379)
+### Digest conflicts on staging merges — no longer applies (#379, merged 2026-05-20)
 
 Historical: digest files used to be tracked and would conflict on every
-multi-branch merge because hashes always diverge. As of #379 the entire
-`dist/**/build/` subtree is gitignored, so digests never enter the
-diff. Merges should now be clean for digests; if you encounter a digest
-file in conflict, you're on a pre-#379 branch — run the post-merge
-recovery: `rm -rf dist/**/build` then `bin/sync.sh`.
+multi-branch merge because hashes always diverge. As of #379 (merged
+2026-05-20) the entire `dist/**/build/` subtree is gitignored, so
+digests never enter the diff. Merges should be clean for digests on
+any branch that has #379 merged in. If you encounter a digest file in
+conflict, you're on a pre-#379 branch — run the post-merge recovery:
+`rm -rf dist/**/build` then `bin/sync.sh`.
 
 ### `run-benchmark-tests.sh` Python leg needs `.venv`
 
@@ -718,3 +789,26 @@ detect renamed kernel types as stale (it only prunes files no longer
 referenced *anywhere* in the manifest, and the file's basename is the
 type name not a path). Manual `rm` is required; safe because the next
 assemble regenerates the new-named file.
+
+### Deleting a `dist/json/<pkg>/build/main/digest.json` causes Phase 2 silent exit
+
+`assemble_refresh_digest` in `bin/lib/assemble-common.sh` is gated by
+`[ -f "$input_digest" ] && (cd ... && stack exec digest-check refresh ...)`.
+Under `set -e`, when the input digest file is missing the `[ -f ]` returns 1
+and the whole `&& (...)` returns 1, killing the calling `assemble-distribution.sh`
+silently — no error to stderr, no "FAILED" banner. The next package in the
+sync loop never runs.
+
+Symptom: `bin/sync.sh` Phase 2 exits EXIT=1 after writing the first package's
+files ("Done: N main files") with no error message and no Phase 3 banner.
+
+Recovery: when you nuke a `dist/json/<pkg>/build/main/digest.json` to force
+regen, also nuke `heads/haskell/.stack-work/phase1-input-cache.txt`. The
+Phase 1 cache miss triggers a full Phase 1 rerun, which regenerates the
+json digest as part of `update-json-manifest`. Without busting the Phase 1
+cache, Phase 1 stays skipped and the dist/json side never gets a new digest,
+so Phase 2 keeps re-failing the same way.
+
+Documented in the build-system cache model
+([docs/build-system.md §Cache files are not tracked](../docs/build-system.md#cache-files-are-not-tracked)),
+but the silent-exit mechanism deserves the explicit pitfall callout.

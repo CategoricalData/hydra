@@ -1,0 +1,166 @@
+{
+  "definitions": [
+    {
+      "primitive": {
+        "description": "Concatenate a list of strings into a single string.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.strings.cat",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"literal": {"string": {}}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Concatenate two strings.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.strings.cat2",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a list of Unicode code points to a string.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.strings.fromList",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"literal": {"integer": {"int32": {}}}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Join a list of strings with a separator between each element.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.strings.intercalate",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"literal": {"string": {}}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Return the length of a string.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.strings.length",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Split a string into lines.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.strings.lines",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"list": {"literal": {"string": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Get the Unicode code point of the character at a specific index, returning Nothing if out of bounds.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.strings.maybeCharAt",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"maybe": {"literal": {"integer": {"int32": {}}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Check whether a string is empty.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.strings.null",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Split a string on a delimiter string.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.strings.splitOn",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"list": {"literal": {"string": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a string to a list of Unicode code points.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.strings.toList",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"list": {"literal": {"integer": {"int32": {}}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a string to lowercase.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.strings.toLower",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a string to uppercase.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.strings.toUpper",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Join a list of strings with newlines, appending a trailing newline.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.strings.unlines",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"literal": {"string": {}}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}}],
+  "dependencies": [
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "description": "Primitives in the hydra.lib.strings namespace.",
+  "name": "hydra.lib.strings"}

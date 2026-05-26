@@ -111,12 +111,15 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
 
     from hydra.packaging import DefinitionTerm
     from hydra.core import Binding
+    import hydra.lib.maybes as Maybes
+    from hydra.scoping import term_signature_to_type_scheme
     bindings = {}
     for mod in term_mods:
         for d in mod.definitions:
             if isinstance(d, DefinitionTerm):
                 td = d.value
-                bindings[td.name] = Binding(td.name, td.term, td.type_scheme)
+                ts = Maybes.map(term_signature_to_type_scheme, td.signature)
+                bindings[td.name] = Binding(td.name, td.term, ts)
 
     return bindings
 

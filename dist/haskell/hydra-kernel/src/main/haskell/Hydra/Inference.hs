@@ -22,9 +22,11 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Names as Names
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Reflect as Reflect
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Show.Typing as ShowTyping
 import qualified Hydra.Sorting as Sorting
@@ -381,7 +383,7 @@ inferTypeOfCollection fcx cx typCons trmCons desc classNames els =
           fcx2 = Pairs.second varResult
           classConstraints =
                   Logic.ifElse (Sets.null classNames) Maps.empty (Maps.singleton var (Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = classNames}))
+                    Core.typeVariableMetadataClasses = (Lists.map (\n -> Core.TypeClassConstraintSimple n) (Sets.toList classNames))}))
       in (Logic.ifElse (Lists.null els) (Right (yieldWithConstraints fcx2 (buildTypeApplicationTerm [
         var] (trmCons [])) (typCons (Core.TypeVariable var)) Substitution.idTypeSubst classConstraints)) (Eithers.bind (inferMany fcx2 cx (Lists.zip els (Lists.map (\i -> Strings.cat [
         "#",
@@ -701,7 +703,8 @@ inferTypeOfMap fcx cx m =
           fcx3 = Pairs.second vvarResult
           keyConstraints =
                   Maps.singleton kvar (Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = (Sets.singleton (Core.Name "ordering"))})
+                    Core.typeVariableMetadataClasses = [
+                      Core.TypeClassConstraintSimple (Core.Name "ordering")]})
       in (Logic.ifElse (Maps.null m) (Right (yieldWithConstraints fcx3 (buildTypeApplicationTerm [
         kvar,
         vvar] (Core.TermMap Maps.empty)) (Core.TypeMap (Core.MapType {
@@ -777,7 +780,7 @@ inferTypeOfPrimitive fcx cx name =
           ts = Pairs.first tsResult
           fcx2 = Pairs.second tsResult
           constraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
-      in (Right (yieldCheckedWithConstraints fcx2 (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)) (Core.typeSchemeBody ts) Substitution.idTypeSubst constraints))) (Maybes.map Graph.primitiveTypeScheme (Maps.lookup name (Graph.graphPrimitives cx)))
+      in (Right (yieldCheckedWithConstraints fcx2 (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)) (Core.typeSchemeBody ts) Substitution.idTypeSubst constraints))) (Maybes.map (\_p -> Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition _p))) (Maps.lookup name (Graph.graphPrimitives cx)))
 -- | Infer the type of a record projection (Either version)
 inferTypeOfProjection :: Context.Context -> Graph.Graph -> Core.Projection -> Either Errors.Error Typing.InferenceResult
 inferTypeOfProjection fcx cx proj =
@@ -896,7 +899,7 @@ inferTypeOfVariable fcx cx name =
           ts = Pairs.first tsResult
           fcx2 = Pairs.second tsResult
           constraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
-      in (Right (yieldCheckedWithConstraints fcx2 (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)) (Core.typeSchemeBody ts) Substitution.idTypeSubst constraints))) (Maybes.map Graph.primitiveTypeScheme (Maps.lookup name (Graph.graphPrimitives cx)))) (\scheme ->
+      in (Right (yieldCheckedWithConstraints fcx2 (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)) (Core.typeSchemeBody ts) Substitution.idTypeSubst constraints))) (Maybes.map (\_p -> Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition _p))) (Maps.lookup name (Graph.graphPrimitives cx)))) (\scheme ->
       let tsResult = Resolution.instantiateTypeScheme fcx scheme
           ts = Pairs.first tsResult
           fcx2 = Pairs.second tsResult
@@ -988,7 +991,7 @@ mergeClassConstraints m1 m2 =
       in (Maybes.maybe (Maps.insert k v acc) (\existing ->
         let merged =
                 Core.TypeVariableMetadata {
-                  Core.typeVariableMetadataClasses = (Sets.union (Core.typeVariableMetadataClasses existing) (Core.typeVariableMetadataClasses v))}
+                  Core.typeVariableMetadataClasses = (Lists.nub (Lists.concat2 (Core.typeVariableMetadataClasses existing) (Core.typeVariableMetadataClasses v)))}
         in (Maps.insert k merged acc)) (Maps.lookup k acc))) m1 (Maps.toList m2)
 -- | Show an inference result for debugging
 showInferenceResult :: Typing.InferenceResult -> String

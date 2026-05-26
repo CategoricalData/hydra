@@ -26,6 +26,7 @@ import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Constants      as Constants
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Lexical        as Lexical
+import qualified Hydra.Sources.Kernel.Terms.Scoping        as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Dependencies   as Dependencies
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
@@ -108,7 +109,7 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
       _Module_dependencies>>: project _Module _Module_dependencies @@ var "mod",
       _Module_definitions>>: Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
         (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-        (Core.bindingTypeScheme $ var "b")))
+        (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
         (var "testBindings")]] $
     Eithers.bind
       (Eithers.bimap

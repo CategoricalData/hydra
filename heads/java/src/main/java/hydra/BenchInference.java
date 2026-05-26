@@ -177,7 +177,7 @@ public class BenchInference {
                 String local = td.name.value.substring(td.name.value.lastIndexOf('.') + 1);
                 Name newName = new Name(targetNs.value + "." + local);
                 renamed.add(new Definition.Term(
-                        new TermDefinition(newName, td.term, td.typeScheme)));
+                        new TermDefinition(newName, td.term, td.signature)));
             } else {
                 renamed.add(d);
             }

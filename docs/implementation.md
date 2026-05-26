@@ -163,9 +163,11 @@ the descriptions below cover the main ones:
 **Typing.hs** - `hydra.typing` namespace
 - Type inference and reconstruction
 - Type constraints and substitutions
+- `TypeClass` record (used by `hydra.classes` term bindings)
 
-**Classes.hs** - `hydra.classes` namespace
-- Minimal typeclass metadata (`Ord`, `Eq`) used during inference
+**hydra.classes** - term module (not a type module)
+- `equality` and `ordering` bindings of type `TypeClass`
+- See the [Concepts wiki § Type classes](https://github.com/CategoricalData/hydra/wiki/Concepts#type-classes)
 
 **Context.hs** - `hydra.context` namespace
 - Execution context: trace, messages, error attribution
@@ -518,7 +520,7 @@ inferTypeOfEitherDef = define "inferTypeOfEither" $
 
 **Features Demonstrated:**
 - `define` - Define a named function
-- `~>` - Lambda abstraction
+- `~>` - Function abstraction
 - `<~` - Let binding
 - `<<~` - `Either`-bind (bind into the error-handling monad-like combinator)
 - `@@` - Function application
@@ -551,113 +553,174 @@ Primitive functions are the standard library of Hydra, providing built-in operat
 
 ### Organization
 
-Primitives are organized into **13 library modules** by category:
+Primitives are organized into **13 library modules** by category. Each module
+lives in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs`
+and is **the** canonical registry for its namespace:
 
 | Library | Count | Examples |
 |---------|-------|----------|
 | **hydra.lib.chars** | 6 | `isAlphaNum`, `isLower`, `toUpper` |
-| **hydra.lib.eithers** | 8 | `either`, `isLeft`, `rights` |
+| **hydra.lib.eithers** | 15 | `either`, `isLeft`, `rights`, `bimap`, `bind` |
 | **hydra.lib.equality** | 9 | `equal`, `compare`, `gt`, `lt`, `max` |
-| **hydra.lib.lists** | 34 | `map`, `filter`, `fold`, `concat`, `sort` |
-| **hydra.lib.literals** | 43 | Type conversions, parsing, showing |
+| **hydra.lib.lists** | 37 | `map`, `filter`, `foldl`, `concat`, `sort` |
+| **hydra.lib.literals** | 55 | Type conversions, parsing, showing |
 | **hydra.lib.logic** | 4 | `and`, `or`, `not`, `ifElse` |
-| **hydra.lib.maps** | 19 | `lookup`, `insert`, `keys`, `toList` |
-| **hydra.lib.math** | 37 | `add`, `mul`, `sin`, `sqrt`, `abs` |
+| **hydra.lib.maps** | 20 | `lookup`, `insert`, `keys`, `toList` |
+| **hydra.lib.math** | 46 | `add`, `mul`, `sin`, `sqrt`, `abs` |
 | **hydra.lib.maybes** | 13 | `fromMaybe`, `maybe`, `isJust` |
-| **hydra.lib.pairs** | 4 | `first`, `second`, `map`, `swap` |
+| **hydra.lib.pairs** | 3 | `first`, `second`, `bimap` |
 | **hydra.lib.regex** | 6 | `matches`, `find`, `findAll`, `replace`, `replaceAll`, `split` |
 | **hydra.lib.sets** | 14 | `union`, `intersection`, `member` |
-| **hydra.lib.strings** | 13 | `concat`, `split`, `length`, `lines` |
+| **hydra.lib.strings** | 13 | `cat`, `splitOn`, `length`, `lines` |
 
-**Total: ~210 primitive functions**
+**Total: 241 primitive functions** (post-#156).
 
 ### Three-level definition structure
 
-Each primitive is defined at three levels:
+Each primitive is defined at three levels, with a clear separation of concerns
+between universal metadata and per-host implementation (introduced in #156):
 
-#### Level 1: Core Type Definition
+#### Level 1: PrimitiveDefinition + Primitive (kernel types)
 
-From `Graph.hs`:
+`PrimitiveDefinition` (in `hydra.packaging`) carries the universal metadata that
+is the same in every host language:
+
+```haskell
+def "PrimitiveDefinition" $
+  record [
+    "name">:                  doc "Fully-qualified name" $ core "Name",
+    "description">:           doc "Human-readable description" $ core "String",
+    "signature">:             doc "Full type signature with parameter names" $
+                                typing "TermSignature",
+    "isPure">:                doc "Purity flag (defaults to True)" $ core "Boolean",
+    "isTotal">:               doc "Totality flag (defaults to True)" $ core "Boolean",
+    "defaultImplementation">: doc "Optional reference implementation in Hydra terms" $
+                                T.maybe (core "Term")
+  ]
+```
+
+`Primitive` (in `hydra.graph`) pairs the universal metadata with a host-specific
+implementation. This is what lives in a `Graph` as the per-host primitive
+registry:
+
 ```haskell
 def "Primitive" $
   record [
-    "name">: doc "Unique name of the primitive" $
-      core "Name",
-    "type">: doc "Type signature" $
-      core "TypeScheme",
-    "implementation">: doc "Concrete implementation" $
+    "definition">:     doc "Universal metadata" $ packaging "PrimitiveDefinition",
+    "implementation">: doc "Host-specific native implementation" $
       context "Context" ~> graph "Graph" ~> list (core "Term") ~>
         Types.either_ (errors "Error") (core "Term")
   ]
 ```
 
-(The Either-based implementation replaces the former `Flow` monad, removed in #245.)
+(The Either-based implementation replaces the former `Flow` monad, removed in #245.
+The split into `PrimitiveDefinition` + `Primitive` happened in #156.)
 
-#### Level 2: Haskell Implementation
+#### Level 2: PrimitiveDefinition declaration (the canonical registry)
 
-Native Haskell implementations in `heads/haskell/src/main/haskell/Hydra/Lib/`:
+The kernel modules `Hydra/Sources/Kernel/Lib/<Sub>.hs` declare every primitive
+as a `PrimitiveDefinition` (an arm of `Definition` alongside `term` and `type`),
+collectively forming **the** primitive registry. The 13 modules — `Chars`,
+`Eithers`, `Equality`, `Lists`, `Literals`, `Logic`, `Maps`, `Math`, `Maybes`,
+`Pairs`, `Regex`, `Sets`, `Strings` — declare 241 primitives total.
 
-```haskell
--- Math.hs
-add :: Num a => a -> a -> a
-add x y = x + y
-
-sqrt :: Double -> Double
-sqrt = Prelude.sqrt
-
--- Strings.hs
-cat :: [String] -> String
-cat = L.concat
-
-toUpper :: String -> String
-toUpper = fmap C.toUpper
-
--- Lists.hs
-map :: (a -> b) -> [a] -> [b]
-map = fmap
-
-length :: [a] -> Int
-length = L.length
-```
-
-#### Level 3: Primitive Registration
-
-In `Sources/Libraries.hs`, primitives are wrapped with metadata using DSL helpers:
+Example (`Hydra/Sources/Kernel/Lib/Logic.hs`):
 
 ```haskell
--- Unary primitive
-prim1 name function typeVars inputCoder outputCoder
+ns :: ModuleName
+ns = ModuleName "hydra.lib.logic"
 
--- Binary primitive
-prim2 name function typeVars input1Coder input2Coder outputCoder
-
--- Ternary primitive
-prim3 name function typeVars input1Coder input2Coder input3Coder outputCoder
-
--- Constant (nullary)
-prim0 name value typeVars outputCoder
-```
-
-**Example: Lists.map**
-```haskell
-prim2Interp _lists_map (Just mapInterp) ["x", "y"]
-  (function x y) (list x) (list y)
+module_ :: Module
+module_ = Module {
+            moduleName = ns,
+            moduleDefinitions = definitions,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
+            moduleDescription = Just "Primitives in the hydra.lib.logic namespace."}
   where
-    x = variable "x"
-    y = variable "y"
+    definitions = [
+      toPrimitive "Compute the logical AND of two boolean values." andSig and_,
+      primNoDef "ifElse" "Compute a conditional expression." ifElseSig,
+      toPrimitive "Compute the logical NOT of a boolean value." notSig not_,
+      toPrimitive "Compute the logical OR of two boolean values." orSig or_]
 
-    mapInterp :: Term -> Term -> Context -> Graph -> Either Error Term
-    mapInterp fun args' cx g = do
-      args <- ExtractCore.list cx args' g
-      return $ Terms.list (Terms.apply fun <$> args)
+andSig :: TermSignature
+andSig = sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) Nothing
+
+and_ :: TTermDefinition (Bool -> Bool -> Bool)
+and_ = define "and" $
+  doc "Logical AND, defined in terms of ifElse." $
+  "a" ~> "b" ~> Logic.ifElse (var "a") (var "b" :: TTerm Bool) false
 ```
+
+The metadata flows through to JSON in `dist/json/hydra-kernel/src/main/json/hydra/lib/<sub>.json`,
+where it becomes the cross-host source of truth for the primitive's name,
+signature, description, and default implementation.
+
+#### Level 3: Native implementations and host registries
+
+Per host, two things are needed beyond the kernel metadata:
+
+1. **Native implementations** — in `heads/<host>/`, e.g.
+   `heads/haskell/src/main/haskell/Hydra/Lib/Math.hs`:
+
+   ```haskell
+   add :: Int -> Int -> Int
+   add x y = x + y
+   ```
+
+2. **Host-side primitive registry** — binds names to native impls.
+   The Haskell registry lives in
+   `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`:
+
+   ```haskell
+   hydraLibMath :: Library
+   hydraLibMath = standardLibrary _hydra_lib_math [
+     prim2 _math_add Math.add [] int32 int32 int32,
+     ...]
+   ```
+
+   The `prim1`/`prim2`/`prim3` helpers build a `Primitive` by pairing the
+   universal `PrimitiveDefinition` (looked up by name) with the host's native
+   `implementation` function.
+
+   The Java and Python heads have analogous host-side registries
+   (`heads/java/.../Libraries.java`, `heads/python/.../sources/libraries.py`)
+   that wrap each native impl in a `Primitive`.
+
+The type information passed to `prim1`/`prim2`/`prim3` at host registration is
+a sanity-check repetition of the canonical signature — it's expected to match,
+and divergence is a bug. Future work (see follow-ups) may have host registries
+derive their signatures directly from the kernel metadata to eliminate this
+duplication.
+
+### Default implementations
+
+`PrimitiveDefinition.defaultImplementation : Maybe Term` carries an optional
+declarative reference implementation in pure Hydra terms. Two uses:
+
+- **Fallback for minimal interpreters.** A host that doesn't ship a native
+  impl for a primitive can fall back to evaluating the default Hydra term.
+- **Proof-friendly reference.** Targets that can prove or simulate the default
+  body (e.g. Coq) get a verified reference implementation for free.
+
+Default implementations are pure expressions — they take only the primitive's
+declared arguments (no `Context`, no `Graph`) and reduce using only other
+primitives. Not every primitive has one: fundamental operations like
+`logic.ifElse`, `pairs.first`, character predicates, and arithmetic cannot
+be expressed in terms of other primitives and use `primNoDef`.
+
+The `defaultImplementation` field replaces the pre-#156 `Hydra.Sources.Kernel.Lib.Defaults.*`
+modules, which encoded the same notion as interpreter-friendly Term-AST
+constructions. Those modules remain in the source tree but are now superseded
+by the primitive modules' `defaultImplementation` field; they will be removed
+in a follow-up.
 
 ### TermCoder system
 
 The `Hydra.Dsl.Prims` module provides type coding:
 
 ```haskell
--- Primitive types
+-- Literal types
 int32, int64 :: TermCoder Int
 float32, float64 :: TermCoder Double
 bigint :: TermCoder Integer
@@ -853,8 +916,9 @@ Test runners and custom applications can use `graphWithPrimitives` to inject add
 ### Built-in primitives vs. user-defined functions
 
 **Built-in primitives** (`graphPrimitives`) are implemented natively in the host language.
-Each `Primitive` carries a name, a type scheme, and an `implementation` function that maps
-a list of `Term` arguments to a result `Term`.
+Each `Primitive` carries a `definition : PrimitiveDefinition` (universal metadata: name,
+description, signature, isPure/isTotal flags, optional reference implementation) and an
+`implementation` function that maps a list of `Term` arguments to a result `Term`.
 See [Primitive functions](#primitive-functions) above.
 
 **User-defined functions** (`graphBoundTerms`) are Hydra terms — typically lambdas or
@@ -990,7 +1054,7 @@ encodeTerm :: Context -> Graph -> Aliases -> Term -> Either Error Java.Expressio
 -- - Unions (abstract class with visitors)
 -- - Variables (local variables or fields)
 -- - Let bindings (variable declarations)
--- - Case expressions (visitor pattern)
+-- - Case statements (visitor pattern)
 ```
 
 #### Step 2: Type Encoding
@@ -1194,6 +1258,9 @@ The modules compiled in the Haskell head are aggregated in `Hydra.Sources.All`
   type inference, type checking, term reduction, rewriting, code generation, etc.
   Hand-written DSL definitions in `Hydra.Sources.Kernel.Terms.*`.
   Also includes the encoder/decoder source modules (see below).
+  For the high-level framing of how inference and checking cooperate, see the
+  [Inference wiki page](https://github.com/CategoricalData/hydra/wiki/Inference);
+  this section covers only the build-system mechanics.
 
 - **Haskell modules** (`haskellModules`) — Both type modules (the Haskell AST model)
   and term modules (the Haskell coder, serializer, and utilities). These are specific
@@ -1276,6 +1343,12 @@ For detailed context on encoder/decoder modules, see
 [Issue #47: Per-Type Term Coders](https://github.com/CategoricalData/hydra/blob/main/docs/work/issues/issue-47-per-type-term-coders.md).
 
 ### Incremental inference
+
+This section covers how Hydra's build system *runs* inference at scale — caching,
+incremental skipping, per-package iteration. For what inference itself does
+(HM with elaboration to typed System F, the two cooperating modules
+`hydra.inference` and `hydra.checking`, the `Graph` as inference context), see
+the [Inference wiki page](https://github.com/CategoricalData/hydra/wiki/Inference).
 
 `inferModulesGiven` (in `Hydra.Codegen`) takes a universe and a target set
 and re-infers only the relevant subset. Bindings in the target modules or
@@ -1444,9 +1517,9 @@ heads/haskell/src/main/haskell/Hydra/
 
 packages/hydra-kernel/src/main/haskell/Hydra/
 └── Sources/                # Kernel DSL-based specifications (manual)
-    ├── Kernel/Types/       # Type modules
-    ├── Kernel/Terms/       # Term modules
-    ├── Eval/Lib/           # Primitive library specs
+    ├── Kernel/Types/       # Type modules (data shapes)
+    ├── Kernel/Terms/       # Term modules (kernel functions)
+    ├── Kernel/Lib/         # Primitive registry: PrimitiveDefinition per hydra.lib.<sub> namespace
     └── Test/               # Common test suite
 
 packages/hydra-<lang>/src/main/haskell/Hydra/
@@ -1480,8 +1553,9 @@ For detailed step-by-step guides, see the
 
 ### Key extension points
 
-**Primitive functions**: Add new standard library functions by defining native implementations in Haskell,
-registering them in `Sources/Libraries.hs`, and regenerating code for all target languages.
+**Primitive functions**: Add new standard library functions by declaring a `PrimitiveDefinition`
+in the appropriate `Hydra/Sources/Kernel/Lib/<Sub>.hs` module, adding native implementations in
+each host, and regenerating code for all target languages.
 See the
 [Adding primitives recipe](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/adding-primitives.md).
 
@@ -1531,9 +1605,18 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 
 ### Primitive functions
 
-[`heads/haskell/src/main/haskell/Hydra/Lib/`](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Lib) — Native implementations
-[`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs) — Primitive registration
+[`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib) — Canonical primitive registry (one `PrimitiveDefinition`-emitting module per `hydra.lib.<sub>` namespace)
+
+[`heads/haskell/src/main/haskell/Hydra/Lib/`](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Lib) — Native Haskell implementations
+
+[`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs) — Host-side bindings (pairs each name with its native impl via `prim1`/`prim2`/`prim3`)
 ```
+Sources/Kernel/Lib/
+├── Math.hs
+├── Lists.hs
+└── ...
+
+heads/haskell/.../Hydra/Lib/
 ├── Math.hs
 ├── Lists.hs
 └── ...

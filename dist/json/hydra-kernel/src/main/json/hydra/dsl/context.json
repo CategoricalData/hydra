@@ -3,6 +3,47 @@
     {
       "term": {
         "name": "hydra.dsl.context.context",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A stack of context labels describing the current execution path"}}}],
+                      "body": {"list": {"literal": {"string": {}}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A log of warnings and/or info messages"}}}],
+                      "body": {"list": {"literal": {"string": {}}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A map of string keys to arbitrary terms as values, for application-specific use"}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.context.Context"}}}],
@@ -84,46 +125,28 @@
                             "value": {"literal": {"string": "A stack of context labels describing the current execution path"}}}],
                         "body": {"list": {"literal": {"string": {}}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "trace"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                      "domain": {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "key": "description",
-                                  "value": {"literal": {"string": "A map of string keys to arbitrary terms as values, for application-specific use"}}}],
-                              "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "A log of warnings and/or info messages"}}}],
-                          "body": {"list": {"literal": {"string": {}}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A stack of context labels describing the current execution path"}}}],
-                      "body": {"list": {"literal": {"string": {}}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "trace"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.context.contextTrace",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "A stack of context labels describing the current execution path"}}}],
+                    "body": {"list": {"literal": {"string": {}}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the trace field of hydra.context.Context"}}}],
@@ -160,25 +183,25 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A stack of context labels describing the current execution path"}}}],
-                      "body": {"list": {"literal": {"string": {}}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.context.contextMessages",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "A log of warnings and/or info messages"}}}],
+                    "body": {"list": {"literal": {"string": {}}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -216,22 +239,28 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A log of warnings and/or info messages"}}}],
-                      "body": {"list": {"literal": {"string": {}}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.context.contextOther",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "A map of string keys to arbitrary terms as values, for application-specific use"}}}],
+                    "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the other field of hydra.context.Context"}}}],
@@ -268,25 +297,32 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
+                "parameter": "x"}}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.context.contextWithTrace",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
                 "application": {
                   "argument": {
                     "annotated": {
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "A map of string keys to arbitrary terms as values, for application-specific use"}}}],
-                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsl.context.contextWithTrace",
+                          "value": {"literal": {"string": "A stack of context labels describing the current execution path"}}}],
+                      "body": {"list": {"literal": {"string": {}}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the trace field of hydra.context.Context"}}}],
@@ -401,28 +437,29 @@
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "key": "description",
-                              "value": {"literal": {"string": "A stack of context labels describing the current execution path"}}}],
-                          "body": {"list": {"literal": {"string": {}}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.context.contextWithMessages",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A log of warnings and/or info messages"}}}],
+                      "body": {"list": {"literal": {"string": {}}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -535,25 +572,32 @@
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "A log of warnings and/or info messages"}}}],
-                          "body": {"list": {"literal": {"string": {}}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.context.contextWithOther",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A map of string keys to arbitrary terms as values, for application-specific use"}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the other field of hydra.context.Context"}}}],
@@ -668,25 +712,7 @@
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "key": "description",
-                              "value": {"literal": {"string": "A map of string keys to arbitrary terms as values, for application-specific use"}}}],
-                          "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"application": {"argument": {"variable": "hydra.context.Context"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}}],
+                "parameter": "original"}}}}}}],
   "dependencies": [{"module": "hydra.context"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.context",
   "name": "hydra.dsl.context"}

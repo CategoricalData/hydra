@@ -54,6 +54,7 @@ import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
 
+import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
@@ -240,7 +241,7 @@ graphWithPrimitives = define "graphWithPrimitives" $
   doc "Build a graph with primitives assembled from built-in and user-provided lists. User-provided primitives shadow built-in ones." $
   "builtIn" ~> "userProvided" ~>
   "toMap" <~ ("ps" ~> Maps.fromList (Lists.map ("p" ~>
-    pair (Graph.primitiveName (var "p")) (var "p")) (var "ps"))) $
+    pair (Packaging.primitiveDefinitionName $ Graph.primitiveDefinition (var "p")) (var "p")) (var "ps"))) $
   "prims" <~ Maps.union (var "toMap" @@ var "userProvided") (var "toMap" @@ var "builtIn") $
   buildGraph @@ list ([] :: [TTerm Binding]) @@ Maps.empty @@ var "prims"
 
@@ -345,7 +346,7 @@ requirePrimitiveType = define "requirePrimitiveType" $
   doc "Look up a primitive's type scheme in a graph by name, failing if the primitive is not registered" $
   "tx" ~> "name" ~>
   -- Look up the primitive directly and extract its type, avoiding O(p) map reconstruction.
-  "mts" <~ Maybes.map ("_p" ~> Graph.primitiveTypeScheme (var "_p"))
+  "mts" <~ Maybes.map ("_p" ~> Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "_p")))
     (Maps.lookup (var "name") (Graph.graphPrimitives $ var "tx")) $
   optCases (var "mts")
     (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoSuchPrimitive $ Error.noSuchPrimitiveError (var "name")) (var "cx"))

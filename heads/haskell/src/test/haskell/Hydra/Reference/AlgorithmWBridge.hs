@@ -6,6 +6,8 @@ import Hydra.Reference.AlgorithmW
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
+import Hydra.Packaging (primitiveDefinitionSignature)
+import Hydra.Scoping (termSignatureToTypeScheme)
 import qualified Hydra.Dsl.Literals as Literals
 import qualified Hydra.Dsl.LiteralTypes as LiteralTypes
 import qualified Hydra.Dsl.Terms as Terms
@@ -38,7 +40,7 @@ hydraTermToStlc context term = case term of
       prim <- case M.lookup name prims of
         Nothing -> Left $ "no such primitive: " ++ Core.unName name
         Just p -> Right p
-      ts <- hydraTypeSchemeToStlc $ Graph.primitiveTypeScheme prim
+      ts <- hydraTypeSchemeToStlc $ termSignatureToTypeScheme $ primitiveDefinitionSignature $ Graph.primitiveDefinition prim
       return $ Const $ PrimTyped $ TypedPrimitive name ts
     Core.TermLet (Core.Let bindings env) -> Letrec <$> CM.mapM bindingToStlc bindings <*> toStlc env
       where

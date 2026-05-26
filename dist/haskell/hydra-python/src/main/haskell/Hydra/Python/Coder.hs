@@ -559,7 +559,7 @@ encodeDefinition cx env def_ =
                     Maybes.maybe (Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Unit")),
-                      Core.typeSchemeConstraints = Nothing}) (\x -> x) (Packaging.termDefinitionTypeScheme v0)
+                      Core.typeSchemeConstraints = Nothing}) (\sig -> Scoping.termSignatureToTypeScheme sig) (Packaging.termDefinitionSignature v0)
         in (Eithers.bind (Annotations.getTermDescription cx (pythonEnvironmentGetGraph env) term) (\comment ->
           let normComment = Maybes.map Formatting.normalizeComment comment
           in (Eithers.bind (encodeTermAssignment cx env True name term typ normComment) (\stmt -> Right [
@@ -1334,7 +1334,7 @@ encodeVariable cx env name args =
           in (Right asFunctionRef))) (Core.bindingTypeScheme el))) (Lexical.lookupBinding g name)) (\prim ->
         let primArity = Arity.primitiveArity prim
         in (Logic.ifElse (Equality.equal primArity 0) (Right asFunctionCall) (
-          let ts = Graph.primitiveTypeScheme prim
+          let ts = Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim))
               asFunctionRef =
                       Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables ts))) (makeSimpleLambda (Arity.typeArity (Core.typeSchemeBody ts)) asVariable) asVariable
           in (Right asFunctionRef)))) (Lexical.lookupPrimitive g name)))) (\typ -> Logic.ifElse (Sets.member name tcLambdaVars) (Right asVariable) (Logic.ifElse (Sets.member name inlineVars) (
@@ -1562,7 +1562,7 @@ gatherMetadata focusNs defs =
                     Packaging.DefinitionTerm v0 ->
                       let term = Packaging.termDefinitionTerm v0
                           typ =
-                                  Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody (Packaging.termDefinitionTypeScheme v0)
+                                  Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) (\sig -> Core.typeSchemeBody (Scoping.termSignatureToTypeScheme sig)) (Packaging.termDefinitionSignature v0)
                           meta2 = extendMetaForType True True typ meta
                       in (extendMetaForTerm True meta2 term)
                     Packaging.DefinitionType v0 ->
@@ -2555,7 +2555,7 @@ withDefinitions env defs body =
                 Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                   Core.bindingName = (Packaging.termDefinitionName v0),
                   Core.bindingTerm = (Packaging.termDefinitionTerm v0),
-                  Core.bindingTypeScheme = (Packaging.termDefinitionTypeScheme v0)})
+                  Core.bindingTypeScheme = (Maybes.map (\sig -> Scoping.termSignatureToTypeScheme sig) (Packaging.termDefinitionSignature v0))})
                 Packaging.DefinitionType _ -> Nothing
                 _ -> Nothing) defs)
           dummyLet =

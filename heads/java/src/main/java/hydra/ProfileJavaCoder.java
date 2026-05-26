@@ -85,7 +85,7 @@ public class ProfileJavaCoder {
                     if (d instanceof Definition.Term) {
                         TermDefinition td = ((Definition.Term) d).value;
                         stripped.add(new Definition.Term(
-                            new TermDefinition(td.name, td.term, Maybe.<hydra.core.TypeScheme>nothing())));
+                            new TermDefinition(td.name, td.term, Maybe.<hydra.typing.TermSignature>nothing())));
                     } else stripped.add(d);
                 }
                 strippedTarget = new Module(m.description, m.name, m.dependencies, stripped);

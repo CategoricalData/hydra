@@ -1,0 +1,88 @@
+{
+  "definitions": [
+    {
+      "primitive": {
+        "description": "Check whether a character is alphanumeric.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.chars.isAlphaNum",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Check whether a character is lowercase.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.chars.isLower",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Check whether a character is a whitespace character.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.chars.isSpace",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Check whether a character is uppercase.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.chars.isUpper",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a character to lowercase.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.chars.toLower",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Convert a character to uppercase.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.chars.toUpper",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
+          "typeParameters": []}}}],
+  "dependencies": [
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "description": "Primitives in the hydra.lib.chars namespace.",
+  "name": "hydra.lib.chars"}

@@ -1,7 +1,147 @@
-// heads/java is currently built as part of the hydra-java package via source-set
-// crossover (see ../../packages/hydra-java/build.gradle). This file is a placeholder
-// for the future state where heads/java builds standalone and its output is copied
-// into dist/java/hydra-kernel during sync.
-//
-// Until then, no gradle subproject is defined here; root settings.gradle does not
-// include 'heads-java'.
+plugins {
+    id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
+    id 'java-library'
+    id 'signing'
+    id 'maven-publish'
+    id 'checkstyle'
+}
+
+allprojects {
+    group = 'net.fortytwo.hydra'
+    version = '0.16.0'
+
+    apply plugin: 'signing'
+    apply plugin: 'maven-publish'
+
+    ext {
+        junitVersion = '5.9.2'
+        rdf4jVersion = '5.0.2'
+    }
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        maven {
+            url "https://linkedin.jfrog.io/artifactory/open-source/" // For Pegasus dependencies
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'checkstyle'
+
+    sourceSets {
+        main {
+            java {
+                srcDirs 'src/main/java'
+                srcDirs 'src/gen-main/java'
+            }
+        }
+        test {
+            java {
+                srcDirs 'src/test/java'
+                srcDirs 'src/gen-test/java'
+            }
+        }
+    }
+
+    java {
+        withJavadocJar()
+        withSourcesJar()
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    tasks.withType(JavaCompile) {
+        options.fork = true
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    checkstyle {
+        toolVersion = '8.29'
+        configFile = file("$rootDir/../../packages/hydra-java/config/checkstyle/checkstyle.xml")
+    }
+
+    checkstyleMain {
+        source = 'src/main'
+        include '**/*.java'
+    }
+
+    checkstyleTest {
+        source = 'src/test'
+        include '**/*.java'
+    }
+
+    tasks.withType(Checkstyle) {
+        reports {
+            xml.required = false
+            html.required = true
+        }
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    tasks.withType(Javadoc) {
+        options.encoding = 'UTF-8'
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from(components.java)
+
+            pom {
+                name = 'hydra'
+                description = 'The Hydra language for type-safe transformations'
+                url = 'https://github.com/CategoricalData/hydra'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'joshsh'
+                        name = 'Joshua Shinavier'
+                        email = 'josh@fortytwo.net'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/CategoricalData/hydra'
+                    connection = 'scm:git://github.com/CategoricalData/hydra.git'
+                    developerConnection = 'scm:git://github.com/CategoricalData/hydra.git'
+                }
+            }
+        }
+    }
+
+    // Uncomment the below to enable local publishing
+    // repositories {
+    //     mavenLocal()
+    // }
+}
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
+        }
+    }
+}
+
+task buildAll {
+    dependsOn subprojects*.build
+}
+
+task publishAll {
+    dependsOn subprojects*.publish
+}

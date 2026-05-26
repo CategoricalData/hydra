@@ -3,6 +3,7 @@
     {
       "term": {
         "name": "hydra.test.lib.math.allTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Test cases for hydra.lib.math primitives"}}}],
@@ -37737,8 +37738,7 @@
                   {
                     "name": "cases",
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-                "typeName": "hydra.testing.TestGroup"}}}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+                "typeName": "hydra.testing.TestGroup"}}}}}}],
   "dependencies": [
     {"module": "hydra.reduction"},
     {"module": "hydra.show.core"},

@@ -138,10 +138,12 @@ partitionDefinitions = define "partitionDefinitions" $
   "defs" ~>
   "getType" <~ ("def" ~> cases _Definition (var "def") Nothing [
     _Definition_type>>: "td" ~> just (var "td"),
-    _Definition_term>>: "_" ~> nothing]) $
+    _Definition_term>>: "_" ~> nothing,
+    _Definition_primitive>>: "_" ~> nothing]) $
   "getTerm" <~ ("def" ~> cases _Definition (var "def") Nothing [
     _Definition_type>>: "_" ~> nothing,
-    _Definition_term>>: "td" ~> just (var "td")]) $
+    _Definition_term>>: "td" ~> just (var "td"),
+    _Definition_primitive>>: "_" ~> nothing]) $
   pair
     (Maybes.cat $ Lists.map (var "getType") (var "defs"))
     (Maybes.cat $ Lists.map (var "getTerm") (var "defs"))

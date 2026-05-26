@@ -3,18 +3,22 @@
 
 module Hydra.Packaging where
 import qualified Hydra.Core as Core
+import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
--- | A definition, which may be either a term or type definition
+-- | A definition, which may be either a term, type, or primitive definition
 data Definition =
   -- | A term definition
   DefinitionTerm TermDefinition |
   -- | A type definition
-  DefinitionType TypeDefinition
+  DefinitionType TypeDefinition |
+  -- | A primitive definition
+  DefinitionPrimitive PrimitiveDefinition
   deriving (Eq, Ord, Read, Show)
 _Definition = Core.Name "hydra.packaging.Definition"
 _Definition_term = Core.Name "term"
 _Definition_type = Core.Name "type"
+_Definition_primitive = Core.Name "primitive"
 -- | A file extension (without the dot), e.g. "json" or "py"
 newtype FileExtension =
   FileExtension {
@@ -96,6 +100,29 @@ data PackageVersionSpecifier =
   deriving (Eq, Ord, Read, Show)
 _PackageVersionSpecifier = Core.Name "hydra.packaging.PackageVersionSpecifier"
 _PackageVersionSpecifier_any = Core.Name "any"
+-- | A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, description, signature, totality and purity flags, and an optional default implementation expressed as a Hydra term.
+data PrimitiveDefinition =
+  PrimitiveDefinition {
+    -- | The name of the primitive
+    primitiveDefinitionName :: Core.Name,
+    -- | A human-readable description of the primitive
+    primitiveDefinitionDescription :: String,
+    -- | The signature of the primitive (always explicit, never inferred)
+    primitiveDefinitionSignature :: Typing.TermSignature,
+    -- | Whether the primitive is pure (referentially transparent, no observable side effects). Defaults to true.
+    primitiveDefinitionIsPure :: Bool,
+    -- | Whether the primitive is total (terminates on every input of its declared type). Defaults to true.
+    primitiveDefinitionIsTotal :: Bool,
+    -- | An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation.
+    primitiveDefinitionDefaultImplementation :: (Maybe Core.Term)}
+  deriving (Eq, Ord, Read, Show)
+_PrimitiveDefinition = Core.Name "hydra.packaging.PrimitiveDefinition"
+_PrimitiveDefinition_name = Core.Name "name"
+_PrimitiveDefinition_description = Core.Name "description"
+_PrimitiveDefinition_signature = Core.Name "signature"
+_PrimitiveDefinition_isPure = Core.Name "isPure"
+_PrimitiveDefinition_isTotal = Core.Name "isTotal"
+_PrimitiveDefinition_defaultImplementation = Core.Name "defaultImplementation"
 -- | A qualified name consisting of an optional module name together with a mandatory local name
 data QualifiedName =
   QualifiedName {
@@ -107,20 +134,20 @@ data QualifiedName =
 _QualifiedName = Core.Name "hydra.packaging.QualifiedName"
 _QualifiedName_moduleName = Core.Name "moduleName"
 _QualifiedName_local = Core.Name "local"
--- | A term-level definition, including a name, a term, and the type scheme of the term
+-- | A term-level definition, including a name, a term, and an optional signature
 data TermDefinition =
   TermDefinition {
     -- | The name of the term
     termDefinitionName :: Core.Name,
     -- | The term being defined
     termDefinitionTerm :: Core.Term,
-    -- | The type scheme of the term, including any class constraints
-    termDefinitionTypeScheme :: (Maybe Core.TypeScheme)}
+    -- | The optional signature of the term. When absent, the signature is to be inferred.
+    termDefinitionSignature :: (Maybe Typing.TermSignature)}
   deriving (Eq, Ord, Read, Show)
 _TermDefinition = Core.Name "hydra.packaging.TermDefinition"
 _TermDefinition_name = Core.Name "name"
 _TermDefinition_term = Core.Name "term"
-_TermDefinition_typeScheme = Core.Name "typeScheme"
+_TermDefinition_signature = Core.Name "signature"
 -- | A type-level definition, including a name and the type scheme
 data TypeDefinition =
   TypeDefinition {

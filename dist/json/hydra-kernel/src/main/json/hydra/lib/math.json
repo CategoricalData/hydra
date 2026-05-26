@@ -1,0 +1,552 @@
+{
+  "definitions": [
+    {
+      "primitive": {
+        "description": "The absolute value of an integer.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.abs",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The arc cosine of a floating-point number.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.acos",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The hyperbolic arc cosine of a floating-point number.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.acosh",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Integer addition.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.add",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Floating-point addition.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.addFloat64",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The arc sine of a floating-point number.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.asin",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The hyperbolic arc sine of a floating-point number.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.asinh",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The arc tangent of a floating-point number.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.atan",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The two-argument arc tangent (atan2).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.atan2",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The hyperbolic arc tangent of a floating-point number.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.atanh",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The smallest integer greater than or equal to the argument, as a float.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.ceiling",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The cosine of a floating-point number.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.cos",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The hyperbolic cosine of a floating-point number.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.cosh",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Euler's constant (the base of the natural logarithm).",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.e",
+        "signature": {"parameters": [], "result": {"type": {"literal": {"float": {"float64": {}}}}}, "typeParameters": []}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "Test whether an integer is even, defined via maybeMod and equality."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"literal": {"integer": {"int32": 0}}},
+                    "function": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"literal": {"integer": {"int32": 2}}},
+                                "function": {"application": {"argument": {"variable": "x"}, "function": {"variable": "hydra.lib.math.maybeMod"}}}}},
+                            "function": {
+                              "application": {"argument": {"literal": {"integer": {"int32": 0}}}, "function": {"variable": "hydra.lib.maybes.fromMaybe"}}}}},
+                        "function": {"variable": "hydra.lib.equality.equal"}}}}},
+                "parameter": "x"}}}},
+        "description": "Test whether an integer is even.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.even",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The exponential function.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.exp",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The largest integer less than or equal to the argument, as a float.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.floor",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The natural logarithm.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.log",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Logarithm of the second argument in the base of the first.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.logBase",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The maximum of two integers.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.max",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Integer division, or Nothing if dividing by zero.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.maybeDiv",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"maybe": {"literal": {"integer": {"int32": {}}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Integer modulus, or Nothing if dividing by zero.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.maybeMod",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"maybe": {"literal": {"integer": {"int32": {}}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The predecessor of an integer, or Nothing on underflow.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.maybePred",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"maybe": {"literal": {"integer": {"int32": {}}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Integer remainder, or Nothing if dividing by zero.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.maybeRem",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"maybe": {"literal": {"integer": {"int32": {}}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The successor of an integer, or Nothing on overflow.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.maybeSucc",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"maybe": {"literal": {"integer": {"int32": {}}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The minimum of two integers.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.min",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Integer multiplication.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.mul",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Floating-point multiplication.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.mulFloat64",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Negate an integer.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.negate",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Negate a floating-point number.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.negateFloat64",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "Test whether an integer is odd, defined as the negation of even."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"application": {"argument": {"variable": "x"}, "function": {"variable": "hydra.lib.math.even"}}},
+                    "function": {"variable": "hydra.lib.logic.not"}}},
+                "parameter": "x"}}}},
+        "description": "Test whether an integer is odd.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.odd",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The mathematical constant pi.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.pi",
+        "signature": {"parameters": [], "result": {"type": {"literal": {"float": {"float64": {}}}}}, "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Raise the first argument to the power of the second.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.pow",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Construct the inclusive integer range from the first to the second argument.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.range",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"list": {"literal": {"integer": {"int32": {}}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Round a floating-point number to the nearest integer-valued float.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.round",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Round a Float32 to the given number of decimal places.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.roundFloat32",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"float": {"float32": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float32": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Round a Float64 to the given number of decimal places.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.roundFloat64",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Return the sign of an integer as -1, 0, or 1.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.signum",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The sine of a floating-point number.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.sin",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The hyperbolic sine of a floating-point number.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.sinh",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The non-negative square root of a floating-point number.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.sqrt",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Integer subtraction.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.sub",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Floating-point subtraction.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.subFloat64",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The tangent of a floating-point number.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.tan",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "The hyperbolic tangent of a floating-point number.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.tanh",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}},
+    {
+      "primitive": {
+        "description": "Truncate a floating-point number toward zero, as a float.",
+        "isPure": true,
+        "isTotal": true,
+        "name": "hydra.lib.math.truncate",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}},
+          "typeParameters": []}}}],
+  "dependencies": [
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "description": "Primitives in the hydra.lib.math namespace.",
+  "name": "hydra.lib.math"}

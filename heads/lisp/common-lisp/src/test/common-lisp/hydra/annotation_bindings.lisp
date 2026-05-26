@@ -11,7 +11,7 @@
   (cl:list :variable name))
 (cl:defun t-let (name val body)
   (cl:list :let (make-hydra_core_let
-                  :bindings (cl:list (make-hydra_core_binding :name name :term val :type cl:nil))
+                  :bindings (cl:list (make-hydra_core_binding :name name :term val :type_scheme cl:nil))
                   :body body)))
 (cl:defun t-inject (type-name field-name term)
   (cl:list :inject (make-hydra_core_injection
@@ -22,7 +22,7 @@
 (cl:defun t-field (name term)
   (make-hydra_core_field :name name :term term))
 (cl:defun t-project (type-name field-name)
-  (cl:list :project (make-hydra_core_projection :type_name type-name :field field-name)))
+  (cl:list :project (make-hydra_core_projection :type_name type-name :field_name field-name)))
 (cl:defun t-match (type-name default &rest case-fields)
   (cl:list :cases (make-hydra_core_case_statement
                     :type_name type-name :default default :cases case-fields)))

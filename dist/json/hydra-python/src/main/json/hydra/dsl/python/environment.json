@@ -3,6 +3,12 @@
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonVersionPython310",
+        "signature": {
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.python.environment.PythonVersion"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -31,14 +37,16 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.phantoms.TTerm"}}}},
-        "typeScheme": {
-          "body": {
-            "application": {"argument": {"variable": "hydra.python.environment.PythonVersion"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-          "variables": []}}},
+                "typeName": "hydra.phantoms.TTerm"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonVersionPython312",
+        "signature": {
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.python.environment.PythonVersion"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -67,14 +75,95 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.phantoms.TTerm"}}}},
-        "typeScheme": {
-          "body": {
-            "application": {"argument": {"variable": "hydra.python.environment.PythonVersion"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-          "variables": []}}},
+                "typeName": "hydra.phantoms.TTerm"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonEnvironment",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
+                      "body": {
+                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables in scope, with their Python names"}}}],
+                      "body": {
+                        "pair": {
+                          "first": {"list": {"variable": "hydra.core.Name"}},
+                          "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.python.syntax.Name"}}}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Graph context for type inference"}}}],
+                      "body": {"variable": "hydra.graph.Graph"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Set of nullary bindings (need call syntax)"}}}],
+                      "body": {"set": {"variable": "hydra.core.Name"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg4",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Target Python version"}}}],
+                      "body": {"variable": "hydra.python.environment.PythonVersion"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg5",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "When True, skip generating cast() calls for reduced memory usage"}}}],
+                      "body": {"literal": {"boolean": {}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg6",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Variables that are inline let bindings (walrus operators)"}}}],
+                      "body": {"set": {"variable": "hydra.core.Name"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -234,86 +323,29 @@
                         "body": {
                           "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "namespaces"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {
-                                "function": {
-                                  "codomain": {
-                                    "function": {
-                                      "codomain": {
-                                        "application": {
-                                          "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                                          "function": {"variable": "hydra.phantoms.TTerm"}}},
-                                      "domain": {
-                                        "application": {
-                                          "argument": {
-                                            "annotated": {
-                                              "annotation": [{"key": "description", "value": {"literal": {"string": "Variables that are inline let bindings (walrus operators)"}}}],
-                                              "body": {"set": {"variable": "hydra.core.Name"}}}},
-                                          "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                  "domain": {
-                                    "application": {
-                                      "argument": {
-                                        "annotated": {
-                                          "annotation": [
-                                            {
-                                              "key": "description",
-                                              "value": {"literal": {"string": "When True, skip generating cast() calls for reduced memory usage"}}}],
-                                          "body": {"literal": {"boolean": {}}}}},
-                                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                              "domain": {
-                                "application": {
-                                  "argument": {
-                                    "annotated": {
-                                      "annotation": [{"key": "description", "value": {"literal": {"string": "Target Python version"}}}],
-                                      "body": {"variable": "hydra.python.environment.PythonVersion"}}},
-                                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                          "domain": {
-                            "application": {
-                              "argument": {
-                                "annotated": {
-                                  "annotation": [{"key": "description", "value": {"literal": {"string": "Set of nullary bindings (need call syntax)"}}}],
-                                  "body": {"set": {"variable": "hydra.core.Name"}}}},
-                              "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                      "domain": {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [{"key": "description", "value": {"literal": {"string": "Graph context for type inference"}}}],
-                              "body": {"variable": "hydra.graph.Graph"}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables in scope, with their Python names"}}}],
-                          "body": {
-                            "pair": {
-                              "first": {"list": {"variable": "hydra.core.Name"}},
-                              "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.python.syntax.Name"}}}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
-                      "body": {
-                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "namespaces"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonEnvironmentNamespaces",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
+                    "body": {
+                      "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -356,26 +388,31 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
-                      "body": {
-                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonEnvironmentBoundTypeVariables",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables in scope, with their Python names"}}}],
+                    "body": {
+                      "pair": {
+                        "first": {"list": {"variable": "hydra.core.Name"}},
+                        "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.python.syntax.Name"}}}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -420,28 +457,28 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables in scope, with their Python names"}}}],
-                      "body": {
-                        "pair": {
-                          "first": {"list": {"variable": "hydra.core.Name"}},
-                          "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.python.syntax.Name"}}}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonEnvironmentGraph",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Graph context for type inference"}}}],
+                    "body": {"variable": "hydra.graph.Graph"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -484,25 +521,28 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Graph context for type inference"}}}],
-                      "body": {"variable": "hydra.graph.Graph"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonEnvironmentNullaryBindings",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Set of nullary bindings (need call syntax)"}}}],
+                    "body": {"set": {"variable": "hydra.core.Name"}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -547,25 +587,28 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Set of nullary bindings (need call syntax)"}}}],
-                      "body": {"set": {"variable": "hydra.core.Name"}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonEnvironmentVersion",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Target Python version"}}}],
+                    "body": {"variable": "hydra.python.environment.PythonVersion"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -608,25 +651,31 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Target Python version"}}}],
-                      "body": {"variable": "hydra.python.environment.PythonVersion"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonEnvironmentSkipCasts",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "When True, skip generating cast() calls for reduced memory usage"}}}],
+                    "body": {"literal": {"boolean": {}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -669,28 +718,28 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "When True, skip generating cast() calls for reduced memory usage"}}}],
-                      "body": {"literal": {"boolean": {}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonEnvironmentInlineVariables",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Variables that are inline let bindings (walrus operators)"}}}],
+                    "body": {"set": {"variable": "hydra.core.Name"}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -735,25 +784,36 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Variables that are inline let bindings (walrus operators)"}}}],
-                      "body": {"set": {"variable": "hydra.core.Name"}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonEnvironmentWithNamespaces",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
+                      "body": {
+                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -1016,32 +1076,38 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
-                          "body": {
-                            "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonEnvironmentWithBoundTypeVariables",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables in scope, with their Python names"}}}],
+                      "body": {
+                        "pair": {
+                          "first": {"list": {"variable": "hydra.core.Name"}},
+                          "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.python.syntax.Name"}}}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -1304,34 +1370,35 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables in scope, with their Python names"}}}],
-                          "body": {
-                            "pair": {
-                              "first": {"list": {"variable": "hydra.core.Name"}},
-                              "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.python.syntax.Name"}}}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonEnvironmentWithGraph",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Graph context for type inference"}}}],
+                      "body": {"variable": "hydra.graph.Graph"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -1593,31 +1660,35 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "Graph context for type inference"}}}],
-                          "body": {"variable": "hydra.graph.Graph"}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonEnvironmentWithNullaryBindings",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Set of nullary bindings (need call syntax)"}}}],
+                      "body": {"set": {"variable": "hydra.core.Name"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -1877,31 +1948,35 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "Set of nullary bindings (need call syntax)"}}}],
-                          "body": {"set": {"variable": "hydra.core.Name"}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonEnvironmentWithVersion",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Target Python version"}}}],
+                      "body": {"variable": "hydra.python.environment.PythonVersion"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -2163,31 +2238,38 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "Target Python version"}}}],
-                          "body": {"variable": "hydra.python.environment.PythonVersion"}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonEnvironmentWithSkipCasts",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "When True, skip generating cast() calls for reduced memory usage"}}}],
+                      "body": {"literal": {"boolean": {}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -2452,34 +2534,35 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "key": "description",
-                              "value": {"literal": {"string": "When True, skip generating cast() calls for reduced memory usage"}}}],
-                          "body": {"literal": {"boolean": {}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonEnvironmentWithInlineVariables",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Variables that are inline let bindings (walrus operators)"}}}],
+                      "body": {"set": {"variable": "hydra.core.Name"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -2739,31 +2822,123 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "Variables that are inline let bindings (walrus operators)"}}}],
-                          "body": {"set": {"variable": "hydra.core.Name"}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadata",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
+                      "body": {
+                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables used in the module"}}}],
+                      "body": {"set": {"variable": "hydra.core.Name"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg4",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg5",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg6",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg7",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg8",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg9",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg10",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg11",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg12",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg13",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg14",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg15",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg16",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg17",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg18",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg19",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg20",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg21",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg22",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3078,98 +3253,29 @@
                         "body": {
                           "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "namespaces"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {
-                                "function": {
-                                  "codomain": {
-                                    "function": {
-                                      "codomain": {
-                                        "function": {
-                                          "codomain": {
-                                            "function": {
-                                              "codomain": {
-                                                "function": {
-                                                  "codomain": {
-                                                    "function": {
-                                                      "codomain": {
-                                                        "function": {
-                                                          "codomain": {
-                                                            "function": {
-                                                              "codomain": {
-                                                                "function": {
-                                                                  "codomain": {
-                                                                    "function": {
-                                                                      "codomain": {
-                                                                        "function": {
-                                                                          "codomain": {
-                                                                            "function": {
-                                                                              "codomain": {
-                                                                                "function": {
-                                                                                  "codomain": {
-                                                                                    "function": {
-                                                                                      "codomain": {
-                                                                                        "function": {
-                                                                                          "codomain": {
-                                                                                            "function": {
-                                                                                              "codomain": {
-                                                                                                "function": {
-                                                                                                  "codomain": {
-                                                                                                    "function": {
-                                                                                                      "codomain": {
-                                                                                                        "application": {
-                                                                                                          "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                                                                                                          "function": {"variable": "hydra.phantoms.TTerm"}}},
-                                                                                                      "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                                                                                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                                                                              "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                                                                          "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                                                                      "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                                                                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                                                              "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                                                          "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                                                      "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                                                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                                              "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                                          "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                                      "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                              "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                          "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                      "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                              "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                          "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                      "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables used in the module"}}}],
-                          "body": {"set": {"variable": "hydra.core.Name"}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
-                      "body": {
-                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "namespaces"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataNamespaces",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
+                    "body": {
+                      "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3213,26 +3319,28 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
-                      "body": {
-                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataTypeVariables",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables used in the module"}}}],
+                    "body": {"set": {"variable": "hydra.core.Name"}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3278,25 +3386,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables used in the module"}}}],
-                      "body": {"set": {"variable": "hydra.core.Name"}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesAnnotated",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3342,19 +3446,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesCallable",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3400,19 +3506,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesCast",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3456,19 +3564,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesLruCache",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3514,19 +3624,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesTypeAlias",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3572,19 +3684,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesDataclass",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3630,19 +3744,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesDecimal",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3686,19 +3802,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesEither",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3742,19 +3860,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesEnum",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3798,19 +3918,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesFrozenDict",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3856,19 +3978,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesFrozenList",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3914,19 +4038,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesFrozenSet",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -3972,19 +4098,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesGeneric",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -4028,19 +4156,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesJust",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -4084,19 +4214,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesLeft",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -4140,19 +4272,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesMaybe",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -4196,19 +4330,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesName",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -4252,19 +4388,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesNode",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -4308,19 +4446,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesNothing",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -4364,19 +4504,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesRight",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -4420,19 +4562,21 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataUsesTypeVar",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -4476,19 +4620,36 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithNamespaces",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
+                      "body": {
+                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -5328,32 +5489,35 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
-                          "body": {
-                            "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithTypeVariables",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables used in the module"}}}],
+                      "body": {"set": {"variable": "hydra.core.Name"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -6190,31 +6354,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables used in the module"}}}],
-                          "body": {"set": {"variable": "hydra.core.Name"}}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesAnnotated",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -7045,25 +7207,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesCallable",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -7894,25 +8060,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesCast",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -8745,25 +8915,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesLruCache",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -9594,25 +9768,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesTypeAlias",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -10443,25 +10621,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesDataclass",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -11292,25 +11474,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesDecimal",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -12143,25 +12329,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesEither",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -12994,25 +13184,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesEnum",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -13845,25 +14039,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesFrozenDict",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -14694,25 +14892,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesFrozenList",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -15543,25 +15745,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesFrozenSet",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -16392,25 +16598,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesGeneric",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -17243,25 +17453,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesJust",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -18094,25 +18308,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesLeft",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -18945,25 +19163,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesMaybe",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -19796,25 +20018,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesName",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -20647,25 +20873,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesNode",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -21498,25 +21728,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesNothing",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -22349,25 +22583,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesRight",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -23200,25 +23438,29 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pythonModuleMetadataWithUsesTypeVar",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -24051,25 +24293,36 @@
                   "application": {
                     "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {"variable": "hydra.python.environment.PythonModuleMetadata"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pyGraph",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra graph being processed"}}}],
+                      "body": {"variable": "hydra.graph.Graph"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Accumulated module metadata"}}}],
+                      "body": {"variable": "hydra.python.environment.PythonModuleMetadata"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.python.environment.PyGraph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.python.environment.PyGraph"}}}],
@@ -24127,32 +24380,26 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra graph being processed"}}}],
                         "body": {"variable": "hydra.graph.Graph"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "graph"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {"argument": {"variable": "hydra.python.environment.PyGraph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "Accumulated module metadata"}}}],
-                          "body": {"variable": "hydra.python.environment.PythonModuleMetadata"}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra graph being processed"}}}],
-                      "body": {"variable": "hydra.graph.Graph"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "graph"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pyGraphGraph",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {"argument": {"variable": "hydra.python.environment.PyGraph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra graph being processed"}}}],
+                    "body": {"variable": "hydra.graph.Graph"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -24193,23 +24440,26 @@
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.python.environment.PyGraph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra graph being processed"}}}],
-                      "body": {"variable": "hydra.graph.Graph"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {"argument": {"variable": "hydra.python.environment.PyGraph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pyGraphMetadata",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {"argument": {"variable": "hydra.python.environment.PyGraph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Accumulated module metadata"}}}],
+                    "body": {"variable": "hydra.python.environment.PythonModuleMetadata"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -24250,23 +24500,31 @@
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.python.environment.PyGraph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Accumulated module metadata"}}}],
-                      "body": {"variable": "hydra.python.environment.PythonModuleMetadata"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {"argument": {"variable": "hydra.python.environment.PyGraph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "x"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pyGraphWithGraph",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {"argument": {"variable": "hydra.python.environment.PyGraph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra graph being processed"}}}],
+                      "body": {"variable": "hydra.graph.Graph"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.python.environment.PyGraph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -24348,27 +24606,31 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.python.environment.PyGraph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {"argument": {"variable": "hydra.python.environment.PyGraph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra graph being processed"}}}],
-                          "body": {"variable": "hydra.graph.Graph"}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {"argument": {"variable": "hydra.python.environment.PyGraph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
+                "parameter": "original"}}}}}},
     {
       "term": {
         "name": "hydra.dsl.python.environment.pyGraphWithMetadata",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {"argument": {"variable": "hydra.python.environment.PyGraph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Accumulated module metadata"}}}],
+                      "body": {"variable": "hydra.python.environment.PythonModuleMetadata"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.python.environment.PyGraph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -24450,24 +24712,7 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.python.environment.PyGraph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "original"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "application": {"argument": {"variable": "hydra.python.environment.PyGraph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "Accumulated module metadata"}}}],
-                          "body": {"variable": "hydra.python.environment.PythonModuleMetadata"}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {"argument": {"variable": "hydra.python.environment.PyGraph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}}],
+                "parameter": "original"}}}}}}],
   "dependencies": [
     {"module": "hydra.python.environment"},
     {"module": "hydra.phantoms"},

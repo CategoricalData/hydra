@@ -29,7 +29,7 @@ check_native_jdk
 # kernel artifact intentionally doesn't bundle.
 echo "Building hydra-java..."
 BUILD_START=$(date +%s)
-cd "$HYDRA_ROOT"
+cd "$HYDRA_JAVA_DIR"
 if ! ./gradlew :hydra-java:compileJava :hydra-java:compileHeadsExtrasJava 2>&1; then
     echo ""
     echo "ERROR: Java compilation failed. See errors above."

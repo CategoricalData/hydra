@@ -77,7 +77,7 @@ annotateBodyWithCod typ term =
         _ -> setAnn term
 annotateLambdaArgs :: Core.Name -> [Core.Type] -> [Core.Term] -> t0 -> Graph.Graph -> Either t1 [Core.Term]
 annotateLambdaArgs cname tApps argTerms cx g =
-    Logic.ifElse (Lists.null tApps) (Right argTerms) (Eithers.bind (Eithers.bind (Right (Lexical.lookupBinding g cname)) (\mel -> Maybes.cases mel (Right (Maybes.map (\prim -> Graph.primitiveTypeScheme prim) (Maps.lookup cname (Graph.graphPrimitives g)))) (\el -> Right (Core.bindingTypeScheme el)))) (\mts -> Maybes.cases mts (Right argTerms) (\ts ->
+    Logic.ifElse (Lists.null tApps) (Right argTerms) (Eithers.bind (Eithers.bind (Right (Lexical.lookupBinding g cname)) (\mel -> Maybes.cases mel (Right (Maybes.map (\prim -> Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim))) (Maps.lookup cname (Graph.graphPrimitives g)))) (\el -> Right (Core.bindingTypeScheme el)))) (\mts -> Maybes.cases mts (Right argTerms) (\ts ->
       let schemeType = Core.typeSchemeBody ts
           schemeTypeVars = collectTypeVars schemeType
           schemeVars = Lists.filter (\v -> Sets.member v schemeTypeVars) (Core.typeSchemeVariables ts)
@@ -1325,7 +1325,7 @@ encodeTermDefinition env tdef cx g =
                 Maybes.maybe (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Unit")),
-                  Core.typeSchemeConstraints = Nothing}) (\x -> x) (Packaging.termDefinitionTypeScheme tdef)
+                  Core.typeSchemeConstraints = Nothing}) (\sig -> Scoping.termSignatureToTypeScheme sig) (Packaging.termDefinitionSignature tdef)
             term = Variables.unshadowVariables term0
         in (Eithers.bind (analyzeJavaFunction env term cx g) (\fs ->
           let schemeVars = Lists.filter (\v -> isSimpleName v) (Core.typeSchemeVariables ts)

@@ -30,6 +30,7 @@ import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
+import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Dsl.Meta.DeepCore as DeepCore
@@ -308,7 +309,7 @@ dslModule = define "dslModule" $
               (primitive _lists_map @@ dslNamespace @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))))))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-            (Core.bindingTypeScheme $ var "b")))
+            (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
             (deduplicateBindings @@ Lists.concat (var "dslBindings"))))))
 -- | Generate a DSL module namespace from a source module namespace
 -- For example, "hydra.core" -> "hydra.dsl.core"

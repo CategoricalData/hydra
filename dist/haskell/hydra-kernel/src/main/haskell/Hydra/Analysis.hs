@@ -100,6 +100,7 @@ definitionDependencyNamespaces defs =
               \def -> case def of
                 Packaging.DefinitionType v0 -> Dependencies.typeDependencyNames True (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0))
                 Packaging.DefinitionTerm v0 -> Dependencies.termDependencyNames True True True (Packaging.termDefinitionTerm v0)
+                Packaging.DefinitionPrimitive v0 -> Dependencies.typeDependencyNames True (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature v0)))
           allNames = Sets.unions (Lists.map defNames defs)
       in (Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList allNames))))
 -- | Find dependency namespaces in all of a set of terms (Either version)
@@ -277,7 +278,7 @@ moduleDependencyNamespaces cx graph binds withPrims withNoms withSchema mod =
                 Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                   Core.bindingName = (Packaging.termDefinitionName v0),
                   Core.bindingTerm = (Packaging.termDefinitionTerm v0),
-                  Core.bindingTypeScheme = (Packaging.termDefinitionTypeScheme v0)})
+                  Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
                 _ -> Nothing) (Packaging.moduleDefinitions mod))
       in (Eithers.map (\deps -> Sets.delete (Packaging.moduleName mod) deps) (dependencyNamespaces cx graph binds withPrims withNoms withSchema allBindings))
 -- | Create namespaces mapping for definitions

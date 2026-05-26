@@ -139,7 +139,7 @@ substInClassConstraints = define "substInClassConstraints" $
     Maybes.maybe
       (Maps.insert (var "varName") (var "metadata") (var "acc"))
       ("existing" ~>
-        "merged" <~ Core.typeVariableMetadata (Sets.union (Core.typeVariableMetadataClasses $ var "existing") (Core.typeVariableMetadataClasses $ var "metadata")) $
+        "merged" <~ Core.typeVariableMetadata (Lists.nub $ Lists.concat2 (Core.typeVariableMetadataClasses $ var "existing") (Core.typeVariableMetadataClasses $ var "metadata")) $
         Maps.insert (var "varName") (var "merged") (var "acc"))
       (Maps.lookup (var "varName") (var "acc"))) $
   -- For each (varName, metadata) in constraints:

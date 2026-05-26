@@ -1,6 +1,6 @@
 module Hydra.Demos.Genpg.Runtime where
 
-import Hydra.Kernel
+import Hydra.Kernel hiding (Result)
 import qualified Hydra.Show.Errors as ShowError
 import qualified Hydra.Pg.Model as Pg
 import Hydra.Dsl.Pg.Mappings

@@ -109,6 +109,7 @@ checkDefinitionDocumentation mod =
                         in case typ of
                           Core.TypeAnnotated v1 -> Annotations.hasDescription (Core.annotatedTypeAnnotation v1)
                           _ -> False
+                      Packaging.DefinitionPrimitive v0 -> Logic.not (Equality.equal (Packaging.primitiveDefinitionDescription v0) "")
                       _ -> False
         in (Logic.ifElse documented Nothing (Just (ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
           ErrorPackaging.missingDocumentationErrorModuleName = ns,
@@ -139,11 +140,13 @@ checkDefinitionNameConvention mod =
                     case def of
                       Packaging.DefinitionTerm _ -> Util.CaseConventionCamel
                       Packaging.DefinitionType _ -> Util.CaseConventionPascal
+                      Packaging.DefinitionPrimitive _ -> Util.CaseConventionCamel
                       _ -> Util.CaseConventionCamel
             pattern =
                     case def of
                       Packaging.DefinitionTerm _ -> Constants.regexCamelCase
                       Packaging.DefinitionType _ -> Constants.regexPascalCase
+                      Packaging.DefinitionPrimitive _ -> Constants.regexCamelCase
                       _ -> Constants.regexCamelCase
         in (Logic.ifElse (Regex.matches pattern local) Nothing (Just (ErrorPackaging.InvalidModuleErrorInvalidDefinitionName (ErrorPackaging.InvalidDefinitionNameError {
           ErrorPackaging.invalidDefinitionNameErrorModuleName = ns,
@@ -222,6 +225,7 @@ definitionName def =
     case def of
       Packaging.DefinitionTerm v0 -> Packaging.termDefinitionName v0
       Packaging.DefinitionType v0 -> Packaging.typeDefinitionName v0
+      Packaging.DefinitionPrimitive v0 -> Packaging.primitiveDefinitionName v0
 -- | True iff the given rule name appears in the profile's errorRules or warningRules.
 enabledPackaging :: Validation.ValidationProfile -> Core.Name -> Bool
 enabledPackaging p ruleName =

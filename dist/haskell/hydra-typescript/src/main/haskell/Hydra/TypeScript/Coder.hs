@@ -22,6 +22,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
@@ -365,7 +366,8 @@ encodeTermDefinition cx g currentNs td =
           lname = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Names.localNameOf name)
           rawTerm = Packaging.termDefinitionTerm td
           asExport = \stmt -> Syntax.ModuleItemExport (Syntax.ExportDeclarationDeclaration stmt)
-          mScheme = Maybes.bind (Packaging.termDefinitionTypeScheme td) (\ts -> Just (Core.typeSchemeBody ts))
+          mScheme =
+                  Maybes.bind (Packaging.termDefinitionSignature td) (\sig -> Just (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme sig)))
           dterm = Strip.deannotateTerm rawTerm
           funDecl = functionDeclarationFromTerm cx g currentNs lname rawTerm mScheme
           asFunDecl = asExport (Syntax.StatementFunctionDeclaration funDecl)
@@ -612,7 +614,7 @@ moduleToTypeScript mod defs cx g =
           typeImportsFromTypes =
                   Lists.foldl (\acc -> \td -> Sets.union acc (collectImports currentNs (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme td)))) Sets.empty typeDefs
           typeImportsFromTerms =
-                  Lists.foldl (\acc -> \td -> Maybes.cases (Packaging.termDefinitionTypeScheme td) acc (\ts -> Sets.union acc (collectImports currentNs (Core.typeSchemeBody ts)))) Sets.empty termDefs
+                  Lists.foldl (\acc -> \td -> Maybes.cases (Packaging.termDefinitionSignature td) acc (\sig -> Sets.union acc (collectImports currentNs (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme sig))))) Sets.empty termDefs
           typeImportsFromInner =
                   Lists.foldl (\acc -> \td -> Sets.union acc (collectInnerTypeImports currentNs (Packaging.termDefinitionTerm td))) Sets.empty termDefs
           typeImports = Sets.union (Sets.union typeImportsFromTypes typeImportsFromTerms) typeImportsFromInner

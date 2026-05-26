@@ -3,6 +3,7 @@
     {
       "term": {
         "name": "hydra.pegasus.language.pdlLanguage",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for LinkedIn Pegasus (PDL)"}}}],
@@ -110,8 +111,7 @@
                                 "name": "types",
                                 "term": {"typeApplication": {"body": {"variable": "typePredicate"}, "type": {"variable": "hydra.core.Type"}}}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
-                    "typeName": "hydra.coders.Language"}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}}],
+                    "typeName": "hydra.coders.Language"}}}}}}}}],
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.paths"},

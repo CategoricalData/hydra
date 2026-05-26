@@ -1756,6 +1756,14 @@ typeApplicationTermWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL injection for the simple variant of hydra.core.TypeClassConstraint
+typeClassConstraintSimple :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.TypeClassConstraint
+typeClassConstraintSimple x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.core.TypeClassConstraint"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "simple"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the either variant of hydra.core.Type
 typeEither :: Phantoms.TTerm Core.EitherType -> Phantoms.TTerm Core.Type
 typeEither x =
@@ -2029,7 +2037,7 @@ typeVariable x =
         Core.fieldName = (Core.Name "variable"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL constructor for hydra.core.TypeVariableMetadata
-typeVariableMetadata :: Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Core.TypeVariableMetadata
+typeVariableMetadata :: Phantoms.TTerm [Core.TypeClassConstraint] -> Phantoms.TTerm Core.TypeVariableMetadata
 typeVariableMetadata classes =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.core.TypeVariableMetadata"),
@@ -2038,7 +2046,7 @@ typeVariableMetadata classes =
           Core.fieldName = (Core.Name "classes"),
           Core.fieldTerm = (Phantoms.unTTerm classes)}]}))
 -- | DSL accessor for the classes field of hydra.core.TypeVariableMetadata
-typeVariableMetadataClasses :: Phantoms.TTerm Core.TypeVariableMetadata -> Phantoms.TTerm (S.Set Core.Name)
+typeVariableMetadataClasses :: Phantoms.TTerm Core.TypeVariableMetadata -> Phantoms.TTerm [Core.TypeClassConstraint]
 typeVariableMetadataClasses x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2046,7 +2054,7 @@ typeVariableMetadataClasses x =
         Core.projectionFieldName = (Core.Name "classes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the classes field of hydra.core.TypeVariableMetadata
-typeVariableMetadataWithClasses :: Phantoms.TTerm Core.TypeVariableMetadata -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Core.TypeVariableMetadata
+typeVariableMetadataWithClasses :: Phantoms.TTerm Core.TypeVariableMetadata -> Phantoms.TTerm [Core.TypeClassConstraint] -> Phantoms.TTerm Core.TypeVariableMetadata
 typeVariableMetadataWithClasses original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.core.TypeVariableMetadata"),
