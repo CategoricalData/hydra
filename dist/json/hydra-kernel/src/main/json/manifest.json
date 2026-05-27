@@ -132,7 +132,6 @@
     "hydra.lib.maps",
     "hydra.lib.math",
     "hydra.lib.maybes",
-    "hydra.lib.names",
     "hydra.lib.pairs",
     "hydra.lib.regex",
     "hydra.lib.sets",
