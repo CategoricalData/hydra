@@ -2,9 +2,7 @@
 -- | DSL functions for hydra.errors
 
 module Hydra.Dsl.Errors where
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Dsl.Context as DslContext
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Error.Checking as ErrorChecking
 import qualified Hydra.Dsl.Error.Core as DslErrorCore

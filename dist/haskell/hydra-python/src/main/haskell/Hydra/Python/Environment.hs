@@ -4,7 +4,9 @@
 module Hydra.Python.Environment where
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Python.Syntax as Syntax
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci

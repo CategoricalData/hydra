@@ -3,7 +3,6 @@
 
 module Hydra.Decode.Errors where
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Context as Context
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Decode.Error.Checking as Checking
 import qualified Hydra.Decode.Error.Core as ErrorCore

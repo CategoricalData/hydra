@@ -2,7 +2,6 @@
 -- | Test cases for term reduction/evaluation mechanics
 
 module Hydra.Test.Reduction where
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Inference as Inference
@@ -11,6 +10,7 @@ import qualified Hydra.Reduction as Reduction
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Test cases for term reduction mechanics

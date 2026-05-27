@@ -3,8 +3,16 @@
 
 module Hydra.Lisp.Serde where
 import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
+import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
@@ -13,7 +21,20 @@ import qualified Hydra.Haskell.Lib.Maybes as Maybes
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Lisp.Syntax as Syntax
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Serialization as Serialization
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 andExpressionToExpr :: Syntax.Dialect -> Syntax.AndExpression -> Ast.Expr

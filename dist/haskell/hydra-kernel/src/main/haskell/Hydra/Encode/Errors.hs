@@ -3,7 +3,6 @@
 
 module Hydra.Encode.Errors where
 import qualified Hydra.Core as Core
-import qualified Hydra.Encode.Context as Context
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Error.Checking as Checking
 import qualified Hydra.Encode.Error.Core as ErrorCore
