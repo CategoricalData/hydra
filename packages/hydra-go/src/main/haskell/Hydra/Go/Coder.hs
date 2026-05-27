@@ -13,7 +13,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Go.Language as GoLang
 import qualified Hydra.Go.Syntax as Go
 import Hydra.Go.Serde (moduleToExpr)
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Strings as Strings
 
 import qualified Data.Char as C
 import qualified Data.List as L

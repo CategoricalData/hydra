@@ -190,8 +190,32 @@ namespacesForModule :: TTermDefinition (Module -> InferenceContext -> Graph -> E
 namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
   doc "Compute the Haskell module namespaces for a Hydra module" $
   "mod" ~> "cx" ~> "g" ~>
-    "nss" <<~ Analysis.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ true @@ true @@ true @@ true @@ var "mod" $
-    "ns" <~ (Packaging.moduleName $ var "mod") $
+    -- Collect dependency namespaces by walking the module's term/type
+    -- contents (the primary source) AND from its declared
+    -- moduleDependencies (the secondary source, filtered to namespaces
+    -- that actually exist in the graph). The declared deps catch cases
+    -- where a term carries reified data whose namespace is referenced
+    -- only through the record-typeName / type-variable structure that
+    -- termDependencyNames may skip (e.g., the lowered PrimitiveDefinition
+    -- modules whose bindings are term-encoded records referencing
+    -- hydra.packaging). We filter against the graph's existing
+    -- namespaces so that synthesized sources' phantom deps (e.g.,
+    -- hydra.decode.graph in hydra.decode.coders) don't produce import
+    -- lines for nonexistent modules.
+    "termNss" <<~ Analysis.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ true @@ true @@ true @@ true @@ var "mod" $
+    "knownNss" <~ Sets.fromList (Maybes.cat
+      (Lists.map Names.namespaceOf (Lists.concat2
+        (Maps.keys (Graph.graphSchemaTypes (var "g")))
+        (Maps.keys (Graph.graphBoundTerms (var "g")))))) $
+    "rawDeclaredNss" <~ Sets.fromList (Lists.map
+      ("dep" ~> Packaging.moduleDependencyModule (var "dep"))
+      (Packaging.moduleDependencies (var "mod"))) $
+    "declaredNss" <~ Sets.fromList (Lists.filter
+      ("ns" ~> Sets.member (var "ns") (var "knownNss"))
+      (Sets.toList (var "rawDeclaredNss"))) $
+    "ownNs" <~ (Packaging.moduleName $ var "mod") $
+    "nss" <~ Sets.delete (var "ownNs") (Sets.union (var "termNss") (var "declaredNss")) $
+    "ns" <~ var "ownNs" $
     "segmentsOf" <~ ("namespace" ~>
       Strings.splitOn (string ".") (unwrap _ModuleName @@ var "namespace")) $
     -- Build an alias by taking the last `n` segments of `segs`, capitalizing each,

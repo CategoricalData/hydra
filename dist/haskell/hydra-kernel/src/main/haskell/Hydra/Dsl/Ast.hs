@@ -4,6 +4,7 @@
 module Hydra.Dsl.Ast where
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Core as Core
+import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci

@@ -2,12 +2,12 @@
 -- | Mappings from property graph schemas to SHACL shapes graphs, and from property graph data to RDF graphs
 
 module Hydra.Pg.Rdf.Mappings where
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Pg.Model as PgModel
 import qualified Hydra.Pg.Rdf.Environment as Environment
 import qualified Hydra.Rdf.Syntax as Syntax

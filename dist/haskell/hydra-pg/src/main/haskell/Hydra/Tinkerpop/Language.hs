@@ -4,9 +4,9 @@
 module Hydra.Tinkerpop.Language where
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Tinkerpop.Features as Features
 import qualified Hydra.Variants as Variants

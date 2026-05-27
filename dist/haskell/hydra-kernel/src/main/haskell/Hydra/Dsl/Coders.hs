@@ -4,6 +4,11 @@
 module Hydra.Dsl.Coders where
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Dsl.Errors as DslErrors
+import qualified Hydra.Dsl.Graph as DslGraph
+import qualified Hydra.Dsl.Typing as DslTyping
+import qualified Hydra.Dsl.Variants as DslVariants
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Phantoms as Phantoms

@@ -1,6 +1,6 @@
 -- | Haskell implementations of hydra.lib.lists primitives
 
-module Hydra.Lib.Lists where
+module Hydra.Haskell.Lib.Lists where
 
 import Hydra.Util
 import Hydra.Core

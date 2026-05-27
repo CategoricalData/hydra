@@ -1,6 +1,6 @@
 -- | Haskell implementations of hydra.lib.logic (logic and control flow) primitives
 
-module Hydra.Lib.Logic where
+module Hydra.Haskell.Lib.Logic where
 
 import Hydra.Core
 

@@ -2,19 +2,41 @@
 -- | JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling.
 
 module Hydra.Json.Decode where
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Extract.Core as ExtractCore
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Literals as Literals
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Literals as LibLiterals
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Literals as Literals
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -23,13 +45,13 @@ decodeFloat :: Core.FloatType -> Model.Value -> Either String Core.Term
 decodeFloat ft value =
     case ft of
       Core.FloatTypeFloat32 -> case value of
-        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (Literals.decimalToFloat32 v1))))
+        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (LibLiterals.decimalToFloat32 v1))))
         Model.ValueString v1 -> Maybes.maybe (Left (Strings.cat [
           "invalid float32 sentinel: ",
           v1])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 v)))) (parseSpecialFloat32 v1)
         _ -> Left "expected number or special float string for float32"
       Core.FloatTypeFloat64 -> case value of
-        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.decimalToFloat64 v1))))
+        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (LibLiterals.decimalToFloat64 v1))))
         Model.ValueString v1 -> Maybes.maybe (Left (Strings.cat [
           "invalid float64 sentinel: ",
           v1])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 v)))) (parseSpecialFloat v1)
@@ -41,53 +63,53 @@ decodeInteger it value =
       Core.IntegerTypeBigint ->
         let strResult = expectString value
         in (Eithers.either (\err -> Left err) (\s ->
-          let parsed = Literals.readBigint s
+          let parsed = LibLiterals.readBigint s
           in (Maybes.maybe (Left (Strings.cat [
             "invalid bigint: ",
             s])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint v)))) parsed)) strResult)
       Core.IntegerTypeInt64 ->
         let strResult = expectString value
         in (Eithers.either (\err -> Left err) (\s ->
-          let parsed = Literals.readInt64 s
+          let parsed = LibLiterals.readInt64 s
           in (Maybes.maybe (Left (Strings.cat [
             "invalid int64: ",
             s])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 v)))) parsed)) strResult)
       Core.IntegerTypeUint32 ->
         let strResult = expectString value
         in (Eithers.either (\err -> Left err) (\s ->
-          let parsed = Literals.readUint32 s
+          let parsed = LibLiterals.readUint32 s
           in (Maybes.maybe (Left (Strings.cat [
             "invalid uint32: ",
             s])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint32 v)))) parsed)) strResult)
       Core.IntegerTypeUint64 ->
         let strResult = expectString value
         in (Eithers.either (\err -> Left err) (\s ->
-          let parsed = Literals.readUint64 s
+          let parsed = LibLiterals.readUint64 s
           in (Maybes.maybe (Left (Strings.cat [
             "invalid uint64: ",
             s])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint64 v)))) parsed)) strResult)
       Core.IntegerTypeInt8 ->
         let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt8 (Literals.bigintToInt8 (Literals.decimalToBigint n))))) numResult)
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt8 (LibLiterals.bigintToInt8 (LibLiterals.decimalToBigint n))))) numResult)
       Core.IntegerTypeInt16 ->
         let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt16 (Literals.bigintToInt16 (Literals.decimalToBigint n))))) numResult)
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt16 (LibLiterals.bigintToInt16 (LibLiterals.decimalToBigint n))))) numResult)
       Core.IntegerTypeInt32 ->
         let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Literals.bigintToInt32 (Literals.decimalToBigint n))))) numResult)
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (LibLiterals.bigintToInt32 (LibLiterals.decimalToBigint n))))) numResult)
       Core.IntegerTypeUint8 ->
         let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint8 (Literals.bigintToUint8 (Literals.decimalToBigint n))))) numResult)
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint8 (LibLiterals.bigintToUint8 (LibLiterals.decimalToBigint n))))) numResult)
       Core.IntegerTypeUint16 ->
         let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint16 (Literals.bigintToUint16 (Literals.decimalToBigint n))))) numResult)
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint16 (LibLiterals.bigintToUint16 (LibLiterals.decimalToBigint n))))) numResult)
 -- | Decode a JSON value to a literal term
 decodeLiteral :: Core.LiteralType -> Model.Value -> Either String Core.Term
 decodeLiteral lt value =
     case lt of
       Core.LiteralTypeBinary ->
         let strResult = expectString value
-        in (Eithers.map (\s -> Core.TermLiteral (Core.LiteralBinary (Literals.stringToBinary s))) strResult)
+        in (Eithers.map (\s -> Core.TermLiteral (Core.LiteralBinary (LibLiterals.stringToBinary s))) strResult)
       Core.LiteralTypeBoolean -> case value of
         Model.ValueBoolean v1 -> Right (Core.TermLiteral (Core.LiteralBoolean v1))
         _ -> Left "expected boolean"
@@ -258,8 +280,8 @@ fromJson types tname typ value =
 -- | Parse an IEEE sentinel string (NaN, Infinity, -Infinity, -0.0) to a float64. Returns Nothing for unrecognized strings.
 parseSpecialFloat :: String -> Maybe Double
 parseSpecialFloat s =
-    Logic.ifElse (Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))) (Literals.readFloat64 s) Nothing
+    Logic.ifElse (Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))) (LibLiterals.readFloat64 s) Nothing
 -- | Parse an IEEE sentinel string (NaN, Infinity, -Infinity, -0.0) to a float32. Returns Nothing for unrecognized strings.
 parseSpecialFloat32 :: String -> Maybe Float
 parseSpecialFloat32 s =
-    Logic.ifElse (Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))) (Literals.readFloat32 s) Nothing
+    Logic.ifElse (Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))) (LibLiterals.readFloat32 s) Nothing

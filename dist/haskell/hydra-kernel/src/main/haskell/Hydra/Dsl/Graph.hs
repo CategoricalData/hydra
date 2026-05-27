@@ -3,6 +3,10 @@
 
 module Hydra.Dsl.Graph where
 import qualified Hydra.Core as Core
+import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Dsl.Errors as DslErrors
+import qualified Hydra.Dsl.Packaging as DslPackaging
+import qualified Hydra.Dsl.Typing as DslTyping
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Packaging as Packaging

@@ -3,10 +3,18 @@
 
 module Hydra.Dsl.Python.Environment where
 import qualified Hydra.Core as Core
+import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Dsl.Graph as DslGraph
+import qualified Hydra.Dsl.Packaging as DslPackaging
+import qualified Hydra.Dsl.Python.Syntax as PythonSyntax
+import qualified Hydra.Dsl.Typing as DslTyping
+import qualified Hydra.Dsl.Util as DslUtil
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Python.Environment as Environment
 import qualified Hydra.Python.Syntax as Syntax
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci

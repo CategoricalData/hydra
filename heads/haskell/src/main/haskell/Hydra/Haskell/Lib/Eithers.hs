@@ -1,6 +1,6 @@
 -- | Haskell implementations of hydra.lib.eithers primitives
 
-module Hydra.Lib.Eithers where
+module Hydra.Haskell.Lib.Eithers where
 
 import qualified Control.Monad as CM
 import qualified Data.Bifunctor as BF

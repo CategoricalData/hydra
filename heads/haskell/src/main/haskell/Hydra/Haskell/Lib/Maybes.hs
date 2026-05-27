@@ -1,6 +1,6 @@
 -- | Haskell implementations of hydra.lib.maybes primitives
 
-module Hydra.Lib.Maybes where
+module Hydra.Haskell.Lib.Maybes where
 
 import qualified Data.Maybe as Y
 
