@@ -439,12 +439,17 @@ public class Generation {
 
     /**
      * Generate TypeScript source files from modules.
+     *
+     * doHoistCaseStatements=true mirrors Python's TS-host setting and the
+     * per-target dispatch in heads/typescript/.../bootstrap.ts. Hoisting
+     * pulls cases out of inline IIFEs into top-level helpers, saving
+     * stack frames when the TS runtime walks deeply-nested terms.
      */
     public static void writeTypeScript(String basePath, List<Module> universe, List<Module> mods) {
         generateSources(
                 mod -> defs -> cx -> g -> hydra.typeScript.Coder.moduleToTypeScript(mod, defs, cx, g),
                 hydra.typeScript.Language.typeScriptLanguage(),
-                false, true, false, false,
+                false, true, true, false,
                 basePath, universe, mods);
     }
 

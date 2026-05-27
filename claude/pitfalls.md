@@ -853,3 +853,18 @@ During the #368 merge the second path was needed because every patch
 attempt to rebuild triggered another wave of kernel-source changes. Trace
 the binary's expected shape by reading the relevant
 `Sources/Encode/<Type>.hs` and `Sources/Decode/<Type>.hs` at the merge base.
+
+### `git reset --soft` after the user ran their own git commands
+
+If you've been committing across a session, your mental model of HEAD
+can lag behind reality. Common case: the user runs `git pull` (or
+`git merge`) between your turns. Their merge commit becomes the new
+HEAD, and `git reset --soft HEAD~` now undoes *their* merge, not the
+commit you intended to amend.
+
+Before any `git reset --soft HEAD~` (or `HEAD~N`), check `git log
+-1 --oneline` and `git reflog | head -5`. If the most recent commit
+isn't yours, stop and ask. Recovery is straightforward via the
+reflog (`git reset --soft <sha-of-the-merge>`) provided you notice
+quickly — but the safer rule is "verify before reset," not "recover
+after reset."
