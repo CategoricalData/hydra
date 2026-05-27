@@ -3,7 +3,6 @@
 module Hydra.Sources.Kernel.Lib.Eithers where
 
 import Hydra.Kernel
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms

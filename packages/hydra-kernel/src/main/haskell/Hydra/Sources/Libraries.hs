@@ -5,7 +5,7 @@ module Hydra.Sources.Libraries (
 ) where
 
 import Hydra.Kernel
-import qualified Hydra.Lib.Names as LibNames
+import qualified Hydra.Sources.Kernel.Lib.Names as LibNames
 import Hydra.Dsl.Prims as Prims
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
