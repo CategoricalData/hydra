@@ -142,6 +142,27 @@ moduleTermBindings m = Maybes.cat $ Lists.map
         (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "td"))])
   (Packaging.moduleDefinitions m)
 
+-- | Extract primitive defaultImplementation bindings from a module, for the
+-- inference-time consistency check between primitiveDefinitionSignature and the
+-- type of primitiveDefinitionDefaultImplementation. Each Binding carries the
+-- declared signature in bindingTypeScheme, so inferGraphTypes unifies the
+-- inferred type of the default term against it; mismatches surface as
+-- unification errors. These bindings are intentionally not emitted by
+-- moduleTermBindings so they don't enter source-file generation paths
+-- (where they'd be treated as ordinary term definitions); they only feed
+-- the inference pass.
+modulePrimitiveDefaultBindings :: TTerm Module -> TTerm [Binding]
+modulePrimitiveDefaultBindings m = Maybes.cat $ Lists.map
+  ("d" ~> cases _Definition (var "d") (Just nothing) [
+    _Definition_primitive>>: "pd" ~>
+      Maybes.map
+        ("impl" ~> Core.binding
+          (Packaging.primitiveDefinitionName $ var "pd")
+          (var "impl")
+          (just (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ var "pd"))))
+        (Packaging.primitiveDefinitionDefaultImplementation $ var "pd")])
+  (Packaging.moduleDefinitions m)
+
 -- | Extract all definitions from a module as Bindings.
 moduleAllBindings :: TTerm Module -> TTerm [Binding]
 moduleAllBindings m = Lists.concat2 (moduleTypeBindings m) (moduleTermBindings m)
@@ -514,7 +535,8 @@ inferModulesGiven = define "inferModulesGiven" $
   -- non-target closure modules that already carry a scheme are kept verbatim; their schemes
   -- are in graphBoundTypes via modulesToGraph so references from re-inferred bindings resolve
   -- through inferTypeOfVariable with correctly-sized TypeApplication wrappers.
-  "bindingsToInfer" <~ Lists.concat (Lists.map
+  -- Term-definition bindings (target-aware filter).
+  "termBindings" <~ Lists.concat (Lists.map
     ("m" ~>
       "isTarget" <~ Sets.member (Packaging.moduleName (var "m")) (var "targetNamespaces") $
       "bs" <~ moduleTermBindings (var "m") $
@@ -522,6 +544,21 @@ inferModulesGiven = define "inferModulesGiven" $
         (var "bs")
         (Lists.filter ("b" ~> Maybes.isNothing (Core.bindingTypeScheme (var "b"))) (var "bs")))
     (var "closureMods")) $
+  -- Primitive defaultImplementation bindings: included only for target modules
+  -- so we run a signature-consistency check whenever a primitive module is
+  -- (re)inferred. inferGraphTypes unifies the inferred type against the
+  -- declared signature; mismatches surface as ErrorUnification. The bindings
+  -- are dropped by refreshModule (which only updates DefinitionTerm cases),
+  -- so the primitive definitions emitted to JSON are unchanged.
+  "primitiveBindings" <~ Lists.concat (Lists.map
+    ("m" ~>
+      "isTarget" <~ Sets.member (Packaging.moduleName (var "m")) (var "targetNamespaces") $
+      "bs" <~ modulePrimitiveDefaultBindings (var "m") $
+      Logic.ifElse (var "isTarget")
+        (var "bs")
+        (TTerm (Terms.list []) :: TTerm [Binding]))
+    (var "closureMods")) $
+  "bindingsToInfer" <~ Lists.concat2 (var "termBindings") (var "primitiveBindings") $
   "untouchedTypedBindings" <~ Lists.concat (Lists.map
     ("m" ~>
       "isTarget" <~ Sets.member (Packaging.moduleName (var "m")) (var "targetNamespaces") $

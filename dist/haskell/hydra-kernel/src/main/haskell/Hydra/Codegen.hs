@@ -286,7 +286,7 @@ inferModulesGiven cx bsGraph universeMods targetMods =
           nsMap = Maps.fromList (Lists.map (\m -> (Packaging.moduleName m, m)) universeMods)
           closureMods = moduleDepsTransitive nsMap targetMods
           targetNamespaces = Sets.fromList (Lists.map Packaging.moduleName targetMods)
-          bindingsToInfer =
+          termBindings =
                   Lists.concat (Lists.map (\m ->
                     let isTarget = Sets.member (Packaging.moduleName m) targetNamespaces
                         bs =
@@ -297,6 +297,18 @@ inferModulesGiven cx bsGraph universeMods targetMods =
                                     Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
                                   _ -> Nothing) (Packaging.moduleDefinitions m))
                     in (Logic.ifElse isTarget bs (Lists.filter (\b -> Maybes.isNothing (Core.bindingTypeScheme b)) bs))) closureMods)
+          primitiveBindings =
+                  Lists.concat (Lists.map (\m ->
+                    let isTarget = Sets.member (Packaging.moduleName m) targetNamespaces
+                        bs =
+                                Maybes.cat (Lists.map (\d -> case d of
+                                  Packaging.DefinitionPrimitive v0 -> Maybes.map (\impl -> Core.Binding {
+                                    Core.bindingName = (Packaging.primitiveDefinitionName v0),
+                                    Core.bindingTerm = impl,
+                                    Core.bindingTypeScheme = (Just (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature v0)))}) (Packaging.primitiveDefinitionDefaultImplementation v0)
+                                  _ -> Nothing) (Packaging.moduleDefinitions m))
+                    in (Logic.ifElse isTarget bs [])) closureMods)
+          bindingsToInfer = Lists.concat2 termBindings primitiveBindings
           untouchedTypedBindings =
                   Lists.concat (Lists.map (\m ->
                     let isTarget = Sets.member (Packaging.moduleName m) targetNamespaces
