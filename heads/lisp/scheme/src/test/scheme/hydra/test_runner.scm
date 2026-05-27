@@ -1,7 +1,6 @@
 (define-library (hydra test_runner)
   (import (scheme base) (scheme write) (scheme cxr) (scheme char)
           (hydra core)
-          (hydra context)
           (hydra graph)
           (hydra prims)
           (hydra reduction)
