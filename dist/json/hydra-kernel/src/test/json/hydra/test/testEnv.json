@@ -3,8 +3,8 @@
     {
       "term": {
         "name": "hydra.test.testEnv.testContext",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.context.Context"}}, "typeParameters": []},
-        "term": {"variable": "hydra.lexical.emptyContext"}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.typing.InferenceContext"}}, "typeParameters": []},
+        "term": {"variable": "hydra.lexical.emptyInferenceContext"}}},
     {
       "term": {
         "name": "hydra.test.testEnv.testGraph",
@@ -30,7 +30,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

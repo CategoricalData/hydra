@@ -1500,7 +1500,7 @@
                                   "left": {"variable": "hydra.errors.Error"},
                                   "right": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t1"}}}}},
                               "domain": {"variable": "hydra.graph.Graph"}}},
-                          "domain": {"variable": "hydra.context.Context"}}},
+                          "domain": {"variable": "hydra.typing.InferenceContext"}}},
                       "domain": {"list": {"variable": "hydra.packaging.Definition"}}}},
                   "domain": {"variable": "hydra.packaging.Module"}}}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.coders.Language"}},
@@ -1511,7 +1511,7 @@
             {"isLazy": false, "name": "arg6", "type": {"variable": "hydra.graph.Graph"}},
             {"isLazy": false, "name": "arg7", "type": {"list": {"variable": "hydra.packaging.Module"}}},
             {"isLazy": false, "name": "arg8", "type": {"list": {"variable": "hydra.packaging.Module"}}},
-            {"isLazy": false, "name": "arg9", "type": {"variable": "hydra.context.Context"}}],
+            {"isLazy": false, "name": "arg9", "type": {"variable": "hydra.typing.InferenceContext"}}],
           "result": {
             "type": {
               "either": {
@@ -3044,7 +3044,7 @@
                                                                                                                                           "application": {
                                                                                                                                             "argument": {"variable": "constraints"},
                                                                                                                                             "function": {
-                                                                                                                                              "typeApplication": {"body": {"variable": "hydra.adapt.schemaGraphToDefinitions"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                                                                              "typeApplication": {"body": {"variable": "hydra.adapt.schemaGraphToDefinitions"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                                                                             "function": {
                                                                                                                               "typeApplication": {
                                                                                                                                 "body": {
@@ -3087,7 +3087,7 @@
                                                                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
                                                                                                                     "type": {"list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}},
                                                                                                                 "type": {"list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
-                                                            "domain": {"variable": "hydra.context.Context"},
+                                                            "domain": {"variable": "hydra.typing.InferenceContext"},
                                                             "parameter": "cx"}},
                                                         "domain": {"list": {"variable": "hydra.packaging.Module"}},
                                                         "parameter": "modsToGenerate"}},
@@ -3118,7 +3118,7 @@
                                             "left": {"variable": "hydra.errors.Error"},
                                             "right": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t1"}}}}},
                                         "domain": {"variable": "hydra.graph.Graph"}}},
-                                    "domain": {"variable": "hydra.context.Context"}}},
+                                    "domain": {"variable": "hydra.typing.InferenceContext"}}},
                                 "domain": {"list": {"variable": "hydra.packaging.Definition"}}}},
                             "domain": {"variable": "hydra.packaging.Module"}}},
                         "parameter": "printDefinitions"}}}},
@@ -3129,7 +3129,7 @@
         "name": "hydra.codegen.inferAndGenerateLexicon",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
             {"isLazy": false, "name": "arg2", "type": {"list": {"variable": "hydra.packaging.Module"}}}],
           "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"literal": {"string": {}}}}}},
@@ -3266,7 +3266,7 @@
                                                               "typeApplication": {
                                                                 "body": {"variable": "hydra.lib.pairs.first"},
                                                                 "type": {"pair": {"first": {"variable": "hydra.graph.Graph"}, "second": {"list": {"variable": "hydra.core.Binding"}}}}}},
-                                                            "type": {"variable": "hydra.context.Context"}}}}},
+                                                            "type": {"variable": "hydra.typing.InferenceContext"}}}}},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.graph.Graph"}}},
@@ -3276,7 +3276,7 @@
                                         "domain": {
                                           "pair": {
                                             "first": {"pair": {"first": {"variable": "hydra.graph.Graph"}, "second": {"list": {"variable": "hydra.core.Binding"}}}},
-                                            "second": {"variable": "hydra.context.Context"}}},
+                                            "second": {"variable": "hydra.typing.InferenceContext"}}},
                                         "parameter": "inferResultWithCx"}},
                                     "function": {
                                       "application": {
@@ -3295,20 +3295,20 @@
                                                 "type": {
                                                   "pair": {
                                                     "first": {"pair": {"first": {"variable": "hydra.graph.Graph"}, "second": {"list": {"variable": "hydra.core.Binding"}}}},
-                                                    "second": {"variable": "hydra.context.Context"}}}}},
+                                                    "second": {"variable": "hydra.typing.InferenceContext"}}}}},
                                             "type": {"literal": {"string": {}}}}}}}}}}}}},
                         "domain": {"list": {"variable": "hydra.packaging.Module"}},
                         "parameter": "kernelModules"}},
                     "domain": {"variable": "hydra.graph.Graph"},
                     "parameter": "bsGraph"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
         "name": "hydra.codegen.inferModules",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
             {"isLazy": false, "name": "arg2", "type": {"list": {"variable": "hydra.packaging.Module"}}},
             {"isLazy": false, "name": "arg3", "type": {"list": {"variable": "hydra.packaging.Module"}}}],
@@ -3447,7 +3447,7 @@
                                                               "typeApplication": {
                                                                 "body": {"variable": "hydra.lib.pairs.first"},
                                                                 "type": {"pair": {"first": {"variable": "hydra.graph.Graph"}, "second": {"list": {"variable": "hydra.core.Binding"}}}}}},
-                                                            "type": {"variable": "hydra.context.Context"}}}}},
+                                                            "type": {"variable": "hydra.typing.InferenceContext"}}}}},
                                                     "typeScheme": {
                                                       "body": {"pair": {"first": {"variable": "hydra.graph.Graph"}, "second": {"list": {"variable": "hydra.core.Binding"}}}},
                                                       "variables": []}}],
@@ -3485,7 +3485,7 @@
                                             "domain": {
                                               "pair": {
                                                 "first": {"pair": {"first": {"variable": "hydra.graph.Graph"}, "second": {"list": {"variable": "hydra.core.Binding"}}}},
-                                                "second": {"variable": "hydra.context.Context"}}},
+                                                "second": {"variable": "hydra.typing.InferenceContext"}}},
                                             "parameter": "inferResultWithCx"}},
                                         "function": {
                                           "application": {
@@ -3504,7 +3504,7 @@
                                                     "type": {
                                                       "pair": {
                                                         "first": {"pair": {"first": {"variable": "hydra.graph.Graph"}, "second": {"list": {"variable": "hydra.core.Binding"}}}},
-                                                        "second": {"variable": "hydra.context.Context"}}}}},
+                                                        "second": {"variable": "hydra.typing.InferenceContext"}}}}},
                                                 "type": {"list": {"variable": "hydra.packaging.Module"}}}}}}}}}}}},
                             "domain": {"list": {"variable": "hydra.packaging.Module"}},
                             "parameter": "targetMods"}},
@@ -3512,14 +3512,14 @@
                         "parameter": "universeMods"}},
                     "domain": {"variable": "hydra.graph.Graph"},
                     "parameter": "bsGraph"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
         "name": "hydra.codegen.inferModulesGiven",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
             {"isLazy": false, "name": "arg2", "type": {"list": {"variable": "hydra.packaging.Module"}}},
             {"isLazy": false, "name": "arg3", "type": {"list": {"variable": "hydra.packaging.Module"}}}],
@@ -3904,7 +3904,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"variable": "hydra.lib.pairs.first"},
                                                                                 "type": {"pair": {"first": {"variable": "hydra.graph.Graph"}, "second": {"list": {"variable": "hydra.core.Binding"}}}}}},
-                                                                            "type": {"variable": "hydra.context.Context"}}}}},
+                                                                            "type": {"variable": "hydra.typing.InferenceContext"}}}}},
                                                                     "typeScheme": {
                                                                       "body": {"pair": {"first": {"variable": "hydra.graph.Graph"}, "second": {"list": {"variable": "hydra.core.Binding"}}}},
                                                                       "variables": []}}],
@@ -3956,7 +3956,7 @@
                                                             "domain": {
                                                               "pair": {
                                                                 "first": {"pair": {"first": {"variable": "hydra.graph.Graph"}, "second": {"list": {"variable": "hydra.core.Binding"}}}},
-                                                                "second": {"variable": "hydra.context.Context"}}},
+                                                                "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                             "parameter": "inferResultWithCx"}},
                                                         "function": {
                                                           "application": {
@@ -3975,7 +3975,7 @@
                                                                     "type": {
                                                                       "pair": {
                                                                         "first": {"pair": {"first": {"variable": "hydra.graph.Graph"}, "second": {"list": {"variable": "hydra.core.Binding"}}}},
-                                                                        "second": {"variable": "hydra.context.Context"}}}}},
+                                                                        "second": {"variable": "hydra.typing.InferenceContext"}}}}},
                                                                 "type": {"list": {"variable": "hydra.packaging.Module"}}}}}}}}}}}}}}}}}}}},
                             "domain": {"list": {"variable": "hydra.packaging.Module"}},
                             "parameter": "targetMods"}},
@@ -3983,7 +3983,7 @@
                         "parameter": "universeMods"}},
                     "domain": {"variable": "hydra.graph.Graph"},
                     "parameter": "bsGraph"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
@@ -5410,7 +5410,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

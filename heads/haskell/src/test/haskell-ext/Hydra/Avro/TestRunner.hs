@@ -20,8 +20,8 @@ import qualified Data.Map as M
 
 
 -- | The context used for all tests
-testContext :: Context
-testContext = emptyContext
+testContext :: InferenceContext
+testContext = emptyInferenceContext
 
 -- | Run all test cases under a single HSpec describe block
 runAvroTestCases :: String -> [T.AvroTestCase] -> H.SpecWith ()

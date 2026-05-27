@@ -963,9 +963,9 @@
         "name": "hydra.resolution.instantiateType",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Type"}}],
-          "result": {"type": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.context.Context"}}}},
+          "result": {"type": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.typing.InferenceContext"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -973,7 +973,8 @@
               {
                 "key": "description",
                 "value": {
-                  "literal": {"string": "Instantiate a type by replacing all forall-bound type variables with fresh variables, threading Context"}}}],
+                  "literal": {
+                    "string": "Instantiate a type by replacing all forall-bound type variables with fresh variables, threading InferenceContext"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -988,7 +989,7 @@
                                 "argument": {"application": {"argument": {"variable": "typ"}, "function": {"variable": "hydra.resolution.typeToTypeScheme"}}},
                                 "function": {"application": {"argument": {"variable": "cx"}, "function": {"variable": "hydra.resolution.instantiateTypeScheme"}}}}},
                             "typeScheme": {
-                              "body": {"pair": {"first": {"variable": "hydra.core.TypeScheme"}, "second": {"variable": "hydra.context.Context"}}},
+                              "body": {"pair": {"first": {"variable": "hydra.core.TypeScheme"}, "second": {"variable": "hydra.typing.InferenceContext"}}},
                               "variables": []}}],
                         "body": {
                           "typeApplication": {
@@ -1004,7 +1005,7 @@
                                             "function": {
                                               "typeApplication": {
                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.TypeScheme"}}},
-                                                "type": {"variable": "hydra.context.Context"}}}}},
+                                                "type": {"variable": "hydra.typing.InferenceContext"}}}}},
                                         "function": {"variable": "hydra.scoping.typeSchemeToFType"}}},
                                     "second": {
                                       "application": {
@@ -1012,28 +1013,29 @@
                                         "function": {
                                           "typeApplication": {
                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.TypeScheme"}}},
-                                            "type": {"variable": "hydra.context.Context"}}}}}}},
+                                            "type": {"variable": "hydra.typing.InferenceContext"}}}}}}},
                                 "type": {"variable": "hydra.core.Type"}}},
-                            "type": {"variable": "hydra.context.Context"}}}}},
+                            "type": {"variable": "hydra.typing.InferenceContext"}}}}},
                     "domain": {"variable": "hydra.core.Type"},
                     "parameter": "typ"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
         "name": "hydra.resolution.instantiateTypeScheme",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.TypeScheme"}}],
-          "result": {"type": {"pair": {"first": {"variable": "hydra.core.TypeScheme"}, "second": {"variable": "hydra.context.Context"}}}},
+          "result": {
+            "type": {"pair": {"first": {"variable": "hydra.core.TypeScheme"}, "second": {"variable": "hydra.typing.InferenceContext"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "Instantiate a type scheme with fresh variables, threading Context"}}}],
+                "value": {"literal": {"string": "Instantiate a type scheme with fresh variables, threading InferenceContext"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1064,7 +1066,7 @@
                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.core.Name"}}}}},
                                         "function": {"variable": "hydra.names.freshNames"}}}}},
                                 "typeScheme": {
-                                  "body": {"pair": {"first": {"list": {"variable": "hydra.core.Name"}}, "second": {"variable": "hydra.context.Context"}}},
+                                  "body": {"pair": {"first": {"list": {"variable": "hydra.core.Name"}}, "second": {"variable": "hydra.typing.InferenceContext"}}},
                                   "variables": []}}],
                             "body": {
                               "let": {
@@ -1077,7 +1079,7 @@
                                         "function": {
                                           "typeApplication": {
                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"list": {"variable": "hydra.core.Name"}}}},
-                                            "type": {"variable": "hydra.context.Context"}}}}},
+                                            "type": {"variable": "hydra.typing.InferenceContext"}}}}},
                                     "typeScheme": {"body": {"list": {"variable": "hydra.core.Name"}}, "variables": []}}],
                                 "body": {
                                   "let": {
@@ -1090,8 +1092,8 @@
                                             "function": {
                                               "typeApplication": {
                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"list": {"variable": "hydra.core.Name"}}}},
-                                                "type": {"variable": "hydra.context.Context"}}}}},
-                                        "typeScheme": {"body": {"variable": "hydra.context.Context"}, "variables": []}}],
+                                                "type": {"variable": "hydra.typing.InferenceContext"}}}}},
+                                        "typeScheme": {"body": {"variable": "hydra.typing.InferenceContext"}, "variables": []}}],
                                     "body": {
                                       "let": {
                                         "bindings": [
@@ -1273,10 +1275,10 @@
                                                                 "typeName": "hydra.core.TypeScheme"}},
                                                             "second": {"variable": "cx2"}}},
                                                         "type": {"variable": "hydra.core.TypeScheme"}}},
-                                                    "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}}}}}},
+                                                    "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}}}}}},
                     "domain": {"variable": "hydra.core.TypeScheme"},
                     "parameter": "scheme"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
@@ -1581,7 +1583,7 @@
         "name": "hydra.resolution.requireSchemaType",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -1591,12 +1593,14 @@
             "type": {
               "either": {
                 "left": {"variable": "hydra.errors.Error"},
-                "right": {"pair": {"first": {"variable": "hydra.core.TypeScheme"}, "second": {"variable": "hydra.context.Context"}}}}}},
+                "right": {"pair": {"first": {"variable": "hydra.core.TypeScheme"}, "second": {"variable": "hydra.typing.InferenceContext"}}}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Look up a schema type and instantiate it, threading Context"}}}],
+              {
+                "key": "description",
+                "value": {"literal": {"string": "Look up a schema type and instantiate it, threading InferenceContext"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1630,7 +1634,7 @@
                                                     "argument": {"application": {"argument": {"variable": "ts"}, "function": {"variable": "hydra.strip.deannotateTypeSchemeRecursive"}}},
                                                     "function": {"application": {"argument": {"variable": "cx"}, "function": {"variable": "hydra.resolution.instantiateTypeScheme"}}}}}}},
                                             "type": {"variable": "hydra.errors.Error"}}},
-                                        "type": {"pair": {"first": {"variable": "hydra.core.TypeScheme"}, "second": {"variable": "hydra.context.Context"}}}}},
+                                        "type": {"pair": {"first": {"variable": "hydra.core.TypeScheme"}, "second": {"variable": "hydra.typing.InferenceContext"}}}}},
                                     "domain": {"variable": "hydra.core.TypeScheme"},
                                     "parameter": "ts"}},
                                 "function": {
@@ -1653,7 +1657,7 @@
                                                           "typeName": "hydra.errors.ResolutionError"}}},
                                                     "typeName": "hydra.errors.Error"}}}},
                                             "type": {"variable": "hydra.errors.Error"}}},
-                                        "type": {"pair": {"first": {"variable": "hydra.core.TypeScheme"}, "second": {"variable": "hydra.context.Context"}}}}},
+                                        "type": {"pair": {"first": {"variable": "hydra.core.TypeScheme"}, "second": {"variable": "hydra.typing.InferenceContext"}}}}},
                                     "function": {
                                       "typeApplication": {
                                         "body": {
@@ -1662,13 +1666,13 @@
                                             "type": {
                                               "either": {
                                                 "left": {"variable": "hydra.errors.Error"},
-                                                "right": {"pair": {"first": {"variable": "hydra.core.TypeScheme"}, "second": {"variable": "hydra.context.Context"}}}}}}},
+                                                "right": {"pair": {"first": {"variable": "hydra.core.TypeScheme"}, "second": {"variable": "hydra.typing.InferenceContext"}}}}}}},
                                         "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}},
                         "domain": {"variable": "hydra.core.Name"},
                         "parameter": "tname"}},
                     "domain": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}},
                     "parameter": "types"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
@@ -2201,7 +2205,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

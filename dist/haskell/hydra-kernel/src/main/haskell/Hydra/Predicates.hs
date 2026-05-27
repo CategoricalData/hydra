@@ -4,7 +4,6 @@
 module Hydra.Predicates where
 import qualified Hydra.Arity as Arity
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Dependencies as Dependencies
@@ -93,7 +92,7 @@ isNominalType typ =
       Core.TypeForall v0 -> isNominalType (Core.forallTypeBody v0)
       _ -> False
 -- | Check if an element is serializable (no function types in dependencies) (Either version)
-isSerializable :: Context.Context -> Graph.Graph -> Core.Binding -> Either Errors.Error Bool
+isSerializable :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.Error Bool
 isSerializable cx graph el =
 
       let variants =
@@ -102,7 +101,7 @@ isSerializable cx graph el =
         let allVariants = Sets.fromList (Lists.concat (Lists.map variants (Maps.elems deps)))
         in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))) (typeDependencies cx graph False Equality.identity (Core.bindingName el)))
 -- | Check if a type (by name) is serializable, resolving all type dependencies (Either version)
-isSerializableByName :: Context.Context -> Graph.Graph -> Core.Name -> Either Errors.Error Bool
+isSerializableByName :: t0 -> Graph.Graph -> Core.Name -> Either Errors.Error Bool
 isSerializableByName cx graph name =
 
       let variants =
@@ -159,16 +158,12 @@ isUnitType x =
       Core.TypeUnit -> True
       _ -> False
 -- | Get all type dependencies for a given type name (Either version)
-typeDependencies :: Context.Context -> Graph.Graph -> Bool -> (Core.Type -> Core.Type) -> Core.Name -> Either Errors.Error (M.Map Core.Name Core.Type)
+typeDependencies :: t0 -> Graph.Graph -> Bool -> (Core.Type -> Core.Type) -> Core.Name -> Either Errors.Error (M.Map Core.Name Core.Type)
 typeDependencies cx graph withSchema transform name =
 
       let requireType =
               \name2 ->
-                let cx1 =
-                        Context.Context {
-                          Context.contextTrace = (Lists.cons (Strings.cat2 "type dependencies of " (Core.unName name2)) (Context.contextTrace cx)),
-                          Context.contextMessages = (Context.contextMessages cx),
-                          Context.contextOther = (Context.contextOther cx)}
+                let cx1 = cx
                 in (Eithers.bind (Lexical.requireBinding graph name2) (\el -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (DecodeCore.type_ graph (Core.bindingTerm el))))
           toPair = \name2 -> Eithers.map (\typ -> (name2, (transform typ))) (requireType name2)
           deps =
