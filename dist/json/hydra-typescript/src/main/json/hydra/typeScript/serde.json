@@ -5545,7 +5545,7 @@
                             "term": {
                               "lambda": {
                                 "body": {"literal": {"string": "Object"}},
-                                "domain": {"variable": "hydra.typeScript.syntax.ObjectTypeExpression"},
+                                "domain": {"list": {"variable": "hydra.typeScript.syntax.PropertySignature"}},
                                 "parameter": "_"}}},
                           {
                             "name": "union",
