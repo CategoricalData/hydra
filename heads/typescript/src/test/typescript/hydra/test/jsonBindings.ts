@@ -307,7 +307,6 @@ export const TYPE_NAMESPACES: readonly string[] = [
   "hydra.coders",
   "hydra.core",
   "hydra.compute",
-  "hydra.context",
   "hydra.equality",
   "hydra.errors",
   "hydra.error.checking",

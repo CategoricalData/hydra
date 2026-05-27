@@ -767,13 +767,14 @@ grep -rn 'OldTypeName' packages/hydra-haskell/ packages/hydra-java/ packages/hyd
   code that previously stored a bare type must now properly extract/wrap forall binders.
   Tests are essential for catching these.
 
-- **Types threaded through computations**: If the old type was passed as a `Context` or `Graph` parameter through
-  computations, every call site must be updated.
+- **Types threaded through computations**: If the old type was passed as an `InferenceContext`, `Graph`,
+  or similar parameter through computations, every call site must be updated.
   These are easy to miss because the compiler may not flag them if the new type happens to unify.
 
-- **Multiple types with similar roles**: When consolidating types like `TypeContext`, `InferenceContext`,
-  and `Graph` into a single `Graph`, different consumers may have used different subsets of the old types' fields.
-  Map each consumer's actual field usage to the new type's fields rather than doing a mechanical rename.
+- **Multiple types with similar roles**: Refactorings that move fields between threaded types
+  (e.g., #192 consolidating `TypeContext` into `Graph`, then #368 splitting inference state back out
+  into `InferenceContext`) must map each consumer's actual field usage to the new type's fields
+  rather than doing a mechanical rename.
 
 ---
 
@@ -801,7 +802,7 @@ The key insight: the patches in step 3 are temporary scaffolding.
 They only need to be correct enough for the build to succeed so that regeneration can produce the real versions.
 
 ### Silent State Pipeline Bugs
-When refactoring types that are threaded through computations (e.g., as `Context` or `Graph` parameters),
+When refactoring types that are threaded through computations (e.g., as `InferenceContext` or `Graph` parameters),
 a function may compile but produce wrong results because a field is empty or has the wrong representation. For example:
 - A graph passed through computations might have an empty `schemaTypes` map,
   causing type alias lookups to silently fail and generate wrapper classes instead of transparent aliases.

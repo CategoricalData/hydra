@@ -7,7 +7,7 @@ from typing import TypeVar, cast
 import hydra.dsl.terms as terms
 import hydra.dsl.types as types
 import hydra.extract.core as extract
-from hydra.context import Context
+from hydra.typing import InferenceContext
 from hydra.core import (
     Application,
     FloatType,
@@ -37,7 +37,7 @@ X = TypeVar("X")
 Y = TypeVar("Y")
 
 
-def other_err(cx: Context, msg: str) -> Error:
+def other_err(cx: InferenceContext, msg: str) -> Error:
     """Create an Error (Other) from a string message."""
     return ErrorOther(OtherError(msg))
 
@@ -533,7 +533,7 @@ def prim0(
         name: Name, value: Callable[[], A], variables: list[TypeVar_], output: TermCoder[A]
 ) -> Primitive:
     """Create a 0-argument primitive function."""
-    def impl(cx: Context, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
+    def impl(cx: InferenceContext, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
         result = output.decode(cx, value())
         return result
 
@@ -551,7 +551,7 @@ def prim1(
         output: TermCoder[B],
 ) -> Primitive:
     """Create a 1-argument primitive function."""
-    def impl(cx: Context, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
+    def impl(cx: InferenceContext, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
         def go():
             r = extract.n_args(name, 1, args)
             match r:
@@ -583,7 +583,7 @@ def prim2(
         output: TermCoder[C],
 ) -> Primitive:
     """Create a 2-argument primitive function."""
-    def impl(cx: Context, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
+    def impl(cx: InferenceContext, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
         def go():
             r = extract.n_args(name, 2, args)
             match r:
@@ -625,7 +625,7 @@ def prim3(
         output: TermCoder[D],
 ) -> Primitive:
     """Create a 3-argument primitive function."""
-    def impl(cx: Context, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
+    def impl(cx: InferenceContext, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
         def go():
             r = extract.n_args(name, 3, args)
             match r:

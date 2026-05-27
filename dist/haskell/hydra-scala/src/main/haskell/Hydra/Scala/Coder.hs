@@ -4,7 +4,6 @@
 module Hydra.Scala.Coder where
 import qualified Hydra.Analysis as Analysis
 import qualified Hydra.Annotations as Annotations
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Environment as Environment
 import qualified Hydra.Errors as Errors
@@ -717,7 +716,7 @@ encodeTypedParam cx g pair =
         Syntax.paramDataDecltpe = (Just sdom),
         Syntax.paramDataDefault = Nothing})))
 -- | Encode an untyped application term by first inferring types
-encodeUntypeApplicationTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either Errors.Error Syntax.Data
+encodeUntypeApplicationTerm :: Typing.InferenceContext -> Graph.Graph -> Core.Term -> Either Errors.Error Syntax.Data
 encodeUntypeApplicationTerm cx g term =
     Eithers.bind (Inference.inferInGraphContext cx g term) (\result -> encodeTerm cx g (Typing.inferenceResultTerm result))
 -- | Extract the innermost body from a term

@@ -496,14 +496,6 @@
                 "parameter": "local"}}}}}},
     {
       "term": {
-        "name": "hydra.rdf.utils.key_rdfBlankNodeCounter",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {
-          "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "The key used for tracking blank node counters"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "rdfBlankNodeCounter"}}, "typeName": "hydra.core.Name"}}}}}},
-    {
-      "term": {
         "name": "hydra.rdf.utils.mergeGraphs",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.rdf.syntax.Graph"}}}],
@@ -557,73 +549,41 @@
       "term": {
         "name": "hydra.rdf.utils.nextBlankNode",
         "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}}],
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
           "result": {
-            "type": {"pair": {"first": {"variable": "hydra.rdf.syntax.Resource"}, "second": {"variable": "hydra.context.Context"}}}},
+            "type": {"pair": {"first": {"variable": "hydra.rdf.syntax.Resource"}, "second": {"literal": {"integer": {"int32": {}}}}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate the next blank node and an updated context"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate the next blank node and an incremented counter"}}}],
             "body": {
               "lambda": {
                 "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "result",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "cx"},
-                            "function": {
-                              "application": {
-                                "argument": {"variable": "hydra.rdf.utils.key_rdfBlankNodeCounter"},
-                                "function": {"variable": "hydra.annotations.nextCount"}}}}},
-                        "typeScheme": {
-                          "body": {"pair": {"first": {"literal": {"integer": {"int32": {}}}}, "second": {"variable": "hydra.context.Context"}}},
-                          "variables": []}},
-                      {
-                        "name": "count",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "result"},
-                            "function": {
-                              "typeApplication": {
-                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"literal": {"integer": {"int32": {}}}}}},
-                                "type": {"variable": "hydra.context.Context"}}}}},
-                        "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
-                      {
-                        "name": "cx'",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "result"},
-                            "function": {
-                              "typeApplication": {
-                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": {"integer": {"int32": {}}}}}},
-                                "type": {"variable": "hydra.context.Context"}}}}},
-                        "typeScheme": {"body": {"variable": "hydra.context.Context"}, "variables": []}}],
+                  "typeApplication": {
                     "body": {
                       "typeApplication": {
                         "body": {
-                          "typeApplication": {
-                            "body": {
-                              "pair": {
-                                "first": {
-                                  "inject": {
-                                    "field": {
-                                      "name": "bnode",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {
-                                            "application": {
-                                              "argument": {"application": {"argument": {"variable": "count"}, "function": {"variable": "hydra.lib.literals.showInt32"}}},
-                                              "function": {"application": {"argument": {"literal": {"string": "b"}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                          "typeName": "hydra.rdf.syntax.BlankNode"}}},
-                                    "typeName": "hydra.rdf.syntax.Resource"}},
-                                "second": {"variable": "cx'"}}},
-                            "type": {"variable": "hydra.rdf.syntax.Resource"}}},
-                        "type": {"variable": "hydra.context.Context"}}}}},
-                "domain": {"variable": "hydra.context.Context"},
-                "parameter": "cx"}}}}}},
+                          "pair": {
+                            "first": {
+                              "inject": {
+                                "field": {
+                                  "name": "bnode",
+                                  "term": {
+                                    "wrap": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {"application": {"argument": {"variable": "counter"}, "function": {"variable": "hydra.lib.literals.showInt32"}}},
+                                          "function": {"application": {"argument": {"literal": {"string": "b"}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                      "typeName": "hydra.rdf.syntax.BlankNode"}}},
+                                "typeName": "hydra.rdf.syntax.Resource"}},
+                            "second": {
+                              "application": {
+                                "argument": {"literal": {"integer": {"int32": 1}}},
+                                "function": {"application": {"argument": {"variable": "counter"}, "function": {"variable": "hydra.lib.math.add"}}}}}}},
+                        "type": {"variable": "hydra.rdf.syntax.Resource"}}},
+                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                "domain": {"literal": {"integer": {"int32": {}}}},
+                "parameter": "counter"}}}}}},
     {
       "term": {
         "name": "hydra.rdf.utils.propertyIri",
@@ -837,12 +797,10 @@
   "dependencies": [
     {"module": "hydra.formatting"},
     {"module": "hydra.names"},
-    {"module": "hydra.annotations"},
     {"module": "hydra.rdf.syntax"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
