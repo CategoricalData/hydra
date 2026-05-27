@@ -2,7 +2,17 @@
 -- | A module which provides a minimal typing environment for decoding other modules from JSON. This avoids certain problems with generating entire source modules into target languages like Java, which is subject to method size limits for large modules like hydra.core.
 
 module Hydra.Json.Bootstrap where
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M

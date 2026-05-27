@@ -3,7 +3,6 @@
 module Hydra.Sources.Kernel.Lib.Literals where
 
 import Hydra.Kernel
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Types             as Types

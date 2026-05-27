@@ -1,6 +1,6 @@
 -- | Haskell implementations of hydra.lib.pairs primitives
 
-module Hydra.Lib.Pairs where
+module Hydra.Haskell.Lib.Pairs where
 
 import qualified Data.Bifunctor as BF
 

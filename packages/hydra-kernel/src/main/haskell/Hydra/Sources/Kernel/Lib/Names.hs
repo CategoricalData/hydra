@@ -1,629 +1,567 @@
--- | Namespaces and primitive names for the Hydra standard library
+-- | Namespace and primitive-name constants for the Hydra standard library.
+--
+-- This module is a Haskell-side derived index of the primitive names declared
+-- in the per-namespace primitive modules (Hydra.Sources.Kernel.Lib.Chars,
+-- Hydra.Sources.Kernel.Lib.Logic, ..., one module per hydra.lib.<sub>
+-- namespace). The canonical source of truth for every primitive's name and
+-- signature is its PrimitiveDefinition in those modules; this module merely
+-- exposes per-primitive Name constants built from `qname namespace localName`.
+--
+-- This module is NOT emitted as a hydra.lib.names kernel module - it has no
+-- `module_ :: Module` declaration. It exists purely so kernel/coder DSL
+-- source files (and host-side primN registrations) can reference primitive
+-- names without re-typing the qualified-string form. Each constant has type
+-- `Name` (not `TTermDefinition Name`), matching the type expected by
+-- `prim1` / `prim2` / `prim3` and `primitive1` / `primitive2` / `primitive3`.
+--
+-- The namespace constants (`chars`, `eithers`, ...) are declared here as
+-- plain `ModuleName` literals rather than re-exports of `LibChars.ns` etc.,
+-- to avoid a module-import cycle: `Lib/<Sub>.hs` modules import DSL wrappers
+-- (`Hydra.Dsl.Meta.Lib.<Sub>`) which import `Hydra.Sources.Libraries` which
+-- imports this module. If you change a namespace string here, change the
+-- matching `ns = ModuleName "..."` in the corresponding `Lib/<Sub>.hs`.
 
 module Hydra.Sources.Kernel.Lib.Names where
 
--- Standard imports for kernel terms modules
-import Hydra.Kernel hiding (qname)
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
-import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Phantoms     as Phantoms
-import           Hydra.Sources.Kernel.Types.All
-import           Prelude hiding ((++))
-import qualified Data.List                  as L
+import Hydra.Kernel (Name, ModuleName(..))
+import Hydra.Names (qname)
 
 
-ns :: ModuleName
-ns = ModuleName "hydra.lib.names"
+-- Namespace constants
 
-module_ :: Module
-module_ = Module {
-            moduleName = ns,
-            moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> (kernelTypesModuleNames),
-            moduleDescription = Just "Namespaces and primitive names for the Hydra standard library"}
-  where
-    definitions = [
-      toDefinition chars,
-      toDefinition charsIsAlphaNum,
-      toDefinition charsIsLower,
-      toDefinition charsIsSpace,
-      toDefinition charsIsUpper,
-      toDefinition charsToLower,
-      toDefinition charsToUpper,
-      toDefinition eithers,
-      toDefinition eithersBimap,
-      toDefinition eithersBind,
-      toDefinition eithersEither,
-      toDefinition eithersFoldl,
-      toDefinition eithersFromLeft,
-      toDefinition eithersFromRight,
-      toDefinition eithersIsLeft,
-      toDefinition eithersIsRight,
-      toDefinition eithersLefts,
-      toDefinition eithersMap,
-      toDefinition eithersMapList,
-      toDefinition eithersMapMaybe,
-      toDefinition eithersMapSet,
-      toDefinition eithersPartitionEithers,
-      toDefinition eithersRights,
-      toDefinition equality,
-      toDefinition equalityCompare,
-      toDefinition equalityEqual,
-      toDefinition equalityGt,
-      toDefinition equalityGte,
-      toDefinition equalityIdentity,
-      toDefinition equalityLt,
-      toDefinition equalityLte,
-      toDefinition equalityMax,
-      toDefinition equalityMin,
-      toDefinition lists,
-      toDefinition listsApply,
-      toDefinition listsBind,
-      toDefinition listsConcat,
-      toDefinition listsConcat2,
-      toDefinition listsCons,
-      toDefinition listsDrop,
-      toDefinition listsDropWhile,
-      toDefinition listsElem,
-      toDefinition listsFilter,
-      toDefinition listsFind,
-      toDefinition listsFoldl,
-      toDefinition listsFoldr,
-      toDefinition listsGroup,
-      toDefinition listsIntercalate,
-      toDefinition listsIntersperse,
-      toDefinition listsLength,
-      toDefinition listsMap,
-      toDefinition listsMaybeAt,
-      toDefinition listsMaybeHead,
-      toDefinition listsMaybeInit,
-      toDefinition listsMaybeLast,
-      toDefinition listsMaybeTail,
-      toDefinition listsNub,
-      toDefinition listsNull,
-      toDefinition listsPartition,
-      toDefinition listsPure,
-      toDefinition listsReplicate,
-      toDefinition listsReverse,
-      toDefinition listsSingleton,
-      toDefinition listsSort,
-      toDefinition listsSortOn,
-      toDefinition listsSpan,
-      toDefinition listsTake,
-      toDefinition listsTranspose,
-      toDefinition listsUncons,
-      toDefinition listsZip,
-      toDefinition listsZipWith,
-      toDefinition literals,
-      toDefinition literalsBigintToDecimal,
-      toDefinition literalsBigintToInt16,
-      toDefinition literalsBigintToInt32,
-      toDefinition literalsBigintToInt64,
-      toDefinition literalsBigintToInt8,
-      toDefinition literalsBigintToUint16,
-      toDefinition literalsBigintToUint32,
-      toDefinition literalsBigintToUint64,
-      toDefinition literalsBigintToUint8,
-      toDefinition literalsBinaryToBytes,
-      toDefinition literalsBinaryToString,
-      toDefinition literalsDecimalToBigint,
-      toDefinition literalsDecimalToFloat32,
-      toDefinition literalsDecimalToFloat64,
-      toDefinition literalsFloat32ToDecimal,
-      toDefinition literalsFloat32ToFloat64,
-      toDefinition literalsFloat64ToDecimal,
-      toDefinition literalsFloat64ToFloat32,
-      toDefinition literalsInt16ToBigint,
-      toDefinition literalsInt32ToBigint,
-      toDefinition literalsInt64ToBigint,
-      toDefinition literalsInt8ToBigint,
-      toDefinition literalsReadBigint,
-      toDefinition literalsReadBoolean,
-      toDefinition literalsReadDecimal,
-      toDefinition literalsReadFloat32,
-      toDefinition literalsReadFloat64,
-      toDefinition literalsReadInt16,
-      toDefinition literalsReadInt32,
-      toDefinition literalsReadInt64,
-      toDefinition literalsReadInt8,
-      toDefinition literalsReadString,
-      toDefinition literalsReadUint16,
-      toDefinition literalsReadUint32,
-      toDefinition literalsReadUint64,
-      toDefinition literalsReadUint8,
-      toDefinition literalsShowBigint,
-      toDefinition literalsShowBoolean,
-      toDefinition literalsShowDecimal,
-      toDefinition literalsShowFloat32,
-      toDefinition literalsShowFloat64,
-      toDefinition literalsShowInt16,
-      toDefinition literalsShowInt32,
-      toDefinition literalsShowInt64,
-      toDefinition literalsShowInt8,
-      toDefinition literalsShowString,
-      toDefinition literalsShowUint16,
-      toDefinition literalsShowUint32,
-      toDefinition literalsShowUint64,
-      toDefinition literalsShowUint8,
-      toDefinition literalsStringToBinary,
-      toDefinition literalsUint16ToBigint,
-      toDefinition literalsUint32ToBigint,
-      toDefinition literalsUint64ToBigint,
-      toDefinition literalsUint8ToBigint,
-      toDefinition logic,
-      toDefinition logicAnd,
-      toDefinition logicIfElse,
-      toDefinition logicNot,
-      toDefinition logicOr,
-      toDefinition maps,
-      toDefinition mapsAlter,
-      toDefinition mapsBimap,
-      toDefinition mapsDelete,
-      toDefinition mapsElems,
-      toDefinition mapsEmpty,
-      toDefinition mapsFilter,
-      toDefinition mapsFilterWithKey,
-      toDefinition mapsFindWithDefault,
-      toDefinition mapsFromList,
-      toDefinition mapsInsert,
-      toDefinition mapsKeys,
-      toDefinition mapsLookup,
-      toDefinition mapsMap,
-      toDefinition mapsMapKeys,
-      toDefinition mapsMember,
-      toDefinition mapsNull,
-      toDefinition mapsSingleton,
-      toDefinition mapsSize,
-      toDefinition mapsToList,
-      toDefinition mapsUnion,
-      toDefinition math,
-      toDefinition mathAbs,
-      toDefinition mathAcos,
-      toDefinition mathAcosh,
-      toDefinition mathAdd,
-      toDefinition mathAddFloat64,
-      toDefinition mathAsin,
-      toDefinition mathAsinh,
-      toDefinition mathAtan,
-      toDefinition mathAtan2,
-      toDefinition mathAtanh,
-      toDefinition mathCeiling,
-      toDefinition mathCos,
-      toDefinition mathCosh,
-      toDefinition mathE,
-      toDefinition mathEven,
-      toDefinition mathExp,
-      toDefinition mathFloor,
-      toDefinition mathLog,
-      toDefinition mathLogBase,
-      toDefinition mathMax,
-      toDefinition mathMaybeDiv,
-      toDefinition mathMaybeMod,
-      toDefinition mathMaybePred,
-      toDefinition mathMaybeRem,
-      toDefinition mathMaybeSucc,
-      toDefinition mathMin,
-      toDefinition mathMul,
-      toDefinition mathMulFloat64,
-      toDefinition mathNegate,
-      toDefinition mathNegateFloat64,
-      toDefinition mathOdd,
-      toDefinition mathPi,
-      toDefinition mathPow,
-      toDefinition mathRange,
-      toDefinition mathRound,
-      toDefinition mathRoundFloat32,
-      toDefinition mathRoundFloat64,
-      toDefinition mathSignum,
-      toDefinition mathSin,
-      toDefinition mathSinh,
-      toDefinition mathSqrt,
-      toDefinition mathSub,
-      toDefinition mathSubFloat64,
-      toDefinition mathTan,
-      toDefinition mathTanh,
-      toDefinition mathTruncate,
-      toDefinition maybes,
-      toDefinition maybesApply,
-      toDefinition maybesBind,
-      toDefinition maybesCases,
-      toDefinition maybesCat,
-      toDefinition maybesCompose,
-      toDefinition maybesFromMaybe,
-      toDefinition maybesIsJust,
-      toDefinition maybesIsNothing,
-      toDefinition maybesMap,
-      toDefinition maybesMapMaybe,
-      toDefinition maybesMaybe,
-      toDefinition maybesPure,
-      toDefinition maybesToList,
-      toDefinition pairs,
-      toDefinition pairsBimap,
-      toDefinition pairsFirst,
-      toDefinition pairsSecond,
-      toDefinition regex,
-      toDefinition regexFind,
-      toDefinition regexFindAll,
-      toDefinition regexMatches,
-      toDefinition regexReplace,
-      toDefinition regexReplaceAll,
-      toDefinition regexSplit,
-      toDefinition sets,
-      toDefinition setsDelete,
-      toDefinition setsDifference,
-      toDefinition setsEmpty,
-      toDefinition setsFromList,
-      toDefinition setsInsert,
-      toDefinition setsIntersection,
-      toDefinition setsMap,
-      toDefinition setsMember,
-      toDefinition setsNull,
-      toDefinition setsSingleton,
-      toDefinition setsSize,
-      toDefinition setsToList,
-      toDefinition setsUnion,
-      toDefinition setsUnions,
-      toDefinition strings,
-      toDefinition stringsCat,
-      toDefinition stringsCat2,
-      toDefinition stringsFromList,
-      toDefinition stringsIntercalate,
-      toDefinition stringsLength,
-      toDefinition stringsLines,
-      toDefinition stringsMaybeCharAt,
-      toDefinition stringsNull,
-      toDefinition stringsSplitOn,
-      toDefinition stringsToList,
-      toDefinition stringsToLower,
-      toDefinition stringsToUpper,
-      toDefinition stringsUnlines,
-      toDefinition typeclass,
-      toDefinition typeclassEq,
-      toDefinition typeclassOrd]
+chars, eithers, equality, lists, literals, logic, maps, math, maybes, pairs, regex, sets, strings, typeclass :: ModuleName
+chars     = ModuleName "hydra.lib.chars"
+eithers   = ModuleName "hydra.lib.eithers"
+equality  = ModuleName "hydra.lib.equality"
+lists     = ModuleName "hydra.lib.lists"
+literals  = ModuleName "hydra.lib.literals"
+logic     = ModuleName "hydra.lib.logic"
+maps      = ModuleName "hydra.lib.maps"
+math      = ModuleName "hydra.lib.math"
+maybes    = ModuleName "hydra.lib.maybes"
+pairs     = ModuleName "hydra.lib.pairs"
+regex     = ModuleName "hydra.lib.regex"
+sets      = ModuleName "hydra.lib.sets"
+strings   = ModuleName "hydra.lib.strings"
+-- The hydra.typeclass namespace is referenced by legacy aliases in
+-- Hydra.Sources.Libraries (_typeclass_Eq, _typeclass_Ord); it has no
+-- associated primitive registry module.
+typeclass = ModuleName "hydra.typeclass"
 
-define :: String -> TTerm a -> TTermDefinition a
-define = definitionInModule module_
 
--- | Helper: define a namespace constant
-defineNs :: String -> String -> TTermDefinition ModuleName
-defineNs name nsStr = define name $
-  doc ("ModuleName of the " <> name <> " library") $
-  wrap _ModuleName $ string nsStr
+-- Primitive Name constants
 
--- | Helper: define a primitive name constant as a simple Name data constructor
-defineName :: String -> String -> String -> TTermDefinition Name
-defineName name nsStr localName = define name $
-  doc ("Name of the " <> libName <> "." <> localName <> " primitive") $
-  wrap _Name $ string (nsStr <> "." <> localName)
-  where
-    -- Last dot-segment of nsStr, e.g. "hydra.lib.chars" -> "chars".
-    libName = reverse (takeWhile (/= '.') (reverse nsStr))
 
--- ModuleName constants
+-- chars
+charsIsAlphaNum                  :: Name
+charsIsAlphaNum                  = qname chars "isAlphaNum"
+charsIsLower                     :: Name
+charsIsLower                     = qname chars "isLower"
+charsIsSpace                     :: Name
+charsIsSpace                     = qname chars "isSpace"
+charsIsUpper                     :: Name
+charsIsUpper                     = qname chars "isUpper"
+charsToLower                     :: Name
+charsToLower                     = qname chars "toLower"
+charsToUpper                     :: Name
+charsToUpper                     = qname chars "toUpper"
 
-chars :: TTermDefinition ModuleName
-chars = defineNs "chars" "hydra.lib.chars"
+-- eithers
+eithersBimap                     :: Name
+eithersBimap                     = qname eithers "bimap"
+eithersBind                      :: Name
+eithersBind                      = qname eithers "bind"
+eithersEither                    :: Name
+eithersEither                    = qname eithers "either"
+eithersFoldl                     :: Name
+eithersFoldl                     = qname eithers "foldl"
+eithersFromLeft                  :: Name
+eithersFromLeft                  = qname eithers "fromLeft"
+eithersFromRight                 :: Name
+eithersFromRight                 = qname eithers "fromRight"
+eithersIsLeft                    :: Name
+eithersIsLeft                    = qname eithers "isLeft"
+eithersIsRight                   :: Name
+eithersIsRight                   = qname eithers "isRight"
+eithersLefts                     :: Name
+eithersLefts                     = qname eithers "lefts"
+eithersMapList                   :: Name
+eithersMapList                   = qname eithers "mapList"
+eithersMapMaybe                  :: Name
+eithersMapMaybe                  = qname eithers "mapMaybe"
+eithersMapSet                    :: Name
+eithersMapSet                    = qname eithers "mapSet"
+eithersMap                       :: Name
+eithersMap                       = qname eithers "map"
+eithersPartitionEithers          :: Name
+eithersPartitionEithers          = qname eithers "partitionEithers"
+eithersRights                    :: Name
+eithersRights                    = qname eithers "rights"
 
-charsIsAlphaNum = defineName "charsIsAlphaNum" "hydra.lib.chars" "isAlphaNum"
+-- equality
+equalityCompare                  :: Name
+equalityCompare                  = qname equality "compare"
+equalityEqual                    :: Name
+equalityEqual                    = qname equality "equal"
+equalityGte                      :: Name
+equalityGte                      = qname equality "gte"
+equalityGt                       :: Name
+equalityGt                       = qname equality "gt"
+equalityIdentity                 :: Name
+equalityIdentity                 = qname equality "identity"
+equalityLte                      :: Name
+equalityLte                      = qname equality "lte"
+equalityLt                       :: Name
+equalityLt                       = qname equality "lt"
+equalityMax                      :: Name
+equalityMax                      = qname equality "max"
+equalityMin                      :: Name
+equalityMin                      = qname equality "min"
 
-charsIsLower    = defineName "charsIsLower" "hydra.lib.chars" "isLower"
+-- lists
+listsApply                       :: Name
+listsApply                       = qname lists "apply"
+listsBind                        :: Name
+listsBind                        = qname lists "bind"
+listsConcat2                     :: Name
+listsConcat2                     = qname lists "concat2"
+listsConcat                      :: Name
+listsConcat                      = qname lists "concat"
+listsCons                        :: Name
+listsCons                        = qname lists "cons"
+listsDropWhile                   :: Name
+listsDropWhile                   = qname lists "dropWhile"
+listsDrop                        :: Name
+listsDrop                        = qname lists "drop"
+listsElem                        :: Name
+listsElem                        = qname lists "elem"
+listsFilter                      :: Name
+listsFilter                      = qname lists "filter"
+listsFind                        :: Name
+listsFind                        = qname lists "find"
+listsFoldl                       :: Name
+listsFoldl                       = qname lists "foldl"
+listsFoldr                       :: Name
+listsFoldr                       = qname lists "foldr"
+listsGroup                       :: Name
+listsGroup                       = qname lists "group"
+listsIntercalate                 :: Name
+listsIntercalate                 = qname lists "intercalate"
+listsIntersperse                 :: Name
+listsIntersperse                 = qname lists "intersperse"
+listsLength                      :: Name
+listsLength                      = qname lists "length"
+listsMap                         :: Name
+listsMap                         = qname lists "map"
+listsMaybeAt                     :: Name
+listsMaybeAt                     = qname lists "maybeAt"
+listsMaybeHead                   :: Name
+listsMaybeHead                   = qname lists "maybeHead"
+listsMaybeInit                   :: Name
+listsMaybeInit                   = qname lists "maybeInit"
+listsMaybeLast                   :: Name
+listsMaybeLast                   = qname lists "maybeLast"
+listsMaybeTail                   :: Name
+listsMaybeTail                   = qname lists "maybeTail"
+listsNub                         :: Name
+listsNub                         = qname lists "nub"
+listsNull                        :: Name
+listsNull                        = qname lists "null"
+listsPartition                   :: Name
+listsPartition                   = qname lists "partition"
+listsPure                        :: Name
+listsPure                        = qname lists "pure"
+listsReplicate                   :: Name
+listsReplicate                   = qname lists "replicate"
+listsReverse                     :: Name
+listsReverse                     = qname lists "reverse"
+listsSingleton                   :: Name
+listsSingleton                   = qname lists "singleton"
+listsSortOn                      :: Name
+listsSortOn                      = qname lists "sortOn"
+listsSort                        :: Name
+listsSort                        = qname lists "sort"
+listsSpan                        :: Name
+listsSpan                        = qname lists "span"
+listsTake                        :: Name
+listsTake                        = qname lists "take"
+listsTranspose                   :: Name
+listsTranspose                   = qname lists "transpose"
+listsUncons                      :: Name
+listsUncons                      = qname lists "uncons"
+listsZipWith                     :: Name
+listsZipWith                     = qname lists "zipWith"
+listsZip                         :: Name
+listsZip                         = qname lists "zip"
 
-charsIsSpace    = defineName "charsIsSpace" "hydra.lib.chars" "isSpace"
+-- literals
+literalsBigintToDecimal          :: Name
+literalsBigintToDecimal          = qname literals "bigintToDecimal"
+literalsBigintToInt16            :: Name
+literalsBigintToInt16            = qname literals "bigintToInt16"
+literalsBigintToInt32            :: Name
+literalsBigintToInt32            = qname literals "bigintToInt32"
+literalsBigintToInt64            :: Name
+literalsBigintToInt64            = qname literals "bigintToInt64"
+literalsBigintToInt8             :: Name
+literalsBigintToInt8             = qname literals "bigintToInt8"
+literalsBigintToUint16           :: Name
+literalsBigintToUint16           = qname literals "bigintToUint16"
+literalsBigintToUint32           :: Name
+literalsBigintToUint32           = qname literals "bigintToUint32"
+literalsBigintToUint64           :: Name
+literalsBigintToUint64           = qname literals "bigintToUint64"
+literalsBigintToUint8            :: Name
+literalsBigintToUint8            = qname literals "bigintToUint8"
+literalsBinaryToBytes            :: Name
+literalsBinaryToBytes            = qname literals "binaryToBytes"
+literalsBinaryToString           :: Name
+literalsBinaryToString           = qname literals "binaryToString"
+literalsDecimalToBigint          :: Name
+literalsDecimalToBigint          = qname literals "decimalToBigint"
+literalsDecimalToFloat32         :: Name
+literalsDecimalToFloat32         = qname literals "decimalToFloat32"
+literalsDecimalToFloat64         :: Name
+literalsDecimalToFloat64         = qname literals "decimalToFloat64"
+literalsFloat32ToDecimal         :: Name
+literalsFloat32ToDecimal         = qname literals "float32ToDecimal"
+literalsFloat32ToFloat64         :: Name
+literalsFloat32ToFloat64         = qname literals "float32ToFloat64"
+literalsFloat64ToDecimal         :: Name
+literalsFloat64ToDecimal         = qname literals "float64ToDecimal"
+literalsFloat64ToFloat32         :: Name
+literalsFloat64ToFloat32         = qname literals "float64ToFloat32"
+literalsInt16ToBigint            :: Name
+literalsInt16ToBigint            = qname literals "int16ToBigint"
+literalsInt32ToBigint            :: Name
+literalsInt32ToBigint            = qname literals "int32ToBigint"
+literalsInt64ToBigint            :: Name
+literalsInt64ToBigint            = qname literals "int64ToBigint"
+literalsInt8ToBigint             :: Name
+literalsInt8ToBigint             = qname literals "int8ToBigint"
+literalsReadBigint               :: Name
+literalsReadBigint               = qname literals "readBigint"
+literalsReadBoolean              :: Name
+literalsReadBoolean              = qname literals "readBoolean"
+literalsReadDecimal              :: Name
+literalsReadDecimal              = qname literals "readDecimal"
+literalsReadFloat32              :: Name
+literalsReadFloat32              = qname literals "readFloat32"
+literalsReadFloat64              :: Name
+literalsReadFloat64              = qname literals "readFloat64"
+literalsReadInt16                :: Name
+literalsReadInt16                = qname literals "readInt16"
+literalsReadInt32                :: Name
+literalsReadInt32                = qname literals "readInt32"
+literalsReadInt64                :: Name
+literalsReadInt64                = qname literals "readInt64"
+literalsReadInt8                 :: Name
+literalsReadInt8                 = qname literals "readInt8"
+literalsReadString               :: Name
+literalsReadString               = qname literals "readString"
+literalsReadUint16               :: Name
+literalsReadUint16               = qname literals "readUint16"
+literalsReadUint32               :: Name
+literalsReadUint32               = qname literals "readUint32"
+literalsReadUint64               :: Name
+literalsReadUint64               = qname literals "readUint64"
+literalsReadUint8                :: Name
+literalsReadUint8                = qname literals "readUint8"
+literalsShowBigint               :: Name
+literalsShowBigint               = qname literals "showBigint"
+literalsShowBoolean              :: Name
+literalsShowBoolean              = qname literals "showBoolean"
+literalsShowDecimal              :: Name
+literalsShowDecimal              = qname literals "showDecimal"
+literalsShowFloat32              :: Name
+literalsShowFloat32              = qname literals "showFloat32"
+literalsShowFloat64              :: Name
+literalsShowFloat64              = qname literals "showFloat64"
+literalsShowInt16                :: Name
+literalsShowInt16                = qname literals "showInt16"
+literalsShowInt32                :: Name
+literalsShowInt32                = qname literals "showInt32"
+literalsShowInt64                :: Name
+literalsShowInt64                = qname literals "showInt64"
+literalsShowInt8                 :: Name
+literalsShowInt8                 = qname literals "showInt8"
+literalsShowString               :: Name
+literalsShowString               = qname literals "showString"
+literalsShowUint16               :: Name
+literalsShowUint16               = qname literals "showUint16"
+literalsShowUint32               :: Name
+literalsShowUint32               = qname literals "showUint32"
+literalsShowUint64               :: Name
+literalsShowUint64               = qname literals "showUint64"
+literalsShowUint8                :: Name
+literalsShowUint8                = qname literals "showUint8"
+literalsStringToBinary           :: Name
+literalsStringToBinary           = qname literals "stringToBinary"
+literalsUint16ToBigint           :: Name
+literalsUint16ToBigint           = qname literals "uint16ToBigint"
+literalsUint32ToBigint           :: Name
+literalsUint32ToBigint           = qname literals "uint32ToBigint"
+literalsUint64ToBigint           :: Name
+literalsUint64ToBigint           = qname literals "uint64ToBigint"
+literalsUint8ToBigint            :: Name
+literalsUint8ToBigint            = qname literals "uint8ToBigint"
 
-charsIsUpper    = defineName "charsIsUpper" "hydra.lib.chars" "isUpper"
+-- logic
+logicAnd                         :: Name
+logicAnd                         = qname logic "and"
+logicIfElse                      :: Name
+logicIfElse                      = qname logic "ifElse"
+logicNot                         :: Name
+logicNot                         = qname logic "not"
+logicOr                          :: Name
+logicOr                          = qname logic "or"
 
-charsToLower    = defineName "charsToLower" "hydra.lib.chars" "toLower"
+-- maps
+mapsAlter                        :: Name
+mapsAlter                        = qname maps "alter"
+mapsBimap                        :: Name
+mapsBimap                        = qname maps "bimap"
+mapsDelete                       :: Name
+mapsDelete                       = qname maps "delete"
+mapsElems                        :: Name
+mapsElems                        = qname maps "elems"
+mapsEmpty                        :: Name
+mapsEmpty                        = qname maps "empty"
+mapsFilterWithKey                :: Name
+mapsFilterWithKey                = qname maps "filterWithKey"
+mapsFilter                       :: Name
+mapsFilter                       = qname maps "filter"
+mapsFindWithDefault              :: Name
+mapsFindWithDefault              = qname maps "findWithDefault"
+mapsFromList                     :: Name
+mapsFromList                     = qname maps "fromList"
+mapsInsert                       :: Name
+mapsInsert                       = qname maps "insert"
+mapsKeys                         :: Name
+mapsKeys                         = qname maps "keys"
+mapsLookup                       :: Name
+mapsLookup                       = qname maps "lookup"
+mapsMapKeys                      :: Name
+mapsMapKeys                      = qname maps "mapKeys"
+mapsMap                          :: Name
+mapsMap                          = qname maps "map"
+mapsMember                       :: Name
+mapsMember                       = qname maps "member"
+mapsNull                         :: Name
+mapsNull                         = qname maps "null"
+mapsSingleton                    :: Name
+mapsSingleton                    = qname maps "singleton"
+mapsSize                         :: Name
+mapsSize                         = qname maps "size"
+mapsToList                       :: Name
+mapsToList                       = qname maps "toList"
+mapsUnion                        :: Name
+mapsUnion                        = qname maps "union"
 
-charsToUpper    = defineName "charsToUpper" "hydra.lib.chars" "toUpper"
+-- math
+mathAbs                          :: Name
+mathAbs                          = qname math "abs"
+mathAcosh                        :: Name
+mathAcosh                        = qname math "acosh"
+mathAcos                         :: Name
+mathAcos                         = qname math "acos"
+mathAddFloat64                   :: Name
+mathAddFloat64                   = qname math "addFloat64"
+mathAdd                          :: Name
+mathAdd                          = qname math "add"
+mathAsinh                        :: Name
+mathAsinh                        = qname math "asinh"
+mathAsin                         :: Name
+mathAsin                         = qname math "asin"
+mathAtan2                        :: Name
+mathAtan2                        = qname math "atan2"
+mathAtanh                        :: Name
+mathAtanh                        = qname math "atanh"
+mathAtan                         :: Name
+mathAtan                         = qname math "atan"
+mathCeiling                      :: Name
+mathCeiling                      = qname math "ceiling"
+mathCosh                         :: Name
+mathCosh                         = qname math "cosh"
+mathCos                          :: Name
+mathCos                          = qname math "cos"
+mathEven                         :: Name
+mathEven                         = qname math "even"
+mathExp                          :: Name
+mathExp                          = qname math "exp"
+mathE                            :: Name
+mathE                            = qname math "e"
+mathFloor                        :: Name
+mathFloor                        = qname math "floor"
+mathLogBase                      :: Name
+mathLogBase                      = qname math "logBase"
+mathLog                          :: Name
+mathLog                          = qname math "log"
+mathMax                          :: Name
+mathMax                          = qname math "max"
+mathMaybeDiv                     :: Name
+mathMaybeDiv                     = qname math "maybeDiv"
+mathMaybeMod                     :: Name
+mathMaybeMod                     = qname math "maybeMod"
+mathMaybePred                    :: Name
+mathMaybePred                    = qname math "maybePred"
+mathMaybeRem                     :: Name
+mathMaybeRem                     = qname math "maybeRem"
+mathMaybeSucc                    :: Name
+mathMaybeSucc                    = qname math "maybeSucc"
+mathMin                          :: Name
+mathMin                          = qname math "min"
+mathMulFloat64                   :: Name
+mathMulFloat64                   = qname math "mulFloat64"
+mathMul                          :: Name
+mathMul                          = qname math "mul"
+mathNegateFloat64                :: Name
+mathNegateFloat64                = qname math "negateFloat64"
+mathNegate                       :: Name
+mathNegate                       = qname math "negate"
+mathOdd                          :: Name
+mathOdd                          = qname math "odd"
+mathPi                           :: Name
+mathPi                           = qname math "pi"
+mathPow                          :: Name
+mathPow                          = qname math "pow"
+mathRange                        :: Name
+mathRange                        = qname math "range"
+mathRoundFloat32                 :: Name
+mathRoundFloat32                 = qname math "roundFloat32"
+mathRoundFloat64                 :: Name
+mathRoundFloat64                 = qname math "roundFloat64"
+mathRound                        :: Name
+mathRound                        = qname math "round"
+mathSignum                       :: Name
+mathSignum                       = qname math "signum"
+mathSinh                         :: Name
+mathSinh                         = qname math "sinh"
+mathSin                          :: Name
+mathSin                          = qname math "sin"
+mathSqrt                         :: Name
+mathSqrt                         = qname math "sqrt"
+mathSubFloat64                   :: Name
+mathSubFloat64                   = qname math "subFloat64"
+mathSub                          :: Name
+mathSub                          = qname math "sub"
+mathTanh                         :: Name
+mathTanh                         = qname math "tanh"
+mathTan                          :: Name
+mathTan                          = qname math "tan"
+mathTruncate                     :: Name
+mathTruncate                     = qname math "truncate"
 
--- Eithers primitives
+-- maybes
+maybesApply                      :: Name
+maybesApply                      = qname maybes "apply"
+maybesBind                       :: Name
+maybesBind                       = qname maybes "bind"
+maybesCases                      :: Name
+maybesCases                      = qname maybes "cases"
+maybesCat                        :: Name
+maybesCat                        = qname maybes "cat"
+maybesCompose                    :: Name
+maybesCompose                    = qname maybes "compose"
+maybesFromMaybe                  :: Name
+maybesFromMaybe                  = qname maybes "fromMaybe"
+maybesIsJust                     :: Name
+maybesIsJust                     = qname maybes "isJust"
+maybesIsNothing                  :: Name
+maybesIsNothing                  = qname maybes "isNothing"
+maybesMapMaybe                   :: Name
+maybesMapMaybe                   = qname maybes "mapMaybe"
+maybesMap                        :: Name
+maybesMap                        = qname maybes "map"
+maybesMaybe                      :: Name
+maybesMaybe                      = qname maybes "maybe"
+maybesPure                       :: Name
+maybesPure                       = qname maybes "pure"
+maybesToList                     :: Name
+maybesToList                     = qname maybes "toList"
 
-eithers :: TTermDefinition ModuleName
-eithers = defineNs "eithers" "hydra.lib.eithers"
+-- pairs
+pairsBimap                       :: Name
+pairsBimap                       = qname pairs "bimap"
+pairsFirst                       :: Name
+pairsFirst                       = qname pairs "first"
+pairsSecond                      :: Name
+pairsSecond                      = qname pairs "second"
 
-eithersBimap            = defineName "eithersBimap" "hydra.lib.eithers" "bimap"
+-- regex
+regexFindAll                     :: Name
+regexFindAll                     = qname regex "findAll"
+regexFind                        :: Name
+regexFind                        = qname regex "find"
+regexMatches                     :: Name
+regexMatches                     = qname regex "matches"
+regexReplaceAll                  :: Name
+regexReplaceAll                  = qname regex "replaceAll"
+regexReplace                     :: Name
+regexReplace                     = qname regex "replace"
+regexSplit                       :: Name
+regexSplit                       = qname regex "split"
 
-eithersBind             = defineName "eithersBind" "hydra.lib.eithers" "bind"
+-- sets
+setsDelete                       :: Name
+setsDelete                       = qname sets "delete"
+setsDifference                   :: Name
+setsDifference                   = qname sets "difference"
+setsEmpty                        :: Name
+setsEmpty                        = qname sets "empty"
+setsFromList                     :: Name
+setsFromList                     = qname sets "fromList"
+setsInsert                       :: Name
+setsInsert                       = qname sets "insert"
+setsIntersection                 :: Name
+setsIntersection                 = qname sets "intersection"
+setsMap                          :: Name
+setsMap                          = qname sets "map"
+setsMember                       :: Name
+setsMember                       = qname sets "member"
+setsNull                         :: Name
+setsNull                         = qname sets "null"
+setsSingleton                    :: Name
+setsSingleton                    = qname sets "singleton"
+setsSize                         :: Name
+setsSize                         = qname sets "size"
+setsToList                       :: Name
+setsToList                       = qname sets "toList"
+setsUnions                       :: Name
+setsUnions                       = qname sets "unions"
+setsUnion                        :: Name
+setsUnion                        = qname sets "union"
 
-eithersEither           = defineName "eithersEither" "hydra.lib.eithers" "either"
+-- strings
+stringsCat2                      :: Name
+stringsCat2                      = qname strings "cat2"
+stringsCat                       :: Name
+stringsCat                       = qname strings "cat"
+stringsFromList                  :: Name
+stringsFromList                  = qname strings "fromList"
+stringsIntercalate               :: Name
+stringsIntercalate               = qname strings "intercalate"
+stringsLength                    :: Name
+stringsLength                    = qname strings "length"
+stringsLines                     :: Name
+stringsLines                     = qname strings "lines"
+stringsMaybeCharAt               :: Name
+stringsMaybeCharAt               = qname strings "maybeCharAt"
+stringsNull                      :: Name
+stringsNull                      = qname strings "null"
+stringsSplitOn                   :: Name
+stringsSplitOn                   = qname strings "splitOn"
+stringsToList                    :: Name
+stringsToList                    = qname strings "toList"
+stringsToLower                   :: Name
+stringsToLower                   = qname strings "toLower"
+stringsToUpper                   :: Name
+stringsToUpper                   = qname strings "toUpper"
+stringsUnlines                   :: Name
+stringsUnlines                   = qname strings "unlines"
 
-eithersFoldl            = defineName "eithersFoldl" "hydra.lib.eithers" "foldl"
-
-eithersFromLeft         = defineName "eithersFromLeft" "hydra.lib.eithers" "fromLeft"
-
-eithersFromRight        = defineName "eithersFromRight" "hydra.lib.eithers" "fromRight"
-
-eithersIsLeft           = defineName "eithersIsLeft" "hydra.lib.eithers" "isLeft"
-eithersIsRight          = defineName "eithersIsRight" "hydra.lib.eithers" "isRight"
-eithersLefts            = defineName "eithersLefts" "hydra.lib.eithers" "lefts"
-eithersMap              = defineName "eithersMap" "hydra.lib.eithers" "map"
-eithersMapList          = defineName "eithersMapList" "hydra.lib.eithers" "mapList"
-eithersMapMaybe         = defineName "eithersMapMaybe" "hydra.lib.eithers" "mapMaybe"
-
-eithersMapSet           = defineName "eithersMapSet" "hydra.lib.eithers" "mapSet"
-eithersPartitionEithers = defineName "eithersPartitionEithers" "hydra.lib.eithers" "partitionEithers"
-eithersRights           = defineName "eithersRights" "hydra.lib.eithers" "rights"
-
--- Equality primitives
-equality :: TTermDefinition ModuleName
-equality = defineNs "equality" "hydra.lib.equality"
-equalityCompare  = defineName "equalityCompare" "hydra.lib.equality" "compare"
-equalityEqual    = defineName "equalityEqual" "hydra.lib.equality" "equal"
-equalityGt       = defineName "equalityGt" "hydra.lib.equality" "gt"
-equalityGte      = defineName "equalityGte" "hydra.lib.equality" "gte"
-equalityIdentity = defineName "equalityIdentity" "hydra.lib.equality" "identity"
-equalityLt       = defineName "equalityLt" "hydra.lib.equality" "lt"
-equalityLte      = defineName "equalityLte" "hydra.lib.equality" "lte"
-equalityMax      = defineName "equalityMax" "hydra.lib.equality" "max"
-equalityMin      = defineName "equalityMin" "hydra.lib.equality" "min"
-
--- Lists primitives
-lists :: TTermDefinition ModuleName
-lists = defineNs "lists" "hydra.lib.lists"
-listsApply       = defineName "listsApply" "hydra.lib.lists" "apply"
-
-listsBind        = defineName "listsBind" "hydra.lib.lists" "bind"
-listsConcat      = defineName "listsConcat" "hydra.lib.lists" "concat"
-listsConcat2     = defineName "listsConcat2" "hydra.lib.lists" "concat2"
-listsCons        = defineName "listsCons" "hydra.lib.lists" "cons"
-listsDrop        = defineName "listsDrop" "hydra.lib.lists" "drop"
-listsDropWhile   = defineName "listsDropWhile" "hydra.lib.lists" "dropWhile"
-listsElem        = defineName "listsElem" "hydra.lib.lists" "elem"
-listsFilter      = defineName "listsFilter" "hydra.lib.lists" "filter"
-listsFind        = defineName "listsFind" "hydra.lib.lists" "find"
-
-listsFoldl       = defineName "listsFoldl" "hydra.lib.lists" "foldl"
-listsFoldr       = defineName "listsFoldr" "hydra.lib.lists" "foldr"
-listsGroup       = defineName "listsGroup" "hydra.lib.lists" "group"
-listsIntercalate = defineName "listsIntercalate" "hydra.lib.lists" "intercalate"
-listsIntersperse = defineName "listsIntersperse" "hydra.lib.lists" "intersperse"
-listsLength      = defineName "listsLength" "hydra.lib.lists" "length"
-listsMap         = defineName "listsMap" "hydra.lib.lists" "map"
-listsMaybeAt     = defineName "listsMaybeAt" "hydra.lib.lists" "maybeAt"
-listsMaybeHead   = defineName "listsMaybeHead" "hydra.lib.lists" "maybeHead"
-listsMaybeInit   = defineName "listsMaybeInit" "hydra.lib.lists" "maybeInit"
-listsMaybeLast   = defineName "listsMaybeLast" "hydra.lib.lists" "maybeLast"
-listsMaybeTail   = defineName "listsMaybeTail" "hydra.lib.lists" "maybeTail"
-listsNub         = defineName "listsNub" "hydra.lib.lists" "nub"
-listsNull        = defineName "listsNull" "hydra.lib.lists" "null"
-listsPartition   = defineName "listsPartition" "hydra.lib.lists" "partition"
-listsPure        = defineName "listsPure" "hydra.lib.lists" "pure"
-listsReplicate   = defineName "listsReplicate" "hydra.lib.lists" "replicate"
-listsReverse     = defineName "listsReverse" "hydra.lib.lists" "reverse"
-listsSingleton   = defineName "listsSingleton" "hydra.lib.lists" "singleton"
-listsSort        = defineName "listsSort" "hydra.lib.lists" "sort"
-listsSortOn      = defineName "listsSortOn" "hydra.lib.lists" "sortOn"
-listsSpan        = defineName "listsSpan" "hydra.lib.lists" "span"
-listsTake        = defineName "listsTake" "hydra.lib.lists" "take"
-listsTranspose   = defineName "listsTranspose" "hydra.lib.lists" "transpose"
-listsUncons      = defineName "listsUncons" "hydra.lib.lists" "uncons"
-listsZip         = defineName "listsZip" "hydra.lib.lists" "zip"
-listsZipWith     = defineName "listsZipWith" "hydra.lib.lists" "zipWith"
-
--- Literals primitives
-literals :: TTermDefinition ModuleName
-literals = defineNs "literals" "hydra.lib.literals"
-literalsBigintToDecimal   = defineName "literalsBigintToDecimal" "hydra.lib.literals" "bigintToDecimal"
-literalsBigintToInt16     = defineName "literalsBigintToInt16" "hydra.lib.literals" "bigintToInt16"
-literalsBigintToInt32     = defineName "literalsBigintToInt32" "hydra.lib.literals" "bigintToInt32"
-literalsBigintToInt64     = defineName "literalsBigintToInt64" "hydra.lib.literals" "bigintToInt64"
-literalsBigintToInt8      = defineName "literalsBigintToInt8" "hydra.lib.literals" "bigintToInt8"
-
-literalsBigintToUint16    = defineName "literalsBigintToUint16" "hydra.lib.literals" "bigintToUint16"
-literalsBigintToUint32    = defineName "literalsBigintToUint32" "hydra.lib.literals" "bigintToUint32"
-literalsBigintToUint64    = defineName "literalsBigintToUint64" "hydra.lib.literals" "bigintToUint64"
-literalsBigintToUint8     = defineName "literalsBigintToUint8" "hydra.lib.literals" "bigintToUint8"
-literalsBinaryToBytes     = defineName "literalsBinaryToBytes" "hydra.lib.literals" "binaryToBytes"
-literalsBinaryToString    = defineName "literalsBinaryToString" "hydra.lib.literals" "binaryToString"
-literalsDecimalToBigint   = defineName "literalsDecimalToBigint" "hydra.lib.literals" "decimalToBigint"
-literalsDecimalToFloat32  = defineName "literalsDecimalToFloat32" "hydra.lib.literals" "decimalToFloat32"
-literalsDecimalToFloat64  = defineName "literalsDecimalToFloat64" "hydra.lib.literals" "decimalToFloat64"
-literalsFloat32ToDecimal  = defineName "literalsFloat32ToDecimal" "hydra.lib.literals" "float32ToDecimal"
-literalsFloat32ToFloat64  = defineName "literalsFloat32ToFloat64" "hydra.lib.literals" "float32ToFloat64"
-literalsFloat64ToDecimal  = defineName "literalsFloat64ToDecimal" "hydra.lib.literals" "float64ToDecimal"
-literalsFloat64ToFloat32  = defineName "literalsFloat64ToFloat32" "hydra.lib.literals" "float64ToFloat32"
-literalsInt16ToBigint     = defineName "literalsInt16ToBigint" "hydra.lib.literals" "int16ToBigint"
-literalsInt32ToBigint     = defineName "literalsInt32ToBigint" "hydra.lib.literals" "int32ToBigint"
-literalsInt64ToBigint     = defineName "literalsInt64ToBigint" "hydra.lib.literals" "int64ToBigint"
-literalsInt8ToBigint      = defineName "literalsInt8ToBigint" "hydra.lib.literals" "int8ToBigint"
-literalsReadBigint        = defineName "literalsReadBigint" "hydra.lib.literals" "readBigint"
-literalsReadBoolean       = defineName "literalsReadBoolean" "hydra.lib.literals" "readBoolean"
-literalsReadDecimal       = defineName "literalsReadDecimal" "hydra.lib.literals" "readDecimal"
-literalsReadFloat32       = defineName "literalsReadFloat32" "hydra.lib.literals" "readFloat32"
-literalsReadFloat64       = defineName "literalsReadFloat64" "hydra.lib.literals" "readFloat64"
-literalsReadInt16         = defineName "literalsReadInt16" "hydra.lib.literals" "readInt16"
-literalsReadInt32         = defineName "literalsReadInt32" "hydra.lib.literals" "readInt32"
-literalsReadInt64         = defineName "literalsReadInt64" "hydra.lib.literals" "readInt64"
-literalsReadInt8          = defineName "literalsReadInt8" "hydra.lib.literals" "readInt8"
-literalsReadString        = defineName "literalsReadString" "hydra.lib.literals" "readString"
-literalsReadUint16        = defineName "literalsReadUint16" "hydra.lib.literals" "readUint16"
-literalsReadUint32        = defineName "literalsReadUint32" "hydra.lib.literals" "readUint32"
-literalsReadUint64        = defineName "literalsReadUint64" "hydra.lib.literals" "readUint64"
-literalsReadUint8         = defineName "literalsReadUint8" "hydra.lib.literals" "readUint8"
-literalsShowBigint        = defineName "literalsShowBigint" "hydra.lib.literals" "showBigint"
-literalsShowBoolean       = defineName "literalsShowBoolean" "hydra.lib.literals" "showBoolean"
-literalsShowDecimal       = defineName "literalsShowDecimal" "hydra.lib.literals" "showDecimal"
-literalsShowFloat32       = defineName "literalsShowFloat32" "hydra.lib.literals" "showFloat32"
-literalsShowFloat64       = defineName "literalsShowFloat64" "hydra.lib.literals" "showFloat64"
-literalsShowInt16         = defineName "literalsShowInt16" "hydra.lib.literals" "showInt16"
-literalsShowInt32         = defineName "literalsShowInt32" "hydra.lib.literals" "showInt32"
-literalsShowInt64         = defineName "literalsShowInt64" "hydra.lib.literals" "showInt64"
-literalsShowInt8          = defineName "literalsShowInt8" "hydra.lib.literals" "showInt8"
-literalsShowString        = defineName "literalsShowString" "hydra.lib.literals" "showString"
-literalsShowUint16        = defineName "literalsShowUint16" "hydra.lib.literals" "showUint16"
-literalsShowUint32        = defineName "literalsShowUint32" "hydra.lib.literals" "showUint32"
-literalsShowUint64        = defineName "literalsShowUint64" "hydra.lib.literals" "showUint64"
-literalsShowUint8         = defineName "literalsShowUint8" "hydra.lib.literals" "showUint8"
-literalsStringToBinary    = defineName "literalsStringToBinary" "hydra.lib.literals" "stringToBinary"
-literalsUint16ToBigint    = defineName "literalsUint16ToBigint" "hydra.lib.literals" "uint16ToBigint"
-literalsUint32ToBigint    = defineName "literalsUint32ToBigint" "hydra.lib.literals" "uint32ToBigint"
-literalsUint64ToBigint    = defineName "literalsUint64ToBigint" "hydra.lib.literals" "uint64ToBigint"
-
--- Logic primitives
-literalsUint8ToBigint     = defineName "literalsUint8ToBigint" "hydra.lib.literals" "uint8ToBigint"
-logic :: TTermDefinition ModuleName
-logic = defineNs "logic" "hydra.lib.logic"
-logicAnd    = defineName "logicAnd" "hydra.lib.logic" "and"
-logicIfElse = defineName "logicIfElse" "hydra.lib.logic" "ifElse"
-logicNot    = defineName "logicNot" "hydra.lib.logic" "not"
-logicOr     = defineName "logicOr" "hydra.lib.logic" "or"
-
--- Maps primitives
-maps :: TTermDefinition ModuleName
-maps = defineNs "maps" "hydra.lib.maps"
-mapsAlter           = defineName "mapsAlter" "hydra.lib.maps" "alter"
-mapsBimap           = defineName "mapsBimap" "hydra.lib.maps" "bimap"
-mapsDelete          = defineName "mapsDelete" "hydra.lib.maps" "delete"
-
-mapsElems           = defineName "mapsElems" "hydra.lib.maps" "elems"
-mapsEmpty           = defineName "mapsEmpty" "hydra.lib.maps" "empty"
-mapsFilter          = defineName "mapsFilter" "hydra.lib.maps" "filter"
-mapsFilterWithKey   = defineName "mapsFilterWithKey" "hydra.lib.maps" "filterWithKey"
-
-mapsFindWithDefault = defineName "mapsFindWithDefault" "hydra.lib.maps" "findWithDefault"
-mapsFromList        = defineName "mapsFromList" "hydra.lib.maps" "fromList"
-mapsInsert          = defineName "mapsInsert" "hydra.lib.maps" "insert"
-mapsKeys            = defineName "mapsKeys" "hydra.lib.maps" "keys"
-mapsLookup          = defineName "mapsLookup" "hydra.lib.maps" "lookup"
-mapsMap             = defineName "mapsMap" "hydra.lib.maps" "map"
-mapsMapKeys         = defineName "mapsMapKeys" "hydra.lib.maps" "mapKeys"
-mapsMember          = defineName "mapsMember" "hydra.lib.maps" "member"
-mapsNull            = defineName "mapsNull" "hydra.lib.maps" "null"
-mapsSingleton       = defineName "mapsSingleton" "hydra.lib.maps" "singleton"
-mapsSize            = defineName "mapsSize" "hydra.lib.maps" "size"
-mapsToList          = defineName "mapsToList" "hydra.lib.maps" "toList"
-mapsUnion           = defineName "mapsUnion" "hydra.lib.maps" "union"
-
--- Math primitives
-math :: TTermDefinition ModuleName
-math = defineNs "math" "hydra.lib.math"
-mathAbs      = defineName "mathAbs" "hydra.lib.math" "abs"
-mathAcos     = defineName "mathAcos" "hydra.lib.math" "acos"
-mathAcosh    = defineName "mathAcosh" "hydra.lib.math" "acosh"
-mathAdd      = defineName "mathAdd" "hydra.lib.math" "add"
-mathAddFloat64 = defineName "mathAddFloat64" "hydra.lib.math" "addFloat64"
-mathAsin     = defineName "mathAsin" "hydra.lib.math" "asin"
-
-mathAsinh    = defineName "mathAsinh" "hydra.lib.math" "asinh"
-mathAtan     = defineName "mathAtan" "hydra.lib.math" "atan"
-mathAtan2    = defineName "mathAtan2" "hydra.lib.math" "atan2"
-mathAtanh    = defineName "mathAtanh" "hydra.lib.math" "atanh"
-mathCeiling  = defineName "mathCeiling" "hydra.lib.math" "ceiling"
-mathCos      = defineName "mathCos" "hydra.lib.math" "cos"
-mathCosh     = defineName "mathCosh" "hydra.lib.math" "cosh"
-mathE        = defineName "mathE" "hydra.lib.math" "e"
-mathEven     = defineName "mathEven" "hydra.lib.math" "even"
-mathExp      = defineName "mathExp" "hydra.lib.math" "exp"
-mathFloor    = defineName "mathFloor" "hydra.lib.math" "floor"
-mathLog      = defineName "mathLog" "hydra.lib.math" "log"
-mathLogBase  = defineName "mathLogBase" "hydra.lib.math" "logBase"
-mathMax      = defineName "mathMax" "hydra.lib.math" "max"
-mathMaybeDiv = defineName "mathMaybeDiv" "hydra.lib.math" "maybeDiv"
-mathMaybeMod = defineName "mathMaybeMod" "hydra.lib.math" "maybeMod"
-mathMaybePred = defineName "mathMaybePred" "hydra.lib.math" "maybePred"
-mathMaybeRem = defineName "mathMaybeRem" "hydra.lib.math" "maybeRem"
-mathMaybeSucc = defineName "mathMaybeSucc" "hydra.lib.math" "maybeSucc"
-mathMin      = defineName "mathMin" "hydra.lib.math" "min"
-mathMul      = defineName "mathMul" "hydra.lib.math" "mul"
-mathMulFloat64 = defineName "mathMulFloat64" "hydra.lib.math" "mulFloat64"
-mathNegate   = defineName "mathNegate" "hydra.lib.math" "negate"
-mathNegateFloat64 = defineName "mathNegateFloat64" "hydra.lib.math" "negateFloat64"
-mathOdd      = defineName "mathOdd" "hydra.lib.math" "odd"
-mathPi       = defineName "mathPi" "hydra.lib.math" "pi"
-mathPow      = defineName "mathPow" "hydra.lib.math" "pow"
-mathRange    = defineName "mathRange" "hydra.lib.math" "range"
-mathRound        = defineName "mathRound" "hydra.lib.math" "round"
-mathRoundFloat32 = defineName "mathRoundFloat32" "hydra.lib.math" "roundFloat32"
-mathRoundFloat64 = defineName "mathRoundFloat64" "hydra.lib.math" "roundFloat64"
-mathSignum       = defineName "mathSignum" "hydra.lib.math" "signum"
-mathSin      = defineName "mathSin" "hydra.lib.math" "sin"
-mathSinh     = defineName "mathSinh" "hydra.lib.math" "sinh"
-mathSqrt     = defineName "mathSqrt" "hydra.lib.math" "sqrt"
-mathSub      = defineName "mathSub" "hydra.lib.math" "sub"
-mathSubFloat64 = defineName "mathSubFloat64" "hydra.lib.math" "subFloat64"
-mathTan      = defineName "mathTan" "hydra.lib.math" "tan"
-mathTanh     = defineName "mathTanh" "hydra.lib.math" "tanh"
-mathTruncate = defineName "mathTruncate" "hydra.lib.math" "truncate"
-
--- Maybes primitives
-maybes :: TTermDefinition ModuleName
-maybes = defineNs "maybes" "hydra.lib.maybes"
-maybesApply     = defineName "maybesApply" "hydra.lib.maybes" "apply"
-maybesBind      = defineName "maybesBind" "hydra.lib.maybes" "bind"
-maybesCases     = defineName "maybesCases" "hydra.lib.maybes" "cases"
-maybesCat       = defineName "maybesCat" "hydra.lib.maybes" "cat"
-maybesCompose   = defineName "maybesCompose" "hydra.lib.maybes" "compose"
-
-maybesFromMaybe = defineName "maybesFromMaybe" "hydra.lib.maybes" "fromMaybe"
-maybesIsJust    = defineName "maybesIsJust" "hydra.lib.maybes" "isJust"
-maybesIsNothing = defineName "maybesIsNothing" "hydra.lib.maybes" "isNothing"
-maybesMap       = defineName "maybesMap" "hydra.lib.maybes" "map"
-maybesMapMaybe  = defineName "maybesMapMaybe" "hydra.lib.maybes" "mapMaybe"
-maybesMaybe     = defineName "maybesMaybe" "hydra.lib.maybes" "maybe"
-maybesPure      = defineName "maybesPure" "hydra.lib.maybes" "pure"
-maybesToList    = defineName "maybesToList" "hydra.lib.maybes" "toList"
-
--- Pairs primitives
-pairs :: TTermDefinition ModuleName
-pairs = defineNs "pairs" "hydra.lib.pairs"
-pairsBimap  = defineName "pairsBimap" "hydra.lib.pairs" "bimap"
-pairsFirst  = defineName "pairsFirst" "hydra.lib.pairs" "first"
-pairsSecond = defineName "pairsSecond" "hydra.lib.pairs" "second"
-
--- Sets primitives
-regex :: TTermDefinition ModuleName
-regex = defineNs "regex" "hydra.lib.regex"
-
-regexFind       = defineName "regexFind" "hydra.lib.regex" "find"
-regexFindAll    = defineName "regexFindAll" "hydra.lib.regex" "findAll"
-regexMatches    = defineName "regexMatches" "hydra.lib.regex" "matches"
-
-regexReplace    = defineName "regexReplace" "hydra.lib.regex" "replace"
-regexReplaceAll = defineName "regexReplaceAll" "hydra.lib.regex" "replaceAll"
-regexSplit      = defineName "regexSplit" "hydra.lib.regex" "split"
-
--- Strings primitives
-sets :: TTermDefinition ModuleName
-sets = defineNs "sets" "hydra.lib.sets"
-setsDelete       = defineName "setsDelete" "hydra.lib.sets" "delete"
-setsDifference   = defineName "setsDifference" "hydra.lib.sets" "difference"
-setsEmpty        = defineName "setsEmpty" "hydra.lib.sets" "empty"
-setsFromList     = defineName "setsFromList" "hydra.lib.sets" "fromList"
-setsInsert       = defineName "setsInsert" "hydra.lib.sets" "insert"
-setsIntersection = defineName "setsIntersection" "hydra.lib.sets" "intersection"
-setsMap          = defineName "setsMap" "hydra.lib.sets" "map"
-setsMember       = defineName "setsMember" "hydra.lib.sets" "member"
-setsNull         = defineName "setsNull" "hydra.lib.sets" "null"
-setsSingleton    = defineName "setsSingleton" "hydra.lib.sets" "singleton"
-
-setsSize         = defineName "setsSize" "hydra.lib.sets" "size"
-setsToList       = defineName "setsToList" "hydra.lib.sets" "toList"
-setsUnion        = defineName "setsUnion" "hydra.lib.sets" "union"
-setsUnions       = defineName "setsUnions" "hydra.lib.sets" "unions"
-
--- Regex primitives
-strings :: TTermDefinition ModuleName
-strings = defineNs "strings" "hydra.lib.strings"
-stringsCat         = defineName "stringsCat" "hydra.lib.strings" "cat"
-
-stringsCat2        = defineName "stringsCat2" "hydra.lib.strings" "cat2"
-stringsFromList    = defineName "stringsFromList" "hydra.lib.strings" "fromList"
-stringsIntercalate = defineName "stringsIntercalate" "hydra.lib.strings" "intercalate"
-stringsLength      = defineName "stringsLength" "hydra.lib.strings" "length"
-stringsLines       = defineName "stringsLines" "hydra.lib.strings" "lines"
-stringsMaybeCharAt = defineName "stringsMaybeCharAt" "hydra.lib.strings" "maybeCharAt"
-stringsNull        = defineName "stringsNull" "hydra.lib.strings" "null"
-stringsSplitOn     = defineName "stringsSplitOn" "hydra.lib.strings" "splitOn"
-stringsToList      = defineName "stringsToList" "hydra.lib.strings" "toList"
-stringsToLower     = defineName "stringsToLower" "hydra.lib.strings" "toLower"
-stringsToUpper     = defineName "stringsToUpper" "hydra.lib.strings" "toUpper"
-stringsUnlines     = defineName "stringsUnlines" "hydra.lib.strings" "unlines"
-
--- Type class names
-typeclass :: TTermDefinition ModuleName
-typeclass = defineNs "typeclass" "hydra.typeclass"
-
--- Chars primitives
-
-typeclassEq  = defineName "typeclassEq" "hydra.typeclass" "Eq"
-typeclassOrd = defineName "typeclassOrd" "hydra.typeclass" "Ord"
+-- typeclass
+typeclassEq                      :: Name
+typeclassEq                      = qname typeclass "Eq"
+typeclassOrd                     :: Name
+typeclassOrd                     = qname typeclass "Ord"
