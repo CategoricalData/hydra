@@ -191,6 +191,17 @@ bimapSig = sig $ TypeScheme [Name "a", Name "b", Name "c", Name "d"]
    Types.pair (Types.var "a") (Types.var "b") Types.~>
    Types.pair (Types.var "c") (Types.var "d"))
   Nothing
+```
+
+The `TypeScheme`'s variable list must be in **declaration order** — the order
+the variables first appear in the body — **not alphabetical**. Hosts that
+re-register primitives by hand (e.g. `heads/typescript/.../lib/libraries.ts`,
+`heads/java/.../lib/Libraries.java`) must follow the same order: kernel
+typeApps bind positionally to that list, and mis-ordering silently swaps
+domain and codomain in inferred lambda types. For example, `maybes.maybe :
+b → (a → b) → maybe<a> → b` lists vars as `[b, a]`, not `[a, b]`.
+
+```haskell
 
 bimap_ :: TTermDefinition ((a -> c) -> (b -> d) -> (a, b) -> (c, d))
 bimap_ = define "bimap" $

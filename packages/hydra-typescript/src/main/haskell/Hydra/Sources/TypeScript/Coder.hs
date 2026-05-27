@@ -34,6 +34,7 @@ import qualified Hydra.Dsl.Errors                          as Error
 import qualified Hydra.Dsl.Packaging                       as Packaging
 import qualified Hydra.Dsl.Util                            as Util
 import qualified Hydra.Sources.Kernel.Terms.Analysis       as Analysis
+import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Environment    as Environment
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
@@ -69,7 +70,7 @@ module_ = Module {
             moduleDependencies = unqualifiedDep <$> (
               [moduleName TypeScriptLanguageSource.module_,
                moduleName TypeScriptSerdeSource.module_,
-               Analysis.ns, Environment.ns, Formatting.ns, Names.ns, Rewriting.ns,
+               Analysis.ns, Annotations.ns, Environment.ns, Formatting.ns, Names.ns, Rewriting.ns,
                Serialization.ns, Sorting.ns, Strip.ns, Variables.ns]
               L.++ (TypeScriptSyntax.ns : KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "TypeScript code generator: emits TypeScript type declarations from Hydra modules"}
@@ -130,6 +131,8 @@ module_ = Module {
       toDefinition tsParamApp2,
       toDefinition tsParen,
       toDefinition tsPropSig,
+      toDefinition tsPropSigWithDoc,
+      toDefinition mkDocComment,
       toDefinition tsReadonlyMap,
       toDefinition tsReadonlySet,
       toDefinition tsTuple,
@@ -366,6 +369,29 @@ tsUndefined = def "tsUndefined" $ tsExprIdent @@ string "undefined"
 tsPropSig :: TTermDefinition (String -> Bool -> TS.TypeExpression -> TS.PropertySignature)
 tsPropSig = def "tsPropSig" $
   lambda "name" $ lambda "optional" $ lambda "typ" $
+    tsPropSigWithDoc @@ var "name" @@ var "optional" @@ var "typ" @@ nothing
+
+-- | Build a `DocumentationComment` from an optional description string.
+-- Returns Nothing when the description is missing or empty so callers can
+-- propagate "no doc" through the AST. Tags are always empty here; we only
+-- emit narrative descriptions, not @param/@returns tags (those would be
+-- duplicative with TS's own type annotations).
+mkDocComment :: TTermDefinition (Maybe String -> Maybe TS.DocumentationComment)
+mkDocComment = def "mkDocComment" $
+  lambda "mdesc" $ Maybes.cases (var "mdesc")
+    nothing
+    (lambda "d" $ Logic.ifElse (Equality.equal (var "d") (string ""))
+      nothing
+      (just (record TS._DocumentationComment [
+        TS._DocumentationComment_description>>: var "d",
+        TS._DocumentationComment_tags>>: list ([] :: [TTerm TS.DocumentationTag])])))
+
+-- | A readonly property signature with an optional JSDoc comment that gets
+-- emitted above the property line. Used for record-interface fields where
+-- the field has a description annotation in the kernel module.
+tsPropSigWithDoc :: TTermDefinition (String -> Bool -> TS.TypeExpression -> Maybe TS.DocumentationComment -> TS.PropertySignature)
+tsPropSigWithDoc = def "tsPropSigWithDoc" $
+  lambda "name" $ lambda "optional" $ lambda "typ" $ lambda "mcomments" $
     "safe" <~ (Formatting.sanitizeWithUnderscores
       @@ TypeScriptLanguageSource.typeScriptReservedWords
       @@ var "name") $
@@ -373,7 +399,8 @@ tsPropSig = def "tsPropSig" $
       TS._PropertySignature_name>>: tsIdent @@ var "safe",
       TS._PropertySignature_type>>: var "typ",
       TS._PropertySignature_optional>>: var "optional",
-      TS._PropertySignature_readonly>>: boolean True]
+      TS._PropertySignature_readonly>>: boolean True,
+      TS._PropertySignature_comments>>: var "mcomments"]
 
 -- =============================================================================
 -- Literal-type encoding
@@ -878,13 +905,17 @@ collectForallParams = def "collectForallParams" $
 -- | Encode a Hydra type definition as either an InterfaceDeclaration (records),
 -- a TypeAliasDeclaration of a discriminated union (unions), or a plain type
 -- alias (everything else).
-encodeTypeDefinition :: TTermDefinition (InferenceContext -> Graph -> TypeDefinition -> Either Error TS.ModuleItem)
+-- The returned pair carries an optional JSDoc description (pulled from
+-- the type's description annotation, if any) alongside the ModuleItem.
+-- `moduleToTypeScript` prepends the doc above the rendered item.
+encodeTypeDefinition :: TTermDefinition (InferenceContext -> Graph -> TypeDefinition -> Either Error (Maybe String, TS.ModuleItem))
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.typeDefinitionName (var "tdef") $
     "typScheme" <~ Packaging.typeDefinitionTypeScheme (var "tdef") $
     "rawTyp" <~ Core.typeSchemeBody (var "typScheme") $
     "lname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ var "name")) $
+    "mdoc" <<~ (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "rawTyp") $
     -- Walk leading foralls to harvest type parameters; the body is what we
     -- actually encode. This matches how Hydra represents generic types — the
     -- outer foralls bind the variables that appear inside.
@@ -897,25 +928,26 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
     cases _Type (var "dtyp") (Just $
         -- Fallback: a plain type alias `type Foo<T...> = <encoded>;`
         "styp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
-          right (inject TS._ModuleItem TS._ModuleItem_typeAlias $
+          right (pair (var "mdoc") (inject TS._ModuleItem TS._ModuleItem_typeAlias $
             record TS._TypeAliasDeclaration [
               TS._TypeAliasDeclaration_name>>: tsIdent @@ var "lname",
               TS._TypeAliasDeclaration_typeParameters>>: var "typeParams",
-              TS._TypeAliasDeclaration_type>>: var "styp"]))
+              TS._TypeAliasDeclaration_type>>: var "styp"])))
       [_Type_record>>: lambda "fts" $
         "members" <<~ (Eithers.mapList
           (lambda "ft" $
             "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
             "ftyp"  <~ Core.fieldTypeType (var "ft") $
             "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
-              right (tsPropSig @@ var "fname" @@ boolean False @@ var "sftyp"))
+            "mfdoc" <<~ (Annotations.commentsFromFieldType @@ var "cx" @@ var "g" @@ var "ft") $
+              right (tsPropSigWithDoc @@ var "fname" @@ boolean False @@ var "sftyp" @@ (mkDocComment @@ var "mfdoc")))
           (var "fts")) $
-          right (inject TS._ModuleItem TS._ModuleItem_interface $
+          right (pair (var "mdoc") (inject TS._ModuleItem TS._ModuleItem_interface $
             record TS._InterfaceDeclaration [
               TS._InterfaceDeclaration_name>>: tsIdent @@ var "lname",
               TS._InterfaceDeclaration_typeParameters>>: var "typeParams",
               TS._InterfaceDeclaration_extends>>: list ([] :: [TTerm TS.TypeExpression]),
-              TS._InterfaceDeclaration_members>>: var "members"]),
+              TS._InterfaceDeclaration_members>>: var "members"])),
       _Type_union>>: lambda "fts" $
         -- Each union field becomes one discriminated-union arm:
         --   `{ readonly tag: "<fname>"; readonly value: <encoded fty> }`
@@ -945,11 +977,11 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
                             TS._StringLiteral_value>>: var "fname",
                             TS._StringLiteral_singleQuote>>: boolean False])])])
           (var "fts")) $
-          right (inject TS._ModuleItem TS._ModuleItem_typeAlias $
+          right (pair (var "mdoc") (inject TS._ModuleItem TS._ModuleItem_typeAlias $
             record TS._TypeAliasDeclaration [
               TS._TypeAliasDeclaration_name>>: tsIdent @@ var "lname",
               TS._TypeAliasDeclaration_typeParameters>>: var "typeParams",
-              TS._TypeAliasDeclaration_type>>: inject TS._TypeExpression TS._TypeExpression_union (var "arms")]),
+              TS._TypeAliasDeclaration_type>>: inject TS._TypeExpression TS._TypeExpression_union (var "arms")])),
       _Type_wrap>>: lambda "wt" $
         -- A wrap type becomes a single-field interface with a `_tag` brand.
         -- Wrap-type interface: single `value` field. We previously emitted
@@ -961,13 +993,13 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
         -- still discriminate on shape because each wrap type has a unique
         -- payload-type combination.
         "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "wt") $
-          right (inject TS._ModuleItem TS._ModuleItem_interface $
+          right (pair (var "mdoc") (inject TS._ModuleItem TS._ModuleItem_interface $
             record TS._InterfaceDeclaration [
               TS._InterfaceDeclaration_name>>: tsIdent @@ var "lname",
               TS._InterfaceDeclaration_typeParameters>>: var "typeParams",
               TS._InterfaceDeclaration_extends>>: list ([] :: [TTerm TS.TypeExpression]),
               TS._InterfaceDeclaration_members>>: list [
-                tsPropSig @@ string "value" @@ boolean False @@ var "sftyp"]])]
+                tsPropSig @@ string "value" @@ boolean False @@ var "sftyp"]]))]
 
 -- =============================================================================
 -- Term-level encoding (direct-to-text, minimal subset)
@@ -1388,45 +1420,82 @@ encodeTerm = def "encodeTerm" $
      -- The arm bodies are applied to `u.value` (or to `u` itself for
      -- unit-shaped arms); the default handler is a bare value, not a fn.
      _Term_cases>>: lambda "cs" $
+       -- Emit a switch-statement IIFE rather than a right-fold of
+       -- ternaries. The previous nested-ternary form (`tag === "a" ?
+       -- armA(u.value) : tag === "b" ? armB(u.value) : default`) compiles
+       -- correctly but adds two stack frames per arm (one ternary, one
+       -- IIFE-application). For a 21-arm `cases` like the kernel's
+       -- `typeOf` dispatcher, that's 42 extra frames per call — and
+       -- typeOf chains through deeply-nested terms blow V8's ~8K-frame
+       -- stack when running under Rosetta-emulated Node on Apple Silicon.
+       -- The switch-statement form has constant per-arm overhead (one
+       -- call frame per arm body) and is also clearer.
+       --
+       -- Emitted shape:
+       --   ((u) => {
+       --     switch ((u as any).tag) {
+       --       case "<arm1Name>": return arm1Expr((u as any).value);
+       --       ...
+       --       default: return defaultExpr;  // or throw
+       --     }
+       --   })
+       --
+       -- Hosts that prefer hoisting `cases` out of inline positions can
+       -- still do so via `doHoistCase`; this emission then naturally
+       -- becomes the body of a top-level `function name(u) { switch ...
+       -- }` instead of an IIFE.
        "armFields" <~ Core.caseStatementCases (var "cs") $
        "defaultMaybe" <~ Core.caseStatementDefault (var "cs") $
-       "tail" <~ Maybes.cases (var "defaultMaybe")
-         -- No default: emit a throw-IIFE so unmatched cases fail loudly
-         -- at runtime rather than silently returning undefined. The
-         -- IIFE's body is `throw new Error(...)`. Since the AST has no
-         -- ThrowExpression, we approximate via `((() => { throw ... })())`.
-         -- Practically rare: kernel `cases` almost always provides a default.
-         (tsCall @@ (tsArrow @@ list ([] :: [TTerm String])
-           @@ (tsCall @@ (tsExprIdent @@ string "(() => { throw new Error('unmatched case'); })")
-                       @@ list ([] :: [TTerm TS.Expression])))
-           @@ list ([] :: [TTerm TS.Expression]))
-         (lambda "dt" $ encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "dt") $
        "uVar" <~ string "u" $
-       -- Cast `u` to any before destructuring so tsc doesn't reject
-       -- `.value` access on unit-shaped variants (`{tag: "X"}` with no
-       -- payload) — the arm-side lambda ignores `undefined` at runtime.
+       -- Cast `u` to any so `.value` works for unit-shaped variants too.
        "uExpr" <~ (tsAsAny @@ (tsExprIdent @@ var "uVar")) $
        "uTag" <~ (tsMember @@ var "uExpr" @@ string "tag") $
        "uValue" <~ (tsMember @@ var "uExpr" @@ string "value") $
-       -- Fold arms right-to-left into a nested conditional: the innermost
-       -- conditional has the default as its alternate.
-       "reversedArms" <~ Lists.reverse (var "armFields") $
-       "body" <~ Lists.foldl
-         (lambda "acc" $ lambda "f" $
+       -- Build one `SwitchCase` per arm: `case "<fname>": return
+       -- <armExpr>(u.value);`.
+       "armCases" <~ Lists.map
+         (lambda "f" $
            "fname" <~ Core.unName (Core.fieldName (var "f")) $
            "armExpr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.fieldTerm (var "f")) $
-           tsCond
-             @@ (inject TS._Expression TS._Expression_binary
-                  (record TS._BinaryExpression [
-                    TS._BinaryExpression_operator>>:
-                      inject TS._BinaryOperator TS._BinaryOperator_strictEqual unit,
-                    TS._BinaryExpression_left>>: var "uTag",
-                    TS._BinaryExpression_right>>: tsExprStr @@ var "fname"]))
-             @@ (tsCall @@ var "armExpr" @@ list [var "uValue"])
-             @@ var "acc")
-         (var "tail")
-         (var "reversedArms") $
-       tsArrow @@ list [var "uVar"] @@ var "body",
+           "callExpr" <~ (tsCall @@ var "armExpr" @@ list [var "uValue"]) $
+           record TS._SwitchCase [
+             TS._SwitchCase_test>>: just (tsExprStr @@ var "fname"),
+             TS._SwitchCase_consequent>>: list [
+               inject TS._Statement TS._Statement_return (just (var "callExpr"))]])
+         (var "armFields") $
+       -- Default arm: emit either `default: return <default-expr>;` if
+       -- the user supplied one, or `default: throw new Error("unmatched
+       -- case");` otherwise.
+       "defaultCase" <~ Maybes.cases (var "defaultMaybe")
+         -- No default: throw. The TS AST doesn't have a Throw statement
+         -- variant, so emit the throw via an unsanitized identifier
+         -- inside an Expression statement (return of an IIFE that
+         -- throws); see the older fold form for the same trick.
+         (record TS._SwitchCase [
+           TS._SwitchCase_test>>: (nothing :: TTerm (Maybe TS.Expression)),
+           TS._SwitchCase_consequent>>: list [
+             inject TS._Statement TS._Statement_return (just
+               (tsCall @@ (tsExprIdent @@ string "(() => { throw new Error('unmatched case'); })")
+                       @@ list ([] :: [TTerm TS.Expression])))]])
+         (lambda "dt" $
+           "dExpr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "dt") $
+           record TS._SwitchCase [
+             TS._SwitchCase_test>>: (nothing :: TTerm (Maybe TS.Expression)),
+             TS._SwitchCase_consequent>>: list [
+               inject TS._Statement TS._Statement_return (just (var "dExpr"))]]) $
+       "allCases" <~ (Lists.concat2 (var "armCases") (list [var "defaultCase"])) $
+       -- Assemble the switch statement and wrap in a block-bodied arrow.
+       "switchStmt" <~ (inject TS._Statement TS._Statement_switch
+         (record TS._SwitchStatement [
+           TS._SwitchStatement_discriminant>>: var "uTag",
+           TS._SwitchStatement_cases>>: var "allCases"])) $
+       inject TS._Expression TS._Expression_arrow
+         (record TS._ArrowFunctionExpression [
+           TS._ArrowFunctionExpression_params>>: list [
+             inject TS._Pattern TS._Pattern_identifier (tsIdent @@ var "uVar")],
+           TS._ArrowFunctionExpression_body>>:
+             inject TS._ArrowFunctionBody TS._ArrowFunctionBody_block (list [var "switchStmt"]),
+           TS._ArrowFunctionExpression_async>>: boolean False]),
      -- Either constructor at the term level: { tag: "left", value: l } or
      -- { tag: "right", value: r }.
      _Term_either>>: lambda "e" $
@@ -1592,13 +1661,20 @@ functionDeclarationFromTerm = def "functionDeclarationFromTerm" $
 -- (explicit params, typed domains, hoisted let bindings, inner body), then
 -- emitted as either `export const name = expr;` (zero-arg) or
 -- `export function name(p1: T1, ..., pN: TN) { ...bindings... return body; }`.
-encodeTermDefinition :: TTermDefinition (InferenceContext -> Graph -> ModuleName -> TermDefinition -> TS.ModuleItem)
+-- The returned pair carries an optional JSDoc description (pulled from
+-- the term's description annotation, if any) alongside the ModuleItem.
+encodeTermDefinition :: TTermDefinition (InferenceContext -> Graph -> ModuleName -> TermDefinition -> (Maybe String, TS.ModuleItem))
 encodeTermDefinition = def "encodeTermDefinition" $
   lambda "cx" $ lambda "g" $ lambda "currentNs" $ lambda "td" $
     "name" <~ Packaging.termDefinitionName (var "td") $
     "lname" <~ (Formatting.sanitizeWithUnderscores @@ TypeScriptLanguageSource.typeScriptReservedWords
       @@ (Names.localNameOf @@ var "name")) $
     "rawTerm" <~ Packaging.termDefinitionTerm (var "td") $
+    -- Pull the term's description annotation. Extraction errors (rare —
+    -- only when the value isn't a string) collapse to "no doc" so we
+    -- never fail the whole module emit over a single bad annotation.
+    "mdoc" <~ Eithers.either_ (constant nothing) identity
+      (Annotations.getTermDescription @@ var "cx" @@ var "g" @@ var "rawTerm") $
     "asExport" <~ (lambda "stmt" $
       inject TS._ModuleItem TS._ModuleItem_export
         (inject TS._ExportDeclaration TS._ExportDeclaration_declaration (var "stmt"))) $
@@ -1614,7 +1690,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "funDecl" <~ (functionDeclarationFromTerm @@ var "cx" @@ var "g" @@ var "currentNs"
       @@ var "lname" @@ var "rawTerm" @@ var "mScheme") $
     "asFunDecl" <~ (var "asExport" @@ (inject TS._Statement TS._Statement_functionDeclaration (var "funDecl"))) $
-    cases _Term (var "dterm")
+    "item" <~ cases _Term (var "dterm")
       (Just $
         "expr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "rawTerm") $
         "declarator" <~ (record TS._VariableDeclarator [
@@ -1625,7 +1701,8 @@ encodeTermDefinition = def "encodeTermDefinition" $
           TS._VariableDeclaration_declarations>>: list [var "declarator"]]) $
         var "asExport" @@ (inject TS._Statement TS._Statement_variableDeclaration (var "varDecl"))) [
       _Term_lambda>>: lambda "_lam" $ var "asFunDecl",
-      _Term_typeLambda>>: lambda "_tl" $ var "asFunDecl"]
+      _Term_typeLambda>>: lambda "_tl" $ var "asFunDecl"] $
+    pair (var "mdoc") (var "item")
 
 -- =============================================================================
 -- Direct text serializer for TypeScript AST fragments
@@ -1704,18 +1781,33 @@ printTypeExpression = def "printTypeExpression" $
     TS._TypeExpression_void>>: constant $ string "void",
     TS._TypeExpression_never>>: constant $ string "never"]
 
--- | Render a property signature: `[readonly ]<name>[?]: <type>`.
+-- | Render a property signature: optional JSDoc comment, then
+-- `[readonly ]<name>[?]: <type>`. The comment, when present, is prepended
+-- followed by a newline so the formatted member is e.g.
+--   /**
+--    * Doc text.
+--    */
+--   readonly fieldName: T;
 printPropertySignature :: TTermDefinition (TS.PropertySignature -> String)
 printPropertySignature = def "printPropertySignature" $
   lambda "ps" $
-    Strings.cat (list [
+    "mcomments" <~ (project TS._PropertySignature TS._PropertySignature_comments @@ var "ps") $
+    "line" <~ Strings.cat (list [
       Logic.ifElse (project TS._PropertySignature TS._PropertySignature_readonly @@ var "ps")
         (string "readonly ") (string ""),
       unwrap TS._Identifier @@ (project TS._PropertySignature TS._PropertySignature_name @@ var "ps"),
       Logic.ifElse (project TS._PropertySignature TS._PropertySignature_optional @@ var "ps")
         (string "?") (string ""),
       string ": ",
-      printTypeExpression @@ (project TS._PropertySignature TS._PropertySignature_type @@ var "ps")])
+      printTypeExpression @@ (project TS._PropertySignature TS._PropertySignature_type @@ var "ps")]) $
+    Maybes.cases (var "mcomments")
+      (var "line")
+      (lambda "dc" $ Strings.cat (list [
+        TypeScriptSerdeSource.toTypeScriptComments
+          @@ (project TS._DocumentationComment TS._DocumentationComment_description @@ var "dc")
+          @@ (project TS._DocumentationComment TS._DocumentationComment_tags @@ var "dc"),
+        string "\n",
+        var "line"]))
 
 -- | Render one generic parameter (with optional `extends` constraint).
 printTypeParameter :: TTermDefinition (TS.TypeParameter -> String)
@@ -1759,12 +1851,15 @@ printInterfaceDeclaration = def "printInterfaceDeclaration" $
         (Strings.intercalate (string ", ")
           (Lists.map (asTerm printTypeExpression) (var "exts")))) $
     "members" <~ (project TS._InterfaceDeclaration TS._InterfaceDeclaration_members @@ var "decl") $
+    "renderMember" <~ ("ps" ~>
+      Strings.intercalate (string "\n  ")
+        (Strings.lines (asTerm printPropertySignature @@ var "ps"))) $
     "body" <~ Logic.ifElse (Lists.null (var "members"))
       (string "")
       (Strings.cat (list [
         string "\n  ",
         Strings.intercalate (string ";\n  ")
-          (Lists.map (asTerm printPropertySignature) (var "members")),
+          (Lists.map (var "renderMember") (var "members")),
         string ";\n"])) $
     Strings.cat (list [
       string "export interface ",
@@ -1945,12 +2040,32 @@ moduleToTypeScript = def "moduleToTypeScript" $
     "typeItems" <<~ (Eithers.mapList (encodeTypeDefinition @@ var "cx" @@ var "g") (var "typeDefs")) $
     "termItems" <~ (Lists.map (encodeTermDefinition @@ var "cx" @@ var "g" @@ var "currentNs") (var "termDefs")) $
     "allItems" <~ Lists.concat2 (var "typeItems") (var "termItems") $
-    "header" <~ string "// Note: this is an automatically generated file. Do not edit.\n\n" $
-    -- Render every ModuleItem (types and terms alike) through the same
-    -- printer, joined by blank lines. This produces uniform per-definition
-    -- separation; previously term defs were string-cat'd with no separator.
+    -- Module-level description becomes a JSDoc block at the top of the
+    -- file, between the auto-generated warning and the imports.
+    "mModuleDoc" <~ Packaging.moduleDescription (var "mod") $
+    "moduleDocText" <~ Maybes.cases (var "mModuleDoc")
+      (string "")
+      (lambda "d" $ Strings.cat2
+        (TypeScriptSerdeSource.toTypeScriptComments @@ var "d" @@ (list ([] :: [TTerm TS.DocumentationTag])))
+        (string "\n\n")) $
+    "header" <~ Strings.cat2
+      (string "// Note: this is an automatically generated file. Do not edit.\n\n")
+      (var "moduleDocText") $
+    -- Each item carries an optional doc string sidecar; render the item
+    -- via printModuleItem, then prepend the JSDoc when present. Items
+    -- are joined by blank lines (uniform per-definition separation).
+    "renderItem" <~ ("docAndItem" ~>
+      "mdoc" <~ Pairs.first (var "docAndItem") $
+      "item" <~ Pairs.second (var "docAndItem") $
+      "itemText" <~ (printModuleItem @@ var "item") $
+      Maybes.cases (var "mdoc")
+        (var "itemText")
+        (lambda "d" $ Strings.cat (list [
+          TypeScriptSerdeSource.toTypeScriptComments @@ var "d" @@ (list ([] :: [TTerm TS.DocumentationTag])),
+          string "\n",
+          var "itemText"]))) $
     "body" <~ (Strings.intercalate (string "\n\n")
-      (Lists.map (asTerm printModuleItem) (var "allItems"))) $
+      (Lists.map (var "renderItem") (var "allItems"))) $
     "filePath" <~ (Names.namespaceToFilePath
       @@ Util.caseConventionCamel
       @@ wrap _FileExtension (string "ts")

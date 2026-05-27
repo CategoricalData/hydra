@@ -278,12 +278,18 @@ def write_scala(base_path, universe, mods):
 
 
 def write_typescript(base_path, universe, mods):
-    """Generate TypeScript source files from modules."""
+    """Generate TypeScript source files from modules.
+
+    do_hoist_case_statements=True mirrors the per-target dispatch in
+    heads/typescript/.../bootstrap.ts. Hoisting pulls cases out of inline
+    IIFEs into top-level helpers, saving stack frames when the TS runtime
+    walks deeply-nested terms (e.g. when TS hosts the Java coder).
+    """
     from hydra.type_script.coder import module_to_type_script
     from hydra.type_script.language import type_script_language
     generate_sources(
         module_to_type_script, type_script_language(),
-        False, True, False, False,
+        False, True, True, False,
         base_path, universe, mods)
 
 

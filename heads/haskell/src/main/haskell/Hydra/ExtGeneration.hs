@@ -129,8 +129,14 @@ writeRust = generateSources moduleToRust rustLanguage True False False False
 -- declared scheme arity. Matches Python's behavior. Without this, the TS
 -- coder emits `export const capitalize = mapFirstLetter(toUpper)` which
 -- calls a 2-arg function with 1 arg and crashes at runtime.
+-- doHoistCaseStatements=True: matches the per-target dispatch in
+-- heads/typescript/.../bootstrap.ts. Hoisting pulls cases out of inline
+-- IIFEs into top-level helper functions, saving ~2 JS frames per cases
+-- dispatch. Without hoisting, the TS-implemented kernel exhausts V8's
+-- stack on deeply-nested terms (e.g. when TS hosts the Java coder).
+-- See feature_126_typescript-plan.md for measurements.
 writeTypeScript :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeTypeScript = generateSources moduleToTypeScript typeScriptLanguage False True False False
+writeTypeScript = generateSources moduleToTypeScript typeScriptLanguage False True True False
 
 -- | Generate Coq (.v) source files from modules.
 -- First argument: output directory
