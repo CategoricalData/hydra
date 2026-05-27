@@ -24,7 +24,7 @@ import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Meta.Terms         as Terms
-import qualified Hydra.Lib.Math              as Math
+import qualified Hydra.Haskell.Lib.Math              as Math
 
 
 ns :: ModuleName

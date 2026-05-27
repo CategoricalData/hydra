@@ -1,6 +1,6 @@
 -- | Haskell implementations of hydra.lib.regex primitives
 
-module Hydra.Lib.Regex where
+module Hydra.Haskell.Lib.Regex where
 
 import qualified Text.Regex.TDFA as R
 

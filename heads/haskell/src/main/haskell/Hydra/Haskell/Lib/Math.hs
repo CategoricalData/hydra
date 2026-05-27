@@ -1,6 +1,6 @@
 -- | Haskell implementations of hydra.lib.math primitives
 
-module Hydra.Lib.Math where
+module Hydra.Haskell.Lib.Math where
 
 import Prelude (Num, Ord, Integral, Enum, Bool, Double, Int, Integer, Float, Maybe(..), (.), ($), (+), (-), (*), (==), (||))
 import qualified Prelude

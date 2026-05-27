@@ -3,6 +3,7 @@
 
 module Hydra.Dsl.Python.Syntax where
 import qualified Hydra.Core as Core
+import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Python.Syntax as Syntax
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)

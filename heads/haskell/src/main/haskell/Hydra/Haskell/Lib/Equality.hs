@@ -1,6 +1,6 @@
 -- | Haskell implementations of hydra.lib.equality primitives.
 
-module Hydra.Lib.Equality where
+module Hydra.Haskell.Lib.Equality where
 
 import Hydra.Util
 

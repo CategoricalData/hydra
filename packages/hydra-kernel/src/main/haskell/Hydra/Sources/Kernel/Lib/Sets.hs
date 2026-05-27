@@ -3,7 +3,6 @@
 module Hydra.Sources.Kernel.Lib.Sets where
 
 import Hydra.Kernel
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
