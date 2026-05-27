@@ -75,7 +75,7 @@ module_ = Module {
 
 -- | Interpreter-friendly set difference.
 -- difference s1 s2: elements in s1 that are not in s2.
-difference_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+difference_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 difference_ = define "difference" $
   doc "Interpreter-friendly set difference." $
   "cx" ~> "g" ~>
@@ -104,7 +104,7 @@ difference_ = define "difference" $
 
 -- | Interpreter-friendly set intersection.
 -- intersection s1 s2: elements in both s1 and s2.
-intersection_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+intersection_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 intersection_ = define "intersection" $
   doc "Interpreter-friendly set intersection." $
   "cx" ~> "g" ~>
@@ -133,7 +133,7 @@ intersection_ = define "intersection" $
 
 -- | Interpreter-friendly map for Set terms.
 -- Applies fun to each element.
-map_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+map_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for Set terms." $
   "cx" ~> "g" ~>
@@ -148,7 +148,7 @@ map_ = define "map" $
 
 -- | Interpreter-friendly set union.
 -- union s1 s2: elements in either s1 or s2.
-union_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+union_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 union_ = define "union" $
   doc "Interpreter-friendly set union." $
   "cx" ~> "g" ~>
@@ -167,7 +167,7 @@ union_ = define "union" $
 
 -- | Interpreter-friendly unions for list of Set terms.
 -- unions [s1, s2, ...]: union of all sets.
-unions_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+unions_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 unions_ = define "unions" $
   doc "Interpreter-friendly unions for list of Set terms." $
   "cx" ~> "g" ~>

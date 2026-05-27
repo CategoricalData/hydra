@@ -395,7 +395,7 @@ allTests = define "allTests" $
         (tylams ["t0"] $
           lambdaTyped "dir" (T.var "hydra.coders.CoderDirection") $
             lambdaTyped "coder" (T.applys (T.var "hydra.coders.Coder") (T.var <$> ["t0", "t0"])) $
-              lambdaTyped "cx" (T.var "hydra.context.Context") $
+              lambdaTyped "cx" (T.var "hydra.typing.InferenceContext") $
                 lambdaTyped "v1" (T.var "t0") $
                   match (Core.nameLift _CoderDirection)
                     nothing [
@@ -416,7 +416,7 @@ allTests = define "allTests" $
 -- Helpers
 
 -- | Reference to hydra.reduction.etaExpandTypedTerm
-etaExpandRef :: TTerm (Context -> Graph -> Term -> Either Error Term)
+etaExpandRef :: TTerm (InferenceContext -> Graph -> Term -> Either Error Term)
 etaExpandRef = TTerm $ TermVariable $ Name "hydra.reduction.etaExpandTypedTerm"
 
 testCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata

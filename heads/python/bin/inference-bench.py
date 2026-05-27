@@ -37,7 +37,7 @@ for sub in (
         sys.path.insert(0, p)
 
 import hydra.codegen as codegen
-from hydra.context import Context
+from hydra.typing import InferenceContext
 from hydra.core import Name
 from hydra.dsl.python import FrozenDict, Left, Right
 from hydra.generation import (
@@ -124,7 +124,7 @@ def _make_synthetic_module(bench: Module, n: int) -> Module:
 
 
 def _time_inference(universe: tuple[Module, ...], target: Module) -> tuple[float, bool, str]:
-    ctx = Context((), (), FrozenDict({}))
+    ctx = InferenceContext(fresh_type_variable_count=0, trace=())
     t0 = time.perf_counter()
     result = codegen.infer_modules_given(
         ctx, bootstrap_graph(), tuple(universe) + (target,), (target,)

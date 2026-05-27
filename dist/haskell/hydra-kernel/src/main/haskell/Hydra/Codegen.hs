@@ -6,7 +6,6 @@ import qualified Hydra.Adapt as Adapt
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Decode.Packaging as DecodePackaging
@@ -35,6 +34,7 @@ import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -140,7 +140,7 @@ generateLexicon graph =
             primitiveLines = Lists.map (\p -> formatPrimitive p) sortedPrimitives
         in (Right (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Primitives:\n" (Strings.unlines primitiveLines)) "\nTypes:\n") (Strings.unlines typeLines)) "\nTerms:\n") (Strings.unlines termLines)))))
 -- | Pure core of code generation: given a coder, language, flags, bootstrap graph, universe, and modules to generate, produce a list of (filePath, content) pairs.
-generateSourceFiles :: Ord t0 => ((Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either Errors.Error (M.Map t0 t1)) -> Coders.Language -> Bool -> Bool -> Bool -> Bool -> Graph.Graph -> [Packaging.Module] -> [Packaging.Module] -> Context.Context -> Either Errors.Error [(t0, t1)])
+generateSourceFiles :: Ord t0 => ((Packaging.Module -> [Packaging.Definition] -> Typing.InferenceContext -> Graph.Graph -> Either Errors.Error (M.Map t0 t1)) -> Coders.Language -> Bool -> Bool -> Bool -> Bool -> Graph.Graph -> [Packaging.Module] -> [Packaging.Module] -> Typing.InferenceContext -> Either Errors.Error [(t0, t1)])
 generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bsGraph universeModules modsToGenerate cx =
 
       let namespaceMap = Maps.fromList (Lists.map (\m -> (Packaging.moduleName m, m)) (Lists.concat2 universeModules modsToGenerate))
@@ -248,7 +248,7 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                 defs = Pairs.second p
             in (Eithers.map (\m -> Maps.toList m) (printDefinitions mod (Lists.map (\d -> Packaging.DefinitionTerm d) defs) cx g1))) (Lists.zip refreshedMods dedupedDefLists))))))) (\termFiles -> Right (Lists.concat2 schemaFiles termFiles))))
 -- | Perform type inference and generate the lexicon for a set of modules
-inferAndGenerateLexicon :: Context.Context -> Graph.Graph -> [Packaging.Module] -> Either Errors.Error String
+inferAndGenerateLexicon :: Typing.InferenceContext -> Graph.Graph -> [Packaging.Module] -> Either Errors.Error String
 inferAndGenerateLexicon cx bsGraph kernelModules =
 
       let g0 = modulesToGraph bsGraph kernelModules kernelModules
@@ -263,7 +263,7 @@ inferAndGenerateLexicon cx bsGraph kernelModules =
         let g1 = Pairs.first (Pairs.first inferResultWithCx)
         in (generateLexicon g1)))
 -- | Perform type inference on modules and reconstruct with inferred types
-inferModules :: Context.Context -> Graph.Graph -> [Packaging.Module] -> [Packaging.Module] -> Either Errors.Error [Packaging.Module]
+inferModules :: Typing.InferenceContext -> Graph.Graph -> [Packaging.Module] -> [Packaging.Module] -> Either Errors.Error [Packaging.Module]
 inferModules cx bsGraph universeMods targetMods =
 
       let g0 = modulesToGraph bsGraph universeMods universeMods
@@ -279,7 +279,7 @@ inferModules cx bsGraph universeMods targetMods =
             inferredElements = Pairs.second inferResult
         in (Right (Lists.map (refreshModule inferredElements) targetMods))))
 -- | Infer types for target modules in the context of a typed universe
-inferModulesGiven :: Context.Context -> Graph.Graph -> [Packaging.Module] -> [Packaging.Module] -> Either Errors.Error [Packaging.Module]
+inferModulesGiven :: Typing.InferenceContext -> Graph.Graph -> [Packaging.Module] -> [Packaging.Module] -> Either Errors.Error [Packaging.Module]
 inferModulesGiven cx bsGraph universeMods targetMods =
 
       let g0 = modulesToGraph bsGraph universeMods universeMods
