@@ -10,7 +10,7 @@ A guide to generating source code in target languages from Hydra module definiti
 ## Overview
 
 Hydra modules can be defined in any host language's DSL and generated
-into any target language (Haskell, Java, Python, Scala, Lisp dialects,
+into any target language (Haskell, Java, Python, Scala, TypeScript, Lisp dialects,
 plus schema-only targets like Coq, Rust, GraphQL, etc.).
 There are two source representations for modules:
 

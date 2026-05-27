@@ -259,7 +259,7 @@
                                 "argument": {"variable": "g"},
                                 "function": {
                                   "application": {
-                                    "argument": {"variable": "hydra.lexical.emptyContext"},
+                                    "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                     "function": {"variable": "hydra.inference.inferInGraphContext"}}}}}}},
                         "function": {
                           "application": {
@@ -299,7 +299,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
