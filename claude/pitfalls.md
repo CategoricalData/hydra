@@ -812,3 +812,18 @@ so Phase 2 keeps re-failing the same way.
 Documented in the build-system cache model
 ([docs/build-system.md §Cache files are not tracked](../docs/build-system.md#cache-files-are-not-tracked)),
 but the silent-exit mechanism deserves the explicit pitfall callout.
+
+### `git reset --soft` after the user ran their own git commands
+
+If you've been committing across a session, your mental model of HEAD
+can lag behind reality. Common case: the user runs `git pull` (or
+`git merge`) between your turns. Their merge commit becomes the new
+HEAD, and `git reset --soft HEAD~` now undoes *their* merge, not the
+commit you intended to amend.
+
+Before any `git reset --soft HEAD~` (or `HEAD~N`), check `git log
+-1 --oneline` and `git reflog | head -5`. If the most recent commit
+isn't yours, stop and ask. Recovery is straightforward via the
+reflog (`git reset --soft <sha-of-the-merge>`) provided you notice
+quickly — but the safer rule is "verify before reset," not "recover
+after reset."
