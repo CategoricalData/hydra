@@ -776,12 +776,12 @@ TERM__VARIABLE__NAME = Name("variable")
 ## Error handling
 
 Hydra computations use `Either[Error, A]` for error handling (the former Flow monad
-was removed in #245). A `Context` value is threaded alongside the graph and carries a
-trace stack and diagnostic messages.
+was removed in #245). An `InferenceContext` value is threaded alongside the graph
+and carries the fresh-type-variable counter and the current subterm-path trace.
 
 ```python
 from hydra.util import Either
-from hydra.context import Context
+from hydra.typing import InferenceContext
 from hydra.errors import Error
 
 # Create a successful result

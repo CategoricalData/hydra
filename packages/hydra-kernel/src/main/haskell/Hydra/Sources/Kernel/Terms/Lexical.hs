@@ -2,7 +2,7 @@
 module Hydra.Sources.Kernel.Terms.Lexical where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel hiding (buildGraph, chooseUniqueName, dereferenceSchemaType, dereferenceVariable, elementsToGraph, emptyContext, emptyGraph, fieldsOf, getField, graphToBindings, graphWithPrimitives, lookupBinding, lookupPrimitive, lookupTerm, matchEnum, matchRecord, matchUnion, matchUnitField, requireBinding, requirePrimitive, requirePrimitiveType, requireTerm, resolveTerm, stripAndDereferenceTerm, stripAndDereferenceTermEither)
+import Hydra.Kernel hiding (buildGraph, chooseUniqueName, dereferenceSchemaType, dereferenceVariable, elementsToGraph, emptyGraph, emptyInferenceContext, fieldsOf, getField, graphToBindings, graphWithPrimitives, lookupBinding, lookupPrimitive, lookupTerm, matchEnum, matchRecord, matchUnion, matchUnitField, requireBinding, requirePrimitive, requirePrimitiveType, requireTerm, resolveTerm, stripAndDereferenceTerm, stripAndDereferenceTermEither)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -18,6 +18,7 @@ import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
 import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
+import qualified Hydra.Dsl.Meta.Literals     as MetaLiterals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
@@ -43,7 +44,6 @@ import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
 import qualified Hydra.Dsl.Util         as Util
 import qualified Hydra.Dsl.Meta.Variants     as Variants
-import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Errors       as Error
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
@@ -79,8 +79,8 @@ module_ = Module {
       toDefinition dereferenceSchemaType,
       toDefinition dereferenceVariable,
       toDefinition elementsToGraph,
-      toDefinition emptyContext,
       toDefinition emptyGraph,
+      toDefinition emptyInferenceContext,
       toDefinition fieldsOf,
       toDefinition getField,
       toDefinition graphToBindings,
@@ -192,18 +192,15 @@ elementsToGraph = define "elementsToGraph" $
   "g" <~ (buildGraph @@ var "elements" @@ Maps.empty @@ var "prims") $
   Graph.graphWithSchemaTypes (var "g") (var "schemaTypes")
 
-emptyContext :: TTermDefinition Context
-emptyContext = define "emptyContext" $
-  doc "An empty context; no trace, no messages, no other data." $
-  record _Context [
-    _Context_trace>>: list ([] :: [TTerm String]),
-    _Context_messages>>: list ([] :: [TTerm String]),
-    _Context_other>>: Maps.empty]
-
 emptyGraph :: TTermDefinition Graph
 emptyGraph = define "emptyGraph" $
   doc "An empty graph; no elements, no primitives, no schema." $
   Graph.emptyGraph
+
+emptyInferenceContext :: TTermDefinition InferenceContext
+emptyInferenceContext = define "emptyInferenceContext" $
+  doc "An empty inference context; fresh-variable counter at zero and empty trace." $
+  Typing.inferenceContext (MetaLiterals.int32 0) (list ([] :: [TTerm SubtermStep]))
 
 fieldsOf :: TTermDefinition (Type -> [FieldType])
 fieldsOf = define "fieldsOf" $
@@ -221,7 +218,7 @@ getField = define "getField" $
   doc "Look up a field by name in a record's field map and decode its value, failing if the field is missing" $
   "m" ~> "fname" ~> "decode" ~>
   Maybes.maybe
-    (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname")) (var "cx"))
+    (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname")))
     (var "decode")
     (Maps.lookup (var "fname") (var "m"))
 
@@ -279,7 +276,7 @@ matchRecord = define "matchRecord" $
   "graph" ~> "decode" ~> "term" ~>
   "stripped" <~ Strip.deannotateAndDetypeTerm @@ var "term" $
   cases _Term (var "stripped")
-    (Just (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "record") (ShowCore.term @@ var "term")) (var "cx"))) [
+    (Just (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "record") (ShowCore.term @@ var "term")))) [
     _Term_record>>: "record" ~> var "decode" @@
       (Maps.fromList (Lists.map
         ("field" ~> pair (Core.fieldName (var "field")) (Core.fieldTerm (var "field")))
@@ -292,7 +289,7 @@ matchUnion = define "matchUnion" $
   "stripped" <~ Strip.deannotateAndDetypeTerm @@ var "term" $
   "mapping" <~ Maps.fromList (var "pairs") $
   cases _Term (var "stripped")
-    (Just (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (Strings.cat2 (string "injection for type ") (Core.unName (var "tname"))) (ShowCore.term @@ var "stripped")) (var "cx"))) [
+    (Just (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (Strings.cat2 (string "injection for type ") (Core.unName (var "tname"))) (ShowCore.term @@ var "stripped")))) [
     _Term_variable>>: "name" ~>
       "el" <<~ requireBinding @@ var "graph" @@ var "name" $
       matchUnion @@ var "graph" @@ var "tname" @@ var "pairs" @@ (Core.bindingTerm (var "el")),
@@ -301,12 +298,12 @@ matchUnion = define "matchUnion" $
         "fname" <~ Core.fieldName (Core.injectionField (var "injection")) $
         "val" <~ Core.fieldTerm (Core.injectionField (var "injection")) $
         Maybes.maybe
-          (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname")) (var "cx"))
+          (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname")))
           ("f" ~> var "f" @@ var "val")
           (Maps.lookup (var "fname") (var "mapping"))) $
       Logic.ifElse (Core.equalName_ (Core.injectionTypeName (var "injection")) (var "tname"))
         (var "exp")
-        (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (Strings.cat2 (string "injection for type ") (Core.unName (var "tname"))) (ShowCore.term @@ var "term")) (var "cx"))]
+        (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (Strings.cat2 (string "injection for type ") (Core.unName (var "tname"))) (ShowCore.term @@ var "term")))]
 
 matchUnitField :: TTermDefinition (Name -> y -> (Name, x -> Either Error y))
 matchUnitField = define "matchUnitField" $
@@ -328,7 +325,7 @@ requireBinding = define "requireBinding" $
     (Strings.intercalate (string ", ") (var "ellipsis" @@ (Lists.map (reify Core.unName) (Maps.keys (Graph.graphBoundTerms (var "graph")))))) ++
     (string "}")) $
   Maybes.maybe
-    (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorOther $ Error.otherResolutionError (var "errMsg")) (var "cx"))
+    (left (Error.errorResolution $ Error.resolutionErrorOther $ Error.otherResolutionError (var "errMsg")))
     (reify right)
     (lookupBinding @@ var "graph" @@ var "name")
 
@@ -337,7 +334,7 @@ requirePrimitive = define "requirePrimitive" $
   doc "Look up a primitive in a graph by name, failing if it is not registered" $
   "graph" ~> "name" ~>
   Maybes.maybe
-    (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoSuchPrimitive $ Error.noSuchPrimitiveError (var "name")) (var "cx"))
+    (left (Error.errorResolution $ Error.resolutionErrorNoSuchPrimitive $ Error.noSuchPrimitiveError (var "name")))
     (reify right)
     (lookupPrimitive @@ var "graph" @@ var "name")
 
@@ -349,7 +346,7 @@ requirePrimitiveType = define "requirePrimitiveType" $
   "mts" <~ Maybes.map ("_p" ~> Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "_p")))
     (Maps.lookup (var "name") (Graph.graphPrimitives $ var "tx")) $
   optCases (var "mts")
-    (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoSuchPrimitive $ Error.noSuchPrimitiveError (var "name")) (var "cx"))
+    (left (Error.errorResolution $ Error.resolutionErrorNoSuchPrimitive $ Error.noSuchPrimitiveError (var "name")))
     ("ts" ~> right $ var "ts")
 
 requireTerm :: TTermDefinition (Graph -> Name -> Either Error Term)
@@ -357,7 +354,7 @@ requireTerm = define "requireTerm" $
   doc "Resolve a name to a term in the graph, following variable references, and fail if the name is not bound" $
   "graph" ~> "name" ~>
   Maybes.maybe
-    (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "name")) (var "cx"))
+    (left (Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "name")))
     (reify right)
     (resolveTerm @@ var "graph" @@ var "name")
 

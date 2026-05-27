@@ -14,7 +14,6 @@ import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
@@ -127,15 +126,15 @@ module_ = Module {
 
 
 -- | err cx msg = Left (ErrorOther (OtherError msg))
-err :: TTerm Context -> TTerm String -> TTerm (Either Error a)
-err cx msg = Ctx.failInContext (Error.errorOther $ Error.otherError msg) cx
+err :: TTerm InferenceContext -> TTerm String -> TTerm (Either Error a)
+err _cx msg = left (Error.errorOther $ Error.otherError msg)
 
 -- | unexpectedE cx expected found = err cx $ "Expected " ++ expected ++ ", found: " ++ found
-unexpectedE :: TTerm Context -> TTerm String -> TTerm String -> TTerm (Either Error a)
+unexpectedE :: TTerm InferenceContext -> TTerm String -> TTerm String -> TTerm (Either Error a)
 unexpectedE cx expected found = err cx (Strings.cat2 (string "Expected ") (Strings.cat2 expected (Strings.cat2 (string ", found: ") found)))
 
 
-constructModule :: TTermDefinition (Context -> Graph -> M.Map ModuleName String -> Module -> [TypeDefinition] -> Either Error (M.Map FilePath PDL.SchemaFile))
+constructModule :: TTermDefinition (InferenceContext -> Graph -> M.Map ModuleName String -> Module -> [TypeDefinition] -> Either Error (M.Map FilePath PDL.SchemaFile))
 constructModule = def "constructModule" $
   doc "Construct PDL schema files from type definitions, with topological sorting and cycle detection" $
   "cx" ~> "g" ~> "aliases" ~> "mod" ~> "typeDefs" ~>
@@ -157,7 +156,7 @@ doc_ = def "doc" $
     PDL._Annotations_doc>>: var "s",
     PDL._Annotations_deprecated>>: false]
 
-encode :: TTermDefinition (Context -> Graph -> M.Map ModuleName String -> Type -> Either Error PDL.Schema)
+encode :: TTermDefinition (InferenceContext -> Graph -> M.Map ModuleName String -> Type -> Either Error PDL.Schema)
 encode = def "encode" $
       "cx" ~> "g" ~> "aliases" ~> "t" ~>
         cases _Type (Strip.deannotateType @@ var "t")
@@ -177,7 +176,7 @@ encode = def "encode" $
                  (lambda "_" $ err (var "cx") (Strings.cat2 (string "type resolved to an unsupported nested named schema: ") (ShowCore.type_ @@ var "t")))
                  (var "res"))]
 
-encodeEnumField :: TTermDefinition (Context -> Graph -> FieldType -> Either Error PDL.EnumField)
+encodeEnumField :: TTermDefinition (InferenceContext -> Graph -> FieldType -> Either Error PDL.EnumField)
 encodeEnumField = def "encodeEnumField" $
   "cx" ~> "g" ~> "ft" ~>
     "name" <~ Core.fieldTypeName (var "ft") $
@@ -187,7 +186,7 @@ encodeEnumField = def "encodeEnumField" $
       PDL._EnumField_name>>: wrap PDL._EnumFieldName (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionUpperSnake @@ Core.unName (var "name")),
       PDL._EnumField_annotations>>: var "anns"])
 
-encodePossiblyOptionalType :: TTermDefinition (Context -> Graph -> M.Map ModuleName String -> Type -> Either Error (PDL.Schema, Bool))
+encodePossiblyOptionalType :: TTermDefinition (InferenceContext -> Graph -> M.Map ModuleName String -> Type -> Either Error (PDL.Schema, Bool))
 encodePossiblyOptionalType = def "encodePossiblyOptionalType" $
   "cx" ~> "g" ~> "aliases" ~> "typ" ~>
     cases _Type (Strip.deannotateType @@ var "typ") Nothing [
@@ -230,7 +229,7 @@ encodePossiblyOptionalType = def "encodePossiblyOptionalType" $
       _Type_annotated>>: lambda "at" $
         encodePossiblyOptionalType @@ var "cx" @@ var "g" @@ var "aliases" @@ Core.annotatedTypeBody (var "at")]
 
-encodeRecordField :: TTermDefinition (Context -> Graph -> M.Map ModuleName String -> FieldType -> Either Error PDL.RecordField)
+encodeRecordField :: TTermDefinition (InferenceContext -> Graph -> M.Map ModuleName String -> FieldType -> Either Error PDL.RecordField)
 encodeRecordField = def "encodeRecordField" $
   "cx" ~> "g" ~> "aliases" ~> "ft" ~>
     "name" <~ Core.fieldTypeName (var "ft") $
@@ -246,7 +245,7 @@ encodeRecordField = def "encodeRecordField" $
       PDL._RecordField_default>>: nothing,
       PDL._RecordField_annotations>>: var "anns"])
 
-encodeType_ :: TTermDefinition (Context -> Graph -> M.Map ModuleName String -> Type -> Either Error (Either PDL.Schema PDL.NamedSchemaType))
+encodeType_ :: TTermDefinition (InferenceContext -> Graph -> M.Map ModuleName String -> Type -> Either Error (Either PDL.Schema PDL.NamedSchemaType))
 encodeType_ = def "encodeType" $
   doc "Encode a Hydra type as either a PDL Schema (Left) or a PDL NamedSchemaType (Right)" $
   "cx" ~> "g" ~> "aliases" ~> "typ" ~>
@@ -342,7 +341,7 @@ encodeType_ = def "encodeType" $
           ("members" <<~ (Eithers.mapList (encodeUnionField @@ var "cx" @@ var "g" @@ var "aliases") (var "rt")) $
            right (left (inject PDL._Schema PDL._Schema_union (wrap PDL._UnionSchema (var "members")))))]
 
-encodeUnionField :: TTermDefinition (Context -> Graph -> M.Map ModuleName String -> FieldType -> Either Error PDL.UnionMember)
+encodeUnionField :: TTermDefinition (InferenceContext -> Graph -> M.Map ModuleName String -> FieldType -> Either Error PDL.UnionMember)
 encodeUnionField = def "encodeUnionField" $
   "cx" ~> "g" ~> "aliases" ~> "ft" ~>
     "name" <~ Core.fieldTypeName (var "ft") $
@@ -359,13 +358,13 @@ encodeUnionField = def "encodeUnionField" $
       PDL._UnionMember_value>>: var "schema",
       PDL._UnionMember_annotations>>: var "anns"])
 
-getAnns :: TTermDefinition (Context -> Graph -> Type -> Either Error PDL.Annotations)
+getAnns :: TTermDefinition (InferenceContext -> Graph -> Type -> Either Error PDL.Annotations)
 getAnns = def "getAnns" $
   "cx" ~> "g" ~> "typ" ~>
     "r" <<~ (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ") $
     right (doc_ @@ var "r")
 
-importAliasesForModule :: TTermDefinition (Context -> Graph -> Module -> Either Error (M.Map ModuleName String))
+importAliasesForModule :: TTermDefinition (InferenceContext -> Graph -> Module -> Either Error (M.Map ModuleName String))
 importAliasesForModule = def "importAliasesForModule" $
   doc "Compute import aliases for a module's dependencies" $
   "cx" ~> "g" ~> "mod" ~>
@@ -374,7 +373,7 @@ importAliasesForModule = def "importAliasesForModule" $
       (lambda "ns_" $ pair (var "ns_") (slashesToDots @@ (unwrap _ModuleName @@ var "ns_")))
       (Sets.toList (var "nss"))))
 
-moduleToPdl :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
+moduleToPdl :: TTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
 moduleToPdl = def "moduleToPdl" $
   doc "Convert a Hydra module to a map of file paths to PDL schema strings" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
@@ -386,7 +385,7 @@ moduleToPdl = def "moduleToPdl" $
           (Serialization.printExpr @@ (Serialization.parenthesize @@ (PegasusSerdeSource.schemaFileToExpr @@ Pairs.second (var "pair")))))
       (Maps.toList (var "files"))))
 
-moduleToPegasusSchemas :: TTermDefinition (Context -> Graph -> Module -> [Definition] -> Either Error (M.Map FilePath PDL.SchemaFile))
+moduleToPegasusSchemas :: TTermDefinition (InferenceContext -> Graph -> Module -> [Definition] -> Either Error (M.Map FilePath PDL.SchemaFile))
 moduleToPegasusSchemas = def "moduleToPegasusSchemas" $
   doc "Convert a Hydra module and its definitions to PDL schema files" $
   "cx" ~> "g" ~> "mod" ~> "defs" ~>
@@ -448,7 +447,7 @@ toPair = def "toPair" $
       PDL._SchemaFile_imports>>: var "imports",
       PDL._SchemaFile_schemas>>: list [var "schema"]])
 
-typeToSchema :: TTermDefinition (Context -> Graph -> M.Map ModuleName String -> Module -> TypeDefinition -> Either Error (PDL.NamedSchema, [PDL.QualifiedName]))
+typeToSchema :: TTermDefinition (InferenceContext -> Graph -> M.Map ModuleName String -> Module -> TypeDefinition -> Either Error (PDL.NamedSchema, [PDL.QualifiedName]))
 typeToSchema = def "typeToSchema" $
   "cx" ~> "g" ~> "aliases" ~> "mod" ~> "typeDef" ~>
     "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "typeDef")) $

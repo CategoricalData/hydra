@@ -73,7 +73,7 @@ testGraph = define "testGraph" $
 
 -- | The test context. Emits a reference to the hand-written
 -- Hydra.Test.TestEnv.testContext.
-testContext :: TTermDefinition Context
+testContext :: TTermDefinition InferenceContext
 testContext = define "testContext" $ asTerm TestEnv.testContext
 
 testTypes :: TTermDefinition (M.Map Name Type)

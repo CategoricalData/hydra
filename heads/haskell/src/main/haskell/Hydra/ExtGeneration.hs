@@ -204,7 +204,7 @@ coqLibPrimitiveNames = Set.fromList [
 -- | Wrap moduleToLisp for a specific dialect
 moduleToLispDialect
   :: LispSyntax.Dialect -> String
-  -> Module -> [Definition] -> Context -> Graph
+  -> Module -> [Definition] -> InferenceContext -> Graph
   -> Either Error (M.Map FilePath String)
 moduleToLispDialect dialect ext mod defs cx g =
   case moduleToLisp dialect mod defs cx g of
