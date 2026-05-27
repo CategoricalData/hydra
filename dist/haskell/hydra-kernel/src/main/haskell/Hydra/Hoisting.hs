@@ -462,6 +462,8 @@ updateHoistState accessor state =
         Paths.SubtermStepAnnotatedBody -> (True, usedApp)
         Paths.SubtermStepLetBody -> (True, usedApp)
         Paths.SubtermStepLetBinding _ -> (True, usedApp)
+        Paths.SubtermStepTypeApplicationTerm -> (True, usedApp)
+        Paths.SubtermStepTypeLambdaBody -> (True, usedApp)
         Paths.SubtermStepLambdaBody -> Logic.ifElse usedApp (False, True) (True, False)
         Paths.SubtermStepUnionCasesBranch _ -> Logic.ifElse usedApp (False, True) (True, False)
         Paths.SubtermStepUnionCasesDefault -> Logic.ifElse usedApp (False, True) (True, False)
