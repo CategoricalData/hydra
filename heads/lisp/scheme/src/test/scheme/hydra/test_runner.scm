@@ -308,7 +308,7 @@
       *test-graph*)
 
     (define (empty-context)
-      (make-hydra_context_context '() '() hydra_lib_maps_empty))
+      (make-hydra_typing_inference_context 0 '()))
 
     ;; Build an empty graph with standard primitives (for hoisting tests)
     (define (empty-graph)

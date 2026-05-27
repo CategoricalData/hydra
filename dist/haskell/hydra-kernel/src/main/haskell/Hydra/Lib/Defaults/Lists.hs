@@ -2,7 +2,6 @@
 -- | Default term-level implementations of List functions for the Hydra interpreter.
 
 module Hydra.Lib.Defaults.Lists where
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
@@ -12,6 +11,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Reduction as Reduction
+import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Interpreter-friendly applicative apply for List terms.
@@ -86,7 +86,7 @@ find cx g predTerm listTerm =
           Core.applicationArgument = predTerm})),
         Core.applicationArgument = listTerm}))}))
 -- | Interpreter-friendly left fold for List terms.
-foldl :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
+foldl :: Typing.InferenceContext -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 foldl cx g funTerm initTerm listTerm =
     Eithers.bind (ExtractCore.list g listTerm) (\elements -> Lists.foldl (\acc -> \el -> Eithers.bind acc (\reducedAcc -> Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -94,7 +94,7 @@ foldl cx g funTerm initTerm listTerm =
         Core.applicationArgument = reducedAcc})),
       Core.applicationArgument = el})))) (Right initTerm) elements)
 -- | Interpreter-friendly right fold for List terms.
-foldr :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
+foldr :: Typing.InferenceContext -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 foldr cx g funTerm initTerm listTerm =
     Eithers.bind (ExtractCore.list g listTerm) (\elements -> Lists.foldr (\el -> \acc -> Eithers.bind acc (\reducedAcc -> Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {

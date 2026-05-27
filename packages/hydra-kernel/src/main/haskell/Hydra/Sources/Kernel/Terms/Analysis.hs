@@ -58,7 +58,6 @@ import qualified Hydra.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
@@ -128,7 +127,7 @@ addNamesToNamespaces = define "addNamesToNamespaces" $
     (Maps.fromList $ Lists.map (var "toPair") $ Sets.toList $ var "nss")
 
 analyzeFunctionTerm :: TTermDefinition (
-  Context ->
+  InferenceContext ->
   (env -> Graph) ->
   (Graph -> env -> env) ->
   env ->
@@ -142,7 +141,7 @@ analyzeFunctionTerm = define "analyzeFunctionTerm" $
     @@ var "getTC" @@ var "setTC" @@ var "env" @@ var "term"
 
 analyzeFunctionTermWith :: TTermDefinition (
-  Context ->
+  InferenceContext ->
   (Graph -> Binding -> Maybe Term) ->
   (env -> Graph) ->
   (Graph -> env -> env) ->
@@ -162,7 +161,7 @@ analyzeFunctionTermWith = define "analyzeFunctionTermWith" $
     @@ var "term"
 
 analyzeFunctionTermWithFinish :: TTermDefinition (
-  Context ->
+  InferenceContext ->
   (env -> Graph) ->
   env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
   Either Error (FunctionStructure env))
@@ -186,7 +185,7 @@ analyzeFunctionTermWithFinish = define "analyzeFunctionTermWithFinish" $
     _FunctionStructure_environment>>: var "fEnv"]
 
 analyzeFunctionTermWithGather :: TTermDefinition (
-  Context ->
+  InferenceContext ->
   (Graph -> Binding -> Maybe Term) ->
   (env -> Graph) ->
   (Graph -> env -> env) ->
@@ -264,7 +263,7 @@ definitionDependencyNamespaces = define "definitionDependencyNamespaces" $
   "allNames" <~ Sets.unions (Lists.map (var "defNames") (var "defs")) $
   Sets.fromList (Maybes.cat (Lists.map (Names.namespaceOf) (Sets.toList (var "allNames"))))
 
-dependencyNamespaces :: TTermDefinition (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Either Error (S.Set ModuleName))
+dependencyNamespaces :: TTermDefinition (InferenceContext -> Graph -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Either Error (S.Set ModuleName))
 dependencyNamespaces = define "dependencyNamespaces" $
   doc "Find dependency namespaces in all of a set of terms (Either version)" $
   "cx" ~> "graph" ~> "binds" ~> "withPrims" ~> "withNoms" ~> "withSchema" ~> "els" ~>
@@ -499,7 +498,7 @@ moduleContainsDecimalLiterals = define "moduleContainsDecimalLiterals" $
     false
     (var "defTerms")
 
-moduleDependencyNamespaces :: TTermDefinition (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> Module -> Either Error (S.Set ModuleName))
+moduleDependencyNamespaces :: TTermDefinition (InferenceContext -> Graph -> Bool -> Bool -> Bool -> Bool -> Module -> Either Error (S.Set ModuleName))
 moduleDependencyNamespaces = define "moduleDependencyNamespaces" $
   doc "Find dependency namespaces in all elements of a module, excluding the module's own namespace (Either version)" $
   "cx" ~> "graph" ~> "binds" ~> "withPrims" ~> "withNoms" ~> "withSchema" ~> "mod" ~>

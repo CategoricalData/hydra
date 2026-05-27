@@ -2,7 +2,6 @@
 -- | A module defining the graph used in the test suite.
 
 module Hydra.Test.TestGraph where
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Maps as Maps
@@ -10,10 +9,11 @@ import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Test.TestEnv as TestEnv
 import qualified Hydra.Test.TestTerms as TestTerms
 import qualified Hydra.Test.TestTypes as TestTypes
+import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-testContext :: Context.Context
+testContext :: Typing.InferenceContext
 testContext = TestEnv.testContext
 testGraph :: Graph.Graph
 testGraph = TestEnv.testGraph testTypes testTerms

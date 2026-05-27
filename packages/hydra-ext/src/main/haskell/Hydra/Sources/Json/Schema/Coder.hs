@@ -132,7 +132,7 @@ module_ = Module {
       toDefinition typeToKeywordSchemaPair]
 
 
-constructModule :: TTermDefinition (Context -> Graph -> Module -> [TypeDefinition] -> Either Error (M.Map FilePath JS.Document))
+constructModule :: TTermDefinition (InferenceContext -> Graph -> Module -> [TypeDefinition] -> Either Error (M.Map FilePath JS.Document))
 constructModule = define "constructModule" $
   doc "Construct JSON Schema documents from type definitions" $
   lambda "cx" $ lambda "g" $ lambda "mod" $ lambda "typeDefs" $ lets [
@@ -164,7 +164,7 @@ eitherBranch = define "eitherBranch" $
         (inject JS._ObjectRestriction JS._ObjectRestriction_additionalProperties
           (inject JS._AdditionalItems JS._AdditionalItems_any false))])
 
-encodeField :: TTermDefinition (Context -> Graph -> FieldType -> Either Error (JS.Keyword, JS.Schema))
+encodeField :: TTermDefinition (InferenceContext -> Graph -> FieldType -> Either Error (JS.Keyword, JS.Schema))
 encodeField = define "encodeField" $
   doc "Encode a field type as a JSON Schema keyword-schema pair" $
   lambda "cx" $ lambda "g" $ lambda "ft" $ lets [
@@ -180,7 +180,7 @@ encodeName = define "encodeName" $
   lambda "name" $
     Formatting.nonAlnumToUnderscores @@ Core.unName (var "name")
 
-encodeNamedType :: TTermDefinition (Context -> Graph -> Name -> Type -> Either Error [JS.Restriction])
+encodeNamedType :: TTermDefinition (InferenceContext -> Graph -> Name -> Type -> Either Error [JS.Restriction])
 encodeNamedType = define "encodeNamedType" $
   doc "Encode a named type as a list of JSON Schema restrictions with a title" $
   lambda "cx" $ lambda "g" $ lambda "name" $ lambda "typ" $
@@ -190,7 +190,7 @@ encodeNamedType = define "encodeNamedType" $
         var "res"])
       (typeToExpr @@ var "cx" @@ var "g" @@ false @@ (Strip.deannotateType @@ var "typ"))
 
-encodeRecordOrUnion :: TTermDefinition (Context -> Graph -> Bool -> Bool -> [FieldType] -> Either Error [JS.Restriction])
+encodeRecordOrUnion :: TTermDefinition (InferenceContext -> Graph -> Bool -> Bool -> [FieldType] -> Either Error [JS.Restriction])
 encodeRecordOrUnion = define "encodeRecordOrUnion" $
   doc "Encode a record or union as a list of JSON Schema object restrictions; isUnion adds min/maxProperties=1" $
   lambda "cx" $ lambda "g" $ lambda "optional" $ lambda "isUnion" $ lambda "fields" $
@@ -226,7 +226,7 @@ encodeRecordOrUnion = define "encodeRecordOrUnion" $
           var "addPropsRes",
           var "cardRes"])))
 
-encodeUnion :: TTermDefinition (Context -> Graph -> Bool -> [FieldType] -> Either Error [JS.Restriction])
+encodeUnion :: TTermDefinition (InferenceContext -> Graph -> Bool -> [FieldType] -> Either Error [JS.Restriction])
 encodeUnion = define "encodeUnion" $
   doc "Encode a union type, splitting unit-typed (simple) variants into a string-enum branch" $
   lambda "cx" $ lambda "g" $ lambda "optional" $ lambda "fields" $ lets [
@@ -280,7 +280,7 @@ literalTypeName = define "literalTypeName" $
       _LiteralType_integer>>: constant (inject JS._TypeName JS._TypeName_integer unit),
       _LiteralType_string>>: constant (inject JS._TypeName JS._TypeName_string unit)]
 
-moduleToJsonSchema :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
+moduleToJsonSchema :: TTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
 moduleToJsonSchema = define "moduleToJsonSchema" $
   doc "Convert a Hydra module to a map from file path to JSON Schema document string" $
   lambda "mod" $ lambda "defs" $ lambda "cx" $ lambda "g" $ lets [
@@ -344,7 +344,7 @@ transitiveTypeDeps = define "transitiveTypeDeps" $
             (Maps.lookup (var "n") (var "typeMap")))] $
     Lists.foldl (var "step") (var "visited") (Sets.toList (var "directDeps"))
 
-typeDefToDocument :: TTermDefinition (Context -> Graph -> M.Map Name Type -> Name -> Type -> Either Error (FilePath, JS.Document))
+typeDefToDocument :: TTermDefinition (InferenceContext -> Graph -> M.Map Name Type -> Name -> Type -> Either Error (FilePath, JS.Document))
 typeDefToDocument = define "typeDefToDocument" $
   doc "Build a JSON Schema document for a single named type, with $defs covering its transitive dependencies and short-name substitution applied" $
   lambda "cx" $ lambda "g" $ lambda "typeMap" $ lambda "rootName" $ lambda "rootType" $ lets [
@@ -370,7 +370,7 @@ typeDefToDocument = define "typeDefToDocument" $
           JS._Document_definitions>>: just (Maps.fromList (var "schemas")),
           JS._Document_root>>: wrap JS._Schema (list [referenceRestriction @@ var "subRoot"])])))
 
-typeToExpr :: TTermDefinition (Context -> Graph -> Bool -> Type -> Either Error [JS.Restriction])
+typeToExpr :: TTermDefinition (InferenceContext -> Graph -> Bool -> Type -> Either Error [JS.Restriction])
 typeToExpr = define "typeToExpr" $
   doc "Encode a Hydra type as a list of JSON Schema restrictions" $
   lambda "cx" $ lambda "g" $ lambda "optional" $ lambda "typ" $
@@ -463,7 +463,7 @@ typeToExpr = define "typeToExpr" $
       _Type_wrap>>: ("inner" ~>
         asTerm typeToExpr @@ var "cx" @@ var "g" @@ var "optional" @@ var "inner")]
 
-typeToKeywordSchemaPair :: TTermDefinition (Context -> Graph -> Name -> Type -> Either Error (JS.Keyword, JS.Schema))
+typeToKeywordSchemaPair :: TTermDefinition (InferenceContext -> Graph -> Name -> Type -> Either Error (JS.Keyword, JS.Schema))
 typeToKeywordSchemaPair = define "typeToKeywordSchemaPair" $
   doc "Build a (Keyword, Schema) pair for a named type, used as a $defs entry" $
   lambda "cx" $ lambda "g" $ lambda "name" $ lambda "typ" $

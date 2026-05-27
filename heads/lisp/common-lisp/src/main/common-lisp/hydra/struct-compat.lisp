@@ -249,23 +249,6 @@
 (setf (symbol-function 'copy-language_name) #'copy-hydra_coders_language_name)
 (setf (symbol-function 'language_name-p) #'hydra_coders_language_name-p)
 
-;; hydra_context_context -> hydra_context_context
-(defun make-hydra_context_context (&rest args)
-  (if (and args (keywordp (first args)))
-    (loop for (k v) on args by #'cddr collect (cons k v))
-    (mapcar #'cons '( :trace :messages :other) args)))
-(defun hydra_context_context-trace (rec) (cdr (assoc :trace rec)))
-(defun hydra_context_context-messages (rec) (cdr (assoc :messages rec)))
-(defun hydra_context_context-other (rec) (cdr (assoc :other rec)))
-(defun copy-hydra_context_context (x) (copy-alist x))
-(defun hydra_context_context-p (x) (listp x))
-(setf (symbol-function 'make-context) #'make-hydra_context_context)
-(setf (symbol-function 'context-trace) #'hydra_context_context-trace)
-(setf (symbol-function 'context-messages) #'hydra_context_context-messages)
-(setf (symbol-function 'context-other) #'hydra_context_context-other)
-(setf (symbol-function 'copy-context) #'copy-hydra_context_context)
-(setf (symbol-function 'context-p) #'hydra_context_context-p)
-
 ;; hydra_core_annotated_term -> hydra_core_annotated_term
 (defun make-hydra_core_annotated_term (&rest args)
   (if (and args (keywordp (first args)))
@@ -2607,6 +2590,21 @@
 (setf (symbol-function 'function_structure-environment) #'hydra_typing_function_structure-environment)
 (setf (symbol-function 'copy-function_structure) #'copy-hydra_typing_function_structure)
 (setf (symbol-function 'function_structure-p) #'hydra_typing_function_structure-p)
+
+;; hydra_typing_inference_context -> hydra_typing_inference_context
+(defun make-hydra_typing_inference_context (&rest args)
+  (if (and args (keywordp (first args)))
+    (loop for (k v) on args by #'cddr collect (cons k v))
+    (mapcar #'cons '( :fresh_type_variable_count :trace) args)))
+(defun hydra_typing_inference_context-fresh_type_variable_count (rec) (cdr (assoc :fresh_type_variable_count rec)))
+(defun hydra_typing_inference_context-trace (rec) (cdr (assoc :trace rec)))
+(defun copy-hydra_typing_inference_context (x) (copy-alist x))
+(defun hydra_typing_inference_context-p (x) (listp x))
+(setf (symbol-function 'make-inference_context) #'make-hydra_typing_inference_context)
+(setf (symbol-function 'inference_context-fresh_type_variable_count) #'hydra_typing_inference_context-fresh_type_variable_count)
+(setf (symbol-function 'inference_context-trace) #'hydra_typing_inference_context-trace)
+(setf (symbol-function 'copy-inference_context) #'copy-hydra_typing_inference_context)
+(setf (symbol-function 'inference_context-p) #'hydra_typing_inference_context-p)
 
 ;; hydra_typing_inference_result -> hydra_typing_inference_result
 (defun make-hydra_typing_inference_result (&rest args)

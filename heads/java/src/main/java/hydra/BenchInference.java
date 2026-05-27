@@ -1,6 +1,6 @@
 package hydra;
 
-import hydra.context.Context;
+import hydra.typing.InferenceContext;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.errors.Error_;
@@ -192,10 +192,7 @@ public class BenchInference {
 
     private static BenchResult timeInference(List<Module> universe, Module target, int n, String benchNs) {
         // Build a context — empty is fine for this synthetic workload.
-        Context cx = new Context(
-                Collections.emptyList(),
-                Collections.emptyList(),
-                Collections.emptyMap());
+        InferenceContext cx = new InferenceContext(0, new java.util.ArrayList<>());
         Graph bsGraph = Generation.bootstrapGraph();
 
         List<Module> universeWithTarget = new ArrayList<>(universe);

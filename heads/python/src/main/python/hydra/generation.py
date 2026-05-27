@@ -19,7 +19,7 @@ from hydra.codegen import (
     generate_source_files,
     namespace_to_path,
 )
-from hydra.context import Context
+from hydra.typing import InferenceContext
 from hydra.core import Binding
 from hydra.dsl.python import FrozenDict, Just, Left, Nothing, Right
 from hydra.graph import Graph
@@ -40,8 +40,8 @@ def bootstrap_schema_map():
     suitable for the JSON decoder.
 
     The bootstrap type map contains types from the kernel modules needed to
-    decode Module from JSON: hydra.context, hydra.core,
-    hydra.error, hydra.graph, hydra.module, and hydra.util.
+    decode Module from JSON: hydra.core, hydra.error,
+    hydra.graph, hydra.module, hydra.typing, and hydra.util.
     """
     from hydra.json.bootstrap import types_by_name
 
@@ -68,8 +68,8 @@ def bootstrap_graph():
 
 
 def empty_context():
-    """Create an empty Context."""
-    return Context(trace=(), messages=(), other=FrozenDict({}))
+    """Create an empty InferenceContext."""
+    return InferenceContext(fresh_type_variable_count=0, trace=())
 
 
 def unwrap_either(result):
@@ -535,7 +535,6 @@ def infer_and_write_by_package(
     """
     from hydra import codegen
     from hydra import sorting as Sorting
-    from hydra.context import Context
     from hydra.dsl.python import FrozenDict, Left, Right
 
     seed_ns = {m.name.value for m in seed_acc}
@@ -576,7 +575,7 @@ def infer_and_write_by_package(
     print(f"  Per-package inference: {len(ordered)} packages in dep order: "
           f"{' -> '.join(ordered)}", flush=True)
 
-    ctx = Context((), (), FrozenDict({}))
+    ctx = InferenceContext(fresh_type_variable_count=0, trace=())
     bs_graph = bootstrap_graph()
     acc = list(seed_acc)
     inferred_all = []

@@ -8,14 +8,14 @@ import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
 import hydra.graph.Graph;
-import hydra.context.Context;
+import hydra.typing.InferenceContext;
 import hydra.TestSuiteRunner;
 
 import java.util.Map;
 
 public class TestEnv {
     private static Graph cachedGraph;
-    private static Context cachedContext;
+    private static InferenceContext cachedContext;
 
     /**
      * Returns the test graph. The testTypes and testTerms arguments are
@@ -32,12 +32,9 @@ public class TestEnv {
         return cachedGraph;
     }
 
-    public static Context testContext() {
+    public static InferenceContext testContext() {
         if (cachedContext == null) {
-            cachedContext = new Context(
-                hydra.util.ConsList.empty(),
-                hydra.util.ConsList.empty(),
-                hydra.util.PersistentMap.empty());
+            cachedContext = new InferenceContext(0, new java.util.ArrayList<>());
         }
         return cachedContext;
     }

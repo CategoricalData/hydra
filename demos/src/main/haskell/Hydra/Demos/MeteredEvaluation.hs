@@ -46,7 +46,7 @@ demoMeteredEvaluation = do
       Right reduced -> putStrLn $ "result: " <> show reduced
   where
     graph = modulesToGraph [testModule] [testModule]
-    cx = emptyContext
+    cx = emptyInferenceContext
     result = do
       original <- bindingTerm <$> requireBinding graph (unqualifyName $ QualifiedName (Just testNs) "catStrings")
       reduceTerm cx graph False original

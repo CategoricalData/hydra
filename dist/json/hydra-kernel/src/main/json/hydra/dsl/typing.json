@@ -2668,6 +2668,475 @@
                 "parameter": "original"}}}}}},
     {
       "term": {
+        "name": "hydra.dsl.typing.inferenceContext",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {
+                              "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}],
+                      "body": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
+        "term": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.InferenceContext"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "wrap": {
+                        "body": {
+                          "inject": {
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.typing.InferenceContext"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {"wrap": {"body": {"literal": {"string": "freshTypeVariableCount"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "freshTypeVariableCount"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "trace"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "trace"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}}]}}],
+                                  "typeName": "hydra.core.Record"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "typeName": "hydra.phantoms.TTerm"}},
+                    "domain": {
+                      "application": {
+                        "argument": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "key": "description",
+                                "value": {
+                                  "literal": {
+                                    "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}],
+                            "body": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "trace"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}],
+                        "body": {"literal": {"integer": {"int32": {}}}}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "freshTypeVariableCount"}}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.typing.inferenceContextFreshTypeVariableCount",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}],
+                    "body": {"literal": {"integer": {"int32": {}}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL accessor for the freshTypeVariableCount field of hydra.typing.InferenceContext"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "field": {
+                                        "name": "project",
+                                        "term": {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "typeName",
+                                                "term": {"wrap": {"body": {"literal": {"string": "hydra.typing.InferenceContext"}}, "typeName": "hydra.core.Name"}}},
+                                              {
+                                                "name": "fieldName",
+                                                "term": {"wrap": {"body": {"literal": {"string": "freshTypeVariableCount"}}, "typeName": "hydra.core.Name"}}}],
+                                            "typeName": "hydra.core.Projection"}}},
+                                      "typeName": "hydra.core.Term"}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                              "typeName": "hydra.core.Application"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "x"}}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.typing.inferenceContextTrace",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {
+                          "literal": {
+                            "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}],
+                    "body": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL accessor for the trace field of hydra.typing.InferenceContext"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "field": {
+                                        "name": "project",
+                                        "term": {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "typeName",
+                                                "term": {"wrap": {"body": {"literal": {"string": "hydra.typing.InferenceContext"}}, "typeName": "hydra.core.Name"}}},
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "trace"}}, "typeName": "hydra.core.Name"}}}],
+                                            "typeName": "hydra.core.Projection"}}},
+                                      "typeName": "hydra.core.Term"}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                              "typeName": "hydra.core.Application"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "x"}}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.typing.inferenceContextWithFreshTypeVariableCount",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL updater for the freshTypeVariableCount field of hydra.typing.InferenceContext"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "wrap": {
+                        "body": {
+                          "inject": {
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.typing.InferenceContext"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {"wrap": {"body": {"literal": {"string": "freshTypeVariableCount"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "trace"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.typing.InferenceContext"}}, "typeName": "hydra.core.Name"}}},
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "trace"}}, "typeName": "hydra.core.Name"}}}],
+                                                                          "typeName": "hydra.core.Projection"}}},
+                                                                    "typeName": "hydra.core.Term"}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                            "typeName": "hydra.core.Application"}}},
+                                                      "typeName": "hydra.core.Term"}}}],
+                                              "typeName": "hydra.core.Field"}}]}}],
+                                  "typeName": "hydra.core.Record"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "typeName": "hydra.phantoms.TTerm"}},
+                    "domain": {
+                      "application": {
+                        "argument": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "key": "description",
+                                "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}],
+                            "body": {"literal": {"integer": {"int32": {}}}}}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}},
+                "domain": {
+                  "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "original"}}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.typing.inferenceContextWithTrace",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {
+                              "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}],
+                      "body": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+          "typeParameters": []},
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL updater for the trace field of hydra.typing.InferenceContext"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "wrap": {
+                        "body": {
+                          "inject": {
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.typing.InferenceContext"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {"wrap": {"body": {"literal": {"string": "freshTypeVariableCount"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.typing.InferenceContext"}}, "typeName": "hydra.core.Name"}}},
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "freshTypeVariableCount"}}, "typeName": "hydra.core.Name"}}}],
+                                                                          "typeName": "hydra.core.Projection"}}},
+                                                                    "typeName": "hydra.core.Term"}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                            "typeName": "hydra.core.Application"}}},
+                                                      "typeName": "hydra.core.Term"}}}],
+                                              "typeName": "hydra.core.Field"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "trace"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}}]}}],
+                                  "typeName": "hydra.core.Record"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "typeName": "hydra.phantoms.TTerm"}},
+                    "domain": {
+                      "application": {
+                        "argument": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "key": "description",
+                                "value": {
+                                  "literal": {
+                                    "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}],
+                            "body": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}},
+                "domain": {
+                  "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "original"}}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.typing.inferenceResult",
         "signature": {
           "parameters": [
@@ -2724,8 +3193,8 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "The updated context after inference (carries fresh variable state)"}}}],
-                      "body": {"variable": "hydra.context.Context"}}},
+                          "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}],
+                      "body": {"variable": "hydra.typing.InferenceContext"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}],
           "result": {
             "type": {
@@ -2810,8 +3279,8 @@
                                         "annotation": [
                                           {
                                             "key": "description",
-                                            "value": {"literal": {"string": "The updated context after inference (carries fresh variable state)"}}}],
-                                        "body": {"variable": "hydra.context.Context"}}},
+                                            "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}],
+                                        "body": {"variable": "hydra.typing.InferenceContext"}}},
                                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                                 "parameter": "context"}},
                             "domain": {
@@ -3112,8 +3581,8 @@
                     "annotation": [
                       {
                         "key": "description",
-                        "value": {"literal": {"string": "The updated context after inference (carries fresh variable state)"}}}],
-                    "body": {"variable": "hydra.context.Context"}}},
+                        "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}],
+                    "body": {"variable": "hydra.typing.InferenceContext"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}}},
           "typeParameters": []},
         "term": {
@@ -4021,8 +4490,8 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "The updated context after inference (carries fresh variable state)"}}}],
-                      "body": {"variable": "hydra.context.Context"}}},
+                          "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}],
+                      "body": {"variable": "hydra.typing.InferenceContext"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}],
           "result": {
             "type": {
@@ -4210,8 +4679,8 @@
                             "annotation": [
                               {
                                 "key": "description",
-                                "value": {"literal": {"string": "The updated context after inference (carries fresh variable state)"}}}],
-                            "body": {"variable": "hydra.context.Context"}}},
+                                "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}],
+                            "body": {"variable": "hydra.typing.InferenceContext"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -7916,8 +8385,8 @@
     {"module": "hydra.typing"},
     {"module": "hydra.phantoms"},
     {"module": "hydra.core"},
-    {"module": "hydra.context"},
+    {"module": "hydra.paths"},
     {"module": "hydra.dsl.core"},
-    {"module": "hydra.dsl.context"}],
+    {"module": "hydra.dsl.paths"}],
   "description": "DSL functions for hydra.typing",
   "name": "hydra.dsl.typing"}

@@ -41,9 +41,9 @@ Types:
 
 Terms:
   ...
-  hydra.inference.freshVariableType : ((hydra.context.Context → (hydra.core.Type, hydra.context.Context)))
+  hydra.inference.freshVariableType : ((hydra.typing.InferenceContext → (hydra.core.Type, hydra.typing.InferenceContext)))
   hydra.inference.generalize : ((hydra.graph.Graph → hydra.core.Type → hydra.core.TypeScheme))
-  hydra.inference.inferGraphTypes : ((hydra.context.Context → list<hydra.core.Binding> → hydra.graph.Graph → either<hydra.errors.Error, ((hydra.graph.Graph, list<hydra.core.Binding>), hydra.context.Context)>))
+  hydra.inference.inferGraphTypes : ((hydra.typing.InferenceContext → list<hydra.core.Binding> → hydra.graph.Graph → either<hydra.errors.Error, ((hydra.graph.Graph, list<hydra.core.Binding>), hydra.typing.InferenceContext)>))
   ...
 ```
 

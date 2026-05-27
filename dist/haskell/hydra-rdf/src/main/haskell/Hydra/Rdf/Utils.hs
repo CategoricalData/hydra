@@ -2,16 +2,14 @@
 -- | Utility functions for working with RDF graphs and descriptions
 
 module Hydra.Rdf.Utils where
-import qualified Hydra.Annotations as Annotations
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
+import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Names as Names
@@ -109,23 +107,16 @@ iri ns local = Syntax.Iri (Strings.cat2 ns local)
 -- | Construct a key IRI from a local name
 keyIri :: String -> Syntax.Iri
 keyIri local = iri "urn:key:" local
--- | The key used for tracking blank node counters
-key_rdfBlankNodeCounter :: Core.Name
-key_rdfBlankNodeCounter = Core.Name "rdfBlankNodeCounter"
 -- | Merge a list of RDF graphs into a single graph
 mergeGraphs :: [Syntax.Graph] -> Syntax.Graph
 mergeGraphs graphs = Syntax.Graph (Sets.unions (Lists.map Syntax.unGraph graphs))
 -- | Convert a Hydra name to an RDF IRI
 nameToIri :: Core.Name -> Syntax.Iri
 nameToIri name = Syntax.Iri (Strings.cat2 "urn:" (Core.unName name))
--- | Generate the next blank node and an updated context
-nextBlankNode :: Context.Context -> (Syntax.Resource, Context.Context)
-nextBlankNode cx =
-
-      let result = Annotations.nextCount key_rdfBlankNodeCounter cx
-          count = Pairs.first result
-          cx_ = Pairs.second result
-      in (Syntax.ResourceBnode (Syntax.BlankNode (Strings.cat2 "b" (Literals.showInt32 count))), cx_)
+-- | Generate the next blank node and an incremented counter
+nextBlankNode :: Int -> (Syntax.Resource, Int)
+nextBlankNode counter =
+    (Syntax.ResourceBnode (Syntax.BlankNode (Strings.cat2 "b" (Literals.showInt32 counter))), (Math.add counter 1))
 -- | Construct a property IRI from a record name and field name
 propertyIri :: Core.Name -> Core.Name -> Syntax.Iri
 propertyIri rname fname =

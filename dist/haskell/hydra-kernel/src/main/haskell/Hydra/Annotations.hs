@@ -3,7 +3,6 @@
 
 module Hydra.Annotations where
 import qualified Hydra.Constants as Constants
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
@@ -15,7 +14,6 @@ import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
@@ -37,42 +35,6 @@ commentsFromBinding cx g b = getTermDescription cx g (Core.bindingTerm b)
 -- | Extract comments/description from a FieldType
 commentsFromFieldType :: t0 -> Graph.Graph -> Core.FieldType -> Either Errors.Error (Maybe String)
 commentsFromFieldType cx g ft = getTypeDescription cx g (Core.fieldTypeType ft)
--- | Debug if the debug ID matches (Either version)
-debugIf :: Context.Context -> String -> String -> Either Errors.Error ()
-debugIf cx debugId message =
-    Eithers.bind (getDebugId cx) (\mid -> Logic.ifElse (Equality.equal mid (Just debugId)) (Left (Errors.ErrorOther (Errors.OtherError message))) (Right ()))
--- | Fail if the given flag is set (Either version)
-failOnFlag :: Context.Context -> Core.Name -> String -> Either Errors.Error ()
-failOnFlag cx flag msg =
-    Eithers.bind (hasFlag cx flag) (\val -> Logic.ifElse val (Left (Errors.ErrorOther (Errors.OtherError msg))) (Right ()))
--- | Get an attribute from a context (pure version)
-getAttr :: Core.Name -> Context.Context -> Maybe Core.Term
-getAttr key cx = Maps.lookup key (Context.contextOther cx)
--- | Get an attribute with a default value from context (pure version)
-getAttrWithDefault :: Core.Name -> Core.Term -> Context.Context -> Core.Term
-getAttrWithDefault key def cx = Maybes.fromMaybe def (getAttr key cx)
--- | Get a counter value from context (pure version)
-getCount :: Core.Name -> Context.Context -> Int
-getCount key cx =
-    Maybes.maybe 0 (\term -> case term of
-      Core.TermLiteral v0 -> case v0 of
-        Core.LiteralInteger v1 -> case v1 of
-          Core.IntegerValueInt32 v2 -> v2
-          _ -> 0
-        _ -> 0
-      _ -> 0) (Maps.lookup key (Context.contextOther cx))
--- | Get the debug ID from context (Either version)
-getDebugId :: Context.Context -> Either Errors.Error (Maybe String)
-getDebugId cx =
-    Maybes.maybe (Right Nothing) (\term -> Eithers.map Maybes.pure (ExtractCore.string (Graph.Graph {
-      Graph.graphBoundTerms = Maps.empty,
-      Graph.graphBoundTypes = Maps.empty,
-      Graph.graphClassConstraints = Maps.empty,
-      Graph.graphLambdaVariables = Sets.empty,
-      Graph.graphMetadata = Maps.empty,
-      Graph.graphPrimitives = Maps.empty,
-      Graph.graphSchemaTypes = Maps.empty,
-      Graph.graphTypeVariables = Sets.empty}) term)) (getAttr Constants.keyDebugId cx)
 -- | Get description from annotations map (Either version)
 getDescription :: t0 -> Graph.Graph -> M.Map Core.Name Core.Term -> Either Errors.Error (Maybe String)
 getDescription cx graph anns =
@@ -109,20 +71,6 @@ getTypeDescription cx graph typ = getDescription cx graph (typeAnnotationInterna
 -- | Check if annotations contain description
 hasDescription :: M.Map Core.Name t0 -> Bool
 hasDescription anns = Maybes.isJust (Maps.lookup Constants.keyDescription anns)
--- | Check if flag is set (Either version)
-hasFlag :: Context.Context -> Core.Name -> Either Errors.Error Bool
-hasFlag cx flag =
-
-      let term = getAttrWithDefault flag (Core.TermLiteral (Core.LiteralBoolean False)) cx
-      in (ExtractCore.boolean (Graph.Graph {
-        Graph.graphBoundTerms = Maps.empty,
-        Graph.graphBoundTypes = Maps.empty,
-        Graph.graphClassConstraints = Maps.empty,
-        Graph.graphLambdaVariables = Sets.empty,
-        Graph.graphMetadata = Maps.empty,
-        Graph.graphPrimitives = Maps.empty,
-        Graph.graphSchemaTypes = Maps.empty,
-        Graph.graphTypeVariables = Sets.empty}) term)
 -- | Check if type has description
 hasTypeDescription :: Core.Type -> Bool
 hasTypeDescription typ = hasDescription (typeAnnotationInternal typ)
@@ -136,12 +84,6 @@ isNativeType el =
         Core.typeSchemeVariables = [],
         Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
         Core.typeSchemeConstraints = Nothing})) (Logic.not isFlaggedAsFirstClassType)) (Core.bindingTypeScheme el))
--- | Return a zero-indexed counter for the given key and updated context (pure version)
-nextCount :: Core.Name -> Context.Context -> (Int, Context.Context)
-nextCount key cx =
-
-      let count = getCount key cx
-      in (count, (putCount key (Math.add count 1) cx))
 -- | Normalize term annotations
 normalizeTermAnnotations :: Core.Term -> Core.Term
 normalizeTermAnnotations term =
@@ -160,19 +102,6 @@ normalizeTypeAnnotations typ =
       in (Logic.ifElse (Maps.null anns) stripped (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = stripped,
         Core.annotatedTypeAnnotation = anns})))
--- | Set an attribute in a context
-putAttr :: Core.Name -> Core.Term -> Context.Context -> Context.Context
-putAttr key val cx =
-    Context.Context {
-      Context.contextTrace = (Context.contextTrace cx),
-      Context.contextMessages = (Context.contextMessages cx),
-      Context.contextOther = (Maps.insert key val (Context.contextOther cx))}
--- | Set counter value in context
-putCount :: Core.Name -> Int -> Context.Context -> Context.Context
-putCount key count cx = putAttr key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 count))) cx
--- | Reset counter to zero in context
-resetCount :: Core.Name -> Context.Context -> Context.Context
-resetCount key cx = putAttr key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))) cx
 -- | Set annotation in map
 setAnnotation :: Ord t0 => (t0 -> Maybe t1 -> M.Map t0 t1 -> M.Map t0 t1)
 setAnnotation key val m = Maps.alter (\_ -> val) key m
@@ -238,6 +167,3 @@ typeAnnotationInternal typ =
                 Core.TypeAnnotated v0 -> Just v0
                 _ -> Nothing
       in (aggregateAnnotations getAnn (\at -> Core.annotatedTypeBody at) (\at -> Core.annotatedTypeAnnotation at) typ)
--- | Execute different branches based on flag (Either version)
-whenFlag :: Context.Context -> Core.Name -> Either Errors.Error t0 -> Either Errors.Error t0 -> Either Errors.Error t0
-whenFlag cx flag ethen eelse = Eithers.bind (hasFlag cx flag) (\b -> Logic.ifElse b ethen eelse)

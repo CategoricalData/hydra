@@ -729,10 +729,10 @@
     {"module": "hydra.rewriting"},
     {"module": "hydra.coders"},
     {"module": "hydra.util"},
-    {"module": "hydra.decode.context"},
     {"module": "hydra.decode.errors"},
     {"module": "hydra.decode.graph"},
     {"module": "hydra.decode.variants"},
-    {"module": "hydra.decode.core"}],
+    {"module": "hydra.decode.core"},
+    {"module": "hydra.decode.typing"}],
   "description": "Term decoders for hydra.coders",
   "name": "hydra.decode.coders"}

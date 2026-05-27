@@ -210,11 +210,11 @@
                         "parameter": "y"}}}],
                 "typeName": "hydra.coders.TraversalOrder"}}}}}}],
   "dependencies": [
-    {"module": "hydra.encode.context"},
     {"module": "hydra.encode.errors"},
     {"module": "hydra.encode.graph"},
     {"module": "hydra.encode.variants"},
     {"module": "hydra.encode.core"},
+    {"module": "hydra.encode.typing"},
     {"module": "hydra.coders"}],
   "description": "Term encoders for hydra.coders",
   "name": "hydra.encode.coders"}

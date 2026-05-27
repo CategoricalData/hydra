@@ -15,7 +15,7 @@ import qualified Data.Scientific as Sci
 -- | Run type inference on a single term
 inferTerm :: Graph.Graph -> Core.Term -> Either String Core.Term
 inferTerm g term =
-    Eithers.bimap (\e -> Errors.error e) (\x -> Typing.inferenceResultTerm x) (Inference.inferInGraphContext Lexical.emptyContext g term)
+    Eithers.bimap (\e -> Errors.error e) (\x -> Typing.inferenceResultTerm x) (Inference.inferInGraphContext Lexical.emptyInferenceContext g term)
 -- | Run type inference on the terms in a test case
 inferTestCase :: t0 -> Testing.TestCaseWithMetadata -> Either t1 Testing.TestCaseWithMetadata
 inferTestCase g tcm =

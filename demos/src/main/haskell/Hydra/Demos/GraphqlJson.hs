@@ -20,7 +20,6 @@ import Hydra.Dsl.Bootstrap (bootstrapGraph)
 
 import qualified Hydra.Graphql.Coder as GraphqlCoder
 import qualified Hydra.Lexical as Lexical
-import qualified Hydra.Context as Context
 
 import qualified Data.Map as M
 import qualified System.Directory as SD
@@ -51,7 +50,7 @@ generateGraphqlSchema outputDir = do
   let allMods = kernelTypesModules
       schemaElements = concatMap moduleAsBindings allMods
       schemaGraph = Lexical.elementsToGraph bootstrapGraph M.empty schemaElements
-      cx = Context.Context [] [] M.empty
+      cx = Lexical.emptyInferenceContext
 
   -- For each schema module, hand the coder the type definitions directly.
   let results = do

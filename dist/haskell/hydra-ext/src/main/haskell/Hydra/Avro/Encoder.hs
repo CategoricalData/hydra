@@ -5,7 +5,6 @@ module Hydra.Avro.Encoder where
 import qualified Hydra.Avro.Environment as Environment
 import qualified Hydra.Avro.Schema as Schema
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
@@ -22,6 +21,7 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -381,8 +381,8 @@ nameNamespace name_ =
       in (Logic.ifElse (Equality.equal (Lists.length parts) 1) Nothing (Maybes.map (\ps -> Strings.intercalate "." ps) (Lists.maybeInit parts)))
 -- | Build a named type adapter (shared between record and union-as-record)
 namedTypeAdapter :: t0 -> Core.Type -> Maybe Core.Name -> M.Map Core.Name Core.Term -> [Core.FieldType] -> Environment.EncodeEnvironment -> ([Schema.Field] -> Schema.NamedType) -> (t0 -> Core.Name -> [(Core.Name, (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value))] -> (
-  (Context.Context -> Core.Term -> Either Errors.Error Model.Value),
-  (Context.Context -> Model.Value -> Either Errors.Error Core.Term))) -> Either Errors.Error (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value, Environment.EncodeEnvironment)
+  (Typing.InferenceContext -> Core.Term -> Either Errors.Error Model.Value),
+  (Typing.InferenceContext -> Model.Value -> Either Errors.Error Core.Term))) -> Either Errors.Error (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value, Environment.EncodeEnvironment)
 namedTypeAdapter cx typ mName annotations fieldTypes env0 mkNamedType mkCoder =
 
       let typeName = Maybes.fromMaybe (typeToName typ) mName
@@ -418,8 +418,8 @@ namedTypeAdapter cx typ mName annotations fieldTypes env0 mkNamedType mkCoder =
         in (Right (adapter_, env2)))) (\existingAd -> Right (existingAd, env0)) (Maps.lookup typeName (Environment.encodeEnvironmentEmitted env0)))
 -- | Build a record term coder from field adapters
 recordTermCoder :: t0 -> Core.Name -> [(Core.Name, (Coders.Adapter t1 t2 Core.Term Model.Value))] -> (
-  (Context.Context -> Core.Term -> Either Errors.Error Model.Value),
-  (Context.Context -> Model.Value -> Either Errors.Error Core.Term))
+  (Typing.InferenceContext -> Core.Term -> Either Errors.Error Model.Value),
+  (Typing.InferenceContext -> Model.Value -> Either Errors.Error Core.Term))
 recordTermCoder cx typeName fieldAdapters =
 
       let encode =

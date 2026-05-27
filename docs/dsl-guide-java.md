@@ -736,12 +736,12 @@ public abstract class Term implements Serializable, Comparable<Term> {
 ## Error handling
 
 Hydra computations use `Either<Error, A>` for error handling (the former Flow monad
-was removed in #245). A `Context` value is threaded alongside the graph and carries a
-trace stack and diagnostic messages.
+was removed in #245). An `InferenceContext` value is threaded alongside the graph
+and carries the fresh-type-variable counter and the current subterm-path trace.
 
 ```java
 import hydra.util.Either;
-import hydra.context.Context;
+import hydra.typing.InferenceContext;
 import hydra.errors.Error;
 import hydra.graph.Graph;
 

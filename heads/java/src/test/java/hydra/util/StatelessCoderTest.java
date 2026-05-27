@@ -101,10 +101,7 @@ public class StatelessCoderTest extends HydraTestBase {
      * Apply a Coder's encode function, converting errors to simple strings.
      */
     private static <V1, V2> Either<String, V2> coderEncode(Coder<V1, V2> coder, V1 value) {
-        hydra.context.Context cx = new hydra.context.Context(
-            hydra.util.ConsList.empty(),
-            hydra.util.ConsList.empty(),
-            hydra.util.PersistentMap.empty());
+        hydra.typing.InferenceContext cx = new hydra.typing.InferenceContext(0, new java.util.ArrayList<>());
         Either<hydra.errors.Error_, V2> result =
             coder.encode.apply(cx).apply(value);
         if (result.isRight()) {
@@ -118,10 +115,7 @@ public class StatelessCoderTest extends HydraTestBase {
      * Apply a Coder's decode function, converting errors to simple strings.
      */
     private static <V1, V2> Either<String, V1> coderDecode(Coder<V1, V2> coder, V2 value) {
-        hydra.context.Context cx = new hydra.context.Context(
-            hydra.util.ConsList.empty(),
-            hydra.util.ConsList.empty(),
-            hydra.util.PersistentMap.empty());
+        hydra.typing.InferenceContext cx = new hydra.typing.InferenceContext(0, new java.util.ArrayList<>());
         Either<hydra.errors.Error_, V1> result =
             coder.decode.apply(cx).apply(value);
         if (result.isRight()) {

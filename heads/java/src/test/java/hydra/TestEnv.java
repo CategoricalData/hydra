@@ -7,11 +7,11 @@
 package hydra;
 
 import hydra.graph.Graph;
-import hydra.context.Context;
+import hydra.typing.InferenceContext;
 
 public class TestEnv {
     private static Graph cachedGraph;
-    private static Context cachedContext;
+    private static InferenceContext cachedContext;
 
     public static synchronized Graph testGraph() {
         if (cachedGraph == null) {
@@ -20,12 +20,9 @@ public class TestEnv {
         return cachedGraph;
     }
 
-    public static synchronized Context testContext() {
+    public static synchronized InferenceContext testContext() {
         if (cachedContext == null) {
-            cachedContext = new Context(
-                hydra.util.ConsList.empty(),
-                hydra.util.ConsList.empty(),
-                hydra.util.PersistentMap.empty());
+            cachedContext = new InferenceContext(0, new java.util.ArrayList<>());
         }
         return cachedContext;
     }

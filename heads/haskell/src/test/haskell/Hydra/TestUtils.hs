@@ -13,7 +13,6 @@ import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Terms
 import qualified Hydra.DefaultsPrimitives as DefaultPrims
 import qualified Hydra.Sources.Kernel.Types.Coders as TypeCoders
-import qualified Hydra.Sources.Kernel.Types.Context as TypeContext
 import qualified Hydra.Sources.Kernel.Types.Core as TypeCore
 import qualified Hydra.Sources.Kernel.Types.Errors as TypeError
 import qualified Hydra.Sources.Kernel.Types.Util as TypeUtil
@@ -81,7 +80,6 @@ testSchemaGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes hydraCoreGra
   where
     kernelElements = L.concat $ fmap moduleAsBindings
       [ TypeCoders.module_
-      , TypeContext.module_
       , TypeCore.module_
       , TypeError.module_
       , TypeUtil.module_
@@ -89,13 +87,13 @@ testSchemaGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes hydraCoreGra
     testElements = fmap
       (\(n, t) -> Binding n (EncodeCore.type_ t) $ Just $ Types.mono $ TypeVariable _Type) $ M.toList testTypes
 
-testContext :: Context
-testContext = Context [] [] M.empty
+testContext :: InferenceContext
+testContext = InferenceContext { inferenceContextFreshTypeVariableCount = 0, inferenceContextTrace = [] }
 
 check :: String -> H.SpecWith a -> H.SpecWith a
 check desc = H.describe $ "Check type inference for " <> desc
 
-checkSerdeRoundTrip :: (Context -> Graph -> Type -> Either Error (Coder Term BS.ByteString))
+checkSerdeRoundTrip :: (InferenceContext -> Graph -> Type -> Either Error (Coder Term BS.ByteString))
   -> TypeApplicationTerm -> H.Expectation
 checkSerdeRoundTrip mkSerde (TypeApplicationTerm term typ) = do
     case mkSerde testContext testGraph typ of
@@ -105,7 +103,7 @@ checkSerdeRoundTrip mkSerde (TypeApplicationTerm term typ) = do
           Left e -> HL.assertFailure (showError e)
           Right roundTripped -> deannotateTerm roundTripped `H.shouldBe` deannotateTerm term
 
-checkSerialization :: (Context -> Graph -> Type -> Either Error (Coder Term String))
+checkSerialization :: (InferenceContext -> Graph -> Type -> Either Error (Coder Term String))
   -> TypeApplicationTerm -> String -> H.Expectation
 checkSerialization mkSerdeStr (TypeApplicationTerm term typ) expected = do
     case mkSerdeStr testContext testGraph typ of

@@ -187,7 +187,6 @@ public class Names {
         new ModuleName("hydra.ast"),
         new ModuleName("hydra.classes"),
         new ModuleName("hydra.coders"),
-        new ModuleName("hydra.context"),
         new ModuleName("hydra.core"),
         new ModuleName("hydra.error.checking"),
         new ModuleName("hydra.error.core"),

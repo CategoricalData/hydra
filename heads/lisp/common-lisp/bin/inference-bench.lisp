@@ -208,7 +208,7 @@
 (defun time-inference (universe target)
   "Time hydra_codegen_infer_modules_given universe+target target. Returns (elapsed ok err)."
   (let* ((bs-graph (bootstrap-graph))
-         (cx (funcall 'make-hydra_context_context nil nil nil))
+         (cx (funcall 'make-hydra_typing_inference_context 0 nil))
          (universe-plus (append universe (list target)))
          (targets (list target))
          (t0 (get-internal-real-time))

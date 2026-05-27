@@ -43,8 +43,8 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 -- | Stub: the real testContext lives in hand-written Hydra.Test.TestEnv
-testContext :: TTermDefinition Context
-testContext = define "testContext" $ asTerm Lexical.emptyContext
+testContext :: TTermDefinition InferenceContext
+testContext = define "testContext" $ asTerm Lexical.emptyInferenceContext
 
 -- | Stub: the real testGraph lives in hand-written Hydra.Test.TestEnv.
 -- The hand-written runtime takes a test-types map and a test-terms map;

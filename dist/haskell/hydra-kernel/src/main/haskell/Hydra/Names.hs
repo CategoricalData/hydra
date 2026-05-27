@@ -2,9 +2,6 @@
 -- | Functions for working with qualified names.
 
 module Hydra.Names where
-import qualified Hydra.Annotations as Annotations
-import qualified Hydra.Constants as Constants
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Lib.Lists as Lists
@@ -17,6 +14,8 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -33,14 +32,18 @@ compactName namespaces name =
         pre,
         ":",
         local]) (Maps.lookup ns namespaces)) mns)
--- | Generate a fresh type variable name, threading Context
-freshName :: Context.Context -> (Core.Name, Context.Context)
+-- | Generate a fresh type variable name, threading InferenceContext
+freshName :: Typing.InferenceContext -> (Core.Name, Typing.InferenceContext)
 freshName cx =
 
-      let count = Annotations.getCount Constants.keyFreshTypeVariableCount cx
-      in (normalTypeVariable count, (Annotations.putCount Constants.keyFreshTypeVariableCount (Math.add count 1) cx))
--- | Generate multiple fresh type variable names, threading Context
-freshNames :: Int -> Context.Context -> ([Core.Name], Context.Context)
+      let count = Typing.inferenceContextFreshTypeVariableCount cx
+      in (
+        normalTypeVariable count,
+        Typing.InferenceContext {
+          Typing.inferenceContextFreshTypeVariableCount = (Math.add count 1),
+          Typing.inferenceContextTrace = (Typing.inferenceContextTrace cx)})
+-- | Generate multiple fresh type variable names, threading InferenceContext
+freshNames :: Int -> Typing.InferenceContext -> ([Core.Name], Typing.InferenceContext)
 freshNames n cx =
 
       let go =
@@ -83,6 +86,12 @@ namespaceToFilePath caseConv ext ns =
 -- | Type variable naming convention follows Haskell: t0, t1, etc.
 normalTypeVariable :: Int -> Core.Name
 normalTypeVariable i = Core.Name (Strings.cat2 "t" (Literals.showInt32 i))
+-- | Prepend a SubtermStep to the InferenceContext's trace. The trace is accumulated backwards as inference descends through subterms; at error-emission time the list is reversed and wrapped into a SubtermPath stamped onto the error.
+pushSubtermStep :: Paths.SubtermStep -> Typing.InferenceContext -> Typing.InferenceContext
+pushSubtermStep step cx =
+    Typing.InferenceContext {
+      Typing.inferenceContextFreshTypeVariableCount = (Typing.inferenceContextFreshTypeVariableCount cx),
+      Typing.inferenceContextTrace = (Lists.cons step (Typing.inferenceContextTrace cx))}
 -- | Construct a qualified (dot-separated) name
 qname :: Packaging.ModuleName -> String -> Core.Name
 qname ns name =
@@ -105,6 +114,12 @@ qualifyName name =
           Packaging.qualifiedNameLocal = (Core.unName name)}) (Packaging.QualifiedName {
           Packaging.qualifiedNameModuleName = (Just (Packaging.ModuleName (Strings.intercalate "." (Lists.reverse restReversed)))),
           Packaging.qualifiedNameLocal = localName}))) (Lists.uncons parts))
+-- | Restore the original trace from baseCx, while keeping the freshTypeVariableCount from newCx. Used between sibling sub-inferences (e.g. application LHS vs RHS) so that an error in the second sibling doesn't include the first sibling's trace path. Returns a new InferenceContext.
+restoreTrace :: Typing.InferenceContext -> Typing.InferenceContext -> Typing.InferenceContext
+restoreTrace baseCx newCx =
+    Typing.InferenceContext {
+      Typing.inferenceContextFreshTypeVariableCount = (Typing.inferenceContextFreshTypeVariableCount newCx),
+      Typing.inferenceContextTrace = (Typing.inferenceContextTrace baseCx)}
 -- | Generate a unique label by appending a suffix if the label is already in use
 uniqueLabel :: S.Set String -> String -> String
 uniqueLabel visited l = Logic.ifElse (Sets.member l visited) (uniqueLabel visited (Strings.cat2 l "'")) l

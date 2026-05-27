@@ -140,7 +140,7 @@
                             "key": "description",
                             "value": {
                               "literal": {
-                                "string": "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting."}}}],
+                                "string": "A concrete implementation of the primitive function. The InferenceContext and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the InferenceContext supports subterm-path tracing for error reporting."}}}],
                         "body": {
                           "function": {
                             "codomain": {
@@ -150,7 +150,7 @@
                                     "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
                                     "domain": {"list": {"variable": "hydra.core.Term"}}}},
                                 "domain": {"variable": "hydra.graph.Graph"}}},
-                            "domain": {"variable": "hydra.context.Context"}}}}}}]}}},
+                            "domain": {"variable": "hydra.typing.InferenceContext"}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -188,7 +188,7 @@
                                         "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "a"}}},
                                         "domain": {"variable": "hydra.core.Term"}}},
                                     "domain": {"variable": "hydra.graph.Graph"}}},
-                                "domain": {"variable": "hydra.context.Context"}}}}}},
+                                "domain": {"variable": "hydra.typing.InferenceContext"}}}}}},
                       {
                         "name": "decode",
                         "type": {
@@ -200,9 +200,9 @@
                                   "function": {
                                     "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
                                     "domain": {"variable": "a"}}},
-                                "domain": {"variable": "hydra.context.Context"}}}}}}]},
+                                "domain": {"variable": "hydra.typing.InferenceContext"}}}}}}]},
                   "parameter": "a"}}}},
           "variables": []}}}],
-  "dependencies": [{"module": "hydra.context"}, {"module": "hydra.core"}, {"module": "hydra.errors"}, {"module": "hydra.packaging"}],
+  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.errors"}, {"module": "hydra.packaging"}, {"module": "hydra.typing"}],
   "description": "The extension to graphs of Hydra's core type system (hydra.core)",
   "name": "hydra.graph"}

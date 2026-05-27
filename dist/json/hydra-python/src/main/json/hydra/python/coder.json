@@ -252,7 +252,7 @@
         "name": "hydra.python.coder.analyzePythonFunction",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.python.environment.PythonEnvironment"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
           "result": {
@@ -307,7 +307,7 @@
                             "parameter": "term"}},
                         "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
                         "parameter": "env"}},
-                    "domain": {"variable": "hydra.context.Context"},
+                    "domain": {"variable": "hydra.typing.InferenceContext"},
                     "parameter": "cx"}}}},
             "parameter": "t0"}}}},
     {
@@ -1975,7 +1975,7 @@
         "name": "hydra.python.coder.encodeApplication",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.python.environment.PythonEnvironment"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Application"}}],
           "result": {
@@ -2239,14 +2239,14 @@
                         "parameter": "app"}},
                     "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "parameter": "env"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
         "name": "hydra.python.coder.encodeApplicationInner",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.python.environment.PythonEnvironment"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}},
             {"isLazy": false, "name": "arg3", "type": {"list": {"variable": "hydra.python.syntax.Expression"}}},
@@ -2777,7 +2777,7 @@
                                                                                                               "application": {
                                                                                                                 "argument": {"variable": "cx"},
                                                                                                                 "function": {
-                                                                                                                  "typeApplication": {"body": {"variable": "hydra.python.coder.encodeVariable"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                                                  "typeApplication": {"body": {"variable": "hydra.python.coder.encodeVariable"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {
@@ -3000,7 +3000,7 @@
                                                                                                                                                           "application": {
                                                                                                                                                             "argument": {"variable": "cx"},
                                                                                                                                                             "function": {
-                                                                                                                                                              "typeApplication": {"body": {"variable": "hydra.python.coder.encodeVariable"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                                                                                              "typeApplication": {"body": {"variable": "hydra.python.coder.encodeVariable"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                                                                                             "function": {
                                                                                                                                               "typeApplication": {
                                                                                                                                                 "body": {
@@ -3071,7 +3071,7 @@
                                                                                                                                   "application": {
                                                                                                                                     "argument": {"variable": "cx"},
                                                                                                                                     "function": {
-                                                                                                                                      "typeApplication": {"body": {"variable": "hydra.python.coder.encodeVariable"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                                                                      "typeApplication": {"body": {"variable": "hydra.python.coder.encodeVariable"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                                                                     "function": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {
@@ -3138,7 +3138,7 @@
                                                                                                                       "application": {
                                                                                                                         "argument": {"variable": "cx"},
                                                                                                                         "function": {
-                                                                                                                          "typeApplication": {"body": {"variable": "hydra.python.coder.encodeVariable"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                                                          "typeApplication": {"body": {"variable": "hydra.python.coder.encodeVariable"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                                                         "function": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {
@@ -3197,7 +3197,7 @@
                         "parameter": "fun"}},
                     "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "parameter": "env"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
@@ -3567,7 +3567,7 @@
         "name": "hydra.python.coder.encodeBindingAs",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.python.environment.PythonEnvironment"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Binding"}}],
           "result": {
@@ -3688,7 +3688,7 @@
                                                                       "application": {
                                                                         "argument": {"variable": "cx"},
                                                                         "function": {
-                                                                          "typeApplication": {"body": {"variable": "hydra.annotations.getTermDescription"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                          "typeApplication": {"body": {"variable": "hydra.annotations.getTermDescription"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                             "function": {
                                                               "typeApplication": {
                                                                 "body": {
@@ -4243,7 +4243,7 @@
                                                                                                                                                                                                 "function": {
                                                                                                                                                                                                   "typeApplication": {
                                                                                                                                                                                                     "body": {
-                                                                                                                                                                                                      "typeApplication": {"body": {"variable": "hydra.python.coder.caseBlockToExpr"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                                                                                                                                      "typeApplication": {"body": {"variable": "hydra.python.coder.caseBlockToExpr"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                                                                                                                     "type": {"variable": "hydra.errors.Error"}}}}}}}}}}}}}}},
                                                                                                                                                                         "function": {
                                                                                                                                                                           "typeApplication": {
@@ -4274,7 +4274,7 @@
                                                                                                                           "application": {
                                                                                                                             "argument": {"variable": "cx"},
                                                                                                                             "function": {
-                                                                                                                              "typeApplication": {"body": {"variable": "hydra.resolution.requireUnionType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                                                              "typeApplication": {"body": {"variable": "hydra.resolution.requireUnionType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                                                                 "function": {
                                                                                                                   "typeApplication": {
                                                                                                                     "body": {
@@ -4616,7 +4616,7 @@
                                                                                                                                                                                         "function": {
                                                                                                                                                                                           "typeApplication": {
                                                                                                                                                                                             "body": {
-                                                                                                                                                                                              "typeApplication": {"body": {"variable": "hydra.python.coder.caseBlockToExpr"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                                                                                                                              "typeApplication": {"body": {"variable": "hydra.python.coder.caseBlockToExpr"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                                                                                                             "type": {"variable": "hydra.errors.Error"}}}}}}}}}}}}}}},
                                                                                                                                                                 "function": {
                                                                                                                                                                   "typeApplication": {
@@ -4647,7 +4647,7 @@
                                                                                                                                       "application": {
                                                                                                                                         "argument": {"variable": "cx"},
                                                                                                                                         "function": {
-                                                                                                                                          "typeApplication": {"body": {"variable": "hydra.resolution.requireUnionType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                                                                          "typeApplication": {"body": {"variable": "hydra.resolution.requireUnionType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                                                                             "function": {
                                                                                                                               "typeApplication": {
                                                                                                                                 "body": {
@@ -5081,7 +5081,7 @@
                                                                                                                                                                                 "function": {
                                                                                                                                                                                   "typeApplication": {
                                                                                                                                                                                     "body": {
-                                                                                                                                                                                      "typeApplication": {"body": {"variable": "hydra.python.coder.caseBlockToExpr"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                                                                                                                      "typeApplication": {"body": {"variable": "hydra.python.coder.caseBlockToExpr"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                                                                                                     "type": {"variable": "hydra.errors.Error"}}}}}}}}}}}}}}},
                                                                                                                                                         "function": {
                                                                                                                                                           "typeApplication": {
@@ -5112,7 +5112,7 @@
                                                                                                                               "application": {
                                                                                                                                 "argument": {"variable": "cx"},
                                                                                                                                 "function": {
-                                                                                                                                  "typeApplication": {"body": {"variable": "hydra.resolution.requireUnionType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                                                                  "typeApplication": {"body": {"variable": "hydra.resolution.requireUnionType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                                                                     "function": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {
@@ -5218,14 +5218,14 @@
                         "parameter": "binding"}},
                     "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "parameter": "env"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
         "name": "hydra.python.coder.encodeBindingAsAssignment",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"literal": {"boolean": {}}}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.python.environment.PythonEnvironment"}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Binding"}}],
@@ -5434,7 +5434,7 @@
                         "parameter": "env"}},
                     "domain": {"literal": {"boolean": {}}},
                     "parameter": "allowThunking"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
@@ -6019,7 +6019,7 @@
         "name": "hydra.python.coder.encodeDefinition",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.python.environment.PythonEnvironment"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.packaging.Definition"}}],
           "result": {
@@ -6185,7 +6185,7 @@
                                                                       "application": {
                                                                         "argument": {"variable": "cx"},
                                                                         "function": {
-                                                                          "typeApplication": {"body": {"variable": "hydra.annotations.getTermDescription"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                          "typeApplication": {"body": {"variable": "hydra.annotations.getTermDescription"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                             "function": {
                                                               "typeApplication": {
                                                                 "body": {
@@ -6258,7 +6258,7 @@
                                                                               "application": {
                                                                                 "argument": {"variable": "cx"},
                                                                                 "function": {
-                                                                                  "typeApplication": {"body": {"variable": "hydra.python.coder.encodeTypeAssignment"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}}}},
+                                                                                  "typeApplication": {"body": {"variable": "hydra.python.coder.encodeTypeAssignment"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}}}},
                                                         "domain": {"maybe": {"literal": {"string": {}}}},
                                                         "parameter": "comment"}},
                                                     "function": {
@@ -6274,7 +6274,7 @@
                                                                   "application": {
                                                                     "argument": {"variable": "cx"},
                                                                     "function": {
-                                                                      "typeApplication": {"body": {"variable": "hydra.annotations.getTypeDescription"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                      "typeApplication": {"body": {"variable": "hydra.annotations.getTypeDescription"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {
@@ -6289,7 +6289,7 @@
                         "parameter": "def_"}},
                     "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "parameter": "env"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
@@ -7665,7 +7665,7 @@
         "name": "hydra.python.coder.functionDefinitionToExpr",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.python.environment.PythonEnvironment"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Name"}},
             {"isLazy": false, "name": "arg3", "type": {"list": {"variable": "hydra.core.Name"}}},
@@ -8248,7 +8248,7 @@
                         "parameter": "name"}},
                     "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "parameter": "env"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
@@ -9608,7 +9608,7 @@
         "name": "hydra.python.coder.encodePythonModule",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.packaging.Module"}},
             {"isLazy": false, "name": "arg3", "type": {"list": {"variable": "hydra.packaging.Definition"}}}],
@@ -9966,7 +9966,7 @@
                         "parameter": "mod"}},
                     "domain": {"variable": "hydra.graph.Graph"},
                     "parameter": "g"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
@@ -10187,7 +10187,7 @@
         "name": "hydra.python.coder.encodeTermAssignment",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.python.environment.PythonEnvironment"}},
             {"isLazy": false, "name": "arg2", "type": {"literal": {"boolean": {}}}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Name"}},
@@ -10608,14 +10608,14 @@
                         "parameter": "topLevel"}},
                     "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "parameter": "env"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
         "name": "hydra.python.coder.encodeTermInline",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.python.environment.PythonEnvironment"}},
             {"isLazy": false, "name": "arg2", "type": {"literal": {"boolean": {}}}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Term"}}],
@@ -10752,8 +10752,8 @@
                                                                                     "function": {
                                                                                       "typeApplication": {
                                                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.Type"}}},
-                                                                                        "type": {"variable": "hydra.context.Context"}}}}},
-                                                                                "domain": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.context.Context"}}},
+                                                                                        "type": {"variable": "hydra.typing.InferenceContext"}}}}},
+                                                                                "domain": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                 "parameter": "_r"}},
                                                                             "function": {
                                                                               "typeApplication": {
@@ -10762,7 +10762,7 @@
                                                                                     "body": {
                                                                                       "typeApplication": {
                                                                                         "body": {"variable": "hydra.lib.eithers.map"},
-                                                                                        "type": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.context.Context"}}}}},
+                                                                                        "type": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.typing.InferenceContext"}}}}},
                                                                                     "type": {"variable": "hydra.core.Type"}}},
                                                                                 "type": {"variable": "hydra.errors.Error"}}}}}}},
                                                                     "typeScheme": {
@@ -12790,7 +12790,7 @@
                                                                                   "application": {
                                                                                     "argument": {"variable": "cx"},
                                                                                     "function": {
-                                                                                      "typeApplication": {"body": {"variable": "hydra.resolution.requireUnionType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                      "typeApplication": {"body": {"variable": "hydra.resolution.requireUnionType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                         "function": {
                                                                           "typeApplication": {
                                                                             "body": {
@@ -12835,7 +12835,7 @@
                                                                       "application": {
                                                                         "argument": {"variable": "cx"},
                                                                         "function": {
-                                                                          "typeApplication": {"body": {"variable": "hydra.python.coder.encodeVariable"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                          "typeApplication": {"body": {"variable": "hydra.python.coder.encodeVariable"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                         "domain": {"variable": "hydra.core.Name"},
                                                         "parameter": "name"}}},
                                                   {
@@ -12908,14 +12908,14 @@
                         "parameter": "noCast"}},
                     "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "parameter": "env"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
         "name": "hydra.python.coder.encodeTermMultiline",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.python.environment.PythonEnvironment"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
           "result": {
@@ -13417,7 +13417,7 @@
                                                                                                                                                 "function": {
                                                                                                                                                   "typeApplication": {
                                                                                                                                                     "body": {
-                                                                                                                                                      "typeApplication": {"body": {"variable": "hydra.python.coder.caseBlockToExpr"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                                                                                      "typeApplication": {"body": {"variable": "hydra.python.coder.caseBlockToExpr"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                                                                     "type": {"variable": "hydra.errors.Error"}}}}}}}}}}}}}}},
                                                                                                                         "function": {
                                                                                                                           "typeApplication": {
@@ -13469,7 +13469,7 @@
                                                                                                   "application": {
                                                                                                     "argument": {"variable": "cx"},
                                                                                                     "function": {
-                                                                                                      "typeApplication": {"body": {"variable": "hydra.resolution.requireUnionType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                                      "typeApplication": {"body": {"variable": "hydra.resolution.requireUnionType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                                         "function": {
                                                                                           "typeApplication": {
                                                                                             "body": {
@@ -13502,14 +13502,14 @@
                         "parameter": "term"}},
                     "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "parameter": "env"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
         "name": "hydra.python.coder.encodeTermMultilineTCO",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.python.environment.PythonEnvironment"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Name"}},
             {"isLazy": false, "name": "arg3", "type": {"list": {"variable": "hydra.core.Name"}}},
@@ -13924,7 +13924,7 @@
                                                                                                                                                                                 "function": {
                                                                                                                                                                                   "typeApplication": {
                                                                                                                                                                                     "body": {
-                                                                                                                                                                                      "typeApplication": {"body": {"variable": "hydra.python.coder.caseBlockToExpr"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                                                                                                                      "typeApplication": {"body": {"variable": "hydra.python.coder.caseBlockToExpr"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                                                                                                     "type": {"variable": "hydra.errors.Error"}}}}}}}}}}}}}}},
                                                                                                                                                         "function": {
                                                                                                                                                           "typeApplication": {
@@ -13976,7 +13976,7 @@
                                                                                                                                   "application": {
                                                                                                                                     "argument": {"variable": "cx"},
                                                                                                                                     "function": {
-                                                                                                                                      "typeApplication": {"body": {"variable": "hydra.resolution.requireUnionType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                                                                      "typeApplication": {"body": {"variable": "hydra.resolution.requireUnionType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                                                                         "function": {
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {
@@ -14216,7 +14216,7 @@
                         "parameter": "funcName"}},
                     "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "parameter": "env"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
@@ -15243,7 +15243,7 @@
         "name": "hydra.python.coder.encodeUnionEliminationInline",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.python.environment.PythonEnvironment"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.CaseStatement"}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.python.syntax.Expression"}}],
@@ -15806,7 +15806,7 @@
                                                           "application": {
                                                             "argument": {"variable": "cx"},
                                                             "function": {
-                                                              "typeApplication": {"body": {"variable": "hydra.resolution.requireUnionType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                              "typeApplication": {"body": {"variable": "hydra.resolution.requireUnionType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {
@@ -15820,7 +15820,7 @@
                         "parameter": "cs"}},
                     "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
                     "parameter": "env"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
@@ -21520,7 +21520,7 @@
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}},
             {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.packaging.Definition"}}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {
@@ -21614,7 +21614,7 @@
                                         "type": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"string": {}}}}}}}}}}},
                             "domain": {"variable": "hydra.graph.Graph"},
                             "parameter": "g"}},
-                        "domain": {"variable": "hydra.context.Context"},
+                        "domain": {"variable": "hydra.typing.InferenceContext"},
                         "parameter": "cx"}},
                     "domain": {"list": {"variable": "hydra.packaging.Definition"}},
                     "parameter": "defs"}},
@@ -26893,7 +26893,6 @@
     {"module": "hydra.ast"},
     {"module": "hydra.classes"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

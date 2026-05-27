@@ -23,7 +23,6 @@ import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Coders                          as Coders
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                           as Error
 import qualified Hydra.Dsl.Packaging                          as Packaging
@@ -150,7 +149,7 @@ dialectSupportsLetrec = def "dialectSupportsLetrec" $
 -- | Encode a function application, detecting ifElse and other lazy primitives.
 -- Transforms (((hydra.lib.logic.ifElse C) T) E) into native (if C T E).
 -- For other lazy primitives, wraps the appropriate argument in a thunk.
-encodeApplication :: TTermDefinition (L.Dialect -> Context -> Graph -> Term -> Term -> Either Error L.Expression)
+encodeApplication :: TTermDefinition (L.Dialect -> InferenceContext -> Graph -> Term -> Term -> Either Error L.Expression)
 encodeApplication = def "encodeApplication" $
   "dialect" ~> "cx" ~> "g" ~> lambda "rawFun" $ lambda "rawArg" $
     "dFun" <~ (Strip.deannotateTerm @@ var "rawFun") $
@@ -226,7 +225,7 @@ encodeFieldDef = def "encodeFieldDef" $
         L._FieldDefinition_defaultValue>>: nothing]
 
 -- | Encode a Hydra lambda as a Lisp expression
-encodeLambdaTerm :: TTermDefinition (L.Dialect -> Context -> Graph -> Lambda -> Either Error L.Expression)
+encodeLambdaTerm :: TTermDefinition (L.Dialect -> InferenceContext -> Graph -> Lambda -> Either Error L.Expression)
 encodeLambdaTerm = def "encodeLambdaTerm" $
   "dialect" ~> "cx" ~> "g" ~> lambda "lam" $
     "param" <~ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (Core.lambdaParameter (var "lam")))) $
@@ -236,7 +235,7 @@ encodeLambdaTerm = def "encodeLambdaTerm" $
 -- | Encode let bindings as nested ((lambda (x) body) init) applications.
 -- Used for self-referential non-lambda bindings (Y-combinator fixpoint pattern)
 -- so that the loader's fix-letrec can transform them into proper letrec with thunking.
-encodeLetAsLambdaApp :: TTermDefinition (L.Dialect -> Context -> Graph -> [Binding] -> Term -> Either Error L.Expression)
+encodeLetAsLambdaApp :: TTermDefinition (L.Dialect -> InferenceContext -> Graph -> [Binding] -> Term -> Either Error L.Expression)
 encodeLetAsLambdaApp = def "encodeLetAsLambdaApp" $
   "dialect" ~> "cx" ~> "g" ~> lambda "bindings" $ lambda "body" $
     "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "body") $
@@ -252,7 +251,7 @@ encodeLetAsLambdaApp = def "encodeLetAsLambdaApp" $
 -- Self-referential bindings -> letrec (with eta-expansion for non-lambda self-refs)
 -- Single non-self-ref binding -> let
 -- Multiple non-self-ref bindings -> let* (sequential)
-encodeLetAsNative :: TTermDefinition (L.Dialect -> Context -> Graph -> [Binding] -> Term -> Either Error L.Expression)
+encodeLetAsNative :: TTermDefinition (L.Dialect -> InferenceContext -> Graph -> [Binding] -> Term -> Either Error L.Expression)
 encodeLetAsNative = def "encodeLetAsNative" $
   "dialect" ~> "cx" ~> "g" ~> lambda "bindings" $ lambda "body" $
     "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "body") $
@@ -451,7 +450,7 @@ encodeLiteral = def "encodeLiteral" $
 
 -- | Encode a Hydra record projection as a Lisp expression.
 -- Takes an optional argument for applied projections.
-encodeProjectionElim :: TTermDefinition (L.Dialect -> Context -> Graph -> Projection -> Maybe Term -> Either Error L.Expression)
+encodeProjectionElim :: TTermDefinition (L.Dialect -> InferenceContext -> Graph -> Projection -> Maybe Term -> Either Error L.Expression)
 encodeProjectionElim = def "encodeProjectionElim" $
   "dialect" ~> "cx" ~> "g" ~> lambda "proj" $ lambda "marg" $
       -- Record projection: (:field record) or (record-type-field record)
@@ -474,7 +473,7 @@ encodeProjectionElim = def "encodeProjectionElim" $
                   L._FieldAccess_target>>: var "sarg"]))
 
 -- | Encode a Hydra term as a Lisp expression
-encodeTerm :: TTermDefinition (L.Dialect -> Context -> Graph -> Term -> Either Error L.Expression)
+encodeTerm :: TTermDefinition (L.Dialect -> InferenceContext -> Graph -> Term -> Either Error L.Expression)
 encodeTerm = def "encodeTerm" $
   "dialect" ~> "cx" ~> "g" ~> lambda "term" $
     cases _Term (var "term") Nothing
@@ -607,7 +606,7 @@ encodeTerm = def "encodeTerm" $
        encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.wrappedTermBody (var "wt")]
 
 -- | Encode a Hydra term definition as a Lisp top-level form
-encodeTermDefinition :: TTermDefinition (L.Dialect -> Context -> Graph -> TermDefinition -> Either Error L.TopLevelFormWithComments)
+encodeTermDefinition :: TTermDefinition (L.Dialect -> InferenceContext -> Graph -> TermDefinition -> Either Error L.TopLevelFormWithComments)
 encodeTermDefinition = def "encodeTermDefinition" $
   "dialect" ~> "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.termDefinitionName (var "tdef") $
@@ -634,7 +633,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
              L._VariableDefinition_doc>>: nothing]))]
 
 -- | Encode a Hydra type as a Lisp type specifier (used for type annotations)
-encodeType :: TTermDefinition (Context -> Graph -> Type -> Either Error L.TypeSpecifier)
+encodeType :: TTermDefinition (InferenceContext -> Graph -> Type -> Either Error L.TypeSpecifier)
 encodeType = def "encodeType" $
   "cx" ~> "g" ~> lambda "t" $
     "typ" <~ (Strip.deannotateType @@ var "t") $
@@ -754,7 +753,7 @@ encodeTypeBody = def "encodeTypeBody" $
            L._RecordTypeDefinition_doc>>: nothing]))]
 
 -- | Encode a Hydra type definition as a Lisp top-level form
-encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> Either Error L.TopLevelFormWithComments)
+encodeTypeDefinition :: TTermDefinition (InferenceContext -> Graph -> TypeDefinition -> Either Error L.TopLevelFormWithComments)
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.typeDefinitionName (var "tdef") $
@@ -765,7 +764,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
 
 -- | Encode a Hydra case statement (union elimination) as a Lisp expression.
 -- Takes an optional argument for applied case statements.
-encodeUnionElim :: TTermDefinition (L.Dialect -> Context -> Graph -> CaseStatement -> Maybe Term -> Either Error L.Expression)
+encodeUnionElim :: TTermDefinition (L.Dialect -> InferenceContext -> Graph -> CaseStatement -> Maybe Term -> Either Error L.Expression)
 encodeUnionElim = def "encodeUnionElim" $
   "dialect" ~> "cx" ~> "g" ~> lambda "cs" $ lambda "marg" $
       -- Union elimination: cond dispatch on tagged values
@@ -815,7 +814,7 @@ encodeUnionElim = def "encodeUnionElim" $
 
 -- | Encode a Hydra wrap elimination (unwrap) as a Lisp expression.
 -- Takes an optional argument for applied unwraps.
-encodeUnwrapElim :: TTermDefinition (L.Dialect -> Context -> Graph -> Name -> Maybe Term -> Either Error L.Expression)
+encodeUnwrapElim :: TTermDefinition (L.Dialect -> InferenceContext -> Graph -> Name -> Maybe Term -> Either Error L.Expression)
 encodeUnwrapElim = def "encodeUnwrapElim" $
   "dialect" ~> "cx" ~> "g" ~> lambda "name" $ lambda "marg" $
       -- Wrap elimination: transparent unwrap
@@ -1003,7 +1002,7 @@ moduleImports = def "moduleImports" $
       (var "depNss")
 
 -- | Convert a Hydra module to a Lisp program.
-moduleToLisp :: TTermDefinition (L.Dialect -> Module -> [Definition] -> Context -> Graph -> Either Error L.Program)
+moduleToLisp :: TTermDefinition (L.Dialect -> Module -> [Definition] -> InferenceContext -> Graph -> Either Error L.Program)
 moduleToLisp = def "moduleToLisp" $
   "dialect" ~> "mod" ~> "defs0" ~> "cx" ~> "g" ~>
     -- Reorder definitions: types first, then topologically sorted terms

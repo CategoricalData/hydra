@@ -30,7 +30,6 @@ import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Errors                          as Error
 import qualified Hydra.Dsl.Packaging                       as Packaging
 import qualified Hydra.Dsl.Util                            as Util
@@ -444,7 +443,7 @@ encodeLiteralType = def "encodeLiteralType" $
 -- Anonymous records and unions are rejected — they must appear as the body of
 -- a named TypeDefinition so the coder can emit an interface or discriminated-
 -- union alias.
-encodeType :: TTermDefinition (Context -> Graph -> Type -> Either Error TS.TypeExpression)
+encodeType :: TTermDefinition (InferenceContext -> Graph -> Type -> Either Error TS.TypeExpression)
 encodeType = def "encodeType" $
   "cx" ~> "g" ~> lambda "t" $
     "typ" <~ (Strip.deannotateType @@ var "t") $
@@ -849,7 +848,7 @@ flattenApplication = def "flattenApplication" $
 -- in `() => expr` thunks. The `lazyFlags` list parallels `args`:
 -- True positions are wrapped, False positions are emitted normally.
 -- Returns a single call expression with all args supplied at once.
-encodeLazyCall :: TTermDefinition (Context -> Graph -> ModuleName -> Term -> [Term] -> [Bool] -> TS.Expression)
+encodeLazyCall :: TTermDefinition (InferenceContext -> Graph -> ModuleName -> Term -> [Term] -> [Bool] -> TS.Expression)
 encodeLazyCall = def "encodeLazyCall" $
   lambda "cx" $ lambda "g" $ lambda "currentNs" $ lambda "headTerm" $ lambda "args" $ lambda "lazyFlags" $
     "headExpr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm") $
@@ -909,7 +908,7 @@ collectForallParams = def "collectForallParams" $
 -- The returned pair carries an optional JSDoc description (pulled from
 -- the type's description annotation, if any) alongside the ModuleItem.
 -- `moduleToTypeScript` prepends the doc above the rendered item.
-encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> Either Error (Maybe String, TS.ModuleItem))
+encodeTypeDefinition :: TTermDefinition (InferenceContext -> Graph -> TypeDefinition -> Either Error (Maybe String, TS.ModuleItem))
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.typeDefinitionName (var "tdef") $
@@ -1100,7 +1099,7 @@ encodeLiteral = def "encodeLiteral" $
 -- `Serde.expressionToExpr` + `Serialization.printExpr`. This is the same
 -- pipeline the Java/Scala/Python coders use; it gives proper precedence,
 -- newlines, and indentation without manual string assembly.
-encodeTerm :: TTermDefinition (Context -> Graph -> ModuleName -> Term -> TS.Expression)
+encodeTerm :: TTermDefinition (InferenceContext -> Graph -> ModuleName -> Term -> TS.Expression)
 encodeTerm = def "encodeTerm" $
   lambda "cx" $ lambda "g" $ lambda "currentNs" $ lambda "term" $ cases _Term (var "term")
     (Just $ tsExprIdent @@ string "null")
@@ -1518,7 +1517,7 @@ sanitizeParamName = def "sanitizeParamName" $
 
 -- | Try to encode a Hydra `Core.Type` as a TS `TypeExpression`. If `encodeType`
 -- fails (e.g. anonymous record), fall back to `any`.
-encodeTypeOrAny :: TTermDefinition (Context -> Graph -> Type -> TS.TypeExpression)
+encodeTypeOrAny :: TTermDefinition (InferenceContext -> Graph -> Type -> TS.TypeExpression)
 encodeTypeOrAny = def "encodeTypeOrAny" $
   "cx" ~> "g" ~> "typ" ~>
     Eithers.either_
@@ -1540,7 +1539,7 @@ tsEnvSetGraph = def "tsEnvSetGraph" $ lambda "newG" $ lambda "_old" $ var "newG"
 
 -- | Concrete TS-side wrapper around `Analysis.analyzeFunctionTerm` with
 -- `env = Graph`. Mirrors `analyzeJavaFunction` / `analyzePythonFunction`.
-analyzeTypeScriptFunction :: TTermDefinition (Context -> Graph -> Term -> Either Error (FunctionStructure Graph))
+analyzeTypeScriptFunction :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error (FunctionStructure Graph))
 analyzeTypeScriptFunction = def "analyzeTypeScriptFunction" $
   "cx" ~> "g" ~> "term" ~>
     Analysis.analyzeFunctionTerm @@ var "cx"
@@ -1551,7 +1550,7 @@ analyzeTypeScriptFunction = def "analyzeTypeScriptFunction" $
 -- | Build a TS function parameter as a `Pattern`. Wraps the parameter name in a
 -- `_Pattern_typed` if the domain encodes to anything other than the analyze
 -- pass's `_`-typed-variable sentinel; otherwise emits an untyped identifier.
-encodeParam :: TTermDefinition (Context -> Graph -> Name -> Type -> TS.Pattern)
+encodeParam :: TTermDefinition (InferenceContext -> Graph -> Name -> Type -> TS.Pattern)
 encodeParam = def "encodeParam" $
   "cx" ~> "g" ~> "pname" ~> "dom" ~>
     "nstr" <~ (sanitizeParamName @@ var "pname") $
@@ -1572,7 +1571,7 @@ encodeParam = def "encodeParam" $
 -- | Encode a let-binding as a TS `Statement` inside an enclosing function body.
 -- If the binding's value is a lambda chain, emit a nested `function` declaration
 -- (which hoists). Otherwise emit a `const name = <expr>;` variable declaration.
-encodeBindingAsStatement :: TTermDefinition (Context -> Graph -> ModuleName -> Binding -> TS.Statement)
+encodeBindingAsStatement :: TTermDefinition (InferenceContext -> Graph -> ModuleName -> Binding -> TS.Statement)
 encodeBindingAsStatement = def "encodeBindingAsStatement" $
   "cx" ~> "g" ~> "currentNs" ~> "b" ~>
     "bname" <~ Core.bindingName (var "b") $
@@ -1607,7 +1606,7 @@ encodeBindingAsStatement = def "encodeBindingAsStatement" $
 -- into the FunctionStructure shape: explicit params + statements + body.
 -- The `mScheme :: Maybe Type` arg is the binding's known type scheme body
 -- (for codomain inference); pass `Nothing` if not available.
-functionDeclarationFromTerm :: TTermDefinition (Context -> Graph -> ModuleName -> String -> Term -> Maybe Type -> TS.FunctionDeclaration)
+functionDeclarationFromTerm :: TTermDefinition (InferenceContext -> Graph -> ModuleName -> String -> Term -> Maybe Type -> TS.FunctionDeclaration)
 functionDeclarationFromTerm = def "functionDeclarationFromTerm" $
   "cx" ~> "g" ~> "currentNs" ~> "lname" ~> "term" ~> "_mScheme" ~>
     "fsE" <~ (analyzeTypeScriptFunction @@ var "cx" @@ var "g" @@ var "term") $
@@ -1664,7 +1663,7 @@ functionDeclarationFromTerm = def "functionDeclarationFromTerm" $
 -- `export function name(p1: T1, ..., pN: TN) { ...bindings... return body; }`.
 -- The returned pair carries an optional JSDoc description (pulled from
 -- the term's description annotation, if any) alongside the ModuleItem.
-encodeTermDefinition :: TTermDefinition (Context -> Graph -> ModuleName -> TermDefinition -> (Maybe String, TS.ModuleItem))
+encodeTermDefinition :: TTermDefinition (InferenceContext -> Graph -> ModuleName -> TermDefinition -> (Maybe String, TS.ModuleItem))
 encodeTermDefinition = def "encodeTermDefinition" $
   lambda "cx" $ lambda "g" $ lambda "currentNs" $ lambda "td" $
     "name" <~ Packaging.termDefinitionName (var "td") $
@@ -1980,7 +1979,7 @@ sortTermDefsTopologically = def "sortTermDefsTopologically" $
 -- Emits both type definitions (interfaces, type aliases) and term definitions
 -- (export const). Imports are collected from type definitions only today;
 -- term-level cross-module refs may be missing imports.
-moduleToTypeScript :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
+moduleToTypeScript :: TTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
 moduleToTypeScript = def "moduleToTypeScript" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
     "currentNs" <~ Packaging.moduleName (var "mod") $
@@ -2004,7 +2003,7 @@ moduleToTypeScript = def "moduleToTypeScript" $
       (var "typeDefs")) $
     -- Also collect imports from each term-definition's typeScheme: typed
     -- parameters and codomain annotations introduce references to types
-    -- from other modules (Term, Graph, Context, ...) that aren't otherwise
+    -- from other modules (Term, Graph, InferenceContext, ...) that aren't otherwise
     -- present in the term's free-variable set.
     "typeImportsFromTerms" <~ (Lists.foldl
       (lambda "acc" $ lambda "td" $

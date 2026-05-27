@@ -21,7 +21,6 @@ import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Coders       as Coders
 import qualified Hydra.Dsl.Util      as Util
-import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
@@ -262,11 +261,11 @@ formatTermBinding = define "formatTermBinding" $
 
 -- | Format a primitive for the lexicon: "  name : typeScheme"
 generateSourceFiles
-  :: TTermDefinition ((Module -> [Definition] -> Context -> Graph -> Prelude.Either Error (M.Map String String))
+  :: TTermDefinition ((Module -> [Definition] -> InferenceContext -> Graph -> Prelude.Either Error (M.Map String String))
     -> Language
     -> Bool -> Bool -> Bool -> Bool
     -> Graph -> [Module] -> [Module]
-    -> Context -> Prelude.Either Error [(String, String)])
+    -> InferenceContext -> Prelude.Either Error [(String, String)])
 -- | Format a type binding for the lexicon: "  name = type"
 formatTypeBinding :: TTermDefinition (Graph -> Binding -> Prelude.Either Error String)
 formatTypeBinding = define "formatTypeBinding" $
@@ -421,7 +420,7 @@ generateSourceFiles = define "generateSourceFiles" $
 -- | Format a term binding for the lexicon: "  name : typeScheme"
 -- | Perform type inference on a graph and generate its lexicon.
 -- Composes inferGraphTypes and generateLexicon into a single computation.
-inferAndGenerateLexicon :: TTermDefinition (Context -> Graph -> [Module] -> Prelude.Either Error String)
+inferAndGenerateLexicon :: TTermDefinition (InferenceContext -> Graph -> [Module] -> Prelude.Either Error String)
 inferAndGenerateLexicon = define "inferAndGenerateLexicon" $
   doc "Perform type inference and generate the lexicon for a set of modules" $
   "cx" ~> "bsGraph" ~> "kernelModules" ~>
@@ -438,7 +437,7 @@ inferAndGenerateLexicon = define "inferAndGenerateLexicon" $
 -- | Perform type inference on a set of modules and reconstruct the target modules
 -- with inferred types. Type-only modules (containing only native type definitions)
 -- are passed through unchanged.
-inferModules :: TTermDefinition (Context -> Graph -> [Module] -> [Module] -> Prelude.Either Error [Module])
+inferModules :: TTermDefinition (InferenceContext -> Graph -> [Module] -> [Module] -> Prelude.Either Error [Module])
 inferModules = define "inferModules" $
   doc "Perform type inference on modules and reconstruct with inferred types" $
   "cx" ~> "bsGraph" ~> "universeMods" ~> "targetMods" ~>
@@ -497,7 +496,7 @@ inferModules = define "inferModules" $
 -- identical behavior to 'inferModules'. When a caching layer pre-populates schemes on clean
 -- modules, only the target set plus any transitively-reachable untyped binding is actually
 -- re-solved — the point of issue #247.
-inferModulesGiven :: TTermDefinition (Context -> Graph -> [Module] -> [Module] -> Prelude.Either Error [Module])
+inferModulesGiven :: TTermDefinition (InferenceContext -> Graph -> [Module] -> [Module] -> Prelude.Either Error [Module])
 inferModulesGiven = define "inferModulesGiven" $
   doc "Infer types for target modules in the context of a typed universe" $
   "cx" ~> "bsGraph" ~> "universeMods" ~> "targetMods" ~>
@@ -605,8 +604,8 @@ moduleToSourceModule = define "moduleToSourceModule" $
 -- inference run) are installed as the graph's boundTypes so incremental inference
 -- can use them as a read-only lookup.
 generateCoderModules
-  :: TTermDefinition ((Context -> Graph -> Module -> Prelude.Either Error (Maybe Module)) -> Graph -> [Module] -> [Module]
-    -> Context -> Prelude.Either Error [Module])
+  :: TTermDefinition ((InferenceContext -> Graph -> Module -> Prelude.Either Error (Maybe Module)) -> Graph -> [Module] -> [Module]
+    -> InferenceContext -> Prelude.Either Error [Module])
 -- | Build a graph from a list of modules, using an explicit bootstrap graph.
 -- Type definitions become schema elements and term definitions become data elements.
 -- Any type schemes already present on universe term bindings (e.g. from a prior

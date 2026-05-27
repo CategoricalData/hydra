@@ -351,7 +351,7 @@ object TestSuiteRunner {
         FieldType("encode", Type.unit),
         FieldType("decode", Type.unit))))
 
-    val contextName = "hydra.context.Context"
+    val contextName = "hydra.typing.InferenceContext"
     val errorName = "hydra.errors.Error"
     def eitherError(v: hydra.core.Type): hydra.core.Type =
       Type.either(EitherType(Type.variable(errorName), v))
@@ -374,14 +374,11 @@ object TestSuiteRunner {
       Type.forall(ForallType("v1",
         Type.forall(ForallType("v2", coderBody)))))
 
-    // Context
+    // InferenceContext
     types += (contextName ->
       Type.record(Seq(
-        FieldType("trace", Type.list(Type.literal(LiteralType.string))),
-        FieldType("messages", Type.list(Type.literal(LiteralType.string))),
-        FieldType("other", Type.map(MapType(
-          Type.variable("hydra.core.Name"),
-          Type.variable("hydra.core.Term")))))))
+        FieldType("freshTypeVariableCount", Type.literal(LiteralType.integer(IntegerType.int32))),
+        FieldType("trace", Type.list(Type.variable("hydra.paths.SubtermStep"))))))
 
     // Error types
     val otherErrorName = "hydra.errors.OtherError"

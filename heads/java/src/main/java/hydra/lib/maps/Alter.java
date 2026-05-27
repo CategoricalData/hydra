@@ -17,7 +17,7 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
-import hydra.context.Context;
+import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 import hydra.util.PersistentMap;
@@ -50,13 +50,13 @@ public class Alter extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), (Map<Term, Term> mp) -> {
                 Term f = args.get(0);
                 Term key = args.get(1);
                 Maybe<Term> currentValue = Lookup.apply(key, mp);
                 Either<Error_, Term> r = hydra.Reduction.reduceTerm(
-                    hydra.Lexical.emptyContext(), graph, true, Terms.apply(f, Terms.optional(currentValue)));
+                    hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(f, Terms.optional(currentValue)));
                 if (r.isLeft()) return (Either) r;
                 Either<Error_, Maybe<Term>> maybeResult = hydra.extract.Core.maybeTerm(
                     t -> Either.right(t), graph, ((Either.Right<Error_, Term>) r).value);

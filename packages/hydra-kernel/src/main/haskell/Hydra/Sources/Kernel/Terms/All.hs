@@ -71,7 +71,6 @@ import qualified Hydra.Sources.Kernel.Terms.Validate.Packaging as ValidatePackag
 import qualified Hydra.Sources.Decode.Paths          as DecodePaths
 import qualified Hydra.Sources.Decode.Ast           as DecodeAst
 import qualified Hydra.Sources.Decode.Coders        as DecodeCoders
-import qualified Hydra.Sources.Decode.Context       as DecodeContext
 import qualified Hydra.Sources.Decode.Core          as DecodeCore
 import qualified Hydra.Sources.Decode.Errors         as DecodeErrors
 import qualified Hydra.Sources.Decode.Error.Checking as DecodeErrorChecking
@@ -93,7 +92,6 @@ import qualified Hydra.Sources.Decode.Variants      as DecodeVariants
 import qualified Hydra.Sources.Encode.Paths          as EncodePaths
 import qualified Hydra.Sources.Encode.Ast           as EncodeAst
 import qualified Hydra.Sources.Encode.Coders        as EncodeCoders
-import qualified Hydra.Sources.Encode.Context       as EncodeContext
 import qualified Hydra.Sources.Encode.Core          as EncodeCore
 import qualified Hydra.Sources.Encode.Errors         as EncodeErrors
 import qualified Hydra.Sources.Encode.Error.Checking as EncodeErrorChecking
@@ -186,7 +184,6 @@ kernelDecodingModules = [
   DecodePaths.module_,
   DecodeAst.module_,
   DecodeCoders.module_,
-  DecodeContext.module_,
   DecodeCore.module_,
   DecodeErrors.module_,
   DecodeErrorChecking.module_,
@@ -209,7 +206,6 @@ kernelEncodingModules = [
   EncodePaths.module_,
   EncodeAst.module_,
   EncodeCoders.module_,
-  EncodeContext.module_,
   EncodeCore.module_,
   EncodeErrors.module_,
   EncodeErrorChecking.module_,

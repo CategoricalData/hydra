@@ -801,25 +801,6 @@
                 "parameter": "parent"}}}}}},
     {
       "term": {
-        "name": "hydra.lexical.emptyContext",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.context.Context"}}, "typeParameters": []},
-        "term": {
-          "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "An empty context; no trace, no messages, no other data."}}}],
-            "body": {
-              "record": {
-                "fields": [
-                  {"name": "trace", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
-                  {"name": "messages", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
-                  {
-                    "name": "other",
-                    "term": {
-                      "typeApplication": {
-                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.empty"}, "type": {"variable": "hydra.core.Name"}}},
-                        "type": {"variable": "hydra.core.Term"}}}}],
-                "typeName": "hydra.context.Context"}}}}}},
-    {
-      "term": {
         "name": "hydra.lexical.emptyGraph",
         "signature": {"parameters": [], "result": {"type": {"variable": "hydra.graph.Graph"}}, "typeParameters": []},
         "term": {
@@ -871,6 +852,22 @@
                     "name": "typeVariables",
                     "term": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "hydra.core.Name"}}}}],
                 "typeName": "hydra.graph.Graph"}}}}}},
+    {
+      "term": {
+        "name": "hydra.lexical.emptyInferenceContext",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.typing.InferenceContext"}}, "typeParameters": []},
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "An empty inference context; fresh-variable counter at zero and empty trace."}}}],
+            "body": {
+              "record": {
+                "fields": [
+                  {"name": "freshTypeVariableCount", "term": {"literal": {"integer": {"int32": 0}}}},
+                  {"name": "trace", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.paths.SubtermStep"}}}}],
+                "typeName": "hydra.typing.InferenceContext"}}}}}},
     {
       "term": {
         "name": "hydra.lexical.fieldsOf",
@@ -2587,7 +2584,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

@@ -4096,7 +4096,6 @@
     {"module": "hydra.rewriting"},
     {"module": "hydra.errors"},
     {"module": "hydra.util"},
-    {"module": "hydra.decode.context"},
     {"module": "hydra.decode.core"},
     {"module": "hydra.decode.error.checking"},
     {"module": "hydra.decode.error.core"},

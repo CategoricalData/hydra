@@ -4,7 +4,7 @@ module Hydra.Sources.Kernel.Terms.Names where
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
   compactName, freshName, freshNames, localNameOf, nameToFilePath, namespaceOf, namespaceToFilePath,
-  normalTypeVariable, qname, qualifyName,
+  normalTypeVariable, pushSubtermStep, qname, qualifyName, restoreTrace,
   uniqueLabel, unqualifyName)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
@@ -78,8 +78,10 @@ module_ = Module {
      toDefinition namespaceOf,
      toDefinition namespaceToFilePath,
      toDefinition normalTypeVariable,
+     toDefinition pushSubtermStep,
      toDefinition qname,
      toDefinition qualifyName,
+     toDefinition restoreTrace,
      toDefinition uniqueLabel,
      toDefinition unqualifyName]
 
@@ -184,18 +186,18 @@ unqualifyName = define "unqualifyName" $
       (project _QualifiedName _QualifiedName_moduleName @@ var "qname")]
     $ wrap _Name $ var "prefix" ++ (project _QualifiedName _QualifiedName_local @@ var "qname")
 
-freshName :: TTermDefinition (Context -> (Name, Context))
+freshName :: TTermDefinition (InferenceContext -> (Name, InferenceContext))
 freshName = define "freshName" $
-  doc "Generate a fresh type variable name, threading Context" $
+  doc "Generate a fresh type variable name, threading InferenceContext" $
   "cx" ~>
-  "count" <~ Annotations.getCount @@ Constants.keyFreshTypeVariableCount @@ var "cx" $
+  "count" <~ Typing.inferenceContextFreshTypeVariableCount (var "cx") $
   pair
     (normalTypeVariable @@ var "count")
-    (Annotations.putCount @@ Constants.keyFreshTypeVariableCount @@ Math.add (var "count") (int32 1) @@ var "cx")
+    (Typing.inferenceContextWithFreshTypeVariableCount (var "cx") (Math.add (var "count") (int32 1)))
 
-freshNames :: TTermDefinition (Int -> Context -> ([Name], Context))
+freshNames :: TTermDefinition (Int -> InferenceContext -> ([Name], InferenceContext))
 freshNames = define "freshNames" $
-  doc "Generate multiple fresh type variable names, threading Context" $
+  doc "Generate multiple fresh type variable names, threading InferenceContext" $
   "n" ~> "cx" ~>
   -- Fold over n units, accumulating names and threading context
   "go" <~ ("acc" ~> "_" ~>
@@ -211,3 +213,17 @@ normalTypeVariable :: TTermDefinition (Int -> Name)
 normalTypeVariable = define "normalTypeVariable" $
   doc "Type variable naming convention follows Haskell: t0, t1, etc." $
   "i" ~> Core.name (Strings.cat2 (string "t") (Literals.showInt32 $ var "i"))
+
+pushSubtermStep :: TTermDefinition (SubtermStep -> InferenceContext -> InferenceContext)
+pushSubtermStep = define "pushSubtermStep" $
+  doc "Prepend a SubtermStep to the InferenceContext's trace. The trace is accumulated backwards as inference descends through subterms; at error-emission time the list is reversed and wrapped into a SubtermPath stamped onto the error." $
+  "step" ~> "cx" ~>
+  Typing.inferenceContextWithTrace (var "cx") (Lists.cons (var "step") (Typing.inferenceContextTrace (var "cx")))
+
+restoreTrace :: TTermDefinition (InferenceContext -> InferenceContext -> InferenceContext)
+restoreTrace = define "restoreTrace" $
+  doc ("Restore the original trace from baseCx, while keeping the freshTypeVariableCount from newCx."
+    <> " Used between sibling sub-inferences (e.g. application LHS vs RHS) so that an error in the second sibling"
+    <> " doesn't include the first sibling's trace path. Returns a new InferenceContext.") $
+  "baseCx" ~> "newCx" ~>
+  Typing.inferenceContextWithTrace (var "newCx") (Typing.inferenceContextTrace (var "baseCx"))

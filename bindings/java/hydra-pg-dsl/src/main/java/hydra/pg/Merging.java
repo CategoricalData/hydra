@@ -175,11 +175,11 @@ public class Merging {
     }
 
     /**
-     * Apply a StatelessCoder's encode function (via its Coder.encode, which takes Context).
+     * Apply a StatelessCoder's encode function (via its Coder.encode, which takes InferenceContext).
      */
     private static <V> Either<String, V> applyCoderEncode(StatelessCoder<V, V> coder, V value) {
-        hydra.context.Context cx = new hydra.context.Context(
-            new ArrayList<>(), new ArrayList<>(), new HashMap<>());
+        hydra.typing.InferenceContext cx = new hydra.typing.InferenceContext(
+            0, new ArrayList<>());
         hydra.util.Either<hydra.errors.Error_, V> result = coder.encode.apply(cx).apply(value);
         if (result.isRight()) {
             return Either.right(((Either.Right<hydra.errors.Error_, V>) result).value);
@@ -189,11 +189,11 @@ public class Merging {
     }
 
     /**
-     * Apply a StatelessCoder's decode function (via its Coder.decode, which takes Context).
+     * Apply a StatelessCoder's decode function (via its Coder.decode, which takes InferenceContext).
      */
     private static <V> Either<String, V> applyCoderDecode(StatelessCoder<V, V> coder, V value) {
-        hydra.context.Context cx = new hydra.context.Context(
-            new ArrayList<>(), new ArrayList<>(), new HashMap<>());
+        hydra.typing.InferenceContext cx = new hydra.typing.InferenceContext(
+            0, new ArrayList<>());
         hydra.util.Either<hydra.errors.Error_, V> result = coder.decode.apply(cx).apply(value);
         if (result.isRight()) {
             return Either.right(((Either.Right<hydra.errors.Error_, V>) result).value);

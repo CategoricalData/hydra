@@ -32,7 +32,7 @@ import hydra.lexical
 import hydra.rewriting
 import hydra.testing
 from hydra.dsl.python import FrozenDict, Nothing
-import hydra.context
+import hydra.typing
 
 import hydra.test.test_types
 
@@ -131,7 +131,7 @@ def _load_bootstrap_type_schemes() -> FrozenDict:
     Uses hydra.json.bootstrap.types_by_name (the same bootstrap type map
     used for JSON decoding) to build a Map[Name, TypeScheme] suitable for
     the test graph's schema_types. This provides type definitions for
-    hydra.core, hydra.util, hydra.context, hydra.error, hydra.graph,
+    hydra.core, hydra.util, hydra.typing, hydra.error, hydra.graph,
     and hydra.module — all the types needed by inference tests.
 
     This mirrors Java's Generation.bootstrapTypeSchemes().
@@ -174,12 +174,11 @@ def should_skip_test(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
     return is_disabled(tcase)
 
 
-def _empty_context() -> hydra.context.Context:
-    """Create an empty Context for test use."""
-    return hydra.context.Context(
+def _empty_context() -> hydra.typing.InferenceContext:
+    """Create an empty InferenceContext for test use."""
+    return hydra.typing.InferenceContext(
+        fresh_type_variable_count=0,
         trace=(),
-        messages=(),
-        other=FrozenDict({}),
     )
 
 
@@ -204,7 +203,7 @@ def build_test_graph() -> hydra.graph.Graph:
 
     # Step 1: Build schema types from bootstrap type map + test types
     # The bootstrap type schemes provide types for hydra.core, hydra.util,
-    # hydra.context, hydra.error, hydra.graph, and hydra.module.
+    # hydra.typing, hydra.error, hydra.graph, and hydra.module.
     bootstrap_types = _load_bootstrap_type_schemes()
 
     # Get test type definitions and convert each to a TypeScheme

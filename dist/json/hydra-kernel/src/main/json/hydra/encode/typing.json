@@ -252,6 +252,98 @@
             "parameter": "t0"}}}},
     {
       "term": {
+        "name": "hydra.encode.typing.inferenceContext",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
+        "term": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.typing.InferenceContext"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "record",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.typing.InferenceContext"}}, "typeName": "hydra.core.Name"}}},
+                            {
+                              "name": "fields",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"wrap": {"body": {"literal": {"string": "freshTypeVariableCount"}}, "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "term",
+                                          "term": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "x"},
+                                                  "function": {"project": {"fieldName": "freshTypeVariableCount", "typeName": "hydra.typing.InferenceContext"}}}},
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "inject": {
+                                                      "field": {
+                                                        "name": "literal",
+                                                        "term": {
+                                                          "inject": {
+                                                            "field": {
+                                                              "name": "integer",
+                                                              "term": {"inject": {"field": {"name": "int32", "term": {"variable": "x"}}, "typeName": "hydra.core.IntegerValue"}}},
+                                                            "typeName": "hydra.core.Literal"}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "domain": {"literal": {"integer": {"int32": {}}}},
+                                                  "parameter": "x"}}}}}],
+                                      "typeName": "hydra.core.Field"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "trace"}}, "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "term",
+                                          "term": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "x"},
+                                                  "function": {"project": {"fieldName": "trace", "typeName": "hydra.typing.InferenceContext"}}}},
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "inject": {
+                                                      "field": {
+                                                        "name": "list",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {"variable": "xs"},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "hydra.encode.paths.subtermStep"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "domain": {"list": {"variable": "hydra.paths.SubtermStep"}},
+                                                  "parameter": "xs"}}}}}],
+                                      "typeName": "hydra.core.Field"}}]}}],
+                          "typeName": "hydra.core.Record"}}},
+                    "typeName": "hydra.core.Term"}},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
+                "parameter": "x"}}}}}},
+    {
+      "term": {
         "name": "hydra.encode.typing.inferenceResult",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceResult"}}],
@@ -371,7 +463,7 @@
                                                 "application": {
                                                   "argument": {"variable": "x"},
                                                   "function": {"project": {"fieldName": "context", "typeName": "hydra.typing.InferenceResult"}}}},
-                                              "function": {"variable": "hydra.encode.context.context"}}}}],
+                                              "function": {"variable": "hydra.encode.typing.inferenceContext"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
@@ -1013,6 +1105,6 @@
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.typing.TypeSubst"},
                 "parameter": "x"}}}}}}],
-  "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.encode.context"}, {"module": "hydra.typing"}],
+  "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.encode.paths"}, {"module": "hydra.typing"}],
   "description": "Term encoders for hydra.typing",
   "name": "hydra.encode.typing"}

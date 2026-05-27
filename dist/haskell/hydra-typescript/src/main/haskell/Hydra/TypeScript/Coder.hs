@@ -4,7 +4,6 @@
 module Hydra.TypeScript.Coder where
 import qualified Hydra.Analysis as Analysis
 import qualified Hydra.Annotations as Annotations
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Environment as Environment
 import qualified Hydra.Errors as Errors
@@ -38,7 +37,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
-analyzeTypeScriptFunction :: Context.Context -> Graph.Graph -> Core.Term -> Either t0 (Typing.FunctionStructure Graph.Graph)
+analyzeTypeScriptFunction :: Typing.InferenceContext -> Graph.Graph -> Core.Term -> Either t0 (Typing.FunctionStructure Graph.Graph)
 analyzeTypeScriptFunction cx g term = Analysis.analyzeFunctionTerm cx tsEnvGetGraph tsEnvSetGraph g term
 collectForallParams :: Core.Type -> [Core.Name]
 collectForallParams t =
@@ -70,7 +69,7 @@ collectTermImports currentNs t =
 
       let vars = Variables.freeVariablesInTerm t
       in (filterNonLocalNames currentNs vars)
-encodeBindingAsStatement :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> Core.Binding -> Syntax.Statement
+encodeBindingAsStatement :: Typing.InferenceContext -> Graph.Graph -> Packaging.ModuleName -> Core.Binding -> Syntax.Statement
 encodeBindingAsStatement cx g currentNs b =
 
       let bname = Core.bindingName b
@@ -94,7 +93,7 @@ encodeBindingAsStatement cx g currentNs b =
                         Syntax.variableDeclarationDeclarations = [
                           declarator]}
           in (Syntax.StatementVariableDeclaration varDecl)
-encodeLazyCall :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> Core.Term -> [Core.Term] -> [Bool] -> Syntax.Expression
+encodeLazyCall :: Typing.InferenceContext -> Graph.Graph -> Packaging.ModuleName -> Core.Term -> [Core.Term] -> [Bool] -> Syntax.Expression
 encodeLazyCall cx g currentNs headTerm args lazyFlags =
 
       let headExpr = encodeTerm cx g currentNs headTerm
@@ -168,7 +167,7 @@ encodeParam cx g pname dom =
       in case (Strip.deannotateType dom) of
         Core.TypeVariable _ -> tsTypedIdent nstr Syntax.TypeExpressionAny
         _ -> tsTypedIdent nstr (encodeTypeOrAny cx g dom)
-encodeTerm :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> Core.Term -> Syntax.Expression
+encodeTerm :: Typing.InferenceContext -> Graph.Graph -> Packaging.ModuleName -> Core.Term -> Syntax.Expression
 encodeTerm cx g currentNs term =
     case term of
       Core.TermAnnotated v0 -> encodeTerm cx g currentNs (Core.annotatedTermBody v0)
@@ -361,7 +360,7 @@ encodeTerm cx g currentNs term =
         ("tag", (tsExprStr "right")),
         ("value", (encodeTerm cx g currentNs r))])) v0
       _ -> tsExprIdent "null"
-encodeTermDefinition :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> Packaging.TermDefinition -> (Maybe String, Syntax.ModuleItem)
+encodeTermDefinition :: Typing.InferenceContext -> Graph.Graph -> Packaging.ModuleName -> Packaging.TermDefinition -> (Maybe String, Syntax.ModuleItem)
 encodeTermDefinition cx g currentNs td =
 
       let name = Packaging.termDefinitionName td
@@ -537,7 +536,7 @@ flattenApplication t =
               prevArgs = Pairs.second inner
           in (head_, (Lists.concat2 prevArgs (Lists.singleton (Core.applicationArgument v0))))
         _ -> (t, [])
-functionDeclarationFromTerm :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> String -> Core.Term -> Maybe Core.Type -> Syntax.FunctionDeclaration
+functionDeclarationFromTerm :: Typing.InferenceContext -> Graph.Graph -> Packaging.ModuleName -> String -> Core.Term -> Maybe Core.Type -> Syntax.FunctionDeclaration
 functionDeclarationFromTerm cx g currentNs lname term _mScheme =
 
       let fsE = analyzeTypeScriptFunction cx g term
@@ -622,7 +621,7 @@ mkDocComment mdesc =
     Maybes.cases mdesc Nothing (\d -> Logic.ifElse (Equality.equal d "") Nothing (Just (Syntax.DocumentationComment {
       Syntax.documentationCommentDescription = d,
       Syntax.documentationCommentTags = []})))
-moduleToTypeScript :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either Errors.Error (M.Map String String)
+moduleToTypeScript :: Packaging.Module -> [Packaging.Definition] -> Typing.InferenceContext -> Graph.Graph -> Either Errors.Error (M.Map String String)
 moduleToTypeScript mod defs cx g =
 
       let currentNs = Packaging.moduleName mod

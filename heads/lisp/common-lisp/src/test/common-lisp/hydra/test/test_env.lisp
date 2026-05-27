@@ -17,7 +17,7 @@
 ;; in heads/lisp/common-lisp/src/test/common-lisp/hydra/test_runner.lisp,
 ;; which already maintains the live test graph used by all CL tests.
 ;; This file provides the two symbols the generated test_graph.lisp
-;; needs (a Context value and a (test-types -> Graph) function),
+;; needs (an InferenceContext value and a (test-types -> Graph) function),
 ;; backed by that helper.
 
 (in-package :cl-user)
@@ -39,13 +39,12 @@
 (cl:defpackage :hydra.test.testEnv
   (:use :cl))
 
-;; Empty context: alist with the three hydra_context_context fields
-;; (trace, messages, other). The generated kernel modules create
+;; Empty context: alist with the two hydra_typing_inference_context fields
+;; (fresh_type_variable_count, trace). The generated kernel modules create
 ;; records as alists '((:key . val) ...).
 (cl:defvar hydra_test_test_env_test_context
-  (cl:list (cl:cons :trace cl:nil)
-           (cl:cons :messages cl:nil)
-           (cl:cons :other hydra_lib_maps_empty)))
+  (cl:list (cl:cons :fresh_type_variable_count 0)
+           (cl:cons :trace cl:nil)))
 
 ;; Build a test graph parametrized by a map of test-types and a map of
 ;; test-terms. Delegates to the test runner's build-test-graph +
