@@ -600,6 +600,10 @@ updateHoistState = define "updateHoistState" $
       -- Let body and binding are pass-through
       _SubtermStep_letBody>>: constant $ pair true (var "usedApp"),
       _SubtermStep_letBinding>>: constant $ pair true (var "usedApp"),
+      -- Type-application and type-lambda are erased at the value level
+      -- in every target, so a case inside either is still at top level.
+      _SubtermStep_typeApplicationTerm>>: constant $ pair true (var "usedApp"),
+      _SubtermStep_typeLambdaBody>>: constant $ pair true (var "usedApp"),
       -- Lambda body: pass-through if we haven't used app LHS yet
       _SubtermStep_lambdaBody>>: constant $
         Logic.ifElse (var "usedApp")
