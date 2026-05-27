@@ -45,7 +45,7 @@ export const testContext: Context = {
 // value-equality keying handles wrapped Name lookups consistently with
 // how the generated kernel constructs all other Map<Name, _> values.
 const buildPrimitivesMap = (): ReadonlyMap<Name, Primitive> =>
-  maps.fromList(standardPrimitives().map((p) => [p.name, p] as const));
+  maps.fromList(standardPrimitives().map((p) => [p.definition.name, p] as const));
 
 // The primitives map is computed once and shared across all calls
 // (cheap: ~50 entries, constructed from a static list).

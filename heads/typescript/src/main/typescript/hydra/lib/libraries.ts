@@ -30,6 +30,7 @@ import type { Error as HydraError } from "../errors.js";
 import type { Either } from "../runtime.js";
 
 import * as extractCore from "../extract/core.js";
+import * as scoping from "../scoping.js";
 
 import * as libChars from "./chars.js";
 import * as libEquality from "./equality.js";
@@ -181,8 +182,14 @@ const bind = <A, B>(e: Either<HydraError, A>, f: (a: A) => Either<HydraError, B>
 type Impl = (cx: Context, g: Graph, args: readonly Term[]) => Either<HydraError, Term>;
 
 const prim = (qname: string, ts: TypeScheme, impl: Impl): Primitive => ({
-  name: { value: qname } as Name,
-  typeScheme: ts,
+  definition: {
+    name: { value: qname } as Name,
+    description: "",
+    signature: scoping.typeSchemeToTermSignature(ts as any) as any,
+    isPure: true,
+    isTotal: true,
+    defaultImplementation: { tag: "nothing" },
+  },
   implementation: impl,
 });
 
