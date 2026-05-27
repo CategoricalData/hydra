@@ -443,7 +443,7 @@
          (setq hydra--test-graph base))))))
 
 (defun hydra-empty-context ()
-  '((:functions) (:annotations) (:variable_types)))
+  (funcall 'make-hydra_typing_inference_context 0 nil))
 
 (defun hydra-type-scheme-to-type (ts)
   "Convert a TypeScheme back to a Type by wrapping forall binders."
