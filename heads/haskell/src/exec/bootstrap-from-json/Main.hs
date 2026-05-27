@@ -529,14 +529,24 @@ main = do
 
   -- Prepend synthesized source modules to modsToGenerate (deduping by namespace
   -- to keep ordering stable). They go into the same universe as the main modules.
+  --
   -- The translingual lowerPrimitiveDefinitions rewrites Definition.primitive arms
   -- to Definition.term arms (with term-encoded PrimitiveDefinition values), so
   -- the host coder sees a uniform terms module. Applied to both the emit set
   -- and the universe to keep references consistent. Defaults from defaultImplementation
   -- are already typed (inference ran in update-json-main).
-  let modsToGenerate' = map CodeGeneration.lowerPrimitiveDefinitions
+  --
+  -- For now we apply the lowering only to the Haskell target, because the
+  -- Java/Python/Scala/Lisp/Go coders haven't been adapted to handle the
+  -- term-encoded PrimitiveDefinition record (they fail with "extraction
+  -- error" in resolution). Once those coders gain support, drop this
+  -- target check and apply lowering universally.
+  let applyLowering = if target == "haskell"
+        then map CodeGeneration.lowerPrimitiveDefinitions
+        else id
+  let modsToGenerate' = applyLowering
         (modsToGenerateScopedFiltered ++ synthesizedSourceMods)
-  let allModsFinal'   = map CodeGeneration.lowerPrimitiveDefinitions
+  let allModsFinal'   = applyLowering
         (allModsFinal ++ synthesizedSourceMods)
 
   -- Generate main modules

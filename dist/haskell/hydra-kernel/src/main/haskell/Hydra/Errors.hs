@@ -2,7 +2,6 @@
 -- | Top-level error types for the Hydra kernel
 
 module Hydra.Errors where
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
