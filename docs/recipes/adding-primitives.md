@@ -254,9 +254,161 @@ a sanity-check repetition, not the source of truth.
 
 #### Java
 
-Create `heads/java/src/main/java/hydra/lib/<library>/<FunctionName>.java`:
+Higher-order primitives (functions that take other functions as arguments) may have associated "eval elements."
+These eval elements provide term-level implementations of the primitive --
+they construct unevaluated application terms rather than calling native code.
+
+**Why do eval elements exist?**
+
+Eval elements are not required for the main interpreter, which can call all primitives natively.
+They exist to support *minimal Hydra implementations* (sometimes called "minimal heads") that may choose
+not to implement every primitive natively.
+A minimal head can fall back to an eval element to get correct behavior using only basic term reduction,
+without needing a native implementation of the primitive.
+
+**When should you add an eval element?**
+- Any higher-order primitive (one that accepts function arguments, e.g., `map`, `filter`, `foldl`, `foldr`)
+- The eval element constructs application terms that the interpreter can reduce without calling native code
+
+**Adding an eval element:**
+
+1. Create or update the Sources module in `/heads/haskell/src/main/haskell/Hydra/Sources/Eval/Lib/<Library>.hs`:
+
+```haskell
+module Hydra.Sources.Eval.Lib.Eithers where
+
+import Hydra.Kernel
+import Hydra.Sources.Libraries
+import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
+import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+-- ... other imports
+
+ns :: ModuleName
+ns = ModuleName "hydra.eval.lib.eithers"
+
+define :: String -> TTerm a -> TTermDefinition a
+define = definitionInModuleName ns
+
+module_ :: Module
+module_ = Module {
+    moduleName = ns,
+    moduleDefinitions = definitions,
+    moduleDependencies = unqualifiedDep <$>
+      ([moduleName Monads.module_, moduleName ShowCore.module_]
+       L.++ kernelTypesModuleNames),
+    moduleDescription = Just "Evaluation-level implementations of Either functions."}
+  where
+    definitions = [toDefinition bimap_]
+
+-- | Interpreter-friendly bimap for Either terms.
+bimap_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
+bimap_ = define "bimap" $
+  doc "Interpreter-friendly bimap for Either terms." $
+  "leftFun" ~> "rightFun" ~> "eitherTerm" ~>
+  cases _Term (var "eitherTerm")
+    (Just (Monads.unexpected @@ string "either value" @@ (ShowCore.term @@ var "eitherTerm"))) [
+    _Term_either>>: "e" ~>
+      produce $ Eithers.either_
+        ("val" ~> Core.termEither $ left $ Core.termApplication $ Core.application (var "leftFun") (var "val"))
+        ("val" ~> Core.termEither $ right $ Core.termApplication $ Core.application (var "rightFun") (var "val"))
+        (var "e")]
+```
+
+2. Add the module to `/heads/haskell/src/main/haskell/Hydra/Sources/Eval/Lib/All.hs`:
+
+```haskell
+import qualified Hydra.Sources.Eval.Lib.Eithers as EvalEithers
+
+evalLibModules :: [Module]
+evalLibModules = [
+  EvalEithers.module_,
+  -- ... other modules
+  ]
+```
+
+3. Generate the Haskell runtime code.
+   The generated module goes in `/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Eval/Lib/<Library>.hs`.
+
+   **Note:** The generated eval module is a bootstrap file. If you add a new eval element,
+   you may need to manually add the function to the generated file initially, then regenerate.
+   The export list in the generated file must include your new function
+   for the `Libraries.hs` import to work.
+
+4. Update the primitive registration in `Libraries.hs` to use `prim3Eval` instead of `prim3`:
+
+```haskell
+import qualified Hydra.Eval.Lib.Eithers as EvalEithers
+
+hydraLibEithers :: Library
+hydraLibEithers = standardLibrary _hydra_lib_eithers [
+    prim3Eval _eithers_bimap EvalEithers.bimap ["x", "y", "z", "w"] ...,
+    -- Use prim3Eval for higher-order, prim3 for first-order
+    ]
+```
+
+**Key differences between `primN` and `primNEval`:**
+- `prim3` uses the native Haskell implementation directly
+- `prim3Eval` uses the eval element, which returns unevaluated application terms
+
+**Important nuance:** Not all higher-order primitives use `primNEval`.
+Some higher-order primitives (e.g., `foldl`, `foldr`) are registered with `prim3`
+even though they have eval elements.
+The eval element exists as a fallback for minimal implementations,
+but the primitive registration itself uses the native implementation.
+Follow the pattern of similar existing primitives when deciding which to use.
+
+### 4. Create DSL wrapper
+
+Add typed wrapper in `/heads/haskell/src/main/haskell/Hydra/Dsl/Lib/<Library>.hs`:
+
+```haskell
+-- In Hydra/Dsl/Lib/Chars.hs
+module Hydra.Dsl.Meta.Lib.Chars where
+
+import Hydra.Phantoms
+import Hydra.Dsl.Meta.Phantoms
+import qualified Hydra.Dsl.Terms as Terms
+import Hydra.Sources.Libraries
+
+isAlphaNum :: TTerm Int -> TTerm Bool
+isAlphaNum = primitive1 _chars_isAlphaNum
+
+toLower :: TTerm Int -> TTerm Int
+toLower = primitive1 _chars_toLower
+```
+
+**Guidelines:**
+- Use phantom types (`TTerm`) to ensure type safety
+- Use `primitive1` for unary, `primitive2` for binary functions
+- Reference the name constants defined in `Libraries.hs`
+
+## Adding a primitive to Java
+
+### 1. Implement the PrimitiveFunction class
+
+Create `/heads/java/src/main/java/hydra/lib/<library>/<FunctionName>.java`:
 
 ```java
+package hydra.lib.chars;
+
+import hydra.typing.InferenceContext;
+import hydra.core.Name;
+import hydra.core.Term;
+import hydra.core.TypeScheme;
+import hydra.dsl.Terms;
+import hydra.errors.Error;
+import hydra.graph.Graph;
+import hydra.tools.PrimitiveFunction;
+import hydra.util.Either;
+
+import java.util.List;
+import java.util.function.Function;
+
+import static hydra.dsl.Types.boolean_;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.int32;
+import static hydra.dsl.Types.scheme;
+
 public class IsAlphaNum extends PrimitiveFunction {
     public Name name() { return new Name("hydra.lib.chars.isAlphaNum"); }
 
@@ -266,7 +418,7 @@ public class IsAlphaNum extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
             c -> Terms.boolean_(apply(c)),
             hydra.extract.Core.int32(cx, graph, args.get(0)));
@@ -278,7 +430,27 @@ public class IsAlphaNum extends PrimitiveFunction {
 }
 ```
 
-Register it in `heads/java/src/main/java/hydra/lib/Libraries.java`:
+**Structure:**
+- `name()`: Returns the fully qualified Hydra name
+- `type()`: Declares the type scheme (use type parameters for polymorphic functions)
+- `implementation()`: Either-based wrapper that extracts arguments and wraps results,
+  taking `InferenceContext` and `Graph` parameters
+- `apply()`: Static method(s) for direct Java usage
+
+**Higher-order primitives in Java:** When the primitive takes function arguments,
+the `implementation()` method must use `Reduction.reduceTerm()` to evaluate function applications.
+The `apply()` method receives Java `Function` objects that can be called directly.
+See `hydra/lib/lists/Foldr.java` for an example that iterates in reverse
+and calls `reduceTerm` on each application.
+
+### 2. Register in Libraries
+
+Update `/heads/java/src/main/java/hydra/lib/Libraries.java`. Add the new
+primitive to its category's list, and ensure the category is included in
+`standardPrimitives()`. Per the Java head's collection conventions
+(see [Java collection conventions](#java-collection-conventions) below),
+new code should return `ConsList`/`PersistentMap`/`PersistentSet`
+typed as `List`/`Map`/`Set` rather than building via `ArrayList`/`HashMap`/`HashSet`.
 
 ```java
 private static List<PrimitiveFunction> charsPrimitives() {

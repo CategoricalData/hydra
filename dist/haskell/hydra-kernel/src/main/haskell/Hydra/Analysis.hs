@@ -6,7 +6,6 @@ import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Checking as Checking
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Dependencies as Dependencies
@@ -43,15 +42,15 @@ addNamesToNamespaces encodeNamespace names ns0 =
         Util.namespacesFocus = (Util.namespacesFocus ns0),
         Util.namespacesMapping = (Maps.union (Util.namespacesMapping ns0) (Maps.fromList (Lists.map toPair (Sets.toList nss))))}
 -- | Analyze a function term, collecting lambdas, type lambdas, lets, and type applications
-analyzeFunctionTerm :: Context.Context -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
+analyzeFunctionTerm :: Typing.InferenceContext -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTerm cx getTC setTC env term =
     analyzeFunctionTermWith cx (\g -> \b -> Logic.ifElse (Predicates.isComplexBinding g b) (Just (Core.TermLiteral (Core.LiteralBoolean True))) Nothing) getTC setTC env term
 -- | Analyze a function term with configurable binding metadata
-analyzeFunctionTermWith :: Context.Context -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
+analyzeFunctionTermWith :: Typing.InferenceContext -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTermWith cx forBinding getTC setTC env term =
     analyzeFunctionTermWithGather cx forBinding getTC setTC True env [] [] [] [] [] term
 -- | Final step of the function-term walk: type-apply the body and assemble the FunctionStructure
-analyzeFunctionTermWithFinish :: Context.Context -> (t0 -> Graph.Graph) -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
+analyzeFunctionTermWithFinish :: Typing.InferenceContext -> (t0 -> Graph.Graph) -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTermWithFinish cx getTC fEnv tparams args bindings doms tapps body =
 
       let bodyWithTapps =
@@ -68,7 +67,7 @@ analyzeFunctionTermWithFinish cx getTC fEnv tparams args bindings doms tapps bod
         Typing.functionStructureCodomain = mcod,
         Typing.functionStructureEnvironment = fEnv}))
 -- | Recursive step of the function-term walk: peel lambdas / type-lambdas / type-applications, accumulating params and bindings, then call analyzeFunctionTermWithFinish
-analyzeFunctionTermWithGather :: Context.Context -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> Bool -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
+analyzeFunctionTermWithGather :: Typing.InferenceContext -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> Bool -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTermWithGather cx forBinding getTC setTC argMode gEnv tparams args bindings doms tapps t =
     case (Strip.deannotateTerm t) of
       Core.TermLambda v0 -> Logic.ifElse argMode (

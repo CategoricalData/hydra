@@ -6,7 +6,7 @@ import           Hydra.Dsl.Annotations (doc)
 import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
-import qualified Hydra.Sources.Kernel.Types.Context as Context
+import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Errors as Error
 import qualified Hydra.Sources.Kernel.Types.Graph as Graph
@@ -23,7 +23,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = unqualifiedDep <$> [Context.ns, Error.ns, Graph.ns, Variants.ns, Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Error.ns, Graph.ns, Variants.ns, Core.ns, Typing.ns],
             moduleDescription = Just "Abstractions for paired transformations between languages"}
   where
     definitions = [
@@ -88,11 +88,11 @@ coder = define "Coder" $
   doc "An encoder and decoder; a bidirectional transformation between two types" $
   T.forAlls ["v1", "v2"] $ T.record [
     "encode">:
-      doc "A function which encodes source values as target values in a given context" $
-      Context.context ~> "v1" ~> T.either_ Error.error_ "v2",
+      doc "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing" $
+      Typing.inferenceContext ~> "v1" ~> T.either_ Error.error_ "v2",
     "decode">:
-      doc "A function which decodes target values as source values in a given context" $
-      Context.context ~> "v2" ~> T.either_ Error.error_ "v1"]
+      doc "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing" $
+      Typing.inferenceContext ~> "v2" ~> T.either_ Error.error_ "v1"]
 
 coderDirection :: Binding
 coderDirection = define "CoderDirection" $

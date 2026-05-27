@@ -66,7 +66,7 @@ buildNamespacesForTestGroup mod tgroup graph_ =
                       Packaging.termDefinitionName = (Core.bindingName b),
                       Packaging.termDefinitionTerm = (Core.bindingTerm b),
                       Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) testBindings)}
-      in (Eithers.bind (Eithers.bimap (\e -> Errors.error e) (\a -> a) (Utils.namespacesForModule tempModule Lexical.emptyContext graph_)) (\baseNamespaces ->
+      in (Eithers.bind (Eithers.bimap (\e -> Errors.error e) (\a -> a) (Utils.namespacesForModule tempModule Lexical.emptyInferenceContext graph_)) (\baseNamespaces ->
         let encodedNames = Sets.unions (Lists.map (\t -> extractEncodedTermVariableNames graph_ t) testTerms)
         in (Right (addNamespacesToNamespaces baseNamespaces encodedNames))))
 -- | Build the complete test module for Haskell HSpec

@@ -1585,7 +1585,6 @@
                 "domain": {"variable": "hydra.errors.UnificationInferenceError"},
                 "parameter": "x"}}}}}}],
   "dependencies": [
-    {"module": "hydra.encode.context"},
     {"module": "hydra.encode.core"},
     {"module": "hydra.encode.error.checking"},
     {"module": "hydra.encode.error.core"},

@@ -59,7 +59,7 @@ type Result a = Either Error a
 data LastMile a =
   LastMile {
     -- | An encoder for terms to a list of output objects
-    lastMileEncoder :: (Type -> Context -> Graph -> Result (Term -> Graph -> Context -> Result [a])),
+    lastMileEncoder :: (Type -> InferenceContext -> Graph -> Result (Term -> Graph -> InferenceContext -> Result [a])),
     -- | A function which serializes a list of output objects to a string representation
     lastMileSerializer :: ([a] -> Result String),
     -- | A file extension for the generated file(s)
@@ -77,7 +77,7 @@ eitherToIo (Right v) = return v
 
 data JsonPayloadFormat = Json | Jsonl
 
-type TermEncoder x = Term -> Graph -> Context -> Result [x]
+type TermEncoder x = Term -> Graph -> InferenceContext -> Result [x]
 
 -- | A convenience for transformAvroJsonDirectory, bundling all of the input parameters together as a workflow
 executeAvroTransformWorkflow :: LastMile x -> TransformWorkflow -> IO ()
@@ -117,21 +117,26 @@ propertyGraphGraphsonLastMile = LastMile encoder serializer "jsonl"
 shaclRdfLastMile :: LastMile Rdf.Description
 shaclRdfLastMile = LastMile typeApplicationTermToShaclRdf (Right . rdfDescriptionsToNtriples) "nt"
 
-typeApplicationTermToShaclRdf :: Type -> Context -> Graph -> Result (Term -> Graph -> Context -> Result [Rdf.Description])
+-- The outer InferenceContext is the LastMile API contract (shared with the
+-- property-graph encoder). The blank-node counter for SHACL/RDF encoding is
+-- threaded as a plain Int, independent of inference state (see #368).
+typeApplicationTermToShaclRdf :: Type -> InferenceContext -> Graph -> Result (Term -> Graph -> InferenceContext -> Result [Rdf.Description])
 typeApplicationTermToShaclRdf _ _cx _g = Right encode
   where
-    encode term graf cx = do
-        elDescs <- CM.mapM (encodeElement cx) $ graphToBindings graf
-        termDescs <- encodeBlankTerm cx
-        return $ L.concat (termDescs:elDescs)
+    encode term graf _cx = do
+        let (elDescs, cxAfter) = L.foldl' encodeElement ([], 0) (graphToBindings graf)
+        elDescsR <- sequence elDescs
+        termDescs <- encodeBlankTerm cxAfter
+        return $ L.concat (termDescs : elDescsR)
       where
-        encodeElement cx' el = do
+        encodeElement (acc, ctr) el =
           let subject = Rdf.ResourceIri $ RdfUt.nameToIri $ bindingName el
-          fst <$> Shacl.encodeTerm subject (listsToSets $ bindingTerm el) cx' graf
-        encodeBlankTerm cx' = if notInGraph
+              r = fmap fst $ Shacl.encodeTerm subject (listsToSets $ bindingTerm el) ctr graf
+          in (acc ++ [r], ctr)
+        encodeBlankTerm ctr = if notInGraph
           then do
-            let (subject, cx'') = RdfUt.nextBlankNode cx'
-            fst <$> Shacl.encodeTerm subject (listsToSets term) cx'' graf
+            let (subject, ctr') = RdfUt.nextBlankNode ctr
+            fst <$> Shacl.encodeTerm subject (listsToSets term) ctr' graf
           else pure []
         notInGraph = L.null $ L.filter (\e -> bindingTerm e == term) $ graphToBindings graf
 
@@ -139,7 +144,7 @@ transformAvroJson :: JsonPayloadFormat -> Adapter Avro.Schema Type Json.Value Te
 transformAvroJson format adapter lastMile inFile outFile = do
     putStr $ "\t" ++ inFile ++ " --> "
     contents <- readFile inFile
-    let cx = emptyContext
+    let cx = emptyInferenceContext
     let entities = case format of
           Json -> [contents]
           Jsonl -> L.filter (not . L.null) $ lines contents
@@ -168,7 +173,7 @@ transformAvroJsonDirectory :: LastMile x -> FilePath -> FilePath -> FilePath -> 
 transformAvroJsonDirectory lastMile schemaPath srcDir destDir = do
     createDirectoryIfMissing True destDir
     schemaStr <- readFile schemaPath
-    let cx = emptyContext
+    let cx = emptyInferenceContext
     adapter <- eitherToIo $ loadAdapter cx schemaStr
     paths <- getDirectoryContents srcDir
     conf <- CM.mapM (transformFile adapter) paths

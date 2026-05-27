@@ -516,7 +516,7 @@ by the per-target `assemble-distribution.sh`. The pattern, target by target:
 - Emacs Lisp: `heads/lisp/emacs-lisp/src/test/emacs-lisp/hydra/test/test_env.el`
 - Scheme: `heads/lisp/scheme/src/test/scheme/hydra/test/test_env.scm`
 
-Each provides `hydra_test_test_env_test_context` (a `Context` value) and
+Each provides `hydra_test_test_env_test_context` (an `InferenceContext` value) and
 `hydra_test_test_env_test_graph` (a function `Map Name Type → Map Name Term → Graph`),
 matching the DSL signature in `Hydra.Sources.Test.TestEnv`. Scala and the
 four Lisp dialects (Clojure, Common Lisp, Emacs Lisp, Scheme) curry the

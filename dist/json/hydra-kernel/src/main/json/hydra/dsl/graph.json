@@ -3992,7 +3992,7 @@
                           "key": "description",
                           "value": {
                             "literal": {
-                              "string": "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting."}}}],
+                              "string": "A concrete implementation of the primitive function. The InferenceContext and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the InferenceContext supports subterm-path tracing for error reporting."}}}],
                       "body": {
                         "function": {
                           "codomain": {
@@ -4002,7 +4002,7 @@
                                   "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
                                   "domain": {"list": {"variable": "hydra.core.Term"}}}},
                               "domain": {"variable": "hydra.graph.Graph"}}},
-                          "domain": {"variable": "hydra.context.Context"}}}}},
+                          "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
@@ -4058,7 +4058,7 @@
                                 "key": "description",
                                 "value": {
                                   "literal": {
-                                    "string": "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting."}}}],
+                                    "string": "A concrete implementation of the primitive function. The InferenceContext and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the InferenceContext supports subterm-path tracing for error reporting."}}}],
                             "body": {
                               "function": {
                                 "codomain": {
@@ -4068,7 +4068,7 @@
                                         "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
                                         "domain": {"list": {"variable": "hydra.core.Term"}}}},
                                     "domain": {"variable": "hydra.graph.Graph"}}},
-                                "domain": {"variable": "hydra.context.Context"}}}}},
+                                "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "implementation"}},
                 "domain": {
@@ -4166,7 +4166,7 @@
                         "key": "description",
                         "value": {
                           "literal": {
-                            "string": "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting."}}}],
+                            "string": "A concrete implementation of the primitive function. The InferenceContext and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the InferenceContext supports subterm-path tracing for error reporting."}}}],
                     "body": {
                       "function": {
                         "codomain": {
@@ -4176,7 +4176,7 @@
                                 "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
                                 "domain": {"list": {"variable": "hydra.core.Term"}}}},
                             "domain": {"variable": "hydra.graph.Graph"}}},
-                        "domain": {"variable": "hydra.context.Context"}}}}},
+                        "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}}},
           "typeParameters": []},
         "term": {
@@ -4357,7 +4357,7 @@
                           "key": "description",
                           "value": {
                             "literal": {
-                              "string": "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting."}}}],
+                              "string": "A concrete implementation of the primitive function. The InferenceContext and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the InferenceContext supports subterm-path tracing for error reporting."}}}],
                       "body": {
                         "function": {
                           "codomain": {
@@ -4367,7 +4367,7 @@
                                   "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
                                   "domain": {"list": {"variable": "hydra.core.Term"}}}},
                               "domain": {"variable": "hydra.graph.Graph"}}},
-                          "domain": {"variable": "hydra.context.Context"}}}}},
+                          "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
@@ -4452,7 +4452,7 @@
                                 "key": "description",
                                 "value": {
                                   "literal": {
-                                    "string": "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting."}}}],
+                                    "string": "A concrete implementation of the primitive function. The InferenceContext and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the InferenceContext supports subterm-path tracing for error reporting."}}}],
                             "body": {
                               "function": {
                                 "codomain": {
@@ -4462,7 +4462,7 @@
                                         "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
                                         "domain": {"list": {"variable": "hydra.core.Term"}}}},
                                     "domain": {"variable": "hydra.graph.Graph"}}},
-                                "domain": {"variable": "hydra.context.Context"}}}}},
+                                "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -4499,7 +4499,7 @@
                                   "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "a"}}},
                                   "domain": {"variable": "hydra.core.Term"}}},
                               "domain": {"variable": "hydra.graph.Graph"}}},
-                          "domain": {"variable": "hydra.context.Context"}}}}},
+                          "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}},
             {
               "isLazy": false,
@@ -4515,7 +4515,7 @@
                             "function": {
                               "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
                               "domain": {"variable": "a"}}},
-                          "domain": {"variable": "hydra.context.Context"}}}}},
+                          "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}],
           "result": {
             "type": {
@@ -4586,7 +4586,7 @@
                                       "function": {
                                         "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
                                         "domain": {"variable": "a"}}},
-                                    "domain": {"variable": "hydra.context.Context"}}}}},
+                                    "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                             "function": {"variable": "hydra.phantoms.TTerm"}}},
                         "parameter": "decode"}},
                     "domain": {
@@ -4603,7 +4603,7 @@
                                         "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "a"}}},
                                         "domain": {"variable": "hydra.core.Term"}}},
                                     "domain": {"variable": "hydra.graph.Graph"}}},
-                                "domain": {"variable": "hydra.context.Context"}}}}},
+                                "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "encode"}},
                 "domain": {
@@ -4702,7 +4702,7 @@
                                 "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "a"}}},
                                 "domain": {"variable": "hydra.core.Term"}}},
                             "domain": {"variable": "hydra.graph.Graph"}}},
-                        "domain": {"variable": "hydra.context.Context"}}}}},
+                        "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
@@ -4769,7 +4769,7 @@
                           "function": {
                             "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
                             "domain": {"variable": "a"}}},
-                        "domain": {"variable": "hydra.context.Context"}}}}},
+                        "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
@@ -4984,7 +4984,7 @@
                                   "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "a"}}},
                                   "domain": {"variable": "hydra.core.Term"}}},
                               "domain": {"variable": "hydra.graph.Graph"}}},
-                          "domain": {"variable": "hydra.context.Context"}}}}},
+                          "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}],
           "result": {
             "type": {
@@ -5108,7 +5108,7 @@
                                         "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "a"}}},
                                         "domain": {"variable": "hydra.core.Term"}}},
                                     "domain": {"variable": "hydra.graph.Graph"}}},
-                                "domain": {"variable": "hydra.context.Context"}}}}},
+                                "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -5142,7 +5142,7 @@
                             "function": {
                               "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
                               "domain": {"variable": "a"}}},
-                          "domain": {"variable": "hydra.context.Context"}}}}},
+                          "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}],
           "result": {
             "type": {
@@ -5263,7 +5263,7 @@
                                   "function": {
                                     "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
                                     "domain": {"variable": "a"}}},
-                                "domain": {"variable": "hydra.context.Context"}}}}},
+                                "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -5274,13 +5274,13 @@
   "dependencies": [
     {"module": "hydra.graph"},
     {"module": "hydra.phantoms"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.errors"},
     {"module": "hydra.packaging"},
-    {"module": "hydra.dsl.context"},
+    {"module": "hydra.typing"},
     {"module": "hydra.dsl.core"},
     {"module": "hydra.dsl.errors"},
-    {"module": "hydra.dsl.packaging"}],
+    {"module": "hydra.dsl.packaging"},
+    {"module": "hydra.dsl.typing"}],
   "description": "DSL functions for hydra.graph",
   "name": "hydra.dsl.graph"}
