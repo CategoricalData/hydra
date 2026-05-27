@@ -4,7 +4,6 @@
 module Hydra.Test.Differentiation where
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Differentiation as Differentiation
 import qualified Hydra.Error.Checking as Checking

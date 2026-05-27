@@ -4,9 +4,9 @@
 module Hydra.Decode.Coders where
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Context as Context
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Decode.Errors as DecodeErrors
+import qualified Hydra.Decode.Typing as Typing
 import qualified Hydra.Decode.Variants as Variants
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
