@@ -186,7 +186,7 @@ hsvar = haskellUtilsDefinition "hsvar" $
   "s" ~>
     inject H._Expression H._Expression_variable $ (rawName @@ var "s")
 
-namespacesForModule :: TTermDefinition (Module -> Context -> Graph -> Either Error HaskellNamespaces)
+namespacesForModule :: TTermDefinition (Module -> InferenceContext -> Graph -> Either Error HaskellNamespaces)
 namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
   doc "Compute the Haskell module namespaces for a Hydra module" $
   "mod" ~> "cx" ~> "g" ~>

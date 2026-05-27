@@ -6354,7 +6354,7 @@
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.test.testGraph.testContext"},
                                                                               "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -6427,7 +6427,7 @@
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.test.testGraph.testContext"},
                                                                               "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -6510,7 +6510,7 @@
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.test.testGraph.testContext"},
                                                                               "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -6639,7 +6639,7 @@
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.test.testGraph.testContext"},
                                                                               "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -6772,7 +6772,7 @@
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.test.testGraph.testContext"},
                                                                               "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -6918,7 +6918,7 @@
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.test.testGraph.testContext"},
                                                                               "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -7112,7 +7112,7 @@
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.test.testGraph.testContext"},
                                                                               "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -7253,7 +7253,7 @@
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.test.testGraph.testContext"},
                                                                               "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -7375,7 +7375,7 @@
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.test.testGraph.testContext"},
                                                                               "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                "typeApplication": {"body": {"variable": "hydra.reduction.betaReduceType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -9284,7 +9284,7 @@
     {"module": "hydra.reduction"},
     {"module": "hydra.inference"},
     {"module": "hydra.show.core"},
-    {"module": "hydra.context"},
+    {"module": "hydra.typing"},
     {"module": "hydra.core"},
     {"module": "hydra.errors"},
     {"module": "hydra.test.testGraph"},

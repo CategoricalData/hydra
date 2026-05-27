@@ -18,7 +18,6 @@ import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                     as Error
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
@@ -148,4 +147,4 @@ inferTerm = define "inferTerm" $
     Eithers.bimap
       ("e" ~> ShowError.error_ @@ var "e")
       ("x" ~> Typing.inferenceResultTerm (var "x"))
-      (Inference.inferInGraphContext @@ asTerm Lexical.emptyContext @@ var "g" @@ var "term")
+      (Inference.inferInGraphContext @@ asTerm Lexical.emptyInferenceContext @@ var "g" @@ var "term")

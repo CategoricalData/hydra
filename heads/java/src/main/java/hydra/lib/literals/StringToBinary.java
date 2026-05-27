@@ -14,7 +14,7 @@ import static hydra.dsl.Types.binary;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
-import hydra.context.Context;
+import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -46,7 +46,7 @@ public class StringToBinary extends PrimitiveFunction {
      * @return a function that converts string terms to binary terms
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<String, Term>) s -> new Term.Literal(new hydra.core.Literal.Binary(apply(s))), hydra.extract.Core.string(graph, args.get(0)));
     }
 

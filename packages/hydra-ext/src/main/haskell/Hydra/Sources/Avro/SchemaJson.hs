@@ -79,7 +79,6 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 -- Additional imports
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Avro.Schema as Avro
 import qualified Hydra.Json.Model as JM
@@ -196,13 +195,13 @@ module_ = Module {
 
 -- | Error helpers
 
-err :: TTermDefinition (Context -> String -> Result a)
+err :: TTermDefinition (InferenceContext -> String -> Result a)
 err = define "err" $
   doc "Construct an error result with a message in context" $
   lambda "cx" $ lambda "msg" $
-    Ctx.failInContext (Error.errorOther $ Error.otherError (var "msg")) (var "cx")
+    left (Error.errorOther $ Error.otherError (var "msg"))
 
-unexpectedE :: TTermDefinition (Context -> String -> String -> Result a)
+unexpectedE :: TTermDefinition (InferenceContext -> String -> String -> Result a)
 unexpectedE = define "unexpectedE" $
   doc "Construct an error for unexpected values" $
   lambda "cx" $ lambda "expected" $ lambda "found" $
@@ -211,35 +210,35 @@ unexpectedE = define "unexpectedE" $
 
 -- | JSON extraction helpers
 
-expectArrayE :: TTermDefinition (Context -> JM.Value -> Result [JM.Value])
+expectArrayE :: TTermDefinition (InferenceContext -> JM.Value -> Result [JM.Value])
 expectArrayE = define "expectArrayE" $
   doc "Extract a JSON array or return an error" $
   lambda "cx" $ lambda "value" $
     cases JM._Value (var "value") Nothing [
       JM._Value_array>>: lambda "v" $ Phantoms.right (var "v")]
 
-expectNumberE :: TTermDefinition (Context -> JM.Value -> Result Sci.Scientific)
+expectNumberE :: TTermDefinition (InferenceContext -> JM.Value -> Result Sci.Scientific)
 expectNumberE = define "expectNumberE" $
   doc "Extract a JSON number or return an error" $
   lambda "cx" $ lambda "value" $
     cases JM._Value (var "value") Nothing [
       JM._Value_number>>: lambda "v" $ Phantoms.right (var "v")]
 
-expectObjectE :: TTermDefinition (Context -> JM.Value -> Result (M.Map String JM.Value))
+expectObjectE :: TTermDefinition (InferenceContext -> JM.Value -> Result (M.Map String JM.Value))
 expectObjectE = define "expectObjectE" $
   doc "Extract a JSON object or return an error" $
   lambda "cx" $ lambda "value" $
     cases JM._Value (var "value") Nothing [
       JM._Value_object>>: lambda "v" $ Phantoms.right (var "v")]
 
-expectStringE :: TTermDefinition (Context -> JM.Value -> Result String)
+expectStringE :: TTermDefinition (InferenceContext -> JM.Value -> Result String)
 expectStringE = define "expectStringE" $
   doc "Extract a JSON string or return an error" $
   lambda "cx" $ lambda "value" $
     cases JM._Value (var "value") Nothing [
       JM._Value_string>>: lambda "v" $ Phantoms.right (var "v")]
 
-requireE :: TTermDefinition (Context -> String -> M.Map String JM.Value -> Result JM.Value)
+requireE :: TTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result JM.Value)
 requireE = define "requireE" $
   doc "Look up a required attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
@@ -248,21 +247,21 @@ requireE = define "requireE" $
       (lambda "v" $ Phantoms.right (var "v"))
       (Maps.lookup (var "fname") (var "m"))
 
-requireArrayE :: TTermDefinition (Context -> String -> M.Map String JM.Value -> Result [JM.Value])
+requireArrayE :: TTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result [JM.Value])
 requireArrayE = define "requireArrayE" $
   doc "Look up a required array attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
     Eithers.bind (requireE @@ var "cx" @@ var "fname" @@ var "m")
       (lambda "v" $ expectArrayE @@ var "cx" @@ var "v")
 
-requireNumberE :: TTermDefinition (Context -> String -> M.Map String JM.Value -> Result Sci.Scientific)
+requireNumberE :: TTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result Sci.Scientific)
 requireNumberE = define "requireNumberE" $
   doc "Look up a required number attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
     Eithers.bind (requireE @@ var "cx" @@ var "fname" @@ var "m")
       (lambda "v" $ expectNumberE @@ var "cx" @@ var "v")
 
-requireStringE :: TTermDefinition (Context -> String -> M.Map String JM.Value -> Result String)
+requireStringE :: TTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result String)
 requireStringE = define "requireStringE" $
   doc "Look up a required string attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
@@ -275,7 +274,7 @@ optE = define "optE" $
   lambda "k" $ lambda "m" $
     Maps.lookup (var "k") (var "m")
 
-optArrayE :: TTermDefinition (Context -> String -> M.Map String JM.Value -> Result (Maybe [JM.Value]))
+optArrayE :: TTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result (Maybe [JM.Value]))
 optArrayE = define "optArrayE" $
   doc "Look up an optional array attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
@@ -284,7 +283,7 @@ optArrayE = define "optArrayE" $
       (lambda "v" $ Eithers.map (lambda "a" $ Maybes.pure (var "a")) (expectArrayE @@ var "cx" @@ var "v"))
       (Maps.lookup (var "fname") (var "m"))
 
-optStringE :: TTermDefinition (Context -> String -> M.Map String JM.Value -> Result (Maybe String))
+optStringE :: TTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result (Maybe String))
 optStringE = define "optStringE" $
   doc "Look up an optional string attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
@@ -535,7 +534,7 @@ encodeAnnotations = define "encodeAnnotations" $
 
 -- | Coder functions
 
-avroSchemaJsonCoder :: TTermDefinition (Context -> Coder Avro.Schema JM.Value)
+avroSchemaJsonCoder :: TTermDefinition (InferenceContext -> Coder Avro.Schema JM.Value)
 avroSchemaJsonCoder = define "avroSchemaJsonCoder" $
   doc "Create a coder between Avro schemas and JSON values" $
   lambda "cx" $
@@ -543,7 +542,7 @@ avroSchemaJsonCoder = define "avroSchemaJsonCoder" $
       _Coder_encode>>: lambda "_cx" $ lambda "schema" $ Phantoms.right (encodeSchema @@ var "schema"),
       _Coder_decode>>: lambda "cx2" $ lambda "json" $ decodeSchema @@ var "cx2" @@ var "json"]
 
-avroSchemaStringCoder :: TTermDefinition (Context -> Coder Avro.Schema String)
+avroSchemaStringCoder :: TTermDefinition (InferenceContext -> Coder Avro.Schema String)
 avroSchemaStringCoder = define "avroSchemaStringCoder" $
   doc "Create a coder between Avro schemas and JSON strings" $
   lambda "cx" $
@@ -561,7 +560,7 @@ avroSchemaStringCoder = define "avroSchemaStringCoder" $
 
 -- | Decode functions
 
-decodeAliases :: TTermDefinition (Context -> M.Map String JM.Value -> Result (Maybe [String]))
+decodeAliases :: TTermDefinition (InferenceContext -> M.Map String JM.Value -> Result (Maybe [String]))
 decodeAliases = define "decodeAliases" $
   doc "Decode aliases from a JSON object map" $
   lambda "cx" $ lambda "m" $
@@ -575,7 +574,7 @@ decodeAliases = define "decodeAliases" $
               (Eithers.mapList (expectStringE @@ var "cx") (var "arr")))
           (var "mArr"))
 
-decodeEnum :: TTermDefinition (Context -> M.Map String JM.Value -> Result Avro.NamedType)
+decodeEnum :: TTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.NamedType)
 decodeEnum = define "decodeEnum" $
   doc "Decode an Avro enum type from a JSON object map" $
   lambda "cx" $ lambda "m" $
@@ -590,7 +589,7 @@ decodeEnum = define "decodeEnum" $
                     Avro._Enum_symbols>>: var "symbols",
                     Avro._Enum_default>>: var "defVal"])))))
 
-decodeField :: TTermDefinition (Context -> M.Map String JM.Value -> Result Avro.Field)
+decodeField :: TTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.Field)
 decodeField = define "decodeField" $
   doc "Decode an Avro field from a JSON object map" $
   lambda "cx" $ lambda "m" $
@@ -617,7 +616,7 @@ decodeField = define "decodeField" $
                               Avro._Field_aliases>>: var "aliases",
                               Avro._Field_annotations>>: getAnnotations @@ var "m"])))))))
 
-decodeFixed :: TTermDefinition (Context -> M.Map String JM.Value -> Result Avro.NamedType)
+decodeFixed :: TTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.NamedType)
 decodeFixed = define "decodeFixed" $
   doc "Decode an Avro fixed type from a JSON object map" $
   lambda "cx" $ lambda "m" $
@@ -628,7 +627,7 @@ decodeFixed = define "decodeFixed" $
           record Avro._Fixed [
             Avro._Fixed_size>>: var "size"])
 
-decodeNamedSchema :: TTermDefinition (Context -> M.Map String JM.Value -> Result Avro.NamedType -> Result Avro.Schema)
+decodeNamedSchema :: TTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.NamedType -> Result Avro.Schema)
 decodeNamedSchema = define "decodeNamedSchema" $
   doc "Decode a named Avro schema from a JSON object map and a decoded named type result" $
   lambda "cx" $ lambda "m" $ lambda "namedTypeResult" $
@@ -651,7 +650,7 @@ decodeNamedSchema = define "decodeNamedSchema" $
                             Avro._Named_type>>: var "namedType",
                             Avro._Named_annotations>>: getAnnotations @@ var "m"])))))))
 
-decodeOrder :: TTermDefinition (Context -> String -> Result Avro.Order)
+decodeOrder :: TTermDefinition (InferenceContext -> String -> Result Avro.Order)
 decodeOrder = define "decodeOrder" $
   doc "Decode an Avro field ordering from a string" $
   lambda "cx" $ lambda "o" $
@@ -663,7 +662,7 @@ decodeOrder = define "decodeOrder" $
           (Phantoms.right (inject Avro._Order Avro._Order_ignore unit))
           (err @@ var "cx" @@ (Strings.cat $ list [string "unknown order: ", var "o"]))))
 
-decodeRecord :: TTermDefinition (Context -> M.Map String JM.Value -> Result Avro.NamedType)
+decodeRecord :: TTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.NamedType)
 decodeRecord = define "decodeRecord" $
   doc "Decode an Avro record type from a JSON object map" $
   lambda "cx" $ lambda "m" $
@@ -701,7 +700,7 @@ decodePrimitiveName = define "decodePrimitiveName" $
                     (just (inject Avro._Primitive Avro._Primitive_string unit))
                     nothing)))))))
 
-decodeSchema :: TTermDefinition (Context -> JM.Value -> Result Avro.Schema)
+decodeSchema :: TTermDefinition (InferenceContext -> JM.Value -> Result Avro.Schema)
 decodeSchema = define "decodeSchema" $
   doc "Decode an Avro schema from a JSON value" $
   lambda "cx" $ lambda "v" $
@@ -722,7 +721,7 @@ decodeSchema = define "decodeSchema" $
         Eithers.bind (requireStringE @@ var "cx" @@ avro_type @@ var "m")
           (lambda "typeName" $ decodeObjectSchema @@ var "cx" @@ var "m" @@ var "typeName")]
 
-decodeObjectSchema :: TTermDefinition (Context -> M.Map String JM.Value -> String -> Result Avro.Schema)
+decodeObjectSchema :: TTermDefinition (InferenceContext -> M.Map String JM.Value -> String -> Result Avro.Schema)
 decodeObjectSchema = define "decodeObjectSchema" $
   doc "Decode an Avro schema from a JSON object given the type name" $
   lambda "cx" $ lambda "m" $ lambda "typeName" $
@@ -742,7 +741,7 @@ decodeObjectSchema = define "decodeObjectSchema" $
                 (lambda "p" $ Phantoms.right (inject Avro._Schema Avro._Schema_primitive (var "p")))
                 (decodePrimitiveName @@ var "typeName"))))))
 
-decodeArraySchema :: TTermDefinition (Context -> M.Map String JM.Value -> Result Avro.Schema)
+decodeArraySchema :: TTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.Schema)
 decodeArraySchema = define "decodeArraySchema" $
   doc "Decode an Avro array schema from a JSON object map" $
   lambda "cx" $ lambda "m" $
@@ -753,7 +752,7 @@ decodeArraySchema = define "decodeArraySchema" $
             Avro._Array_items>>: var "s"]))
           (decodeSchema @@ var "cx" @@ var "items"))
 
-decodeMapSchema :: TTermDefinition (Context -> M.Map String JM.Value -> Result Avro.Schema)
+decodeMapSchema :: TTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.Schema)
 decodeMapSchema = define "decodeMapSchema" $
   doc "Decode an Avro map schema from a JSON object map" $
   lambda "cx" $ lambda "m" $

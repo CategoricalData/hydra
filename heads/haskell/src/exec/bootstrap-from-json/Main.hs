@@ -575,7 +575,7 @@ main = do
         "python"     -> generateSources moduleToPython     pythonLanguage     False True  True  False dir allModsFinal' mods
         "scala"      -> generateSourcesWithTransform wrapLongScalaText moduleToScala scalaLanguage False True False False dir allModsFinal' mods
         "go"         -> generateSources moduleToGo  goLanguage         False False False False dir allModsFinal' mods
-        "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False True  False False dir allModsFinal' mods
+        "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False True  True  False dir allModsFinal' mods
         _ | Just g <- lispGenerator ->
               generateSources g lispLanguage True False False False dir allModsFinal' mods
         _ -> do
@@ -706,7 +706,7 @@ main = do
             "java"       -> generateSources moduleToJava       javaLanguage       False True  False True  outMain allUniverse extModsForTests >> return ()
             "python"     -> generateSources moduleToPython     pythonLanguage     False True  True  False outMain allUniverse extModsForTests >> return ()
             "go"         -> generateSources moduleToGo  goLanguage         False False False False outMain allUniverse extModsForTests >> return ()
-            "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False True  False False outMain allUniverse extModsForTests >> return ()
+            "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False True  True  False outMain allUniverse extModsForTests >> return ()
             _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False False False False outMain allUniverse extModsForTests >> return ()
             _ -> return ()
           putStrLn ""
@@ -736,7 +736,7 @@ main = do
             "python"     -> generateSources moduleToPython     pythonLanguage     False True  True  False dir allUniverse mods
             "scala"      -> generateSourcesWithTransform wrapLongScalaText moduleToScala scalaLanguage False True False False dir allUniverse mods
             "go"         -> generateSources moduleToGo  goLanguage         False False False False dir allUniverse mods
-            "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False True  False False dir allUniverse mods
+            "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False True  True  False dir allUniverse mods
             _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False False False False dir allUniverse mods
             _ -> return []
 
