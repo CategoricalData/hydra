@@ -80,8 +80,8 @@
                                                                                       "body": {
                                                                                         "typeApplication": {
                                                                                           "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.bimap"}, "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                          "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                      "type": {"literal": {"string": {}}}}},
+                                                                                          "type": {"literal": {"string": {}}}}},
+                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                   "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
                                                                   "function": {
                                                                     "lambda": {
@@ -221,8 +221,8 @@
                                                                                       "body": {
                                                                                         "typeApplication": {
                                                                                           "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.bimap"}, "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                          "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                      "type": {"literal": {"string": {}}}}},
+                                                                                          "type": {"literal": {"string": {}}}}},
+                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                   "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
                                                                   "function": {
                                                                     "lambda": {

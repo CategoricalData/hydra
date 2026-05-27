@@ -111,6 +111,7 @@ module_ = Module {
       toDefinition inferAndGenerateLexicon,
       toDefinition inferModules,
       toDefinition inferModulesGiven,
+      toDefinition lowerPrimitiveDefinitions,
       toDefinition moduleDepsTransitive,
       toDefinition moduleToJson,
       toDefinition moduleToSourceModule,
@@ -576,6 +577,65 @@ inferModulesGiven = define "inferModulesGiven" $
 -- | Generate encoder or decoder modules for a list of type modules.
 -- Takes a codec function, bootstrap graph, universe modules, and type modules.
 -- Returns the generated coder modules (Nothing results are filtered out).
+-- | Lower each Definition.primitive arm of a module into a Definition.term arm.
+-- The replacement TermDefinition has:
+--   * name      = primitiveDefinitionName pd
+--   * term      = encoderFor _PrimitiveDefinition pd  (the entire pd reified as a term)
+--   * signature = Just (nullary TermSignature with result type Type.variable _PrimitiveDefinition)
+-- Definition.term and Definition.type arms pass through unchanged. The result is a
+-- terms module that every host coder can emit verbatim — no per-host special-casing
+-- of the Definition.primitive arm is needed. The lowering must run after inference
+-- so that every inner term in defaultImplementation carries its inferred type.
+-- A hydra.packaging dependency is added if the module contains any primitive
+-- definitions (so that the host coder's lookup of `hydra.packaging.PrimitiveDefinition`
+-- resolves). Modules without primitives pass through unchanged.
+lowerPrimitiveDefinitions :: TTermDefinition (Module -> Module)
+lowerPrimitiveDefinitions = define "lowerPrimitiveDefinitions" $
+  doc "Lower Definition.primitive arms to Definition.term arms with term-encoded PrimitiveDefinition" $
+  "m" ~>
+  "pkgNs" <~ (wrap _ModuleName (string "hydra.packaging") :: TTerm ModuleName) $
+  "coreNs" <~ (wrap _ModuleName (string "hydra.core") :: TTerm ModuleName) $
+  "primDefSig" <~ Scoping.typeSchemeToTermSignature @@ Core.typeScheme
+    (list ([] :: [TTerm Name]))
+    (Core.typeVariable (wrap _Name (string "hydra.packaging.PrimitiveDefinition")))
+    nothing $
+  "origDefs" <~ Packaging.moduleDefinitions (var "m") $
+  "hasPrim" <~ Lists.foldl
+    ("acc" ~> "d" ~> Logic.or (var "acc")
+      (cases _Definition (var "d") (Just false) [_Definition_primitive>>: "_" ~> true]))
+    false (var "origDefs") $
+  Logic.ifElse (Logic.not (var "hasPrim"))
+    (var "m")
+    ("newDefs" <~ Lists.map
+      ("d" ~> cases _Definition (var "d") (Just (var "d")) [
+        _Definition_primitive>>: "pd" ~>
+          Packaging.definitionTerm (Packaging.termDefinition
+            (Packaging.primitiveDefinitionName $ var "pd")
+            (encoderFor _PrimitiveDefinition @@ var "pd")
+            (just (var "primDefSig")))])
+      (var "origDefs") $
+    -- Ensure hydra.packaging and hydra.core are among the module's
+    -- dependencies. The encoded PrimitiveDefinition term references the
+    -- PrimitiveDefinition record type (hydra.packaging) and a slew of
+    -- Core types inside the embedded signature (Name, TermSignature,
+    -- Parameter, Result, LiteralType*, TypeLiteral, ...). We prune any
+    -- existing references first to dedupe.
+    "currentDeps" <~ Packaging.moduleDependencies (var "m") $
+    "filteredDeps" <~ Lists.filter
+      ("dep" ~> Logic.and
+        (Logic.not (Equality.equal (Packaging.moduleDependencyModule (var "dep")) (var "pkgNs")))
+        (Logic.not (Equality.equal (Packaging.moduleDependencyModule (var "dep")) (var "coreNs"))))
+      (var "currentDeps") $
+    "newDeps" <~ Lists.concat2 (var "filteredDeps")
+      (list [
+        Packaging.moduleDependency (var "pkgNs") nothing,
+        Packaging.moduleDependency (var "coreNs") nothing]) $
+    Packaging.module_
+      (Packaging.moduleDescription $ var "m")
+      (Packaging.moduleName $ var "m")
+      (var "newDeps")
+      (var "newDefs"))
+
 -- | Compute the transitive closure of dependencies for a set of modules.
 -- Returns the modules that are transitively depended upon (including the input modules).
 moduleDepsTransitive :: TTermDefinition (M.Map ModuleName Module -> [Module] -> [Module])
