@@ -4,7 +4,6 @@
 module Hydra.Encoding where
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Constants as Constants
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
@@ -247,7 +246,7 @@ encodeMapType mt =
               Core.applicationArgument = (encodeType (Core.mapTypeValues mt))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}}))})
 -- | Transform a type module into an encoder module
-encodeModule :: Context.Context -> Graph.Graph -> Packaging.Module -> Either Errors.Error (Maybe Packaging.Module)
+encodeModule :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error (Maybe Packaging.Module)
 encodeModule cx graph mod =
     Eithers.bind (filterTypeBindings cx graph (Maybes.cat (Lists.map (\d -> case d of
       Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
@@ -668,11 +667,11 @@ encoderTypeSchemeNamed ename typ =
         Core.typeSchemeBody = encoderFunType,
         Core.typeSchemeConstraints = constraints}
 -- | Filter bindings to only encodable type definitions
-filterTypeBindings :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either Errors.Error [Core.Binding]
+filterTypeBindings :: t0 -> Graph.Graph -> [Core.Binding] -> Either Errors.Error [Core.Binding]
 filterTypeBindings cx graph bindings =
     Eithers.map Maybes.cat (Eithers.mapList (isEncodableBinding cx graph) (Lists.filter Annotations.isNativeType bindings))
 -- | Check if a binding is encodable (serializable type)
-isEncodableBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either Errors.Error (Maybe Core.Binding)
+isEncodableBinding :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.Error (Maybe Core.Binding)
 isEncodableBinding cx graph b =
     Eithers.bind (Predicates.isSerializableByName cx graph (Core.bindingName b)) (\serializable -> Right (Logic.ifElse serializable (Just b) Nothing))
 -- | Check whether a type is the unit type

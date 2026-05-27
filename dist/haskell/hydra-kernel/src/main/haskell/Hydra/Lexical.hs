@@ -2,7 +2,6 @@
 -- | A module for lexical operations over graphs.
 
 module Hydra.Lexical where
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
@@ -21,6 +20,7 @@ import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -95,13 +95,6 @@ elementsToGraph parent schemaTypes elements =
         Graph.graphPrimitives = (Graph.graphPrimitives g),
         Graph.graphSchemaTypes = schemaTypes,
         Graph.graphTypeVariables = (Graph.graphTypeVariables g)}
--- | An empty context; no trace, no messages, no other data.
-emptyContext :: Context.Context
-emptyContext =
-    Context.Context {
-      Context.contextTrace = [],
-      Context.contextMessages = [],
-      Context.contextOther = Maps.empty}
 -- | An empty graph; no elements, no primitives, no schema.
 emptyGraph :: Graph.Graph
 emptyGraph =
@@ -114,6 +107,12 @@ emptyGraph =
       Graph.graphPrimitives = Maps.empty,
       Graph.graphSchemaTypes = Maps.empty,
       Graph.graphTypeVariables = Sets.empty}
+-- | An empty inference context; fresh-variable counter at zero and empty trace.
+emptyInferenceContext :: Typing.InferenceContext
+emptyInferenceContext =
+    Typing.InferenceContext {
+      Typing.inferenceContextFreshTypeVariableCount = 0,
+      Typing.inferenceContextTrace = []}
 -- | Extract the fields of a record or union type
 fieldsOf :: Core.Type -> [Core.FieldType]
 fieldsOf t =

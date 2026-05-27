@@ -17,7 +17,6 @@ import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
@@ -152,7 +151,7 @@ examplePgSchema = define "examplePgSchema" $
     PGM._Schema_defaultEdgeId>>: string "defaultEdgeId"]
 
 -- | Extract a string from a term using the empty graph
-expString :: TTermDefinition (Context -> Term -> Either Error String)
+expString :: TTermDefinition (InferenceContext -> Term -> Either Error String)
 expString = define "expString" $
   doc "Extract a string from a term using the empty graph" $
   "cx" ~> "term" ~>
@@ -168,8 +167,8 @@ propertyGraphElements = define "propertyGraphElements" $
       (Lists.map ("x" ~> inject PG._Element PG._Element_edge (var "x")) (Maps.elems $ project PG._Graph PG._Graph_edges @@ var "g"))
 
 -- | Convert a type-annotated term to property graph elements
-typeApplicationTermToPropertyGraph :: TTermDefinition (PGM.Schema Graph t v -> Type -> t -> t -> Context -> Graph
-  -> Either Error (Term -> Context -> Either Error [PG.Element v]))
+typeApplicationTermToPropertyGraph :: TTermDefinition (PGM.Schema Graph t v -> Type -> t -> t -> InferenceContext -> Graph
+  -> Either Error (Term -> InferenceContext -> Either Error [PG.Element v]))
 typeApplicationTermToPropertyGraph = define "typeApplicationTermToPropertyGraph" $
   doc "Convert a type-annotated term to property graph elements" $
   "schema" ~> "typ" ~> "vidType" ~> "eidType" ~> "cx" ~> "g" ~>
@@ -195,7 +194,7 @@ lazyGraphToElements = define "lazyGraphToElements" $
       (Lists.map ("x" ~> inject PG._Element PG._Element_edge (var "x")) (project PG._LazyGraph PG._LazyGraph_edges @@ var "lg"))
 
 -- | Convert a property graph element to JSON
-pgElementToJson :: TTermDefinition (PGM.Schema Graph t v -> PG.Element v -> Context -> Either Error JM.Value)
+pgElementToJson :: TTermDefinition (PGM.Schema Graph t v -> PG.Element v -> InferenceContext -> Either Error JM.Value)
 pgElementToJson = define "pgElementToJson" $
   doc "Convert a property graph element to JSON" $
   "schema" ~> "el" ~> "cx" ~>
@@ -229,14 +228,14 @@ pgElementToJson = define "pgElementToJson" $
     @@ var "el"
 
 -- | Convert a list of property graph elements to JSON
-pgElementsToJson :: TTermDefinition (PGM.Schema Graph t v -> [PG.Element v] -> Context -> Either Error JM.Value)
+pgElementsToJson :: TTermDefinition (PGM.Schema Graph t v -> [PG.Element v] -> InferenceContext -> Either Error JM.Value)
 pgElementsToJson = define "pgElementsToJson" $
   doc "Convert a list of property graph elements to JSON" $
   "schema" ~> "els" ~> "cx" ~>
     Eithers.map ("els'" ~> Json.valueArray (var "els'")) (Eithers.mapList ("el" ~> pgElementToJson @@ var "schema" @@ var "el" @@ var "cx") (var "els"))
 
 -- Internal helper (not exported as a binding)
-propsToJson :: TTerm (PGM.Schema Graph t v -> Context -> M.Map PG.PropertyKey v -> Either Error (Y.Maybe (String, JM.Value)))
+propsToJson :: TTerm (PGM.Schema Graph t v -> InferenceContext -> M.Map PG.PropertyKey v -> Either Error (Y.Maybe (String, JM.Value)))
 propsToJson = "schema" ~> "cx" ~> "pairs" ~>
   Logic.ifElse (Maps.null $ var "pairs")
     (right nothing)
