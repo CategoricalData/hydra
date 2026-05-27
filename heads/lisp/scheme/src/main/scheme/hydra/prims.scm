@@ -1,7 +1,6 @@
 (define-library (hydra prims)
   (import (scheme base) (scheme cxr) (scheme inexact)
           (hydra core)
-          (hydra context)
           (hydra graph)
           (hydra packaging)
           (hydra scoping)
