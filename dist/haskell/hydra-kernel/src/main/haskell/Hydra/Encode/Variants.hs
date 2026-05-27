@@ -3,6 +3,7 @@
 
 module Hydra.Encode.Variants where
 import qualified Hydra.Core as Core
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci

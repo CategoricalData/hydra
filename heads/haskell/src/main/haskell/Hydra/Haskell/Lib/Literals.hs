@@ -1,6 +1,6 @@
 -- | Haskell implementations of hydra.lib.literals primitives
 
-module Hydra.Lib.Literals where
+module Hydra.Haskell.Lib.Literals where
 
 import Data.Int
 import Data.Scientific (Scientific, toRealFloat, fromFloatDigits)

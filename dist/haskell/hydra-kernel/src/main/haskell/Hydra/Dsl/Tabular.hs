@@ -3,6 +3,8 @@
 
 module Hydra.Dsl.Tabular where
 import qualified Hydra.Core as Core
+import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Dsl.Relational as DslRelational
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Relational as Relational
 import qualified Hydra.Tabular as Tabular

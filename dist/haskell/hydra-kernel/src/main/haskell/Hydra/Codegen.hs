@@ -4,15 +4,21 @@
 module Hydra.Codegen where
 import qualified Hydra.Adapt as Adapt
 import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Decode.Packaging as DecodePackaging
+import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Packaging as EncodePackaging
+import qualified Hydra.Encoding as Encoding
 import qualified Hydra.Environment as Environment
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Inference as Inference
@@ -21,20 +27,34 @@ import qualified Hydra.Json.Encode as Encode
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Json.Writer as Writer
 import qualified Hydra.Lexical as Lexical
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Math as Math
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Math as Math
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Show.Errors as ShowErrors
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -325,6 +345,46 @@ inferModulesGiven cx bsGraph universeMods targetMods =
             newlyInferredBindings = Pairs.second inferResult
             allInferredBindings = Lists.concat2 newlyInferredBindings untouchedTypedBindings
         in (Right (Lists.map (refreshModule allInferredBindings) targetMods))))
+-- | Lower Definition.primitive arms to Definition.term arms with term-encoded PrimitiveDefinition
+lowerPrimitiveDefinitions :: Packaging.Module -> Packaging.Module
+lowerPrimitiveDefinitions m =
+
+      let pkgNs = Packaging.ModuleName "hydra.packaging"
+          coreNs = Packaging.ModuleName "hydra.core"
+          primDefSig =
+                  Scoping.typeSchemeToTermSignature (Core.TypeScheme {
+                    Core.typeSchemeVariables = [],
+                    Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.packaging.PrimitiveDefinition")),
+                    Core.typeSchemeConstraints = Nothing})
+          origDefs = Packaging.moduleDefinitions m
+          hasPrim =
+                  Lists.foldl (\acc -> \d -> Logic.or acc (case d of
+                    Packaging.DefinitionPrimitive _ -> True
+                    _ -> False)) False origDefs
+      in (Logic.ifElse (Logic.not hasPrim) m (
+        let newDefs =
+                Lists.map (\d -> case d of
+                  Packaging.DefinitionPrimitive v0 -> Packaging.DefinitionTerm (Packaging.TermDefinition {
+                    Packaging.termDefinitionName = (Packaging.primitiveDefinitionName v0),
+                    Packaging.termDefinitionTerm = (EncodePackaging.primitiveDefinition v0),
+                    Packaging.termDefinitionSignature = (Just primDefSig)})
+                  _ -> d) origDefs
+            currentDeps = Packaging.moduleDependencies m
+            filteredDeps =
+                    Lists.filter (\dep -> Logic.and (Logic.not (Equality.equal (Packaging.moduleDependencyModule dep) pkgNs)) (Logic.not (Equality.equal (Packaging.moduleDependencyModule dep) coreNs))) currentDeps
+            newDeps =
+                    Lists.concat2 filteredDeps [
+                      Packaging.ModuleDependency {
+                        Packaging.moduleDependencyModule = pkgNs,
+                        Packaging.moduleDependencyPackage = Nothing},
+                      Packaging.ModuleDependency {
+                        Packaging.moduleDependencyModule = coreNs,
+                        Packaging.moduleDependencyPackage = Nothing}]
+        in Packaging.Module {
+          Packaging.moduleDescription = (Packaging.moduleDescription m),
+          Packaging.moduleName = (Packaging.moduleName m),
+          Packaging.moduleDependencies = newDeps,
+          Packaging.moduleDefinitions = newDefs}))
 -- | Compute transitive closure of dependencies for a set of modules
 moduleDepsTransitive :: M.Map Packaging.ModuleName Packaging.Module -> [Packaging.Module] -> [Packaging.Module]
 moduleDepsTransitive nsMap modules =

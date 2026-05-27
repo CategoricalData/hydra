@@ -4,7 +4,7 @@
 module Hydra.Encode.Pg.Mapping where
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Pg.Model as Model
-import qualified Hydra.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Pg.Mapping as Mapping
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci

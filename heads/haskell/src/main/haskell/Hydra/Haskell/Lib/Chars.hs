@@ -1,7 +1,7 @@
 -- | Haskell implementations of hydra.lib.chars primitives.
 -- All functions operate on Unicode code points (Int) rather than Char.
 
-module Hydra.Lib.Chars where
+module Hydra.Haskell.Lib.Chars where
 
 import qualified Data.Char as C
 

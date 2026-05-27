@@ -5,9 +5,9 @@ module Hydra.Encode.Typing where
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Context as Context
 import qualified Hydra.Encode.Core as EncodeCore
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
