@@ -374,9 +374,9 @@ const main = async (): Promise<void> => {
   // without them, every module that calls `hydra.lib.maps.empty` etc.
   // fails with `Unknown variable`. Mirrors Python's bootstrap_graph()
   // which calls standard_library() to populate `primitives`.
-  const stdPrims = (libraries as { standardPrimitives: () => ReadonlyArray<{ name: { value: string } }> }).standardPrimitives();
+  const stdPrims = (libraries as { standardPrimitives: () => ReadonlyArray<{ definition: { name: { value: string } } }> }).standardPrimitives();
   const primMap = (maps as { fromList: (entries: ReadonlyArray<readonly [unknown, unknown]>) => unknown }).fromList(
-    stdPrims.map((p) => [p.name, p] as const)
+    stdPrims.map((p) => [p.definition.name, p] as const)
   );
   const bsGraph = { ...(lexical.emptyGraph as object), primitives: primMap };
   const schemaMap = (jsonBootstrap as { typesByName: unknown }).typesByName;
