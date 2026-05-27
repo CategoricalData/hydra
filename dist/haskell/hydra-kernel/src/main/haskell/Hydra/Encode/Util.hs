@@ -3,9 +3,10 @@
 
 module Hydra.Encode.Util where
 import qualified Hydra.Core as Core
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Packaging as Packaging
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci

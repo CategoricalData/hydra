@@ -29,6 +29,7 @@ module Main where
 
 import Hydra.Kernel
 import Hydra.Generation
+import qualified Hydra.Codegen as CodeGeneration
 import Hydra.PackageRouting (groupByPackage, namespaceToPackage, packagePrefixes)
 import qualified Hydra.TargetFilePaths as TargetFilePaths
 import qualified Hydra.Digest as Digest
@@ -528,8 +529,15 @@ main = do
 
   -- Prepend synthesized source modules to modsToGenerate (deduping by namespace
   -- to keep ordering stable). They go into the same universe as the main modules.
-  let modsToGenerate' = modsToGenerateScopedFiltered ++ synthesizedSourceMods
-  let allModsFinal'   = allModsFinal ++ synthesizedSourceMods
+  -- The translingual lowerPrimitiveDefinitions rewrites Definition.primitive arms
+  -- to Definition.term arms (with term-encoded PrimitiveDefinition values), so
+  -- the host coder sees a uniform terms module. Applied to both the emit set
+  -- and the universe to keep references consistent. Defaults from defaultImplementation
+  -- are already typed (inference ran in update-json-main).
+  let modsToGenerate' = map CodeGeneration.lowerPrimitiveDefinitions
+        (modsToGenerateScopedFiltered ++ synthesizedSourceMods)
+  let allModsFinal'   = map CodeGeneration.lowerPrimitiveDefinitions
+        (allModsFinal ++ synthesizedSourceMods)
 
   -- Generate main modules
   let stepNum = if optIncludeCoders opts then "3" else "2"

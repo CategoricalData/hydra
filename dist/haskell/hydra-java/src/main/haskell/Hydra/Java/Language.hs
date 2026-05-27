@@ -4,8 +4,8 @@
 module Hydra.Java.Language where
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci

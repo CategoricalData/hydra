@@ -490,8 +490,8 @@
                                                                                       "body": {
                                                                                         "typeApplication": {
                                                                                           "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bimap"}, "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                          "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                      "type": {"literal": {"string": {}}}}},
+                                                                                          "type": {"literal": {"string": {}}}}},
+                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                   "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
                                                                   "function": {
                                                                     "lambda": {
@@ -613,8 +613,8 @@
                                                                                       "body": {
                                                                                         "typeApplication": {
                                                                                           "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bimap"}, "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                          "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                      "type": {"literal": {"string": {}}}}},
+                                                                                          "type": {"literal": {"string": {}}}}},
+                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                   "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
                                                                   "function": {
                                                                     "lambda": {
@@ -1111,8 +1111,8 @@
                                                                           "argument": {"literal": {"string": "default"}},
                                                                           "function": {
                                                                             "typeApplication": {
-                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.fromRight"}, "type": {"literal": {"string": {}}}}},
-                                                                              "type": {"unit": {}}}}}}}},
+                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.fromRight"}, "type": {"unit": {}}}},
+                                                                              "type": {"literal": {"string": {}}}}}}}}},
                                                                   "function": {
                                                                     "lambda": {
                                                                       "body": {"application": {"argument": {"variable": "s"}, "function": {"variable": "hydra.lib.literals.showString"}}},
@@ -1170,8 +1170,9 @@
                                                                           "argument": {"literal": {"string": "default"}},
                                                                           "function": {
                                                                             "typeApplication": {
-                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.fromRight"}, "type": {"literal": {"string": {}}}}},
-                                                                              "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                              "body": {
+                                                                                "typeApplication": {"body": {"variable": "hydra.lib.eithers.fromRight"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                              "type": {"literal": {"string": {}}}}}}}}},
                                                                   "function": {
                                                                     "lambda": {
                                                                       "body": {"application": {"argument": {"variable": "s"}, "function": {"variable": "hydra.lib.literals.showString"}}},

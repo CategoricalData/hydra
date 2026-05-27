@@ -3,10 +3,13 @@
 
 module Hydra.Encode.Errors where
 import qualified Hydra.Core as Core
+import qualified Hydra.Encode.Context as Context
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Error.Checking as Checking
 import qualified Hydra.Encode.Error.Core as ErrorCore
 import qualified Hydra.Encode.Paths as Paths
+import qualified Hydra.Encode.Typing as Typing
+import qualified Hydra.Encode.Variants as Variants
 import qualified Hydra.Errors as Errors
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci

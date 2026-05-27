@@ -2,16 +2,37 @@
 -- | Transform test cases for code generation, filtering to tests that can be compiled to target languages
 
 module Hydra.Test.Transform where
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Formatting as Formatting
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
+import qualified Hydra.Sorting as Sorting
+import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Add generation namespace prefix

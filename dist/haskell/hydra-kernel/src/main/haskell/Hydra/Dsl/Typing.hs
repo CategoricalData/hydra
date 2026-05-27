@@ -4,6 +4,8 @@
 module Hydra.Dsl.Typing where
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Dsl.Context as DslContext
+import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)

@@ -4,7 +4,7 @@
 module Hydra.Encode.Paths where
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
-import qualified Hydra.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Paths as Paths
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci

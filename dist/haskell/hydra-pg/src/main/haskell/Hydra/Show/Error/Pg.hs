@@ -3,7 +3,7 @@
 
 module Hydra.Show.Error.Pg where
 import qualified Hydra.Error.Pg as Pg
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Pg.Model as Model
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci

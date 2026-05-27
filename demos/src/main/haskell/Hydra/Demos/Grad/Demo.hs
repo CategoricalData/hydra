@@ -15,7 +15,7 @@ import qualified Hydra.Variables as Vars
 import qualified Hydra.Reduction as Reduction
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Sources.Libraries as Lib
-import qualified Hydra.Lib.Math as HMath
+import qualified Hydra.Haskell.Lib.Math as HMath
 
 import Control.Monad (when)
 import qualified Data.List as L

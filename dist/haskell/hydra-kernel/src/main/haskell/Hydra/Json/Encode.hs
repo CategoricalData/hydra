@@ -2,20 +2,43 @@
 -- | JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling.
 
 module Hydra.Json.Encode where
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Extract.Core as ExtractCore
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Literals as Literals
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Literals as LibLiterals
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Literals as Literals
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -24,29 +47,29 @@ encodeFloat :: Core.FloatValue -> Either t0 Model.Value
 encodeFloat fv =
     case fv of
       Core.FloatValueFloat32 v0 ->
-        let s = Literals.showFloat32 v0
-        in (Logic.ifElse (requiresJsonStringSentinel s) (Right (Model.ValueString s)) (Right (Model.ValueNumber (Literals.float32ToDecimal v0))))
+        let s = LibLiterals.showFloat32 v0
+        in (Logic.ifElse (requiresJsonStringSentinel s) (Right (Model.ValueString s)) (Right (Model.ValueNumber (LibLiterals.float32ToDecimal v0))))
       Core.FloatValueFloat64 v0 ->
-        let s = Literals.showFloat64 v0
-        in (Logic.ifElse (requiresJsonStringSentinel s) (Right (Model.ValueString s)) (Right (Model.ValueNumber (Literals.float64ToDecimal v0))))
+        let s = LibLiterals.showFloat64 v0
+        in (Logic.ifElse (requiresJsonStringSentinel s) (Right (Model.ValueString s)) (Right (Model.ValueNumber (LibLiterals.float64ToDecimal v0))))
 -- | Encode an integer value to JSON. Small ints use native numbers; large ints use strings.
 encodeInteger :: Core.IntegerValue -> Either t0 Model.Value
 encodeInteger iv =
     case iv of
-      Core.IntegerValueBigint v0 -> Right (Model.ValueString (Literals.showBigint v0))
-      Core.IntegerValueInt64 v0 -> Right (Model.ValueString (Literals.showInt64 v0))
-      Core.IntegerValueUint32 v0 -> Right (Model.ValueString (Literals.showUint32 v0))
-      Core.IntegerValueUint64 v0 -> Right (Model.ValueString (Literals.showUint64 v0))
-      Core.IntegerValueInt8 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.int8ToBigint v0)))
-      Core.IntegerValueInt16 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.int16ToBigint v0)))
-      Core.IntegerValueInt32 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint v0)))
-      Core.IntegerValueUint8 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.uint8ToBigint v0)))
-      Core.IntegerValueUint16 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.uint16ToBigint v0)))
+      Core.IntegerValueBigint v0 -> Right (Model.ValueString (LibLiterals.showBigint v0))
+      Core.IntegerValueInt64 v0 -> Right (Model.ValueString (LibLiterals.showInt64 v0))
+      Core.IntegerValueUint32 v0 -> Right (Model.ValueString (LibLiterals.showUint32 v0))
+      Core.IntegerValueUint64 v0 -> Right (Model.ValueString (LibLiterals.showUint64 v0))
+      Core.IntegerValueInt8 v0 -> Right (Model.ValueNumber (LibLiterals.bigintToDecimal (LibLiterals.int8ToBigint v0)))
+      Core.IntegerValueInt16 v0 -> Right (Model.ValueNumber (LibLiterals.bigintToDecimal (LibLiterals.int16ToBigint v0)))
+      Core.IntegerValueInt32 v0 -> Right (Model.ValueNumber (LibLiterals.bigintToDecimal (LibLiterals.int32ToBigint v0)))
+      Core.IntegerValueUint8 v0 -> Right (Model.ValueNumber (LibLiterals.bigintToDecimal (LibLiterals.uint8ToBigint v0)))
+      Core.IntegerValueUint16 v0 -> Right (Model.ValueNumber (LibLiterals.bigintToDecimal (LibLiterals.uint16ToBigint v0)))
 -- | Encode a Hydra literal to a JSON value
 encodeLiteral :: Core.Literal -> Either t0 Model.Value
 encodeLiteral lit =
     case lit of
-      Core.LiteralBinary v0 -> Right (Model.ValueString (Literals.binaryToString v0))
+      Core.LiteralBinary v0 -> Right (Model.ValueString (LibLiterals.binaryToString v0))
       Core.LiteralBoolean v0 -> Right (Model.ValueBoolean v0)
       Core.LiteralDecimal v0 -> Right (Model.ValueNumber v0)
       Core.LiteralFloat v0 -> encodeFloat v0

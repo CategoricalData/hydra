@@ -202,8 +202,29 @@ constructModule :: TTermDefinition (HaskellNamespaces -> Module -> [Definition] 
 constructModule = haskellCoderDefinition "constructModule" $
   doc "Construct a Haskell module from a Hydra module and its definitions" $
   "namespaces" ~> "mod" ~> "defs" ~> "cx" ~> "g" ~> lets [
+  -- Convert a ModuleName to its dot-separated namespace string. The
+  -- unwrapped name is used as-is for the current module's own declaration
+  -- (see `hRaw` below) so that lowered `hydra.lib.<sub>` modules emit
+  -- with the canonical module name. For *referenced* namespaces, native
+  -- runtime libraries live at "hydra.<host>.lib.<sub>", but kernel JSON
+  -- references them as the canonical "hydra.lib.<sub>" (three segments
+  -- exactly). When we see a referenced namespace matching that shape,
+  -- rewrite the middle so generated Haskell imports the host-native
+  -- module. Other namespaces (including hydra.lib.defaults.* which is a
+  -- separate kernel-emitted tree) pass through unchanged.
+  "hRaw">: "namespace" ~> unwrap _ModuleName @@ var "namespace",
   "h">: "namespace" ~>
-    unwrap _ModuleName @@ var "namespace",
+    "raw" <~ (unwrap _ModuleName @@ var "namespace") $
+    "parts" <~ Strings.splitOn (string ".") (var "raw") $
+    Logic.ifElse
+      (Logic.and
+        (Equality.equal (Lists.length (var "parts")) (int32 3))
+        (Equality.equal
+          (Lists.take (int32 2) (var "parts"))
+          (list [string "hydra", string "lib"])))
+      (Strings.cat2 (string "hydra.haskell.lib.")
+        (Strings.intercalate (string ".") (Lists.drop (int32 2) (var "parts"))))
+      (var "raw"),
   "createDeclarations">: "def" ~>
     cases _Definition (var "def") Nothing [
       _Definition_type>>: "type" ~> lets [
@@ -269,11 +290,12 @@ constructModule = haskellCoderDefinition "constructModule" $
         var "condImport"
           @@ (project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesSet @@ var "meta")
           @@ pair (pair (string "Data.Set") (just $ string "S")) (list ([] :: [TTerm String])),
-        -- Conditionally add Hydra.Lib.Literals import if binary or decimal literals are present
+        -- Conditionally add Hydra.Haskell.Lib.Literals import (the native runtime
+        -- for hydra.lib.literals) if binary or decimal literals are present.
         Logic.ifElse (Logic.or
             (Analysis.moduleContainsBinaryLiterals @@ var "mod")
             (Analysis.moduleContainsDecimalLiterals @@ var "mod"))
-          (list [pair (pair (string "Hydra.Lib.Literals") (just $ string "Literals")) (list ([] :: [TTerm String]))])
+          (list [pair (pair (string "Hydra.Haskell.Lib.Literals") (just $ string "Literals")) (list ([] :: [TTerm String]))])
           (list ([] :: [TTerm ((String, Maybe String), [String])]))]] $
     "declLists" <<~ Eithers.mapList (var "createDeclarations") (var "defs") $ lets [
     "decls">: Lists.concat $ var "declLists",
@@ -281,7 +303,7 @@ constructModule = haskellCoderDefinition "constructModule" $
     right $ record H._Module [
       H._Module_head>>: just $ record H._ModuleHead [
         H._ModuleHead_comments>>: var "mc",
-        H._ModuleHead_name>>: var "importName" @@ (var "h" @@ (Packaging.moduleName $ var "mod")),
+        H._ModuleHead_name>>: var "importName" @@ (var "hRaw" @@ (Packaging.moduleName $ var "mod")),
         H._ModuleHead_exports>>: list ([] :: [TTerm H.Export])],
       H._Module_imports>>: var "imports",
       H._Module_declarations>>: var "decls"]

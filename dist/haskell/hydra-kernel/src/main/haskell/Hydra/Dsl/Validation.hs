@@ -3,6 +3,9 @@
 
 module Hydra.Dsl.Validation where
 import qualified Hydra.Core as Core
+import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Dsl.Error.Core as DslErrorCore
+import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Validation as Validation
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)

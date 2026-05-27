@@ -4,8 +4,8 @@
 module Hydra.Graphql.Serde where
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Graphql.Syntax as Syntax
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
 import qualified Hydra.Serialization as Serialization
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
