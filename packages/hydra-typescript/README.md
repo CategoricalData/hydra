@@ -18,7 +18,7 @@ which Scala and Lisp heads also lack today.
 
 Hydra is a type-aware data transformation toolkit which aims to be highly flexible and
 portable. It has its roots in graph databases and type theory, and provides APIs in
-Haskell, Java, Python, Scala, and Lisp. See the main Hydra
+Haskell, Java, Python, Scala, TypeScript, and Lisp. See the main Hydra
 [README](https://github.com/CategoricalData/hydra) for more details.
 
 ## Layout

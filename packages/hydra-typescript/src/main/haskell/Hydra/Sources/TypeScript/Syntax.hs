@@ -372,7 +372,10 @@ propertySignature = define "PropertySignature" $
       T.boolean,
     "readonly">:
       doc "Whether the property is readonly"
-      T.boolean]
+      T.boolean,
+    "comments">:
+      doc "Optional JSDoc documentation comment to emit above this property" $
+      T.optional $ ts "DocumentationComment"]
 
 typeParameter :: Binding
 typeParameter = define "TypeParameter" $
