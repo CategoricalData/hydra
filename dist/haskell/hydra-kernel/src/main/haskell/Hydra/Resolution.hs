@@ -2,29 +2,46 @@
 -- | Type dereference, lookup, requirements, and instantiation
 
 module Hydra.Resolution where
-import qualified Hydra.Context as Context
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lexical as Lexical
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Literals as Literals
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Math as Math
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Literals as Literals
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Math as Math
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Substitution as Substitution
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
 import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
 import qualified Hydra.Variables as Variables
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -101,14 +118,14 @@ fullyStripType typ =
     case (Strip.deannotateType typ) of
       Core.TypeForall v0 -> fullyStripType (Core.forallTypeBody v0)
       _ -> typ
--- | Instantiate a type by replacing all forall-bound type variables with fresh variables, threading Context
-instantiateType :: Context.Context -> Core.Type -> (Core.Type, Context.Context)
+-- | Instantiate a type by replacing all forall-bound type variables with fresh variables, threading InferenceContext
+instantiateType :: Typing.InferenceContext -> Core.Type -> (Core.Type, Typing.InferenceContext)
 instantiateType cx typ =
 
       let result = instantiateTypeScheme cx (typeToTypeScheme typ)
       in (Scoping.typeSchemeToFType (Pairs.first result), (Pairs.second result))
--- | Instantiate a type scheme with fresh variables, threading Context
-instantiateTypeScheme :: Context.Context -> Core.TypeScheme -> (Core.TypeScheme, Context.Context)
+-- | Instantiate a type scheme with fresh variables, threading InferenceContext
+instantiateTypeScheme :: Typing.InferenceContext -> Core.TypeScheme -> (Core.TypeScheme, Typing.InferenceContext)
 instantiateTypeScheme cx scheme =
 
       let oldVars = Core.typeSchemeVariables scheme
@@ -152,8 +169,8 @@ requireRowType cx label getter graph name =
       in (Eithers.bind (requireType cx graph name) (\t -> Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = (Strings.cat2 label " type"),
         Errors.unexpectedShapeErrorActual = (Strings.cat2 (Core.unName name) (Strings.cat2 ": " (ShowCore.type_ t)))})))) (\x -> Right x) (getter (rawType t))))
--- | Look up a schema type and instantiate it, threading Context
-requireSchemaType :: Context.Context -> M.Map Core.Name Core.TypeScheme -> Core.Name -> Either Errors.Error (Core.TypeScheme, Context.Context)
+-- | Look up a schema type and instantiate it, threading InferenceContext
+requireSchemaType :: Typing.InferenceContext -> M.Map Core.Name Core.TypeScheme -> Core.Name -> Either Errors.Error (Core.TypeScheme, Typing.InferenceContext)
 requireSchemaType cx types tname =
     Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchBinding (Errors.NoSuchBindingError {
       Errors.noSuchBindingErrorName = tname})))) (\ts -> Right (instantiateTypeScheme cx (Strip.deannotateTypeSchemeRecursive ts))) (Maps.lookup tname types)

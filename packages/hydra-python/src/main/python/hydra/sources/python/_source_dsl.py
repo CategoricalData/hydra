@@ -30,7 +30,7 @@ def unqualified_dep(module: ModuleName) -> ModuleDependency:
 KERNEL_TYPES_NAMESPACES = [
     unqualified_dep(ModuleName(n)) for n in [
         "hydra.paths", "hydra.ast", "hydra.classes", "hydra.coders",
-        "hydra.context", "hydra.core", "hydra.error.checking", "hydra.error.core",
+        "hydra.core", "hydra.error.checking", "hydra.error.core",
         "hydra.error.packaging", "hydra.errors", "hydra.graph", "hydra.json.model",
         "hydra.packaging", "hydra.parsing", "hydra.phantoms", "hydra.query",
         "hydra.relational", "hydra.tabular", "hydra.testing", "hydra.topology",

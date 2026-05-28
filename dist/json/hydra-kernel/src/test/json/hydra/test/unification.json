@@ -1606,11 +1606,11 @@
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                      "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -1852,11 +1852,11 @@
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                      "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -2094,11 +2094,11 @@
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                      "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -2343,11 +2343,11 @@
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                      "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -2603,11 +2603,11 @@
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                      "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -2856,11 +2856,11 @@
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                      "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -3119,11 +3119,11 @@
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                      "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -3386,11 +3386,11 @@
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                      "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -3671,11 +3671,11 @@
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                      "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -3984,11 +3984,11 @@
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                      "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -4243,11 +4243,11 @@
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                      "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -4539,11 +4539,11 @@
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                      "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -4843,11 +4843,11 @@
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                      "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -5147,11 +5147,11 @@
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                      "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -5425,11 +5425,11 @@
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                      "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -5672,11 +5672,11 @@
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                      "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -5923,11 +5923,11 @@
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                      "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -6138,11 +6138,11 @@
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                      "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -6315,11 +6315,11 @@
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                      "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                            "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                           "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -6470,9 +6470,9 @@
                                                                                   "typeName": "hydra.core.Type"}},
                                                                               "function": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                  "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                   "function": {
-                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -6634,9 +6634,9 @@
                                                                                   "typeName": "hydra.core.Type"}},
                                                                               "function": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                  "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                   "function": {
-                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -6811,9 +6811,9 @@
                                                                                   "typeName": "hydra.core.Type"}},
                                                                               "function": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                  "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                   "function": {
-                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -7039,9 +7039,9 @@
                                                                                   "typeName": "hydra.core.Type"}},
                                                                               "function": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                  "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                   "function": {
-                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -7260,9 +7260,9 @@
                                                                                   "typeName": "hydra.core.Type"}},
                                                                               "function": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                  "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                   "function": {
-                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -7488,9 +7488,9 @@
                                                                                   "typeName": "hydra.core.Type"}},
                                                                               "function": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                  "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                   "function": {
-                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -7735,9 +7735,9 @@
                                                                                   "typeName": "hydra.core.Type"}},
                                                                               "function": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                  "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                   "function": {
-                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -7982,9 +7982,9 @@
                                                                                   "typeName": "hydra.core.Type"}},
                                                                               "function": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                  "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                   "function": {
-                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -8203,9 +8203,9 @@
                                                                                   "typeName": "hydra.core.Type"}},
                                                                               "function": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                  "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                   "function": {
-                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -8382,9 +8382,9 @@
                                                                               "argument": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Type"}},
                                                                               "function": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                  "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                   "function": {
-                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -8551,9 +8551,9 @@
                                                                                   "typeName": "hydra.core.Type"}},
                                                                               "function": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                  "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                   "function": {
-                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -8706,9 +8706,9 @@
                                                                                   "typeName": "hydra.core.Type"}},
                                                                               "function": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                  "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                   "function": {
-                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -8870,9 +8870,9 @@
                                                                                   "typeName": "hydra.core.Type"}},
                                                                               "function": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.lexical.emptyContext"},
+                                                                                  "argument": {"variable": "hydra.lexical.emptyInferenceContext"},
                                                                                   "function": {
-                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                    "typeApplication": {"body": {"variable": "hydra.unification.joinTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -8958,7 +8958,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

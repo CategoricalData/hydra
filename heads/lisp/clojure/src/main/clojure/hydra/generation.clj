@@ -37,10 +37,9 @@
     #{}))    ; type_variables
 
 (defn empty-context
-  "Create an empty Context. (Updated after #368 InContext removal: builds
-  a proper hydra.context.Context, not the deleted InContext wrapper.)"
+  "Create an empty InferenceContext."
   []
-  ((r '->hydra_context_context) (list) (list) {}))
+  ((r '->hydra_typing_inference_context) 0 (list)))
 
 (defn unwrap-either
   "Unwrap an Either value, throwing on Left."

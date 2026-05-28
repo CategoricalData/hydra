@@ -1079,8 +1079,9 @@ match _Result Nothing [
 ## Error handling with Either
 
 Hydra uses `Either Error a` for computations that can fail. `Error` is a structured union
-type from `hydra.errors`; a `Context` value carrying trace messages and metadata is threaded
-alongside the graph as an explicit parameter.
+type from `hydra.errors`; an `InferenceContext` value carrying the fresh-type-variable
+counter and the current subterm-path trace is threaded alongside the graph as an
+explicit parameter.
 
 ### Basic Either operations
 
@@ -1109,10 +1110,11 @@ Eithers.map (lambda "x" (Math.add (var "x") (int32 1))) eitherExpr
 right (Math.add (var "x") (var "y"))
 ```
 
-### Context for debug traces
+### Subterm-path tracing
 
-The `Context` type carries debug trace information (stack of messages, metadata) through computations.
-Functions that need tracing accept a `Context` parameter explicitly.
+The `InferenceContext` type carries a `trace` field (a list of `SubtermStep`s,
+accumulated backward as inference descends into a term) used for error reporting.
+Functions that need tracing accept an `InferenceContext` parameter explicitly.
 
 ## Primitive functions
 

@@ -3,7 +3,8 @@
 
 module Hydra.Test.Lib.Logic where
 import qualified Hydra.Core as Core
-import qualified Hydra.Lib.Eithers as Eithers
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Reduction as Reduction
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Test.TestGraph as TestGraph

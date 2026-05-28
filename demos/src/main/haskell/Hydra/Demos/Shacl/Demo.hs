@@ -22,7 +22,7 @@ import qualified Hydra.Shacl.Model as Shacl
 import qualified Hydra.Rdf.Utils as RdfUtils
 import qualified Hydra.Rdf.Serde as Serde
 import qualified Hydra.Encode.Packaging as EncodePackaging
-import qualified Hydra.Context as Context
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Lexical as Lexical
 
 import Hydra.Demos.Shacl.ShaclRdf (shapesGraphToTriples)
@@ -53,7 +53,8 @@ runDemo jsonDir outDir = do
   -- Step 1: Build a graph from the kernel type modules
   putStrLn "Step 1: Building graph from kernel type modules..."
   let graph = modulesToGraph kernelModules kernelModules
-  let cx = Lexical.emptyContext
+  -- Blank-node counter (replaces the prior InferenceContext threading per #368)
+  let cx = 0 :: Int
 
   -- Step 2: Generate SHACL shapes from kernel type elements, skipping unsupported types
   putStrLn "Step 2: Generating SHACL shapes from kernel type modules..."
@@ -78,7 +79,7 @@ runDemo jsonDir outDir = do
   loadedModules <- loadModulesFromJson jsonDir kernelModules typeNs
 
   -- Encode each loaded module *as a Module term* into RDF
-  (allDataDescs, nDataSkipped) <- encodeModulesAsRdf cx graph loadedModules
+  (allDataDescs, nDataSkipped) <- encodeModulesAsRdf 0 graph loadedModules
   let dataNt = Serde.rdfGraphToNtriples $ RdfUtils.descriptionsToGraph allDataDescs
   let dataFile = outDir </> "data.nt"
   writeFile dataFile dataNt
@@ -105,8 +106,10 @@ runDemo jsonDir outDir = do
 
 -- | Encode type definitions as SHACL shapes, skipping types that the SHACL language
 -- doesn't support (function types, type variables, etc.). Returns the shapes graph
--- and the count of skipped elements.
-encodeShapes :: Context.Context -> [TypeDefinition] -> (Shacl.ShapesGraph, Int)
+-- and the count of skipped elements. The Int is the blank-node counter; SHACL
+-- type encoding doesn't currently issue blank nodes, but the slot is preserved
+-- for symmetry with term encoding.
+encodeShapes :: Int -> [TypeDefinition] -> (Shacl.ShapesGraph, Int)
 encodeShapes cx defs =
   let results = map (encodeOneShape cx) defs
       successes = [d | Right d <- results]
@@ -115,7 +118,7 @@ encodeShapes cx defs =
 
 -- | Try to encode a single type definition as a SHACL Definition<Shape>.
 -- Replicates the toShape logic from shaclCoder but returns Either for error recovery.
-encodeOneShape :: Context.Context -> TypeDefinition -> Either String (Shacl.Definition Shacl.Shape)
+encodeOneShape :: Int -> TypeDefinition -> Either String (Shacl.Definition Shacl.Shape)
 encodeOneShape cx td =
   let nm = typeDefinitionName td
       typ = typeSchemeBody (typeDefinitionTypeScheme td)
@@ -129,7 +132,9 @@ encodeOneShape cx td =
 -- then converted to a term and encoded as RDF via the SHACL term encoder.
 -- This is necessary because Module elements can contain arbitrary Hydra terms
 -- (functions, type definitions) that the SHACL term encoder doesn't support.
-encodeModulesAsRdf :: Context.Context -> Graph -> [Module] -> IO ([Rdf.Description], Int)
+-- | The first Int is the blank-node counter, threaded through Shacl encoding.
+-- The Int in the return tuple is the count of skipped modules.
+encodeModulesAsRdf :: Int -> Graph -> [Module] -> IO ([Rdf.Description], Int)
 encodeModulesAsRdf cx graph mods = go cx mods [] 0
   where
     go _ [] descs nSkip = return (descs, nSkip)
@@ -159,8 +164,9 @@ simplifyModule m = m { moduleDefinitions = map simplifyDef (moduleDefinitions m)
     simplifyDef d = d
 
 -- | Try to encode a term as RDF, catching both Either errors and exceptions.
-tryEncode :: Rdf.Resource -> Term -> Context.Context -> Graph
-          -> IO (Maybe ([Rdf.Description], Context.Context))
+-- The threaded Int is the blank-node counter (see hydra.rdf.utils.nextBlankNode).
+tryEncode :: Rdf.Resource -> Term -> Int -> Graph
+          -> IO (Maybe ([Rdf.Description], Int))
 tryEncode subject term cx graph =
   catch
     (case ShaclCoder.encodeTerm subject term cx graph of

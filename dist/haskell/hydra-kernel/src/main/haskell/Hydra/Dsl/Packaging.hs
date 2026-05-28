@@ -3,6 +3,8 @@
 
 module Hydra.Dsl.Packaging where
 import qualified Hydra.Core as Core
+import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Dsl.Typing as DslTyping
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Typing as Typing
