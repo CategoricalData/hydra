@@ -86,9 +86,6 @@ import qualified Hydra.Java.Syntax as Java
 import qualified Hydra.Sources.Java.Syntax as JavaSyntax
 
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
 ns :: ModuleName
 ns = ModuleName "hydra.java.names"
 
@@ -130,6 +127,9 @@ applyMethodName = def "applyMethodName" $ string "apply"
 
 compareToMethodName :: TTermDefinition String
 compareToMethodName = def "compareToMethodName" $ string "compareTo"
+
+def :: String -> TTerm a -> TTermDefinition a
+def = definitionInModule module_
 
 equalsMethodName :: TTermDefinition String
 equalsMethodName = def "equalsMethodName" $ string "equals"

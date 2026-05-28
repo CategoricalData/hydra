@@ -53,6 +53,14 @@ define = definitionInModule module_
 -- Helpers
 -- ============================================================================
 
+-- Empty accessor path
+emptyPath :: TTerm SubtermPath
+emptyPath = Phantoms.wrap _SubtermPath (Phantoms.list ([] :: [TTerm SubtermStep]))
+
+-- Typed just for InvalidTermError
+justError :: TTerm InvalidTermError -> TTerm (Maybe InvalidTermError)
+justError (TTerm t) = TTerm $ TermMaybe $ Just t
+
 -- Helper to build names
 nm :: String -> TTerm Name
 nm s = Core.name $ Phantoms.string s
@@ -61,19 +69,21 @@ nm s = Core.name $ Phantoms.string s
 noError :: TTerm (Maybe InvalidTermError)
 noError = TTerm $ TermMaybe Nothing
 
--- Typed just for InvalidTermError
-justError :: TTerm InvalidTermError -> TTerm (Maybe InvalidTermError)
-justError (TTerm t) = TTerm $ TermMaybe $ Just t
-
 -- Shorthand for untyped term test case
 untypedCase :: String -> TTerm Term -> TTerm (Maybe InvalidTermError) -> TTerm TestCaseWithMetadata
 untypedCase name = validateCoreTermCase name (Phantoms.boolean False)
 
--- Empty accessor path
-emptyPath :: TTerm SubtermPath
-emptyPath = Phantoms.wrap _SubtermPath (Phantoms.list ([] :: [TTerm SubtermStep]))
-
 -- Error constructors
+
+-- SubtermStep helpers
+accLambdaBody :: TTerm SubtermStep
+accLambdaBody = Phantoms.inject _SubtermStep _SubtermStep_lambdaBody Phantoms.unit
+
+accLetBinding :: String -> TTerm SubtermStep
+accLetBinding name = Phantoms.inject _SubtermStep _SubtermStep_letBinding (nm name)
+
+accLetBody :: TTerm SubtermStep
+accLetBody = Phantoms.inject _SubtermStep _SubtermStep_letBody Phantoms.unit
 
 dupBinding :: [TTerm SubtermStep] -> String -> TTerm (Maybe InvalidTermError)
 dupBinding path name = justError $
@@ -89,6 +99,19 @@ dupField path name = justError $
       unName _DuplicateFieldError_location Phantoms.>: Phantoms.wrap _SubtermPath (Phantoms.list path),
       unName _DuplicateFieldError_name Phantoms.>: nm name]
 
+emptyAnnotErr :: TTerm (Maybe InvalidTermError)
+emptyAnnotErr = justError $
+  Phantoms.inject _InvalidTermError _InvalidTermError_emptyTermAnnotation $
+    Phantoms.record _EmptyTermAnnotationError [
+      unName _EmptyTermAnnotationError_location Phantoms.>: emptyPath]
+
+emptyCaseErr :: String -> TTerm (Maybe InvalidTermError)
+emptyCaseErr tname = justError $
+  Phantoms.inject _InvalidTermError _InvalidTermError_emptyCaseStatement $
+    Phantoms.record _EmptyCaseStatementError [
+      unName _EmptyCaseStatementError_location Phantoms.>: emptyPath,
+      unName _EmptyCaseStatementError_typeName Phantoms.>: nm tname]
+
 emptyLetErr :: TTerm (Maybe InvalidTermError)
 emptyLetErr = justError $
   Phantoms.inject _InvalidTermError _InvalidTermError_emptyLetBindings $
@@ -101,65 +124,11 @@ emptyTypeNameErr = justError $
     Phantoms.record _EmptyTypeNameInTermError [
       unName _EmptyTypeNameInTermError_location Phantoms.>: emptyPath]
 
-emptyCaseErr :: String -> TTerm (Maybe InvalidTermError)
-emptyCaseErr tname = justError $
-  Phantoms.inject _InvalidTermError _InvalidTermError_emptyCaseStatement $
-    Phantoms.record _EmptyCaseStatementError [
-      unName _EmptyCaseStatementError_location Phantoms.>: emptyPath,
-      unName _EmptyCaseStatementError_typeName Phantoms.>: nm tname]
-
-nestedAnnotErr :: TTerm (Maybe InvalidTermError)
-nestedAnnotErr = justError $
-  Phantoms.inject _InvalidTermError _InvalidTermError_nestedTermAnnotation $
-    Phantoms.record _NestedTermAnnotationError [
-      unName _NestedTermAnnotationError_location Phantoms.>: emptyPath]
-
-emptyAnnotErr :: TTerm (Maybe InvalidTermError)
-emptyAnnotErr = justError $
-  Phantoms.inject _InvalidTermError _InvalidTermError_emptyTermAnnotation $
-    Phantoms.record _EmptyTermAnnotationError [
-      unName _EmptyTermAnnotationError_location Phantoms.>: emptyPath]
-
-unknownPrimErr :: String -> TTerm (Maybe InvalidTermError)
-unknownPrimErr name = justError $
-  Phantoms.inject _InvalidTermError _InvalidTermError_unknownPrimitiveName $
-    Phantoms.record _UnknownPrimitiveNameError [
-      unName _UnknownPrimitiveNameError_location Phantoms.>: emptyPath,
-      unName _UnknownPrimitiveNameError_name Phantoms.>: nm name]
-
-selfAppErr :: String -> TTerm (Maybe InvalidTermError)
-selfAppErr name = justError $
-  Phantoms.inject _InvalidTermError _InvalidTermError_selfApplication $
-    Phantoms.record _SelfApplicationError [
-      unName _SelfApplicationError_location Phantoms.>: emptyPath,
-      unName _SelfApplicationError_name Phantoms.>: nm name]
-
 identityAppErr :: TTerm (Maybe InvalidTermError)
 identityAppErr = justError $
   Phantoms.inject _InvalidTermError _InvalidTermError_unnecessaryIdentityApplication $
     Phantoms.record _UnnecessaryIdentityApplicationError [
       unName _UnnecessaryIdentityApplicationError_location Phantoms.>: emptyPath]
-
-redundantWrapErr :: String -> TTerm (Maybe InvalidTermError)
-redundantWrapErr tname = justError $
-  Phantoms.inject _InvalidTermError _InvalidTermError_redundantWrapUnwrap $
-    Phantoms.record _RedundantWrapUnwrapError [
-      unName _RedundantWrapUnwrapError_location Phantoms.>: emptyPath,
-      unName _RedundantWrapUnwrapError_typeName Phantoms.>: nm tname]
-
-shadowErr :: String -> TTerm (Maybe InvalidTermError)
-shadowErr name = justError $
-  Phantoms.inject _InvalidTermError _InvalidTermError_termVariableShadowing $
-    Phantoms.record _TermVariableShadowingError [
-      unName _TermVariableShadowingError_location Phantoms.>: emptyPath,
-      unName _TermVariableShadowingError_name Phantoms.>: nm name]
-
-invalidNameErr :: String -> TTerm (Maybe InvalidTermError)
-invalidNameErr name = justError $
-  Phantoms.inject _InvalidTermError _InvalidTermError_invalidLambdaParameterName $
-    Phantoms.record _InvalidLambdaParameterNameError [
-      unName _InvalidLambdaParameterNameError_location Phantoms.>: emptyPath,
-      unName _InvalidLambdaParameterNameError_name Phantoms.>: nm name]
 
 invalidLetNameErr :: String -> TTerm (Maybe InvalidTermError)
 invalidLetNameErr name = justError $
@@ -168,48 +137,50 @@ invalidLetNameErr name = justError $
       unName _InvalidLetBindingNameError_location Phantoms.>: emptyPath,
       unName _InvalidLetBindingNameError_name Phantoms.>: nm name]
 
--- SubtermStep helpers
-accLambdaBody :: TTerm SubtermStep
-accLambdaBody = Phantoms.inject _SubtermStep _SubtermStep_lambdaBody Phantoms.unit
+invalidNameErr :: String -> TTerm (Maybe InvalidTermError)
+invalidNameErr name = justError $
+  Phantoms.inject _InvalidTermError _InvalidTermError_invalidLambdaParameterName $
+    Phantoms.record _InvalidLambdaParameterNameError [
+      unName _InvalidLambdaParameterNameError_location Phantoms.>: emptyPath,
+      unName _InvalidLambdaParameterNameError_name Phantoms.>: nm name]
 
-accLetBody :: TTerm SubtermStep
-accLetBody = Phantoms.inject _SubtermStep _SubtermStep_letBody Phantoms.unit
+nestedAnnotErr :: TTerm (Maybe InvalidTermError)
+nestedAnnotErr = justError $
+  Phantoms.inject _InvalidTermError _InvalidTermError_nestedTermAnnotation $
+    Phantoms.record _NestedTermAnnotationError [
+      unName _NestedTermAnnotationError_location Phantoms.>: emptyPath]
 
-accLetBinding :: String -> TTerm SubtermStep
-accLetBinding name = Phantoms.inject _SubtermStep _SubtermStep_letBinding (nm name)
+redundantWrapErr :: String -> TTerm (Maybe InvalidTermError)
+redundantWrapErr tname = justError $
+  Phantoms.inject _InvalidTermError _InvalidTermError_redundantWrapUnwrap $
+    Phantoms.record _RedundantWrapUnwrapError [
+      unName _RedundantWrapUnwrapError_location Phantoms.>: emptyPath,
+      unName _RedundantWrapUnwrapError_typeName Phantoms.>: nm tname]
+
+selfAppErr :: String -> TTerm (Maybe InvalidTermError)
+selfAppErr name = justError $
+  Phantoms.inject _InvalidTermError _InvalidTermError_selfApplication $
+    Phantoms.record _SelfApplicationError [
+      unName _SelfApplicationError_location Phantoms.>: emptyPath,
+      unName _SelfApplicationError_name Phantoms.>: nm name]
+
+shadowErr :: String -> TTerm (Maybe InvalidTermError)
+shadowErr name = justError $
+  Phantoms.inject _InvalidTermError _InvalidTermError_termVariableShadowing $
+    Phantoms.record _TermVariableShadowingError [
+      unName _TermVariableShadowingError_location Phantoms.>: emptyPath,
+      unName _TermVariableShadowingError_name Phantoms.>: nm name]
+
+unknownPrimErr :: String -> TTerm (Maybe InvalidTermError)
+unknownPrimErr name = justError $
+  Phantoms.inject _InvalidTermError _InvalidTermError_unknownPrimitiveName $
+    Phantoms.record _UnknownPrimitiveNameError [
+      unName _UnknownPrimitiveNameError_location Phantoms.>: emptyPath,
+      unName _UnknownPrimitiveNameError_name Phantoms.>: nm name]
 
 -- Term construction helpers
 
 -- DSL-based term construction helpers (raw Haskell constructors break test generation)
-
--- | Construct an annotated term with a single annotation
-annotateTerm :: TTerm Term -> String -> TTerm Term -> TTerm Term
-annotateTerm body key val = Phantoms.annot (Name key) Nothing body
-
--- | Construct a wrap term
-wrapTerm :: String -> TTerm Term -> TTerm Term
-wrapTerm tname = Phantoms.wrap (Name tname)
-
--- | Coerce a phantom-typed term to TTerm Term
-toTermTerm :: TTerm a -> TTerm Term
-toTermTerm (TTerm t) = TTerm t
-
--- | Construct an unwrap elimination applied to a term
-unwrapApply :: String -> TTerm Term -> TTerm Term
-unwrapApply tname (TTerm arg) = TTerm $ TermApplication $ Application
-  (TermUnwrap (Name tname)) arg
-
--- | Construct a primitive function reference
-primRef :: String -> TTerm Term
-primRef name = toTermTerm $ Phantoms.primitive (Name name)
-
--- | Construct a projection
-projTerm :: String -> String -> TTerm Term
-projTerm tname fname = toTermTerm $ Phantoms.project (Name tname) (Name fname)
-
--- ============================================================================
--- Test groups
--- ============================================================================
 
 allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
@@ -232,6 +203,10 @@ allTests = define "allTests" $
 -- ============================================================================
 -- T2: Duplicate bindings
 -- ============================================================================
+
+-- | Construct an annotated term with a single annotation
+annotateTerm :: TTerm Term -> String -> TTerm Term -> TTerm Term
+annotateTerm body key val = Phantoms.annot (Name key) Nothing body
 
 duplicateBindingsTests :: TTermDefinition TestGroup
 duplicateBindingsTests = define "duplicateBindingsTests" $
@@ -286,6 +261,11 @@ duplicateFieldsTests = define "duplicateFieldsTests" $
 -- ============================================================================
 -- T1: Empty let bindings
 -- ============================================================================
+
+-- | The fully qualified rule name for InvalidTermError.emptyLetBindings.
+-- Matches the format produced by 'qualifiedRule' in Validate/Core.hs.
+emptyLetBindingsRule :: Name
+emptyLetBindingsRule = Name "hydra.error.core.InvalidTermError.emptyLetBindings"
 
 emptyLetBindingsTests :: TTermDefinition TestGroup
 emptyLetBindingsTests = define "emptyLetBindingsTests" $
@@ -360,34 +340,15 @@ annotationTests = define "annotationTests" $
 -- T22: Unknown primitive
 -- ============================================================================
 
-unknownPrimitiveTests :: TTermDefinition TestGroup
-unknownPrimitiveTests = define "unknownPrimitiveTests" $
-  subgroup "unknown primitive" [
-    untypedCase "known primitive is valid"
-      (primRef "hydra.lib.math.add")
-      noError,
-    untypedCase "unknown primitive"
-      (primRef "hydra.lib.nonexistent.foo")
-      (unknownPrimErr "hydra.lib.nonexistent.foo")]
-
--- ============================================================================
--- T15: Self-application
--- ============================================================================
-
-{- selfApplicationTests :: TTermDefinition TestGroup
-selfApplicationTests = define "selfApplicationTests" $
-  subgroup "self application" [
-    untypedCase "normal application is valid"
-      (app (var "f") (var "x"))
-      noError,
-    untypedCase "self-application"
-      (app (var "x") (var "x"))
-      (selfAppErr "x")]
--}
-
--- ============================================================================
--- T16: Identity application
--- ============================================================================
+-- | Bare InvalidTermError representing an empty-let-bindings violation at
+-- a given subterm path. Differs from 'emptyLetErr' in two ways: returns
+-- the bare error (not Maybe), and accepts a path so distinct violations
+-- in the same input can be distinguished by location.
+emptyLetErrAt :: [TTerm SubtermStep] -> TTerm InvalidTermError
+emptyLetErrAt path = Phantoms.inject _InvalidTermError _InvalidTermError_emptyLetBindings $
+  Phantoms.record _EmptyLetBindingsError [
+    unName _EmptyLetBindingsError_location Phantoms.>:
+      Phantoms.wrap _SubtermPath (Phantoms.list path)]
 
 identityApplicationTests :: TTermDefinition TestGroup
 identityApplicationTests = define "identityApplicationTests" $
@@ -403,95 +364,9 @@ identityApplicationTests = define "identityApplicationTests" $
 -- T14: Redundant wrap/unwrap
 -- ============================================================================
 
-redundantWrapUnwrapTests :: TTermDefinition TestGroup
-redundantWrapUnwrapTests = define "redundantWrapUnwrapTests" $
-  subgroup "redundant wrap unwrap" [
-    untypedCase "unwrap of different type is valid"
-      (unwrapApply "TypeA" (wrapTerm "TypeB" (int32 1)))
-      noError,
-    untypedCase "unwrap of same type wrap"
-      (unwrapApply "MyType" (wrapTerm "MyType" (int32 1)))
-      (redundantWrapErr "MyType")]
-
--- ============================================================================
--- T11: Variable shadowing
--- ============================================================================
-
-variableShadowingTests :: TTermDefinition TestGroup
-variableShadowingTests = define "variableShadowingTests" $
-  subgroup "variable shadowing" [
-    untypedCase "lambda with fresh variable is valid"
-      (lambda "x" (var "x"))
-      noError,
-    -- Note: shadowing detection deferred; needs pre-extension graph access
-    untypedCase "lambda shadows outer lambda"
-      (lambda "x" (lambda "x" (var "x")))
-      noError,
-    untypedCase "let binding shadows lambda parameter"
-      (lambda "x" (lets [(nm "x", int32 1)] (var "x")))
-      noError]
-
--- ============================================================================
--- T17/T18: Naming conventions
--- ============================================================================
-
-{- namingConventionTests :: TTermDefinition TestGroup
-namingConventionTests = define "namingConventionTests" $
-  subgroup "naming conventions" [
-    untypedCase "lambda with valid name"
-      (lambda "x" (var "x"))
-      noError,
-    untypedCase "lambda with empty name"
-      (TTerm $ TermLambda $ Lambda (Name "") Nothing (TermVariable $ Name "x"))
-      (invalidNameErr ""),
-    untypedCase "let binding with valid name"
-      (lets [(nm "x", int32 1)] (var "x"))
-      noError,
-    untypedCase "let binding with empty name"
-      (TTerm $ TermLet $ Let [Binding (Name "") (TermLiteral $ LiteralInteger $ IntegerValueInt32 1) Nothing] (TermVariable $ Name "x"))
-      (invalidLetNameErr "")]
--}
-
--- ============================================================================
--- Profile-aware behaviour tests
---
--- These exercise the post-#320 validator API: an explicit ValidationProfile
--- argument and a ValidationResult return shape. The legacy 'Maybe E'-shaped
--- tests above only see the first error per pass, so they can't observe
--- multi-error accumulation, warning vs error classification, or rule
--- disabling. The cases here drive validateCoreTermProfiledRef directly.
--- ============================================================================
-
--- | Build a ValidationProfile from explicit error/warning rule lists and bounds.
-profileWith :: [Name] -> [Name] -> Int -> Int -> TTerm ValidationProfile
-profileWith errs warns mE mW = Validation.validationProfile
-  (Sets.fromList $ Phantoms.list $ Phantoms.nameLift <$> errs)
-  (Sets.fromList $ Phantoms.list $ Phantoms.nameLift <$> warns)
-  (Phantoms.int32 mE)
-  (Phantoms.int32 mW)
-
--- | Build a ValidationResult from explicit error and warning lists.
-resultWith
-  :: [TTerm InvalidTermError]
-  -> [TTerm InvalidTermError]
-  -> TTerm (ValidationResult InvalidTermError)
-resultWith errs warns = Validation.validationResult
-  (Phantoms.list errs) (Phantoms.list warns)
-
--- | Bare InvalidTermError representing an empty-let-bindings violation at
--- a given subterm path. Differs from 'emptyLetErr' in two ways: returns
--- the bare error (not Maybe), and accepts a path so distinct violations
--- in the same input can be distinguished by location.
-emptyLetErrAt :: [TTerm SubtermStep] -> TTerm InvalidTermError
-emptyLetErrAt path = Phantoms.inject _InvalidTermError _InvalidTermError_emptyLetBindings $
-  Phantoms.record _EmptyLetBindingsError [
-    unName _EmptyLetBindingsError_location Phantoms.>:
-      Phantoms.wrap _SubtermPath (Phantoms.list path)]
-
--- | The fully qualified rule name for InvalidTermError.emptyLetBindings.
--- Matches the format produced by 'qualifiedRule' in Validate/Core.hs.
-emptyLetBindingsRule :: Name
-emptyLetBindingsRule = Name "hydra.error.core.InvalidTermError.emptyLetBindings"
+-- | Construct a primitive function reference
+primRef :: String -> TTerm Term
+primRef name = toTermTerm $ Phantoms.primitive (Name name)
 
 profileBehaviourTests :: TTermDefinition TestGroup
 profileBehaviourTests = define "profileBehaviourTests" $
@@ -543,3 +418,128 @@ profileBehaviourTests = define "profileBehaviourTests" $
       (showValidationResultTerm $ resultWith
         [emptyLetErrAt []]
         [])]
+
+-- | Build a ValidationProfile from explicit error/warning rule lists and bounds.
+profileWith :: [Name] -> [Name] -> Int -> Int -> TTerm ValidationProfile
+profileWith errs warns mE mW = Validation.validationProfile
+  (Sets.fromList $ Phantoms.list $ Phantoms.nameLift <$> errs)
+  (Sets.fromList $ Phantoms.list $ Phantoms.nameLift <$> warns)
+  (Phantoms.int32 mE)
+  (Phantoms.int32 mW)
+
+-- | Build a ValidationResult from explicit error and warning lists.
+resultWith
+  :: [TTerm InvalidTermError]
+  -> [TTerm InvalidTermError]
+  -> TTerm (ValidationResult InvalidTermError)
+resultWith errs warns = Validation.validationResult
+  (Phantoms.list errs) (Phantoms.list warns)
+
+-- | Construct a projection
+projTerm :: String -> String -> TTerm Term
+projTerm tname fname = toTermTerm $ Phantoms.project (Name tname) (Name fname)
+
+-- ============================================================================
+-- Test groups
+-- ============================================================================
+
+redundantWrapUnwrapTests :: TTermDefinition TestGroup
+redundantWrapUnwrapTests = define "redundantWrapUnwrapTests" $
+  subgroup "redundant wrap unwrap" [
+    untypedCase "unwrap of different type is valid"
+      (unwrapApply "TypeA" (wrapTerm "TypeB" (int32 1)))
+      noError,
+    untypedCase "unwrap of same type wrap"
+      (unwrapApply "MyType" (wrapTerm "MyType" (int32 1)))
+      (redundantWrapErr "MyType")]
+
+-- ============================================================================
+-- T11: Variable shadowing
+-- ============================================================================
+
+-- | Coerce a phantom-typed term to TTerm Term
+toTermTerm :: TTerm a -> TTerm Term
+toTermTerm (TTerm t) = TTerm t
+
+unknownPrimitiveTests :: TTermDefinition TestGroup
+unknownPrimitiveTests = define "unknownPrimitiveTests" $
+  subgroup "unknown primitive" [
+    untypedCase "known primitive is valid"
+      (primRef "hydra.lib.math.add")
+      noError,
+    untypedCase "unknown primitive"
+      (primRef "hydra.lib.nonexistent.foo")
+      (unknownPrimErr "hydra.lib.nonexistent.foo")]
+
+-- ============================================================================
+-- T15: Self-application
+-- ============================================================================
+
+{- selfApplicationTests :: TTermDefinition TestGroup
+selfApplicationTests = define "selfApplicationTests" $
+  subgroup "self application" [
+    untypedCase "normal application is valid"
+      (app (var "f") (var "x"))
+      noError,
+    untypedCase "self-application"
+      (app (var "x") (var "x"))
+      (selfAppErr "x")]
+-}
+
+-- ============================================================================
+-- T16: Identity application
+-- ============================================================================
+
+-- | Construct an unwrap elimination applied to a term
+unwrapApply :: String -> TTerm Term -> TTerm Term
+unwrapApply tname (TTerm arg) = TTerm $ TermApplication $ Application
+  (TermUnwrap (Name tname)) arg
+
+variableShadowingTests :: TTermDefinition TestGroup
+variableShadowingTests = define "variableShadowingTests" $
+  subgroup "variable shadowing" [
+    untypedCase "lambda with fresh variable is valid"
+      (lambda "x" (var "x"))
+      noError,
+    -- Note: shadowing detection deferred; needs pre-extension graph access
+    untypedCase "lambda shadows outer lambda"
+      (lambda "x" (lambda "x" (var "x")))
+      noError,
+    untypedCase "let binding shadows lambda parameter"
+      (lambda "x" (lets [(nm "x", int32 1)] (var "x")))
+      noError]
+
+-- ============================================================================
+-- T17/T18: Naming conventions
+-- ============================================================================
+
+{- namingConventionTests :: TTermDefinition TestGroup
+namingConventionTests = define "namingConventionTests" $
+  subgroup "naming conventions" [
+    untypedCase "lambda with valid name"
+      (lambda "x" (var "x"))
+      noError,
+    untypedCase "lambda with empty name"
+      (TTerm $ TermLambda $ Lambda (Name "") Nothing (TermVariable $ Name "x"))
+      (invalidNameErr ""),
+    untypedCase "let binding with valid name"
+      (lets [(nm "x", int32 1)] (var "x"))
+      noError,
+    untypedCase "let binding with empty name"
+      (TTerm $ TermLet $ Let [Binding (Name "") (TermLiteral $ LiteralInteger $ IntegerValueInt32 1) Nothing] (TermVariable $ Name "x"))
+      (invalidLetNameErr "")]
+-}
+
+-- ============================================================================
+-- Profile-aware behaviour tests
+--
+-- These exercise the post-#320 validator API: an explicit ValidationProfile
+-- argument and a ValidationResult return shape. The legacy 'Maybe E'-shaped
+-- tests above only see the first error per pass, so they can't observe
+-- multi-error accumulation, warning vs error classification, or rule
+-- disabling. The cases here drive validateCoreTermProfiledRef directly.
+-- ============================================================================
+
+-- | Construct a wrap term
+wrapTerm :: String -> TTerm Term -> TTerm Term
+wrapTerm tname = Phantoms.wrap (Name tname)

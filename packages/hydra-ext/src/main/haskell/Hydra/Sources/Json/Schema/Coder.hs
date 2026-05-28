@@ -93,12 +93,6 @@ import qualified Hydra.Sources.Json.Schema.Serde as JsonSchemaSerde
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-jsonSchemaPhantomNs :: ModuleName
-jsonSchemaPhantomNs = ModuleName "hydra.json.schema"
-
-jsonModelNs :: ModuleName
-jsonModelNs = ModuleName "hydra.json.model"
-
 ns :: ModuleName
 ns = ModuleName "hydra.json.schema.coder"
 
@@ -267,6 +261,12 @@ jsType = define "jsType" $
       (Logic.ifElse (var "optional")
         (inject JS._Type JS._Type_multiple (list [var "tname", inject JS._TypeName JS._TypeName_null unit]))
         (inject JS._Type JS._Type_single (var "tname")))]
+
+jsonModelNs :: ModuleName
+jsonModelNs = ModuleName "hydra.json.model"
+
+jsonSchemaPhantomNs :: ModuleName
+jsonSchemaPhantomNs = ModuleName "hydra.json.schema"
 
 literalTypeName :: TTermDefinition (LiteralType -> JS.TypeName)
 literalTypeName = define "literalTypeName" $

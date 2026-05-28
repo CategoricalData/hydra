@@ -156,13 +156,13 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
--- | Format a UnificationError as a string
-formatUnifError :: TTerm (UnificationError -> String)
-formatUnifError = "e" ~> Error.unificationErrorMessage (var "e")
-
 -- | Format an Error as a string
 formatError :: TTerm (Error -> String)
 formatError = "e" ~> ShowError.error_ @@ var "e"
+
+-- | Format a UnificationError as a string
+formatUnifError :: TTerm (UnificationError -> String)
+formatUnifError = "e" ~> Error.unificationErrorMessage (var "e")
 
 -- | Lift a UnificationError to an Error, stamping the current trace from
 -- the InferenceContext (reversed: trace is accumulated leaf-to-root; the

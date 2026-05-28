@@ -100,9 +100,6 @@ module_ = Module {
       toDefinition stripAndDereferenceTerm,
       toDefinition stripAndDereferenceTermEither]
 
-formatError :: TTerm (Error -> String)
-formatError = "e" ~> ShowError.error_ @@ var "e"
-
 -- | Build a Graph from element bindings, environment, and primitives.
 -- Construction-time shadowing: any bound term or type whose name matches a primitive is removed,
 -- so primitives always take priority by construction.
@@ -212,6 +209,9 @@ fieldsOf = define "fieldsOf" $
     _Type_forall>>: "forallType" ~> fieldsOf @@ (Core.forallTypeBody (var "forallType")),
     _Type_record>>: "rt" ~> var "rt",
     _Type_union>>: "rt" ~> var "rt"]
+
+formatError :: TTerm (Error -> String)
+formatError = "e" ~> ShowError.error_ @@ var "e"
 
 getField :: TTermDefinition (M.Map Name Term -> Name -> (Term -> Either Error b) -> Either Error b)
 getField = define "getField" $

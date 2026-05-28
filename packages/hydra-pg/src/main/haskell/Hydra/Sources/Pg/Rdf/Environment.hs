@@ -25,18 +25,6 @@ ns = ModuleName "hydra.pg.rdf.environment"
 define :: String -> Type -> Binding
 define = defineType ns
 
-env :: String -> Type
-env = typeref ns
-
-rdf :: String -> Type
-rdf = typeref RdfSyntax.ns
-
-pg :: String -> Type
-pg = typeref PgModel.ns
-
-core :: String -> Type
-core = typeref Core.ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -46,6 +34,15 @@ module_ = Module {
   where
     definitions = [
       pgRdfEnvironment]
+
+core :: String -> Type
+core = typeref Core.ns
+
+env :: String -> Type
+env = typeref ns
+
+pg :: String -> Type
+pg = typeref PgModel.ns
 
 -- | The environment for property graph to RDF mapping, providing configurable
 -- functions for encoding property graph labels, keys, ids, and values as RDF terms.
@@ -71,3 +68,6 @@ pgRdfEnvironment = define "PgRdfEnvironment" $
     "encodePropertyValue">:
       doc "A function which encodes a property value as an RDF literal" $
       T.function "v" (rdf "Literal")]
+
+rdf :: String -> Type
+rdf = typeref RdfSyntax.ns

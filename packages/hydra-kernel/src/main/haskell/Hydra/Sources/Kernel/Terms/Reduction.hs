@@ -98,9 +98,6 @@ module_ = Module {
      toDefinition termIsClosed,
      toDefinition termIsValue]
 
-formatError :: TTerm (Error -> String)
-formatError = "e" ~> ShowError.error_ @@ var "e"
-
 alphaConvert :: TTermDefinition (Name -> Name -> Term -> Term)
 alphaConvert = define "alphaConvert" $
   doc "Alpha convert a variable in a term" $
@@ -738,6 +735,9 @@ etaReduceTerm = define "etaReduceTerm" $
         (etaReduceTerm @@ (Core.annotatedTermBody $ var "at"))
         (Core.annotatedTermAnnotation $ var "at"),
     _Term_lambda>>: "l" ~> var "reduceLambda" @@ var "l"]
+
+formatError :: TTerm (Error -> String)
+formatError = "e" ~> ShowError.error_ @@ var "e"
 
 reduceTerm :: TTermDefinition (InferenceContext -> Graph -> Bool -> Term -> Prelude.Either Error Term)
 reduceTerm = define "reduceTerm" $

@@ -168,9 +168,6 @@ noTypeArgs = list ([] :: [TTerm Type])
 
 --
 
-formatError :: TTerm (Error -> String)
-formatError = "e" ~> ShowError.error_ @@ var "e"
-
 allEqual :: TTermDefinition ([a] -> Bool)
 allEqual = define "allEqual" $
   doc "True if every element of the list is equal to every other element (vacuously true for the empty list)" $
@@ -337,6 +334,9 @@ containsInScopeTypeVars = define "containsInScopeTypeVars" $
   "vars" <~ Graph.graphTypeVariables (var "tx") $
   "freeVars" <~ Variables.freeVariablesInTypeSimple @@ var "t" $
   Logic.not $ Sets.null $ Sets.intersection (var "vars") (var "freeVars")
+
+formatError :: TTerm (Error -> String)
+formatError = "e" ~> ShowError.error_ @@ var "e"
 
 normalizeTypeFreeVars :: TTermDefinition (Type -> Type)
 normalizeTypeFreeVars = define "normalizeTypeFreeVars" $

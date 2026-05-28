@@ -135,6 +135,37 @@ module_ = Module {
       toDefinition termToElementsAdapter,
       toDefinition termToString]
 
+-- | Apply a parsed pattern (list of literal/path pairs) to a term, producing string term results.
+--   The pattern is represented as: (firstLiteral, [(pathSteps, trailingLiteral), ...])
+--   We build result strings by starting with firstLit, then for each pair, evaluating the path
+--   on the term to get strings, and appending pathResult ++ trailingLiteral.
+applyPattern :: TTermDefinition (InferenceContext -> String -> [([String], String)] -> Term -> Either Error [Term])
+applyPattern = define "applyPattern" $
+  doc "Apply a parsed pattern to a term, producing string terms" $
+  "cx" ~> "firstLit" ~> "pairs" ~> "term" ~>
+    Logic.ifElse (Lists.null $ var "pairs")
+      -- No path expressions: just return the literal as a string term
+      (right (list [inject _Term _Term_literal (inject _Literal _Literal_string (var "firstLit"))]))
+      -- Evaluate all paths, then combine
+      (Eithers.bind (Eithers.mapList
+        ("pp" ~> Eithers.map
+          ("terms" ~> pair (Lists.map ("t" ~> termToString @@ var "t") (var "terms")) (Pairs.second $ var "pp"))
+          (evalPath @@ var "cx" @@ (Pairs.first $ var "pp") @@ var "term"))
+        (var "pairs"))
+        ("evaluated" ~>
+          -- Fold over evaluated pairs, building up accumulator strings
+          right (Lists.map
+            ("s" ~> inject _Term _Term_literal (inject _Literal _Literal_string (var "s")))
+            (Lists.foldl
+              ("accum" ~> "ep" ~> lets [
+                "pStrs">: Pairs.first $ var "ep",
+                "litP">: Pairs.second $ var "ep"] $
+                Lists.concat (Lists.map
+                  ("pStr" ~> Lists.map ("a" ~> var "a" ++ var "pStr" ++ var "litP") (var "accum"))
+                  (var "pStrs")))
+              (list [var "firstLit"])
+              (var "evaluated")))))
+
 -- | Decode an edge label from a term
 decodeEdgeLabel :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error PG.EdgeLabel)
 decodeEdgeLabel = define "decodeEdgeLabel" $
@@ -244,6 +275,44 @@ decodeVertexSpec = define "decodeVertexSpec" $
                 @@ (expectList @@ var "cx" @@ var "g" @@ decodePropertySpec)))))
       @@ var "term"
 
+-- | Evaluate a path (list of steps) on a term, returning all resulting terms
+evalPath :: TTermDefinition (InferenceContext -> [String] -> Term -> Either Error [Term])
+evalPath = define "evalPath" $
+  doc "Evaluate a path (list of steps) on a term, returning all resulting terms" $
+  "cx" ~> "path" ~> "term" ~>
+    Maybes.maybe
+      (right (list [var "term"]))
+      (lambda "p" $
+        Eithers.bind (evalStep @@ var "cx" @@ Pairs.first (var "p") @@ var "term")
+          ("results" ~> Eithers.map (lambda "xs" $ Lists.concat (var "xs"))
+            (Eithers.mapList (evalPath @@ var "cx" @@ Pairs.second (var "p")) (var "results"))))
+      (Lists.uncons $ var "path")
+
+-- | Evaluate a single step of a path traversal on a term
+evalStep :: TTermDefinition (InferenceContext -> String -> Term -> Either Error [Term])
+evalStep = define "evalStep" $
+  doc "Evaluate a single step of a path traversal on a term" $
+  "cx" ~> "step" ~> "term" ~>
+    Logic.ifElse (Strings.null $ var "step")
+      (right (list [var "term"]))
+      (cases _Term (Strip.deannotateTerm @@ var "term")
+        (Just $ left (Error.errorOther $ Error.otherError $ string "Can't traverse through term for step " ++ var "step")) [
+        _Term_list>>: "terms" ~>
+          Eithers.map (lambda "xs" $ Lists.concat (var "xs")) (Eithers.mapList (evalStep @@ var "cx" @@ var "step") (var "terms")),
+        _Term_maybe>>: "mt" ~>
+          Maybes.maybe (right (list ([] :: [TTerm Term]))) ("t" ~> evalStep @@ var "cx" @@ var "step" @@ var "t") (var "mt"),
+        _Term_record>>: "rec" ~>
+          Maybes.maybe
+            (left $ Error.errorOther $ Error.otherError $ string "No such field " ++ var "step" ++ string " in record")
+            ("t" ~> right (list [var "t"]))
+            (Maps.lookup (Core.name $ var "step") (Resolution.fieldMap @@ (Core.recordFields $ var "rec"))),
+        _Term_inject>>: "inj" ~>
+          Logic.ifElse (Equality.equal (Core.unName $ Core.fieldName $ Core.injectionField $ var "inj") (var "step"))
+            (evalStep @@ var "cx" @@ var "step" @@ (Core.fieldTerm $ Core.injectionField $ var "inj"))
+            (right (list ([] :: [TTerm Term]))),
+        _Term_wrap>>: "wt" ~>
+          evalStep @@ var "cx" @@ var "step" @@ (Core.wrappedTermBody $ var "wt")])
+
 -- | Extract a list from a term and apply a decoder to each element
 expectList :: TTermDefinition (InferenceContext -> Graph -> (InferenceContext ->Graph -> Term -> Either Error x) -> Term -> Either Error [x])
 expectList = define "expectList" $
@@ -303,95 +372,6 @@ parseElementSpec = define "parseElementSpec" $
       PGM._ElementSpec_vertex>>: "vspec" ~> parseVertexSpec @@ var "cx" @@ var "g" @@ var "schema" @@ var "vspec",
       PGM._ElementSpec_edge>>: "espec" ~> parseEdgeSpec @@ var "cx" @@ var "g" @@ var "schema" @@ var "espec"]
     @@ var "spec"
-
--- | Evaluate a single step of a path traversal on a term
-evalStep :: TTermDefinition (InferenceContext -> String -> Term -> Either Error [Term])
-evalStep = define "evalStep" $
-  doc "Evaluate a single step of a path traversal on a term" $
-  "cx" ~> "step" ~> "term" ~>
-    Logic.ifElse (Strings.null $ var "step")
-      (right (list [var "term"]))
-      (cases _Term (Strip.deannotateTerm @@ var "term")
-        (Just $ left (Error.errorOther $ Error.otherError $ string "Can't traverse through term for step " ++ var "step")) [
-        _Term_list>>: "terms" ~>
-          Eithers.map (lambda "xs" $ Lists.concat (var "xs")) (Eithers.mapList (evalStep @@ var "cx" @@ var "step") (var "terms")),
-        _Term_maybe>>: "mt" ~>
-          Maybes.maybe (right (list ([] :: [TTerm Term]))) ("t" ~> evalStep @@ var "cx" @@ var "step" @@ var "t") (var "mt"),
-        _Term_record>>: "rec" ~>
-          Maybes.maybe
-            (left $ Error.errorOther $ Error.otherError $ string "No such field " ++ var "step" ++ string " in record")
-            ("t" ~> right (list [var "t"]))
-            (Maps.lookup (Core.name $ var "step") (Resolution.fieldMap @@ (Core.recordFields $ var "rec"))),
-        _Term_inject>>: "inj" ~>
-          Logic.ifElse (Equality.equal (Core.unName $ Core.fieldName $ Core.injectionField $ var "inj") (var "step"))
-            (evalStep @@ var "cx" @@ var "step" @@ (Core.fieldTerm $ Core.injectionField $ var "inj"))
-            (right (list ([] :: [TTerm Term]))),
-        _Term_wrap>>: "wt" ~>
-          evalStep @@ var "cx" @@ var "step" @@ (Core.wrappedTermBody $ var "wt")])
-
--- | Evaluate a path (list of steps) on a term, returning all resulting terms
-evalPath :: TTermDefinition (InferenceContext -> [String] -> Term -> Either Error [Term])
-evalPath = define "evalPath" $
-  doc "Evaluate a path (list of steps) on a term, returning all resulting terms" $
-  "cx" ~> "path" ~> "term" ~>
-    Maybes.maybe
-      (right (list [var "term"]))
-      (lambda "p" $
-        Eithers.bind (evalStep @@ var "cx" @@ Pairs.first (var "p") @@ var "term")
-          ("results" ~> Eithers.map (lambda "xs" $ Lists.concat (var "xs"))
-            (Eithers.mapList (evalPath @@ var "cx" @@ Pairs.second (var "p")) (var "results"))))
-      (Lists.uncons $ var "path")
-
--- | Convert a term to its string representation
-termToString :: TTermDefinition (Term -> String)
-termToString = define "termToString" $
-  doc "Convert a term to its string representation" $
-  "term" ~>
-    cases _Term (Strip.deannotateTerm @@ var "term")
-      (Just $ ShowCore.term @@ var "term") [
-      _Term_literal>>: "lit" ~>
-        cases _Literal (var "lit") (Just $ ShowCore.term @@ var "term") [
-          _Literal_string>>: lambda "s" $ var "s",
-          _Literal_boolean>>: "b" ~> Logic.ifElse (var "b") (string "true") (string "false"),
-          _Literal_integer>>: "i" ~>
-            cases _IntegerValue (var "i") (Just $ ShowCore.term @@ var "term") [
-              _IntegerValue_int32>>: "n" ~> Literals.showInt32 (var "n")],
-          _Literal_float>>: "f" ~>
-            cases _FloatValue (var "f") (Just $ ShowCore.term @@ var "term") [
-              _FloatValue_float64>>: "n" ~> Literals.showFloat64 (var "n")]],
-      _Term_maybe>>: "mt" ~>
-        Maybes.maybe (string "nothing") ("t" ~> termToString @@ var "t") (var "mt")]
-
--- | Apply a parsed pattern (list of literal/path pairs) to a term, producing string term results.
---   The pattern is represented as: (firstLiteral, [(pathSteps, trailingLiteral), ...])
---   We build result strings by starting with firstLit, then for each pair, evaluating the path
---   on the term to get strings, and appending pathResult ++ trailingLiteral.
-applyPattern :: TTermDefinition (InferenceContext -> String -> [([String], String)] -> Term -> Either Error [Term])
-applyPattern = define "applyPattern" $
-  doc "Apply a parsed pattern to a term, producing string terms" $
-  "cx" ~> "firstLit" ~> "pairs" ~> "term" ~>
-    Logic.ifElse (Lists.null $ var "pairs")
-      -- No path expressions: just return the literal as a string term
-      (right (list [inject _Term _Term_literal (inject _Literal _Literal_string (var "firstLit"))]))
-      -- Evaluate all paths, then combine
-      (Eithers.bind (Eithers.mapList
-        ("pp" ~> Eithers.map
-          ("terms" ~> pair (Lists.map ("t" ~> termToString @@ var "t") (var "terms")) (Pairs.second $ var "pp"))
-          (evalPath @@ var "cx" @@ (Pairs.first $ var "pp") @@ var "term"))
-        (var "pairs"))
-        ("evaluated" ~>
-          -- Fold over evaluated pairs, building up accumulator strings
-          right (Lists.map
-            ("s" ~> inject _Term _Term_literal (inject _Literal _Literal_string (var "s")))
-            (Lists.foldl
-              ("accum" ~> "ep" ~> lets [
-                "pStrs">: Pairs.first $ var "ep",
-                "litP">: Pairs.second $ var "ep"] $
-                Lists.concat (Lists.map
-                  ("pStr" ~> Lists.map ("a" ~> var "a" ++ var "pStr" ++ var "litP") (var "accum"))
-                  (var "pStrs")))
-              (list [var "firstLit"])
-              (var "evaluated")))))
 
 -- | Parse a string pattern into a function that traverses terms.
 --   Patterns can contain ${path/to/field} expressions that are evaluated against terms.
@@ -552,3 +532,23 @@ termToElementsAdapter = define "termToElementsAdapter" $
                     Eithers.map ("_xs" ~> Lists.concat (var "_xs")) (Eithers.mapList ("e" ~> var "e" @@ var "cx'" @@ var "t") (var "encoders")))
                   ("cx'" ~> "_els" ~> left (Error.errorOther $ Error.otherError $ string "element decoding is not yet supported")))))))
       (Annotations.getTypeAnnotation @@ var "key_elements" @@ var "typ")
+
+-- | Convert a term to its string representation
+termToString :: TTermDefinition (Term -> String)
+termToString = define "termToString" $
+  doc "Convert a term to its string representation" $
+  "term" ~>
+    cases _Term (Strip.deannotateTerm @@ var "term")
+      (Just $ ShowCore.term @@ var "term") [
+      _Term_literal>>: "lit" ~>
+        cases _Literal (var "lit") (Just $ ShowCore.term @@ var "term") [
+          _Literal_string>>: lambda "s" $ var "s",
+          _Literal_boolean>>: "b" ~> Logic.ifElse (var "b") (string "true") (string "false"),
+          _Literal_integer>>: "i" ~>
+            cases _IntegerValue (var "i") (Just $ ShowCore.term @@ var "term") [
+              _IntegerValue_int32>>: "n" ~> Literals.showInt32 (var "n")],
+          _Literal_float>>: "f" ~>
+            cases _FloatValue (var "f") (Just $ ShowCore.term @@ var "term") [
+              _FloatValue_float64>>: "n" ~> Literals.showFloat64 (var "n")]],
+      _Term_maybe>>: "mt" ~>
+        Maybes.maybe (string "nothing") ("t" ~> termToString @@ var "t") (var "mt")]

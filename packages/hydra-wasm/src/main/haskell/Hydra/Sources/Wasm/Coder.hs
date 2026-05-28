@@ -51,9 +51,6 @@ import qualified Hydra.Sources.Wasm.Serde as WasmSerdeSource
 import qualified Hydra.Sources.Wasm.Language as WasmLanguageSource
 
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
 ns :: ModuleName
 ns = ModuleName "hydra.wasm.coder"
 
@@ -97,148 +94,242 @@ module_ = Module {
 -- Value type encoding
 -- =============================================================================
 
--- | Map a Hydra type to a WASM value type
-encodeValType :: TTermDefinition (InferenceContext -> Graph -> Type -> Either Error W.ValType)
-encodeValType = def "encodeValType" $
-  "cx" ~> "g" ~> lambda "t" $
-    "typ" <~ (Strip.deannotateType @@ var "t") $
-    cases _Type (var "typ") (Just $
-      -- Default: compound types are represented as i32 (memory pointer)
-      right (inject W._ValType W._ValType_i32 unit))
-    [_Type_annotated>>: lambda "at" $
-       encodeValType @@ var "cx" @@ var "g" @@ Core.annotatedTypeBody (var "at"),
-     _Type_application>>: lambda "at" $
-       encodeValType @@ var "cx" @@ var "g" @@ Core.applicationTypeFunction (var "at"),
-     _Type_literal>>: lambda "lt" $
-       right (encodeLiteralType @@ var "lt"),
-     _Type_unit>>: constant $
-       right (inject W._ValType W._ValType_i32 unit),
-     _Type_void>>: constant $
-       right (inject W._ValType W._ValType_i32 unit),
-     _Type_forall>>: lambda "fa" $
-       encodeValType @@ var "cx" @@ var "g" @@ Core.forallTypeBody (var "fa")]
+-- | Build a module-level field-offset table from a Graph. For each record type defined
+-- anywhere in the universe (i.e. every entry in `graphSchemaTypes`), walks its `TypeScheme`
+-- (stripping `Annotated`, `Forall`, and `TypeLambda` layers) and, if the underlying type is
+-- `_Type_record [FieldType]`, records a list of (fieldName, byteOffset) pairs in declaration
+-- order (offsets 0, 4, 8, ...). Non-record types contribute nothing.
+--
+-- The resulting `M.Map Name [(Name, Int)]` is consumed by `encodeProjection` to replace
+-- placeholder projection output with a real `i32.load offset=N` at `scrutinee + fieldOffset`.
+-- Using the full graph (not just the current module's type defs) is essential because
+-- most record projections reference types defined in other modules — e.g. every
+-- projection of a `hydra.core.Record` happens in modules that don't themselves define
+-- that type.
+buildFieldOffsets :: TTermDefinition (Graph -> M.Map Name [(Name, Int)])
+buildFieldOffsets = def "buildFieldOffsets" $
+  lambda "g" $
+    -- Return Just [FieldType] if the stripped type is a record; Nothing otherwise.
+    -- Handles two layers of Forall + one Annotated wrapper, which covers the kernel.
+    "recordFieldsOf" <~ (lambda "t" $
+      "stripped" <~ (Strip.deannotateType @@ var "t") $
+      cases _Type (var "stripped") (Just $ (nothing :: TTerm (Maybe [FieldType]))) [
+        _Type_record>>: lambda "fts" $ just (var "fts"),
+        _Type_forall>>: lambda "fa" $
+          -- A Forall over a record: recurse one level.
+          "innerStripped" <~ (Strip.deannotateType @@ Core.forallTypeBody (var "fa")) $
+          cases _Type (var "innerStripped") (Just $ (nothing :: TTerm (Maybe [FieldType]))) [
+            _Type_record>>: lambda "fts" $ just (var "fts")]]) $
+    "entryFor" <~ (lambda "nameSchemePair" $
+      "tname" <~ Pairs.first (var "nameSchemePair") $
+      "tscheme" <~ Pairs.second (var "nameSchemePair") $
+      "tbody" <~ Core.typeSchemeBody (var "tscheme") $
+      "mfields" <~ (var "recordFieldsOf" @@ var "tbody") $
+      Maybes.cases (var "mfields")
+        (nothing :: TTerm (Maybe (Name, [(Name, Int)])))
+        (lambda "fts" $
+          "namedOffsets" <~ (Lists.map
+            (lambda "p" $
+              "i" <~ Pairs.first (var "p") $
+              "ft" <~ Pairs.second (var "p") $
+                pair (Core.fieldTypeName (var "ft")) (Math.mul (var "i") (int32 4)))
+            -- Zip [0..N-1] with the field type list.
+            (Lists.zip
+              (Lists.foldl
+                (lambda "acc" $ lambda "_f" $ Lists.concat2 (var "acc") (list [Lists.length (var "acc")]))
+                (list ([] :: [TTerm Int]))
+                (var "fts"))
+              (var "fts"))) $
+          just (pair (var "tname") (var "namedOffsets")))) $
+    "schemaTypesList" <~ (Maps.toList (DslGraph.graphSchemaTypes (var "g"))) $
+    "entries" <~ (Maybes.cat (Lists.map (var "entryFor") (var "schemaTypesList"))) $
+    Maps.fromList (var "entries")
 
+-- | Build a universe-wide map from snake-cased function names to Wasm signatures.
+-- Walks three sources: (1) the graph's primitives (hydra.lib.*), (2) the graph's
+-- boundTypes (all kernel cross-module definitions), and (3) the current module's
+-- own term definitions (for internal consistency). Each entry's Hydra type scheme
+-- is stripped of its Forall and passed through extractSignature. Any entry whose
+-- type extraction fails is silently dropped — the call site will fall back to
+-- the default (param i32) (result i32) signature.
+--
+-- Keys are snake-cased to match the form used by Formatting.convertCaseCamelToLowerSnake
+-- at call and import emission sites. If two distinct Hydra names collide to the same
+-- snake form, the last one wins (deterministic by Maps.toList order).
+buildFunctionSignatures :: TTermDefinition (InferenceContext -> Graph -> [TermDefinition] -> M.Map String ([W.ValType], [W.ValType]))
+buildFunctionSignatures = def "buildFunctionSignatures" $
+  "cx" ~> "g" ~> lambda "termDefs" $
+    -- Helper: given a (Name, TypeScheme) pair, produce a (snakeName, signature) pair
+    -- or Nothing on failure.
+    "toSigEntry" <~ (lambda "nameAndScheme" $
+      "nm" <~ Pairs.first (var "nameAndScheme") $
+      "ts" <~ Pairs.second (var "nameAndScheme") $
+      "snakeName" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (var "nm")) $
+      "sigEither" <~ (extractSignature @@ var "cx" @@ var "g" @@ Core.typeSchemeBody (var "ts")) $
+      Eithers.either_
+        (lambda "_err" $ nothing)
+        (lambda "sig" $ just (pair (var "snakeName") (var "sig")))
+        (var "sigEither")) $
+    -- Primitives: walk graph.primitives -> Map Name Primitive, extract type from each.
+    "primEntries" <~ Maybes.cat (Lists.map
+      (lambda "kv" $ var "toSigEntry" @@ pair (Pairs.first (var "kv")) (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ DslGraph.primitiveDefinition (Pairs.second (var "kv")))))
+      (Maps.toList (DslGraph.graphPrimitives (var "g")))) $
+    -- Cross-module bound term types: walk graph.boundTypes -> Map Name TypeScheme.
+    "boundEntries" <~ Maybes.cat (Lists.map
+      (lambda "kv" $ var "toSigEntry" @@ var "kv")
+      (Maps.toList (DslGraph.graphBoundTypes (var "g")))) $
+    -- Current module's own term defs: use their optional TypeScheme field directly.
+    "localEntries" <~ Maybes.cat (Lists.map
+      (lambda "td" $
+        Maybes.bind (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "td"))
+          (lambda "ts" $ var "toSigEntry" @@ pair (Packaging.termDefinitionName (var "td")) (var "ts")))
+      (var "termDefs")) $
+    Maps.fromList (Lists.concat (list [var "primEntries", var "boundEntries", var "localEntries"]))
 
--- =============================================================================
--- Literal type encoding
--- =============================================================================
+-- | Assign a byte offset to each distinct string. Offsets start at 1024 (reserving the
+-- low 1KB for a null-pointer region) and grow by 4 + UTF-8 byte count per entry, to
+-- match the length-prefixed layout used by stringDataSegment. Each length-prefix is
+-- 4 bytes (little-endian i32 length). Returns a pair (offsetMap, bumpStart) where
+-- bumpStart is the next 16-byte-aligned offset past the end of the string segment;
+-- it's used to initialize the runtime bump allocator.
+buildStringOffsets :: TTermDefinition ([String] -> (M.Map String Int, Int))
+buildStringOffsets = def "buildStringOffsets" $
+  lambda "strs" $
+    "step" <~ (lambda "acc" $ lambda "s" $
+      "m" <~ Pairs.first (var "acc") $
+      "off" <~ Pairs.second (var "acc") $
+      "len" <~ Strings.length (var "s") $
+        pair
+          (Maps.insert (var "s") (var "off") (var "m"))
+          (Math.add (var "off") (Math.add (int32 4) (var "len")))) $
+    "final" <~ (Lists.foldl (var "step")
+      (pair (Maps.empty :: TTerm (M.Map String Int)) (int32 1024))
+      (var "strs")) $
+    "rawEnd" <~ Pairs.second (var "final") $
+    -- Round up to the next 16-byte boundary so the bump pointer starts aligned.
+    "aligned" <~ Math.mul (Maybes.fromMaybe (int32 0) (Math.maybeDiv (Math.add (var "rawEnd") (int32 15)) (int32 16))) (int32 16) $
+    pair (Pairs.first (var "final")) (var "aligned")
 
--- | Encode a Hydra literal type as a WASM value type
-encodeLiteralType :: TTermDefinition (LiteralType -> W.ValType)
-encodeLiteralType = def "encodeLiteralType" $
-  lambda "lt" $ cases _LiteralType (var "lt") Nothing [
-    _LiteralType_binary>>: constant $
-      inject W._ValType W._ValType_i32 unit, -- pointer to memory
-    _LiteralType_boolean>>: constant $
-      inject W._ValType W._ValType_i32 unit, -- 0 or 1
-    _LiteralType_float>>: lambda "ft" $
-      cases _FloatType (var "ft") Nothing [
-        _FloatType_float32>>: constant $ inject W._ValType W._ValType_f32 unit,
-        _FloatType_float64>>: constant $ inject W._ValType W._ValType_f64 unit],
-    _LiteralType_integer>>: lambda "it" $
-      cases _IntegerType (var "it") Nothing [
-        _IntegerType_bigint>>: constant $ inject W._ValType W._ValType_i64 unit,
-        _IntegerType_int8>>: constant $ inject W._ValType W._ValType_i32 unit,
-        _IntegerType_int16>>: constant $ inject W._ValType W._ValType_i32 unit,
-        _IntegerType_int32>>: constant $ inject W._ValType W._ValType_i32 unit,
-        _IntegerType_int64>>: constant $ inject W._ValType W._ValType_i64 unit,
-        _IntegerType_uint8>>: constant $ inject W._ValType W._ValType_i32 unit,
-        _IntegerType_uint16>>: constant $ inject W._ValType W._ValType_i32 unit,
-        _IntegerType_uint32>>: constant $ inject W._ValType W._ValType_i32 unit,
-        _IntegerType_uint64>>: constant $ inject W._ValType W._ValType_i64 unit],
-    _LiteralType_string>>: constant $
-      inject W._ValType W._ValType_i32 unit] -- pointer to memory
+-- | Build a universe-wide variant-tag table from a Graph. For each union type defined
+-- anywhere in the graph's schemaTypes, walks the stripped `TypeScheme` and, if the
+-- underlying type is `_Type_union [FieldType]`, records a list of (variantName, tagIndex)
+-- pairs in declaration order (indexes 0, 1, 2, ...). Non-union types contribute nothing.
+--
+-- The resulting `M.Map Name [(Name, Int)]` is consumed by `encodeTerm`'s `_Term_inject`
+-- case to look up the tag index to store at offset 0 of the allocated union record. The
+-- indexes here are raw integers (not byte offsets), unlike `buildFieldOffsets`.
+buildVariantIndexes :: TTermDefinition (Graph -> M.Map Name [(Name, Int)])
+buildVariantIndexes = def "buildVariantIndexes" $
+  lambda "g" $
+    -- Return Just [FieldType] if the stripped type is a union; Nothing otherwise.
+    "unionFieldsOf" <~ (lambda "t" $
+      "stripped" <~ (Strip.deannotateType @@ var "t") $
+      cases _Type (var "stripped") (Just $ (nothing :: TTerm (Maybe [FieldType]))) [
+        _Type_union>>: lambda "fts" $ just (var "fts"),
+        _Type_forall>>: lambda "fa" $
+          "innerStripped" <~ (Strip.deannotateType @@ Core.forallTypeBody (var "fa")) $
+          cases _Type (var "innerStripped") (Just $ (nothing :: TTerm (Maybe [FieldType]))) [
+            _Type_union>>: lambda "fts" $ just (var "fts")]]) $
+    "entryFor" <~ (lambda "nameSchemePair" $
+      "tname" <~ Pairs.first (var "nameSchemePair") $
+      "tscheme" <~ Pairs.second (var "nameSchemePair") $
+      "tbody" <~ Core.typeSchemeBody (var "tscheme") $
+      "mfields" <~ (var "unionFieldsOf" @@ var "tbody") $
+      Maybes.cases (var "mfields")
+        (nothing :: TTerm (Maybe (Name, [(Name, Int)])))
+        (lambda "fts" $
+          "namedIndexes" <~ (Lists.map
+            (lambda "p" $
+              "i" <~ Pairs.first (var "p") $
+              "ft" <~ Pairs.second (var "p") $
+                pair (Core.fieldTypeName (var "ft")) (var "i"))
+            -- Zip [0..N-1] with the field type list.
+            (Lists.zip
+              (Lists.foldl
+                (lambda "acc" $ lambda "_f" $ Lists.concat2 (var "acc") (list [Lists.length (var "acc")]))
+                (list ([] :: [TTerm Int]))
+                (var "fts"))
+              (var "fts"))) $
+          just (pair (var "tname") (var "namedIndexes")))) $
+    "schemaTypesList" <~ (Maps.toList (DslGraph.graphSchemaTypes (var "g"))) $
+    "entries" <~ (Maybes.cat (Lists.map (var "entryFor") (var "schemaTypesList"))) $
+    Maps.fromList (var "entries")
 
+-- | Clamp a list of Wasm value types to all-i32. The coder's function bodies still
+-- assume the 1-i32-per-term stack invariant (sessions 8-15), so non-i32 types like
+-- f64 or i64 in a primitive's signature would violate that invariant at call sites.
+-- Clamping to i32 universally keeps the body encoding valid while letting the signature
+-- have the right arity. Runtime semantic correctness for non-i32 primitives (floats,
+-- i64 integers) is deferred.
+clampValTypesToI32 :: TTermDefinition ([W.ValType] -> [W.ValType])
+clampValTypesToI32 = def "clampValTypesToI32" $
+  lambda "vts" $
+    Lists.map (lambda "_vt" $ inject W._ValType W._ValType_i32 unit) (var "vts")
 
--- =============================================================================
--- Literal value encoding
--- =============================================================================
+-- | Collect all call targets from a list of instructions.
+-- Recurses into block, loop, and if bodies.
+collectCallTargets :: TTermDefinition ([W.Instruction] -> S.Set String)
+collectCallTargets = def "collectCallTargets" $
+  lambda "instrs" $
+    Lists.foldl
+      (lambda "acc" $ lambda "instr" $
+        cases W._Instruction (var "instr") (Just $ var "acc") [
+          W._Instruction_call>>: lambda "v" $ Sets.insert (var "v") (var "acc"),
+          W._Instruction_block>>: lambda "b" $
+            Sets.union (var "acc") (collectCallTargets @@ (project W._BlockInstruction W._BlockInstruction_body @@ var "b")),
+          W._Instruction_loop>>: lambda "b" $
+            Sets.union (var "acc") (collectCallTargets @@ (project W._BlockInstruction W._BlockInstruction_body @@ var "b")),
+          W._Instruction_if>>: lambda "i" $
+            Sets.union (Sets.union (var "acc")
+              (collectCallTargets @@ (project W._IfInstruction W._IfInstruction_then @@ var "i")))
+              (collectCallTargets @@ (project W._IfInstruction W._IfInstruction_else @@ var "i"))])
+      (Sets.empty :: TTerm (S.Set String))
+      (var "instrs")
 
--- | Encode a Hydra literal value as a WASM const instruction
-encodeLiteral :: TTermDefinition (Literal -> W.Instruction)
-encodeLiteral = def "encodeLiteral" $
-  lambda "lit" $ cases _Literal (var "lit") Nothing [
-    _Literal_boolean>>: lambda "b" $
-      inject W._Instruction W._Instruction_const $
-        inject W._ConstValue W._ConstValue_i32 $
-          Logic.ifElse (var "b") (int32 1) (int32 0),
-    _Literal_string>>: lambda "_s" $
-      -- Strings in WASM are stored in linear memory.
-      -- This is a placeholder: emit i32.const 0 (null pointer).
-      -- A full implementation would allocate memory and return a (pointer, length) pair.
-      -- NOTE: we deliberately do not embed the string value as a comment, since the
-      -- underlying string may contain raw newlines which would break WAT parsing.
-      inject W._Instruction W._Instruction_const $
-        inject W._ConstValue W._ConstValue_i32 (int32 0),
-    -- Under the uniform 1-i32-value-per-term placeholder convention, non-i32 literals
-    -- (f32, f64, i64) would push a value of the wrong type for enclosing blocks declared
-    -- `(result i32)`. Emit `i32.const 0` for all non-i32 literals to maintain uniformity.
-    -- Runtime semantic correctness is deferred.
-    _Literal_float>>: lambda "_fv" $
-      inject W._Instruction W._Instruction_const $
-        inject W._ConstValue W._ConstValue_i32 (int32 0),
-    _Literal_integer>>: lambda "iv" $
-      cases _IntegerValue (var "iv") Nothing [
-        _IntegerValue_int8>>: lambda "i" $
-          inject W._Instruction W._Instruction_const $
-            inject W._ConstValue W._ConstValue_i32 (Literals.bigintToInt32 (Literals.int8ToBigint (var "i"))),
-        _IntegerValue_int16>>: lambda "i" $
-          inject W._Instruction W._Instruction_const $
-            inject W._ConstValue W._ConstValue_i32 (Literals.bigintToInt32 (Literals.int16ToBigint (var "i"))),
-        _IntegerValue_int32>>: lambda "i" $
-          inject W._Instruction W._Instruction_const $
-            inject W._ConstValue W._ConstValue_i32 (var "i"),
-        _IntegerValue_int64>>: lambda "_i" $
-          inject W._Instruction W._Instruction_const $
-            inject W._ConstValue W._ConstValue_i32 (int32 0),
-        _IntegerValue_uint8>>: lambda "i" $
-          inject W._Instruction W._Instruction_const $
-            inject W._ConstValue W._ConstValue_i32 (Literals.bigintToInt32 (Literals.uint8ToBigint (var "i"))),
-        _IntegerValue_uint16>>: lambda "i" $
-          inject W._Instruction W._Instruction_const $
-            inject W._ConstValue W._ConstValue_i32 (Literals.bigintToInt32 (Literals.uint16ToBigint (var "i"))),
-        _IntegerValue_uint32>>: lambda "i" $
-          inject W._Instruction W._Instruction_const $
-            inject W._ConstValue W._ConstValue_i32 (Literals.bigintToInt32 (Literals.uint32ToBigint (var "i"))),
-        _IntegerValue_uint64>>: lambda "_i" $
-          inject W._Instruction W._Instruction_const $
-            inject W._ConstValue W._ConstValue_i32 (int32 0),
-        _IntegerValue_bigint>>: lambda "_i" $
-          inject W._Instruction W._Instruction_const $
-            inject W._ConstValue W._ConstValue_i32 (int32 0)]]
+-- | Collect all local variable names referenced by local.get and local.set in a list of instructions.
+-- Recurses into block, loop, and if bodies.
+collectInstructionLocals :: TTermDefinition ([W.Instruction] -> S.Set String)
+collectInstructionLocals = def "collectInstructionLocals" $
+  lambda "instrs" $
+    Lists.foldl
+      (lambda "acc" $ lambda "instr" $
+        cases W._Instruction (var "instr") (Just $ var "acc") [
+          W._Instruction_localGet>>: lambda "v" $ Sets.insert (var "v") (var "acc"),
+          W._Instruction_localSet>>: lambda "v" $ Sets.insert (var "v") (var "acc"),
+          W._Instruction_localTee>>: lambda "v" $ Sets.insert (var "v") (var "acc"),
+          W._Instruction_block>>: lambda "b" $
+            Sets.union (var "acc") (collectInstructionLocals @@ (project W._BlockInstruction W._BlockInstruction_body @@ var "b")),
+          W._Instruction_loop>>: lambda "b" $
+            Sets.union (var "acc") (collectInstructionLocals @@ (project W._BlockInstruction W._BlockInstruction_body @@ var "b")),
+          W._Instruction_if>>: lambda "i" $
+            Sets.union (Sets.union (var "acc")
+              (collectInstructionLocals @@ (project W._IfInstruction W._IfInstruction_then @@ var "i")))
+              (collectInstructionLocals @@ (project W._IfInstruction W._IfInstruction_else @@ var "i"))])
+      (Sets.empty :: TTerm (S.Set String))
+      (var "instrs")
 
+-- | Collect every distinct string literal reachable from a list of term definitions.
+-- Uses Rewriting.foldOverTerm in pre-order to walk every subterm and accumulate
+-- _Literal_string values into a Set, then returns the Set as a sorted list so that
+-- offset assignments are deterministic across regenerations.
+collectStrings :: TTermDefinition ([TermDefinition] -> [String])
+collectStrings = def "collectStrings" $
+  lambda "termDefs" $
+    "collectOne" <~ (lambda "acc" $ lambda "t" $
+      cases _Term (var "t") (Just $ var "acc") [
+        _Term_literal>>: lambda "lit" $
+          cases _Literal (var "lit") (Just $ var "acc") [
+            _Literal_string>>: lambda "s" $ Sets.insert (var "s") (var "acc")]]) $
+    "allStrings" <~ Lists.foldl
+      (lambda "acc" $ lambda "td" $
+        Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@
+          (var "collectOne") @@ (var "acc") @@ (Packaging.termDefinitionTerm (var "td")))
+      (Sets.empty :: TTerm (S.Set String))
+      (var "termDefs") $
+    Sets.toList (var "allStrings")
 
--- =============================================================================
--- Type encoding (for function signatures)
--- =============================================================================
-
--- | Encode a Hydra type as a list of WASM result types (for function signatures).
--- For function types, returns the innermost codomain (after stripping all arrows).
-encodeType :: TTermDefinition (InferenceContext -> Graph -> Type -> Either Error [W.ValType])
-encodeType = def "encodeType" $
-  "cx" ~> "g" ~> lambda "t" $
-    "typ" <~ (Strip.deannotateType @@ var "t") $
-    cases _Type (var "typ") (Just $
-      -- Default: single i32 result (pointer)
-      right (list [inject W._ValType W._ValType_i32 unit]))
-    [_Type_annotated>>: lambda "at" $
-       encodeType @@ var "cx" @@ var "g" @@ Core.annotatedTypeBody (var "at"),
-     _Type_function>>: lambda "ft" $
-       -- For function types, skip domain and recurse into codomain
-       encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeCodomain (var "ft"),
-     _Type_unit>>: constant $
-       right (list ([] :: [TTerm W.ValType])),
-     _Type_void>>: constant $
-       right (list ([] :: [TTerm W.ValType])),
-     _Type_literal>>: lambda "lt" $
-       right (list [encodeLiteralType @@ var "lt"]),
-     _Type_forall>>: lambda "fa" $
-       encodeType @@ var "cx" @@ var "g" @@ Core.forallTypeBody (var "fa")]
-
-
--- =============================================================================
--- Application encoding
--- =============================================================================
+def :: String -> TTerm a -> TTermDefinition a
+def = definitionInModule module_
 
 -- | Encode a function application. Each external call is emitted as "evaluate args for
 -- side effect, drop them, push a single i32 placeholder arg, call". This maintains the
@@ -404,6 +495,274 @@ encodeApplication = def "encodeApplication" $
 -- =============================================================================
 -- Term encoding
 -- =============================================================================
+
+-- | Encode a case statement (union elimination) as WASM instructions.
+-- Takes scrutinee instructions to place before the dispatch.
+encodeCases :: TTermDefinition (InferenceContext -> Graph -> M.Map String Int -> M.Map Name [(Name, Int)] -> M.Map Name [(Name, Int)] -> M.Map String ([W.ValType], [W.ValType]) -> CaseStatement -> [W.Instruction] -> Either Error [W.Instruction])
+encodeCases = def "encodeCases" $
+  "cx" ~> "g" ~> "stringOffsets" ~> "fieldOffsets" ~> "variantIndexes" ~> "funcSigs" ~> lambda "cs" $ lambda "scrutineeInstrsRaw" $
+    "tname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ Core.caseStatementTypeName (var "cs"))) $
+    "caseFields" <~ Core.caseStatementCases (var "cs") $
+    -- Ensure the scrutinee pushes exactly one i32 onto the stack.
+    -- If the caller passed no instructions, synthesize a placeholder pointer.
+    "scrutineeInstrs" <~ Logic.ifElse (Lists.null (var "scrutineeInstrsRaw"))
+      (list [inject W._Instruction W._Instruction_const $
+        inject W._ConstValue W._ConstValue_i32 (int32 0)])
+      (var "scrutineeInstrsRaw") $
+    -- Scrutinee prologue: evaluate the scrutinee pointer, save to $__rec_ptr (reused
+    -- as a scratch local — nested cases/records overwrite it within their own body
+    -- and restore nothing, which is safe because the outer case has already bound $v
+    -- and loaded its tag before running any arm body). Then:
+    --   1. Load payload from offset 4 and bind to $v (the fresh case variable).
+    --   2. Load tag from offset 0 and leave it on the stack for the br_table dispatch.
+    "prologue" <~ Lists.concat (list [
+      var "scrutineeInstrs",
+      list [
+        inject W._Instruction W._Instruction_localSet (string "__rec_ptr"),
+        -- Load payload and bind to $v
+        inject W._Instruction W._Instruction_localGet (string "__rec_ptr"),
+        inject W._Instruction W._Instruction_load $
+          record W._MemoryInstruction [
+            W._MemoryInstruction_type>>: inject W._ValType W._ValType_i32 unit,
+            W._MemoryInstruction_memArg>>: record W._MemArg [
+              W._MemArg_offset>>: int32 4,
+              W._MemArg_align>>: int32 2]],
+        inject W._Instruction W._Instruction_localSet (string "v"),
+        -- Load tag (selector for br_table)
+        inject W._Instruction W._Instruction_localGet (string "__rec_ptr"),
+        inject W._Instruction W._Instruction_load $
+          record W._MemoryInstruction [
+            W._MemoryInstruction_type>>: inject W._ValType W._ValType_i32 unit,
+            W._MemoryInstruction_memArg>>: record W._MemArg [
+              W._MemArg_offset>>: int32 0,
+              W._MemArg_align>>: int32 2]]]]) $
+    -- Encode each explicit case arm body. Each arm is synthesized as
+    -- `apply (cfterm) (termVariable "v")` — encodeTerm will resolve `v` to `local.get $v`,
+    -- which is now initialized to the loaded payload before any arm runs.
+    "explicitArms" <<~ (Eithers.mapList
+      (lambda "cf" $
+        "cfname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.fieldName (var "cf"))) $
+        "cfterm" <~ Core.fieldTerm (var "cf") $
+        "armBody" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@
+          (Core.termApplication (Core.application (var "cfterm")
+            (Core.termVariable (wrap _Name (string "v")))))) $
+          right (pair (var "cfname") (var "armBody")))
+      (var "caseFields")) $
+    -- Encode the optional default arm. When present, its body is a Term that does
+    -- NOT reference $v (the payload is irrelevant for a default). When absent, we
+    -- still synthesize a default label so that uncovered tags have somewhere to
+    -- branch to; its body is an `i32.const 0` placeholder.
+    "defaultArmLabel" <~ (string "_default") $
+    "mDefault" <~ Core.caseStatementDefault (var "cs") $
+    "defaultArmBody" <<~ Maybes.cases (var "mDefault")
+      (right (list [inject W._Instruction W._Instruction_const $
+        inject W._ConstValue W._ConstValue_i32 (int32 0)]))
+      (lambda "defTerm" $
+        encodeTerm @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@ var "defTerm") $
+    "arms" <~ Lists.concat2 (var "explicitArms") (list [pair (var "defaultArmLabel") (var "defaultArmBody")]) $
+    -- Build the br_table label array. Each entry at index i gets the label of
+    -- the arm handling tag i — either an explicit arm matching the union's
+    -- variant-name-at-index-i, or the default arm's label. The lookup uses the
+    -- universe-wide variantIndexes map keyed by the union's type name; if the
+    -- type isn't found (e.g. dispatching on a locally-defined union not visible
+    -- to the coder), every tag routes to the default.
+    "explicitLabelForName" <~ (lambda "fname" $
+      Maybes.fromMaybe (var "defaultArmLabel")
+        (Maybes.map
+          (reify Pairs.first)
+          (Lists.find
+            (lambda "arm" $ Equality.equal (Pairs.first (var "arm")) (var "fname"))
+            (var "explicitArms")))) $
+    "typeName" <~ Core.caseStatementTypeName (var "cs") $
+    "mUnionVariants" <~ Maps.lookup (var "typeName") (var "variantIndexes") $
+    "brTableLabels" <~ Maybes.cases (var "mUnionVariants")
+      -- Fallback: no variant info for this type. Use the explicit-arm labels
+      -- at positions 0..len-1 (preserving pre-fix behavior); tags beyond the
+      -- explicit arms hit the default.
+      (Lists.map (reify Pairs.first) (var "explicitArms"))
+      (lambda "variantPairs" $
+        -- variantPairs :: [(Name, Int)]. Sort by index, emit label per index.
+        "sorted" <~ Lists.sortOn (reify Pairs.second) (var "variantPairs") $
+        Lists.map
+          (lambda "np" $
+            "fieldName" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Pairs.first (var "np"))) $
+            var "explicitLabelForName" @@ var "fieldName")
+          (var "sorted")) $
+    -- Block-based union dispatch: nested empty dispatch blocks, innermost holds the
+    -- prologue + br_table, outer blocks wrap each arm body (explicit + default).
+    "endLabel" <~ (Strings.cat2 (string "end_") (var "tname")) $
+    "innerDispatch" <~ Lists.concat2
+      (var "prologue")
+      (list [inject W._Instruction W._Instruction_brTable $
+        record W._BrTableArgs [
+          W._BrTableArgs_labels>>: var "brTableLabels",
+          W._BrTableArgs_default>>: var "defaultArmLabel"]]) $
+    "dispatch" <~ Lists.foldl
+      (lambda "acc" $ lambda "arm" $
+        "label" <~ Pairs.first (var "arm") $
+        "body" <~ Pairs.second (var "arm") $
+          Lists.concat (list [
+            list [inject W._Instruction W._Instruction_block $
+              record W._BlockInstruction [
+                W._BlockInstruction_label>>: just (var "label"),
+                W._BlockInstruction_blockType>>: inject W._BlockType W._BlockType_empty unit,
+                W._BlockInstruction_body>>: var "acc"]],
+            var "body",
+            list [inject W._Instruction W._Instruction_br (var "endLabel")]]))
+      (var "innerDispatch")
+      (var "arms") $
+      -- Wrap everything in the outermost end block with result type.
+      -- Even with zero explicit arms, the default arm always exists, so arms is
+      -- never empty — no need to short-circuit.
+      right (list [inject W._Instruction W._Instruction_block $
+        record W._BlockInstruction [
+          W._BlockInstruction_label>>: just (var "endLabel"),
+          W._BlockInstruction_blockType>>: inject W._BlockType W._BlockType_value (inject W._ValType W._ValType_i32 unit),
+          W._BlockInstruction_body>>: var "dispatch"]])
+
+
+-- =============================================================================
+-- Type definition encoding
+-- =============================================================================
+
+-- | Encode a Hydra literal value as a WASM const instruction
+encodeLiteral :: TTermDefinition (Literal -> W.Instruction)
+encodeLiteral = def "encodeLiteral" $
+  lambda "lit" $ cases _Literal (var "lit") Nothing [
+    _Literal_boolean>>: lambda "b" $
+      inject W._Instruction W._Instruction_const $
+        inject W._ConstValue W._ConstValue_i32 $
+          Logic.ifElse (var "b") (int32 1) (int32 0),
+    _Literal_string>>: lambda "_s" $
+      -- Strings in WASM are stored in linear memory.
+      -- This is a placeholder: emit i32.const 0 (null pointer).
+      -- A full implementation would allocate memory and return a (pointer, length) pair.
+      -- NOTE: we deliberately do not embed the string value as a comment, since the
+      -- underlying string may contain raw newlines which would break WAT parsing.
+      inject W._Instruction W._Instruction_const $
+        inject W._ConstValue W._ConstValue_i32 (int32 0),
+    -- Under the uniform 1-i32-value-per-term placeholder convention, non-i32 literals
+    -- (f32, f64, i64) would push a value of the wrong type for enclosing blocks declared
+    -- `(result i32)`. Emit `i32.const 0` for all non-i32 literals to maintain uniformity.
+    -- Runtime semantic correctness is deferred.
+    _Literal_float>>: lambda "_fv" $
+      inject W._Instruction W._Instruction_const $
+        inject W._ConstValue W._ConstValue_i32 (int32 0),
+    _Literal_integer>>: lambda "iv" $
+      cases _IntegerValue (var "iv") Nothing [
+        _IntegerValue_int8>>: lambda "i" $
+          inject W._Instruction W._Instruction_const $
+            inject W._ConstValue W._ConstValue_i32 (Literals.bigintToInt32 (Literals.int8ToBigint (var "i"))),
+        _IntegerValue_int16>>: lambda "i" $
+          inject W._Instruction W._Instruction_const $
+            inject W._ConstValue W._ConstValue_i32 (Literals.bigintToInt32 (Literals.int16ToBigint (var "i"))),
+        _IntegerValue_int32>>: lambda "i" $
+          inject W._Instruction W._Instruction_const $
+            inject W._ConstValue W._ConstValue_i32 (var "i"),
+        _IntegerValue_int64>>: lambda "_i" $
+          inject W._Instruction W._Instruction_const $
+            inject W._ConstValue W._ConstValue_i32 (int32 0),
+        _IntegerValue_uint8>>: lambda "i" $
+          inject W._Instruction W._Instruction_const $
+            inject W._ConstValue W._ConstValue_i32 (Literals.bigintToInt32 (Literals.uint8ToBigint (var "i"))),
+        _IntegerValue_uint16>>: lambda "i" $
+          inject W._Instruction W._Instruction_const $
+            inject W._ConstValue W._ConstValue_i32 (Literals.bigintToInt32 (Literals.uint16ToBigint (var "i"))),
+        _IntegerValue_uint32>>: lambda "i" $
+          inject W._Instruction W._Instruction_const $
+            inject W._ConstValue W._ConstValue_i32 (Literals.bigintToInt32 (Literals.uint32ToBigint (var "i"))),
+        _IntegerValue_uint64>>: lambda "_i" $
+          inject W._Instruction W._Instruction_const $
+            inject W._ConstValue W._ConstValue_i32 (int32 0),
+        _IntegerValue_bigint>>: lambda "_i" $
+          inject W._Instruction W._Instruction_const $
+            inject W._ConstValue W._ConstValue_i32 (int32 0)]]
+
+
+-- =============================================================================
+-- Type encoding (for function signatures)
+-- =============================================================================
+
+-- | Encode a Hydra literal type as a WASM value type
+encodeLiteralType :: TTermDefinition (LiteralType -> W.ValType)
+encodeLiteralType = def "encodeLiteralType" $
+  lambda "lt" $ cases _LiteralType (var "lt") Nothing [
+    _LiteralType_binary>>: constant $
+      inject W._ValType W._ValType_i32 unit, -- pointer to memory
+    _LiteralType_boolean>>: constant $
+      inject W._ValType W._ValType_i32 unit, -- 0 or 1
+    _LiteralType_float>>: lambda "ft" $
+      cases _FloatType (var "ft") Nothing [
+        _FloatType_float32>>: constant $ inject W._ValType W._ValType_f32 unit,
+        _FloatType_float64>>: constant $ inject W._ValType W._ValType_f64 unit],
+    _LiteralType_integer>>: lambda "it" $
+      cases _IntegerType (var "it") Nothing [
+        _IntegerType_bigint>>: constant $ inject W._ValType W._ValType_i64 unit,
+        _IntegerType_int8>>: constant $ inject W._ValType W._ValType_i32 unit,
+        _IntegerType_int16>>: constant $ inject W._ValType W._ValType_i32 unit,
+        _IntegerType_int32>>: constant $ inject W._ValType W._ValType_i32 unit,
+        _IntegerType_int64>>: constant $ inject W._ValType W._ValType_i64 unit,
+        _IntegerType_uint8>>: constant $ inject W._ValType W._ValType_i32 unit,
+        _IntegerType_uint16>>: constant $ inject W._ValType W._ValType_i32 unit,
+        _IntegerType_uint32>>: constant $ inject W._ValType W._ValType_i32 unit,
+        _IntegerType_uint64>>: constant $ inject W._ValType W._ValType_i64 unit],
+    _LiteralType_string>>: constant $
+      inject W._ValType W._ValType_i32 unit] -- pointer to memory
+
+
+-- =============================================================================
+-- Literal value encoding
+-- =============================================================================
+
+-- | Encode a record projection as WASM instructions.
+-- Takes scrutinee instructions to place before the dispatch. The fieldOffsets map is
+-- looked up by (typeName, fieldName) to find the record's field offset in bytes. If the
+-- type is known, the projection is encoded as `scrutinee; i32.load offset=N` (a real
+-- memory read from the record pointer). If the type is unknown (e.g. a projection from
+-- a term whose type hasn't been declared as a record), we fall back to the session-8
+-- placeholder: drop the scrutinee and push `i32.const 0`.
+encodeProjection :: TTermDefinition (InferenceContext -> Graph -> M.Map Name [(Name, Int)] -> Projection -> [W.Instruction] -> Either Error [W.Instruction])
+encodeProjection = def "encodeProjection" $
+  "cx" ~> "g" ~> "fieldOffsets" ~> lambda "proj" $ lambda "scrutineeInstrs" $
+    "typeName" <~ Core.projectionTypeName (var "proj") $
+    "fieldName" <~ Core.projectionFieldName (var "proj") $
+    "mFields" <~ Maps.lookup (var "typeName") (var "fieldOffsets") $
+    -- Compute the offset if the type is known and the field exists in it. Returns
+    -- Maybe Int — Nothing if the type is unknown or the field name doesn't match
+    -- any entry in the type's field list.
+    "mOffset" <~ (Maybes.cases (var "mFields")
+      (nothing :: TTerm (Maybe Int))
+      (lambda "pairs" $
+        -- Find the first pair (fn, off) where fn == fieldName.
+        "matching" <~ Lists.filter
+          (lambda "p" $ Equality.equal (Pairs.first (var "p")) (var "fieldName"))
+          (var "pairs") $
+        Maybes.map (reify Pairs.second) (Lists.maybeHead (var "matching")))) $
+    Maybes.cases (var "mOffset")
+      -- Unknown: fall back to placeholder (drop scrutinee if any, push i32.const 0).
+      (right (Lists.concat (list [
+        var "scrutineeInstrs",
+        Logic.ifElse (Lists.null (var "scrutineeInstrs"))
+          (list ([] :: [TTerm W.Instruction]))
+          (list [inject W._Instruction W._Instruction_drop unit]),
+        list [inject W._Instruction W._Instruction_const $
+          inject W._ConstValue W._ConstValue_i32 (int32 0)]])))
+      -- Known: emit the scrutinee (the record pointer), then i32.load offset=N.
+      -- If the scrutinee is empty (shouldn't happen for a real projection, but guard
+      -- anyway), synthesize an i32.const 0 placeholder scrutinee so the load has an
+      -- address on the stack.
+      (lambda "off" $
+        right (Lists.concat (list [
+          Logic.ifElse (Lists.null (var "scrutineeInstrs"))
+            (list [inject W._Instruction W._Instruction_const $
+              inject W._ConstValue W._ConstValue_i32 (int32 0)])
+            (var "scrutineeInstrs"),
+          list [inject W._Instruction W._Instruction_load $
+            record W._MemoryInstruction [
+              W._MemoryInstruction_type>>: inject W._ValType W._ValType_i32 unit,
+              W._MemoryInstruction_memArg>>: record W._MemArg [
+                W._MemArg_offset>>: var "off",
+                W._MemArg_align>>: int32 2]]]])))
 
 -- | Encode a Hydra term as a list of WASM instructions. The stringOffsets argument is
 -- a module-level string→data-segment-offset map used to encode _Literal_string values
@@ -893,380 +1252,6 @@ encodeTerm = def "encodeTerm" $
 -- Elimination encoding
 -- =============================================================================
 
--- | Encode a record projection as WASM instructions.
--- Takes scrutinee instructions to place before the dispatch. The fieldOffsets map is
--- looked up by (typeName, fieldName) to find the record's field offset in bytes. If the
--- type is known, the projection is encoded as `scrutinee; i32.load offset=N` (a real
--- memory read from the record pointer). If the type is unknown (e.g. a projection from
--- a term whose type hasn't been declared as a record), we fall back to the session-8
--- placeholder: drop the scrutinee and push `i32.const 0`.
-encodeProjection :: TTermDefinition (InferenceContext -> Graph -> M.Map Name [(Name, Int)] -> Projection -> [W.Instruction] -> Either Error [W.Instruction])
-encodeProjection = def "encodeProjection" $
-  "cx" ~> "g" ~> "fieldOffsets" ~> lambda "proj" $ lambda "scrutineeInstrs" $
-    "typeName" <~ Core.projectionTypeName (var "proj") $
-    "fieldName" <~ Core.projectionFieldName (var "proj") $
-    "mFields" <~ Maps.lookup (var "typeName") (var "fieldOffsets") $
-    -- Compute the offset if the type is known and the field exists in it. Returns
-    -- Maybe Int — Nothing if the type is unknown or the field name doesn't match
-    -- any entry in the type's field list.
-    "mOffset" <~ (Maybes.cases (var "mFields")
-      (nothing :: TTerm (Maybe Int))
-      (lambda "pairs" $
-        -- Find the first pair (fn, off) where fn == fieldName.
-        "matching" <~ Lists.filter
-          (lambda "p" $ Equality.equal (Pairs.first (var "p")) (var "fieldName"))
-          (var "pairs") $
-        Maybes.map (reify Pairs.second) (Lists.maybeHead (var "matching")))) $
-    Maybes.cases (var "mOffset")
-      -- Unknown: fall back to placeholder (drop scrutinee if any, push i32.const 0).
-      (right (Lists.concat (list [
-        var "scrutineeInstrs",
-        Logic.ifElse (Lists.null (var "scrutineeInstrs"))
-          (list ([] :: [TTerm W.Instruction]))
-          (list [inject W._Instruction W._Instruction_drop unit]),
-        list [inject W._Instruction W._Instruction_const $
-          inject W._ConstValue W._ConstValue_i32 (int32 0)]])))
-      -- Known: emit the scrutinee (the record pointer), then i32.load offset=N.
-      -- If the scrutinee is empty (shouldn't happen for a real projection, but guard
-      -- anyway), synthesize an i32.const 0 placeholder scrutinee so the load has an
-      -- address on the stack.
-      (lambda "off" $
-        right (Lists.concat (list [
-          Logic.ifElse (Lists.null (var "scrutineeInstrs"))
-            (list [inject W._Instruction W._Instruction_const $
-              inject W._ConstValue W._ConstValue_i32 (int32 0)])
-            (var "scrutineeInstrs"),
-          list [inject W._Instruction W._Instruction_load $
-            record W._MemoryInstruction [
-              W._MemoryInstruction_type>>: inject W._ValType W._ValType_i32 unit,
-              W._MemoryInstruction_memArg>>: record W._MemArg [
-                W._MemArg_offset>>: var "off",
-                W._MemArg_align>>: int32 2]]]])))
-
--- | Encode a case statement (union elimination) as WASM instructions.
--- Takes scrutinee instructions to place before the dispatch.
-encodeCases :: TTermDefinition (InferenceContext -> Graph -> M.Map String Int -> M.Map Name [(Name, Int)] -> M.Map Name [(Name, Int)] -> M.Map String ([W.ValType], [W.ValType]) -> CaseStatement -> [W.Instruction] -> Either Error [W.Instruction])
-encodeCases = def "encodeCases" $
-  "cx" ~> "g" ~> "stringOffsets" ~> "fieldOffsets" ~> "variantIndexes" ~> "funcSigs" ~> lambda "cs" $ lambda "scrutineeInstrsRaw" $
-    "tname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ Core.caseStatementTypeName (var "cs"))) $
-    "caseFields" <~ Core.caseStatementCases (var "cs") $
-    -- Ensure the scrutinee pushes exactly one i32 onto the stack.
-    -- If the caller passed no instructions, synthesize a placeholder pointer.
-    "scrutineeInstrs" <~ Logic.ifElse (Lists.null (var "scrutineeInstrsRaw"))
-      (list [inject W._Instruction W._Instruction_const $
-        inject W._ConstValue W._ConstValue_i32 (int32 0)])
-      (var "scrutineeInstrsRaw") $
-    -- Scrutinee prologue: evaluate the scrutinee pointer, save to $__rec_ptr (reused
-    -- as a scratch local — nested cases/records overwrite it within their own body
-    -- and restore nothing, which is safe because the outer case has already bound $v
-    -- and loaded its tag before running any arm body). Then:
-    --   1. Load payload from offset 4 and bind to $v (the fresh case variable).
-    --   2. Load tag from offset 0 and leave it on the stack for the br_table dispatch.
-    "prologue" <~ Lists.concat (list [
-      var "scrutineeInstrs",
-      list [
-        inject W._Instruction W._Instruction_localSet (string "__rec_ptr"),
-        -- Load payload and bind to $v
-        inject W._Instruction W._Instruction_localGet (string "__rec_ptr"),
-        inject W._Instruction W._Instruction_load $
-          record W._MemoryInstruction [
-            W._MemoryInstruction_type>>: inject W._ValType W._ValType_i32 unit,
-            W._MemoryInstruction_memArg>>: record W._MemArg [
-              W._MemArg_offset>>: int32 4,
-              W._MemArg_align>>: int32 2]],
-        inject W._Instruction W._Instruction_localSet (string "v"),
-        -- Load tag (selector for br_table)
-        inject W._Instruction W._Instruction_localGet (string "__rec_ptr"),
-        inject W._Instruction W._Instruction_load $
-          record W._MemoryInstruction [
-            W._MemoryInstruction_type>>: inject W._ValType W._ValType_i32 unit,
-            W._MemoryInstruction_memArg>>: record W._MemArg [
-              W._MemArg_offset>>: int32 0,
-              W._MemArg_align>>: int32 2]]]]) $
-    -- Encode each explicit case arm body. Each arm is synthesized as
-    -- `apply (cfterm) (termVariable "v")` — encodeTerm will resolve `v` to `local.get $v`,
-    -- which is now initialized to the loaded payload before any arm runs.
-    "explicitArms" <<~ (Eithers.mapList
-      (lambda "cf" $
-        "cfname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.fieldName (var "cf"))) $
-        "cfterm" <~ Core.fieldTerm (var "cf") $
-        "armBody" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@
-          (Core.termApplication (Core.application (var "cfterm")
-            (Core.termVariable (wrap _Name (string "v")))))) $
-          right (pair (var "cfname") (var "armBody")))
-      (var "caseFields")) $
-    -- Encode the optional default arm. When present, its body is a Term that does
-    -- NOT reference $v (the payload is irrelevant for a default). When absent, we
-    -- still synthesize a default label so that uncovered tags have somewhere to
-    -- branch to; its body is an `i32.const 0` placeholder.
-    "defaultArmLabel" <~ (string "_default") $
-    "mDefault" <~ Core.caseStatementDefault (var "cs") $
-    "defaultArmBody" <<~ Maybes.cases (var "mDefault")
-      (right (list [inject W._Instruction W._Instruction_const $
-        inject W._ConstValue W._ConstValue_i32 (int32 0)]))
-      (lambda "defTerm" $
-        encodeTerm @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@ var "defTerm") $
-    "arms" <~ Lists.concat2 (var "explicitArms") (list [pair (var "defaultArmLabel") (var "defaultArmBody")]) $
-    -- Build the br_table label array. Each entry at index i gets the label of
-    -- the arm handling tag i — either an explicit arm matching the union's
-    -- variant-name-at-index-i, or the default arm's label. The lookup uses the
-    -- universe-wide variantIndexes map keyed by the union's type name; if the
-    -- type isn't found (e.g. dispatching on a locally-defined union not visible
-    -- to the coder), every tag routes to the default.
-    "explicitLabelForName" <~ (lambda "fname" $
-      Maybes.fromMaybe (var "defaultArmLabel")
-        (Maybes.map
-          (reify Pairs.first)
-          (Lists.find
-            (lambda "arm" $ Equality.equal (Pairs.first (var "arm")) (var "fname"))
-            (var "explicitArms")))) $
-    "typeName" <~ Core.caseStatementTypeName (var "cs") $
-    "mUnionVariants" <~ Maps.lookup (var "typeName") (var "variantIndexes") $
-    "brTableLabels" <~ Maybes.cases (var "mUnionVariants")
-      -- Fallback: no variant info for this type. Use the explicit-arm labels
-      -- at positions 0..len-1 (preserving pre-fix behavior); tags beyond the
-      -- explicit arms hit the default.
-      (Lists.map (reify Pairs.first) (var "explicitArms"))
-      (lambda "variantPairs" $
-        -- variantPairs :: [(Name, Int)]. Sort by index, emit label per index.
-        "sorted" <~ Lists.sortOn (reify Pairs.second) (var "variantPairs") $
-        Lists.map
-          (lambda "np" $
-            "fieldName" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Pairs.first (var "np"))) $
-            var "explicitLabelForName" @@ var "fieldName")
-          (var "sorted")) $
-    -- Block-based union dispatch: nested empty dispatch blocks, innermost holds the
-    -- prologue + br_table, outer blocks wrap each arm body (explicit + default).
-    "endLabel" <~ (Strings.cat2 (string "end_") (var "tname")) $
-    "innerDispatch" <~ Lists.concat2
-      (var "prologue")
-      (list [inject W._Instruction W._Instruction_brTable $
-        record W._BrTableArgs [
-          W._BrTableArgs_labels>>: var "brTableLabels",
-          W._BrTableArgs_default>>: var "defaultArmLabel"]]) $
-    "dispatch" <~ Lists.foldl
-      (lambda "acc" $ lambda "arm" $
-        "label" <~ Pairs.first (var "arm") $
-        "body" <~ Pairs.second (var "arm") $
-          Lists.concat (list [
-            list [inject W._Instruction W._Instruction_block $
-              record W._BlockInstruction [
-                W._BlockInstruction_label>>: just (var "label"),
-                W._BlockInstruction_blockType>>: inject W._BlockType W._BlockType_empty unit,
-                W._BlockInstruction_body>>: var "acc"]],
-            var "body",
-            list [inject W._Instruction W._Instruction_br (var "endLabel")]]))
-      (var "innerDispatch")
-      (var "arms") $
-      -- Wrap everything in the outermost end block with result type.
-      -- Even with zero explicit arms, the default arm always exists, so arms is
-      -- never empty — no need to short-circuit.
-      right (list [inject W._Instruction W._Instruction_block $
-        record W._BlockInstruction [
-          W._BlockInstruction_label>>: just (var "endLabel"),
-          W._BlockInstruction_blockType>>: inject W._BlockType W._BlockType_value (inject W._ValType W._ValType_i32 unit),
-          W._BlockInstruction_body>>: var "dispatch"]])
-
-
--- =============================================================================
--- Type definition encoding
--- =============================================================================
-
--- | Encode a Hydra type definition as WASM module fields.
--- Types are erased at runtime in WASM, but we emit function type definitions
--- for types that represent function signatures (useful for call_indirect).
-encodeTypeDefinition :: TTermDefinition (InferenceContext -> Graph -> TypeDefinition -> Either Error [W.ModuleField])
-encodeTypeDefinition = def "encodeTypeDefinition" $
-  "cx" ~> "g" ~> lambda "tdef" $
-    "name" <~ Packaging.typeDefinitionName (var "tdef") $
-    "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ var "name")) $
-    "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "tdef")) $
-    "dtyp" <~ (Strip.deannotateType @@ var "typ") $
-    -- Emit a type section entry for function types
-    cases _Type (var "dtyp") (Just $
-      -- Non-function types are erased
-      right (list ([] :: [TTerm W.ModuleField])))
-    [_Type_function>>: lambda "ft" $
-      "paramTypes" <<~ (extractParamTypes @@ var "cx" @@ var "g" @@ var "typ") $
-      "resultTypes" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
-        right (list [
-          inject W._ModuleField W._ModuleField_type $
-            record W._TypeDef [
-              W._TypeDef_name>>: just (var "lname"),
-              W._TypeDef_type>>: record W._FuncType [
-                W._FuncType_params>>: var "paramTypes",
-                W._FuncType_results>>: var "resultTypes"]]])]
-
-
--- =============================================================================
--- Term definition encoding
--- =============================================================================
-
--- | Peel up to N outer lambdas from `term`, where N = length of `args`. Returns
--- (peeledParamNames, innerBody). If `term` has fewer nested lambdas than there
--- are args, the extra args are not peeled (they remain for the caller to drop
--- or ignore). Used by encodeApplication's `_Term_lambda` case to beta-reduce
--- `(\x -> \y -> body) @@ argX @@ argY` by binding each arg to its param's local.
-peelLambdaApp :: TTermDefinition (Term -> [Term] -> ([Name], Term))
-peelLambdaApp = def "peelLambdaApp" $
-  lambda "term" $ lambda "args" $
-    Logic.ifElse (Lists.null (var "args"))
-      (pair (list ([] :: [TTerm Name])) (var "term"))
-      ("stripped" <~ (Strip.deannotateTerm @@ var "term") $
-       cases _Term (var "stripped") (Just $ pair (list ([] :: [TTerm Name])) (var "term")) [
-         _Term_lambda>>: lambda "lam" $
-           "paramName" <~ Core.lambdaParameter (var "lam") $
-           "body" <~ Core.lambdaBody (var "lam") $
-           "restArgs" <~ Maybes.fromMaybe (list ([] :: [TTerm Term])) (Lists.maybeTail (var "args")) $
-           "inner" <~ (peelLambdaApp @@ var "body" @@ var "restArgs") $
-             pair
-               (Lists.cons (var "paramName") (Pairs.first (var "inner")))
-               (Pairs.second (var "inner"))])
-
--- | Extract parameter names from nested lambdas, returning (params, innerBody)
-extractLambdaParams :: TTermDefinition (Term -> ([Name], Term))
-extractLambdaParams = def "extractLambdaParams" $
-  lambda "term" $
-    "stripped" <~ (Strip.deannotateTerm @@ var "term") $
-    cases _Term (var "stripped") (Just $ pair (list ([] :: [TTerm Name])) (var "term")) [
-      _Term_lambda>>: lambda "lam" $
-        "paramName" <~ Core.lambdaParameter (var "lam") $
-        "body" <~ Core.lambdaBody (var "lam") $
-        "inner" <~ (extractLambdaParams @@ var "body") $
-          pair
-            (Lists.cons (var "paramName") (Pairs.first (var "inner")))
-            (Pairs.second (var "inner")),
-      -- Bare eliminations: generate a synthetic parameter name.
-      -- The elimination itself becomes the body (applied to the synthetic param).
-      _Term_cases>>: lambda "_cs" $
-        pair (list [wrap _Name (string "arg_0")]) (var "term"),
-      _Term_project>>: lambda "_proj" $
-        pair (list [wrap _Name (string "arg_0")]) (var "term"),
-      _Term_unwrap>>: lambda "_name" $
-        pair (list [wrap _Name (string "arg_0")]) (var "term"),
-      _Term_typeLambda>>: lambda "tl" $
-        extractLambdaParams @@ Core.typeLambdaBody (var "tl"),
-      _Term_typeApplication>>: lambda "ta" $
-        extractLambdaParams @@ Core.typeApplicationTermBody (var "ta")]
-
--- | Collect all local variable names referenced by local.get and local.set in a list of instructions.
--- Recurses into block, loop, and if bodies.
-collectInstructionLocals :: TTermDefinition ([W.Instruction] -> S.Set String)
-collectInstructionLocals = def "collectInstructionLocals" $
-  lambda "instrs" $
-    Lists.foldl
-      (lambda "acc" $ lambda "instr" $
-        cases W._Instruction (var "instr") (Just $ var "acc") [
-          W._Instruction_localGet>>: lambda "v" $ Sets.insert (var "v") (var "acc"),
-          W._Instruction_localSet>>: lambda "v" $ Sets.insert (var "v") (var "acc"),
-          W._Instruction_localTee>>: lambda "v" $ Sets.insert (var "v") (var "acc"),
-          W._Instruction_block>>: lambda "b" $
-            Sets.union (var "acc") (collectInstructionLocals @@ (project W._BlockInstruction W._BlockInstruction_body @@ var "b")),
-          W._Instruction_loop>>: lambda "b" $
-            Sets.union (var "acc") (collectInstructionLocals @@ (project W._BlockInstruction W._BlockInstruction_body @@ var "b")),
-          W._Instruction_if>>: lambda "i" $
-            Sets.union (Sets.union (var "acc")
-              (collectInstructionLocals @@ (project W._IfInstruction W._IfInstruction_then @@ var "i")))
-              (collectInstructionLocals @@ (project W._IfInstruction W._IfInstruction_else @@ var "i"))])
-      (Sets.empty :: TTerm (S.Set String))
-      (var "instrs")
-
--- | Collect all call targets from a list of instructions.
--- Recurses into block, loop, and if bodies.
-collectCallTargets :: TTermDefinition ([W.Instruction] -> S.Set String)
-collectCallTargets = def "collectCallTargets" $
-  lambda "instrs" $
-    Lists.foldl
-      (lambda "acc" $ lambda "instr" $
-        cases W._Instruction (var "instr") (Just $ var "acc") [
-          W._Instruction_call>>: lambda "v" $ Sets.insert (var "v") (var "acc"),
-          W._Instruction_block>>: lambda "b" $
-            Sets.union (var "acc") (collectCallTargets @@ (project W._BlockInstruction W._BlockInstruction_body @@ var "b")),
-          W._Instruction_loop>>: lambda "b" $
-            Sets.union (var "acc") (collectCallTargets @@ (project W._BlockInstruction W._BlockInstruction_body @@ var "b")),
-          W._Instruction_if>>: lambda "i" $
-            Sets.union (Sets.union (var "acc")
-              (collectCallTargets @@ (project W._IfInstruction W._IfInstruction_then @@ var "i")))
-              (collectCallTargets @@ (project W._IfInstruction W._IfInstruction_else @@ var "i"))])
-      (Sets.empty :: TTerm (S.Set String))
-      (var "instrs")
-
--- | Extract parameter types from a function type, returning a list of domain types
-extractParamTypes :: TTermDefinition (InferenceContext -> Graph -> Type -> Either Error [W.ValType])
-extractParamTypes = def "extractParamTypes" $
-  "cx" ~> "g" ~> lambda "t" $
-    "typ" <~ (Strip.deannotateType @@ var "t") $
-    cases _Type (var "typ") (Just $ right (list ([] :: [TTerm W.ValType]))) [
-      _Type_function>>: lambda "ft" $
-        "domType" <<~ (encodeValType @@ var "cx" @@ var "g" @@ Core.functionTypeDomain (var "ft")) $
-        "rest" <<~ (extractParamTypes @@ var "cx" @@ var "g" @@ Core.functionTypeCodomain (var "ft")) $
-          right (Lists.cons (var "domType") (var "rest")),
-      _Type_forall>>: lambda "fa" $
-        extractParamTypes @@ var "cx" @@ var "g" @@ Core.forallTypeBody (var "fa")]
-
--- | Clamp a list of Wasm value types to all-i32. The coder's function bodies still
--- assume the 1-i32-per-term stack invariant (sessions 8-15), so non-i32 types like
--- f64 or i64 in a primitive's signature would violate that invariant at call sites.
--- Clamping to i32 universally keeps the body encoding valid while letting the signature
--- have the right arity. Runtime semantic correctness for non-i32 primitives (floats,
--- i64 integers) is deferred.
-clampValTypesToI32 :: TTermDefinition ([W.ValType] -> [W.ValType])
-clampValTypesToI32 = def "clampValTypesToI32" $
-  lambda "vts" $
-    Lists.map (lambda "_vt" $ inject W._ValType W._ValType_i32 unit) (var "vts")
-
--- | Extract a complete function signature (params + results) from a Hydra type,
--- clamping every Wasm value type to i32. Returns a pair `(paramTypes, resultTypes)`
--- suitable for direct use in a Wasm TypeUse. Non-function types have zero params
--- and a single i32 result (constants).
-extractSignature :: TTermDefinition (InferenceContext -> Graph -> Type -> Either Error ([W.ValType], [W.ValType]))
-extractSignature = def "extractSignature" $
-  "cx" ~> "g" ~> lambda "t" $
-    "params" <<~ (extractParamTypes @@ var "cx" @@ var "g" @@ var "t") $
-    "results" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "t") $
-      right (pair (clampValTypesToI32 @@ var "params") (clampValTypesToI32 @@ var "results"))
-
--- | Build a universe-wide map from snake-cased function names to Wasm signatures.
--- Walks three sources: (1) the graph's primitives (hydra.lib.*), (2) the graph's
--- boundTypes (all kernel cross-module definitions), and (3) the current module's
--- own term definitions (for internal consistency). Each entry's Hydra type scheme
--- is stripped of its Forall and passed through extractSignature. Any entry whose
--- type extraction fails is silently dropped — the call site will fall back to
--- the default (param i32) (result i32) signature.
---
--- Keys are snake-cased to match the form used by Formatting.convertCaseCamelToLowerSnake
--- at call and import emission sites. If two distinct Hydra names collide to the same
--- snake form, the last one wins (deterministic by Maps.toList order).
-buildFunctionSignatures :: TTermDefinition (InferenceContext -> Graph -> [TermDefinition] -> M.Map String ([W.ValType], [W.ValType]))
-buildFunctionSignatures = def "buildFunctionSignatures" $
-  "cx" ~> "g" ~> lambda "termDefs" $
-    -- Helper: given a (Name, TypeScheme) pair, produce a (snakeName, signature) pair
-    -- or Nothing on failure.
-    "toSigEntry" <~ (lambda "nameAndScheme" $
-      "nm" <~ Pairs.first (var "nameAndScheme") $
-      "ts" <~ Pairs.second (var "nameAndScheme") $
-      "snakeName" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (var "nm")) $
-      "sigEither" <~ (extractSignature @@ var "cx" @@ var "g" @@ Core.typeSchemeBody (var "ts")) $
-      Eithers.either_
-        (lambda "_err" $ nothing)
-        (lambda "sig" $ just (pair (var "snakeName") (var "sig")))
-        (var "sigEither")) $
-    -- Primitives: walk graph.primitives -> Map Name Primitive, extract type from each.
-    "primEntries" <~ Maybes.cat (Lists.map
-      (lambda "kv" $ var "toSigEntry" @@ pair (Pairs.first (var "kv")) (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ DslGraph.primitiveDefinition (Pairs.second (var "kv")))))
-      (Maps.toList (DslGraph.graphPrimitives (var "g")))) $
-    -- Cross-module bound term types: walk graph.boundTypes -> Map Name TypeScheme.
-    "boundEntries" <~ Maybes.cat (Lists.map
-      (lambda "kv" $ var "toSigEntry" @@ var "kv")
-      (Maps.toList (DslGraph.graphBoundTypes (var "g")))) $
-    -- Current module's own term defs: use their optional TypeScheme field directly.
-    "localEntries" <~ Maybes.cat (Lists.map
-      (lambda "td" $
-        Maybes.bind (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "td"))
-          (lambda "ts" $ var "toSigEntry" @@ pair (Packaging.termDefinitionName (var "td")) (var "ts")))
-      (var "termDefs")) $
-    Maps.fromList (Lists.concat (list [var "primEntries", var "boundEntries", var "localEntries"]))
-
 -- | Encode a Hydra term definition as a WASM function. The stringOffsets map is threaded
 -- down to encodeTerm so that _Literal_string values can be resolved to real memory offsets.
 -- The fieldOffsets map is threaded down to encodeProjection so that record projection emits
@@ -1377,145 +1362,139 @@ encodeTermDefinition = def "encodeTermDefinition" $
 -- String data segment support
 -- =============================================================================
 
--- | Collect every distinct string literal reachable from a list of term definitions.
--- Uses Rewriting.foldOverTerm in pre-order to walk every subterm and accumulate
--- _Literal_string values into a Set, then returns the Set as a sorted list so that
--- offset assignments are deterministic across regenerations.
-collectStrings :: TTermDefinition ([TermDefinition] -> [String])
-collectStrings = def "collectStrings" $
-  lambda "termDefs" $
-    "collectOne" <~ (lambda "acc" $ lambda "t" $
-      cases _Term (var "t") (Just $ var "acc") [
-        _Term_literal>>: lambda "lit" $
-          cases _Literal (var "lit") (Just $ var "acc") [
-            _Literal_string>>: lambda "s" $ Sets.insert (var "s") (var "acc")]]) $
-    "allStrings" <~ Lists.foldl
-      (lambda "acc" $ lambda "td" $
-        Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@
-          (var "collectOne") @@ (var "acc") @@ (Packaging.termDefinitionTerm (var "td")))
-      (Sets.empty :: TTerm (S.Set String))
-      (var "termDefs") $
-    Sets.toList (var "allStrings")
+-- | Encode a Hydra type as a list of WASM result types (for function signatures).
+-- For function types, returns the innermost codomain (after stripping all arrows).
+encodeType :: TTermDefinition (InferenceContext -> Graph -> Type -> Either Error [W.ValType])
+encodeType = def "encodeType" $
+  "cx" ~> "g" ~> lambda "t" $
+    "typ" <~ (Strip.deannotateType @@ var "t") $
+    cases _Type (var "typ") (Just $
+      -- Default: single i32 result (pointer)
+      right (list [inject W._ValType W._ValType_i32 unit]))
+    [_Type_annotated>>: lambda "at" $
+       encodeType @@ var "cx" @@ var "g" @@ Core.annotatedTypeBody (var "at"),
+     _Type_function>>: lambda "ft" $
+       -- For function types, skip domain and recurse into codomain
+       encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeCodomain (var "ft"),
+     _Type_unit>>: constant $
+       right (list ([] :: [TTerm W.ValType])),
+     _Type_void>>: constant $
+       right (list ([] :: [TTerm W.ValType])),
+     _Type_literal>>: lambda "lt" $
+       right (list [encodeLiteralType @@ var "lt"]),
+     _Type_forall>>: lambda "fa" $
+       encodeType @@ var "cx" @@ var "g" @@ Core.forallTypeBody (var "fa")]
 
--- | Build a module-level field-offset table from a Graph. For each record type defined
--- anywhere in the universe (i.e. every entry in `graphSchemaTypes`), walks its `TypeScheme`
--- (stripping `Annotated`, `Forall`, and `TypeLambda` layers) and, if the underlying type is
--- `_Type_record [FieldType]`, records a list of (fieldName, byteOffset) pairs in declaration
--- order (offsets 0, 4, 8, ...). Non-record types contribute nothing.
---
--- The resulting `M.Map Name [(Name, Int)]` is consumed by `encodeProjection` to replace
--- placeholder projection output with a real `i32.load offset=N` at `scrutinee + fieldOffset`.
--- Using the full graph (not just the current module's type defs) is essential because
--- most record projections reference types defined in other modules — e.g. every
--- projection of a `hydra.core.Record` happens in modules that don't themselves define
--- that type.
-buildFieldOffsets :: TTermDefinition (Graph -> M.Map Name [(Name, Int)])
-buildFieldOffsets = def "buildFieldOffsets" $
-  lambda "g" $
-    -- Return Just [FieldType] if the stripped type is a record; Nothing otherwise.
-    -- Handles two layers of Forall + one Annotated wrapper, which covers the kernel.
-    "recordFieldsOf" <~ (lambda "t" $
-      "stripped" <~ (Strip.deannotateType @@ var "t") $
-      cases _Type (var "stripped") (Just $ (nothing :: TTerm (Maybe [FieldType]))) [
-        _Type_record>>: lambda "fts" $ just (var "fts"),
-        _Type_forall>>: lambda "fa" $
-          -- A Forall over a record: recurse one level.
-          "innerStripped" <~ (Strip.deannotateType @@ Core.forallTypeBody (var "fa")) $
-          cases _Type (var "innerStripped") (Just $ (nothing :: TTerm (Maybe [FieldType]))) [
-            _Type_record>>: lambda "fts" $ just (var "fts")]]) $
-    "entryFor" <~ (lambda "nameSchemePair" $
-      "tname" <~ Pairs.first (var "nameSchemePair") $
-      "tscheme" <~ Pairs.second (var "nameSchemePair") $
-      "tbody" <~ Core.typeSchemeBody (var "tscheme") $
-      "mfields" <~ (var "recordFieldsOf" @@ var "tbody") $
-      Maybes.cases (var "mfields")
-        (nothing :: TTerm (Maybe (Name, [(Name, Int)])))
-        (lambda "fts" $
-          "namedOffsets" <~ (Lists.map
-            (lambda "p" $
-              "i" <~ Pairs.first (var "p") $
-              "ft" <~ Pairs.second (var "p") $
-                pair (Core.fieldTypeName (var "ft")) (Math.mul (var "i") (int32 4)))
-            -- Zip [0..N-1] with the field type list.
-            (Lists.zip
-              (Lists.foldl
-                (lambda "acc" $ lambda "_f" $ Lists.concat2 (var "acc") (list [Lists.length (var "acc")]))
-                (list ([] :: [TTerm Int]))
-                (var "fts"))
-              (var "fts"))) $
-          just (pair (var "tname") (var "namedOffsets")))) $
-    "schemaTypesList" <~ (Maps.toList (DslGraph.graphSchemaTypes (var "g"))) $
-    "entries" <~ (Maybes.cat (Lists.map (var "entryFor") (var "schemaTypesList"))) $
-    Maps.fromList (var "entries")
 
--- | Build a universe-wide variant-tag table from a Graph. For each union type defined
--- anywhere in the graph's schemaTypes, walks the stripped `TypeScheme` and, if the
--- underlying type is `_Type_union [FieldType]`, records a list of (variantName, tagIndex)
--- pairs in declaration order (indexes 0, 1, 2, ...). Non-union types contribute nothing.
---
--- The resulting `M.Map Name [(Name, Int)]` is consumed by `encodeTerm`'s `_Term_inject`
--- case to look up the tag index to store at offset 0 of the allocated union record. The
--- indexes here are raw integers (not byte offsets), unlike `buildFieldOffsets`.
-buildVariantIndexes :: TTermDefinition (Graph -> M.Map Name [(Name, Int)])
-buildVariantIndexes = def "buildVariantIndexes" $
-  lambda "g" $
-    -- Return Just [FieldType] if the stripped type is a union; Nothing otherwise.
-    "unionFieldsOf" <~ (lambda "t" $
-      "stripped" <~ (Strip.deannotateType @@ var "t") $
-      cases _Type (var "stripped") (Just $ (nothing :: TTerm (Maybe [FieldType]))) [
-        _Type_union>>: lambda "fts" $ just (var "fts"),
-        _Type_forall>>: lambda "fa" $
-          "innerStripped" <~ (Strip.deannotateType @@ Core.forallTypeBody (var "fa")) $
-          cases _Type (var "innerStripped") (Just $ (nothing :: TTerm (Maybe [FieldType]))) [
-            _Type_union>>: lambda "fts" $ just (var "fts")]]) $
-    "entryFor" <~ (lambda "nameSchemePair" $
-      "tname" <~ Pairs.first (var "nameSchemePair") $
-      "tscheme" <~ Pairs.second (var "nameSchemePair") $
-      "tbody" <~ Core.typeSchemeBody (var "tscheme") $
-      "mfields" <~ (var "unionFieldsOf" @@ var "tbody") $
-      Maybes.cases (var "mfields")
-        (nothing :: TTerm (Maybe (Name, [(Name, Int)])))
-        (lambda "fts" $
-          "namedIndexes" <~ (Lists.map
-            (lambda "p" $
-              "i" <~ Pairs.first (var "p") $
-              "ft" <~ Pairs.second (var "p") $
-                pair (Core.fieldTypeName (var "ft")) (var "i"))
-            -- Zip [0..N-1] with the field type list.
-            (Lists.zip
-              (Lists.foldl
-                (lambda "acc" $ lambda "_f" $ Lists.concat2 (var "acc") (list [Lists.length (var "acc")]))
-                (list ([] :: [TTerm Int]))
-                (var "fts"))
-              (var "fts"))) $
-          just (pair (var "tname") (var "namedIndexes")))) $
-    "schemaTypesList" <~ (Maps.toList (DslGraph.graphSchemaTypes (var "g"))) $
-    "entries" <~ (Maybes.cat (Lists.map (var "entryFor") (var "schemaTypesList"))) $
-    Maps.fromList (var "entries")
+-- =============================================================================
+-- Application encoding
+-- =============================================================================
 
--- | Assign a byte offset to each distinct string. Offsets start at 1024 (reserving the
--- low 1KB for a null-pointer region) and grow by 4 + UTF-8 byte count per entry, to
--- match the length-prefixed layout used by stringDataSegment. Each length-prefix is
--- 4 bytes (little-endian i32 length). Returns a pair (offsetMap, bumpStart) where
--- bumpStart is the next 16-byte-aligned offset past the end of the string segment;
--- it's used to initialize the runtime bump allocator.
-buildStringOffsets :: TTermDefinition ([String] -> (M.Map String Int, Int))
-buildStringOffsets = def "buildStringOffsets" $
-  lambda "strs" $
-    "step" <~ (lambda "acc" $ lambda "s" $
-      "m" <~ Pairs.first (var "acc") $
-      "off" <~ Pairs.second (var "acc") $
-      "len" <~ Strings.length (var "s") $
-        pair
-          (Maps.insert (var "s") (var "off") (var "m"))
-          (Math.add (var "off") (Math.add (int32 4) (var "len")))) $
-    "final" <~ (Lists.foldl (var "step")
-      (pair (Maps.empty :: TTerm (M.Map String Int)) (int32 1024))
-      (var "strs")) $
-    "rawEnd" <~ Pairs.second (var "final") $
-    -- Round up to the next 16-byte boundary so the bump pointer starts aligned.
-    "aligned" <~ Math.mul (Maybes.fromMaybe (int32 0) (Math.maybeDiv (Math.add (var "rawEnd") (int32 15)) (int32 16))) (int32 16) $
-    pair (Pairs.first (var "final")) (var "aligned")
+-- | Encode a Hydra type definition as WASM module fields.
+-- Types are erased at runtime in WASM, but we emit function type definitions
+-- for types that represent function signatures (useful for call_indirect).
+encodeTypeDefinition :: TTermDefinition (InferenceContext -> Graph -> TypeDefinition -> Either Error [W.ModuleField])
+encodeTypeDefinition = def "encodeTypeDefinition" $
+  "cx" ~> "g" ~> lambda "tdef" $
+    "name" <~ Packaging.typeDefinitionName (var "tdef") $
+    "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ var "name")) $
+    "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "tdef")) $
+    "dtyp" <~ (Strip.deannotateType @@ var "typ") $
+    -- Emit a type section entry for function types
+    cases _Type (var "dtyp") (Just $
+      -- Non-function types are erased
+      right (list ([] :: [TTerm W.ModuleField])))
+    [_Type_function>>: lambda "ft" $
+      "paramTypes" <<~ (extractParamTypes @@ var "cx" @@ var "g" @@ var "typ") $
+      "resultTypes" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
+        right (list [
+          inject W._ModuleField W._ModuleField_type $
+            record W._TypeDef [
+              W._TypeDef_name>>: just (var "lname"),
+              W._TypeDef_type>>: record W._FuncType [
+                W._FuncType_params>>: var "paramTypes",
+                W._FuncType_results>>: var "resultTypes"]]])]
+
+
+-- =============================================================================
+-- Term definition encoding
+-- =============================================================================
+
+-- | Map a Hydra type to a WASM value type
+encodeValType :: TTermDefinition (InferenceContext -> Graph -> Type -> Either Error W.ValType)
+encodeValType = def "encodeValType" $
+  "cx" ~> "g" ~> lambda "t" $
+    "typ" <~ (Strip.deannotateType @@ var "t") $
+    cases _Type (var "typ") (Just $
+      -- Default: compound types are represented as i32 (memory pointer)
+      right (inject W._ValType W._ValType_i32 unit))
+    [_Type_annotated>>: lambda "at" $
+       encodeValType @@ var "cx" @@ var "g" @@ Core.annotatedTypeBody (var "at"),
+     _Type_application>>: lambda "at" $
+       encodeValType @@ var "cx" @@ var "g" @@ Core.applicationTypeFunction (var "at"),
+     _Type_literal>>: lambda "lt" $
+       right (encodeLiteralType @@ var "lt"),
+     _Type_unit>>: constant $
+       right (inject W._ValType W._ValType_i32 unit),
+     _Type_void>>: constant $
+       right (inject W._ValType W._ValType_i32 unit),
+     _Type_forall>>: lambda "fa" $
+       encodeValType @@ var "cx" @@ var "g" @@ Core.forallTypeBody (var "fa")]
+
+
+-- =============================================================================
+-- Literal type encoding
+-- =============================================================================
+
+-- | Extract parameter names from nested lambdas, returning (params, innerBody)
+extractLambdaParams :: TTermDefinition (Term -> ([Name], Term))
+extractLambdaParams = def "extractLambdaParams" $
+  lambda "term" $
+    "stripped" <~ (Strip.deannotateTerm @@ var "term") $
+    cases _Term (var "stripped") (Just $ pair (list ([] :: [TTerm Name])) (var "term")) [
+      _Term_lambda>>: lambda "lam" $
+        "paramName" <~ Core.lambdaParameter (var "lam") $
+        "body" <~ Core.lambdaBody (var "lam") $
+        "inner" <~ (extractLambdaParams @@ var "body") $
+          pair
+            (Lists.cons (var "paramName") (Pairs.first (var "inner")))
+            (Pairs.second (var "inner")),
+      -- Bare eliminations: generate a synthetic parameter name.
+      -- The elimination itself becomes the body (applied to the synthetic param).
+      _Term_cases>>: lambda "_cs" $
+        pair (list [wrap _Name (string "arg_0")]) (var "term"),
+      _Term_project>>: lambda "_proj" $
+        pair (list [wrap _Name (string "arg_0")]) (var "term"),
+      _Term_unwrap>>: lambda "_name" $
+        pair (list [wrap _Name (string "arg_0")]) (var "term"),
+      _Term_typeLambda>>: lambda "tl" $
+        extractLambdaParams @@ Core.typeLambdaBody (var "tl"),
+      _Term_typeApplication>>: lambda "ta" $
+        extractLambdaParams @@ Core.typeApplicationTermBody (var "ta")]
+
+-- | Extract parameter types from a function type, returning a list of domain types
+extractParamTypes :: TTermDefinition (InferenceContext -> Graph -> Type -> Either Error [W.ValType])
+extractParamTypes = def "extractParamTypes" $
+  "cx" ~> "g" ~> lambda "t" $
+    "typ" <~ (Strip.deannotateType @@ var "t") $
+    cases _Type (var "typ") (Just $ right (list ([] :: [TTerm W.ValType]))) [
+      _Type_function>>: lambda "ft" $
+        "domType" <<~ (encodeValType @@ var "cx" @@ var "g" @@ Core.functionTypeDomain (var "ft")) $
+        "rest" <<~ (extractParamTypes @@ var "cx" @@ var "g" @@ Core.functionTypeCodomain (var "ft")) $
+          right (Lists.cons (var "domType") (var "rest")),
+      _Type_forall>>: lambda "fa" $
+        extractParamTypes @@ var "cx" @@ var "g" @@ Core.forallTypeBody (var "fa")]
+
+-- | Extract a complete function signature (params + results) from a Hydra type,
+-- clamping every Wasm value type to i32. Returns a pair `(paramTypes, resultTypes)`
+-- suitable for direct use in a Wasm TypeUse. Non-function types have zero params
+-- and a single i32 result (constants).
+extractSignature :: TTermDefinition (InferenceContext -> Graph -> Type -> Either Error ([W.ValType], [W.ValType]))
+extractSignature = def "extractSignature" $
+  "cx" ~> "g" ~> lambda "t" $
+    "params" <<~ (extractParamTypes @@ var "cx" @@ var "g" @@ var "t") $
+    "results" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "t") $
+      right (pair (clampValTypesToI32 @@ var "params") (clampValTypesToI32 @@ var "results"))
 
 -- | Emit a single byte as a two-character lowercase hex escape prefixed with backslash,
 -- e.g. 65 -> "\41". Inputs outside 0..255 (e.g. non-ASCII code points from Strings.toList)
@@ -1535,46 +1514,6 @@ hexEscapeString = def "hexEscapeString" $
       string "\\",
       var "digitToHex" @@ (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "byte") (int32 16))),
       var "digitToHex" @@ (Maybes.fromMaybe (int32 0) (Math.maybeMod (var "byte") (int32 16)))])
-
--- | Build the (data ...) module field for a string-offset map. The data segment contains,
--- for each string s with offset off, a 4-byte little-endian length prefix followed by the
--- UTF-8 bytes of s. Strings are emitted in offset order, so consecutive entries pack
--- contiguously starting at offset 1024. The segment is emitted as a single hex-escaped
--- byte string (two hex chars per byte) to avoid any edge cases with quotes, backslashes,
--- newlines, or non-ASCII bytes inside WAT string literals.
---
--- If the map is empty, emits a zero-length data segment at offset 1024 (benign).
-stringDataSegment :: TTermDefinition (M.Map String Int -> W.ModuleField)
-stringDataSegment = def "stringDataSegment" $
-  lambda "offsets" $
-    -- Sort (string, offset) pairs by offset so the data segment packs contiguously
-    "entries" <~ Lists.sortOn (reify Pairs.second) (Maps.toList (var "offsets")) $
-    -- For each string: emit 4 length-prefix bytes (little-endian) followed by content bytes,
-    -- every byte as a hex escape.
-    "bytesForEntry" <~ (lambda "entry" $
-      "s" <~ Pairs.first (var "entry") $
-      "len" <~ Strings.length (var "s") $
-      "lenBytes" <~ list [
-        Maybes.fromMaybe (int32 0) (Math.maybeMod (var "len") (int32 256)),
-        Maybes.fromMaybe (int32 0) (Math.maybeMod (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "len") (int32 256))) (int32 256)),
-        Maybes.fromMaybe (int32 0) (Math.maybeMod (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "len") (int32 65536))) (int32 256)),
-        Maybes.fromMaybe (int32 0) (Math.maybeMod (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "len") (int32 16777216))) (int32 256))] $
-      "contentBytes" <~ Strings.toList (var "s") $
-      "allBytes" <~ Lists.concat2 (var "lenBytes") (var "contentBytes") $
-        Strings.cat (Lists.map (lambda "b" $ hexEscapeString @@ var "b") (var "allBytes"))) $
-    "allHex" <~ Strings.cat (Lists.map (var "bytesForEntry") (var "entries")) $
-    inject W._ModuleField W._ModuleField_data $
-      record W._DataSegment [
-        W._DataSegment_name>>: nothing,
-        W._DataSegment_mode>>: inject W._DataMode W._DataMode_active (list [
-          inject W._Instruction W._Instruction_const $
-            inject W._ConstValue W._ConstValue_i32 (int32 1024)]),
-        W._DataSegment_bytes>>: var "allHex"]
-
-
--- =============================================================================
--- Module entry point
--- =============================================================================
 
 -- | Convert a Hydra module to a map of file paths to WAT source code strings.
 moduleToWasm :: TTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
@@ -1748,3 +1687,64 @@ moduleToWasm = def "moduleToWasm" $
     "code" <~ (SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (WasmSerdeSource.moduleToExpr @@ var "wasmMod"))) $
     "filePath" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ wrap _FileExtension (string "wat") @@ (Packaging.moduleName (var "mod"))) $
       right (Maps.singleton (var "filePath") (var "code"))
+
+-- | Peel up to N outer lambdas from `term`, where N = length of `args`. Returns
+-- (peeledParamNames, innerBody). If `term` has fewer nested lambdas than there
+-- are args, the extra args are not peeled (they remain for the caller to drop
+-- or ignore). Used by encodeApplication's `_Term_lambda` case to beta-reduce
+-- `(\x -> \y -> body) @@ argX @@ argY` by binding each arg to its param's local.
+peelLambdaApp :: TTermDefinition (Term -> [Term] -> ([Name], Term))
+peelLambdaApp = def "peelLambdaApp" $
+  lambda "term" $ lambda "args" $
+    Logic.ifElse (Lists.null (var "args"))
+      (pair (list ([] :: [TTerm Name])) (var "term"))
+      ("stripped" <~ (Strip.deannotateTerm @@ var "term") $
+       cases _Term (var "stripped") (Just $ pair (list ([] :: [TTerm Name])) (var "term")) [
+         _Term_lambda>>: lambda "lam" $
+           "paramName" <~ Core.lambdaParameter (var "lam") $
+           "body" <~ Core.lambdaBody (var "lam") $
+           "restArgs" <~ Maybes.fromMaybe (list ([] :: [TTerm Term])) (Lists.maybeTail (var "args")) $
+           "inner" <~ (peelLambdaApp @@ var "body" @@ var "restArgs") $
+             pair
+               (Lists.cons (var "paramName") (Pairs.first (var "inner")))
+               (Pairs.second (var "inner"))])
+
+-- | Build the (data ...) module field for a string-offset map. The data segment contains,
+-- for each string s with offset off, a 4-byte little-endian length prefix followed by the
+-- UTF-8 bytes of s. Strings are emitted in offset order, so consecutive entries pack
+-- contiguously starting at offset 1024. The segment is emitted as a single hex-escaped
+-- byte string (two hex chars per byte) to avoid any edge cases with quotes, backslashes,
+-- newlines, or non-ASCII bytes inside WAT string literals.
+--
+-- If the map is empty, emits a zero-length data segment at offset 1024 (benign).
+stringDataSegment :: TTermDefinition (M.Map String Int -> W.ModuleField)
+stringDataSegment = def "stringDataSegment" $
+  lambda "offsets" $
+    -- Sort (string, offset) pairs by offset so the data segment packs contiguously
+    "entries" <~ Lists.sortOn (reify Pairs.second) (Maps.toList (var "offsets")) $
+    -- For each string: emit 4 length-prefix bytes (little-endian) followed by content bytes,
+    -- every byte as a hex escape.
+    "bytesForEntry" <~ (lambda "entry" $
+      "s" <~ Pairs.first (var "entry") $
+      "len" <~ Strings.length (var "s") $
+      "lenBytes" <~ list [
+        Maybes.fromMaybe (int32 0) (Math.maybeMod (var "len") (int32 256)),
+        Maybes.fromMaybe (int32 0) (Math.maybeMod (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "len") (int32 256))) (int32 256)),
+        Maybes.fromMaybe (int32 0) (Math.maybeMod (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "len") (int32 65536))) (int32 256)),
+        Maybes.fromMaybe (int32 0) (Math.maybeMod (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "len") (int32 16777216))) (int32 256))] $
+      "contentBytes" <~ Strings.toList (var "s") $
+      "allBytes" <~ Lists.concat2 (var "lenBytes") (var "contentBytes") $
+        Strings.cat (Lists.map (lambda "b" $ hexEscapeString @@ var "b") (var "allBytes"))) $
+    "allHex" <~ Strings.cat (Lists.map (var "bytesForEntry") (var "entries")) $
+    inject W._ModuleField W._ModuleField_data $
+      record W._DataSegment [
+        W._DataSegment_name>>: nothing,
+        W._DataSegment_mode>>: inject W._DataMode W._DataMode_active (list [
+          inject W._Instruction W._Instruction_const $
+            inject W._ConstValue W._ConstValue_i32 (int32 1024)]),
+        W._DataSegment_bytes>>: var "allHex"]
+
+
+-- =============================================================================
+-- Module entry point
+-- =============================================================================

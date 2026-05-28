@@ -57,9 +57,6 @@ import qualified Hydra.Sources.TypeScript.Language as TypeScriptLanguageSource
 import qualified Hydra.Sources.TypeScript.Serde as TypeScriptSerdeSource
 
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
 ns :: ModuleName
 ns = ModuleName "hydra.typeScript.coder"
 
@@ -142,450 +139,30 @@ module_ = Module {
 -- Constructors for TypeScript AST fragments
 -- =============================================================================
 
--- | Wrap a String into a TypeScript Identifier.
-tsIdent :: TTermDefinition (String -> TS.Identifier)
-tsIdent = def "tsIdent" $
-  lambda "s" $ wrap TS._Identifier (var "s")
+-- | Concrete TS-side wrapper around `Analysis.analyzeFunctionTerm` with
+-- `env = Graph`. Mirrors `analyzeJavaFunction` / `analyzePythonFunction`.
+analyzeTypeScriptFunction :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error (FunctionStructure Graph))
+analyzeTypeScriptFunction = def "analyzeTypeScriptFunction" $
+  "cx" ~> "g" ~> "term" ~>
+    Analysis.analyzeFunctionTerm @@ var "cx"
+      @@ tsEnvGetGraph
+      @@ tsEnvSetGraph
+      @@ var "g" @@ var "term"
 
--- | Build a typed-identifier `Pattern` (`name: T`). Used for function
--- parameters where the parameter's domain type is known.
-tsTypedIdent :: TTermDefinition (String -> TS.TypeExpression -> TS.Pattern)
-tsTypedIdent = def "tsTypedIdent" $
-  lambda "name" $ lambda "typ" $
-    inject TS._Pattern TS._Pattern_typed $
-      record TS._TypedPattern [
-        TS._TypedPattern_pattern>>:
-          inject TS._Pattern TS._Pattern_identifier (tsIdent @@ var "name"),
-        TS._TypedPattern_type>>: var "typ"]
-
--- | Escape a Hydra string for embedding as a double-quoted TypeScript string
--- literal. Handles backslash, double-quote, newline, carriage return, tab,
--- backspace, and formfeed; other characters pass through verbatim (which
--- keeps multibyte Unicode intact).
-tsEscapeString :: TTermDefinition (String -> String)
-tsEscapeString = def "tsEscapeString" $
-  lambda "s" $
-    "escapeChar" <~ ("c" ~>
-      Logic.ifElse (Equality.equal (var "c") (int32 34))    (string "\\\"") $
-      Logic.ifElse (Equality.equal (var "c") (int32 92))    (string "\\\\") $
-      Logic.ifElse (Equality.equal (var "c") (int32 10))    (string "\\n")   $
-      Logic.ifElse (Equality.equal (var "c") (int32 13))    (string "\\r")   $
-      Logic.ifElse (Equality.equal (var "c") (int32 9))     (string "\\t")   $
-      Logic.ifElse (Equality.equal (var "c") (int32 8))     (string "\\b")   $
-      Logic.ifElse (Equality.equal (var "c") (int32 12))    (string "\\f")   $
-        Strings.fromList $ Lists.pure (var "c")) $
-    Strings.cat $ list [
-      string "\"",
-      Strings.cat $ Lists.map (var "escapeChar") (Strings.toList (var "s")),
-      string "\""]
-
--- | A bare named type reference like `Foo`.
-tsNamedType :: TTermDefinition (String -> TS.TypeExpression)
-tsNamedType = def "tsNamedType" $
-  lambda "n" $
-    inject TS._TypeExpression TS._TypeExpression_identifier (tsIdent @@ var "n")
-
--- | A parameterized type `Name<T>`.
-tsParamApp1 :: TTermDefinition (String -> TS.TypeExpression -> TS.TypeExpression)
-tsParamApp1 = def "tsParamApp1" $
-  lambda "n" $ lambda "arg" $
-    inject TS._TypeExpression TS._TypeExpression_parameterized $
-      record TS._ParameterizedTypeExpression [
-        TS._ParameterizedTypeExpression_base>>: tsNamedType @@ var "n",
-        TS._ParameterizedTypeExpression_arguments>>: list [var "arg"]]
-
--- | A parameterized type `Name<K, V>`.
-tsParamApp2 :: TTermDefinition (String -> TS.TypeExpression -> TS.TypeExpression -> TS.TypeExpression)
-tsParamApp2 = def "tsParamApp2" $
-  lambda "n" $ lambda "a" $ lambda "b" $
-    inject TS._TypeExpression TS._TypeExpression_parameterized $
-      record TS._ParameterizedTypeExpression [
-        TS._ParameterizedTypeExpression_base>>: tsNamedType @@ var "n",
-        TS._ParameterizedTypeExpression_arguments>>: list [var "a", var "b"]]
-
--- | A tuple type `[A, B, ...]`.
-tsTuple :: TTermDefinition ([TS.TypeExpression] -> TS.TypeExpression)
-tsTuple = def "tsTuple" $
-  lambda "ts" $
-    inject TS._TypeExpression TS._TypeExpression_tuple (var "ts")
-
--- | A `ReadonlyMap<K, V>`.
-tsReadonlyMap :: TTermDefinition (TS.TypeExpression -> TS.TypeExpression -> TS.TypeExpression)
-tsReadonlyMap = def "tsReadonlyMap" $
-  lambda "k" $ lambda "v" $ tsParamApp2 @@ string "ReadonlyMap" @@ var "k" @@ var "v"
-
--- | A `ReadonlySet<T>`.
-tsReadonlySet :: TTermDefinition (TS.TypeExpression -> TS.TypeExpression)
-tsReadonlySet = def "tsReadonlySet" $
-  lambda "t" $ tsParamApp1 @@ string "ReadonlySet" @@ var "t"
-
--- | A generic type parameter with no constraint.
-tsParam :: TTermDefinition (String -> TS.TypeParameter)
-tsParam = def "tsParam" $
-  lambda "n" $
-    record TS._TypeParameter [
-      TS._TypeParameter_name>>: tsIdent @@ var "n",
-      TS._TypeParameter_constraint>>: nothing,
-      TS._TypeParameter_default>>: nothing]
-
--- | Wrap an Expression in `ExpressionParenthesized` when its serialized form
--- needs grouping. Used by the term encoder for arrow-function bodies and
--- nested calls; cheaper than re-deriving precedence at every site.
-tsParen :: TTermDefinition (TS.Expression -> TS.Expression)
-tsParen = def "tsParen" $
-  lambda "e" $ inject TS._Expression TS._Expression_parenthesized (var "e")
-
--- | A bare identifier expression like `x`.
-tsExprIdent :: TTermDefinition (String -> TS.Expression)
-tsExprIdent = def "tsExprIdent" $
-  lambda "s" $ inject TS._Expression TS._Expression_identifier (tsIdent @@ var "s")
-
--- | A string-literal expression. Embeds the value verbatim through
--- `TS.StringLiteral`; serde handles escaping.
-tsExprStr :: TTermDefinition (String -> TS.Expression)
-tsExprStr = def "tsExprStr" $
-  lambda "s" $
-    inject TS._Expression TS._Expression_literal $
-      inject TS._Literal TS._Literal_string $
-        record TS._StringLiteral [
-          TS._StringLiteral_value>>: var "s",
-          TS._StringLiteral_singleQuote>>: boolean False]
-
--- | `obj.prop` member access.
-tsMember :: TTermDefinition (TS.Expression -> String -> TS.Expression)
-tsMember = def "tsMember" $
-  lambda "obj" $ lambda "prop" $
-    inject TS._Expression TS._Expression_member $
-      record TS._MemberExpression [
-        TS._MemberExpression_object>>: var "obj",
-        TS._MemberExpression_property>>: tsExprIdent @@ var "prop",
-        TS._MemberExpression_computed>>: boolean False,
-        TS._MemberExpression_optional>>: boolean False]
-
--- | `callee(arg, ...)` call expression. Wraps the callee in parens iff it's
--- an arrow function or other expression that's ambiguous as a call target.
-tsCall :: TTermDefinition (TS.Expression -> [TS.Expression] -> TS.Expression)
-tsCall = def "tsCall" $
-  lambda "callee" $ lambda "args" $
-    inject TS._Expression TS._Expression_call $
-      record TS._CallExpression [
-        TS._CallExpression_callee>>: var "callee",
-        TS._CallExpression_arguments>>: var "args",
-        TS._CallExpression_optional>>: boolean False]
-
--- | `new C(arg, ...)`.
-tsNew :: TTermDefinition (TS.Expression -> [TS.Expression] -> TS.Expression)
-tsNew = def "tsNew" $
-  lambda "callee" $ lambda "args" $
-    inject TS._Expression TS._Expression_new $
-      record TS._CallExpression [
-        TS._CallExpression_callee>>: var "callee",
-        TS._CallExpression_arguments>>: var "args",
-        TS._CallExpression_optional>>: boolean False]
-
--- | `[e1, e2, ...]` array expression. Each element is wrapped in
--- `ArrayElementExpression` (the AST also supports holes / spreads which we
--- don't emit).
-tsArray :: TTermDefinition ([TS.Expression] -> TS.Expression)
-tsArray = def "tsArray" $
-  lambda "elems" $
-    inject TS._Expression TS._Expression_array $
-      Lists.map (lambda "e" $ inject TS._ArrayElement TS._ArrayElement_expression (var "e"))
-        (var "elems")
-
--- | `{ k1: v1, k2: v2, ... }` object literal. Keys are identifier-style;
--- callers that need string-keyed properties can build a Property directly.
-tsObject :: TTermDefinition ([(String, TS.Expression)] -> TS.Expression)
-tsObject = def "tsObject" $
-  lambda "props" $
-    inject TS._Expression TS._Expression_object $
-      Lists.map
-        (lambda "kv" $
-          "k" <~ Pairs.first (var "kv") $
-          "v" <~ Pairs.second (var "kv") $
-          record TS._Property [
-            TS._Property_key>>: tsExprIdent @@ var "k",
-            TS._Property_value>>: var "v",
-            TS._Property_kind>>: inject TS._PropertyKind TS._PropertyKind_init unit,
-            TS._Property_computed>>: boolean False,
-            TS._Property_shorthand>>: boolean False])
-        (var "props")
-
--- | Wrap an expression in a TypeScript `as any` cast. Used at sites where
--- the kernel emits a structural object literal that tsc would reject
--- against a nominal discriminated-union target (`{tag: "...", value: ...}`
--- vs `Term`/`Type`/`Maybe<T>`). The runtime is unaffected.
-tsAsAny :: TTermDefinition (TS.Expression -> TS.Expression)
-tsAsAny = def "tsAsAny" $
-  lambda "e" $
-    inject TS._Expression TS._Expression_asExpression $
-      record TS._AsExpression [
-        TS._AsExpression_expression>>: var "e",
-        TS._AsExpression_type>>: inject TS._TypeExpression TS._TypeExpression_any unit]
-
--- | `(p1, p2, ...) => body` arrow function with an expression body. Parameters
--- emit as untyped identifier patterns; type annotations are deferred until the
--- AST grows a typed-parameter slot.
-tsArrow :: TTermDefinition ([String] -> TS.Expression -> TS.Expression)
-tsArrow = def "tsArrow" $
-  lambda "params" $ lambda "body" $
-    inject TS._Expression TS._Expression_arrow $
-      record TS._ArrowFunctionExpression [
-        TS._ArrowFunctionExpression_params>>:
-          Lists.map (lambda "p" $ inject TS._Pattern TS._Pattern_identifier (tsIdent @@ var "p"))
-            (var "params"),
-        TS._ArrowFunctionExpression_body>>:
-          inject TS._ArrowFunctionBody TS._ArrowFunctionBody_expression (var "body"),
-        TS._ArrowFunctionExpression_async>>: boolean False]
-
--- | `(p1: T1, p2: T2, ...) => body` arrow function with typed patterns.
--- Used by inline `_Term_lambda` emission to satisfy `noImplicitAny`.
-tsArrowTyped :: TTermDefinition ([TS.Pattern] -> TS.Expression -> TS.Expression)
-tsArrowTyped = def "tsArrowTyped" $
-  lambda "patterns" $ lambda "body" $
-    inject TS._Expression TS._Expression_arrow $
-      record TS._ArrowFunctionExpression [
-        TS._ArrowFunctionExpression_params>>: var "patterns",
-        TS._ArrowFunctionExpression_body>>:
-          inject TS._ArrowFunctionBody TS._ArrowFunctionBody_expression (var "body"),
-        TS._ArrowFunctionExpression_async>>: boolean False]
-
--- | `test ? consequent : alternate`.
-tsCond :: TTermDefinition (TS.Expression -> TS.Expression -> TS.Expression -> TS.Expression)
-tsCond = def "tsCond" $
-  lambda "test" $ lambda "cons" $ lambda "alt" $
-    inject TS._Expression TS._Expression_conditional $
-      record TS._ConditionalExpression [
-        TS._ConditionalExpression_test>>: var "test",
-        TS._ConditionalExpression_consequent>>: var "cons",
-        TS._ConditionalExpression_alternate>>: var "alt"]
-
--- | The `undefined` value as an Expression.
-tsUndefined :: TTermDefinition TS.Expression
-tsUndefined = def "tsUndefined" $ tsExprIdent @@ string "undefined"
-
--- | A readonly property signature. The name is sanitized for TS reserved
--- words (so a Hydra field named `case` becomes `case_`).
-tsPropSig :: TTermDefinition (String -> Bool -> TS.TypeExpression -> TS.PropertySignature)
-tsPropSig = def "tsPropSig" $
-  lambda "name" $ lambda "optional" $ lambda "typ" $
-    tsPropSigWithDoc @@ var "name" @@ var "optional" @@ var "typ" @@ nothing
-
--- | Build a `DocumentationComment` from an optional description string.
--- Returns Nothing when the description is missing or empty so callers can
--- propagate "no doc" through the AST. Tags are always empty here; we only
--- emit narrative descriptions, not @param/@returns tags (those would be
--- duplicative with TS's own type annotations).
-mkDocComment :: TTermDefinition (Maybe String -> Maybe TS.DocumentationComment)
-mkDocComment = def "mkDocComment" $
-  lambda "mdesc" $ Maybes.cases (var "mdesc")
-    nothing
-    (lambda "d" $ Logic.ifElse (Equality.equal (var "d") (string ""))
-      nothing
-      (just (record TS._DocumentationComment [
-        TS._DocumentationComment_description>>: var "d",
-        TS._DocumentationComment_tags>>: list ([] :: [TTerm TS.DocumentationTag])])))
-
--- | A readonly property signature with an optional JSDoc comment that gets
--- emitted above the property line. Used for record-interface fields where
--- the field has a description annotation in the kernel module.
-tsPropSigWithDoc :: TTermDefinition (String -> Bool -> TS.TypeExpression -> Maybe TS.DocumentationComment -> TS.PropertySignature)
-tsPropSigWithDoc = def "tsPropSigWithDoc" $
-  lambda "name" $ lambda "optional" $ lambda "typ" $ lambda "mcomments" $
-    "safe" <~ (Formatting.sanitizeWithUnderscores
-      @@ TypeScriptLanguageSource.typeScriptReservedWords
-      @@ var "name") $
-    record TS._PropertySignature [
-      TS._PropertySignature_name>>: tsIdent @@ var "safe",
-      TS._PropertySignature_type>>: var "typ",
-      TS._PropertySignature_optional>>: var "optional",
-      TS._PropertySignature_readonly>>: boolean True,
-      TS._PropertySignature_comments>>: var "mcomments"]
-
--- =============================================================================
--- Literal-type encoding
--- =============================================================================
-
--- | Map a Hydra LiteralType to a TypeScript TypeExpression.
-encodeLiteralType :: TTermDefinition (LiteralType -> TS.TypeExpression)
-encodeLiteralType = def "encodeLiteralType" $
-  lambda "lt" $ cases _LiteralType (var "lt") Nothing [
-    _LiteralType_binary>>: constant $
-      tsParamApp1 @@ string "ReadonlyArray" @@ (tsNamedType @@ string "number"),
-    _LiteralType_boolean>>: constant $
-      tsNamedType @@ string "boolean",
-    _LiteralType_decimal>>: constant $
-      tsNamedType @@ string "number",
-    _LiteralType_float>>: lambda "ft" $
-      cases _FloatType (var "ft") Nothing [
-        _FloatType_float32>>: constant $ tsNamedType @@ string "number",
-        _FloatType_float64>>: constant $ tsNamedType @@ string "number"],
-    _LiteralType_integer>>: lambda "it" $
-      cases _IntegerType (var "it") Nothing [
-        _IntegerType_bigint>>: constant $ tsNamedType @@ string "bigint",
-        _IntegerType_int8>>:   constant $ tsNamedType @@ string "number",
-        _IntegerType_int16>>:  constant $ tsNamedType @@ string "number",
-        _IntegerType_int32>>:  constant $ tsNamedType @@ string "number",
-        _IntegerType_int64>>:  constant $ tsNamedType @@ string "bigint",
-        _IntegerType_uint8>>:  constant $ tsNamedType @@ string "number",
-        _IntegerType_uint16>>: constant $ tsNamedType @@ string "number",
-        _IntegerType_uint32>>: constant $ tsNamedType @@ string "number",
-        _IntegerType_uint64>>: constant $ tsNamedType @@ string "bigint"],
-    _LiteralType_string>>: constant $
-      tsNamedType @@ string "string"]
-
--- =============================================================================
--- Type encoding
--- =============================================================================
-
--- | Map a Hydra Type to a TypeScript TypeExpression.
---
--- Anonymous records and unions are rejected — they must appear as the body of
--- a named TypeDefinition so the coder can emit an interface or discriminated-
--- union alias.
-encodeType :: TTermDefinition (InferenceContext -> Graph -> Type -> Either Error TS.TypeExpression)
-encodeType = def "encodeType" $
-  "cx" ~> "g" ~> lambda "t" $
-    "typ" <~ (Strip.deannotateType @@ var "t") $
-    cases _Type (var "typ") Nothing [
-      _Type_annotated>>: lambda "at" $
-        encodeType @@ var "cx" @@ var "g" @@ Core.annotatedTypeBody (var "at"),
-      -- Type application: unwind nested ApplicationType chains so a Hydra
-      -- App(App(F, A), B) becomes a TS `F<A, B>`. The head must encode to
-      -- an identifier (otherwise we fall back to the head alone — a known
-      -- limitation when the head is e.g. another parameterized application).
-      _Type_application>>: lambda "at" $
-        "fnTyp" <~ Core.applicationTypeFunction (var "at") $
-        "argTyp" <~ Core.applicationTypeArgument (var "at") $
-        "encFn" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "fnTyp") $
-        "encArg" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "argTyp") $
-          cases TS._TypeExpression (var "encFn") (Just (right (var "encFn"))) [
-            -- F<arg>: head was a bare identifier
-            TS._TypeExpression_identifier>>: lambda "_id" $
-              right (inject TS._TypeExpression TS._TypeExpression_parameterized $
-                record TS._ParameterizedTypeExpression [
-                  TS._ParameterizedTypeExpression_base>>: var "encFn",
-                  TS._ParameterizedTypeExpression_arguments>>: list [var "encArg"]]),
-            -- F<a><b> -- chain: append to existing argument list
-            TS._TypeExpression_parameterized>>: lambda "p" $
-              right (inject TS._TypeExpression TS._TypeExpression_parameterized $
-                record TS._ParameterizedTypeExpression [
-                  TS._ParameterizedTypeExpression_base>>:
-                    project TS._ParameterizedTypeExpression TS._ParameterizedTypeExpression_base @@ var "p",
-                  TS._ParameterizedTypeExpression_arguments>>:
-                    Lists.concat2
-                      (project TS._ParameterizedTypeExpression TS._ParameterizedTypeExpression_arguments @@ var "p")
-                      (list [var "encArg"])])],
+-- | Collect the bound parameter names from a chain of nested foralls, in
+-- outer-to-inner order. Stops at the first non-forall type.
+collectForallParams :: TTermDefinition (Type -> [Name])
+collectForallParams = def "collectForallParams" $
+  lambda "t" $
+    "dt" <~ (Strip.deannotateType @@ var "t") $
+    cases _Type (var "dt") (Just $ list ([] :: [TTerm Name])) [
       _Type_forall>>: lambda "fa" $
-        encodeType @@ var "cx" @@ var "g" @@ Core.forallTypeBody (var "fa"),
-      _Type_unit>>: constant $
-        right (inject TS._TypeExpression TS._TypeExpression_void unit),
-      _Type_void>>: constant $
-        right (inject TS._TypeExpression TS._TypeExpression_never unit),
-      _Type_literal>>: lambda "lt" $
-        right (encodeLiteralType @@ var "lt"),
-      _Type_list>>: lambda "inner" $
-        Eithers.map (lambda "enc" $ tsParamApp1 @@ string "ReadonlyArray" @@ var "enc")
-          (encodeType @@ var "cx" @@ var "g" @@ var "inner"),
-      _Type_set>>: lambda "inner" $
-        Eithers.map (asTerm tsReadonlySet)
-          (encodeType @@ var "cx" @@ var "g" @@ var "inner"),
-      _Type_map>>: lambda "mt" $
-        "kt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeKeys (var "mt")) $
-        "vt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeValues (var "mt")) $
-          right (tsReadonlyMap @@ var "kt" @@ var "vt"),
-      -- Encode `Maybe T` inline as `{tag: "just", value: T} | {tag: "nothing"}`
-      -- matching the runtime value encoding, rather than `T | undefined`
-      -- (which mismatched the kernel's `{tag: "just", value: x}` literals).
-      -- Inlining (like Either) avoids needing a Maybe import in every module.
-      _Type_maybe>>: lambda "inner" $
-        Eithers.map (lambda "enc" $
-          inject TS._TypeExpression TS._TypeExpression_union (list [
-            inject TS._TypeExpression TS._TypeExpression_object $ list [
-              tsPropSig @@ string "tag" @@ boolean False
-                @@ (inject TS._TypeExpression TS._TypeExpression_literal $
-                      inject TS._Literal TS._Literal_string $
-                      record TS._StringLiteral [
-                        TS._StringLiteral_value>>: string "just",
-                        TS._StringLiteral_singleQuote>>: boolean False]),
-              tsPropSig @@ string "value" @@ boolean False @@ var "enc"],
-            inject TS._TypeExpression TS._TypeExpression_object $ list [
-              tsPropSig @@ string "tag" @@ boolean False
-                @@ (inject TS._TypeExpression TS._TypeExpression_literal $
-                      inject TS._Literal TS._Literal_string $
-                      record TS._StringLiteral [
-                        TS._StringLiteral_value>>: string "nothing",
-                        TS._StringLiteral_singleQuote>>: boolean False])]]))
-          (encodeType @@ var "cx" @@ var "g" @@ var "inner"),
-      -- Either is emitted inline as `{ tag: "left", value: L } | { tag: "right", value: R }`
-      -- to avoid needing a runtime `Either` import in every generated module.
-      _Type_either>>: lambda "et" $
-        "lt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.eitherTypeLeft (var "et")) $
-        "rt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.eitherTypeRight (var "et")) $
-          "leftArm" <~ (inject TS._TypeExpression TS._TypeExpression_object $ list [
-            tsPropSig @@ string "tag" @@ boolean False
-              @@ (inject TS._TypeExpression TS._TypeExpression_literal $
-                    inject TS._Literal TS._Literal_string $
-                    record TS._StringLiteral [
-                      TS._StringLiteral_value>>: string "left",
-                      TS._StringLiteral_singleQuote>>: boolean False]),
-            tsPropSig @@ string "value" @@ boolean False @@ var "lt"]) $
-          "rightArm" <~ (inject TS._TypeExpression TS._TypeExpression_object $ list [
-            tsPropSig @@ string "tag" @@ boolean False
-              @@ (inject TS._TypeExpression TS._TypeExpression_literal $
-                    inject TS._Literal TS._Literal_string $
-                    record TS._StringLiteral [
-                      TS._StringLiteral_value>>: string "right",
-                      TS._StringLiteral_singleQuote>>: boolean False]),
-            tsPropSig @@ string "value" @@ boolean False @@ var "rt"]) $
-          right (inject TS._TypeExpression TS._TypeExpression_union $ list [
-            var "leftArm", var "rightArm"]),
-      _Type_pair>>: lambda "pt" $
-        "ft" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.pairTypeFirst (var "pt")) $
-        "st" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.pairTypeSecond (var "pt")) $
-          right (tsTuple @@ list [var "ft", var "st"]),
-      _Type_function>>: lambda "ft" $
-        "dom" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeDomain (var "ft")) $
-        "cod" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeCodomain (var "ft")) $
-          right (inject TS._TypeExpression TS._TypeExpression_function $
-            record TS._FunctionTypeExpression [
-              TS._FunctionTypeExpression_typeParameters>>: list ([] :: [TTerm TS.TypeParameter]),
-              TS._FunctionTypeExpression_parameters>>: list [var "dom"],
-              TS._FunctionTypeExpression_returnType>>: var "cod"]),
-      _Type_variable>>: lambda "name" $
-        right (tsNamedType @@ (Formatting.capitalize @@ (Names.localNameOf @@ var "name"))),
-      _Type_wrap>>: lambda "wt" $
-        encodeType @@ var "cx" @@ var "g" @@ var "wt",
-      -- Anonymous records: emit as inline object types `{ readonly f: T, ... }`.
-      _Type_record>>: lambda "fts" $
-        "members" <<~ (Eithers.mapList
-          (lambda "ft" $
-            "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
-            "ftyp"  <~ Core.fieldTypeType (var "ft") $
-            "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
-              right (tsPropSig @@ var "fname" @@ boolean False @@ var "sftyp"))
-          (var "fts")) $
-          right (inject TS._TypeExpression TS._TypeExpression_object (var "members")),
-      -- Anonymous unions: emit as a TypeScript union of discriminated arms.
-      _Type_union>>: lambda "fts" $
-        "arms" <<~ (Eithers.mapList
-          (lambda "ft" $
-            "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
-            "ftyp"  <~ Core.fieldTypeType (var "ft") $
-            "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
-              right (inject TS._TypeExpression TS._TypeExpression_object $ list [
-                tsPropSig @@ string "tag" @@ boolean False
-                  @@ (inject TS._TypeExpression TS._TypeExpression_literal $
-                        inject TS._Literal TS._Literal_string $
-                        record TS._StringLiteral [
-                          TS._StringLiteral_value>>: var "fname",
-                          TS._StringLiteral_singleQuote>>: boolean False]),
-                tsPropSig @@ string "value" @@ boolean False @@ var "sftyp"]))
-          (var "fts")) $
-          right (inject TS._TypeExpression TS._TypeExpression_union (var "arms"))]
+        Lists.cons
+          (Core.forallTypeParameter (var "fa"))
+          (collectForallParams @@ Core.forallTypeBody (var "fa"))]
 
 -- =============================================================================
--- Cross-module import collection
+-- Type-definition encoding
 -- =============================================================================
 
 -- | Find every qualified name referenced by a Type that lives in a different
@@ -597,15 +174,6 @@ collectImports :: TTermDefinition (ModuleName -> Type -> S.Set Name)
 collectImports = def "collectImports" $
   lambda "currentNs" $ lambda "t" $
     "vars" <~ (Variables.freeVariablesInType @@ var "t") $
-    filterNonLocalNames @@ var "currentNs" @@ var "vars"
-
--- | Same as `collectImports` but walks a Term, gathering free term-level
--- variables that resolve to a different module (i.e. references to other
--- generated `export const` definitions or to runtime lib primitives).
-collectTermImports :: TTermDefinition (ModuleName -> Term -> S.Set Name)
-collectTermImports = def "collectTermImports" $
-  lambda "currentNs" $ lambda "t" $
-    "vars" <~ (Variables.freeVariablesInTerm @@ var "t") $
     filterNonLocalNames @@ var "currentNs" @@ var "vars"
 
 -- | Walk a term and collect free TYPE variables from lambda domains,
@@ -647,202 +215,50 @@ collectInnerTypeImports = def "collectInnerTypeImports" $
       (var "subs")) $
     filterNonLocalNames @@ var "currentNs" @@ (Sets.union (var "ownVars") (var "childVars"))
 
--- | Shared filter: keep only Names that have a ModuleName distinct from
--- the current module's. Names without a ModuleName (bare lambda params)
--- and Names in the current namespace are dropped.
-filterNonLocalNames :: TTermDefinition (ModuleName -> S.Set Name -> S.Set Name)
-filterNonLocalNames = def "filterNonLocalNames" $
-  lambda "currentNs" $ lambda "names" $
-    Sets.fromList $ Maybes.cat $ Lists.map
-      (lambda "n" $
-        Maybes.cases (Names.namespaceOf @@ var "n")
-          nothing
-          (lambda "nameNs" $
-            Logic.ifElse
-              (Equality.equal
-                (unwrap _ModuleName @@ var "currentNs")
-                (unwrap _ModuleName @@ var "nameNs"))
-              nothing
-              (just $ var "n")))
-      (Sets.toList (var "names"))
+-- | Same as `collectImports` but walks a Term, gathering free term-level
+-- variables that resolve to a different module (i.e. references to other
+-- generated `export const` definitions or to runtime lib primitives).
+collectTermImports :: TTermDefinition (ModuleName -> Term -> S.Set Name)
+collectTermImports = def "collectTermImports" $
+  lambda "currentNs" $ lambda "t" $
+    "vars" <~ (Variables.freeVariablesInTerm @@ var "t") $
+    filterNonLocalNames @@ var "currentNs" @@ var "vars"
 
--- | Render a Set of qualified Names as TypeScript import statements grouped
--- by source module. The current module's own namespace is dropped from the
--- output so the file does not import itself.
--- | Render imports for a Set of cross-module Names.
---
--- `kind` selects the import flavor:
---   "type"  → emits `import type { ... }` with PascalCased names (for type refs).
---   "value" → emits `import { ... }` with names verbatim (for term-level refs).
-importsToText :: TTermDefinition (String -> ModuleName -> S.Set Name -> String)
-importsToText = def "importsToText" $
-  lambda "kind" $ lambda "currentNs" $ lambda "names" $
-    -- Pair each Name with its optional ModuleName; drop ones with no namespace
-    -- or whose namespace matches the current module.
-    "pairs" <~ (Maybes.cat $ Lists.map
-      (lambda "n" $
-        Maybes.cases (Names.namespaceOf @@ var "n")
-          nothing
-          (lambda "ns" $
-            Logic.ifElse
-              (Equality.equal
-                (unwrap _ModuleName @@ var "currentNs")
-                (unwrap _ModuleName @@ var "ns"))
-              nothing
-              (just $ pair (var "ns") (var "n"))))
-      (Sets.toList (var "names"))) $
-    -- Apply the kind's case convention. `kind == "type"` → capitalize.
-    -- Value-kind imports also get reserved-word sanitization so e.g. `null`
-    -- becomes `null_`, matching the runtime's exported binding name.
-    "transformLocal" <~ (lambda "s" $
-      Logic.ifElse (Equality.equal (var "kind") (string "type"))
-        (Formatting.capitalize @@ var "s")
-        (Formatting.sanitizeWithUnderscores
-          @@ TypeScriptLanguageSource.typeScriptReservedWords @@ var "s")) $
-    "importKeyword" <~ Logic.ifElse (Equality.equal (var "kind") (string "type"))
-      (string "import type")
-      (string "import") $
-    -- Group by namespace via fold into a Map<ModuleName, [String]>.
-    "grouped" <~ (Lists.foldl
-      (lambda "acc" $ lambda "p" $
-        "ns" <~ Pairs.first (var "p") $
-        "n" <~ Pairs.second (var "p") $
-        "local" <~ (var "transformLocal" @@ (Names.localNameOf @@ var "n")) $
-        "existing" <~ (Maybes.fromMaybe (list ([] :: [TTerm String]))
-          (Maps.lookup (var "ns") (var "acc"))) $
-        Maps.insert (var "ns") (Lists.cons (var "local") (var "existing")) (var "acc"))
-      (Maps.empty :: TTerm (M.Map ModuleName [String]))
-      (var "pairs")) $
-    -- Path computation: every Hydra namespace has the form `hydra.<a>.<b>...`.
-    -- The file for ns `hydra.a.b.c` lives at `hydra/a/b/c.ts` — depth n-1
-    -- (where n is the number of segments after `hydra`). So from the
-    -- current file's directory, we walk up (n_current - 1) times then descend
-    -- through the target's path segments.
-    --
-    -- Test modules (those whose namespace starts with `hydra.test.`) live in
-    -- a sibling tree at `<dist>/src/test/typescript/hydra/test/...`, while
-    -- main modules live at `<dist>/src/main/typescript/hydra/...`. A cross-
-    -- tree import from a test module to a main module needs to escape from
-    -- src/test/typescript into src/main/typescript, hence the extra
-    -- `../../main/typescript/` segment appended to upPrefix.
-    "currentSegs" <~ (Lists.drop (int32 1)
-      (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "currentNs"))) $
-    "currentDepth" <~ (Lists.length (var "currentSegs")) $
-    "currentIsTest" <~ Logic.and
-      (Logic.not (Lists.null (var "currentSegs")))
-      (Equality.equal (Maybes.fromMaybe (string "") (Lists.maybeHead (var "currentSegs"))) (string "test")) $
-    "baseUpPrefix" <~ Logic.ifElse
-      (Equality.equal (var "currentDepth") (int32 1))
-      (string "./")
-      (Strings.cat $ Lists.replicate (Math.sub (var "currentDepth") (int32 1)) (string "../")) $
-    "lines" <~ (Lists.map
-      (lambda "entry" $
-        "ns" <~ Pairs.first (var "entry") $
-        "locals" <~ Pairs.second (var "entry") $
-        "targetSegs" <~ (Lists.drop (int32 1)
-          (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns"))) $
-        "targetIsTest" <~ Logic.and
-          (Logic.not (Lists.null (var "targetSegs")))
-          (Equality.equal (Maybes.fromMaybe (string "") (Lists.maybeHead (var "targetSegs"))) (string "test")) $
-        "targetPath" <~ Strings.intercalate (string "/") (var "targetSegs") $
-        -- Cross-tree paths: test → main needs extra "../../main/typescript/".
-        -- main → test would need the inverse, but currently no main module
-        -- imports test, so that branch is omitted.
-        -- When current is test and target is main, the path becomes:
-        --   baseUpPrefix + "../../../main/typescript/hydra/"
-        -- baseUpPrefix gets us to <test-root>/hydra/. From there:
-        --   ../   → <test-root>/typescript/ (out of hydra/)
-        --   ../   → <test-root>/test/       (out of typescript/)
-        --   ../   → <test-root>/src/        (out of test/)
-        -- then "main/typescript/hydra/" enters the main tree.
-        "upPrefix" <~ Logic.ifElse
-          (Logic.and (var "currentIsTest") (Logic.not (var "targetIsTest")))
-          (Strings.cat2 (var "baseUpPrefix") (string "../../../main/typescript/hydra/"))
-          (var "baseUpPrefix") $
-        -- For type imports keep the named form (TS supports same-named
-        -- types imported from multiple sources via separate aliases, but
-        -- we don't expect type clashes today). For value imports use
-        -- namespace-style `import * as <alias>` to dodge collisions
-        -- between like-named helpers (e.g. `map` from lists/maybes/eithers).
-        -- Build a unique alias by joining all post-`hydra.` segments with
-        -- underscores. So `hydra.test.checking.all` → `test_checking_all`,
-        -- `hydra.test.hoisting.all` → `test_hoisting_all`, avoiding the
-        -- collisions that bare last-segment aliasing would produce.
-        -- Prefix module aliases with `_` to avoid shadowing by local Hydra
-        -- identifiers. E.g. `hydra.arity` would alias as `arity`, which a
-        -- local `const arity = ...` then shadows (TDZ in JS even though
-        -- legal in Haskell). Prefix with `_` to keep aliases out of the
-        -- local-name space.
-        "moduleAlias" <~ Strings.cat2 (string "$mod_")
-          (Strings.intercalate (string "_") (var "targetSegs")) $
-        Logic.ifElse (Equality.equal (var "kind") (string "type"))
-          (Strings.cat (list [
-            var "importKeyword",
-            string " { ",
-            Strings.intercalate (string ", ") (var "locals"),
-            string " } from \"",
-            var "upPrefix",
-            var "targetPath",
-            string ".js\";\n"]))
-          (Strings.cat (list [
-            string "import * as ",
-            -- The `$mod_` prefix in moduleAlias keeps the alias out of
-            -- the local-name space and reserves any clashes for the
-            -- generator. No further sanitization needed — `$` is a
-            -- valid JS identifier character and Hydra source can't
-            -- produce a `$` in a name segment.
-            var "moduleAlias",
-            string " from \"",
-            var "upPrefix",
-            var "targetPath",
-            string ".js\";\n"])))
-      (Maps.toList (var "grouped"))) $
-    Strings.cat (var "lines")
+def :: String -> TTerm a -> TTermDefinition a
+def = definitionInModule module_
 
--- =============================================================================
--- Forall extraction helpers
--- =============================================================================
-
--- | Strip leading forall wrappers from a type, returning the unwrapped body.
--- Annotations on intervening layers are also stripped.
--- =============================================================================
--- Application flattening + laziness wrapping
--- =============================================================================
---
--- Hydra's `ifElse` and several `maybes`/`eithers` primitives have lazy
--- semantics in the Haskell source: the unselected branch is never
--- evaluated. JavaScript is strict, so we wrap the lazy positions in
--- nullary arrow functions `() => expr` and the runtime primitive
--- invokes them on demand. See docs/recipes/new-implementation.md
--- (section "Lazy evaluation and thunking") for the full rationale.
---
--- The lazy-arg positions, mirroring Java's `wrapLazyArguments`:
---   hydra.lib.logic.ifElse        — positions 1, 2 (then, else)
---   hydra.lib.maybes.cases        — position 1 (nothing case)
---   hydra.lib.maybes.maybe        — position 0 (default)
---   hydra.lib.maybes.fromMaybe    — position 0 (default)
---   hydra.lib.eithers.fromLeft    — position 0 (default)
---   hydra.lib.eithers.fromRight   — position 0 (default)
---   hydra.lib.maps.findWithDefault — position 0 (default)
---
--- The TS-side primitive accepts either a value or a thunk and calls the
--- thunk when needed (mirroring Python's `callable()` check).
-
--- | Walk an application spine, returning (innermost head term, args in
--- application order). For `App (App (App f a) b) c)` returns `(f, [a,b,c])`.
-flattenApplication :: TTermDefinition (Term -> (Term, [Term]))
-flattenApplication = def "flattenApplication" $
-  lambda "t" $
-    "dt" <~ (Strip.deannotateTerm @@ var "t") $
-    cases _Term (var "dt")
-      (Just $ pair (var "t") (list ([] :: [TTerm Term]))) [
-      _Term_application>>: lambda "app" $
-        "inner" <~ (flattenApplication @@ Core.applicationFunction (var "app")) $
-        "head_" <~ Pairs.first (var "inner") $
-        "prevArgs" <~ Pairs.second (var "inner") $
-        pair (var "head_")
-             (Lists.concat2 (var "prevArgs")
-                            (Lists.singleton (Core.applicationArgument (var "app"))))]
+-- | Encode a let-binding as a TS `Statement` inside an enclosing function body.
+-- If the binding's value is a lambda chain, emit a nested `function` declaration
+-- (which hoists). Otherwise emit a `const name = <expr>;` variable declaration.
+encodeBindingAsStatement :: TTermDefinition (InferenceContext -> Graph -> ModuleName -> Binding -> TS.Statement)
+encodeBindingAsStatement = def "encodeBindingAsStatement" $
+  "cx" ~> "g" ~> "currentNs" ~> "b" ~>
+    "bname" <~ Core.bindingName (var "b") $
+    "lname" <~ (Formatting.sanitizeWithUnderscores
+      @@ TypeScriptLanguageSource.typeScriptReservedWords
+      @@ (Names.localNameOf @@ var "bname")) $
+    "bterm" <~ Core.bindingTerm (var "b") $
+    "dterm" <~ (Strip.deannotateTerm @@ var "bterm") $
+    cases _Term (var "dterm")
+      (Just $
+        -- Non-lambda value: `const name = <expr>;`
+        "expr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "bterm") $
+        "declarator" <~ (record TS._VariableDeclarator [
+          TS._VariableDeclarator_id>>: inject TS._Pattern TS._Pattern_identifier (tsIdent @@ var "lname"),
+          TS._VariableDeclarator_init>>: just (var "expr")]) $
+        "varDecl" <~ (record TS._VariableDeclaration [
+          TS._VariableDeclaration_kind>>: inject TS._VariableKind TS._VariableKind_const unit,
+          TS._VariableDeclaration_declarations>>: list [var "declarator"]]) $
+        inject TS._Statement TS._Statement_variableDeclaration (var "varDecl")) [
+      _Term_lambda>>: lambda "_lam" $
+        -- Lambda value: emit `function name(...) { ... }` so it hoists and can
+        -- self-reference (recursive let). The inner function is itself built
+        -- via the function-structure pipeline.
+        "innerFunDecl" <~ (functionDeclarationFromTerm @@ var "cx" @@ var "g" @@ var "currentNs"
+          @@ var "lname" @@ var "bterm"
+          @@ (Maybes.bind (Core.bindingTypeScheme (var "b"))
+                ("ts" ~> just (Core.typeSchemeBody (var "ts"))))) $
+        inject TS._Statement TS._Statement_functionDeclaration (var "innerFunDecl")]
 
 -- | Emit a fully-applied primitive call with selected arguments wrapped
 -- in `() => expr` thunks. The `lazyFlags` list parallels `args`:
@@ -862,164 +278,6 @@ encodeLazyCall = def "encodeLazyCall" $
         (var "expr")) $
     "argExprs" <~ Lists.map (var "renderArg") (var "paired") $
     tsCall @@ var "headExpr" @@ var "argExprs"
-
--- | If a term reduces (through annotations and type applications) to
--- `Term_variable name`, return `Just name`; else `Nothing`. Polymorphic
--- primitives are typically wrapped in one or more `Term_typeApplication`
--- layers (e.g. `ifElse @TypeArg`), which the runtime erases — so we
--- erase them here too when looking for the head.
-termHeadVariable :: TTermDefinition (Term -> Maybe Name)
-termHeadVariable = def "termHeadVariable" $
-  lambda "t" $
-    "dt" <~ (Strip.deannotateTerm @@ var "t") $
-    cases _Term (var "dt")
-      (Just (nothing :: TTerm (Maybe Name))) [
-      _Term_variable>>: lambda "n" $ just (var "n"),
-      _Term_typeApplication>>: lambda "ta" $
-        termHeadVariable @@ Core.typeApplicationTermBody (var "ta")]
-
-stripForalls :: TTermDefinition (Type -> Type)
-stripForalls = def "stripForalls" $
-  lambda "t" $
-    "dt" <~ (Strip.deannotateType @@ var "t") $
-    cases _Type (var "dt") (Just $ var "dt") [
-      _Type_forall>>: lambda "fa" $
-        stripForalls @@ Core.forallTypeBody (var "fa")]
-
--- | Collect the bound parameter names from a chain of nested foralls, in
--- outer-to-inner order. Stops at the first non-forall type.
-collectForallParams :: TTermDefinition (Type -> [Name])
-collectForallParams = def "collectForallParams" $
-  lambda "t" $
-    "dt" <~ (Strip.deannotateType @@ var "t") $
-    cases _Type (var "dt") (Just $ list ([] :: [TTerm Name])) [
-      _Type_forall>>: lambda "fa" $
-        Lists.cons
-          (Core.forallTypeParameter (var "fa"))
-          (collectForallParams @@ Core.forallTypeBody (var "fa"))]
-
--- =============================================================================
--- Type-definition encoding
--- =============================================================================
-
--- | Encode a Hydra type definition as either an InterfaceDeclaration (records),
--- a TypeAliasDeclaration of a discriminated union (unions), or a plain type
--- alias (everything else).
--- The returned pair carries an optional JSDoc description (pulled from
--- the type's description annotation, if any) alongside the ModuleItem.
--- `moduleToTypeScript` prepends the doc above the rendered item.
-encodeTypeDefinition :: TTermDefinition (InferenceContext -> Graph -> TypeDefinition -> Either Error (Maybe String, TS.ModuleItem))
-encodeTypeDefinition = def "encodeTypeDefinition" $
-  "cx" ~> "g" ~> lambda "tdef" $
-    "name" <~ Packaging.typeDefinitionName (var "tdef") $
-    "typScheme" <~ Packaging.typeDefinitionTypeScheme (var "tdef") $
-    "rawTyp" <~ Core.typeSchemeBody (var "typScheme") $
-    "lname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ var "name")) $
-    "mdoc" <<~ (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "rawTyp") $
-    -- Walk leading foralls to harvest type parameters; the body is what we
-    -- actually encode. This matches how Hydra represents generic types — the
-    -- outer foralls bind the variables that appear inside.
-    "forallParams" <~ (collectForallParams @@ var "rawTyp") $
-    "typ" <~ (stripForalls @@ var "rawTyp") $
-    "typeParams" <~ (Lists.map
-      (lambda "v" $ tsParam @@ (Formatting.capitalize @@ Core.unName (var "v")))
-      (var "forallParams")) $
-    "dtyp" <~ (Strip.deannotateType @@ var "typ") $
-    cases _Type (var "dtyp") (Just $
-        -- Fallback: a plain type alias `type Foo<T...> = <encoded>;`
-        "styp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
-          right (pair (var "mdoc") (inject TS._ModuleItem TS._ModuleItem_typeAlias $
-            record TS._TypeAliasDeclaration [
-              TS._TypeAliasDeclaration_name>>: tsIdent @@ var "lname",
-              TS._TypeAliasDeclaration_typeParameters>>: var "typeParams",
-              TS._TypeAliasDeclaration_type>>: var "styp"])))
-      [_Type_record>>: lambda "fts" $
-        "members" <<~ (Eithers.mapList
-          (lambda "ft" $
-            "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
-            "ftyp"  <~ Core.fieldTypeType (var "ft") $
-            "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
-            "mfdoc" <<~ (Annotations.commentsFromFieldType @@ var "cx" @@ var "g" @@ var "ft") $
-              right (tsPropSigWithDoc @@ var "fname" @@ boolean False @@ var "sftyp" @@ (mkDocComment @@ var "mfdoc")))
-          (var "fts")) $
-          right (pair (var "mdoc") (inject TS._ModuleItem TS._ModuleItem_interface $
-            record TS._InterfaceDeclaration [
-              TS._InterfaceDeclaration_name>>: tsIdent @@ var "lname",
-              TS._InterfaceDeclaration_typeParameters>>: var "typeParams",
-              TS._InterfaceDeclaration_extends>>: list ([] :: [TTerm TS.TypeExpression]),
-              TS._InterfaceDeclaration_members>>: var "members"])),
-      _Type_union>>: lambda "fts" $
-        -- Each union field becomes one discriminated-union arm:
-        --   `{ readonly tag: "<fname>"; readonly value: <encoded fty> }`
-        "arms" <<~ (Eithers.mapList
-          (lambda "ft" $
-            "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
-            "ftyp"  <~ Core.fieldTypeType (var "ft") $
-            "dtyp2" <~ (Strip.deannotateType @@ var "ftyp") $
-            -- For unit-shaped variants, emit `{ readonly tag: "fname" }`
-            -- (no `value` field).
-            cases _Type (var "dtyp2") (Just $
-              "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
-                right (inject TS._TypeExpression TS._TypeExpression_object $ list [
-                  tsPropSig @@ string "tag" @@ boolean False
-                    @@ (inject TS._TypeExpression TS._TypeExpression_literal $
-                          inject TS._Literal TS._Literal_string $
-                          record TS._StringLiteral [
-                            TS._StringLiteral_value>>: var "fname",
-                            TS._StringLiteral_singleQuote>>: boolean False]),
-                  tsPropSig @@ string "value" @@ boolean False @@ var "sftyp"]))
-              [_Type_unit>>: constant $
-                right (inject TS._TypeExpression TS._TypeExpression_object $ list [
-                  tsPropSig @@ string "tag" @@ boolean False
-                    @@ (inject TS._TypeExpression TS._TypeExpression_literal $
-                          inject TS._Literal TS._Literal_string $
-                          record TS._StringLiteral [
-                            TS._StringLiteral_value>>: var "fname",
-                            TS._StringLiteral_singleQuote>>: boolean False])])])
-          (var "fts")) $
-          right (pair (var "mdoc") (inject TS._ModuleItem TS._ModuleItem_typeAlias $
-            record TS._TypeAliasDeclaration [
-              TS._TypeAliasDeclaration_name>>: tsIdent @@ var "lname",
-              TS._TypeAliasDeclaration_typeParameters>>: var "typeParams",
-              TS._TypeAliasDeclaration_type>>: inject TS._TypeExpression TS._TypeExpression_union (var "arms")])),
-      _Type_wrap>>: lambda "wt" $
-        -- A wrap type becomes a single-field interface with a `_tag` brand.
-        -- Wrap-type interface: single `value` field. We previously emitted
-        -- a `_tag: "TypeName"` brand for nominal typing, but the kernel
-        -- term-level emission for `Term_wrap` doesn't add `_tag`, and
-        -- doing so breaks runtime value-equality keying in `lib/maps.ts`
-        -- (canonical strings differ between primitive Names and term Names).
-        -- Structural typing without the brand is good enough — TS unions
-        -- still discriminate on shape because each wrap type has a unique
-        -- payload-type combination.
-        "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "wt") $
-          right (pair (var "mdoc") (inject TS._ModuleItem TS._ModuleItem_interface $
-            record TS._InterfaceDeclaration [
-              TS._InterfaceDeclaration_name>>: tsIdent @@ var "lname",
-              TS._InterfaceDeclaration_typeParameters>>: var "typeParams",
-              TS._InterfaceDeclaration_extends>>: list ([] :: [TTerm TS.TypeExpression]),
-              TS._InterfaceDeclaration_members>>: list [
-                tsPropSig @@ string "value" @@ boolean False @@ var "sftyp"]]))]
-
--- =============================================================================
--- Term-level encoding (direct-to-text, minimal subset)
--- =============================================================================
---
--- Encodes Hydra terms directly to TypeScript expression text. Covers the
--- shapes that appear in the DSL helper modules:
---   * literals (string, integer, float, boolean)
---   * variables → identifier
---   * lambdas → arrow functions
---   * applications → function calls
---   * records → object literals
---   * inject → discriminated-union construction `{ tag: "x", value: ... }`
---   * wrap → wrapper invocation (treated like inject for now)
---   * list / set / map / pair → literal forms
---   * optional → undefined or value
---   * let → IIFE with sequential bindings
---   * annotated → strip annotations
--- Unsupported variants (cases, project, unwrap, either, typeApplication,
--- typeLambda) emit a `/* unsupported */` comment so the file at least lints.
 
 -- | Render a Hydra Literal as a TypeScript Expression.
 --
@@ -1088,6 +346,59 @@ encodeLiteral = def "encodeLiteral" $
       cases _FloatValue (var "fv") (Just $ var "floatLit" @@ (float64 0.0)) [
         _FloatValue_float32>>: lambda "f" $ var "floatLit" @@ (Literals.float32ToFloat64 (var "f")),
         _FloatValue_float64>>: lambda "f" $ var "floatLit" @@ var "f"]]
+
+-- | Map a Hydra LiteralType to a TypeScript TypeExpression.
+encodeLiteralType :: TTermDefinition (LiteralType -> TS.TypeExpression)
+encodeLiteralType = def "encodeLiteralType" $
+  lambda "lt" $ cases _LiteralType (var "lt") Nothing [
+    _LiteralType_binary>>: constant $
+      tsParamApp1 @@ string "ReadonlyArray" @@ (tsNamedType @@ string "number"),
+    _LiteralType_boolean>>: constant $
+      tsNamedType @@ string "boolean",
+    _LiteralType_decimal>>: constant $
+      tsNamedType @@ string "number",
+    _LiteralType_float>>: lambda "ft" $
+      cases _FloatType (var "ft") Nothing [
+        _FloatType_float32>>: constant $ tsNamedType @@ string "number",
+        _FloatType_float64>>: constant $ tsNamedType @@ string "number"],
+    _LiteralType_integer>>: lambda "it" $
+      cases _IntegerType (var "it") Nothing [
+        _IntegerType_bigint>>: constant $ tsNamedType @@ string "bigint",
+        _IntegerType_int8>>:   constant $ tsNamedType @@ string "number",
+        _IntegerType_int16>>:  constant $ tsNamedType @@ string "number",
+        _IntegerType_int32>>:  constant $ tsNamedType @@ string "number",
+        _IntegerType_int64>>:  constant $ tsNamedType @@ string "bigint",
+        _IntegerType_uint8>>:  constant $ tsNamedType @@ string "number",
+        _IntegerType_uint16>>: constant $ tsNamedType @@ string "number",
+        _IntegerType_uint32>>: constant $ tsNamedType @@ string "number",
+        _IntegerType_uint64>>: constant $ tsNamedType @@ string "bigint"],
+    _LiteralType_string>>: constant $
+      tsNamedType @@ string "string"]
+
+-- =============================================================================
+-- Type encoding
+-- =============================================================================
+
+-- | Build a TS function parameter as a `Pattern`. Wraps the parameter name in a
+-- `_Pattern_typed` if the domain encodes to anything other than the analyze
+-- pass's `_`-typed-variable sentinel; otherwise emits an untyped identifier.
+encodeParam :: TTermDefinition (InferenceContext -> Graph -> Name -> Type -> TS.Pattern)
+encodeParam = def "encodeParam" $
+  "cx" ~> "g" ~> "pname" ~> "dom" ~>
+    "nstr" <~ (sanitizeParamName @@ var "pname") $
+    cases _Type (Strip.deannotateType @@ var "dom")
+      (Just $ tsTypedIdent @@ var "nstr"
+        @@ (encodeTypeOrAny @@ var "cx" @@ var "g" @@ var "dom")) [
+      -- Bare type variables (e.g. `t0`) come from polymorphic top-level
+      -- defs. Function declarations have no generic-binder syntax in our
+      -- AST yet, so we cannot bring `T0` into scope. Emit `any` for these
+      -- params. The analyze pass uses `_` as a sentinel for missing-type;
+      -- previously we emitted an untyped identifier for `_`, but that
+      -- trips `noImplicitAny`. Emit `: any` uniformly for all bare type
+      -- variables.
+      _Type_variable>>: constant $
+        tsTypedIdent @@ var "nstr"
+          @@ (inject TS._TypeExpression TS._TypeExpression_any unit)]
 
 -- | Render a Hydra Term as a TypeScript Expression.
 --
@@ -1508,152 +819,6 @@ encodeTerm = def "encodeTerm" $
            pair (string "value") (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "r")]))
          (var "e")]
 
--- | Sanitize a Hydra parameter name into a valid (and non-reserved) TS identifier.
-sanitizeParamName :: TTermDefinition (Name -> String)
-sanitizeParamName = def "sanitizeParamName" $
-  lambda "n" $ Formatting.sanitizeWithUnderscores
-    @@ TypeScriptLanguageSource.typeScriptReservedWords
-    @@ (Names.localNameOf @@ var "n")
-
--- | Try to encode a Hydra `Core.Type` as a TS `TypeExpression`. If `encodeType`
--- fails (e.g. anonymous record), fall back to `any`.
-encodeTypeOrAny :: TTermDefinition (InferenceContext -> Graph -> Type -> TS.TypeExpression)
-encodeTypeOrAny = def "encodeTypeOrAny" $
-  "cx" ~> "g" ~> "typ" ~>
-    Eithers.either_
-      (lambda "_e" $ inject TS._TypeExpression TS._TypeExpression_any unit)
-      (lambda "te" $ var "te")
-      (encodeType @@ var "cx" @@ var "g" @@ var "typ")
-
--- | `\g -> g`. Identity getter for `analyzeFunctionTerm` when env == Graph.
--- Defined as a top-level helper (with explicit type) so the kernel-to-host
--- translation can resolve it; inline anonymous lambdas trip the Java/Python
--- coders' "untyped term variable" check when the surrounding HOF (here,
--- `Analysis.analyzeFunctionTerm`) is polymorphic.
-tsEnvGetGraph :: TTermDefinition (Graph -> Graph)
-tsEnvGetGraph = def "tsEnvGetGraph" $ lambda "g" $ var "g"
-
--- | `\new old -> new`. setter for `analyzeFunctionTerm` when env == Graph.
-tsEnvSetGraph :: TTermDefinition (Graph -> Graph -> Graph)
-tsEnvSetGraph = def "tsEnvSetGraph" $ lambda "newG" $ lambda "_old" $ var "newG"
-
--- | Concrete TS-side wrapper around `Analysis.analyzeFunctionTerm` with
--- `env = Graph`. Mirrors `analyzeJavaFunction` / `analyzePythonFunction`.
-analyzeTypeScriptFunction :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error (FunctionStructure Graph))
-analyzeTypeScriptFunction = def "analyzeTypeScriptFunction" $
-  "cx" ~> "g" ~> "term" ~>
-    Analysis.analyzeFunctionTerm @@ var "cx"
-      @@ tsEnvGetGraph
-      @@ tsEnvSetGraph
-      @@ var "g" @@ var "term"
-
--- | Build a TS function parameter as a `Pattern`. Wraps the parameter name in a
--- `_Pattern_typed` if the domain encodes to anything other than the analyze
--- pass's `_`-typed-variable sentinel; otherwise emits an untyped identifier.
-encodeParam :: TTermDefinition (InferenceContext -> Graph -> Name -> Type -> TS.Pattern)
-encodeParam = def "encodeParam" $
-  "cx" ~> "g" ~> "pname" ~> "dom" ~>
-    "nstr" <~ (sanitizeParamName @@ var "pname") $
-    cases _Type (Strip.deannotateType @@ var "dom")
-      (Just $ tsTypedIdent @@ var "nstr"
-        @@ (encodeTypeOrAny @@ var "cx" @@ var "g" @@ var "dom")) [
-      -- Bare type variables (e.g. `t0`) come from polymorphic top-level
-      -- defs. Function declarations have no generic-binder syntax in our
-      -- AST yet, so we cannot bring `T0` into scope. Emit `any` for these
-      -- params. The analyze pass uses `_` as a sentinel for missing-type;
-      -- previously we emitted an untyped identifier for `_`, but that
-      -- trips `noImplicitAny`. Emit `: any` uniformly for all bare type
-      -- variables.
-      _Type_variable>>: constant $
-        tsTypedIdent @@ var "nstr"
-          @@ (inject TS._TypeExpression TS._TypeExpression_any unit)]
-
--- | Encode a let-binding as a TS `Statement` inside an enclosing function body.
--- If the binding's value is a lambda chain, emit a nested `function` declaration
--- (which hoists). Otherwise emit a `const name = <expr>;` variable declaration.
-encodeBindingAsStatement :: TTermDefinition (InferenceContext -> Graph -> ModuleName -> Binding -> TS.Statement)
-encodeBindingAsStatement = def "encodeBindingAsStatement" $
-  "cx" ~> "g" ~> "currentNs" ~> "b" ~>
-    "bname" <~ Core.bindingName (var "b") $
-    "lname" <~ (Formatting.sanitizeWithUnderscores
-      @@ TypeScriptLanguageSource.typeScriptReservedWords
-      @@ (Names.localNameOf @@ var "bname")) $
-    "bterm" <~ Core.bindingTerm (var "b") $
-    "dterm" <~ (Strip.deannotateTerm @@ var "bterm") $
-    cases _Term (var "dterm")
-      (Just $
-        -- Non-lambda value: `const name = <expr>;`
-        "expr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "bterm") $
-        "declarator" <~ (record TS._VariableDeclarator [
-          TS._VariableDeclarator_id>>: inject TS._Pattern TS._Pattern_identifier (tsIdent @@ var "lname"),
-          TS._VariableDeclarator_init>>: just (var "expr")]) $
-        "varDecl" <~ (record TS._VariableDeclaration [
-          TS._VariableDeclaration_kind>>: inject TS._VariableKind TS._VariableKind_const unit,
-          TS._VariableDeclaration_declarations>>: list [var "declarator"]]) $
-        inject TS._Statement TS._Statement_variableDeclaration (var "varDecl")) [
-      _Term_lambda>>: lambda "_lam" $
-        -- Lambda value: emit `function name(...) { ... }` so it hoists and can
-        -- self-reference (recursive let). The inner function is itself built
-        -- via the function-structure pipeline.
-        "innerFunDecl" <~ (functionDeclarationFromTerm @@ var "cx" @@ var "g" @@ var "currentNs"
-          @@ var "lname" @@ var "bterm"
-          @@ (Maybes.bind (Core.bindingTypeScheme (var "b"))
-                ("ts" ~> just (Core.typeSchemeBody (var "ts"))))) $
-        inject TS._Statement TS._Statement_functionDeclaration (var "innerFunDecl")]
-
--- | Build a TS `FunctionDeclaration` from a Hydra term. Uses
--- `Analysis.analyzeFunctionTerm` to peel lambdas (and any nested let bindings)
--- into the FunctionStructure shape: explicit params + statements + body.
--- The `mScheme :: Maybe Type` arg is the binding's known type scheme body
--- (for codomain inference); pass `Nothing` if not available.
-functionDeclarationFromTerm :: TTermDefinition (InferenceContext -> Graph -> ModuleName -> String -> Term -> Maybe Type -> TS.FunctionDeclaration)
-functionDeclarationFromTerm = def "functionDeclarationFromTerm" $
-  "cx" ~> "g" ~> "currentNs" ~> "lname" ~> "term" ~> "_mScheme" ~>
-    "fsE" <~ (analyzeTypeScriptFunction @@ var "cx" @@ var "g" @@ var "term") $
-    "fs" <~ Eithers.either_
-      (lambda "_err" $ record _FunctionStructure [
-        _FunctionStructure_typeParams>>: list ([] :: [TTerm Name]),
-        _FunctionStructure_params>>: list ([] :: [TTerm Name]),
-        _FunctionStructure_bindings>>: list ([] :: [TTerm Binding]),
-        _FunctionStructure_body>>: var "term",
-        _FunctionStructure_domains>>: list ([] :: [TTerm Type]),
-        _FunctionStructure_codomain>>: (nothing :: TTerm (Maybe Type)),
-        _FunctionStructure_environment>>: var "g"])
-      (lambda "ok" $ var "ok")
-      (var "fsE") $
-    "fsParams" <~ (project _FunctionStructure _FunctionStructure_params @@ var "fs") $
-    "fsDoms" <~ (project _FunctionStructure _FunctionStructure_domains @@ var "fs") $
-    "fsBindings" <~ (project _FunctionStructure _FunctionStructure_bindings @@ var "fs") $
-    "fsBody" <~ (project _FunctionStructure _FunctionStructure_body @@ var "fs") $
-    "fsEnv" <~ (project _FunctionStructure _FunctionStructure_environment @@ var "fs") $
-    -- Pad `fsDoms` with a Type_variable "_" sentinel up to fsParams length:
-    -- eta-expanded params (from kernel adapt's doExpand) come back with
-    -- empty domains, so a naive zip drops them entirely, producing
-    -- `function name() { ... }` with the parameter elided from the
-    -- signature. Padding ensures every param appears, typed as `any`
-    -- via the `_Type_variable "_"` arm of encodeParam.
-    "domPad" <~ Core.typeVariable (Core.name (string "_")) $
-    "fsDomsPadded" <~ (Lists.concat2 (var "fsDoms")
-      (Lists.replicate
-        (Math.sub (Lists.length (var "fsParams")) (Lists.length (var "fsDoms")))
-        (var "domPad"))) $
-    "paramPatterns" <~ (Lists.map
-      (lambda "pair" $ encodeParam @@ var "cx" @@ var "fsEnv" @@ (Pairs.first $ var "pair") @@ (Pairs.second $ var "pair"))
-      (Lists.zip (var "fsParams") (var "fsDomsPadded"))) $
-    "sortedBindings" <~ (sortBindingsTopologically @@ var "fsBindings") $
-    "bindingStmts" <~ (Lists.map
-      (lambda "b" $ encodeBindingAsStatement @@ var "cx" @@ var "fsEnv" @@ var "currentNs" @@ var "b")
-      (var "sortedBindings")) $
-    "bodyExpr" <~ (encodeTerm @@ var "cx" @@ var "fsEnv" @@ var "currentNs" @@ var "fsBody") $
-    "returnStmt" <~ (inject TS._Statement TS._Statement_return (just (var "bodyExpr"))) $
-    "block" <~ (Lists.concat2 (var "bindingStmts") (list [var "returnStmt"])) $
-    record TS._FunctionDeclaration [
-      TS._FunctionDeclaration_id>>: tsIdent @@ var "lname",
-      TS._FunctionDeclaration_params>>: var "paramPatterns",
-      TS._FunctionDeclaration_body>>: var "block",
-      TS._FunctionDeclaration_async>>: boolean False,
-      TS._FunctionDeclaration_generator>>: boolean False]
-
 -- | Render a Hydra term definition as a TypeScript module item.
 --
 -- Drives encoding through `Analysis.analyzeFunctionTerm`, mirroring the Java
@@ -1714,265 +879,549 @@ encodeTermDefinition = def "encodeTermDefinition" $
 -- directly: just interface declarations and type aliases. Layout is
 -- minimal — one declaration per block, members one per line.
 
--- | Render a TypeScript Literal as source text. Only the variants that
--- appear in generated declarations are handled in detail.
-printLiteral :: TTermDefinition (TS.Literal -> String)
-printLiteral = def "printLiteral" $
-  lambda "lit" $ cases TS._Literal (var "lit") (Just $ string "null") [
-    TS._Literal_string>>: lambda "sl" $
-      tsEscapeString @@ (project TS._StringLiteral TS._StringLiteral_value @@ var "sl"),
-    TS._Literal_boolean>>: lambda "b" $
-      Logic.ifElse (var "b") (string "true") (string "false"),
-    TS._Literal_null>>: constant $ string "null",
-    TS._Literal_undefined>>: constant $ string "undefined"]
-
--- | Render a TypeScript TypeExpression as source text.
-printTypeExpression :: TTermDefinition (TS.TypeExpression -> String)
-printTypeExpression = def "printTypeExpression" $
-  lambda "t" $ cases TS._TypeExpression (var "t") (Just $ string "unknown") [
-    TS._TypeExpression_identifier>>: lambda "i" $
-      unwrap TS._Identifier @@ var "i",
-    TS._TypeExpression_literal>>: lambda "l" $
-      printLiteral @@ var "l",
-    TS._TypeExpression_array>>: lambda "inner" $
-      Strings.cat (list [
-        string "ReadonlyArray<",
-        printTypeExpression @@ (unwrap TS._ArrayTypeExpression @@ var "inner"),
-        string ">"]),
-    TS._TypeExpression_tuple>>: lambda "ts" $
-      Strings.cat (list [
-        string "readonly [",
-        Strings.intercalate (string ", ") (Lists.map (asTerm printTypeExpression) (var "ts")),
-        string "]"]),
-    TS._TypeExpression_union>>: lambda "ts" $
-      Strings.intercalate (string " | ")
-        (Lists.map (asTerm printTypeExpression) (var "ts")),
-    TS._TypeExpression_intersection>>: lambda "ts" $
-      Strings.intercalate (string " & ")
-        (Lists.map (asTerm printTypeExpression) (var "ts")),
-    TS._TypeExpression_parameterized>>: lambda "p" $
-      Strings.cat (list [
-        printTypeExpression @@ (project TS._ParameterizedTypeExpression TS._ParameterizedTypeExpression_base @@ var "p"),
-        string "<",
-        Strings.intercalate (string ", ")
-          (Lists.map (asTerm printTypeExpression)
-            (project TS._ParameterizedTypeExpression TS._ParameterizedTypeExpression_arguments @@ var "p")),
-        string ">"]),
-    TS._TypeExpression_optional>>: lambda "inner" $
-      Strings.cat (list [
-        printTypeExpression @@ var "inner",
-        string " | undefined"]),
-    TS._TypeExpression_readonly>>: lambda "inner" $
-      Strings.cat2 (string "readonly ") (printTypeExpression @@ var "inner"),
-    TS._TypeExpression_object>>: lambda "ms" $
-      Strings.cat (list [
-        string "{ ",
-        Strings.intercalate (string "; ")
-          (Lists.map (asTerm printPropertySignature) (var "ms")),
-        string " }"]),
-    -- Function types rendered as `(...args: any[]) => any`. The kernel's
-    -- curried types (`A -> B -> C`) don't match the coder's flat-call ABI
-    -- (`(a, b) => c`); variadic-any sidesteps arity mismatch and ts2304
-    -- "Cannot find name TN" from unbound type variables in inner contexts.
-    TS._TypeExpression_function>>: constant $
-      string "((...args: any[]) => any)",
-    TS._TypeExpression_any>>: constant $ string "any",
-    TS._TypeExpression_unknown>>: constant $ string "unknown",
-    TS._TypeExpression_void>>: constant $ string "void",
-    TS._TypeExpression_never>>: constant $ string "never"]
-
--- | Render a property signature: optional JSDoc comment, then
--- `[readonly ]<name>[?]: <type>`. The comment, when present, is prepended
--- followed by a newline so the formatted member is e.g.
---   /**
---    * Doc text.
---    */
---   readonly fieldName: T;
-printPropertySignature :: TTermDefinition (TS.PropertySignature -> String)
-printPropertySignature = def "printPropertySignature" $
-  lambda "ps" $
-    "mcomments" <~ (project TS._PropertySignature TS._PropertySignature_comments @@ var "ps") $
-    "line" <~ Strings.cat (list [
-      Logic.ifElse (project TS._PropertySignature TS._PropertySignature_readonly @@ var "ps")
-        (string "readonly ") (string ""),
-      unwrap TS._Identifier @@ (project TS._PropertySignature TS._PropertySignature_name @@ var "ps"),
-      Logic.ifElse (project TS._PropertySignature TS._PropertySignature_optional @@ var "ps")
-        (string "?") (string ""),
-      string ": ",
-      printTypeExpression @@ (project TS._PropertySignature TS._PropertySignature_type @@ var "ps")]) $
-    Maybes.cases (var "mcomments")
-      (var "line")
-      (lambda "dc" $ Strings.cat (list [
-        TypeScriptSerdeSource.toTypeScriptComments
-          @@ (project TS._DocumentationComment TS._DocumentationComment_description @@ var "dc")
-          @@ (project TS._DocumentationComment TS._DocumentationComment_tags @@ var "dc"),
-        string "\n",
-        var "line"]))
-
--- | Render one generic parameter (with optional `extends` constraint).
-printTypeParameter :: TTermDefinition (TS.TypeParameter -> String)
-printTypeParameter = def "printTypeParameter" $
-  lambda "tp" $
-    "name" <~ (unwrap TS._Identifier @@ (project TS._TypeParameter TS._TypeParameter_name @@ var "tp")) $
-    "constraint" <~ (project TS._TypeParameter TS._TypeParameter_constraint @@ var "tp") $
-    Maybes.cases (var "constraint")
-      (var "name")
-      (lambda "c" $ Strings.cat (list [
-        var "name",
-        string " extends ",
-        printTypeExpression @@ var "c"]))
-
--- | Render a `<T, U extends Foo>` block, or empty string when no parameters.
-printTypeParameterList :: TTermDefinition ([TS.TypeParameter] -> String)
-printTypeParameterList = def "printTypeParameterList" $
-  lambda "tps" $
-    Logic.ifElse (Lists.null (var "tps"))
-      (string "")
-      (Strings.cat (list [
-        string "<",
-        Strings.intercalate (string ", ")
-          (Lists.map (asTerm printTypeParameter) (var "tps")),
-        string ">"]))
-
--- | Render an interface declaration:
+-- | Map a Hydra Type to a TypeScript TypeExpression.
 --
---     export interface Foo<T> extends Bar {
---       readonly field: T;
---     }
-printInterfaceDeclaration :: TTermDefinition (TS.InterfaceDeclaration -> String)
-printInterfaceDeclaration = def "printInterfaceDeclaration" $
-  lambda "decl" $
-    "name" <~ (unwrap TS._Identifier @@ (project TS._InterfaceDeclaration TS._InterfaceDeclaration_name @@ var "decl")) $
-    "params" <~ (printTypeParameterList @@ (project TS._InterfaceDeclaration TS._InterfaceDeclaration_typeParameters @@ var "decl")) $
-    "exts" <~ (project TS._InterfaceDeclaration TS._InterfaceDeclaration_extends @@ var "decl") $
-    "extClause" <~ Logic.ifElse (Lists.null (var "exts"))
-      (string "")
-      (Strings.cat2 (string " extends ")
-        (Strings.intercalate (string ", ")
-          (Lists.map (asTerm printTypeExpression) (var "exts")))) $
-    "members" <~ (project TS._InterfaceDeclaration TS._InterfaceDeclaration_members @@ var "decl") $
-    "renderMember" <~ ("ps" ~>
-      Strings.intercalate (string "\n  ")
-        (Strings.lines (asTerm printPropertySignature @@ var "ps"))) $
-    "body" <~ Logic.ifElse (Lists.null (var "members"))
-      (string "")
-      (Strings.cat (list [
-        string "\n  ",
-        Strings.intercalate (string ";\n  ")
-          (Lists.map (var "renderMember") (var "members")),
-        string ";\n"])) $
-    Strings.cat (list [
-      string "export interface ",
-      var "name",
-      var "params",
-      var "extClause",
-      string " {",
-      var "body",
-      string "}\n"])
+-- Anonymous records and unions are rejected — they must appear as the body of
+-- a named TypeDefinition so the coder can emit an interface or discriminated-
+-- union alias.
+encodeType :: TTermDefinition (InferenceContext -> Graph -> Type -> Either Error TS.TypeExpression)
+encodeType = def "encodeType" $
+  "cx" ~> "g" ~> lambda "t" $
+    "typ" <~ (Strip.deannotateType @@ var "t") $
+    cases _Type (var "typ") Nothing [
+      _Type_annotated>>: lambda "at" $
+        encodeType @@ var "cx" @@ var "g" @@ Core.annotatedTypeBody (var "at"),
+      -- Type application: unwind nested ApplicationType chains so a Hydra
+      -- App(App(F, A), B) becomes a TS `F<A, B>`. The head must encode to
+      -- an identifier (otherwise we fall back to the head alone — a known
+      -- limitation when the head is e.g. another parameterized application).
+      _Type_application>>: lambda "at" $
+        "fnTyp" <~ Core.applicationTypeFunction (var "at") $
+        "argTyp" <~ Core.applicationTypeArgument (var "at") $
+        "encFn" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "fnTyp") $
+        "encArg" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "argTyp") $
+          cases TS._TypeExpression (var "encFn") (Just (right (var "encFn"))) [
+            -- F<arg>: head was a bare identifier
+            TS._TypeExpression_identifier>>: lambda "_id" $
+              right (inject TS._TypeExpression TS._TypeExpression_parameterized $
+                record TS._ParameterizedTypeExpression [
+                  TS._ParameterizedTypeExpression_base>>: var "encFn",
+                  TS._ParameterizedTypeExpression_arguments>>: list [var "encArg"]]),
+            -- F<a><b> -- chain: append to existing argument list
+            TS._TypeExpression_parameterized>>: lambda "p" $
+              right (inject TS._TypeExpression TS._TypeExpression_parameterized $
+                record TS._ParameterizedTypeExpression [
+                  TS._ParameterizedTypeExpression_base>>:
+                    project TS._ParameterizedTypeExpression TS._ParameterizedTypeExpression_base @@ var "p",
+                  TS._ParameterizedTypeExpression_arguments>>:
+                    Lists.concat2
+                      (project TS._ParameterizedTypeExpression TS._ParameterizedTypeExpression_arguments @@ var "p")
+                      (list [var "encArg"])])],
+      _Type_forall>>: lambda "fa" $
+        encodeType @@ var "cx" @@ var "g" @@ Core.forallTypeBody (var "fa"),
+      _Type_unit>>: constant $
+        right (inject TS._TypeExpression TS._TypeExpression_void unit),
+      _Type_void>>: constant $
+        right (inject TS._TypeExpression TS._TypeExpression_never unit),
+      _Type_literal>>: lambda "lt" $
+        right (encodeLiteralType @@ var "lt"),
+      _Type_list>>: lambda "inner" $
+        Eithers.map (lambda "enc" $ tsParamApp1 @@ string "ReadonlyArray" @@ var "enc")
+          (encodeType @@ var "cx" @@ var "g" @@ var "inner"),
+      _Type_set>>: lambda "inner" $
+        Eithers.map (asTerm tsReadonlySet)
+          (encodeType @@ var "cx" @@ var "g" @@ var "inner"),
+      _Type_map>>: lambda "mt" $
+        "kt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeKeys (var "mt")) $
+        "vt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeValues (var "mt")) $
+          right (tsReadonlyMap @@ var "kt" @@ var "vt"),
+      -- Encode `Maybe T` inline as `{tag: "just", value: T} | {tag: "nothing"}`
+      -- matching the runtime value encoding, rather than `T | undefined`
+      -- (which mismatched the kernel's `{tag: "just", value: x}` literals).
+      -- Inlining (like Either) avoids needing a Maybe import in every module.
+      _Type_maybe>>: lambda "inner" $
+        Eithers.map (lambda "enc" $
+          inject TS._TypeExpression TS._TypeExpression_union (list [
+            inject TS._TypeExpression TS._TypeExpression_object $ list [
+              tsPropSig @@ string "tag" @@ boolean False
+                @@ (inject TS._TypeExpression TS._TypeExpression_literal $
+                      inject TS._Literal TS._Literal_string $
+                      record TS._StringLiteral [
+                        TS._StringLiteral_value>>: string "just",
+                        TS._StringLiteral_singleQuote>>: boolean False]),
+              tsPropSig @@ string "value" @@ boolean False @@ var "enc"],
+            inject TS._TypeExpression TS._TypeExpression_object $ list [
+              tsPropSig @@ string "tag" @@ boolean False
+                @@ (inject TS._TypeExpression TS._TypeExpression_literal $
+                      inject TS._Literal TS._Literal_string $
+                      record TS._StringLiteral [
+                        TS._StringLiteral_value>>: string "nothing",
+                        TS._StringLiteral_singleQuote>>: boolean False])]]))
+          (encodeType @@ var "cx" @@ var "g" @@ var "inner"),
+      -- Either is emitted inline as `{ tag: "left", value: L } | { tag: "right", value: R }`
+      -- to avoid needing a runtime `Either` import in every generated module.
+      _Type_either>>: lambda "et" $
+        "lt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.eitherTypeLeft (var "et")) $
+        "rt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.eitherTypeRight (var "et")) $
+          "leftArm" <~ (inject TS._TypeExpression TS._TypeExpression_object $ list [
+            tsPropSig @@ string "tag" @@ boolean False
+              @@ (inject TS._TypeExpression TS._TypeExpression_literal $
+                    inject TS._Literal TS._Literal_string $
+                    record TS._StringLiteral [
+                      TS._StringLiteral_value>>: string "left",
+                      TS._StringLiteral_singleQuote>>: boolean False]),
+            tsPropSig @@ string "value" @@ boolean False @@ var "lt"]) $
+          "rightArm" <~ (inject TS._TypeExpression TS._TypeExpression_object $ list [
+            tsPropSig @@ string "tag" @@ boolean False
+              @@ (inject TS._TypeExpression TS._TypeExpression_literal $
+                    inject TS._Literal TS._Literal_string $
+                    record TS._StringLiteral [
+                      TS._StringLiteral_value>>: string "right",
+                      TS._StringLiteral_singleQuote>>: boolean False]),
+            tsPropSig @@ string "value" @@ boolean False @@ var "rt"]) $
+          right (inject TS._TypeExpression TS._TypeExpression_union $ list [
+            var "leftArm", var "rightArm"]),
+      _Type_pair>>: lambda "pt" $
+        "ft" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.pairTypeFirst (var "pt")) $
+        "st" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.pairTypeSecond (var "pt")) $
+          right (tsTuple @@ list [var "ft", var "st"]),
+      _Type_function>>: lambda "ft" $
+        "dom" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeDomain (var "ft")) $
+        "cod" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeCodomain (var "ft")) $
+          right (inject TS._TypeExpression TS._TypeExpression_function $
+            record TS._FunctionTypeExpression [
+              TS._FunctionTypeExpression_typeParameters>>: list ([] :: [TTerm TS.TypeParameter]),
+              TS._FunctionTypeExpression_parameters>>: list [var "dom"],
+              TS._FunctionTypeExpression_returnType>>: var "cod"]),
+      _Type_variable>>: lambda "name" $
+        right (tsNamedType @@ (Formatting.capitalize @@ (Names.localNameOf @@ var "name"))),
+      _Type_wrap>>: lambda "wt" $
+        encodeType @@ var "cx" @@ var "g" @@ var "wt",
+      -- Anonymous records: emit as inline object types `{ readonly f: T, ... }`.
+      _Type_record>>: lambda "fts" $
+        "members" <<~ (Eithers.mapList
+          (lambda "ft" $
+            "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
+            "ftyp"  <~ Core.fieldTypeType (var "ft") $
+            "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
+              right (tsPropSig @@ var "fname" @@ boolean False @@ var "sftyp"))
+          (var "fts")) $
+          right (inject TS._TypeExpression TS._TypeExpression_object (var "members")),
+      -- Anonymous unions: emit as a TypeScript union of discriminated arms.
+      _Type_union>>: lambda "fts" $
+        "arms" <<~ (Eithers.mapList
+          (lambda "ft" $
+            "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
+            "ftyp"  <~ Core.fieldTypeType (var "ft") $
+            "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
+              right (inject TS._TypeExpression TS._TypeExpression_object $ list [
+                tsPropSig @@ string "tag" @@ boolean False
+                  @@ (inject TS._TypeExpression TS._TypeExpression_literal $
+                        inject TS._Literal TS._Literal_string $
+                        record TS._StringLiteral [
+                          TS._StringLiteral_value>>: var "fname",
+                          TS._StringLiteral_singleQuote>>: boolean False]),
+                tsPropSig @@ string "value" @@ boolean False @@ var "sftyp"]))
+          (var "fts")) $
+          right (inject TS._TypeExpression TS._TypeExpression_union (var "arms"))]
 
--- | Render a type alias declaration:
+-- =============================================================================
+-- Cross-module import collection
+-- =============================================================================
+
+-- | Encode a Hydra type definition as either an InterfaceDeclaration (records),
+-- a TypeAliasDeclaration of a discriminated union (unions), or a plain type
+-- alias (everything else).
+-- The returned pair carries an optional JSDoc description (pulled from
+-- the type's description annotation, if any) alongside the ModuleItem.
+-- `moduleToTypeScript` prepends the doc above the rendered item.
+encodeTypeDefinition :: TTermDefinition (InferenceContext -> Graph -> TypeDefinition -> Either Error (Maybe String, TS.ModuleItem))
+encodeTypeDefinition = def "encodeTypeDefinition" $
+  "cx" ~> "g" ~> lambda "tdef" $
+    "name" <~ Packaging.typeDefinitionName (var "tdef") $
+    "typScheme" <~ Packaging.typeDefinitionTypeScheme (var "tdef") $
+    "rawTyp" <~ Core.typeSchemeBody (var "typScheme") $
+    "lname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ var "name")) $
+    "mdoc" <<~ (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "rawTyp") $
+    -- Walk leading foralls to harvest type parameters; the body is what we
+    -- actually encode. This matches how Hydra represents generic types — the
+    -- outer foralls bind the variables that appear inside.
+    "forallParams" <~ (collectForallParams @@ var "rawTyp") $
+    "typ" <~ (stripForalls @@ var "rawTyp") $
+    "typeParams" <~ (Lists.map
+      (lambda "v" $ tsParam @@ (Formatting.capitalize @@ Core.unName (var "v")))
+      (var "forallParams")) $
+    "dtyp" <~ (Strip.deannotateType @@ var "typ") $
+    cases _Type (var "dtyp") (Just $
+        -- Fallback: a plain type alias `type Foo<T...> = <encoded>;`
+        "styp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
+          right (pair (var "mdoc") (inject TS._ModuleItem TS._ModuleItem_typeAlias $
+            record TS._TypeAliasDeclaration [
+              TS._TypeAliasDeclaration_name>>: tsIdent @@ var "lname",
+              TS._TypeAliasDeclaration_typeParameters>>: var "typeParams",
+              TS._TypeAliasDeclaration_type>>: var "styp"])))
+      [_Type_record>>: lambda "fts" $
+        "members" <<~ (Eithers.mapList
+          (lambda "ft" $
+            "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
+            "ftyp"  <~ Core.fieldTypeType (var "ft") $
+            "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
+            "mfdoc" <<~ (Annotations.commentsFromFieldType @@ var "cx" @@ var "g" @@ var "ft") $
+              right (tsPropSigWithDoc @@ var "fname" @@ boolean False @@ var "sftyp" @@ (mkDocComment @@ var "mfdoc")))
+          (var "fts")) $
+          right (pair (var "mdoc") (inject TS._ModuleItem TS._ModuleItem_interface $
+            record TS._InterfaceDeclaration [
+              TS._InterfaceDeclaration_name>>: tsIdent @@ var "lname",
+              TS._InterfaceDeclaration_typeParameters>>: var "typeParams",
+              TS._InterfaceDeclaration_extends>>: list ([] :: [TTerm TS.TypeExpression]),
+              TS._InterfaceDeclaration_members>>: var "members"])),
+      _Type_union>>: lambda "fts" $
+        -- Each union field becomes one discriminated-union arm:
+        --   `{ readonly tag: "<fname>"; readonly value: <encoded fty> }`
+        "arms" <<~ (Eithers.mapList
+          (lambda "ft" $
+            "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
+            "ftyp"  <~ Core.fieldTypeType (var "ft") $
+            "dtyp2" <~ (Strip.deannotateType @@ var "ftyp") $
+            -- For unit-shaped variants, emit `{ readonly tag: "fname" }`
+            -- (no `value` field).
+            cases _Type (var "dtyp2") (Just $
+              "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
+                right (inject TS._TypeExpression TS._TypeExpression_object $ list [
+                  tsPropSig @@ string "tag" @@ boolean False
+                    @@ (inject TS._TypeExpression TS._TypeExpression_literal $
+                          inject TS._Literal TS._Literal_string $
+                          record TS._StringLiteral [
+                            TS._StringLiteral_value>>: var "fname",
+                            TS._StringLiteral_singleQuote>>: boolean False]),
+                  tsPropSig @@ string "value" @@ boolean False @@ var "sftyp"]))
+              [_Type_unit>>: constant $
+                right (inject TS._TypeExpression TS._TypeExpression_object $ list [
+                  tsPropSig @@ string "tag" @@ boolean False
+                    @@ (inject TS._TypeExpression TS._TypeExpression_literal $
+                          inject TS._Literal TS._Literal_string $
+                          record TS._StringLiteral [
+                            TS._StringLiteral_value>>: var "fname",
+                            TS._StringLiteral_singleQuote>>: boolean False])])])
+          (var "fts")) $
+          right (pair (var "mdoc") (inject TS._ModuleItem TS._ModuleItem_typeAlias $
+            record TS._TypeAliasDeclaration [
+              TS._TypeAliasDeclaration_name>>: tsIdent @@ var "lname",
+              TS._TypeAliasDeclaration_typeParameters>>: var "typeParams",
+              TS._TypeAliasDeclaration_type>>: inject TS._TypeExpression TS._TypeExpression_union (var "arms")])),
+      _Type_wrap>>: lambda "wt" $
+        -- A wrap type becomes a single-field interface with a `_tag` brand.
+        -- Wrap-type interface: single `value` field. We previously emitted
+        -- a `_tag: "TypeName"` brand for nominal typing, but the kernel
+        -- term-level emission for `Term_wrap` doesn't add `_tag`, and
+        -- doing so breaks runtime value-equality keying in `lib/maps.ts`
+        -- (canonical strings differ between primitive Names and term Names).
+        -- Structural typing without the brand is good enough — TS unions
+        -- still discriminate on shape because each wrap type has a unique
+        -- payload-type combination.
+        "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "wt") $
+          right (pair (var "mdoc") (inject TS._ModuleItem TS._ModuleItem_interface $
+            record TS._InterfaceDeclaration [
+              TS._InterfaceDeclaration_name>>: tsIdent @@ var "lname",
+              TS._InterfaceDeclaration_typeParameters>>: var "typeParams",
+              TS._InterfaceDeclaration_extends>>: list ([] :: [TTerm TS.TypeExpression]),
+              TS._InterfaceDeclaration_members>>: list [
+                tsPropSig @@ string "value" @@ boolean False @@ var "sftyp"]]))]
+
+-- =============================================================================
+-- Term-level encoding (direct-to-text, minimal subset)
+-- =============================================================================
 --
---     export type Foo<T> = …;
-printTypeAliasDeclaration :: TTermDefinition (TS.TypeAliasDeclaration -> String)
-printTypeAliasDeclaration = def "printTypeAliasDeclaration" $
-  lambda "decl" $
-    "name" <~ (unwrap TS._Identifier @@ (project TS._TypeAliasDeclaration TS._TypeAliasDeclaration_name @@ var "decl")) $
-    "params" <~ (printTypeParameterList @@ (project TS._TypeAliasDeclaration TS._TypeAliasDeclaration_typeParameters @@ var "decl")) $
-    "rhs" <~ (printTypeExpression @@ (project TS._TypeAliasDeclaration TS._TypeAliasDeclaration_type @@ var "decl")) $
-    Strings.cat (list [
-      string "export type ",
-      var "name",
-      var "params",
-      string " = ",
-      var "rhs",
-      string ";\n"])
+-- Encodes Hydra terms directly to TypeScript expression text. Covers the
+-- shapes that appear in the DSL helper modules:
+--   * literals (string, integer, float, boolean)
+--   * variables → identifier
+--   * lambdas → arrow functions
+--   * applications → function calls
+--   * records → object literals
+--   * inject → discriminated-union construction `{ tag: "x", value: ... }`
+--   * wrap → wrapper invocation (treated like inject for now)
+--   * list / set / map / pair → literal forms
+--   * optional → undefined or value
+--   * let → IIFE with sequential bindings
+--   * annotated → strip annotations
+-- Unsupported variants (cases, project, unwrap, either, typeApplication,
+-- typeLambda) emit a `/* unsupported */` comment so the file at least lints.
 
--- | Render a top-level module item. Only interface and type-alias arms emit
--- text today; the other arms (statement / import / export) return "".
--- | Render any ModuleItem. Interface and type-alias arms route through the
--- coder-local declaration printers (which produce the readable, type-aware
--- output the type encoder already knows about). Statement/import/export
--- arms delegate to Serde + Serialization.printExpr — the same pipeline the
--- other coders use, giving proper indentation and newlines for terms.
-printModuleItem :: TTermDefinition (TS.ModuleItem -> String)
-printModuleItem = def "printModuleItem" $
-  lambda "mi" $ cases TS._ModuleItem (var "mi") (Just $ string "") [
-    TS._ModuleItem_interface>>: asTerm printInterfaceDeclaration,
-    TS._ModuleItem_typeAlias>>: asTerm printTypeAliasDeclaration,
-    TS._ModuleItem_statement>>: lambda "_s" $
-      Serialization.printExpr @@ (TypeScriptSerdeSource.moduleItemToExpr @@ var "mi"),
-    TS._ModuleItem_import>>: lambda "_i" $
-      Serialization.printExpr @@ (TypeScriptSerdeSource.moduleItemToExpr @@ var "mi"),
-    TS._ModuleItem_export>>: lambda "_e" $
-      Serialization.printExpr @@ (TypeScriptSerdeSource.moduleItemToExpr @@ var "mi")]
+-- | Try to encode a Hydra `Core.Type` as a TS `TypeExpression`. If `encodeType`
+-- fails (e.g. anonymous record), fall back to `any`.
+encodeTypeOrAny :: TTermDefinition (InferenceContext -> Graph -> Type -> TS.TypeExpression)
+encodeTypeOrAny = def "encodeTypeOrAny" $
+  "cx" ~> "g" ~> "typ" ~>
+    Eithers.either_
+      (lambda "_e" $ inject TS._TypeExpression TS._TypeExpression_any unit)
+      (lambda "te" $ var "te")
+      (encodeType @@ var "cx" @@ var "g" @@ var "typ")
+
+-- | Shared filter: keep only Names that have a ModuleName distinct from
+-- the current module's. Names without a ModuleName (bare lambda params)
+-- and Names in the current namespace are dropped.
+filterNonLocalNames :: TTermDefinition (ModuleName -> S.Set Name -> S.Set Name)
+filterNonLocalNames = def "filterNonLocalNames" $
+  lambda "currentNs" $ lambda "names" $
+    Sets.fromList $ Maybes.cat $ Lists.map
+      (lambda "n" $
+        Maybes.cases (Names.namespaceOf @@ var "n")
+          nothing
+          (lambda "nameNs" $
+            Logic.ifElse
+              (Equality.equal
+                (unwrap _ModuleName @@ var "currentNs")
+                (unwrap _ModuleName @@ var "nameNs"))
+              nothing
+              (just $ var "n")))
+      (Sets.toList (var "names"))
+
+-- | Walk an application spine, returning (innermost head term, args in
+-- application order). For `App (App (App f a) b) c)` returns `(f, [a,b,c])`.
+flattenApplication :: TTermDefinition (Term -> (Term, [Term]))
+flattenApplication = def "flattenApplication" $
+  lambda "t" $
+    "dt" <~ (Strip.deannotateTerm @@ var "t") $
+    cases _Term (var "dt")
+      (Just $ pair (var "t") (list ([] :: [TTerm Term]))) [
+      _Term_application>>: lambda "app" $
+        "inner" <~ (flattenApplication @@ Core.applicationFunction (var "app")) $
+        "head_" <~ Pairs.first (var "inner") $
+        "prevArgs" <~ Pairs.second (var "inner") $
+        pair (var "head_")
+             (Lists.concat2 (var "prevArgs")
+                            (Lists.singleton (Core.applicationArgument (var "app"))))]
+
+-- | Build a TS `FunctionDeclaration` from a Hydra term. Uses
+-- `Analysis.analyzeFunctionTerm` to peel lambdas (and any nested let bindings)
+-- into the FunctionStructure shape: explicit params + statements + body.
+-- The `mScheme :: Maybe Type` arg is the binding's known type scheme body
+-- (for codomain inference); pass `Nothing` if not available.
+functionDeclarationFromTerm :: TTermDefinition (InferenceContext -> Graph -> ModuleName -> String -> Term -> Maybe Type -> TS.FunctionDeclaration)
+functionDeclarationFromTerm = def "functionDeclarationFromTerm" $
+  "cx" ~> "g" ~> "currentNs" ~> "lname" ~> "term" ~> "_mScheme" ~>
+    "fsE" <~ (analyzeTypeScriptFunction @@ var "cx" @@ var "g" @@ var "term") $
+    "fs" <~ Eithers.either_
+      (lambda "_err" $ record _FunctionStructure [
+        _FunctionStructure_typeParams>>: list ([] :: [TTerm Name]),
+        _FunctionStructure_params>>: list ([] :: [TTerm Name]),
+        _FunctionStructure_bindings>>: list ([] :: [TTerm Binding]),
+        _FunctionStructure_body>>: var "term",
+        _FunctionStructure_domains>>: list ([] :: [TTerm Type]),
+        _FunctionStructure_codomain>>: (nothing :: TTerm (Maybe Type)),
+        _FunctionStructure_environment>>: var "g"])
+      (lambda "ok" $ var "ok")
+      (var "fsE") $
+    "fsParams" <~ (project _FunctionStructure _FunctionStructure_params @@ var "fs") $
+    "fsDoms" <~ (project _FunctionStructure _FunctionStructure_domains @@ var "fs") $
+    "fsBindings" <~ (project _FunctionStructure _FunctionStructure_bindings @@ var "fs") $
+    "fsBody" <~ (project _FunctionStructure _FunctionStructure_body @@ var "fs") $
+    "fsEnv" <~ (project _FunctionStructure _FunctionStructure_environment @@ var "fs") $
+    -- Pad `fsDoms` with a Type_variable "_" sentinel up to fsParams length:
+    -- eta-expanded params (from kernel adapt's doExpand) come back with
+    -- empty domains, so a naive zip drops them entirely, producing
+    -- `function name() { ... }` with the parameter elided from the
+    -- signature. Padding ensures every param appears, typed as `any`
+    -- via the `_Type_variable "_"` arm of encodeParam.
+    "domPad" <~ Core.typeVariable (Core.name (string "_")) $
+    "fsDomsPadded" <~ (Lists.concat2 (var "fsDoms")
+      (Lists.replicate
+        (Math.sub (Lists.length (var "fsParams")) (Lists.length (var "fsDoms")))
+        (var "domPad"))) $
+    "paramPatterns" <~ (Lists.map
+      (lambda "pair" $ encodeParam @@ var "cx" @@ var "fsEnv" @@ (Pairs.first $ var "pair") @@ (Pairs.second $ var "pair"))
+      (Lists.zip (var "fsParams") (var "fsDomsPadded"))) $
+    "sortedBindings" <~ (sortBindingsTopologically @@ var "fsBindings") $
+    "bindingStmts" <~ (Lists.map
+      (lambda "b" $ encodeBindingAsStatement @@ var "cx" @@ var "fsEnv" @@ var "currentNs" @@ var "b")
+      (var "sortedBindings")) $
+    "bodyExpr" <~ (encodeTerm @@ var "cx" @@ var "fsEnv" @@ var "currentNs" @@ var "fsBody") $
+    "returnStmt" <~ (inject TS._Statement TS._Statement_return (just (var "bodyExpr"))) $
+    "block" <~ (Lists.concat2 (var "bindingStmts") (list [var "returnStmt"])) $
+    record TS._FunctionDeclaration [
+      TS._FunctionDeclaration_id>>: tsIdent @@ var "lname",
+      TS._FunctionDeclaration_params>>: var "paramPatterns",
+      TS._FunctionDeclaration_body>>: var "block",
+      TS._FunctionDeclaration_async>>: boolean False,
+      TS._FunctionDeclaration_generator>>: boolean False]
+
+-- | Render a Set of qualified Names as TypeScript import statements grouped
+-- by source module. The current module's own namespace is dropped from the
+-- output so the file does not import itself.
+-- | Render imports for a Set of cross-module Names.
+--
+-- `kind` selects the import flavor:
+--   "type"  → emits `import type { ... }` with PascalCased names (for type refs).
+--   "value" → emits `import { ... }` with names verbatim (for term-level refs).
+importsToText :: TTermDefinition (String -> ModuleName -> S.Set Name -> String)
+importsToText = def "importsToText" $
+  lambda "kind" $ lambda "currentNs" $ lambda "names" $
+    -- Pair each Name with its optional ModuleName; drop ones with no namespace
+    -- or whose namespace matches the current module.
+    "pairs" <~ (Maybes.cat $ Lists.map
+      (lambda "n" $
+        Maybes.cases (Names.namespaceOf @@ var "n")
+          nothing
+          (lambda "ns" $
+            Logic.ifElse
+              (Equality.equal
+                (unwrap _ModuleName @@ var "currentNs")
+                (unwrap _ModuleName @@ var "ns"))
+              nothing
+              (just $ pair (var "ns") (var "n"))))
+      (Sets.toList (var "names"))) $
+    -- Apply the kind's case convention. `kind == "type"` → capitalize.
+    -- Value-kind imports also get reserved-word sanitization so e.g. `null`
+    -- becomes `null_`, matching the runtime's exported binding name.
+    "transformLocal" <~ (lambda "s" $
+      Logic.ifElse (Equality.equal (var "kind") (string "type"))
+        (Formatting.capitalize @@ var "s")
+        (Formatting.sanitizeWithUnderscores
+          @@ TypeScriptLanguageSource.typeScriptReservedWords @@ var "s")) $
+    "importKeyword" <~ Logic.ifElse (Equality.equal (var "kind") (string "type"))
+      (string "import type")
+      (string "import") $
+    -- Group by namespace via fold into a Map<ModuleName, [String]>.
+    "grouped" <~ (Lists.foldl
+      (lambda "acc" $ lambda "p" $
+        "ns" <~ Pairs.first (var "p") $
+        "n" <~ Pairs.second (var "p") $
+        "local" <~ (var "transformLocal" @@ (Names.localNameOf @@ var "n")) $
+        "existing" <~ (Maybes.fromMaybe (list ([] :: [TTerm String]))
+          (Maps.lookup (var "ns") (var "acc"))) $
+        Maps.insert (var "ns") (Lists.cons (var "local") (var "existing")) (var "acc"))
+      (Maps.empty :: TTerm (M.Map ModuleName [String]))
+      (var "pairs")) $
+    -- Path computation: every Hydra namespace has the form `hydra.<a>.<b>...`.
+    -- The file for ns `hydra.a.b.c` lives at `hydra/a/b/c.ts` — depth n-1
+    -- (where n is the number of segments after `hydra`). So from the
+    -- current file's directory, we walk up (n_current - 1) times then descend
+    -- through the target's path segments.
+    --
+    -- Test modules (those whose namespace starts with `hydra.test.`) live in
+    -- a sibling tree at `<dist>/src/test/typescript/hydra/test/...`, while
+    -- main modules live at `<dist>/src/main/typescript/hydra/...`. A cross-
+    -- tree import from a test module to a main module needs to escape from
+    -- src/test/typescript into src/main/typescript, hence the extra
+    -- `../../main/typescript/` segment appended to upPrefix.
+    "currentSegs" <~ (Lists.drop (int32 1)
+      (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "currentNs"))) $
+    "currentDepth" <~ (Lists.length (var "currentSegs")) $
+    "currentIsTest" <~ Logic.and
+      (Logic.not (Lists.null (var "currentSegs")))
+      (Equality.equal (Maybes.fromMaybe (string "") (Lists.maybeHead (var "currentSegs"))) (string "test")) $
+    "baseUpPrefix" <~ Logic.ifElse
+      (Equality.equal (var "currentDepth") (int32 1))
+      (string "./")
+      (Strings.cat $ Lists.replicate (Math.sub (var "currentDepth") (int32 1)) (string "../")) $
+    "lines" <~ (Lists.map
+      (lambda "entry" $
+        "ns" <~ Pairs.first (var "entry") $
+        "locals" <~ Pairs.second (var "entry") $
+        "targetSegs" <~ (Lists.drop (int32 1)
+          (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns"))) $
+        "targetIsTest" <~ Logic.and
+          (Logic.not (Lists.null (var "targetSegs")))
+          (Equality.equal (Maybes.fromMaybe (string "") (Lists.maybeHead (var "targetSegs"))) (string "test")) $
+        "targetPath" <~ Strings.intercalate (string "/") (var "targetSegs") $
+        -- Cross-tree paths: test → main needs extra "../../main/typescript/".
+        -- main → test would need the inverse, but currently no main module
+        -- imports test, so that branch is omitted.
+        -- When current is test and target is main, the path becomes:
+        --   baseUpPrefix + "../../../main/typescript/hydra/"
+        -- baseUpPrefix gets us to <test-root>/hydra/. From there:
+        --   ../   → <test-root>/typescript/ (out of hydra/)
+        --   ../   → <test-root>/test/       (out of typescript/)
+        --   ../   → <test-root>/src/        (out of test/)
+        -- then "main/typescript/hydra/" enters the main tree.
+        "upPrefix" <~ Logic.ifElse
+          (Logic.and (var "currentIsTest") (Logic.not (var "targetIsTest")))
+          (Strings.cat2 (var "baseUpPrefix") (string "../../../main/typescript/hydra/"))
+          (var "baseUpPrefix") $
+        -- For type imports keep the named form (TS supports same-named
+        -- types imported from multiple sources via separate aliases, but
+        -- we don't expect type clashes today). For value imports use
+        -- namespace-style `import * as <alias>` to dodge collisions
+        -- between like-named helpers (e.g. `map` from lists/maybes/eithers).
+        -- Build a unique alias by joining all post-`hydra.` segments with
+        -- underscores. So `hydra.test.checking.all` → `test_checking_all`,
+        -- `hydra.test.hoisting.all` → `test_hoisting_all`, avoiding the
+        -- collisions that bare last-segment aliasing would produce.
+        -- Prefix module aliases with `_` to avoid shadowing by local Hydra
+        -- identifiers. E.g. `hydra.arity` would alias as `arity`, which a
+        -- local `const arity = ...` then shadows (TDZ in JS even though
+        -- legal in Haskell). Prefix with `_` to keep aliases out of the
+        -- local-name space.
+        "moduleAlias" <~ Strings.cat2 (string "$mod_")
+          (Strings.intercalate (string "_") (var "targetSegs")) $
+        Logic.ifElse (Equality.equal (var "kind") (string "type"))
+          (Strings.cat (list [
+            var "importKeyword",
+            string " { ",
+            Strings.intercalate (string ", ") (var "locals"),
+            string " } from \"",
+            var "upPrefix",
+            var "targetPath",
+            string ".js\";\n"]))
+          (Strings.cat (list [
+            string "import * as ",
+            -- The `$mod_` prefix in moduleAlias keeps the alias out of
+            -- the local-name space and reserves any clashes for the
+            -- generator. No further sanitization needed — `$` is a
+            -- valid JS identifier character and Hydra source can't
+            -- produce a `$` in a name segment.
+            var "moduleAlias",
+            string " from \"",
+            var "upPrefix",
+            var "targetPath",
+            string ".js\";\n"])))
+      (Maps.toList (var "grouped"))) $
+    Strings.cat (var "lines")
 
 -- =============================================================================
--- Topological sort of term definitions
+-- Forall extraction helpers
 -- =============================================================================
 
--- | Reorder let-bindings so each binding appears after the sibling
--- bindings it depends on. Avoids JS Temporal Dead Zone errors when the
--- emitted block has `const a = b;` ahead of `const b = ...;` because
--- Hydra's `let` block has simultaneous-binding semantics (Haskell-style)
--- whereas JS `const` requires definitions-before-uses.
-sortBindingsTopologically :: TTermDefinition ([Binding] -> [Binding])
-sortBindingsTopologically = def "sortBindingsTopologically" $
-  lambda "bindings" $
-    "byName" <~ (Maps.fromList $ Lists.map
-      (lambda "b" $ pair (Core.bindingName (var "b")) (var "b"))
-      (var "bindings")) $
-    "adjacency" <~ (Lists.map
-      (lambda "b" $
-        "bname" <~ Core.bindingName (var "b") $
-        "bterm" <~ Core.bindingTerm (var "b") $
-        "freeVars" <~ (Variables.freeVariablesInTerm @@ var "bterm") $
-        "deps" <~ (Lists.filter
-          (lambda "n" $ Maps.member (var "n") (var "byName"))
-          (Sets.toList (var "freeVars"))) $
-        pair (var "bname") (var "deps"))
-      (var "bindings")) $
-    "sccs" <~ (Sorting.topologicalSortComponents @@ var "adjacency") $
-    Maybes.cat $ Lists.map
-      (lambda "n" $ Maps.lookup (var "n") (var "byName"))
-      (Lists.concat (var "sccs"))
-
--- | Reorder term definitions so each definition appears after the
--- intra-module definitions it depends on. This avoids JS Temporal Dead
--- Zone errors for `const` declarations that reference other constants
--- defined later in alphabetical order (which is Hydra's source order).
-sortTermDefsTopologically :: TTermDefinition (ModuleName -> [TermDefinition] -> [TermDefinition])
-sortTermDefsTopologically = def "sortTermDefsTopologically" $
-  lambda "currentNs" $ lambda "tdefs" $
-    -- Build a Map<Name, TermDefinition> keyed by full Hydra name.
-    "byName" <~ (Maps.fromList $ Lists.map
-      (lambda "td" $
-        pair (Packaging.termDefinitionName (var "td")) (var "td"))
-      (var "tdefs")) $
-    -- Build adjacency: each Name → list of in-module Names referenced
-    -- by its body.
-    "adjacency" <~ (Lists.map
-      (lambda "td" $
-        "tname" <~ Packaging.termDefinitionName (var "td") $
-        "tterm" <~ Packaging.termDefinitionTerm (var "td") $
-        "freeVars" <~ (Variables.freeVariablesInTerm @@ var "tterm") $
-        -- Keep only references that point to defs in this module.
-        "deps" <~ (Lists.filter
-          (lambda "n" $ Maps.member (var "n") (var "byName"))
-          (Sets.toList (var "freeVars"))) $
-        pair (var "tname") (var "deps"))
-      (var "tdefs")) $
-    -- topologicalSortComponents returns SCCs in dependency-first order,
-    -- which is exactly what we need for hoisting-safe init order.
-    "sccs" <~ (Sorting.topologicalSortComponents @@ var "adjacency") $
-    -- Flatten SCCs (cycles are tolerated; their order within is the input
-    -- order) and map names back to TermDefinitions.
-    Maybes.cat $ Lists.map
-      (lambda "n" $ Maps.lookup (var "n") (var "byName"))
-      (Lists.concat (var "sccs"))
-
+-- | Strip leading forall wrappers from a type, returning the unwrapped body.
+-- Annotations on intervening layers are also stripped.
 -- =============================================================================
--- Module top-level
+-- Application flattening + laziness wrapping
 -- =============================================================================
+--
+-- Hydra's `ifElse` and several `maybes`/`eithers` primitives have lazy
+-- semantics in the Haskell source: the unselected branch is never
+-- evaluated. JavaScript is strict, so we wrap the lazy positions in
+-- nullary arrow functions `() => expr` and the runtime primitive
+-- invokes them on demand. See docs/recipes/new-implementation.md
+-- (section "Lazy evaluation and thunking") for the full rationale.
+--
+-- The lazy-arg positions, mirroring Java's `wrapLazyArguments`:
+--   hydra.lib.logic.ifElse        — positions 1, 2 (then, else)
+--   hydra.lib.maybes.cases        — position 1 (nothing case)
+--   hydra.lib.maybes.maybe        — position 0 (default)
+--   hydra.lib.maybes.fromMaybe    — position 0 (default)
+--   hydra.lib.eithers.fromLeft    — position 0 (default)
+--   hydra.lib.eithers.fromRight   — position 0 (default)
+--   hydra.lib.maps.findWithDefault — position 0 (default)
+--
+-- The TS-side primitive accepts either a value or a thunk and calls the
+-- thunk when needed (mirroring Python's `callable()` check).
+
+-- | Build a `DocumentationComment` from an optional description string.
+-- Returns Nothing when the description is missing or empty so callers can
+-- propagate "no doc" through the AST. Tags are always empty here; we only
+-- emit narrative descriptions, not @param/@returns tags (those would be
+-- duplicative with TS's own type annotations).
+mkDocComment :: TTermDefinition (Maybe String -> Maybe TS.DocumentationComment)
+mkDocComment = def "mkDocComment" $
+  lambda "mdesc" $ Maybes.cases (var "mdesc")
+    nothing
+    (lambda "d" $ Logic.ifElse (Equality.equal (var "d") (string ""))
+      nothing
+      (just (record TS._DocumentationComment [
+        TS._DocumentationComment_description>>: var "d",
+        TS._DocumentationComment_tags>>: list ([] :: [TTerm TS.DocumentationTag])])))
 
 -- | Convert a Hydra module to a map from `.ts` file path to TypeScript source.
 --
@@ -2077,3 +1526,554 @@ moduleToTypeScript = def "moduleToTypeScript" $
         Logic.ifElse (Equality.equal (var "importsBlock") (string "")) (string "") (string "\n"),
         var "body",
         Logic.ifElse (Equality.equal (var "body") (string "")) (string "") (string "\n")])))
+
+-- | Render an interface declaration:
+--
+--     export interface Foo<T> extends Bar {
+--       readonly field: T;
+--     }
+printInterfaceDeclaration :: TTermDefinition (TS.InterfaceDeclaration -> String)
+printInterfaceDeclaration = def "printInterfaceDeclaration" $
+  lambda "decl" $
+    "name" <~ (unwrap TS._Identifier @@ (project TS._InterfaceDeclaration TS._InterfaceDeclaration_name @@ var "decl")) $
+    "params" <~ (printTypeParameterList @@ (project TS._InterfaceDeclaration TS._InterfaceDeclaration_typeParameters @@ var "decl")) $
+    "exts" <~ (project TS._InterfaceDeclaration TS._InterfaceDeclaration_extends @@ var "decl") $
+    "extClause" <~ Logic.ifElse (Lists.null (var "exts"))
+      (string "")
+      (Strings.cat2 (string " extends ")
+        (Strings.intercalate (string ", ")
+          (Lists.map (asTerm printTypeExpression) (var "exts")))) $
+    "members" <~ (project TS._InterfaceDeclaration TS._InterfaceDeclaration_members @@ var "decl") $
+    "renderMember" <~ ("ps" ~>
+      Strings.intercalate (string "\n  ")
+        (Strings.lines (asTerm printPropertySignature @@ var "ps"))) $
+    "body" <~ Logic.ifElse (Lists.null (var "members"))
+      (string "")
+      (Strings.cat (list [
+        string "\n  ",
+        Strings.intercalate (string ";\n  ")
+          (Lists.map (var "renderMember") (var "members")),
+        string ";\n"])) $
+    Strings.cat (list [
+      string "export interface ",
+      var "name",
+      var "params",
+      var "extClause",
+      string " {",
+      var "body",
+      string "}\n"])
+
+-- | Render a TypeScript Literal as source text. Only the variants that
+-- appear in generated declarations are handled in detail.
+printLiteral :: TTermDefinition (TS.Literal -> String)
+printLiteral = def "printLiteral" $
+  lambda "lit" $ cases TS._Literal (var "lit") (Just $ string "null") [
+    TS._Literal_string>>: lambda "sl" $
+      tsEscapeString @@ (project TS._StringLiteral TS._StringLiteral_value @@ var "sl"),
+    TS._Literal_boolean>>: lambda "b" $
+      Logic.ifElse (var "b") (string "true") (string "false"),
+    TS._Literal_null>>: constant $ string "null",
+    TS._Literal_undefined>>: constant $ string "undefined"]
+
+-- | Render a top-level module item. Only interface and type-alias arms emit
+-- text today; the other arms (statement / import / export) return "".
+-- | Render any ModuleItem. Interface and type-alias arms route through the
+-- coder-local declaration printers (which produce the readable, type-aware
+-- output the type encoder already knows about). Statement/import/export
+-- arms delegate to Serde + Serialization.printExpr — the same pipeline the
+-- other coders use, giving proper indentation and newlines for terms.
+printModuleItem :: TTermDefinition (TS.ModuleItem -> String)
+printModuleItem = def "printModuleItem" $
+  lambda "mi" $ cases TS._ModuleItem (var "mi") (Just $ string "") [
+    TS._ModuleItem_interface>>: asTerm printInterfaceDeclaration,
+    TS._ModuleItem_typeAlias>>: asTerm printTypeAliasDeclaration,
+    TS._ModuleItem_statement>>: lambda "_s" $
+      Serialization.printExpr @@ (TypeScriptSerdeSource.moduleItemToExpr @@ var "mi"),
+    TS._ModuleItem_import>>: lambda "_i" $
+      Serialization.printExpr @@ (TypeScriptSerdeSource.moduleItemToExpr @@ var "mi"),
+    TS._ModuleItem_export>>: lambda "_e" $
+      Serialization.printExpr @@ (TypeScriptSerdeSource.moduleItemToExpr @@ var "mi")]
+
+-- =============================================================================
+-- Topological sort of term definitions
+-- =============================================================================
+
+-- | Render a property signature: optional JSDoc comment, then
+-- `[readonly ]<name>[?]: <type>`. The comment, when present, is prepended
+-- followed by a newline so the formatted member is e.g.
+--   /**
+--    * Doc text.
+--    */
+--   readonly fieldName: T;
+printPropertySignature :: TTermDefinition (TS.PropertySignature -> String)
+printPropertySignature = def "printPropertySignature" $
+  lambda "ps" $
+    "mcomments" <~ (project TS._PropertySignature TS._PropertySignature_comments @@ var "ps") $
+    "line" <~ Strings.cat (list [
+      Logic.ifElse (project TS._PropertySignature TS._PropertySignature_readonly @@ var "ps")
+        (string "readonly ") (string ""),
+      unwrap TS._Identifier @@ (project TS._PropertySignature TS._PropertySignature_name @@ var "ps"),
+      Logic.ifElse (project TS._PropertySignature TS._PropertySignature_optional @@ var "ps")
+        (string "?") (string ""),
+      string ": ",
+      printTypeExpression @@ (project TS._PropertySignature TS._PropertySignature_type @@ var "ps")]) $
+    Maybes.cases (var "mcomments")
+      (var "line")
+      (lambda "dc" $ Strings.cat (list [
+        TypeScriptSerdeSource.toTypeScriptComments
+          @@ (project TS._DocumentationComment TS._DocumentationComment_description @@ var "dc")
+          @@ (project TS._DocumentationComment TS._DocumentationComment_tags @@ var "dc"),
+        string "\n",
+        var "line"]))
+
+-- | Render a type alias declaration:
+--
+--     export type Foo<T> = …;
+printTypeAliasDeclaration :: TTermDefinition (TS.TypeAliasDeclaration -> String)
+printTypeAliasDeclaration = def "printTypeAliasDeclaration" $
+  lambda "decl" $
+    "name" <~ (unwrap TS._Identifier @@ (project TS._TypeAliasDeclaration TS._TypeAliasDeclaration_name @@ var "decl")) $
+    "params" <~ (printTypeParameterList @@ (project TS._TypeAliasDeclaration TS._TypeAliasDeclaration_typeParameters @@ var "decl")) $
+    "rhs" <~ (printTypeExpression @@ (project TS._TypeAliasDeclaration TS._TypeAliasDeclaration_type @@ var "decl")) $
+    Strings.cat (list [
+      string "export type ",
+      var "name",
+      var "params",
+      string " = ",
+      var "rhs",
+      string ";\n"])
+
+-- | Render a TypeScript TypeExpression as source text.
+printTypeExpression :: TTermDefinition (TS.TypeExpression -> String)
+printTypeExpression = def "printTypeExpression" $
+  lambda "t" $ cases TS._TypeExpression (var "t") (Just $ string "unknown") [
+    TS._TypeExpression_identifier>>: lambda "i" $
+      unwrap TS._Identifier @@ var "i",
+    TS._TypeExpression_literal>>: lambda "l" $
+      printLiteral @@ var "l",
+    TS._TypeExpression_array>>: lambda "inner" $
+      Strings.cat (list [
+        string "ReadonlyArray<",
+        printTypeExpression @@ (unwrap TS._ArrayTypeExpression @@ var "inner"),
+        string ">"]),
+    TS._TypeExpression_tuple>>: lambda "ts" $
+      Strings.cat (list [
+        string "readonly [",
+        Strings.intercalate (string ", ") (Lists.map (asTerm printTypeExpression) (var "ts")),
+        string "]"]),
+    TS._TypeExpression_union>>: lambda "ts" $
+      Strings.intercalate (string " | ")
+        (Lists.map (asTerm printTypeExpression) (var "ts")),
+    TS._TypeExpression_intersection>>: lambda "ts" $
+      Strings.intercalate (string " & ")
+        (Lists.map (asTerm printTypeExpression) (var "ts")),
+    TS._TypeExpression_parameterized>>: lambda "p" $
+      Strings.cat (list [
+        printTypeExpression @@ (project TS._ParameterizedTypeExpression TS._ParameterizedTypeExpression_base @@ var "p"),
+        string "<",
+        Strings.intercalate (string ", ")
+          (Lists.map (asTerm printTypeExpression)
+            (project TS._ParameterizedTypeExpression TS._ParameterizedTypeExpression_arguments @@ var "p")),
+        string ">"]),
+    TS._TypeExpression_optional>>: lambda "inner" $
+      Strings.cat (list [
+        printTypeExpression @@ var "inner",
+        string " | undefined"]),
+    TS._TypeExpression_readonly>>: lambda "inner" $
+      Strings.cat2 (string "readonly ") (printTypeExpression @@ var "inner"),
+    TS._TypeExpression_object>>: lambda "ms" $
+      Strings.cat (list [
+        string "{ ",
+        Strings.intercalate (string "; ")
+          (Lists.map (asTerm printPropertySignature) (var "ms")),
+        string " }"]),
+    -- Function types rendered as `(...args: any[]) => any`. The kernel's
+    -- curried types (`A -> B -> C`) don't match the coder's flat-call ABI
+    -- (`(a, b) => c`); variadic-any sidesteps arity mismatch and ts2304
+    -- "Cannot find name TN" from unbound type variables in inner contexts.
+    TS._TypeExpression_function>>: constant $
+      string "((...args: any[]) => any)",
+    TS._TypeExpression_any>>: constant $ string "any",
+    TS._TypeExpression_unknown>>: constant $ string "unknown",
+    TS._TypeExpression_void>>: constant $ string "void",
+    TS._TypeExpression_never>>: constant $ string "never"]
+
+-- | Render one generic parameter (with optional `extends` constraint).
+printTypeParameter :: TTermDefinition (TS.TypeParameter -> String)
+printTypeParameter = def "printTypeParameter" $
+  lambda "tp" $
+    "name" <~ (unwrap TS._Identifier @@ (project TS._TypeParameter TS._TypeParameter_name @@ var "tp")) $
+    "constraint" <~ (project TS._TypeParameter TS._TypeParameter_constraint @@ var "tp") $
+    Maybes.cases (var "constraint")
+      (var "name")
+      (lambda "c" $ Strings.cat (list [
+        var "name",
+        string " extends ",
+        printTypeExpression @@ var "c"]))
+
+-- | Render a `<T, U extends Foo>` block, or empty string when no parameters.
+printTypeParameterList :: TTermDefinition ([TS.TypeParameter] -> String)
+printTypeParameterList = def "printTypeParameterList" $
+  lambda "tps" $
+    Logic.ifElse (Lists.null (var "tps"))
+      (string "")
+      (Strings.cat (list [
+        string "<",
+        Strings.intercalate (string ", ")
+          (Lists.map (asTerm printTypeParameter) (var "tps")),
+        string ">"]))
+
+-- | Sanitize a Hydra parameter name into a valid (and non-reserved) TS identifier.
+sanitizeParamName :: TTermDefinition (Name -> String)
+sanitizeParamName = def "sanitizeParamName" $
+  lambda "n" $ Formatting.sanitizeWithUnderscores
+    @@ TypeScriptLanguageSource.typeScriptReservedWords
+    @@ (Names.localNameOf @@ var "n")
+
+-- | Reorder let-bindings so each binding appears after the sibling
+-- bindings it depends on. Avoids JS Temporal Dead Zone errors when the
+-- emitted block has `const a = b;` ahead of `const b = ...;` because
+-- Hydra's `let` block has simultaneous-binding semantics (Haskell-style)
+-- whereas JS `const` requires definitions-before-uses.
+sortBindingsTopologically :: TTermDefinition ([Binding] -> [Binding])
+sortBindingsTopologically = def "sortBindingsTopologically" $
+  lambda "bindings" $
+    "byName" <~ (Maps.fromList $ Lists.map
+      (lambda "b" $ pair (Core.bindingName (var "b")) (var "b"))
+      (var "bindings")) $
+    "adjacency" <~ (Lists.map
+      (lambda "b" $
+        "bname" <~ Core.bindingName (var "b") $
+        "bterm" <~ Core.bindingTerm (var "b") $
+        "freeVars" <~ (Variables.freeVariablesInTerm @@ var "bterm") $
+        "deps" <~ (Lists.filter
+          (lambda "n" $ Maps.member (var "n") (var "byName"))
+          (Sets.toList (var "freeVars"))) $
+        pair (var "bname") (var "deps"))
+      (var "bindings")) $
+    "sccs" <~ (Sorting.topologicalSortComponents @@ var "adjacency") $
+    Maybes.cat $ Lists.map
+      (lambda "n" $ Maps.lookup (var "n") (var "byName"))
+      (Lists.concat (var "sccs"))
+
+-- | Reorder term definitions so each definition appears after the
+-- intra-module definitions it depends on. This avoids JS Temporal Dead
+-- Zone errors for `const` declarations that reference other constants
+-- defined later in alphabetical order (which is Hydra's source order).
+sortTermDefsTopologically :: TTermDefinition (ModuleName -> [TermDefinition] -> [TermDefinition])
+sortTermDefsTopologically = def "sortTermDefsTopologically" $
+  lambda "currentNs" $ lambda "tdefs" $
+    -- Build a Map<Name, TermDefinition> keyed by full Hydra name.
+    "byName" <~ (Maps.fromList $ Lists.map
+      (lambda "td" $
+        pair (Packaging.termDefinitionName (var "td")) (var "td"))
+      (var "tdefs")) $
+    -- Build adjacency: each Name → list of in-module Names referenced
+    -- by its body.
+    "adjacency" <~ (Lists.map
+      (lambda "td" $
+        "tname" <~ Packaging.termDefinitionName (var "td") $
+        "tterm" <~ Packaging.termDefinitionTerm (var "td") $
+        "freeVars" <~ (Variables.freeVariablesInTerm @@ var "tterm") $
+        -- Keep only references that point to defs in this module.
+        "deps" <~ (Lists.filter
+          (lambda "n" $ Maps.member (var "n") (var "byName"))
+          (Sets.toList (var "freeVars"))) $
+        pair (var "tname") (var "deps"))
+      (var "tdefs")) $
+    -- topologicalSortComponents returns SCCs in dependency-first order,
+    -- which is exactly what we need for hoisting-safe init order.
+    "sccs" <~ (Sorting.topologicalSortComponents @@ var "adjacency") $
+    -- Flatten SCCs (cycles are tolerated; their order within is the input
+    -- order) and map names back to TermDefinitions.
+    Maybes.cat $ Lists.map
+      (lambda "n" $ Maps.lookup (var "n") (var "byName"))
+      (Lists.concat (var "sccs"))
+
+-- =============================================================================
+-- Module top-level
+-- =============================================================================
+
+stripForalls :: TTermDefinition (Type -> Type)
+stripForalls = def "stripForalls" $
+  lambda "t" $
+    "dt" <~ (Strip.deannotateType @@ var "t") $
+    cases _Type (var "dt") (Just $ var "dt") [
+      _Type_forall>>: lambda "fa" $
+        stripForalls @@ Core.forallTypeBody (var "fa")]
+
+-- | If a term reduces (through annotations and type applications) to
+-- `Term_variable name`, return `Just name`; else `Nothing`. Polymorphic
+-- primitives are typically wrapped in one or more `Term_typeApplication`
+-- layers (e.g. `ifElse @TypeArg`), which the runtime erases — so we
+-- erase them here too when looking for the head.
+termHeadVariable :: TTermDefinition (Term -> Maybe Name)
+termHeadVariable = def "termHeadVariable" $
+  lambda "t" $
+    "dt" <~ (Strip.deannotateTerm @@ var "t") $
+    cases _Term (var "dt")
+      (Just (nothing :: TTerm (Maybe Name))) [
+      _Term_variable>>: lambda "n" $ just (var "n"),
+      _Term_typeApplication>>: lambda "ta" $
+        termHeadVariable @@ Core.typeApplicationTermBody (var "ta")]
+
+-- | `[e1, e2, ...]` array expression. Each element is wrapped in
+-- `ArrayElementExpression` (the AST also supports holes / spreads which we
+-- don't emit).
+tsArray :: TTermDefinition ([TS.Expression] -> TS.Expression)
+tsArray = def "tsArray" $
+  lambda "elems" $
+    inject TS._Expression TS._Expression_array $
+      Lists.map (lambda "e" $ inject TS._ArrayElement TS._ArrayElement_expression (var "e"))
+        (var "elems")
+
+-- | `(p1, p2, ...) => body` arrow function with an expression body. Parameters
+-- emit as untyped identifier patterns; type annotations are deferred until the
+-- AST grows a typed-parameter slot.
+tsArrow :: TTermDefinition ([String] -> TS.Expression -> TS.Expression)
+tsArrow = def "tsArrow" $
+  lambda "params" $ lambda "body" $
+    inject TS._Expression TS._Expression_arrow $
+      record TS._ArrowFunctionExpression [
+        TS._ArrowFunctionExpression_params>>:
+          Lists.map (lambda "p" $ inject TS._Pattern TS._Pattern_identifier (tsIdent @@ var "p"))
+            (var "params"),
+        TS._ArrowFunctionExpression_body>>:
+          inject TS._ArrowFunctionBody TS._ArrowFunctionBody_expression (var "body"),
+        TS._ArrowFunctionExpression_async>>: boolean False]
+
+-- | `(p1: T1, p2: T2, ...) => body` arrow function with typed patterns.
+-- Used by inline `_Term_lambda` emission to satisfy `noImplicitAny`.
+tsArrowTyped :: TTermDefinition ([TS.Pattern] -> TS.Expression -> TS.Expression)
+tsArrowTyped = def "tsArrowTyped" $
+  lambda "patterns" $ lambda "body" $
+    inject TS._Expression TS._Expression_arrow $
+      record TS._ArrowFunctionExpression [
+        TS._ArrowFunctionExpression_params>>: var "patterns",
+        TS._ArrowFunctionExpression_body>>:
+          inject TS._ArrowFunctionBody TS._ArrowFunctionBody_expression (var "body"),
+        TS._ArrowFunctionExpression_async>>: boolean False]
+
+-- | Wrap an expression in a TypeScript `as any` cast. Used at sites where
+-- the kernel emits a structural object literal that tsc would reject
+-- against a nominal discriminated-union target (`{tag: "...", value: ...}`
+-- vs `Term`/`Type`/`Maybe<T>`). The runtime is unaffected.
+tsAsAny :: TTermDefinition (TS.Expression -> TS.Expression)
+tsAsAny = def "tsAsAny" $
+  lambda "e" $
+    inject TS._Expression TS._Expression_asExpression $
+      record TS._AsExpression [
+        TS._AsExpression_expression>>: var "e",
+        TS._AsExpression_type>>: inject TS._TypeExpression TS._TypeExpression_any unit]
+
+-- | `callee(arg, ...)` call expression. Wraps the callee in parens iff it's
+-- an arrow function or other expression that's ambiguous as a call target.
+tsCall :: TTermDefinition (TS.Expression -> [TS.Expression] -> TS.Expression)
+tsCall = def "tsCall" $
+  lambda "callee" $ lambda "args" $
+    inject TS._Expression TS._Expression_call $
+      record TS._CallExpression [
+        TS._CallExpression_callee>>: var "callee",
+        TS._CallExpression_arguments>>: var "args",
+        TS._CallExpression_optional>>: boolean False]
+
+-- | `test ? consequent : alternate`.
+tsCond :: TTermDefinition (TS.Expression -> TS.Expression -> TS.Expression -> TS.Expression)
+tsCond = def "tsCond" $
+  lambda "test" $ lambda "cons" $ lambda "alt" $
+    inject TS._Expression TS._Expression_conditional $
+      record TS._ConditionalExpression [
+        TS._ConditionalExpression_test>>: var "test",
+        TS._ConditionalExpression_consequent>>: var "cons",
+        TS._ConditionalExpression_alternate>>: var "alt"]
+
+-- | `\g -> g`. Identity getter for `analyzeFunctionTerm` when env == Graph.
+-- Defined as a top-level helper (with explicit type) so the kernel-to-host
+-- translation can resolve it; inline anonymous lambdas trip the Java/Python
+-- coders' "untyped term variable" check when the surrounding HOF (here,
+-- `Analysis.analyzeFunctionTerm`) is polymorphic.
+tsEnvGetGraph :: TTermDefinition (Graph -> Graph)
+tsEnvGetGraph = def "tsEnvGetGraph" $ lambda "g" $ var "g"
+
+-- | `\new old -> new`. setter for `analyzeFunctionTerm` when env == Graph.
+tsEnvSetGraph :: TTermDefinition (Graph -> Graph -> Graph)
+tsEnvSetGraph = def "tsEnvSetGraph" $ lambda "newG" $ lambda "_old" $ var "newG"
+
+-- | Escape a Hydra string for embedding as a double-quoted TypeScript string
+-- literal. Handles backslash, double-quote, newline, carriage return, tab,
+-- backspace, and formfeed; other characters pass through verbatim (which
+-- keeps multibyte Unicode intact).
+tsEscapeString :: TTermDefinition (String -> String)
+tsEscapeString = def "tsEscapeString" $
+  lambda "s" $
+    "escapeChar" <~ ("c" ~>
+      Logic.ifElse (Equality.equal (var "c") (int32 34))    (string "\\\"") $
+      Logic.ifElse (Equality.equal (var "c") (int32 92))    (string "\\\\") $
+      Logic.ifElse (Equality.equal (var "c") (int32 10))    (string "\\n")   $
+      Logic.ifElse (Equality.equal (var "c") (int32 13))    (string "\\r")   $
+      Logic.ifElse (Equality.equal (var "c") (int32 9))     (string "\\t")   $
+      Logic.ifElse (Equality.equal (var "c") (int32 8))     (string "\\b")   $
+      Logic.ifElse (Equality.equal (var "c") (int32 12))    (string "\\f")   $
+        Strings.fromList $ Lists.pure (var "c")) $
+    Strings.cat $ list [
+      string "\"",
+      Strings.cat $ Lists.map (var "escapeChar") (Strings.toList (var "s")),
+      string "\""]
+
+-- | A bare identifier expression like `x`.
+tsExprIdent :: TTermDefinition (String -> TS.Expression)
+tsExprIdent = def "tsExprIdent" $
+  lambda "s" $ inject TS._Expression TS._Expression_identifier (tsIdent @@ var "s")
+
+-- | A string-literal expression. Embeds the value verbatim through
+-- `TS.StringLiteral`; serde handles escaping.
+tsExprStr :: TTermDefinition (String -> TS.Expression)
+tsExprStr = def "tsExprStr" $
+  lambda "s" $
+    inject TS._Expression TS._Expression_literal $
+      inject TS._Literal TS._Literal_string $
+        record TS._StringLiteral [
+          TS._StringLiteral_value>>: var "s",
+          TS._StringLiteral_singleQuote>>: boolean False]
+
+-- | Wrap a String into a TypeScript Identifier.
+tsIdent :: TTermDefinition (String -> TS.Identifier)
+tsIdent = def "tsIdent" $
+  lambda "s" $ wrap TS._Identifier (var "s")
+
+-- | `obj.prop` member access.
+tsMember :: TTermDefinition (TS.Expression -> String -> TS.Expression)
+tsMember = def "tsMember" $
+  lambda "obj" $ lambda "prop" $
+    inject TS._Expression TS._Expression_member $
+      record TS._MemberExpression [
+        TS._MemberExpression_object>>: var "obj",
+        TS._MemberExpression_property>>: tsExprIdent @@ var "prop",
+        TS._MemberExpression_computed>>: boolean False,
+        TS._MemberExpression_optional>>: boolean False]
+
+-- | A bare named type reference like `Foo`.
+tsNamedType :: TTermDefinition (String -> TS.TypeExpression)
+tsNamedType = def "tsNamedType" $
+  lambda "n" $
+    inject TS._TypeExpression TS._TypeExpression_identifier (tsIdent @@ var "n")
+
+-- | `new C(arg, ...)`.
+tsNew :: TTermDefinition (TS.Expression -> [TS.Expression] -> TS.Expression)
+tsNew = def "tsNew" $
+  lambda "callee" $ lambda "args" $
+    inject TS._Expression TS._Expression_new $
+      record TS._CallExpression [
+        TS._CallExpression_callee>>: var "callee",
+        TS._CallExpression_arguments>>: var "args",
+        TS._CallExpression_optional>>: boolean False]
+
+-- | `{ k1: v1, k2: v2, ... }` object literal. Keys are identifier-style;
+-- callers that need string-keyed properties can build a Property directly.
+tsObject :: TTermDefinition ([(String, TS.Expression)] -> TS.Expression)
+tsObject = def "tsObject" $
+  lambda "props" $
+    inject TS._Expression TS._Expression_object $
+      Lists.map
+        (lambda "kv" $
+          "k" <~ Pairs.first (var "kv") $
+          "v" <~ Pairs.second (var "kv") $
+          record TS._Property [
+            TS._Property_key>>: tsExprIdent @@ var "k",
+            TS._Property_value>>: var "v",
+            TS._Property_kind>>: inject TS._PropertyKind TS._PropertyKind_init unit,
+            TS._Property_computed>>: boolean False,
+            TS._Property_shorthand>>: boolean False])
+        (var "props")
+
+-- | A generic type parameter with no constraint.
+tsParam :: TTermDefinition (String -> TS.TypeParameter)
+tsParam = def "tsParam" $
+  lambda "n" $
+    record TS._TypeParameter [
+      TS._TypeParameter_name>>: tsIdent @@ var "n",
+      TS._TypeParameter_constraint>>: nothing,
+      TS._TypeParameter_default>>: nothing]
+
+-- | A parameterized type `Name<T>`.
+tsParamApp1 :: TTermDefinition (String -> TS.TypeExpression -> TS.TypeExpression)
+tsParamApp1 = def "tsParamApp1" $
+  lambda "n" $ lambda "arg" $
+    inject TS._TypeExpression TS._TypeExpression_parameterized $
+      record TS._ParameterizedTypeExpression [
+        TS._ParameterizedTypeExpression_base>>: tsNamedType @@ var "n",
+        TS._ParameterizedTypeExpression_arguments>>: list [var "arg"]]
+
+-- | A parameterized type `Name<K, V>`.
+tsParamApp2 :: TTermDefinition (String -> TS.TypeExpression -> TS.TypeExpression -> TS.TypeExpression)
+tsParamApp2 = def "tsParamApp2" $
+  lambda "n" $ lambda "a" $ lambda "b" $
+    inject TS._TypeExpression TS._TypeExpression_parameterized $
+      record TS._ParameterizedTypeExpression [
+        TS._ParameterizedTypeExpression_base>>: tsNamedType @@ var "n",
+        TS._ParameterizedTypeExpression_arguments>>: list [var "a", var "b"]]
+
+-- | Wrap an Expression in `ExpressionParenthesized` when its serialized form
+-- needs grouping. Used by the term encoder for arrow-function bodies and
+-- nested calls; cheaper than re-deriving precedence at every site.
+tsParen :: TTermDefinition (TS.Expression -> TS.Expression)
+tsParen = def "tsParen" $
+  lambda "e" $ inject TS._Expression TS._Expression_parenthesized (var "e")
+
+-- | A readonly property signature. The name is sanitized for TS reserved
+-- words (so a Hydra field named `case` becomes `case_`).
+tsPropSig :: TTermDefinition (String -> Bool -> TS.TypeExpression -> TS.PropertySignature)
+tsPropSig = def "tsPropSig" $
+  lambda "name" $ lambda "optional" $ lambda "typ" $
+    tsPropSigWithDoc @@ var "name" @@ var "optional" @@ var "typ" @@ nothing
+
+-- | A readonly property signature with an optional JSDoc comment that gets
+-- emitted above the property line. Used for record-interface fields where
+-- the field has a description annotation in the kernel module.
+tsPropSigWithDoc :: TTermDefinition (String -> Bool -> TS.TypeExpression -> Maybe TS.DocumentationComment -> TS.PropertySignature)
+tsPropSigWithDoc = def "tsPropSigWithDoc" $
+  lambda "name" $ lambda "optional" $ lambda "typ" $ lambda "mcomments" $
+    "safe" <~ (Formatting.sanitizeWithUnderscores
+      @@ TypeScriptLanguageSource.typeScriptReservedWords
+      @@ var "name") $
+    record TS._PropertySignature [
+      TS._PropertySignature_name>>: tsIdent @@ var "safe",
+      TS._PropertySignature_type>>: var "typ",
+      TS._PropertySignature_optional>>: var "optional",
+      TS._PropertySignature_readonly>>: boolean True,
+      TS._PropertySignature_comments>>: var "mcomments"]
+
+-- =============================================================================
+-- Literal-type encoding
+-- =============================================================================
+
+-- | A `ReadonlyMap<K, V>`.
+tsReadonlyMap :: TTermDefinition (TS.TypeExpression -> TS.TypeExpression -> TS.TypeExpression)
+tsReadonlyMap = def "tsReadonlyMap" $
+  lambda "k" $ lambda "v" $ tsParamApp2 @@ string "ReadonlyMap" @@ var "k" @@ var "v"
+
+-- | A `ReadonlySet<T>`.
+tsReadonlySet :: TTermDefinition (TS.TypeExpression -> TS.TypeExpression)
+tsReadonlySet = def "tsReadonlySet" $
+  lambda "t" $ tsParamApp1 @@ string "ReadonlySet" @@ var "t"
+
+-- | A tuple type `[A, B, ...]`.
+tsTuple :: TTermDefinition ([TS.TypeExpression] -> TS.TypeExpression)
+tsTuple = def "tsTuple" $
+  lambda "ts" $
+    inject TS._TypeExpression TS._TypeExpression_tuple (var "ts")
+
+-- | Build a typed-identifier `Pattern` (`name: T`). Used for function
+-- parameters where the parameter's domain type is known.
+tsTypedIdent :: TTermDefinition (String -> TS.TypeExpression -> TS.Pattern)
+tsTypedIdent = def "tsTypedIdent" $
+  lambda "name" $ lambda "typ" $
+    inject TS._Pattern TS._Pattern_typed $
+      record TS._TypedPattern [
+        TS._TypedPattern_pattern>>:
+          inject TS._Pattern TS._Pattern_identifier (tsIdent @@ var "name"),
+        TS._TypedPattern_type>>: var "typ"]
+
+-- | The `undefined` value as an Expression.
+tsUndefined :: TTermDefinition TS.Expression
+tsUndefined = def "tsUndefined" $ tsExprIdent @@ string "undefined"

@@ -10,17 +10,11 @@ import qualified Hydra.Dsl.Types                    as T
 import qualified Hydra.Sources.Kernel.Types.Core    as CoreTypes
 import qualified Hydra.Sources.Kernel.Types.Typing  as TypingTypes
 
-typingType :: String -> Type
-typingType = typeref TypingTypes.ns
-
 ns :: ModuleName
 ns = ModuleName "hydra.protobuf.environment"
 
 define :: String -> Type -> Binding
 define = defineType ns
-
-coreType :: String -> Type
-coreType = typeref CoreTypes.ns
 
 module_ :: Module
 module_ = Module {
@@ -32,6 +26,9 @@ module_ = Module {
     definitions = [
       encoderStateType,
       structuralTypeRefType]
+
+coreType :: String -> Type
+coreType = typeref CoreTypes.ns
 
 -- | State threaded through Protobuf encoding: the InferenceContext used by
 -- kernel helpers (annotation reads, dependency analysis) plus a per-message
@@ -58,3 +55,6 @@ structuralTypeRefType = define "StructuralTypeRef" $
     "pair" >:
       doc "A Pair type with first and second component types" $
       T.pair (coreType "Type") (coreType "Type")]
+
+typingType :: String -> Type
+typingType = typeref TypingTypes.ns

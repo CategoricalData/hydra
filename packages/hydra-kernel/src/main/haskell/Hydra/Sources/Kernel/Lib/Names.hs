@@ -85,14 +85,14 @@ eithersIsRight                   :: Name
 eithersIsRight                   = qname eithers "isRight"
 eithersLefts                     :: Name
 eithersLefts                     = qname eithers "lefts"
+eithersMap                       :: Name
+eithersMap                       = qname eithers "map"
 eithersMapList                   :: Name
 eithersMapList                   = qname eithers "mapList"
 eithersMapMaybe                  :: Name
 eithersMapMaybe                  = qname eithers "mapMaybe"
 eithersMapSet                    :: Name
 eithersMapSet                    = qname eithers "mapSet"
-eithersMap                       :: Name
-eithersMap                       = qname eithers "map"
 eithersPartitionEithers          :: Name
 eithersPartitionEithers          = qname eithers "partitionEithers"
 eithersRights                    :: Name
@@ -103,16 +103,16 @@ equalityCompare                  :: Name
 equalityCompare                  = qname equality "compare"
 equalityEqual                    :: Name
 equalityEqual                    = qname equality "equal"
-equalityGte                      :: Name
-equalityGte                      = qname equality "gte"
 equalityGt                       :: Name
 equalityGt                       = qname equality "gt"
+equalityGte                      :: Name
+equalityGte                      = qname equality "gte"
 equalityIdentity                 :: Name
 equalityIdentity                 = qname equality "identity"
-equalityLte                      :: Name
-equalityLte                      = qname equality "lte"
 equalityLt                       :: Name
 equalityLt                       = qname equality "lt"
+equalityLte                      :: Name
+equalityLte                      = qname equality "lte"
 equalityMax                      :: Name
 equalityMax                      = qname equality "max"
 equalityMin                      :: Name
@@ -123,16 +123,16 @@ listsApply                       :: Name
 listsApply                       = qname lists "apply"
 listsBind                        :: Name
 listsBind                        = qname lists "bind"
-listsConcat2                     :: Name
-listsConcat2                     = qname lists "concat2"
 listsConcat                      :: Name
 listsConcat                      = qname lists "concat"
+listsConcat2                     :: Name
+listsConcat2                     = qname lists "concat2"
 listsCons                        :: Name
 listsCons                        = qname lists "cons"
-listsDropWhile                   :: Name
-listsDropWhile                   = qname lists "dropWhile"
 listsDrop                        :: Name
 listsDrop                        = qname lists "drop"
+listsDropWhile                   :: Name
+listsDropWhile                   = qname lists "dropWhile"
 listsElem                        :: Name
 listsElem                        = qname lists "elem"
 listsFilter                      :: Name
@@ -177,10 +177,10 @@ listsReverse                     :: Name
 listsReverse                     = qname lists "reverse"
 listsSingleton                   :: Name
 listsSingleton                   = qname lists "singleton"
-listsSortOn                      :: Name
-listsSortOn                      = qname lists "sortOn"
 listsSort                        :: Name
 listsSort                        = qname lists "sort"
+listsSortOn                      :: Name
+listsSortOn                      = qname lists "sortOn"
 listsSpan                        :: Name
 listsSpan                        = qname lists "span"
 listsTake                        :: Name
@@ -189,11 +189,11 @@ listsTranspose                   :: Name
 listsTranspose                   = qname lists "transpose"
 listsUncons                      :: Name
 listsUncons                      = qname lists "uncons"
-listsZipWith                     :: Name
-listsZipWith                     = qname lists "zipWith"
 listsZip                         :: Name
 listsZip                         = qname lists "zip"
 
+listsZipWith                     :: Name
+listsZipWith                     = qname lists "zipWith"
 -- literals
 literalsBigintToDecimal          :: Name
 literalsBigintToDecimal          = qname literals "bigintToDecimal"
@@ -327,10 +327,10 @@ mapsElems                        :: Name
 mapsElems                        = qname maps "elems"
 mapsEmpty                        :: Name
 mapsEmpty                        = qname maps "empty"
-mapsFilterWithKey                :: Name
-mapsFilterWithKey                = qname maps "filterWithKey"
 mapsFilter                       :: Name
 mapsFilter                       = qname maps "filter"
+mapsFilterWithKey                :: Name
+mapsFilterWithKey                = qname maps "filterWithKey"
 mapsFindWithDefault              :: Name
 mapsFindWithDefault              = qname maps "findWithDefault"
 mapsFromList                     :: Name
@@ -341,10 +341,10 @@ mapsKeys                         :: Name
 mapsKeys                         = qname maps "keys"
 mapsLookup                       :: Name
 mapsLookup                       = qname maps "lookup"
-mapsMapKeys                      :: Name
-mapsMapKeys                      = qname maps "mapKeys"
 mapsMap                          :: Name
 mapsMap                          = qname maps "map"
+mapsMapKeys                      :: Name
+mapsMapKeys                      = qname maps "mapKeys"
 mapsMember                       :: Name
 mapsMember                       = qname maps "member"
 mapsNull                         :: Name
@@ -361,42 +361,42 @@ mapsUnion                        = qname maps "union"
 -- math
 mathAbs                          :: Name
 mathAbs                          = qname math "abs"
-mathAcosh                        :: Name
-mathAcosh                        = qname math "acosh"
 mathAcos                         :: Name
 mathAcos                         = qname math "acos"
-mathAddFloat64                   :: Name
-mathAddFloat64                   = qname math "addFloat64"
+mathAcosh                        :: Name
+mathAcosh                        = qname math "acosh"
 mathAdd                          :: Name
 mathAdd                          = qname math "add"
-mathAsinh                        :: Name
-mathAsinh                        = qname math "asinh"
+mathAddFloat64                   :: Name
+mathAddFloat64                   = qname math "addFloat64"
 mathAsin                         :: Name
 mathAsin                         = qname math "asin"
+mathAsinh                        :: Name
+mathAsinh                        = qname math "asinh"
+mathAtan                         :: Name
+mathAtan                         = qname math "atan"
 mathAtan2                        :: Name
 mathAtan2                        = qname math "atan2"
 mathAtanh                        :: Name
 mathAtanh                        = qname math "atanh"
-mathAtan                         :: Name
-mathAtan                         = qname math "atan"
 mathCeiling                      :: Name
 mathCeiling                      = qname math "ceiling"
-mathCosh                         :: Name
-mathCosh                         = qname math "cosh"
 mathCos                          :: Name
 mathCos                          = qname math "cos"
+mathCosh                         :: Name
+mathCosh                         = qname math "cosh"
+mathE                            :: Name
+mathE                            = qname math "e"
 mathEven                         :: Name
 mathEven                         = qname math "even"
 mathExp                          :: Name
 mathExp                          = qname math "exp"
-mathE                            :: Name
-mathE                            = qname math "e"
 mathFloor                        :: Name
 mathFloor                        = qname math "floor"
-mathLogBase                      :: Name
-mathLogBase                      = qname math "logBase"
 mathLog                          :: Name
 mathLog                          = qname math "log"
+mathLogBase                      :: Name
+mathLogBase                      = qname math "logBase"
 mathMax                          :: Name
 mathMax                          = qname math "max"
 mathMaybeDiv                     :: Name
@@ -411,14 +411,14 @@ mathMaybeSucc                    :: Name
 mathMaybeSucc                    = qname math "maybeSucc"
 mathMin                          :: Name
 mathMin                          = qname math "min"
-mathMulFloat64                   :: Name
-mathMulFloat64                   = qname math "mulFloat64"
 mathMul                          :: Name
 mathMul                          = qname math "mul"
-mathNegateFloat64                :: Name
-mathNegateFloat64                = qname math "negateFloat64"
+mathMulFloat64                   :: Name
+mathMulFloat64                   = qname math "mulFloat64"
 mathNegate                       :: Name
 mathNegate                       = qname math "negate"
+mathNegateFloat64                :: Name
+mathNegateFloat64                = qname math "negateFloat64"
 mathOdd                          :: Name
 mathOdd                          = qname math "odd"
 mathPi                           :: Name
@@ -427,28 +427,28 @@ mathPow                          :: Name
 mathPow                          = qname math "pow"
 mathRange                        :: Name
 mathRange                        = qname math "range"
+mathRound                        :: Name
+mathRound                        = qname math "round"
 mathRoundFloat32                 :: Name
 mathRoundFloat32                 = qname math "roundFloat32"
 mathRoundFloat64                 :: Name
 mathRoundFloat64                 = qname math "roundFloat64"
-mathRound                        :: Name
-mathRound                        = qname math "round"
 mathSignum                       :: Name
 mathSignum                       = qname math "signum"
-mathSinh                         :: Name
-mathSinh                         = qname math "sinh"
 mathSin                          :: Name
 mathSin                          = qname math "sin"
+mathSinh                         :: Name
+mathSinh                         = qname math "sinh"
 mathSqrt                         :: Name
 mathSqrt                         = qname math "sqrt"
-mathSubFloat64                   :: Name
-mathSubFloat64                   = qname math "subFloat64"
 mathSub                          :: Name
 mathSub                          = qname math "sub"
-mathTanh                         :: Name
-mathTanh                         = qname math "tanh"
+mathSubFloat64                   :: Name
+mathSubFloat64                   = qname math "subFloat64"
 mathTan                          :: Name
 mathTan                          = qname math "tan"
+mathTanh                         :: Name
+mathTanh                         = qname math "tanh"
 mathTruncate                     :: Name
 mathTruncate                     = qname math "truncate"
 
@@ -469,10 +469,10 @@ maybesIsJust                     :: Name
 maybesIsJust                     = qname maybes "isJust"
 maybesIsNothing                  :: Name
 maybesIsNothing                  = qname maybes "isNothing"
-maybesMapMaybe                   :: Name
-maybesMapMaybe                   = qname maybes "mapMaybe"
 maybesMap                        :: Name
 maybesMap                        = qname maybes "map"
+maybesMapMaybe                   :: Name
+maybesMapMaybe                   = qname maybes "mapMaybe"
 maybesMaybe                      :: Name
 maybesMaybe                      = qname maybes "maybe"
 maybesPure                       :: Name
@@ -488,17 +488,17 @@ pairsFirst                       = qname pairs "first"
 pairsSecond                      :: Name
 pairsSecond                      = qname pairs "second"
 
+regexFind                        :: Name
+regexFind                        = qname regex "find"
 -- regex
 regexFindAll                     :: Name
 regexFindAll                     = qname regex "findAll"
-regexFind                        :: Name
-regexFind                        = qname regex "find"
 regexMatches                     :: Name
 regexMatches                     = qname regex "matches"
-regexReplaceAll                  :: Name
-regexReplaceAll                  = qname regex "replaceAll"
 regexReplace                     :: Name
 regexReplace                     = qname regex "replace"
+regexReplaceAll                  :: Name
+regexReplaceAll                  = qname regex "replaceAll"
 regexSplit                       :: Name
 regexSplit                       = qname regex "split"
 
@@ -527,16 +527,16 @@ setsSize                         :: Name
 setsSize                         = qname sets "size"
 setsToList                       :: Name
 setsToList                       = qname sets "toList"
-setsUnions                       :: Name
-setsUnions                       = qname sets "unions"
 setsUnion                        :: Name
 setsUnion                        = qname sets "union"
 
+setsUnions                       :: Name
+setsUnions                       = qname sets "unions"
+stringsCat                       :: Name
+stringsCat                       = qname strings "cat"
 -- strings
 stringsCat2                      :: Name
 stringsCat2                      = qname strings "cat2"
-stringsCat                       :: Name
-stringsCat                       = qname strings "cat"
 stringsFromList                  :: Name
 stringsFromList                  = qname strings "fromList"
 stringsIntercalate               :: Name

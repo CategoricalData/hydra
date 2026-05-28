@@ -122,66 +122,6 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
--- | Extract type definitions from a module as Bindings (for elementsToGraph compatibility).
--- Each TypeDefinition is converted to a Binding by encoding the type as a term.
-moduleTypeBindings :: TTerm Module -> TTerm [Binding]
-moduleTypeBindings m = Maybes.cat $ Lists.map
-  ("d" ~> cases _Definition (var "d") (Just nothing) [
-    _Definition_type>>: "td" ~>
-      just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td"))])
-  (Packaging.moduleDefinitions m)
-
--- | Extract term definitions from a module as Bindings (for elementsToGraph compatibility).
-moduleTermBindings :: TTerm Module -> TTerm [Binding]
-moduleTermBindings m = Maybes.cat $ Lists.map
-  ("d" ~> cases _Definition (var "d") (Just nothing) [
-    _Definition_term>>: "td" ~>
-      just (Core.binding
-        (Packaging.termDefinitionName $ var "td")
-        (Packaging.termDefinitionTerm $ var "td")
-        (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "td"))])
-  (Packaging.moduleDefinitions m)
-
--- | Extract primitive defaultImplementation bindings from a module, for the
--- inference-time consistency check between primitiveDefinitionSignature and the
--- type of primitiveDefinitionDefaultImplementation. Each Binding carries the
--- declared signature in bindingTypeScheme, so inferGraphTypes unifies the
--- inferred type of the default term against it; mismatches surface as
--- unification errors. These bindings are intentionally not emitted by
--- moduleTermBindings so they don't enter source-file generation paths
--- (where they'd be treated as ordinary term definitions); they only feed
--- the inference pass.
-modulePrimitiveDefaultBindings :: TTerm Module -> TTerm [Binding]
-modulePrimitiveDefaultBindings m = Maybes.cat $ Lists.map
-  ("d" ~> cases _Definition (var "d") (Just nothing) [
-    _Definition_primitive>>: "pd" ~>
-      Maybes.map
-        ("impl" ~> Core.binding
-          (Packaging.primitiveDefinitionName $ var "pd")
-          (var "impl")
-          (just (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ var "pd"))))
-        (Packaging.primitiveDefinitionDefaultImplementation $ var "pd")])
-  (Packaging.moduleDefinitions m)
-
--- | Extract all definitions from a module as Bindings.
-moduleAllBindings :: TTerm Module -> TTerm [Binding]
-moduleAllBindings m = Lists.concat2 (moduleTypeBindings m) (moduleTermBindings m)
-
--- | Check whether a module has any type definitions.
-hasTypeDefinitions :: TTerm Module -> TTerm Bool
-hasTypeDefinitions m = Logic.not $ Lists.null $ moduleTypeBindings m
-
--- | Check whether a module has any term definitions.
-hasTermDefinitions :: TTerm Module -> TTerm Bool
-hasTermDefinitions m = Logic.not $ Lists.null $ moduleTermBindings m
-
--- | Extract type definition names from a module.
-moduleTypeNames :: TTerm Module -> TTerm [Name]
-moduleTypeNames m = Maybes.cat $ Lists.map
-  ("d" ~> cases _Definition (var "d") (Just nothing) [
-    _Definition_type>>: "td" ~> just (Packaging.typeDefinitionName $ var "td")])
-  (Packaging.moduleDefinitions m)
-
 -- | Build a schema map (Name -> Type) from a graph's schema types.
 -- Used by the JSON decoder to resolve type variables.
 buildSchemaMap :: TTermDefinition (Graph -> M.Map Name Type)
@@ -439,6 +379,14 @@ generateSourceFiles = define "generateSourceFiles" $
   -- Combine results
   right $ Lists.concat2 (var "schemaFiles") (var "termFiles")
 
+-- | Check whether a module has any term definitions.
+hasTermDefinitions :: TTerm Module -> TTerm Bool
+hasTermDefinitions m = Logic.not $ Lists.null $ moduleTermBindings m
+
+-- | Check whether a module has any type definitions.
+hasTypeDefinitions :: TTerm Module -> TTerm Bool
+hasTypeDefinitions m = Logic.not $ Lists.null $ moduleTypeBindings m
+
 -- | Format a term binding for the lexicon: "  name : typeScheme"
 -- | Perform type inference on a graph and generate its lexicon.
 -- Composes inferGraphTypes and generateLexicon into a single computation.
@@ -635,6 +583,10 @@ lowerPrimitiveDefinitions = define "lowerPrimitiveDefinitions" $
       (var "newDeps")
       (var "newDefs"))
 
+-- | Extract all definitions from a module as Bindings.
+moduleAllBindings :: TTerm Module -> TTerm [Binding]
+moduleAllBindings m = Lists.concat2 (moduleTypeBindings m) (moduleTermBindings m)
+
 -- | Compute the transitive closure of dependencies for a set of modules.
 -- Returns the modules that are transitively depended upon (including the input modules).
 moduleDepsTransitive :: TTermDefinition (M.Map ModuleName Module -> [Module] -> [Module])
@@ -647,6 +599,38 @@ moduleDepsTransitive = define "moduleDepsTransitive" $
   Maybes.cat $ Lists.map
     ("n" ~> Maps.lookup (var "n") (var "nsMap"))
     (Sets.toList $ var "closure")
+
+-- | Extract primitive defaultImplementation bindings from a module, for the
+-- inference-time consistency check between primitiveDefinitionSignature and the
+-- type of primitiveDefinitionDefaultImplementation. Each Binding carries the
+-- declared signature in bindingTypeScheme, so inferGraphTypes unifies the
+-- inferred type of the default term against it; mismatches surface as
+-- unification errors. These bindings are intentionally not emitted by
+-- moduleTermBindings so they don't enter source-file generation paths
+-- (where they'd be treated as ordinary term definitions); they only feed
+-- the inference pass.
+modulePrimitiveDefaultBindings :: TTerm Module -> TTerm [Binding]
+modulePrimitiveDefaultBindings m = Maybes.cat $ Lists.map
+  ("d" ~> cases _Definition (var "d") (Just nothing) [
+    _Definition_primitive>>: "pd" ~>
+      Maybes.map
+        ("impl" ~> Core.binding
+          (Packaging.primitiveDefinitionName $ var "pd")
+          (var "impl")
+          (just (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ var "pd"))))
+        (Packaging.primitiveDefinitionDefaultImplementation $ var "pd")])
+  (Packaging.moduleDefinitions m)
+
+-- | Extract term definitions from a module as Bindings (for elementsToGraph compatibility).
+moduleTermBindings :: TTerm Module -> TTerm [Binding]
+moduleTermBindings m = Maybes.cat $ Lists.map
+  ("d" ~> cases _Definition (var "d") (Just nothing) [
+    _Definition_term>>: "td" ~>
+      just (Core.binding
+        (Packaging.termDefinitionName $ var "td")
+        (Packaging.termDefinitionTerm $ var "td")
+        (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "td"))])
+  (Packaging.moduleDefinitions m)
 
 -- | Compute the transitive closure of type dependencies for a set of modules.
 -- First computes transitive term deps, then type deps from those.
@@ -703,6 +687,22 @@ moduleToSourceModule = define "moduleToSourceModule" $
 generateCoderModules
   :: TTermDefinition ((InferenceContext -> Graph -> Module -> Prelude.Either Error (Maybe Module)) -> Graph -> [Module] -> [Module]
     -> InferenceContext -> Prelude.Either Error [Module])
+-- | Extract type definitions from a module as Bindings (for elementsToGraph compatibility).
+-- Each TypeDefinition is converted to a Binding by encoding the type as a term.
+moduleTypeBindings :: TTerm Module -> TTerm [Binding]
+moduleTypeBindings m = Maybes.cat $ Lists.map
+  ("d" ~> cases _Definition (var "d") (Just nothing) [
+    _Definition_type>>: "td" ~>
+      just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td"))])
+  (Packaging.moduleDefinitions m)
+
+-- | Extract type definition names from a module.
+moduleTypeNames :: TTerm Module -> TTerm [Name]
+moduleTypeNames m = Maybes.cat $ Lists.map
+  ("d" ~> cases _Definition (var "d") (Just nothing) [
+    _Definition_type>>: "td" ~> just (Packaging.typeDefinitionName $ var "td")])
+  (Packaging.moduleDefinitions m)
+
 -- | Build a graph from a list of modules, using an explicit bootstrap graph.
 -- Type definitions become schema elements and term definitions become data elements.
 -- Any type schemes already present on universe term bindings (e.g. from a prior
