@@ -30,6 +30,13 @@ packages/<pkg>/src/main/<lang>/  → dist/json/<pkg>/src/<set>/json/  →  dist/
   `dist/haskell/` is tracked through 0.15 to bootstrap a fresh clone;
   all other `dist/<lang>/` trees are regenerated on demand and are not checked in.
 
+This factoring serves Hydra's core premise: there is a single language for
+representing data, schemas, and code, with encodings in many other languages.
+JSON provides a neutral encoding which every host can read. DSL sources
+express the same language in the host of their choice — Haskell today for
+`hydra-kernel`, Java for `hydra-java`, Python for `hydra-python`, with more
+diversification expected over time.
+
 A complete sync of the matrix walks these in five phases (see
 [Phases](#phases-of-bin-sync-sh) below).
 
