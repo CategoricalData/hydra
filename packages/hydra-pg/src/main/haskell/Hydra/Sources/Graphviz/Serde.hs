@@ -262,6 +262,14 @@ stmtToExpr = define "stmtToExpr" $
       Dot._Stmt_equals>>: lambda "eq" $ equalityPairToExpr @@ var "eq",
       Dot._Stmt_subgraph>>: lambda "sg" $ subgraphToExpr @@ var "directed" @@ var "sg"]
 
+subgraphIdToExpr :: TTermDefinition (Dot.SubgraphId -> Expr)
+subgraphIdToExpr = define "subgraphIdToExpr" $
+  doc "Convert a subgraph identifier to an expression" $
+  lambda "sid" $
+    Serialization.spaceSep @@ (Maybes.cat $ list [
+      Maybes.pure (Serialization.cst @@ string "subgraph"),
+      Maybes.map idToExpr (unwrap Dot._SubgraphId @@ var "sid")])
+
 subgraphToExpr :: TTermDefinition (Bool -> Dot.Subgraph -> Expr)
 subgraphToExpr = define "subgraphToExpr" $
   doc "Convert a subgraph to an expression" $
@@ -273,11 +281,3 @@ subgraphToExpr = define "subgraphToExpr" $
     Serialization.spaceSep @@ (Maybes.cat $ list [
       Maybes.map subgraphIdToExpr (var "mid"),
       Maybes.pure (var "body")])
-
-subgraphIdToExpr :: TTermDefinition (Dot.SubgraphId -> Expr)
-subgraphIdToExpr = define "subgraphIdToExpr" $
-  doc "Convert a subgraph identifier to an expression" $
-  lambda "sid" $
-    Serialization.spaceSep @@ (Maybes.cat $ list [
-      Maybes.pure (Serialization.cst @@ string "subgraph"),
-      Maybes.map idToExpr (unwrap Dot._SubgraphId @@ var "sid")])

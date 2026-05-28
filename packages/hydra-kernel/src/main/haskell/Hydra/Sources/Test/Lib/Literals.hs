@@ -55,15 +55,6 @@ literalsInt32ToBigint = subgroup "int32ToBigint" [
 
 -- Other integer to bigint conversions
 
-literalsInt8ToBigint :: TTerm TestGroup
-literalsInt8ToBigint = subgroup "int8ToBigint" [
-  test "positive" 42 42,
-  test "negative" (-42) (-42),
-  test "max value" 127 127,
-  test "min value" (-128) (-128)]
-  where
-    test name x result = primCase name _literals_int8ToBigint [int8 x] (bigint result)
-
 literalsInt16ToBigint :: TTerm TestGroup
 literalsInt16ToBigint = subgroup "int16ToBigint" [
   test "positive" 1000 1000,
@@ -78,14 +69,16 @@ literalsInt64ToBigint = subgroup "int64ToBigint" [
   where
     test name x result = primCase name _literals_int64ToBigint [int64 x] (bigint result)
 
--- Unsigned integer to bigint conversions
-
-literalsUint8ToBigint :: TTerm TestGroup
-literalsUint8ToBigint = subgroup "uint8ToBigint" [
-  test "zero" 0 0,
-  test "max value" 255 255]
+literalsInt8ToBigint :: TTerm TestGroup
+literalsInt8ToBigint = subgroup "int8ToBigint" [
+  test "positive" 42 42,
+  test "negative" (-42) (-42),
+  test "max value" 127 127,
+  test "min value" (-128) (-128)]
   where
-    test name x result = primCase name _literals_uint8ToBigint [uint8 x] (bigint result)
+    test name x result = primCase name _literals_int8ToBigint [int8 x] (bigint result)
+
+-- Unsigned integer to bigint conversions
 
 literalsUint16ToBigint :: TTerm TestGroup
 literalsUint16ToBigint = subgroup "uint16ToBigint" [
@@ -108,14 +101,14 @@ literalsUint64ToBigint = subgroup "uint64ToBigint" [
   where
     test name x result = primCase name _literals_uint64ToBigint [uint64 x] (bigint result)
 
--- Bigint to other integer conversions
-
-literalsBigintToInt8 :: TTerm TestGroup
-literalsBigintToInt8 = subgroup "bigintToInt8" [
-  test "positive" 42 42,
-  test "negative" (-42) (-42)]
+literalsUint8ToBigint :: TTerm TestGroup
+literalsUint8ToBigint = subgroup "uint8ToBigint" [
+  test "zero" 0 0,
+  test "max value" 255 255]
   where
-    test name x result = primCase name _literals_bigintToInt8 [bigint x] (int8 result)
+    test name x result = primCase name _literals_uint8ToBigint [uint8 x] (bigint result)
+
+-- Bigint to other integer conversions
 
 literalsBigintToInt16 :: TTerm TestGroup
 literalsBigintToInt16 = subgroup "bigintToInt16" [
@@ -131,12 +124,12 @@ literalsBigintToInt64 = subgroup "bigintToInt64" [
   where
     test name x result = primCase name _literals_bigintToInt64 [bigint x] (int64 result)
 
-literalsBigintToUint8 :: TTerm TestGroup
-literalsBigintToUint8 = subgroup "bigintToUint8" [
-  test "zero" 0 0,
-  test "typical value" 100 100]
+literalsBigintToInt8 :: TTerm TestGroup
+literalsBigintToInt8 = subgroup "bigintToInt8" [
+  test "positive" 42 42,
+  test "negative" (-42) (-42)]
   where
-    test name x result = primCase name _literals_bigintToUint8 [bigint x] (uint8 result)
+    test name x result = primCase name _literals_bigintToInt8 [bigint x] (int8 result)
 
 literalsBigintToUint16 :: TTerm TestGroup
 literalsBigintToUint16 = subgroup "bigintToUint16" [
@@ -158,6 +151,13 @@ literalsBigintToUint64 = subgroup "bigintToUint64" [
   test "typical value" 1000000 1000000]
   where
     test name x result = primCase name _literals_bigintToUint64 [bigint x] (uint64 result)
+
+literalsBigintToUint8 :: TTerm TestGroup
+literalsBigintToUint8 = subgroup "bigintToUint8" [
+  test "zero" 0 0,
+  test "typical value" 100 100]
+  where
+    test name x result = primCase name _literals_bigintToUint8 [bigint x] (uint8 result)
 
 -- Float conversions
 
@@ -229,16 +229,6 @@ literalsFloat64ToDecimal = subgroup "float64ToDecimal" [
   where
     test name x result = primCase name _literals_float64ToDecimal [float64 x] (decimal result)
 
-literalsShowDecimal :: TTerm TestGroup
-literalsShowDecimal = subgroup "showDecimal" [
-  test "zero" 0 "0.0",
-  test "positive whole" 42 "42.0",
-  test "negative whole" (-42) "-42.0",
-  test "positive fraction" 3.14 "3.14",
-  test "negative fraction" (-2.5) "-2.5"]
-  where
-    test name x result = primCase name _literals_showDecimal [decimal x] (string result)
-
 literalsReadDecimal :: TTerm TestGroup
 literalsReadDecimal = subgroup "readDecimal" [
   testJust "positive" "3.14" 3.14,
@@ -249,64 +239,17 @@ literalsReadDecimal = subgroup "readDecimal" [
     testJust name x result = primCase name _literals_readDecimal [string x] (Core.termMaybe $ just (decimal result))
     testNothing name x = primCase name _literals_readDecimal [string x] (Core.termMaybe nothing)
 
+literalsShowDecimal :: TTerm TestGroup
+literalsShowDecimal = subgroup "showDecimal" [
+  test "zero" 0 "0.0",
+  test "positive whole" 42 "42.0",
+  test "negative whole" (-42) "-42.0",
+  test "positive fraction" 3.14 "3.14",
+  test "negative fraction" (-2.5) "-2.5"]
+  where
+    test name x result = primCase name _literals_showDecimal [decimal x] (string result)
+
 -- Show functions
-
-literalsShowInt32 :: TTerm TestGroup
-literalsShowInt32 = subgroup "showInt32" [
-  test "positive" 42 "42",
-  test "negative" (-42) "-42",
-  test "zero" 0 "0"]
-  where
-    test name x result = primCase name _literals_showInt32 [int32 x] (string result)
-
-literalsShowInt8 :: TTerm TestGroup
-literalsShowInt8 = subgroup "showInt8" [
-  test "positive" 42 "42",
-  test "negative" (-42) "-42"]
-  where
-    test name x result = primCase name _literals_showInt8 [int8 x] (string result)
-
-literalsShowInt16 :: TTerm TestGroup
-literalsShowInt16 = subgroup "showInt16" [
-  test "positive" 1000 "1000",
-  test "negative" (-1000) "-1000"]
-  where
-    test name x result = primCase name _literals_showInt16 [int16 x] (string result)
-
-literalsShowInt64 :: TTerm TestGroup
-literalsShowInt64 = subgroup "showInt64" [
-  test "positive" 1000000 "1000000",
-  test "negative" (-1000000) "-1000000"]
-  where
-    test name x result = primCase name _literals_showInt64 [int64 x] (string result)
-
-literalsShowUint8 :: TTerm TestGroup
-literalsShowUint8 = subgroup "showUint8" [
-  test "zero" 0 "0",
-  test "max value" 255 "255"]
-  where
-    test name x result = primCase name _literals_showUint8 [uint8 x] (string result)
-
-literalsShowUint16 :: TTerm TestGroup
-literalsShowUint16 = subgroup "showUint16" [
-  test "zero" 0 "0",
-  test "typical value" 1000 "1000"]
-  where
-    test name x result = primCase name _literals_showUint16 [uint16 x] (string result)
-
-literalsShowUint32 :: TTerm TestGroup
-literalsShowUint32 = subgroup "showUint32" [
-  test "zero" 0 "0",
-  test "typical value" 100000 "100000"]
-  where
-    test name x result = primCase name _literals_showUint32 [uint32 x] (string result)
-
-literalsShowUint64 :: TTerm TestGroup
-literalsShowUint64 = subgroup "showUint64" [
-  test "zero" 0 "0",
-  test "typical value" 1000000 "1000000"]
-  where
-    test name x result = primCase name _literals_showUint64 [uint64 x] (string result)
 
 literalsShowBigint :: TTerm TestGroup
 literalsShowBigint = subgroup "showBigint" [
@@ -315,6 +258,13 @@ literalsShowBigint = subgroup "showBigint" [
   test "zero" 0 "0"]
   where
     test name x result = primCase name _literals_showBigint [bigint x] (string result)
+
+literalsShowBoolean :: TTerm TestGroup
+literalsShowBoolean = subgroup "showBoolean" [
+  test "true" true "true",
+  test "false" false "false"]
+  where
+    test name x result = primCase name _literals_showBoolean [x] (string result)
 
 literalsShowFloat32 :: TTerm TestGroup
 literalsShowFloat32 = subgroup "showFloat32" [
@@ -339,12 +289,34 @@ literalsShowFloat64 = subgroup "showFloat64" [
   where
     test name x result = primCase name _literals_showFloat64 [float64 x] (string result)
 
-literalsShowBoolean :: TTerm TestGroup
-literalsShowBoolean = subgroup "showBoolean" [
-  test "true" true "true",
-  test "false" false "false"]
+literalsShowInt16 :: TTerm TestGroup
+literalsShowInt16 = subgroup "showInt16" [
+  test "positive" 1000 "1000",
+  test "negative" (-1000) "-1000"]
   where
-    test name x result = primCase name _literals_showBoolean [x] (string result)
+    test name x result = primCase name _literals_showInt16 [int16 x] (string result)
+
+literalsShowInt32 :: TTerm TestGroup
+literalsShowInt32 = subgroup "showInt32" [
+  test "positive" 42 "42",
+  test "negative" (-42) "-42",
+  test "zero" 0 "0"]
+  where
+    test name x result = primCase name _literals_showInt32 [int32 x] (string result)
+
+literalsShowInt64 :: TTerm TestGroup
+literalsShowInt64 = subgroup "showInt64" [
+  test "positive" 1000000 "1000000",
+  test "negative" (-1000000) "-1000000"]
+  where
+    test name x result = primCase name _literals_showInt64 [int64 x] (string result)
+
+literalsShowInt8 :: TTerm TestGroup
+literalsShowInt8 = subgroup "showInt8" [
+  test "positive" 42 "42",
+  test "negative" (-42) "-42"]
+  where
+    test name x result = primCase name _literals_showInt8 [int8 x] (string result)
 
 literalsShowString :: TTerm TestGroup
 literalsShowString = subgroup "showString" [
@@ -370,151 +342,35 @@ literalsShowString = subgroup "showString" [
   where
     test name x result = primCase name _literals_showString [string x] (string result)
 
+literalsShowUint16 :: TTerm TestGroup
+literalsShowUint16 = subgroup "showUint16" [
+  test "zero" 0 "0",
+  test "typical value" 1000 "1000"]
+  where
+    test name x result = primCase name _literals_showUint16 [uint16 x] (string result)
+
+literalsShowUint32 :: TTerm TestGroup
+literalsShowUint32 = subgroup "showUint32" [
+  test "zero" 0 "0",
+  test "typical value" 100000 "100000"]
+  where
+    test name x result = primCase name _literals_showUint32 [uint32 x] (string result)
+
+literalsShowUint64 :: TTerm TestGroup
+literalsShowUint64 = subgroup "showUint64" [
+  test "zero" 0 "0",
+  test "typical value" 1000000 "1000000"]
+  where
+    test name x result = primCase name _literals_showUint64 [uint64 x] (string result)
+
+literalsShowUint8 :: TTerm TestGroup
+literalsShowUint8 = subgroup "showUint8" [
+  test "zero" 0 "0",
+  test "max value" 255 "255"]
+  where
+    test name x result = primCase name _literals_showUint8 [uint8 x] (string result)
+
 -- Read functions
-
-literalsReadInt8 :: TTerm TestGroup
-literalsReadInt8 = subgroup "readInt8" [
-  testJust "positive" "42" 42,
-  testJust "negative" "-42" (-42),
-  testJust "max value" "127" 127,
-  testJust "min value" "-128" (-128),
-  testNothing "invalid" "abc",
-  testNothing "overflow" "128"]
-  where
-    testJust name x result = primCase name _literals_readInt8 [string x] (Core.termMaybe $ just (int8 result))
-    testNothing name x = primCase name _literals_readInt8 [string x] (Core.termMaybe nothing)
-
-literalsReadInt16 :: TTerm TestGroup
-literalsReadInt16 = subgroup "readInt16" [
-  testJust "positive" "1000" 1000,
-  testJust "negative" "-1000" (-1000),
-  testNothing "invalid" "abc"]
-  where
-    testJust name x result = primCase name _literals_readInt16 [string x] (Core.termMaybe $ just (int16 result))
-    testNothing name x = primCase name _literals_readInt16 [string x] (Core.termMaybe nothing)
-
-literalsReadInt32 :: TTerm TestGroup
-literalsReadInt32 = subgroup "readInt32" [
-  testJust "positive" "42" 42,
-  testJust "negative" "-42" (-42),
-  testNothing "invalid" "abc"]
-  where
-    testJust name x result = primCase name _literals_readInt32 [string x] (Core.termMaybe $ just (int32 result))
-    testNothing name x = primCase name _literals_readInt32 [string x] (Core.termMaybe nothing)
-
-literalsReadInt64 :: TTerm TestGroup
-literalsReadInt64 = subgroup "readInt64" [
-  testJust "positive" "1000000" 1000000,
-  testJust "negative" "-1000000" (-1000000),
-  testNothing "invalid" "abc"]
-  where
-    testJust name x result = primCase name _literals_readInt64 [string x] (Core.termMaybe $ just (int64 result))
-    testNothing name x = primCase name _literals_readInt64 [string x] (Core.termMaybe nothing)
-
-literalsReadFloat32 :: TTerm TestGroup
-literalsReadFloat32 = subgroup "readFloat32" [
-  testJust "positive" "3.14" 3.14,
-  testJust "negative" "-2.5" (-2.5),
-  testNothing "invalid" "abc"]
-  where
-    testJust name x result = primCase name _literals_readFloat32 [string x] (Core.termMaybe $ just (float32 result))
-    testNothing name x = primCase name _literals_readFloat32 [string x] (Core.termMaybe nothing)
-
-literalsReadFloat64 :: TTerm TestGroup
-literalsReadFloat64 = subgroup "readFloat64" [
-  testJust "positive" "3.14159" 3.14159,
-  testJust "negative" "-2.71828" (-2.71828),
-  testNothing "invalid" "abc"]
-  where
-    testJust name x result = primCase name _literals_readFloat64 [string x] (Core.termMaybe $ just (float64 result))
-    testNothing name x = primCase name _literals_readFloat64 [string x] (Core.termMaybe nothing)
-
-literalsReadBoolean :: TTerm TestGroup
-literalsReadBoolean = subgroup "readBoolean" [
-  testJust "true" "true" true,
-  testJust "false" "false" false,
-  testNothing "invalid" "yes"]
-  where
-    testJust name x result = primCase name _literals_readBoolean [string x] (Core.termMaybe $ just result)
-    testNothing name x = primCase name _literals_readBoolean [string x] (Core.termMaybe nothing)
-
-literalsReadString :: TTerm TestGroup
-literalsReadString = subgroup "readString" [
-  testJust "quoted string" "\"hello\"" "hello",
-  testJust "empty quoted" "\"\"" "",
-  testNothing "unquoted" "hello"]
-  where
-    testJust name x result = primCase name _literals_readString [string x] (Core.termMaybe $ just (string result))
-    testNothing name x = primCase name _literals_readString [string x] (Core.termMaybe nothing)
-
-literalsReadUint8 :: TTerm TestGroup
-literalsReadUint8 = subgroup "readUint8" [
-  testJust "zero" "0" 0,
-  testJust "typical" "100" 100,
-  testJust "max value" "255" 255,
-  testNothing "invalid" "abc",
-  testNothing "negative" "-1"]
-  where
-    testJust name x result = primCase name _literals_readUint8 [string x] (Core.termMaybe $ just (uint8 result))
-    testNothing name x = primCase name _literals_readUint8 [string x] (Core.termMaybe nothing)
-
-literalsReadUint16 :: TTerm TestGroup
-literalsReadUint16 = subgroup "readUint16" [
-  testJust "zero" "0" 0,
-  testJust "typical" "1000" 1000,
-  testNothing "invalid" "abc",
-  testNothing "negative" "-1"]
-  where
-    testJust name x result = primCase name _literals_readUint16 [string x] (Core.termMaybe $ just (uint16 result))
-    testNothing name x = primCase name _literals_readUint16 [string x] (Core.termMaybe nothing)
-
-literalsReadUint32 :: TTerm TestGroup
-literalsReadUint32 = subgroup "readUint32" [
-  testJust "zero" "0" 0,
-  testJust "typical" "100000" 100000,
-  testNothing "invalid" "abc",
-  testNothing "negative" "-1"]
-  where
-    testJust name x result = primCase name _literals_readUint32 [string x] (Core.termMaybe $ just (uint32 result))
-    testNothing name x = primCase name _literals_readUint32 [string x] (Core.termMaybe nothing)
-
-literalsReadUint64 :: TTerm TestGroup
-literalsReadUint64 = subgroup "readUint64" [
-  testJust "zero" "0" 0,
-  testJust "typical" "1000000" 1000000,
-  testNothing "invalid" "abc",
-  testNothing "negative" "-1"]
-  where
-    testJust name x result = primCase name _literals_readUint64 [string x] (Core.termMaybe $ just (uint64 result))
-    testNothing name x = primCase name _literals_readUint64 [string x] (Core.termMaybe nothing)
-
-literalsReadBigint :: TTerm TestGroup
-literalsReadBigint = subgroup "readBigint" [
-  testJust "positive" "42" 42,
-  testJust "negative" "-42" (-42),
-  testJust "zero" "0" 0,
-  primCaseWithTags "large" [tag_disabled] _literals_readBigint [string "123456789012345678901234567890"] (Core.termMaybe $ just (bigint 123456789012345678901234567890)),
-  testNothing "invalid" "abc"]
-  where
-    testJust name x result = primCase name _literals_readBigint [string x] (Core.termMaybe $ just (bigint result))
-    testNothing name x = primCase name _literals_readBigint [string x] (Core.termMaybe nothing)
-
--- Binary/String conversion
--- Note: binaryToStringBS and stringToBinary use base64 encoding
-
-literalsStringToBinary :: TTerm TestGroup
-literalsStringToBinary = subgroup "stringToBinary" [
-  test "simple base64" "aGVsbG8=" (BC.pack "hello"),
-  test "empty string" "" B.empty]
-  where
-    test name x result = primCase name _literals_stringToBinary [string x] (binary result)
-
-literalsBinaryToString :: TTerm TestGroup
-literalsBinaryToString = subgroup "binaryToString" [
-  test "simple binary" (BC.pack "hello") "aGVsbG8=",
-  test "empty binary" B.empty ""]
-  where
-    test name x result = primCase name _literals_binaryToString [binary x] (string result)
 
 allTests :: TTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
@@ -581,3 +437,147 @@ allTests = definitionInModule module_ "allTests" $
       -- Binary conversions
       literalsStringToBinary,
       literalsBinaryToString]
+
+literalsBinaryToString :: TTerm TestGroup
+literalsBinaryToString = subgroup "binaryToString" [
+  test "simple binary" (BC.pack "hello") "aGVsbG8=",
+  test "empty binary" B.empty ""]
+  where
+    test name x result = primCase name _literals_binaryToString [binary x] (string result)
+
+literalsReadBigint :: TTerm TestGroup
+literalsReadBigint = subgroup "readBigint" [
+  testJust "positive" "42" 42,
+  testJust "negative" "-42" (-42),
+  testJust "zero" "0" 0,
+  primCaseWithTags "large" [tag_disabled] _literals_readBigint [string "123456789012345678901234567890"] (Core.termMaybe $ just (bigint 123456789012345678901234567890)),
+  testNothing "invalid" "abc"]
+  where
+    testJust name x result = primCase name _literals_readBigint [string x] (Core.termMaybe $ just (bigint result))
+    testNothing name x = primCase name _literals_readBigint [string x] (Core.termMaybe nothing)
+
+-- Binary/String conversion
+-- Note: binaryToStringBS and stringToBinary use base64 encoding
+
+literalsReadBoolean :: TTerm TestGroup
+literalsReadBoolean = subgroup "readBoolean" [
+  testJust "true" "true" true,
+  testJust "false" "false" false,
+  testNothing "invalid" "yes"]
+  where
+    testJust name x result = primCase name _literals_readBoolean [string x] (Core.termMaybe $ just result)
+    testNothing name x = primCase name _literals_readBoolean [string x] (Core.termMaybe nothing)
+
+literalsReadFloat32 :: TTerm TestGroup
+literalsReadFloat32 = subgroup "readFloat32" [
+  testJust "positive" "3.14" 3.14,
+  testJust "negative" "-2.5" (-2.5),
+  testNothing "invalid" "abc"]
+  where
+    testJust name x result = primCase name _literals_readFloat32 [string x] (Core.termMaybe $ just (float32 result))
+    testNothing name x = primCase name _literals_readFloat32 [string x] (Core.termMaybe nothing)
+
+literalsReadFloat64 :: TTerm TestGroup
+literalsReadFloat64 = subgroup "readFloat64" [
+  testJust "positive" "3.14159" 3.14159,
+  testJust "negative" "-2.71828" (-2.71828),
+  testNothing "invalid" "abc"]
+  where
+    testJust name x result = primCase name _literals_readFloat64 [string x] (Core.termMaybe $ just (float64 result))
+    testNothing name x = primCase name _literals_readFloat64 [string x] (Core.termMaybe nothing)
+
+literalsReadInt16 :: TTerm TestGroup
+literalsReadInt16 = subgroup "readInt16" [
+  testJust "positive" "1000" 1000,
+  testJust "negative" "-1000" (-1000),
+  testNothing "invalid" "abc"]
+  where
+    testJust name x result = primCase name _literals_readInt16 [string x] (Core.termMaybe $ just (int16 result))
+    testNothing name x = primCase name _literals_readInt16 [string x] (Core.termMaybe nothing)
+
+literalsReadInt32 :: TTerm TestGroup
+literalsReadInt32 = subgroup "readInt32" [
+  testJust "positive" "42" 42,
+  testJust "negative" "-42" (-42),
+  testNothing "invalid" "abc"]
+  where
+    testJust name x result = primCase name _literals_readInt32 [string x] (Core.termMaybe $ just (int32 result))
+    testNothing name x = primCase name _literals_readInt32 [string x] (Core.termMaybe nothing)
+
+literalsReadInt64 :: TTerm TestGroup
+literalsReadInt64 = subgroup "readInt64" [
+  testJust "positive" "1000000" 1000000,
+  testJust "negative" "-1000000" (-1000000),
+  testNothing "invalid" "abc"]
+  where
+    testJust name x result = primCase name _literals_readInt64 [string x] (Core.termMaybe $ just (int64 result))
+    testNothing name x = primCase name _literals_readInt64 [string x] (Core.termMaybe nothing)
+
+literalsReadInt8 :: TTerm TestGroup
+literalsReadInt8 = subgroup "readInt8" [
+  testJust "positive" "42" 42,
+  testJust "negative" "-42" (-42),
+  testJust "max value" "127" 127,
+  testJust "min value" "-128" (-128),
+  testNothing "invalid" "abc",
+  testNothing "overflow" "128"]
+  where
+    testJust name x result = primCase name _literals_readInt8 [string x] (Core.termMaybe $ just (int8 result))
+    testNothing name x = primCase name _literals_readInt8 [string x] (Core.termMaybe nothing)
+
+literalsReadString :: TTerm TestGroup
+literalsReadString = subgroup "readString" [
+  testJust "quoted string" "\"hello\"" "hello",
+  testJust "empty quoted" "\"\"" "",
+  testNothing "unquoted" "hello"]
+  where
+    testJust name x result = primCase name _literals_readString [string x] (Core.termMaybe $ just (string result))
+    testNothing name x = primCase name _literals_readString [string x] (Core.termMaybe nothing)
+
+literalsReadUint16 :: TTerm TestGroup
+literalsReadUint16 = subgroup "readUint16" [
+  testJust "zero" "0" 0,
+  testJust "typical" "1000" 1000,
+  testNothing "invalid" "abc",
+  testNothing "negative" "-1"]
+  where
+    testJust name x result = primCase name _literals_readUint16 [string x] (Core.termMaybe $ just (uint16 result))
+    testNothing name x = primCase name _literals_readUint16 [string x] (Core.termMaybe nothing)
+
+literalsReadUint32 :: TTerm TestGroup
+literalsReadUint32 = subgroup "readUint32" [
+  testJust "zero" "0" 0,
+  testJust "typical" "100000" 100000,
+  testNothing "invalid" "abc",
+  testNothing "negative" "-1"]
+  where
+    testJust name x result = primCase name _literals_readUint32 [string x] (Core.termMaybe $ just (uint32 result))
+    testNothing name x = primCase name _literals_readUint32 [string x] (Core.termMaybe nothing)
+
+literalsReadUint64 :: TTerm TestGroup
+literalsReadUint64 = subgroup "readUint64" [
+  testJust "zero" "0" 0,
+  testJust "typical" "1000000" 1000000,
+  testNothing "invalid" "abc",
+  testNothing "negative" "-1"]
+  where
+    testJust name x result = primCase name _literals_readUint64 [string x] (Core.termMaybe $ just (uint64 result))
+    testNothing name x = primCase name _literals_readUint64 [string x] (Core.termMaybe nothing)
+
+literalsReadUint8 :: TTerm TestGroup
+literalsReadUint8 = subgroup "readUint8" [
+  testJust "zero" "0" 0,
+  testJust "typical" "100" 100,
+  testJust "max value" "255" 255,
+  testNothing "invalid" "abc",
+  testNothing "negative" "-1"]
+  where
+    testJust name x result = primCase name _literals_readUint8 [string x] (Core.termMaybe $ just (uint8 result))
+    testNothing name x = primCase name _literals_readUint8 [string x] (Core.termMaybe nothing)
+
+literalsStringToBinary :: TTerm TestGroup
+literalsStringToBinary = subgroup "stringToBinary" [
+  test "simple base64" "aGVsbG8=" (BC.pack "hello"),
+  test "empty string" "" B.empty]
+  where
+    test name x result = primCase name _literals_stringToBinary [string x] (binary result)

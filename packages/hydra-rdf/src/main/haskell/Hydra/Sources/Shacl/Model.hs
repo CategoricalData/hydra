@@ -22,12 +22,6 @@ ns = ModuleName "hydra.shacl.model"
 define :: String -> Type -> Binding
 define = defineType ns
 
-shacl :: String -> Type
-shacl = typeref ns
-
-rdf :: String -> Type
-rdf = typeref $ RdfSyntax.ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -286,6 +280,9 @@ qualifiedValueShape = define "QualifiedValueShape" $
     "qualifiedMinCount">: T.bigint,
     "qualifiedValueShapesDisjoint">: T.optional T.boolean]
 
+rdf :: String -> Type
+rdf = typeref $ RdfSyntax.ns
+
 reference :: Binding
 reference = define "Reference" $
   doc "Either an instance of a type like sh:Shape or sh:NodeShape, or an IRI which refers to an instance of that type" $
@@ -303,6 +300,9 @@ severity = define "Severity" $ T.union [
   "info">: doc "A non-critical constraint violation indicating an informative message" T.unit,
   "warning">: doc "A non-critical constraint violation indicating a warning" T.unit,
   "violation">: doc "A constraint violation" T.unit]
+
+shacl :: String -> Type
+shacl = typeref ns
 
 shape :: Binding
 shape = define "Shape" $

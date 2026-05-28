@@ -242,19 +242,6 @@ lefts_ = define "lefts" $
     (list ([] :: [TTerm Term]))
     (var "elements")
 
-map_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
-map_ = define "map" $
-  doc "Interpreter-friendly map for Either terms." $
-  "cx" ~> "g" ~>
-  "rightFun" ~> "eitherTerm" ~>
-  cases _Term (var "eitherTerm")
-    (Just (ExtractCore.unexpected (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
-    _Term_either>>: "e" ~>
-      right $ Eithers.either_
-        ("val" ~> Core.termEither $ left $ var "val")
-        ("val" ~> Core.termEither $ right $ Core.termApplication $ Core.application (var "rightFun") (var "val"))
-        (var "e")]
-
 -- | Interpreter-friendly mapList for Either (traverse).
 -- mapList funTerm listTerm: applies funTerm to each element, collecting results.
 -- Short-circuits on first Left error.
@@ -302,6 +289,32 @@ mapList_ = define "mapList" $
     -- Reverse elements so foldl with cons builds list in original order
     (Lists.reverse $ var "elements")
 
+-- | Interpreter-friendly mapMaybe for Either (traverse over Maybe).
+-- mapMaybe funTerm maybeTerm: if Just, applies funTerm to the value.
+mapMaybe_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+mapMaybe_ = define "mapMaybe" $
+  doc "Interpreter-friendly mapMaybe for Either (traverse over Maybe)." $
+  "cx" ~> "g" ~>
+  "funTerm" ~> "maybeTerm" ~>
+  cases _Term (var "maybeTerm")
+    (Just (ExtractCore.unexpected (string "maybe value") (ShowCore.term @@ var "maybeTerm"))) [
+    _Term_maybe>>: "opt" ~>
+      right $ Maybes.maybe
+        -- Nothing: return Right Nothing
+        (Core.termEither $ right $ Core.termMaybe nothing)
+        -- Just val: apply funTerm, wrap result in Just
+        ("val" ~>
+          Core.termApplication $ Core.application
+            (Core.termApplication $ Core.application
+              (Core.termApplication $ Core.application
+                (Core.termVariable $ encodedName _eithers_either)
+                (Core.termLambda $ Core.lambda (wrap _Name $ string "err") nothing $
+                  Core.termEither $ left $ Core.termVariable $ wrap _Name $ string "err"))
+              (Core.termLambda $ Core.lambda (wrap _Name $ string "y") nothing $
+                Core.termEither $ right $ Core.termMaybe $ just $ Core.termVariable $ wrap _Name $ string "y"))
+            (Core.termApplication $ Core.application (var "funTerm") (var "val")))
+        (var "opt")]
+
 -- | Interpreter-friendly mapSet for Either (traverse over Set).
 -- mapSet funTerm setTerm: applies funTerm to each element, collecting results as a set.
 -- Short-circuits on first Left error.
@@ -347,31 +360,18 @@ mapSet_ = define "mapSet" $
     -- Convert set elements to list for folding
     (Sets.toList $ var "elements")
 
--- | Interpreter-friendly mapMaybe for Either (traverse over Maybe).
--- mapMaybe funTerm maybeTerm: if Just, applies funTerm to the value.
-mapMaybe_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
-mapMaybe_ = define "mapMaybe" $
-  doc "Interpreter-friendly mapMaybe for Either (traverse over Maybe)." $
+map_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+map_ = define "map" $
+  doc "Interpreter-friendly map for Either terms." $
   "cx" ~> "g" ~>
-  "funTerm" ~> "maybeTerm" ~>
-  cases _Term (var "maybeTerm")
-    (Just (ExtractCore.unexpected (string "maybe value") (ShowCore.term @@ var "maybeTerm"))) [
-    _Term_maybe>>: "opt" ~>
-      right $ Maybes.maybe
-        -- Nothing: return Right Nothing
-        (Core.termEither $ right $ Core.termMaybe nothing)
-        -- Just val: apply funTerm, wrap result in Just
-        ("val" ~>
-          Core.termApplication $ Core.application
-            (Core.termApplication $ Core.application
-              (Core.termApplication $ Core.application
-                (Core.termVariable $ encodedName _eithers_either)
-                (Core.termLambda $ Core.lambda (wrap _Name $ string "err") nothing $
-                  Core.termEither $ left $ Core.termVariable $ wrap _Name $ string "err"))
-              (Core.termLambda $ Core.lambda (wrap _Name $ string "y") nothing $
-                Core.termEither $ right $ Core.termMaybe $ just $ Core.termVariable $ wrap _Name $ string "y"))
-            (Core.termApplication $ Core.application (var "funTerm") (var "val")))
-        (var "opt")]
+  "rightFun" ~> "eitherTerm" ~>
+  cases _Term (var "eitherTerm")
+    (Just (ExtractCore.unexpected (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
+    _Term_either>>: "e" ~>
+      right $ Eithers.either_
+        ("val" ~> Core.termEither $ left $ var "val")
+        ("val" ~> Core.termEither $ right $ Core.termApplication $ Core.application (var "rightFun") (var "val"))
+        (var "e")]
 
 -- | Interpreter-friendly partitionEithers for list of Either terms.
 -- Splits a list of Eithers into (lefts, rights).

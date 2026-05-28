@@ -36,6 +36,35 @@ module_ = Module {
       typeParameter,
       typeSubst]
 
+functionStructure :: Binding
+functionStructure = define "FunctionStructure" $
+  doc ("A structured representation of a function term's components, replacing ad-hoc tuples."
+    ++ " This captures all the information extracted from peeling lambdas, type lambdas, lets, and"
+    ++ " type applications from a term.") $
+  T.forAll "env" $
+  T.record [
+    "typeParams">:
+      doc "Type parameters (from type lambdas)" $
+      T.list Core.name,
+    "params">:
+      doc "Value parameters (from lambdas)" $
+      T.list Core.name,
+    "bindings">:
+      doc "Let bindings accumulated from the term" $
+      T.list Core.binding,
+    "body">:
+      doc "The body term after removing all lambdas, lets, etc."
+      Core.term,
+    "domains">:
+      doc "Domain types of the value parameters" $
+      T.list Core.type_,
+    "codomain">:
+      doc "The return type of the function (if type inference succeeded)" $
+      T.optional Core.type_,
+    "environment">:
+      doc "Updated environment after processing all bindings" $
+      T.variable "env"]
+
 inferenceContext :: Binding
 inferenceContext = define "InferenceContext" $
   doc ("State threaded through type inference: the fresh type variable counter"
@@ -70,70 +99,6 @@ inferenceResult = define "InferenceResult" $
     "context">:
       doc "The updated InferenceContext after inference (carries fresh-variable counter and trace)" $
       inferenceContext]
-
-termSubst :: Binding
-termSubst = define "TermSubst" $
-  doc "A substitution of term variables for terms" $
-  T.wrap $ T.map Core.name Core.term
-
-typeClass :: Binding
-typeClass = define "TypeClass" $
-  doc ("A type class identifier together with a human-readable description."
-    ++ " Type classes are referenced as bare names (e.g. the local name \"equality\") in"
-    ++ " TypeVariableMetadata.classes; the canonical definitions live as term bindings"
-    ++ " under hydra.classes.") $
-  T.record [
-    "description">:
-      doc "A human-readable description of the type class"
-      T.string]
-
-typeConstraint :: Binding
-typeConstraint = define "TypeConstraint" $
-  doc "An assertion that two types can be unified into a single type" $
-  T.record [
-    "left">:
-      doc "The left-hand side of the constraint"
-      Core.type_,
-    "right">:
-      doc "The right-hand side of the constraint"
-      Core.type_,
-    "comment">:
-      doc "A description of the type constraint which may be used for tracing or debugging"
-      T.string]
-
-typeSubst :: Binding
-typeSubst = define "TypeSubst" $
-  doc "A substitution of type variables for types" $
-  T.wrap $ T.map Core.name Core.type_
-
-functionStructure :: Binding
-functionStructure = define "FunctionStructure" $
-  doc ("A structured representation of a function term's components, replacing ad-hoc tuples."
-    ++ " This captures all the information extracted from peeling lambdas, type lambdas, lets, and"
-    ++ " type applications from a term.") $
-  T.forAll "env" $
-  T.record [
-    "typeParams">:
-      doc "Type parameters (from type lambdas)" $
-      T.list Core.name,
-    "params">:
-      doc "Value parameters (from lambdas)" $
-      T.list Core.name,
-    "bindings">:
-      doc "Let bindings accumulated from the term" $
-      T.list Core.binding,
-    "body">:
-      doc "The body term after removing all lambdas, lets, etc."
-      Core.term,
-    "domains">:
-      doc "Domain types of the value parameters" $
-      T.list Core.type_,
-    "codomain">:
-      doc "The return type of the function (if type inference succeeded)" $
-      T.optional Core.type_,
-    "environment">:
-      doc "Updated environment after processing all bindings" $
-      T.variable "env"]
 
 parameter :: Binding
 parameter = define "Parameter" $
@@ -177,6 +142,36 @@ termSignature = define "TermSignature" $
       doc "The result of the term"
       result]
 
+termSubst :: Binding
+termSubst = define "TermSubst" $
+  doc "A substitution of term variables for terms" $
+  T.wrap $ T.map Core.name Core.term
+
+typeClass :: Binding
+typeClass = define "TypeClass" $
+  doc ("A type class identifier together with a human-readable description."
+    ++ " Type classes are referenced as bare names (e.g. the local name \"equality\") in"
+    ++ " TypeVariableMetadata.classes; the canonical definitions live as term bindings"
+    ++ " under hydra.classes.") $
+  T.record [
+    "description">:
+      doc "A human-readable description of the type class"
+      T.string]
+
+typeConstraint :: Binding
+typeConstraint = define "TypeConstraint" $
+  doc "An assertion that two types can be unified into a single type" $
+  T.record [
+    "left">:
+      doc "The left-hand side of the constraint"
+      Core.type_,
+    "right">:
+      doc "The right-hand side of the constraint"
+      Core.type_,
+    "comment">:
+      doc "A description of the type constraint which may be used for tracing or debugging"
+      T.string]
+
 typeParameter :: Binding
 typeParameter = define "TypeParameter" $
   doc "A type parameter of a term, with an optional list of type class constraints" $
@@ -187,3 +182,8 @@ typeParameter = define "TypeParameter" $
     "constraints">:
       doc "Any type class constraints on the type parameter" $
       T.list Core.typeClassConstraint]
+
+typeSubst :: Binding
+typeSubst = define "TypeSubst" $
+  doc "A substitution of type variables for types" $
+  T.wrap $ T.map Core.name Core.type_

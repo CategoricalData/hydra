@@ -138,17 +138,6 @@ packageVersionSpecifier = define "PackageVersionSpecifier" $
       doc "Any version of the package satisfies the dependency" $
       T.unit]
 
-qualifiedName :: Binding
-qualifiedName = define "QualifiedName" $
-  doc "A qualified name consisting of an optional module name together with a mandatory local name" $
-  T.record [
-    "moduleName">:
-      doc "The optional module name" $
-      T.maybe moduleNameDef,
-    "local">:
-      doc "The local name"
-      T.string]
-
 primitiveDefinition :: Binding
 primitiveDefinition = define "PrimitiveDefinition" $
   doc "A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, description, signature, totality and purity flags, and an optional default implementation expressed as a Hydra term." $
@@ -171,6 +160,17 @@ primitiveDefinition = define "PrimitiveDefinition" $
     "defaultImplementation">:
       doc "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation." $
       T.maybe Core.term]
+
+qualifiedName :: Binding
+qualifiedName = define "QualifiedName" $
+  doc "A qualified name consisting of an optional module name together with a mandatory local name" $
+  T.record [
+    "moduleName">:
+      doc "The optional module name" $
+      T.maybe moduleNameDef,
+    "local">:
+      doc "The local name"
+      T.string]
 
 termDefinition :: Binding
 termDefinition = define "TermDefinition" $

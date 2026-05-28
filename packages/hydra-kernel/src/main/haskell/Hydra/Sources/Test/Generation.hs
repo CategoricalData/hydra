@@ -29,6 +29,11 @@ import qualified Hydra.Sources.Kernel.Terms.Scoping    as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Show.Core  as ShowCore
 
 
+-- Local alias for polymorphic application.
+(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
+(#) = (Phantoms.@@)
+infixl 1 #
+
 ns :: ModuleName
 ns = ModuleName "hydra.test.generation"
 
@@ -44,11 +49,6 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
--- Local alias for polymorphic application.
-(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
-(#) = (Phantoms.@@)
-infixl 1 #
-
 ----------------------------------------
 -- Toy modules used as test input.
 --
@@ -63,33 +63,6 @@ infixl 1 #
 -- is exactly the path `inferModulesGiven` exercises differently from
 -- `inferModules` (the former only infers `targetBindings`, the latter infers
 -- the full universe).
-
-nsA :: TTerm ModuleName
-nsA = Packaging.moduleName2 (Phantoms.string "hydra.testInput.a")
-
-nsB :: TTerm ModuleName
-nsB = Packaging.moduleName2 (Phantoms.string "hydra.testInput.b")
-
-nameIdA :: TTerm Name
-nameIdA = Core.name (Phantoms.string "hydra.testInput.a.idA")
-
-nameUseId :: TTerm Name
-nameUseId = Core.name (Phantoms.string "hydra.testInput.b.useId")
-
--- An untyped term definition (Maybe TypeScheme = nothing) so inference will
--- assign a fresh scheme.
-untypedTermDef :: TTerm Name -> TTerm Term -> TTerm Definition
-untypedTermDef nm tm = Packaging.definitionTerm
-  (Packaging.termDefinition nm tm Phantoms.nothing)
-
--- A pre-annotated term definition, simulating a universe binding whose type
--- scheme was populated by a prior inference run (the future caching layer).
--- `inferModulesGiven` uses these schemes via `modulesToGraph`'s `boundTypes`
--- seeding to resolve cross-module references without re-inferring the
--- universe.
-typedTermDef :: TTerm Name -> TTerm Term -> TTerm TypeScheme -> TTerm Definition
-typedTermDef nm tm ts = Packaging.definitionTerm
-  (Packaging.termDefinition nm tm (Phantoms.just (Scoping.typeSchemeToTermSignature @@ ts)))
 
 -- The scheme carried on `modA.idA`: forall a. a -> a.
 idAScheme :: TTerm TypeScheme
@@ -111,8 +84,35 @@ modB = Packaging.module_
   (Phantoms.list [
     untypedTermDef nameUseId (Terms.apply (Terms.var "hydra.testInput.a.idA") (Terms.int32 42))])
 
+nameIdA :: TTerm Name
+nameIdA = Core.name (Phantoms.string "hydra.testInput.a.idA")
+
+nameUseId :: TTerm Name
+nameUseId = Core.name (Phantoms.string "hydra.testInput.b.useId")
+
+nsA :: TTerm ModuleName
+nsA = Packaging.moduleName2 (Phantoms.string "hydra.testInput.a")
+
+nsB :: TTerm ModuleName
+nsB = Packaging.moduleName2 (Phantoms.string "hydra.testInput.b")
+
+-- A pre-annotated term definition, simulating a universe binding whose type
+-- scheme was populated by a prior inference run (the future caching layer).
+-- `inferModulesGiven` uses these schemes via `modulesToGraph`'s `boundTypes`
+-- seeding to resolve cross-module references without re-inferring the
+-- universe.
+typedTermDef :: TTerm Name -> TTerm Term -> TTerm TypeScheme -> TTerm Definition
+typedTermDef nm tm ts = Packaging.definitionTerm
+  (Packaging.termDefinition nm tm (Phantoms.just (Scoping.typeSchemeToTermSignature @@ ts)))
+
 universeMods :: TTerm [Module]
 universeMods = Phantoms.list [modA, modB]
+
+-- An untyped term definition (Maybe TypeScheme = nothing) so inference will
+-- assign a fresh scheme.
+untypedTermDef :: TTerm Name -> TTerm Term -> TTerm Definition
+untypedTermDef nm tm = Packaging.definitionTerm
+  (Packaging.termDefinition nm tm Phantoms.nothing)
 
 ----------------------------------------
 -- Second toy universe: a "clean" module carrying a scheme with vacuous
@@ -126,18 +126,6 @@ universeMods = Phantoms.list [modA, modB]
 --   hydra.testInput.v.funky :: forall t0 t1. t0 -> t1 -> int32 -> int32
 --     (the body is irrelevant; only the scheme matters for seeding.)
 --   hydra.testInput.w.useFunky = funky "foo" 7 100
-
-nsV :: TTerm ModuleName
-nsV = Packaging.moduleName2 (Phantoms.string "hydra.testInput.v")
-
-nsW :: TTerm ModuleName
-nsW = Packaging.moduleName2 (Phantoms.string "hydra.testInput.w")
-
-nameFunky :: TTerm Name
-nameFunky = Core.name (Phantoms.string "hydra.testInput.v.funky")
-
-nameUseFunky :: TTerm Name
-nameUseFunky = Core.name (Phantoms.string "hydra.testInput.w.useFunky")
 
 -- forall t0 t1 t2. t0 -> t1 -> t2 -> t2
 -- This is the canonical scheme that inferModules produces when funky is
@@ -174,6 +162,18 @@ modW = Packaging.module_
                        (Terms.string "foo"))
           (Terms.int32 7))
         (Terms.int32 100))])
+
+nameFunky :: TTerm Name
+nameFunky = Core.name (Phantoms.string "hydra.testInput.v.funky")
+
+nameUseFunky :: TTerm Name
+nameUseFunky = Core.name (Phantoms.string "hydra.testInput.w.useFunky")
+
+nsV :: TTerm ModuleName
+nsV = Packaging.moduleName2 (Phantoms.string "hydra.testInput.v")
+
+nsW :: TTerm ModuleName
+nsW = Packaging.moduleName2 (Phantoms.string "hydra.testInput.w")
 
 vacuousUniverse :: TTerm [Module]
 vacuousUniverse = Phantoms.list [modV, modW]
@@ -223,6 +223,27 @@ showResult r = Eithers.either_
 ----------------------------------------
 -- Test cases.
 
+allTests :: TTermDefinition TestGroup
+allTests = define "allTests" $
+    Phantoms.doc "Test cases for code generation operations" $
+    supergroup "generation" [
+      subgroup "inferModulesGiven" [
+        incrementalSubsetCase,
+        incrementalFullCase,
+        vacuousQuantifierCase]]
+
+-- | Property: when target = universe, `inferModulesGiven` is equivalent to
+-- `inferModules`.
+incrementalFullCase :: TTerm TestCaseWithMetadata
+incrementalFullCase = universalCase "incremental inference of full universe matches full inference"
+    actual
+    expected
+  where
+    actual = showResult (Generation.inferModulesGiven
+      # TestGraph.testContext # TestGraph.testGraph # universeMods # universeMods)
+    expected = showResult (Generation.inferModules
+      # TestGraph.testContext # TestGraph.testGraph # universeMods # universeMods)
+
 -- | Property: incremental inference of a strict subset of the universe
 -- produces the same inferred type schemes for the target modules' term
 -- bindings as a full inference run over the same universe.
@@ -236,18 +257,6 @@ incrementalSubsetCase = universalCase "incremental inference of subset matches f
       # TestGraph.testContext # TestGraph.testGraph # universeMods # target)
     expected = showResult (Generation.inferModules
       # TestGraph.testContext # TestGraph.testGraph # universeMods # target)
-
--- | Property: when target = universe, `inferModulesGiven` is equivalent to
--- `inferModules`.
-incrementalFullCase :: TTerm TestCaseWithMetadata
-incrementalFullCase = universalCase "incremental inference of full universe matches full inference"
-    actual
-    expected
-  where
-    actual = showResult (Generation.inferModulesGiven
-      # TestGraph.testContext # TestGraph.testGraph # universeMods # universeMods)
-    expected = showResult (Generation.inferModules
-      # TestGraph.testContext # TestGraph.testGraph # universeMods # universeMods)
 
 -- | Property: when a clean universe module carries a pre-inferred scheme,
 -- `inferModulesGiven` uses that scheme verbatim rather than re-inferring it.
@@ -278,12 +287,3 @@ vacuousQuantifierCase = universalCase
     target = Phantoms.list [modW]
     actual = showResult (Generation.inferModulesGiven
       # TestGraph.testContext # TestGraph.testGraph # vacuousUniverse # target)
-
-allTests :: TTermDefinition TestGroup
-allTests = define "allTests" $
-    Phantoms.doc "Test cases for code generation operations" $
-    supergroup "generation" [
-      subgroup "inferModulesGiven" [
-        incrementalSubsetCase,
-        incrementalFullCase,
-        vacuousQuantifierCase]]

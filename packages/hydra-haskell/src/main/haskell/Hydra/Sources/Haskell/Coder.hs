@@ -98,18 +98,6 @@ import qualified Hydra.Sources.Haskell.Utils as HaskellUtilsSource
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 
 
-formatError :: TTerm (Error -> String)
-formatError = "e" ~> ShowError.error_ @@ var "e"
-
--- | Lift Either String to Either Error
-liftStringError :: TTerm InferenceContext -> TTerm (Either String a) -> TTerm (Either Error a)
-liftStringError _cx = Eithers.bimap ("_s" ~> Error.errorExtraction (Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "valid input") (var "_s"))) ("_x" ~> var "_x")
-
-type HaskellNamespaces = Namespaces H.ModuleName
-
-haskellCoderDefinition :: String -> TTerm a -> TTermDefinition a
-haskellCoderDefinition = definitionInModule module_
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -154,21 +142,6 @@ module_ = Module {
       toDefinition toTypeDeclarationsFrom,
       toDefinition typeDecl,
       toDefinition typeSchemeConstraintsToClassMap]
-
--- TODO: make these settings configurable
-includeTypeDefinitions :: TTermDefinition Bool
-includeTypeDefinitions = haskellCoderDefinition "includeTypeDefinitions" $
-  doc "Whether to include type definitions in generated Haskell modules" $
-  false
-useCoreImport :: TTermDefinition Bool
-useCoreImport = haskellCoderDefinition "useCoreImport" $
-  doc "Whether to use the Hydra core import in generated modules" $
-  true
-
-keyHaskellVar :: TTermDefinition Name
-keyHaskellVar = haskellCoderDefinition "keyHaskellVar" $
-  doc "The key used to track Haskell variable depth in annotations" $
-  wrap _Name $ string "haskellVar"
 
 adaptTypeToHaskellAndEncode :: TTermDefinition (HaskellNamespaces -> Type -> InferenceContext -> Graph -> Either Error H.Type)
 adaptTypeToHaskellAndEncode = haskellCoderDefinition "adaptTypeToHaskellAndEncode" $
@@ -367,21 +340,6 @@ encodeCaseExpression = haskellCoderDefinition "encodeCaseExpression" $
       H._CaseExpression_case>>: var "scrutinee",
       H._CaseExpression_alternatives>>: Lists.concat2 (var "ecases") (var "dcases")]
 
-encodeUnwrap :: TTermDefinition (HaskellNamespaces -> Name -> Either Error H.Expression)
-encodeUnwrap = haskellCoderDefinition "encodeUnwrap" $
-  doc "Encode an unwrap term as a Haskell expression" $
-  "namespaces" ~> "name" ~>
-  right $ inject H._Expression H._Expression_variable $ HaskellUtilsSource.elementReference @@ var "namespaces" @@
-    (Names.qname @@ (Maybes.fromMaybe (wrap _ModuleName $ string "") (Names.namespaceOf @@ var "name")) @@ (HaskellUtilsSource.newtypeAccessorName @@ var "name"))
-
-encodeProjection :: TTermDefinition (HaskellNamespaces -> Projection -> Either Error H.Expression)
-encodeProjection = haskellCoderDefinition "encodeProjection" $
-  doc "Encode a record projection as a Haskell expression" $
-  "namespaces" ~> "proj" ~> lets [
-    "dn">: Core.projectionTypeName $ var "proj",
-    "fname">: Core.projectionFieldName $ var "proj"] $
-    right $ inject H._Expression H._Expression_variable $ HaskellUtilsSource.recordFieldReference @@ var "namespaces" @@ var "dn" @@ var "fname"
-
 encodeLambdaTerm :: TTermDefinition (Int -> HaskellNamespaces -> Lambda -> InferenceContext -> Graph -> Either Error H.Expression)
 encodeLambdaTerm = haskellCoderDefinition "encodeLambdaTerm" $
   doc "Encode a Hydra lambda as a Haskell expression" $
@@ -390,14 +348,6 @@ encodeLambdaTerm = haskellCoderDefinition "encodeLambdaTerm" $
     "body">: Core.lambdaBody $ var "lam"] $
     "hbody" <<~ encodeTerm @@ var "depth" @@ var "namespaces" @@ var "body" @@ var "cx" @@ var "g" $
       right $ HaskellUtilsSource.hslambda @@ (HaskellUtilsSource.elementReference @@ var "namespaces" @@ var "v") @@ var "hbody"
-
-encodeStandaloneCases :: TTermDefinition (Int -> HaskellNamespaces -> CaseStatement -> InferenceContext -> Graph -> Either Error H.Expression)
-encodeStandaloneCases = haskellCoderDefinition "encodeStandaloneCases" $
-  doc "Encode a standalone (un-applied) case statement as a Haskell lambda over a case expression" $
-  "depth" ~> "namespaces" ~> "stmt" ~> "cx" ~> "g" ~>
-  -- When used standalone (not applied to an argument), wrap in a lambda
-  Eithers.map (HaskellUtilsSource.hslambda @@ (HaskellUtilsSource.rawName @@ string "x"))
-    (encodeCaseExpression @@ var "depth" @@ var "namespaces" @@ var "stmt" @@ (HaskellUtilsSource.hsvar @@ string "x") @@ var "cx" @@ var "g")
 
 encodeLiteral :: TTermDefinition (Literal -> InferenceContext -> Either Error H.Expression)
 encodeLiteral = haskellCoderDefinition "encodeLiteral" $
@@ -445,6 +395,22 @@ encodeLiteral = haskellCoderDefinition "encodeLiteral" $
             right $ HaskellUtilsSource.hslit @@ (inject H._Literal H._Literal_integer $ Literals.uint64ToBigint $ var "i")],
       _Literal_string>>: "s" ~>
         right $ HaskellUtilsSource.hslit @@ (inject H._Literal H._Literal_string $ var "s")]
+
+encodeProjection :: TTermDefinition (HaskellNamespaces -> Projection -> Either Error H.Expression)
+encodeProjection = haskellCoderDefinition "encodeProjection" $
+  doc "Encode a record projection as a Haskell expression" $
+  "namespaces" ~> "proj" ~> lets [
+    "dn">: Core.projectionTypeName $ var "proj",
+    "fname">: Core.projectionFieldName $ var "proj"] $
+    right $ inject H._Expression H._Expression_variable $ HaskellUtilsSource.recordFieldReference @@ var "namespaces" @@ var "dn" @@ var "fname"
+
+encodeStandaloneCases :: TTermDefinition (Int -> HaskellNamespaces -> CaseStatement -> InferenceContext -> Graph -> Either Error H.Expression)
+encodeStandaloneCases = haskellCoderDefinition "encodeStandaloneCases" $
+  doc "Encode a standalone (un-applied) case statement as a Haskell lambda over a case expression" $
+  "depth" ~> "namespaces" ~> "stmt" ~> "cx" ~> "g" ~>
+  -- When used standalone (not applied to an argument), wrap in a lambda
+  Eithers.map (HaskellUtilsSource.hslambda @@ (HaskellUtilsSource.rawName @@ string "x"))
+    (encodeCaseExpression @@ var "depth" @@ var "namespaces" @@ var "stmt" @@ (HaskellUtilsSource.hsvar @@ string "x") @@ var "cx" @@ var "g")
 
 encodeTerm :: TTermDefinition (Int -> HaskellNamespaces -> Term -> InferenceContext -> Graph -> Either Error H.Expression)
 encodeTerm = haskellCoderDefinition "encodeTerm" $
@@ -724,6 +690,13 @@ encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAsser
             H._ConstrainedType_ctx>>: var "hassert",
             H._ConstrainedType_type>>: var "htyp"])
 
+encodeUnwrap :: TTermDefinition (HaskellNamespaces -> Name -> Either Error H.Expression)
+encodeUnwrap = haskellCoderDefinition "encodeUnwrap" $
+  doc "Encode an unwrap term as a Haskell expression" $
+  "namespaces" ~> "name" ~>
+  right $ inject H._Expression H._Expression_variable $ HaskellUtilsSource.elementReference @@ var "namespaces" @@
+    (Names.qname @@ (Maybes.fromMaybe (wrap _ModuleName $ string "") (Names.namespaceOf @@ var "name")) @@ (HaskellUtilsSource.newtypeAccessorName @@ var "name"))
+
 extendMetaForTerm :: TTermDefinition (HE.HaskellModuleMetadata -> Term -> HE.HaskellModuleMetadata)
 extendMetaForTerm = haskellCoderDefinition "extendMetaForTerm" $
   doc "Extend metadata by analyzing a term for standard import usage (bottom-up step function)" $
@@ -776,6 +749,9 @@ findOrdVariables = haskellCoderDefinition "findOrdVariables" $
             (var "names")]] $
     Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "fold" @@ Sets.empty @@ var "typ"
 
+formatError :: TTerm (Error -> String)
+formatError = "e" ~> ShowError.error_ @@ var "e"
+
 gatherMetadata :: TTermDefinition ([Definition] -> HE.HaskellModuleMetadata)
 gatherMetadata = haskellCoderDefinition "gatherMetadata" $
   doc "Gather metadata from definitions by bottom-up traversal of all terms and types" $
@@ -805,12 +781,24 @@ getImplicitTypeClasses = haskellCoderDefinition "getImplicitTypeClasses" $
       pair (var "name") (Sets.fromList $ list [Core.name (string "ordering")])] $
     Maps.fromList $ Lists.map (var "toPair") (Sets.toList $ findOrdVariables @@ var "typ")
 
-moduleToHaskellModule :: TTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Prelude.Either Error H.Module)
-moduleToHaskellModule = haskellCoderDefinition "moduleToHaskellModule" $
-  doc "Convert a Hydra module and definitions to a Haskell module AST" $
-  "mod" ~> "defs" ~> "cx" ~> "g" ~>
-    "namespaces" <<~ HaskellUtilsSource.namespacesForModule @@ var "mod" @@ var "cx" @@ var "g" $
-      constructModule @@ var "namespaces" @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g"
+haskellCoderDefinition :: String -> TTerm a -> TTermDefinition a
+haskellCoderDefinition = definitionInModule module_
+
+-- TODO: make these settings configurable
+includeTypeDefinitions :: TTermDefinition Bool
+includeTypeDefinitions = haskellCoderDefinition "includeTypeDefinitions" $
+  doc "Whether to include type definitions in generated Haskell modules" $
+  false
+keyHaskellVar :: TTermDefinition Name
+keyHaskellVar = haskellCoderDefinition "keyHaskellVar" $
+  doc "The key used to track Haskell variable depth in annotations" $
+  wrap _Name $ string "haskellVar"
+
+-- | Lift Either String to Either Error
+liftStringError :: TTerm InferenceContext -> TTerm (Either String a) -> TTerm (Either Error a)
+liftStringError _cx = Eithers.bimap ("_s" ~> Error.errorExtraction (Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "valid input") (var "_s"))) ("_x" ~> var "_x")
+
+type HaskellNamespaces = Namespaces H.ModuleName
 
 moduleToHaskell :: TTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Prelude.Either Error (M.Map String String))
 moduleToHaskell = haskellCoderDefinition "moduleToHaskell" $
@@ -820,6 +808,13 @@ moduleToHaskell = haskellCoderDefinition "moduleToHaskell" $
   "s">: Serialization.printExpr @@ (Serialization.parenthesize @@ (HaskellSerde.moduleToExpr @@ var "hsmod")),
   "filepath">: Names.namespaceToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension $ string "hs") @@ (Packaging.moduleName $ var "mod")] $
   right $ Maps.singleton (var "filepath") (var "s")
+
+moduleToHaskellModule :: TTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Prelude.Either Error H.Module)
+moduleToHaskellModule = haskellCoderDefinition "moduleToHaskellModule" $
+  doc "Convert a Hydra module and definitions to a Haskell module AST" $
+  "mod" ~> "defs" ~> "cx" ~> "g" ~>
+    "namespaces" <<~ HaskellUtilsSource.namespacesForModule @@ var "mod" @@ var "cx" @@ var "g" $
+      constructModule @@ var "namespaces" @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g"
 
 nameDecls :: TTermDefinition (HaskellNamespaces -> Name -> Type -> [H.Declaration])
 nameDecls = haskellCoderDefinition "nameDecls" $
@@ -1150,3 +1145,8 @@ typeSchemeConstraintsToClassMap = haskellCoderDefinition "typeSchemeConstraintsT
             Maybes.cat $ Lists.map (var "constraintToName") $ Core.typeVariableMetadataClasses (var "meta"))
           (var "constraints"))
       (var "maybeConstraints")
+
+useCoreImport :: TTermDefinition Bool
+useCoreImport = haskellCoderDefinition "useCoreImport" $
+  doc "Whether to use the Hydra core import in generated modules" $
+  true

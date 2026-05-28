@@ -419,17 +419,6 @@ allTests = define "allTests" $
 etaExpandRef :: TTerm (InferenceContext -> Graph -> Term -> Either Error Term)
 etaExpandRef = TTerm $ TermVariable $ Name "hydra.reduction.etaExpandTypedTerm"
 
-testCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-testCase name input output = universalCase name
-    (retype $ Eithers.either_
-      (Phantoms.lambda "e" (Strings.cat2 (Phantoms.string "ETA ERROR: ") (Phantoms.string "failed")))
-      (Phantoms.lambda "result" (showTermRef Phantoms.@@ Phantoms.var "result"))
-      (etaExpandRef Phantoms.@@ testContextRef Phantoms.@@ testGraphRef Phantoms.@@ input))
-    (retype $ showTermRef Phantoms.@@ output)
-  where
-    retype :: TTerm x -> TTerm String
-    retype (TTerm x) = TTerm x
-
 noChange :: String -> TTerm Term -> TTerm TestCaseWithMetadata
 noChange name term = testCase name term term
 
@@ -451,3 +440,14 @@ foldl = primitive $ _lists_foldl
 splitOn = primitive $ _strings_splitOn
 toLower = primitive $ _strings_toLower
 --toLower = Core.termFunction $ Core.functionPrimitive $ Core.name (Phantoms.string "hydra.lib.strings.toLower")
+
+testCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+testCase name input output = universalCase name
+    (retype $ Eithers.either_
+      (Phantoms.lambda "e" (Strings.cat2 (Phantoms.string "ETA ERROR: ") (Phantoms.string "failed")))
+      (Phantoms.lambda "result" (showTermRef Phantoms.@@ Phantoms.var "result"))
+      (etaExpandRef Phantoms.@@ testContextRef Phantoms.@@ testGraphRef Phantoms.@@ input))
+    (retype $ showTermRef Phantoms.@@ output)
+  where
+    retype :: TTerm x -> TTerm String
+    retype (TTerm x) = TTerm x

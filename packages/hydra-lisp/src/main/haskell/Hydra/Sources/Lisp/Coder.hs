@@ -51,9 +51,6 @@ import qualified Hydra.Sources.Lisp.Syntax as LispSyntax
 import qualified Hydra.Sources.Lisp.Language as LispLanguageSource
 
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
 ns :: ModuleName
 ns = ModuleName "hydra.lisp.coder"
 
@@ -107,6 +104,9 @@ module_ = Module {
       toDefinition qualifiedTypeName,
       toDefinition wrapInThunk]
 
+
+def :: String -> TTerm a -> TTermDefinition a
+def = definitionInModule module_
 
 -- | Dialect-aware name for "cadr" (second element of a list)
 -- Clojure: "second", others: "cadr"

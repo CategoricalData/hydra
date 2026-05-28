@@ -103,6 +103,29 @@ compactName = define "compactName" $
             (Maps.lookup (var "ns") (var "namespaces")))
         (var "mns")
 
+freshName :: TTermDefinition (InferenceContext -> (Name, InferenceContext))
+freshName = define "freshName" $
+  doc "Generate a fresh type variable name, threading InferenceContext" $
+  "cx" ~>
+  "count" <~ Typing.inferenceContextFreshTypeVariableCount (var "cx") $
+  pair
+    (normalTypeVariable @@ var "count")
+    (Typing.inferenceContextWithFreshTypeVariableCount (var "cx") (Math.add (var "count") (int32 1)))
+
+freshNames :: TTermDefinition (Int -> InferenceContext -> ([Name], InferenceContext))
+freshNames = define "freshNames" $
+  doc "Generate multiple fresh type variable names, threading InferenceContext" $
+  "n" ~> "cx" ~>
+  -- Fold over n units, accumulating names and threading context
+  "go" <~ ("acc" ~> "_" ~>
+    "names" <~ Pairs.first (var "acc") $
+    "cx0" <~ Pairs.second (var "acc") $
+    "result" <~ freshName @@ var "cx0" $
+    "name" <~ Pairs.first (var "result") $
+    "cx1" <~ Pairs.second (var "result") $
+    pair (Lists.concat2 (var "names") (Lists.pure (var "name"))) (var "cx1")) $
+  Lists.foldl (var "go") (pair (list ([] :: [TTerm Name])) (var "cx")) (Lists.replicate (var "n") unit)
+
 localNameOf :: TTermDefinition (Name -> String)
 localNameOf = define "localNameOf" $
   doc "Extract the local part of a name" $
@@ -139,6 +162,17 @@ namespaceToFilePath = define "namespaceToFilePath" $
       (Strings.splitOn (string ".") (Packaging.unModuleName $ var "ns"))]
     $ (Strings.intercalate (string "/") $ var "parts") ++ string "." ++ (Packaging.unFileExtension $ var "ext")
 
+normalTypeVariable :: TTermDefinition (Int -> Name)
+normalTypeVariable = define "normalTypeVariable" $
+  doc "Type variable naming convention follows Haskell: t0, t1, etc." $
+  "i" ~> Core.name (Strings.cat2 (string "t") (Literals.showInt32 $ var "i"))
+
+pushSubtermStep :: TTermDefinition (SubtermStep -> InferenceContext -> InferenceContext)
+pushSubtermStep = define "pushSubtermStep" $
+  doc "Prepend a SubtermStep to the InferenceContext's trace. The trace is accumulated backwards as inference descends through subterms; at error-emission time the list is reversed and wrapped into a SubtermPath stamped onto the error." $
+  "step" ~> "cx" ~>
+  Typing.inferenceContextWithTrace (var "cx") (Lists.cons (var "step") (Typing.inferenceContextTrace (var "cx")))
+
 qname :: TTermDefinition (ModuleName -> String -> Name)
 qname = define "qname" $
   doc "Construct a qualified (dot-separated) name" $
@@ -168,6 +202,14 @@ qualifyName = define "qualifyName" $
             (var "localName")))
       (Lists.uncons $ var "parts")
 
+restoreTrace :: TTermDefinition (InferenceContext -> InferenceContext -> InferenceContext)
+restoreTrace = define "restoreTrace" $
+  doc ("Restore the original trace from baseCx, while keeping the freshTypeVariableCount from newCx."
+    <> " Used between sibling sub-inferences (e.g. application LHS vs RHS) so that an error in the second sibling"
+    <> " doesn't include the first sibling's trace path. Returns a new InferenceContext.") $
+  "baseCx" ~> "newCx" ~>
+  Typing.inferenceContextWithTrace (var "newCx") (Typing.inferenceContextTrace (var "baseCx"))
+
 uniqueLabel :: TTermDefinition (S.Set String -> String -> String)
 uniqueLabel = define "uniqueLabel" $
   doc "Generate a unique label by appending a suffix if the label is already in use" $
@@ -185,45 +227,3 @@ unqualifyName = define "unqualifyName" $
       (lambda "n" $ (unwrap _ModuleName @@ var "n") ++ string ".")
       (project _QualifiedName _QualifiedName_moduleName @@ var "qname")]
     $ wrap _Name $ var "prefix" ++ (project _QualifiedName _QualifiedName_local @@ var "qname")
-
-freshName :: TTermDefinition (InferenceContext -> (Name, InferenceContext))
-freshName = define "freshName" $
-  doc "Generate a fresh type variable name, threading InferenceContext" $
-  "cx" ~>
-  "count" <~ Typing.inferenceContextFreshTypeVariableCount (var "cx") $
-  pair
-    (normalTypeVariable @@ var "count")
-    (Typing.inferenceContextWithFreshTypeVariableCount (var "cx") (Math.add (var "count") (int32 1)))
-
-freshNames :: TTermDefinition (Int -> InferenceContext -> ([Name], InferenceContext))
-freshNames = define "freshNames" $
-  doc "Generate multiple fresh type variable names, threading InferenceContext" $
-  "n" ~> "cx" ~>
-  -- Fold over n units, accumulating names and threading context
-  "go" <~ ("acc" ~> "_" ~>
-    "names" <~ Pairs.first (var "acc") $
-    "cx0" <~ Pairs.second (var "acc") $
-    "result" <~ freshName @@ var "cx0" $
-    "name" <~ Pairs.first (var "result") $
-    "cx1" <~ Pairs.second (var "result") $
-    pair (Lists.concat2 (var "names") (Lists.pure (var "name"))) (var "cx1")) $
-  Lists.foldl (var "go") (pair (list ([] :: [TTerm Name])) (var "cx")) (Lists.replicate (var "n") unit)
-
-normalTypeVariable :: TTermDefinition (Int -> Name)
-normalTypeVariable = define "normalTypeVariable" $
-  doc "Type variable naming convention follows Haskell: t0, t1, etc." $
-  "i" ~> Core.name (Strings.cat2 (string "t") (Literals.showInt32 $ var "i"))
-
-pushSubtermStep :: TTermDefinition (SubtermStep -> InferenceContext -> InferenceContext)
-pushSubtermStep = define "pushSubtermStep" $
-  doc "Prepend a SubtermStep to the InferenceContext's trace. The trace is accumulated backwards as inference descends through subterms; at error-emission time the list is reversed and wrapped into a SubtermPath stamped onto the error." $
-  "step" ~> "cx" ~>
-  Typing.inferenceContextWithTrace (var "cx") (Lists.cons (var "step") (Typing.inferenceContextTrace (var "cx")))
-
-restoreTrace :: TTermDefinition (InferenceContext -> InferenceContext -> InferenceContext)
-restoreTrace = define "restoreTrace" $
-  doc ("Restore the original trace from baseCx, while keeping the freshTypeVariableCount from newCx."
-    <> " Used between sibling sub-inferences (e.g. application LHS vs RHS) so that an error in the second sibling"
-    <> " doesn't include the first sibling's trace path. Returns a new InferenceContext.") $
-  "baseCx" ~> "newCx" ~>
-  Typing.inferenceContextWithTrace (var "newCx") (Typing.inferenceContextTrace (var "baseCx"))

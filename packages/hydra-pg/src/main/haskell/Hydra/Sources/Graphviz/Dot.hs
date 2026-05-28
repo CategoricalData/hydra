@@ -19,9 +19,6 @@ ns = ModuleName "hydra.graphviz.dot"
 define :: String -> Type -> Binding
 define = defineType ns
 
-dot :: String -> Type
-dot = typeref ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -47,8 +44,45 @@ module_ = Module {
       subgraphId,
       compassPt]
 
-id_ :: Binding
-id_ = define "Id" $ T.wrap T.string
+attrList :: Binding
+attrList = define "AttrList" $
+  T.wrap $ nonemptyList $ nonemptyList $ dot "EqualityPair"
+
+--attr_stmt	:	(graph | node | edge) attr_list
+--attr_list	:	'[' [ a_list ] ']' [ attr_list ]
+--a_list	:	ID '=' ID [ (';' | ',') ] [ a_list ]
+attrStmt :: Binding
+attrStmt = define "AttrStmt" $
+  T.record [
+    "type">: dot "AttrType",
+    "attributes">: dot "AttrList"]
+
+attrType :: Binding
+attrType = define "AttrType" $
+  T.enum ["graph", "node", "edge"]
+
+--compass_pt	:	(n | ne | e | se | s | sw | w | nw | c | _)
+compassPt :: Binding
+compassPt = define "CompassPt" $
+  T.enum ["n", "ne", "e", "se", "s", "sw", "w", "nw", "c", "none"]
+
+dot :: String -> Type
+dot = typeref ns
+
+--edge_stmt	:	(node_id | subgraph) edgeRHS [ attr_list ]
+--edgeRHS	:	edgeop (node_id | subgraph) [ edgeRHS ]
+edgeStmt :: Binding
+edgeStmt = define "EdgeStmt" $
+  T.record [
+    "left">: dot "NodeOrSubgraph",
+    "right">: nonemptyList $ dot "NodeOrSubgraph",
+    "attributes">: T.maybe $ dot "AttrList"]
+
+equalityPair :: Binding
+equalityPair = define "EqualityPair" $
+  T.record [
+    "left">: dot "Id",
+    "right">: dot "Id"]
 
 --graph	:	[ strict ] (graph | digraph) [ ID ] '{' stmt_list '}'
 graph_ :: Binding
@@ -58,6 +92,37 @@ graph_ = define "Graph" $
     "directed">: T.boolean,
     "id">: T.maybe $ dot "Id",
     "statements">: T.list $ dot "Stmt"]
+
+id_ :: Binding
+id_ = define "Id" $ T.wrap T.string
+
+--node_id	:	ID [ port ]
+nodeId :: Binding
+nodeId = define "NodeId" $
+  T.record [
+    "id">: dot "Id",
+    "port">: T.maybe $ dot "Port"]
+
+nodeOrSubgraph :: Binding
+nodeOrSubgraph = define "NodeOrSubgraph" $
+  T.union [
+    "node">: dot "NodeId",
+    "subgraph">: dot "Subgraph"]
+
+--node_stmt	:	node_id [ attr_list ]
+nodeStmt :: Binding
+nodeStmt = define "NodeStmt" $
+  T.record [
+    "id">: dot "NodeId",
+    "attributes">: T.maybe $ dot "AttrList"]
+
+--port	:	':' ID [ ':' compass_pt ]
+--      |	':' compass_pt
+port :: Binding
+port = define "Port" $
+  T.record [
+    "id">: T.maybe $ dot "Id",
+    "position">: T.maybe $ dot "CompassPt"]
 
 --stmt_list	:	[ stmt [ ';' ] stmt_list ]
 --stmt	:	node_stmt
@@ -74,66 +139,6 @@ stmt = define "Stmt" $
     "equals">: dot "EqualityPair",
     "subgraph">: dot "Subgraph"]
 
-equalityPair :: Binding
-equalityPair = define "EqualityPair" $
-  T.record [
-    "left">: dot "Id",
-    "right">: dot "Id"]
-
---attr_stmt	:	(graph | node | edge) attr_list
---attr_list	:	'[' [ a_list ] ']' [ attr_list ]
---a_list	:	ID '=' ID [ (';' | ',') ] [ a_list ]
-attrStmt :: Binding
-attrStmt = define "AttrStmt" $
-  T.record [
-    "type">: dot "AttrType",
-    "attributes">: dot "AttrList"]
-
-attrType :: Binding
-attrType = define "AttrType" $
-  T.enum ["graph", "node", "edge"]
-
-attrList :: Binding
-attrList = define "AttrList" $
-  T.wrap $ nonemptyList $ nonemptyList $ dot "EqualityPair"
-
---edge_stmt	:	(node_id | subgraph) edgeRHS [ attr_list ]
---edgeRHS	:	edgeop (node_id | subgraph) [ edgeRHS ]
-edgeStmt :: Binding
-edgeStmt = define "EdgeStmt" $
-  T.record [
-    "left">: dot "NodeOrSubgraph",
-    "right">: nonemptyList $ dot "NodeOrSubgraph",
-    "attributes">: T.maybe $ dot "AttrList"]
-
-nodeOrSubgraph :: Binding
-nodeOrSubgraph = define "NodeOrSubgraph" $
-  T.union [
-    "node">: dot "NodeId",
-    "subgraph">: dot "Subgraph"]
-
---node_stmt	:	node_id [ attr_list ]
-nodeStmt :: Binding
-nodeStmt = define "NodeStmt" $
-  T.record [
-    "id">: dot "NodeId",
-    "attributes">: T.maybe $ dot "AttrList"]
-
---node_id	:	ID [ port ]
-nodeId :: Binding
-nodeId = define "NodeId" $
-  T.record [
-    "id">: dot "Id",
-    "port">: T.maybe $ dot "Port"]
-
---port	:	':' ID [ ':' compass_pt ]
---      |	':' compass_pt
-port :: Binding
-port = define "Port" $
-  T.record [
-    "id">: T.maybe $ dot "Id",
-    "position">: T.maybe $ dot "CompassPt"]
-
 --subgraph	:	[ subgraph [ ID ] ] '{' stmt_list '}'
 subgraph :: Binding
 subgraph = define "Subgraph" $
@@ -144,8 +149,3 @@ subgraph = define "Subgraph" $
 subgraphId :: Binding
 subgraphId = define "SubgraphId" $
   T.wrap $ T.maybe $ dot "Id"
-
---compass_pt	:	(n | ne | e | se | s | sw | w | nw | c | _)
-compassPt :: Binding
-compassPt = define "CompassPt" $
-  T.enum ["n", "ne", "e", "se", "s", "sw", "w", "nw", "c", "none"]

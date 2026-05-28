@@ -40,19 +40,29 @@ import           Prelude                     hiding ((++))
 ns :: ModuleName
 ns = ModuleName "hydra.bench.linearChain"
 
+define :: String -> TTerm a -> TTermDefinition a
+define = definitionInModuleName ns
+
+module_ :: Module
+module_ = Module {
+  moduleName = ns,
+  moduleDefinitions = definitions,
+  moduleDependencies = unqualifiedDep <$> ([Strip.ns] `L.union` kernelTypesModuleNames),
+  moduleDescription = Just "Linear-chain inference benchmark. walkerK cases on _Term variants and recurses to walker(K-1) — depth-N type-resolution stress test."
+  }
+  where
+    definitions = [toDefinition (mkWalker k) | k <- [0 .. numWalkers - 1]]
+
+-- | Build the kth walker definition.
+mkWalker :: Int -> TTermDefinition (Term -> Maybe Term)
+mkWalker k = define (L.concat ["walker", show k])
+  $ doc (L.concat ["Term walker level ", show k, "; recurses to walker", show (max 0 (k-1)), "."])
+  $ walkerBody k
+
 -- | Number of walker definitions in the chain. Bench runners take prefixes
 -- (e.g. first 10 / 25 / 50 / 100) to build scaling curves.
 numWalkers :: Int
 numWalkers = 800
-
--- | Hydra-level fully-qualified name for the @k@th walker. Used both as the
--- definition name and as a reference target from @walker(k+1)@.
-walkerName :: Int -> Name
-walkerName k = Name $ L.concat ["hydra.bench.linearChain.walker", show k]
-
--- | Reference to the @k@th walker as a TTerm, suitable for application.
-walkerRef :: Int -> TTerm (Term -> Maybe Term)
-walkerRef k = TTerm $ TermVariable (walkerName k)
 
 -- | Body of @walkerK@.
 --
@@ -87,21 +97,11 @@ walkerBody k =
       _Term_variable>>: constant $ just (var "stripped"),
       _Term_literal>>:  constant $ just (var "stripped")]
 
--- | Build the kth walker definition.
-mkWalker :: Int -> TTermDefinition (Term -> Maybe Term)
-mkWalker k = define (L.concat ["walker", show k])
-  $ doc (L.concat ["Term walker level ", show k, "; recurses to walker", show (max 0 (k-1)), "."])
-  $ walkerBody k
+-- | Hydra-level fully-qualified name for the @k@th walker. Used both as the
+-- definition name and as a reference target from @walker(k+1)@.
+walkerName :: Int -> Name
+walkerName k = Name $ L.concat ["hydra.bench.linearChain.walker", show k]
 
-define :: String -> TTerm a -> TTermDefinition a
-define = definitionInModuleName ns
-
-module_ :: Module
-module_ = Module {
-  moduleName = ns,
-  moduleDefinitions = definitions,
-  moduleDependencies = unqualifiedDep <$> ([Strip.ns] `L.union` kernelTypesModuleNames),
-  moduleDescription = Just "Linear-chain inference benchmark. walkerK cases on _Term variants and recurses to walker(K-1) — depth-N type-resolution stress test."
-  }
-  where
-    definitions = [toDefinition (mkWalker k) | k <- [0 .. numWalkers - 1]]
+-- | Reference to the @k@th walker as a TTerm, suitable for application.
+walkerRef :: Int -> TTerm (Term -> Maybe Term)
+walkerRef k = TTerm $ TermVariable (walkerName k)

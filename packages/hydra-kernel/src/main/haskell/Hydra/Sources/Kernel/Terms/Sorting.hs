@@ -89,6 +89,19 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
+adjacencyListToMap :: TTermDefinition ([(a, [b])] -> M.Map a [b])
+adjacencyListToMap = define "adjacencyListToMap" $
+  doc "Convert an adjacency list to a map, concatenating values for duplicate keys" $
+  "pairs" ~>
+  Lists.foldl
+    ("mp" ~> "p" ~>
+      "k" <~ Pairs.first (var "p") $
+      "vs" <~ Pairs.second (var "p") $
+      "existing" <~ Maybes.maybe (list ([] :: [TTerm a])) (reify Equality.identity) (Maps.lookup (var "k") (var "mp")) $
+      Maps.insert (var "k") (Lists.concat2 (var "existing") (var "vs")) (var "mp"))
+    Maps.empty
+    (var "pairs")
+
 adjacencyListsToGraph :: TTermDefinition ([(key, [key])] -> (Topo.Graph, Topo.Vertex -> Maybe key))
 adjacencyListsToGraph = define "adjacencyListsToGraph" $
   doc ("Given a list of adjacency lists represented as (key, [key]) pairs,"
@@ -120,19 +133,6 @@ adjacencyListsToGraph = define "adjacencyListsToGraph" $
     (var "indexedEdges")) $
   "vertexToKey" <~ ("v" ~> Maps.lookup (var "v") (var "vertexMap")) $
   pair (var "graph") (var "vertexToKey")
-
-adjacencyListToMap :: TTermDefinition ([(a, [b])] -> M.Map a [b])
-adjacencyListToMap = define "adjacencyListToMap" $
-  doc "Convert an adjacency list to a map, concatenating values for duplicate keys" $
-  "pairs" ~>
-  Lists.foldl
-    ("mp" ~> "p" ~>
-      "k" <~ Pairs.first (var "p") $
-      "vs" <~ Pairs.second (var "p") $
-      "existing" <~ Maybes.maybe (list ([] :: [TTerm a])) (reify Equality.identity) (Maps.lookup (var "k") (var "mp")) $
-      Maps.insert (var "k") (Lists.concat2 (var "existing") (var "vs")) (var "mp"))
-    Maps.empty
-    (var "pairs")
 
 createOrderingIsomorphism :: TTermDefinition ([a] -> [a] -> Topo.OrderingIsomorphism b)
 createOrderingIsomorphism = define "createOrderingIsomorphism" $

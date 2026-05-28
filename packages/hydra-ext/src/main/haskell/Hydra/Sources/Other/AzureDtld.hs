@@ -19,71 +19,6 @@ ns = ModuleName "hydra.azure.dtld"
 define :: String -> Type -> Binding
 define = defineType ns
 
-dtld :: String -> Type
-dtld = typeref ns
-
--- Helper types for bounded values
-dtmi128 :: Type
-dtmi128 = bounded Nothing (Just 128) $ dtld "Dtmi"
-
-dtmi2048 :: Type
-dtmi2048 = bounded Nothing (Just 2048) $ dtld "Dtmi"
-
-nonemptyString64 :: Type
-nonemptyString64 = boundedString (Just 1) (Just 64)
-
-nonemptyString512 :: Type
-nonemptyString512 = boundedString (Just 1) (Just 512)
-
-string128 :: Type
-string128 = boundedString Nothing (Just 128)
-
--- Helper field constructors
-idField :: Bool -> Int -> String -> FieldType
-idField req maxlen desc = "id">: doc desc $ if req then t else T.maybe t
-  where
-    t = bounded Nothing (Just maxlen) $ dtld "Dtmi"
-
-idOptionalField :: [Char] -> FieldType
-idOptionalField cat = idField False 2048 $
-  "The ID of the " ++ cat ++ ". If no @id is provided, the digital twin interface processor will assign one."
-
-commentField :: FieldType
-commentField = "comment">: doc "A comment for model authors" $ T.maybe nonemptyString512
-
-descriptionField :: FieldType
-descriptionField = "description">: doc "A localizable description for display" $ T.maybe nonemptyString512
-
-displayNameField :: FieldType
-displayNameField = "displayName">: doc "A localizable name for display" $ T.maybe nonemptyString64
-
-nameField :: String -> String -> FieldType
-nameField cat regex = "name">: doc (
-  "The 'programming' name of the " ++ cat ++ ". The name may only contain the characters " ++
-  "a-z, A-Z, 0-9, and underscore, and must match this regular expression " ++ regex ++ ".")
-  nonemptyString64
-
-schemaField :: String -> FieldType
-schemaField cat = "schema">: doc ("The data type of the " ++ cat) $ dtld "Schema"
-
-schemaInterfaceField :: String -> FieldType
-schemaInterfaceField cat = "schema">: doc ("The data type of the " ++ cat) $ dtld "Interface"
-
-typeField :: String -> FieldType
-typeField desc = "type">: doc desc $ dtld "Iri"
-
-unitField :: String -> FieldType
-unitField cat = "unit">:
-  doc ("The unit type of the " ++ cat ++ ". A semantic type is required for the unit property to be available.") $
-  T.maybe $ dtld "Unit"
-
-writableField :: String -> FieldType
-writableField cat = "writable">:
-  doc (
-    "A boolean value that indicates whether the " ++ cat ++ " is writable by an external source, " ++
-    "such as an application, or not. The default value is false (read-only).") $
-  T.maybe T.boolean
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -168,6 +103,9 @@ commandType = define "CommandType" $
     "synchronous",
     "asynchronous"]
 
+commentField :: FieldType
+commentField = "comment">: doc "A comment for model authors" $ T.maybe nonemptyString512
+
 component :: Binding
 component = define "Component" $
   doc (
@@ -183,9 +121,25 @@ component = define "Component" $
     descriptionField,
     displayNameField]
 
+descriptionField :: FieldType
+descriptionField = "description">: doc "A localizable description for display" $ T.maybe nonemptyString512
+
+displayNameField :: FieldType
+displayNameField = "displayName">: doc "A localizable name for display" $ T.maybe nonemptyString64
+
+dtld :: String -> Type
+dtld = typeref ns
+
 dtmi :: Binding
 dtmi = define "Dtmi" $
   doc "A digital twin model identifier" $ T.wrap T.string
+
+-- Helper types for bounded values
+dtmi128 :: Type
+dtmi128 = bounded Nothing (Just 128) $ dtld "Dtmi"
+
+dtmi2048 :: Type
+dtmi2048 = bounded Nothing (Just 2048) $ dtld "Dtmi"
 
 enumValue :: Binding
 enumValue = define "EnumValue" $
@@ -212,6 +166,16 @@ field = define "Field" $
     commentField,
     descriptionField,
     displayNameField]
+
+-- Helper field constructors
+idField :: Bool -> Int -> String -> FieldType
+idField req maxlen desc = "id">: doc desc $ if req then t else T.maybe t
+  where
+    t = bounded Nothing (Just maxlen) $ dtld "Dtmi"
+
+idOptionalField :: [Char] -> FieldType
+idOptionalField cat = idField False 2048 $
+  "The ID of the " ++ cat ++ ". If no @id is provided, the digital twin interface processor will assign one."
 
 integerOrString :: Binding
 integerOrString = define "IntegerOrString" $ T.union [
@@ -277,6 +241,18 @@ mapValue = define "MapValue" $
     descriptionField,
     displayNameField]
 
+nameField :: String -> String -> FieldType
+nameField cat regex = "name">: doc (
+  "The 'programming' name of the " ++ cat ++ ". The name may only contain the characters " ++
+  "a-z, A-Z, 0-9, and underscore, and must match this regular expression " ++ regex ++ ".")
+  nonemptyString64
+
+nonemptyString512 :: Type
+nonemptyString512 = boundedString (Just 1) (Just 512)
+
+nonemptyString64 :: Type
+nonemptyString64 = boundedString (Just 1) (Just 64)
+
 property_ :: Binding
 property_ = define "Property" $
   doc (
@@ -338,6 +314,12 @@ schema = define "Schema" $
   T.union [
     "primitive">: dtld "Schema_Primitive",
     "complex">: dtld "Schema_Complex"]
+
+schemaField :: String -> FieldType
+schemaField cat = "schema">: doc ("The data type of the " ++ cat) $ dtld "Schema"
+
+schemaInterfaceField :: String -> FieldType
+schemaInterfaceField cat = "schema">: doc ("The data type of the " ++ cat) $ dtld "Interface"
 
 schema_Array :: Binding
 schema_Array = define "Schema_Array" $
@@ -457,6 +439,9 @@ schema_Primitive = define "Schema_Primitive" $
     "string">: doc "A UTF8 string" T.unit,
     "time">: doc "A full-time as defined in section 5.6 of RFC 3339" T.unit]
 
+string128 :: Type
+string128 = boundedString Nothing (Just 128)
+
 telemetry :: Binding
 telemetry = define "Telemetry" $
   doc (
@@ -474,5 +459,20 @@ telemetry = define "Telemetry" $
     displayNameField,
     unitField "Telemetry"]
 
+typeField :: String -> FieldType
+typeField desc = "type">: doc desc $ dtld "Iri"
+
+unitField :: String -> FieldType
+unitField cat = "unit">:
+  doc ("The unit type of the " ++ cat ++ ". A semantic type is required for the unit property to be available.") $
+  T.maybe $ dtld "Unit"
+
 unit_ :: Binding
 unit_ = define "Unit" $ T.wrap T.unit
+
+writableField :: String -> FieldType
+writableField cat = "writable">:
+  doc (
+    "A boolean value that indicates whether the " ++ cat ++ " is writable by an external source, " ++
+    "such as an application, or not. The default value is false (read-only).") $
+  T.maybe T.boolean

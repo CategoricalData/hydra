@@ -88,14 +88,8 @@ import qualified Hydra.Sources.Cpp.Environment as CppEnvironment
 import qualified Hydra.Sources.Cpp.Language as CppLanguage
 
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
 ns :: ModuleName
 ns = ModuleName "hydra.cpp.names"
-
-cppLanguageNs :: ModuleName
-cppLanguageNs = ModuleName "hydra.cpp.language"
 
 module_ :: Module
 module_ = Module {
@@ -130,6 +124,9 @@ className = def "className" $
   lambda "name" $
     sanitizeCppName @@ (Names.localNameOf @@ var "name")
 
+cppLanguageNs :: ModuleName
+cppLanguageNs = ModuleName "hydra.cpp.language"
+
 -- | Create a type reference, optionally wrapped in shared_ptr
 createTypeReference :: TTermDefinition (Bool -> CppUtils.CppEnvironment -> Name -> Cpp.TypeExpression)
 createTypeReference = def "createTypeReference" $
@@ -143,6 +140,9 @@ createTypeReference = def "createTypeReference" $
       (CppUtils.toConstType @@ var "baseType")
       (var "baseType")
 
+def :: String -> TTerm a -> TTermDefinition a
+def = definitionInModule module_
+
 -- | Encode an enum value with appropriate naming convention
 encodeEnumValue :: TTermDefinition (CppUtils.CppEnvironment -> Name -> String)
 encodeEnumValue = def "encodeEnumValue" $
@@ -155,28 +155,6 @@ encodeFieldName = def "encodeFieldName" $
   doc "Encode a field name with appropriate naming convention" $
   lambdas ["env", "fname"] $
     encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "fname"
-
--- | Encode a qualified name with namespace
-encodeNameQualified :: TTermDefinition (CppUtils.CppEnvironment -> Name -> String)
-encodeNameQualified = def "encodeNameQualified" $
-  doc "Encode a qualified name with namespace" $
-  lambdas ["env", "name"] $ lets [
-    "boundVars">: Pairs.second $
-      project CppUtils._CppEnvironment CppUtils._CppEnvironment_boundTypeVariables @@ var "env",
-    "focusNs">: Pairs.first $
-      Util.namespacesFocus
-        (project CppUtils._CppEnvironment CppUtils._CppEnvironment_namespaces @@ var "env"),
-    "qualName">: Names.qualifyName @@ var "name",
-    "mns">: Packaging.qualifiedNameModuleName $ var "qualName",
-    "local">: Packaging.qualifiedNameLocal $ var "qualName"] $
-    Maybes.maybe
-      (Logic.ifElse (Equality.equal (var "mns") (just $ var "focusNs"))
-        (sanitizeCppName @@ var "local")
-        (Strings.intercalate (string "::")
-          (Lists.map sanitizeCppName
-            (Strings.splitOn (string ".") (Core.unName $ var "name")))))
-      (lambda "n" $ var "n")
-      (Maps.lookup (var "name") (var "boundVars"))
 
 -- | Encode a name with specified convention
 encodeName :: TTermDefinition (Bool -> CaseConvention -> CppUtils.CppEnvironment -> Name -> String)
@@ -204,6 +182,28 @@ encodeName = def "encodeName" $
         (lambda "n" $ var "n")
         (Maps.lookup (var "name") (var "boundVars")))
       (var "cppLocal")
+
+-- | Encode a qualified name with namespace
+encodeNameQualified :: TTermDefinition (CppUtils.CppEnvironment -> Name -> String)
+encodeNameQualified = def "encodeNameQualified" $
+  doc "Encode a qualified name with namespace" $
+  lambdas ["env", "name"] $ lets [
+    "boundVars">: Pairs.second $
+      project CppUtils._CppEnvironment CppUtils._CppEnvironment_boundTypeVariables @@ var "env",
+    "focusNs">: Pairs.first $
+      Util.namespacesFocus
+        (project CppUtils._CppEnvironment CppUtils._CppEnvironment_namespaces @@ var "env"),
+    "qualName">: Names.qualifyName @@ var "name",
+    "mns">: Packaging.qualifiedNameModuleName $ var "qualName",
+    "local">: Packaging.qualifiedNameLocal $ var "qualName"] $
+    Maybes.maybe
+      (Logic.ifElse (Equality.equal (var "mns") (just $ var "focusNs"))
+        (sanitizeCppName @@ var "local")
+        (Strings.intercalate (string "::")
+          (Lists.map sanitizeCppName
+            (Strings.splitOn (string ".") (Core.unName $ var "name")))))
+      (lambda "n" $ var "n")
+      (Maps.lookup (var "name") (var "boundVars"))
 
 -- | Encode a namespace as a C++ namespace string
 encodeNamespace :: TTermDefinition (ModuleName -> String)

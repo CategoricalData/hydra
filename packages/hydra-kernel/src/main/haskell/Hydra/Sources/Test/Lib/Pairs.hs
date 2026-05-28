@@ -52,6 +52,14 @@ showIntIntPair = Phantoms.lambda "p" $ Strings.cat (Phantoms.list [
 
 -- Test groups for hydra.lib.pairs primitives
 
+allTests :: TTermDefinition TestGroup
+allTests = definitionInModule module_ "allTests" $
+    Phantoms.doc "Test cases for hydra.lib.pairs primitives" $
+    supergroup "hydra.lib.pairs primitives" [
+      pairsBimap,
+      pairsFirst,
+      pairsSecond]
+
 pairsBimap :: TTerm TestGroup
 pairsBimap = subgroup "bimap" [
   test "transform both elements" 5 "ab" 10 2,
@@ -83,11 +91,3 @@ pairsSecond = subgroup "second" [
     test name fst snd result = stringEvalPair name
       (Pairs.second (Phantoms.pair (Phantoms.int32 fst) (Phantoms.string snd)))
       (Phantoms.string result)
-
-allTests :: TTermDefinition TestGroup
-allTests = definitionInModule module_ "allTests" $
-    Phantoms.doc "Test cases for hydra.lib.pairs primitives" $
-    supergroup "hydra.lib.pairs primitives" [
-      pairsBimap,
-      pairsFirst,
-      pairsSecond]

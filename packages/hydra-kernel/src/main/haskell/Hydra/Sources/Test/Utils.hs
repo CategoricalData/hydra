@@ -106,6 +106,31 @@ module_ = Module {
       toDefinition inferTerm]
 
 
+-- | Run type inference on a single term
+inferTerm :: TTermDefinition (Graph -> Term -> Either String Term)
+inferTerm = define "inferTerm" $
+  doc "Run type inference on a single term" $
+  lambda "g" $ lambda "term" $
+    Eithers.bimap
+      ("e" ~> ShowError.error_ @@ var "e")
+      ("x" ~> Typing.inferenceResultTerm (var "x"))
+      (Inference.inferInGraphContext @@ asTerm Lexical.emptyInferenceContext @@ var "g" @@ var "term")
+
+-- | Run type inference on the terms in a test case
+inferTestCase :: TTermDefinition (Graph -> TestCaseWithMetadata -> Either String TestCaseWithMetadata)
+inferTestCase = define "inferTestCase" $
+  doc "Run type inference on the terms in a test case" $
+  lambda "g" $ lambda "tcm" $ lets [
+    "name_">: project _TestCaseWithMetadata _TestCaseWithMetadata_name @@ var "tcm",
+    "tcase">: project _TestCaseWithMetadata _TestCaseWithMetadata_case @@ var "tcm",
+    "desc">: project _TestCaseWithMetadata _TestCaseWithMetadata_description @@ var "tcm",
+    "tags_">: project _TestCaseWithMetadata _TestCaseWithMetadata_tags @@ var "tcm"] $
+    Eithers.map
+      (lambda "inferredCase" $
+        Testing.testCaseWithMetadata (var "name_") (var "inferredCase") (var "desc") (var "tags_"))
+      (Phantoms.right (var "tcase"))
+
+
 -- | Run type inference on all terms in a TestGroup
 inferTestGroupTerms :: TTermDefinition (Graph -> TestGroup -> Either String TestGroup)
 inferTestGroupTerms = define "inferTestGroupTerms" $
@@ -123,28 +148,3 @@ inferTestGroupTerms = define "inferTestGroupTerms" $
             Testing.testGroup (var "name_") (var "desc") (var "inferredSubgroups") (var "inferredCases"))
           (Eithers.mapList (lambda "tc" $ inferTestCase @@ var "g" @@ var "tc") (var "cases_")))
 
-
--- | Run type inference on the terms in a test case
-inferTestCase :: TTermDefinition (Graph -> TestCaseWithMetadata -> Either String TestCaseWithMetadata)
-inferTestCase = define "inferTestCase" $
-  doc "Run type inference on the terms in a test case" $
-  lambda "g" $ lambda "tcm" $ lets [
-    "name_">: project _TestCaseWithMetadata _TestCaseWithMetadata_name @@ var "tcm",
-    "tcase">: project _TestCaseWithMetadata _TestCaseWithMetadata_case @@ var "tcm",
-    "desc">: project _TestCaseWithMetadata _TestCaseWithMetadata_description @@ var "tcm",
-    "tags_">: project _TestCaseWithMetadata _TestCaseWithMetadata_tags @@ var "tcm"] $
-    Eithers.map
-      (lambda "inferredCase" $
-        Testing.testCaseWithMetadata (var "name_") (var "inferredCase") (var "desc") (var "tags_"))
-      (Phantoms.right (var "tcase"))
-
-
--- | Run type inference on a single term
-inferTerm :: TTermDefinition (Graph -> Term -> Either String Term)
-inferTerm = define "inferTerm" $
-  doc "Run type inference on a single term" $
-  lambda "g" $ lambda "term" $
-    Eithers.bimap
-      ("e" ~> ShowError.error_ @@ var "e")
-      ("x" ~> Typing.inferenceResultTerm (var "x"))
-      (Inference.inferInGraphContext @@ asTerm Lexical.emptyInferenceContext @@ var "g" @@ var "term")

@@ -18,15 +18,6 @@ ns = ModuleName "hydra.lib.logic"
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModuleName ns
 
--- Local convenience: build a TermSignature from a TypeScheme.
-sig :: TypeScheme -> TermSignature
-sig = typeSchemeToTermSignature
-
--- Local convenience: build a no-default primitive Definition from a local name.
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -39,6 +30,15 @@ module_ = Module {
       primNoDef "ifElse" "Compute a conditional expression." ifElseSig,
       toPrimitive "Compute the logical NOT of a boolean value." notSig not_,
       toPrimitive "Compute the logical OR of two boolean values." orSig or_]
+
+-- Local convenience: build a no-default primitive Definition from a local name.
+primNoDef :: String -> String -> TermSignature -> Definition
+primNoDef localName description s =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+
+-- Local convenience: build a TermSignature from a TypeScheme.
+sig :: TypeScheme -> TermSignature
+sig = typeSchemeToTermSignature
 
 -- Signatures
 

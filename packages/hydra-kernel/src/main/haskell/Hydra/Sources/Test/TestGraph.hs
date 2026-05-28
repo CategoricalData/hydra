@@ -57,13 +57,10 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-testTerms :: TTermDefinition (M.Map Name Term)
-testTerms = define "testTerms" $
-  Maps.fromList $ Phantoms.list [
-    Phantoms.pair (name "testDataArthur") TestTerms.testDataArthur]
-
-testNamespace :: TTermDefinition ModuleName
-testNamespace = define "testNamespace" $ DPackaging.moduleName2 $ Phantoms.string "testGraph"
+-- | The test context. Emits a reference to the hand-written
+-- Hydra.Test.TestEnv.testContext.
+testContext :: TTermDefinition InferenceContext
+testContext = define "testContext" $ asTerm TestEnv.testContext
 
 -- | The test graph. Emits a call to the hand-written
 -- Hydra.Test.TestEnv.testGraph (applied to testTypes and testTerms).
@@ -71,10 +68,16 @@ testGraph :: TTermDefinition Graph
 testGraph = define "testGraph" $
   TestEnv.testGraph @@ testTypes @@ testTerms
 
--- | The test context. Emits a reference to the hand-written
--- Hydra.Test.TestEnv.testContext.
-testContext :: TTermDefinition InferenceContext
-testContext = define "testContext" $ asTerm TestEnv.testContext
+testNamespace :: TTermDefinition ModuleName
+testNamespace = define "testNamespace" $ DPackaging.moduleName2 $ Phantoms.string "testGraph"
+
+testSchemaNamespace :: TTermDefinition ModuleName
+testSchemaNamespace = define "testSchemaNamespace" $ DPackaging.moduleName2 $ Phantoms.string "testSchemaGraph"
+
+testTerms :: TTermDefinition (M.Map Name Term)
+testTerms = define "testTerms" $
+  Maps.fromList $ Phantoms.list [
+    Phantoms.pair (name "testDataArthur") TestTerms.testDataArthur]
 
 testTypes :: TTermDefinition (M.Map Name Type)
 testTypes = define "testTypes" $
@@ -101,6 +104,3 @@ testTypes = define "testTypes" $
     Phantoms.pair TestTypes.testTypeUnionMonomorphicName TestTypes.testTypeUnionMonomorphic,
     Phantoms.pair TestTypes.testTypeUnionPolymorphicRecursiveName TestTypes.testTypeUnionPolymorphicRecursive,
     Phantoms.pair TestTypes.testTypeUnitName TestTypes.testTypeUnit]
-
-testSchemaNamespace :: TTermDefinition ModuleName
-testSchemaNamespace = define "testSchemaNamespace" $ DPackaging.moduleName2 $ Phantoms.string "testSchemaGraph"

@@ -26,6 +26,16 @@ import qualified Hydra.Sources.Kernel.Terms.Reduction as Reduction
 import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
 
 
+-- Local alias for polymorphic application (Phantoms.@@ applies TBindings; Terms.@@ only works on TTerm Term)
+(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
+(#) = (Phantoms.@@)
+infixl 1 #
+
+-- Field constructor for cases/match (uses Phantoms.>>: to create Field, since the unqualified >>: from Testing creates tuples)
+(~>:) :: AsTerm t a => Name -> t -> Field
+(~>:) = (Phantoms.>>:)
+infixr 0 ~>:
+
 ns :: ModuleName
 ns = ModuleName "hydra.test.reduction"
 
@@ -38,230 +48,20 @@ module_ = Module {
   where
     definitions = [Phantoms.toDefinition allTests]
 
--- Local alias for polymorphic application (Phantoms.@@ applies TBindings; Terms.@@ only works on TTerm Term)
-(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
-(#) = (Phantoms.@@)
-infixl 1 #
-
--- Field constructor for cases/match (uses Phantoms.>>: to create Field, since the unqualified >>: from Testing creates tuples)
-(~>:) :: AsTerm t a => Name -> t -> Field
-(~>:) = (Phantoms.>>:)
-infixr 0 ~>:
-
--- | Show a term as a string using ShowCore.term
-showTerm :: TTerm Term -> TTerm String
-showTerm t = ShowCore.term # t
-
--- Helper to build names
-nm :: String -> TTerm Name
-nm s = Core.name $ Phantoms.string s
-
--- Helper for single-binding let
-letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term
-letExpr varName value body = lets [(nm varName, value)] body
-
--- | Test cases for beta reduction (lambda application)
-betaReductionTests :: TTerm TestGroup
-betaReductionTests = subgroup "beta reduction" [
-  test "identity function applied to literal"
-    (lambda "x" (var "x") @@ int32 42)
-    (int32 42),
-  test "constant function"
-    (lambda "x" (int32 1) @@ int32 42)
-    (int32 1),
-  test "nested application"
-    (lambda "x" (lambda "y" (var "x")) @@ int32 1 @@ int32 2)
-    (int32 1)]
-  where
-    test name input output = evalCase name input output
-
--- | Test cases for monomorphic primitive application
--- Property: Simple applications of a unary primitive function succeed.
--- Property: Simple applications of a binary primitive function succeed.
--- Property: Extra arguments to a primitive function are tolerated (primitive is applied, extra args remain).
-monomorphicPrimitiveTests :: TTerm TestGroup
-monomorphicPrimitiveTests = subgroup "monomorphic primitives" [
-  -- Unary string functions
-  test "toUpper on lowercase"
-    (primitive _strings_toUpper @@ string "hello")
-    (string "HELLO"),
-  test "toUpper on mixed case"
-    (primitive _strings_toUpper @@ string "Hello World")
-    (string "HELLO WORLD"),
-  test "toUpper on empty string"
-    (primitive _strings_toUpper @@ string "")
-    (string ""),
-  test "toLower on uppercase"
-    (primitive _strings_toLower @@ string "HELLO")
-    (string "hello"),
-  test "string length"
-    (primitive _strings_length @@ string "hello")
-    (int32 5),
-  test "string length of empty"
-    (primitive _strings_length @@ string "")
-    (int32 0),
-  -- Binary arithmetic functions
-  test "add two positive integers"
-    (primitive _math_add @@ int32 3 @@ int32 5)
-    (int32 8),
-  test "add negative and positive"
-    (primitive _math_add @@ int32 (-10) @@ int32 3)
-    (int32 (-7)),
-  test "add with zero"
-    (primitive _math_add @@ int32 0 @@ int32 42)
-    (int32 42),
-  test "subtract integers"
-    (primitive _math_sub @@ int32 10 @@ int32 3)
-    (int32 7),
-  test "multiply integers"
-    (primitive _math_mul @@ int32 6 @@ int32 7)
-    (int32 42),
-  test "multiply by zero"
-    (primitive _math_mul @@ int32 100 @@ int32 0)
-    (int32 0),
-  test "divide integers"
-    (primitive _math_maybeDiv @@ int32 20 @@ int32 4)
-    (Core.termMaybe $ just (int32 5)),
-  test "modulo"
-    (primitive _math_maybeMod @@ int32 17 @@ int32 5)
-    (Core.termMaybe $ just (int32 2)),
-  -- Binary string functions
-  test "splitOn basic"
-    (primitive _strings_splitOn @@ string "," @@ string "a,b,c")
-    (list [string "a", string "b", string "c"]),
-  test "cat2 strings"
-    (primitive _strings_cat2 @@ string "hello" @@ string "world")
-    (string "helloworld")]
-  -- Note: "extra arguments are tolerated" test removed; it produces non-well-typed output
-  where
-    test name input output = evalCase name input output
-
--- | Test cases for polymorphic primitive application
--- Property: Polymorphic primitives work correctly with different element types.
-polymorphicPrimitiveTests :: TTerm TestGroup
-polymorphicPrimitiveTests = subgroup "polymorphic primitives" [
-  -- List length (polymorphic in element type)
-  test "length of integer list"
-    (primitive _lists_length @@ list [int32 1, int32 2, int32 3])
-    (int32 3),
-  test "length of string list"
-    (primitive _lists_length @@ list [string "a", string "b"])
-    (int32 2),
-  test "length of empty list"
-    (primitive _lists_length @@ list [])
-    (int32 0),
-  test "length of single element list"
-    (primitive _lists_length @@ list [true])
-    (int32 1),
-  -- List maybeHead
-  test "maybeHead of integer list"
-    (primitive _lists_maybeHead @@ list [int32 10, int32 20, int32 30])
-    (Core.termMaybe $ just (int32 10)),
-  test "maybeHead of string list"
-    (primitive _lists_maybeHead @@ list [string "first", string "second"])
-    (Core.termMaybe $ just (string "first")),
-  -- List maybeLast
-  test "maybeLast of integer list"
-    (primitive _lists_maybeLast @@ list [int32 10, int32 20, int32 30])
-    (Core.termMaybe $ just (int32 30)),
-  -- List concat
-  test "concat two integer lists"
-    (primitive _lists_concat2 @@ list [int32 1, int32 2] @@ list [int32 3, int32 4])
-    (list [int32 1, int32 2, int32 3, int32 4]),
-  test "concat with empty list"
-    (primitive _lists_concat2 @@ list [] @@ list [int32 1, int32 2])
-    (list [int32 1, int32 2]),
-  -- List reverse
-  test "reverse integer list"
-    (primitive _lists_reverse @@ list [int32 1, int32 2, int32 3])
-    (list [int32 3, int32 2, int32 1]),
-  test "reverse empty list"
-    (primitive _lists_reverse @@ list [])
-    (list [])]
-  where
-    test name input output = evalCase name input output
-
--- | Test cases for nullary primitives (constants)
-nullaryPrimitiveTests :: TTerm TestGroup
-nullaryPrimitiveTests = subgroup "nullary primitives" [
-  test "empty set has size zero"
-    (primitive _sets_size @@ primitive _sets_empty)
-    (int32 0)]
-  where
-    test name input output = evalCase name input output
-
--- | Test cases for literal values
--- Property: Literal terms are fully reduced; evaluating a literal returns the same literal.
--- Property: Literal terms cannot be applied; applying a literal to another term leaves the application unchanged.
-literalValueTests :: TTerm TestGroup
-literalValueTests = subgroup "literals as values" [
-  -- Various literal types reduce to themselves
-  test "integer literal is a value"
-    (int32 42)
-    (int32 42),
-  test "negative integer literal"
-    (int32 (-17))
-    (int32 (-17)),
-  test "zero integer literal"
-    (int32 0)
-    (int32 0),
-  test "string literal is a value"
-    (string "hello")
-    (string "hello"),
-  test "empty string literal"
-    (string "")
-    (string ""),
-  test "string with special characters"
-    (string "hello\nworld\ttab")
-    (string "hello\nworld\ttab"),
-  test "boolean true is a value"
-    true
-    true,
-  test "boolean false is a value"
-    false
-    false,
-  test "float literal is a value"
-    (float64 3.14)
-    (float64 3.14),
-  test "negative float literal"
-    (float64 (-2.718))
-    (float64 (-2.718)),
-  test "zero float literal"
-    (float64 0.0)
-    (float64 0.0)]
-  -- Note: "literal applied to literal" tests removed; they produce non-well-typed output
-  where
-    test name input output = evalCase name input output
-
--- | Test cases for list reduction
-listReductionTests :: TTerm TestGroup
-listReductionTests = subgroup "list reduction" [
-  test "empty list is a value"
-    (list [])
-    (list []),
-  test "list of literals is a value"
-    (list [int32 1, int32 2, int32 3])
-    (list [int32 1, int32 2, int32 3]),
-  test "list with reducible element"
-    (list [lambda "x" (var "x") @@ int32 42])
-    (list [int32 42])]
-  where
-    test name input output = evalCase name input output
-
--- | Test cases for optional/maybe reduction
-optionalReductionTests :: TTerm TestGroup
-optionalReductionTests = subgroup "optional reduction" [
-  test "nothing is a value"
-    (optional nothing)
-    (optional nothing),
-  test "just literal is a value"
-    (optional $ just $ int32 42)
-    (optional $ just $ int32 42),
-  test "just with reducible content"
-    (optional $ just $ lambda "x" (var "x") @@ int32 42)
-    (optional $ just $ int32 42)]
-  where
-    test name input output = evalCase name input output
+allTests :: TTermDefinition TestGroup
+allTests = definitionInModule module_ "allTests" $
+    Phantoms.doc "Test cases for term reduction mechanics" $
+    supergroup "reduction" [
+      betaReductionTests,
+      monomorphicPrimitiveTests,
+      polymorphicPrimitiveTests,
+      nullaryPrimitiveTests,
+      literalValueTests,
+      listReductionTests,
+      optionalReductionTests,
+      alphaConversionTests,
+      typeReductionTests,
+      etaExpandTermGroup]
 
 -- | Test cases for alpha conversion (variable renaming in lambda calculus)
 -- Property: Variables are correctly substituted at all levels.
@@ -307,45 +107,20 @@ alphaConversionTests = subgroup "alpha conversion" [
     (name "x") (name "y")
     (var "y" @@ var "y")]
 
--- | Test cases for type-level beta reduction
--- Property: Type applications of forall types are reduced by substitution.
--- Property: Non-application types are unchanged by reduction.
-typeReductionTests :: TTerm TestGroup
-typeReductionTests = subgroup "type reduction" [
-  -- Non-application types are unchanged
-  typeRedCase "unit type unchanged"
-    T.unit
-    T.unit,
-  typeRedCase "string type unchanged"
-    T.string
-    T.string,
-  typeRedCase "int32 type unchanged"
-    T.int32
-    T.int32,
-  -- Simple type application: (forall t. t -> t) String = String -> String
-  typeRedCase "identity type applied to string"
-    (T.forAll "t" (T.function (T.var "t") (T.var "t")) T.@@ T.string)
-    (T.function T.string T.string),
-  -- Type application with unused variable: (forall x. Int32) Bool = Int32
-  typeRedCase "constant type ignores argument"
-    (T.forAll "x" T.int32 T.@@ T.boolean)
-    T.int32,
-  -- Nested forall application
-  typeRedCase "nested forall first application"
-    (T.forAll "x" (T.forAll "y" (T.function (T.var "x") (T.var "y"))) T.@@ T.int32)
-    (T.forAll "y" (T.function T.int32 (T.var "y"))),
-  -- Full application of nested forall
-  typeRedCase "nested forall both applications"
-    (T.forAll "x" (T.forAll "y" (T.function (T.var "x") (T.var "y"))) T.@@ T.int32 T.@@ T.string)
-    (T.function T.int32 T.string),
-  -- List type application
-  typeRedCase "list type applied"
-    (T.forAll "a" (T.list (T.var "a")) T.@@ T.int32)
-    (T.list T.int32),
-  -- Optional type application
-  typeRedCase "optional type applied"
-    (T.forAll "a" (T.optional (T.var "a")) T.@@ T.string)
-    (T.optional T.string)]
+-- | Test cases for beta reduction (lambda application)
+betaReductionTests :: TTerm TestGroup
+betaReductionTests = subgroup "beta reduction" [
+  test "identity function applied to literal"
+    (lambda "x" (var "x") @@ int32 42)
+    (int32 42),
+  test "constant function"
+    (lambda "x" (int32 1) @@ int32 42)
+    (int32 1),
+  test "nested application"
+    (lambda "x" (lambda "y" (var "x")) @@ int32 1 @@ int32 2)
+    (int32 1)]
+  where
+    test name input output = evalCase name input output
 
 -- | Universal eta expansion test case: applies etaExpandTypedTerm with testContext and testGraph
 etaCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
@@ -423,17 +198,242 @@ etaExpandTermGroup = subgroup "etaExpandTerm" [
       (list [lambda "x" (list [string "foo"]), apply (primitive _strings_splitOn) (string "bar")])
       (list [lambda "x" (list [string "foo"]), lambda "v1" (apply (apply (primitive _strings_splitOn) (string "bar")) (var "v1"))])]
 
-allTests :: TTermDefinition TestGroup
-allTests = definitionInModule module_ "allTests" $
-    Phantoms.doc "Test cases for term reduction mechanics" $
-    supergroup "reduction" [
-      betaReductionTests,
-      monomorphicPrimitiveTests,
-      polymorphicPrimitiveTests,
-      nullaryPrimitiveTests,
-      literalValueTests,
-      listReductionTests,
-      optionalReductionTests,
-      alphaConversionTests,
-      typeReductionTests,
-      etaExpandTermGroup]
+-- Helper for single-binding let
+letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term
+letExpr varName value body = lets [(nm varName, value)] body
+
+-- | Test cases for list reduction
+listReductionTests :: TTerm TestGroup
+listReductionTests = subgroup "list reduction" [
+  test "empty list is a value"
+    (list [])
+    (list []),
+  test "list of literals is a value"
+    (list [int32 1, int32 2, int32 3])
+    (list [int32 1, int32 2, int32 3]),
+  test "list with reducible element"
+    (list [lambda "x" (var "x") @@ int32 42])
+    (list [int32 42])]
+  where
+    test name input output = evalCase name input output
+
+-- | Test cases for literal values
+-- Property: Literal terms are fully reduced; evaluating a literal returns the same literal.
+-- Property: Literal terms cannot be applied; applying a literal to another term leaves the application unchanged.
+literalValueTests :: TTerm TestGroup
+literalValueTests = subgroup "literals as values" [
+  -- Various literal types reduce to themselves
+  test "integer literal is a value"
+    (int32 42)
+    (int32 42),
+  test "negative integer literal"
+    (int32 (-17))
+    (int32 (-17)),
+  test "zero integer literal"
+    (int32 0)
+    (int32 0),
+  test "string literal is a value"
+    (string "hello")
+    (string "hello"),
+  test "empty string literal"
+    (string "")
+    (string ""),
+  test "string with special characters"
+    (string "hello\nworld\ttab")
+    (string "hello\nworld\ttab"),
+  test "boolean true is a value"
+    true
+    true,
+  test "boolean false is a value"
+    false
+    false,
+  test "float literal is a value"
+    (float64 3.14)
+    (float64 3.14),
+  test "negative float literal"
+    (float64 (-2.718))
+    (float64 (-2.718)),
+  test "zero float literal"
+    (float64 0.0)
+    (float64 0.0)]
+  -- Note: "literal applied to literal" tests removed; they produce non-well-typed output
+  where
+    test name input output = evalCase name input output
+
+-- | Test cases for monomorphic primitive application
+-- Property: Simple applications of a unary primitive function succeed.
+-- Property: Simple applications of a binary primitive function succeed.
+-- Property: Extra arguments to a primitive function are tolerated (primitive is applied, extra args remain).
+monomorphicPrimitiveTests :: TTerm TestGroup
+monomorphicPrimitiveTests = subgroup "monomorphic primitives" [
+  -- Unary string functions
+  test "toUpper on lowercase"
+    (primitive _strings_toUpper @@ string "hello")
+    (string "HELLO"),
+  test "toUpper on mixed case"
+    (primitive _strings_toUpper @@ string "Hello World")
+    (string "HELLO WORLD"),
+  test "toUpper on empty string"
+    (primitive _strings_toUpper @@ string "")
+    (string ""),
+  test "toLower on uppercase"
+    (primitive _strings_toLower @@ string "HELLO")
+    (string "hello"),
+  test "string length"
+    (primitive _strings_length @@ string "hello")
+    (int32 5),
+  test "string length of empty"
+    (primitive _strings_length @@ string "")
+    (int32 0),
+  -- Binary arithmetic functions
+  test "add two positive integers"
+    (primitive _math_add @@ int32 3 @@ int32 5)
+    (int32 8),
+  test "add negative and positive"
+    (primitive _math_add @@ int32 (-10) @@ int32 3)
+    (int32 (-7)),
+  test "add with zero"
+    (primitive _math_add @@ int32 0 @@ int32 42)
+    (int32 42),
+  test "subtract integers"
+    (primitive _math_sub @@ int32 10 @@ int32 3)
+    (int32 7),
+  test "multiply integers"
+    (primitive _math_mul @@ int32 6 @@ int32 7)
+    (int32 42),
+  test "multiply by zero"
+    (primitive _math_mul @@ int32 100 @@ int32 0)
+    (int32 0),
+  test "divide integers"
+    (primitive _math_maybeDiv @@ int32 20 @@ int32 4)
+    (Core.termMaybe $ just (int32 5)),
+  test "modulo"
+    (primitive _math_maybeMod @@ int32 17 @@ int32 5)
+    (Core.termMaybe $ just (int32 2)),
+  -- Binary string functions
+  test "splitOn basic"
+    (primitive _strings_splitOn @@ string "," @@ string "a,b,c")
+    (list [string "a", string "b", string "c"]),
+  test "cat2 strings"
+    (primitive _strings_cat2 @@ string "hello" @@ string "world")
+    (string "helloworld")]
+  -- Note: "extra arguments are tolerated" test removed; it produces non-well-typed output
+  where
+    test name input output = evalCase name input output
+
+-- Helper to build names
+nm :: String -> TTerm Name
+nm s = Core.name $ Phantoms.string s
+
+-- | Test cases for nullary primitives (constants)
+nullaryPrimitiveTests :: TTerm TestGroup
+nullaryPrimitiveTests = subgroup "nullary primitives" [
+  test "empty set has size zero"
+    (primitive _sets_size @@ primitive _sets_empty)
+    (int32 0)]
+  where
+    test name input output = evalCase name input output
+
+-- | Test cases for optional/maybe reduction
+optionalReductionTests :: TTerm TestGroup
+optionalReductionTests = subgroup "optional reduction" [
+  test "nothing is a value"
+    (optional nothing)
+    (optional nothing),
+  test "just literal is a value"
+    (optional $ just $ int32 42)
+    (optional $ just $ int32 42),
+  test "just with reducible content"
+    (optional $ just $ lambda "x" (var "x") @@ int32 42)
+    (optional $ just $ int32 42)]
+  where
+    test name input output = evalCase name input output
+
+-- | Test cases for polymorphic primitive application
+-- Property: Polymorphic primitives work correctly with different element types.
+polymorphicPrimitiveTests :: TTerm TestGroup
+polymorphicPrimitiveTests = subgroup "polymorphic primitives" [
+  -- List length (polymorphic in element type)
+  test "length of integer list"
+    (primitive _lists_length @@ list [int32 1, int32 2, int32 3])
+    (int32 3),
+  test "length of string list"
+    (primitive _lists_length @@ list [string "a", string "b"])
+    (int32 2),
+  test "length of empty list"
+    (primitive _lists_length @@ list [])
+    (int32 0),
+  test "length of single element list"
+    (primitive _lists_length @@ list [true])
+    (int32 1),
+  -- List maybeHead
+  test "maybeHead of integer list"
+    (primitive _lists_maybeHead @@ list [int32 10, int32 20, int32 30])
+    (Core.termMaybe $ just (int32 10)),
+  test "maybeHead of string list"
+    (primitive _lists_maybeHead @@ list [string "first", string "second"])
+    (Core.termMaybe $ just (string "first")),
+  -- List maybeLast
+  test "maybeLast of integer list"
+    (primitive _lists_maybeLast @@ list [int32 10, int32 20, int32 30])
+    (Core.termMaybe $ just (int32 30)),
+  -- List concat
+  test "concat two integer lists"
+    (primitive _lists_concat2 @@ list [int32 1, int32 2] @@ list [int32 3, int32 4])
+    (list [int32 1, int32 2, int32 3, int32 4]),
+  test "concat with empty list"
+    (primitive _lists_concat2 @@ list [] @@ list [int32 1, int32 2])
+    (list [int32 1, int32 2]),
+  -- List reverse
+  test "reverse integer list"
+    (primitive _lists_reverse @@ list [int32 1, int32 2, int32 3])
+    (list [int32 3, int32 2, int32 1]),
+  test "reverse empty list"
+    (primitive _lists_reverse @@ list [])
+    (list [])]
+  where
+    test name input output = evalCase name input output
+
+-- | Show a term as a string using ShowCore.term
+showTerm :: TTerm Term -> TTerm String
+showTerm t = ShowCore.term # t
+
+-- | Test cases for type-level beta reduction
+-- Property: Type applications of forall types are reduced by substitution.
+-- Property: Non-application types are unchanged by reduction.
+typeReductionTests :: TTerm TestGroup
+typeReductionTests = subgroup "type reduction" [
+  -- Non-application types are unchanged
+  typeRedCase "unit type unchanged"
+    T.unit
+    T.unit,
+  typeRedCase "string type unchanged"
+    T.string
+    T.string,
+  typeRedCase "int32 type unchanged"
+    T.int32
+    T.int32,
+  -- Simple type application: (forall t. t -> t) String = String -> String
+  typeRedCase "identity type applied to string"
+    (T.forAll "t" (T.function (T.var "t") (T.var "t")) T.@@ T.string)
+    (T.function T.string T.string),
+  -- Type application with unused variable: (forall x. Int32) Bool = Int32
+  typeRedCase "constant type ignores argument"
+    (T.forAll "x" T.int32 T.@@ T.boolean)
+    T.int32,
+  -- Nested forall application
+  typeRedCase "nested forall first application"
+    (T.forAll "x" (T.forAll "y" (T.function (T.var "x") (T.var "y"))) T.@@ T.int32)
+    (T.forAll "y" (T.function T.int32 (T.var "y"))),
+  -- Full application of nested forall
+  typeRedCase "nested forall both applications"
+    (T.forAll "x" (T.forAll "y" (T.function (T.var "x") (T.var "y"))) T.@@ T.int32 T.@@ T.string)
+    (T.function T.int32 T.string),
+  -- List type application
+  typeRedCase "list type applied"
+    (T.forAll "a" (T.list (T.var "a")) T.@@ T.int32)
+    (T.list T.int32),
+  -- Optional type application
+  typeRedCase "optional type applied"
+    (T.forAll "a" (T.optional (T.var "a")) T.@@ T.string)
+    (T.optional T.string)]

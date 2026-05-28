@@ -249,6 +249,10 @@ encodeList = define "encodeList" $
                 (encodeList @@ var "next" @@ Pairs.second (var "p") @@ var "cx3" @@ var "g")))
         (Lists.uncons (var "terms")))
 
+-- | Encode a Hydra Literal as an RDF Literal
+encodeLiteral :: TTerm (Literal -> Rdf.Literal)
+encodeLiteral = TTerm $ TermVariable $ Name "hydra.rdf.utils.encodeLiteral"
+
 -- | Encode a Hydra LiteralType as SHACL CommonProperties with a datatype constraint
 encodeLiteralType :: TTermDefinition (LiteralType -> Shacl.CommonProperties)
 encodeLiteralType = define "encodeLiteralType" $
@@ -439,6 +443,22 @@ foldAccumResult = define "foldAccumResult" $
             (foldAccumResult @@ var "f" @@ (Pairs.second (var "__r")) @@ Pairs.second (var "p"))))
       (Lists.uncons (var "xs"))
 
+-- | Construct triples from a subject, predicate IRI, and list of object nodes
+forObjects :: TTerm (Rdf.Resource -> Rdf.Iri -> [Rdf.Node] -> [Rdf.Triple])
+forObjects = TTerm $ TermVariable $ Name "hydra.rdf.utils.forObjects"
+
+-- | Construct a key IRI from a string
+keyIri :: TTerm (String -> Rdf.Iri)
+keyIri = TTerm $ TermVariable $ Name "hydra.rdf.utils.keyIri"
+
+-- | Convert a Name to an RDF IRI
+nameToIri :: TTerm (Name -> Rdf.Iri)
+nameToIri = TTerm $ TermVariable $ Name "hydra.rdf.utils.nameToIri"
+
+-- | Get the next blank node, updating the context
+nextBlankNode :: TTerm (I.Int32 -> (Rdf.Resource, I.Int32))
+nextBlankNode = TTerm $ TermVariable $ Name "hydra.rdf.utils.nextBlankNode"
+
 -- | Construct a SHACL node shape from a list of common constraints
 node :: TTermDefinition ([Shacl.CommonConstraint] -> Shacl.Shape)
 node = define "node" $
@@ -460,6 +480,18 @@ property = define "property" $
       Shacl._PropertyShape_name>>: wrap Rdf._LangStrings Maps.empty,
       Shacl._PropertyShape_order>>: nothing,
       Shacl._PropertyShape_path>>: var "iri"]
+
+-- | Construct an IRI for a record field property
+propertyIri :: TTerm (Name -> Name -> Rdf.Iri)
+propertyIri = TTerm $ TermVariable $ Name "hydra.rdf.utils.propertyIri"
+
+-- | Construct an RDF namespace IRI
+rdfIri :: TTerm (String -> Rdf.Iri)
+rdfIri = TTerm $ TermVariable $ Name "hydra.rdf.utils.rdfIri"
+
+-- | Convert an RDF Resource to a Node
+resourceToNode :: TTerm (Rdf.Resource -> Rdf.Node)
+resourceToNode = TTerm $ TermVariable $ Name "hydra.rdf.utils.resourceToNode"
 
 -- | Main SHACL coder: encode a module's type elements into a ShapesGraph
 shaclCoder :: TTermDefinition (Module -> I.Int32 -> Graph -> Either Error (Shacl.ShapesGraph, I.Int32))
@@ -488,6 +520,14 @@ shaclCoder = define "shaclCoder" $
         (wrap Shacl._ShapesGraph (Sets.fromList (var "__shapes")))
         (var "cx"))
       (Eithers.mapList (var "toShape") (var "typeEls"))
+
+-- | Extract subject nodes from a list of Descriptions
+subjectsOf :: TTerm ([Rdf.Description] -> [Rdf.Node])
+subjectsOf = TTerm $ TermVariable $ Name "hydra.rdf.utils.subjectsOf"
+
+-- | Extract triples from a list of Descriptions
+triplesOf :: TTerm ([Rdf.Description] -> [Rdf.Triple])
+triplesOf = TTerm $ TermVariable $ Name "hydra.rdf.utils.triplesOf"
 
 -- | Construct an 'expected X, found Y' error
 unexpectedE :: TTermDefinition (String -> String -> Either Error a)
@@ -522,46 +562,6 @@ withType = define "withType" $
 -- Utility functions referenced by the coder but defined in Rdf.Utils.
 -- These are provided as DSL term references to the staging implementations.
 
--- | Convert a Name to an RDF IRI
-nameToIri :: TTerm (Name -> Rdf.Iri)
-nameToIri = TTerm $ TermVariable $ Name "hydra.rdf.utils.nameToIri"
-
--- | Get the next blank node, updating the context
-nextBlankNode :: TTerm (I.Int32 -> (Rdf.Resource, I.Int32))
-nextBlankNode = TTerm $ TermVariable $ Name "hydra.rdf.utils.nextBlankNode"
-
--- | Construct triples from a subject, predicate IRI, and list of object nodes
-forObjects :: TTerm (Rdf.Resource -> Rdf.Iri -> [Rdf.Node] -> [Rdf.Triple])
-forObjects = TTerm $ TermVariable $ Name "hydra.rdf.utils.forObjects"
-
--- | Construct an IRI for a record field property
-propertyIri :: TTerm (Name -> Name -> Rdf.Iri)
-propertyIri = TTerm $ TermVariable $ Name "hydra.rdf.utils.propertyIri"
-
--- | Construct an RDF namespace IRI
-rdfIri :: TTerm (String -> Rdf.Iri)
-rdfIri = TTerm $ TermVariable $ Name "hydra.rdf.utils.rdfIri"
-
--- | Convert an RDF Resource to a Node
-resourceToNode :: TTerm (Rdf.Resource -> Rdf.Node)
-resourceToNode = TTerm $ TermVariable $ Name "hydra.rdf.utils.resourceToNode"
-
--- | Extract subject nodes from a list of Descriptions
-subjectsOf :: TTerm ([Rdf.Description] -> [Rdf.Node])
-subjectsOf = TTerm $ TermVariable $ Name "hydra.rdf.utils.subjectsOf"
-
--- | Extract triples from a list of Descriptions
-triplesOf :: TTerm ([Rdf.Description] -> [Rdf.Triple])
-triplesOf = TTerm $ TermVariable $ Name "hydra.rdf.utils.triplesOf"
-
 -- | Construct an XSD datatype IRI from a local name
 xmlSchemaDatatypeIri :: TTerm (String -> Rdf.Iri)
 xmlSchemaDatatypeIri = TTerm $ TermVariable $ Name "hydra.rdf.utils.xmlSchemaDatatypeIri"
-
--- | Construct a key IRI from a string
-keyIri :: TTerm (String -> Rdf.Iri)
-keyIri = TTerm $ TermVariable $ Name "hydra.rdf.utils.keyIri"
-
--- | Encode a Hydra Literal as an RDF Literal
-encodeLiteral :: TTerm (Literal -> Rdf.Literal)
-encodeLiteral = TTerm $ TermVariable $ Name "hydra.rdf.utils.encodeLiteral"

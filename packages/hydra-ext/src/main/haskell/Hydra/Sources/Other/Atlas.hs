@@ -22,12 +22,6 @@ ns = ModuleName "hydra.atlas"
 define :: String -> Type -> Binding
 define = defineType ns
 
-atlas :: String -> Type
-atlas = typeref ns
-
-xsd :: String -> Type
-xsd = typeref (XmlSchema.ns)
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -47,6 +41,9 @@ module_ = Module {
       atlasRelationshipAttribute,
       atlasStruct,
       typeCategory]
+
+atlas :: String -> Type
+atlas = typeref ns
 
 atlasAttribute :: Binding
 atlasAttribute = define "AtlasAttributeDef" $
@@ -139,3 +136,6 @@ atlasStruct = define "AtlasStructDef" $
 typeCategory :: Binding
 typeCategory = define "TypeCategory" $ T.enum [
   "primitive", "objectIdType", "enum", "struct", "classification", "entity", "array", "map", "relationship", "businessMetadata"]
+
+xsd :: String -> Type
+xsd = typeref (XmlSchema.ns)

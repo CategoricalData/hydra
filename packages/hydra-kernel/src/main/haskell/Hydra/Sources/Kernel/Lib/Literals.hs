@@ -13,17 +13,6 @@ import           Prelude hiding ((++))
 ns :: ModuleName
 ns = ModuleName "hydra.lib.literals"
 
-sig :: TypeScheme -> TermSignature
-sig = typeSchemeToTermSignature
-
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
-
--- Build a monomorphic signature `a -> b`.
-sigFn :: Type -> Type -> TermSignature
-sigFn a b = sig $ TypeScheme [] (a Types.~> b) Nothing
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -87,3 +76,14 @@ module_ = Module {
       primNoDef "uint32ToBigint"   "Convert a uint32 to a bigint." (sigFn Types.uint32 Types.bigint),
       primNoDef "uint64ToBigint"   "Convert a uint64 to a bigint." (sigFn Types.uint64 Types.bigint),
       primNoDef "uint8ToBigint"    "Convert a uint8 to a bigint." (sigFn Types.uint8 Types.bigint)]
+
+primNoDef :: String -> String -> TermSignature -> Definition
+primNoDef localName description s =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+
+sig :: TypeScheme -> TermSignature
+sig = typeSchemeToTermSignature
+
+-- Build a monomorphic signature `a -> b`.
+sigFn :: Type -> Type -> TermSignature
+sigFn a b = sig $ TypeScheme [] (a Types.~> b) Nothing

@@ -26,16 +26,6 @@ import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 
 
 
--- | Test state (an empty Graph)
-testState :: TTerm Term
-testState = metaref Lexical.emptyGraph
-
--- | Empty InferenceContext for Either-based function tests
-testContext :: TTerm Term
-testContext = metaref Lexical.emptyInferenceContext
-
-
-
 ns :: ModuleName
 ns = ModuleName "hydra.test.annotations"
 
@@ -48,6 +38,14 @@ module_ = Module {
   where
     definitions = [Phantoms.toDefinition allTests]
 
+
+allTests :: TTermDefinition TestGroup
+allTests = Phantoms.definitionInModule module_ "allTests" $
+    Phantoms.doc "Test cases for hydra.annotations functions" $
+    supergroup "annotations" [
+      arbitraryAnnotationTests,
+      descriptionTests,
+      layeredAnnotationTests]
 
 -- | Annotation eval case: like annEvalCase but tagged as disabled because these tests
 -- require kernel term bindings in the test graph (via reduceTerm), which not all
@@ -255,10 +253,12 @@ layeredAnnotationTests = subgroup "layered annotations" [
            $ Terms.map $ Maps.singleton (nameTerm "one") (int32Term 99)))
     (optional $ just $ int32Term 99)]
 
-allTests :: TTermDefinition TestGroup
-allTests = Phantoms.definitionInModule module_ "allTests" $
-    Phantoms.doc "Test cases for hydra.annotations functions" $
-    supergroup "annotations" [
-      arbitraryAnnotationTests,
-      descriptionTests,
-      layeredAnnotationTests]
+-- | Empty InferenceContext for Either-based function tests
+testContext :: TTerm Term
+testContext = metaref Lexical.emptyInferenceContext
+
+
+
+-- | Test state (an empty Graph)
+testState :: TTerm Term
+testState = metaref Lexical.emptyGraph

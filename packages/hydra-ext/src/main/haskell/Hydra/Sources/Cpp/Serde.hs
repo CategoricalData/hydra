@@ -1,3 +1,4 @@
+
 -- Note: this file was created with the help of a large language model. It requires further human review.
 
 module Hydra.Sources.Cpp.Serde where
@@ -349,6 +350,15 @@ booleanLiteralToExpr = define "booleanLiteralToExpr" $
       (Serialization.cst @@ string "true")
       (Serialization.cst @@ string "false")
 
+captureListToExpr :: TTermDefinition (Cpp.CaptureList -> Expr)
+captureListToExpr = define "captureListToExpr" $
+  doc "Convert a capture list to an expression" $
+  lambda "cl" $
+    cases Cpp._CaptureList (var "cl") Nothing [
+      Cpp._CaptureList_captureByValue>>: constant $ Serialization.cst @@ string "[=]",
+      Cpp._CaptureList_captures>>: lambda "cs" $
+        Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map captureToExpr (var "cs"))]
+
 captureToExpr :: TTermDefinition (Cpp.Capture -> Expr)
 captureToExpr = define "captureToExpr" $
   doc "Convert a capture to an expression" $
@@ -358,15 +368,6 @@ captureToExpr = define "captureToExpr" $
     Logic.ifElse (var "byRef")
       (Serialization.cst @@ (Strings.cat2 (string "&") (var "name")))
       (Serialization.cst @@ var "name")
-
-captureListToExpr :: TTermDefinition (Cpp.CaptureList -> Expr)
-captureListToExpr = define "captureListToExpr" $
-  doc "Convert a capture list to an expression" $
-  lambda "cl" $
-    cases Cpp._CaptureList (var "cl") Nothing [
-      Cpp._CaptureList_captureByValue>>: constant $ Serialization.cst @@ string "[=]",
-      Cpp._CaptureList_captures>>: lambda "cs" $
-        Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map captureToExpr (var "cs"))]
 
 caseStatementToExpr :: TTermDefinition (Cpp.CaseStatement -> Expr)
 caseStatementToExpr = define "caseStatementToExpr" $
@@ -973,6 +974,17 @@ logicalOrOperationToExpr = define "logicalOrOperationToExpr" $
       Serialization.cst @@ string "||",
       logicalAndExpressionToExpr @@ var "right"]
 
+mapEntryToExpr :: TTermDefinition (Cpp.MapEntry -> Expr)
+mapEntryToExpr = define "mapEntryToExpr" $
+  doc "Convert a map entry to an expression" $
+  lambda "me" $ lets [
+    "key">: project Cpp._MapEntry Cpp._MapEntry_key @@ var "me",
+    "val">: project Cpp._MapEntry Cpp._MapEntry_value @@ var "me"] $
+    Serialization.spaceSep @@ list [
+      Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ list [expressionToExpr @@ var "key"],
+      Serialization.cst @@ string "->",
+      expressionToExpr @@ var "val"]
+
 mapToExpr :: TTermDefinition (Cpp.Map -> Expr)
 mapToExpr = define "mapToExpr" $
   doc "Convert a map to an expression" $
@@ -987,17 +999,6 @@ mapToExpr = define "mapToExpr" $
         typeExpressionToExpr @@ var "valType"],
       Serialization.cst @@ string ">",
       Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ (Lists.map mapEntryToExpr (var "entries"))]
-
-mapEntryToExpr :: TTermDefinition (Cpp.MapEntry -> Expr)
-mapEntryToExpr = define "mapEntryToExpr" $
-  doc "Convert a map entry to an expression" $
-  lambda "me" $ lets [
-    "key">: project Cpp._MapEntry Cpp._MapEntry_key @@ var "me",
-    "val">: project Cpp._MapEntry Cpp._MapEntry_value @@ var "me"] $
-    Serialization.spaceSep @@ list [
-      Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ list [expressionToExpr @@ var "key"],
-      Serialization.cst @@ string "->",
-      expressionToExpr @@ var "val"]
 
 memInitializerToExpr :: TTermDefinition (Cpp.MemInitializer -> Expr)
 memInitializerToExpr = define "memInitializerToExpr" $

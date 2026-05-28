@@ -66,16 +66,6 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 
-formatError :: TTerm (Error -> String)
-formatError = "e" ~> ShowError.error_ @@ var "e"
-
-
--- Helper for Either-based unexpected errors
--- Uses ExtractionError.UnexpectedShape wrapped in Error.Extraction
-unexpected :: TTerm String -> TTerm String -> TTerm (Prelude.Either Error a)
-unexpected expected actual = left
-  (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError expected actual)
-
 ns :: ModuleName
 ns = ModuleName "hydra.extract.core"
 
@@ -226,6 +216,16 @@ caseField = define "caseField" $
     (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (Phantoms.string "matching case") (Phantoms.string "no matching case")))
     ("mf" ~> right $ var "mf")
     (var "matching")
+
+formatError :: TTerm (Error -> String)
+formatError = "e" ~> ShowError.error_ @@ var "e"
+
+
+-- Helper for Either-based unexpected errors
+-- Uses ExtractionError.UnexpectedShape wrapped in Error.Extraction
+unexpected :: TTerm String -> TTerm String -> TTerm (Prelude.Either Error a)
+unexpected expected actual = left
+  (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError expected actual)
 
 -- TODO: nonstandard; move me
 
@@ -584,14 +584,6 @@ lambdaBody = define "lambdaBody" $
   doc "Extract the body of a lambda term" $
   "graph" ~> "term" ~> Eithers.map (reify Core.lambdaBody) (lambda @@ var "graph" @@ var "term")
 
-let_ :: TTermDefinition (Graph -> Term -> Prelude.Either Error Let)
-let_ = define "let" $
-  doc "Extract a let expression from a term" $
-  "graph" ~> "term0" ~>
-  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
-  Phantoms.cases _Term (var "term")
-    (Just (unexpected(Phantoms.string "let term") (ShowCore.term @@ var "term"))) [
-    _Term_let>>: "lt" ~> right (var "lt")]
 -- TODO: nonstandard; move me
 letBinding :: TTermDefinition (String -> Graph -> Term -> Prelude.Either Error Term)
 letBinding = define "letBinding" $
@@ -612,6 +604,14 @@ letBinding = define "letBinding" $
         (Lists.maybeHead $ var "matchingBindings"))
       (left (Error.errorExtraction $ Error.extractionErrorMultipleBindings $ Error.multipleBindingsError (var "name"))))
 
+let_ :: TTermDefinition (Graph -> Term -> Prelude.Either Error Let)
+let_ = define "let" $
+  doc "Extract a let expression from a term" $
+  "graph" ~> "term0" ~>
+  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
+  Phantoms.cases _Term (var "term")
+    (Just (unexpected(Phantoms.string "let term") (ShowCore.term @@ var "term"))) [
+    _Term_let>>: "lt" ~> right (var "lt")]
 list :: TTermDefinition (Graph -> Term -> Prelude.Either Error [Term])
 list = define "list" $
   doc "Extract a list of terms from a term" $

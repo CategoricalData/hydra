@@ -36,28 +36,26 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
+allTests :: TTermDefinition TestGroup
+allTests = define "allTests" $
+    doc "Test cases for type and term substitution operations" $
+    supergroup "substitution" [
+      substInTypeTests,
+      substInTypeSchemeTests]
+
 -- Helper to build names
 nm :: String -> TTerm Name
 nm s = Core.name $ string s
 
--- Helper for building substitution pairs
-subst :: [(String, TTerm Type)] -> TTerm [(Name, Type)]
-subst pairs = list [pair (nm n) t | (n, t) <- pairs]
+-- | Build a TypeScheme DSL value
+scheme :: [String] -> TTerm Type -> TTerm TypeScheme
+scheme vars body = Core.typeScheme (list [nm v | v <- vars]) body nothing
 
 -- | Apply substInType and show the result as a string
 showSubstInType :: [(String, TTerm Type)] -> TTerm Type -> TTerm String
 showSubstInType pairs inputType =
   ShowCore.type_ @@ (Substitution.substInType @@
     (wrap _TypeSubst (Maps.fromList (subst pairs))) @@ inputType)
-
--- | Universal substInType test case
-substInTypeCase :: String -> [(String, TTerm Type)] -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
-substInTypeCase cname pairs input output =
-  universalCase cname (showSubstInType pairs input) (ShowCore.type_ @@ output)
-
--- | Build a TypeScheme DSL value
-scheme :: [String] -> TTerm Type -> TTerm TypeScheme
-scheme vars body = Core.typeScheme (list [nm v | v <- vars]) body nothing
 
 -- | Apply substInTypeScheme and render just the scheme's body type, which is
 -- where the capture-avoidance behavior shows up. The quantifier list is
@@ -67,6 +65,15 @@ showSubstInTypeSchemeBody pairs inputScheme =
   ShowCore.type_ @@ (Core.typeSchemeBody $ Substitution.substInTypeScheme @@
     (wrap _TypeSubst (Maps.fromList (subst pairs))) @@ inputScheme)
 
+-- Helper for building substitution pairs
+subst :: [(String, TTerm Type)] -> TTerm [(Name, Type)]
+subst pairs = list [pair (nm n) t | (n, t) <- pairs]
+
+-- | Universal substInType test case
+substInTypeCase :: String -> [(String, TTerm Type)] -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
+substInTypeCase cname pairs input output =
+  universalCase cname (showSubstInType pairs input) (ShowCore.type_ @@ output)
+
 substInTypeSchemeBodyCase :: String -> [(String, TTerm Type)] -> TTerm TypeScheme -> TTerm Type -> TTerm TestCaseWithMetadata
 substInTypeSchemeBodyCase cname pairs input expectedBody =
   universalCase cname (showSubstInTypeSchemeBody pairs input)
@@ -74,6 +81,47 @@ substInTypeSchemeBodyCase cname pairs input expectedBody =
 
 -- ============================================================
 -- substInType tests
+-- ============================================================
+
+substInTypeSchemeTests :: TTerm TestGroup
+substInTypeSchemeTests = subgroup "substInTypeScheme" [
+  -- Bound variable in scheme's quantifier list must shadow the substitution.
+  -- Without proper shadowing, {t0 -> Foo} applied to `forall [t0]. t0 -> t0`
+  -- would incorrectly rewrite the body to `Foo -> Foo`, leaving the scheme
+  -- with quantifier [t0] and body Foo -> Foo — a scheme with no free t0
+  -- and an escaped Foo. Regression test for the incremental-inference
+  -- unification bug (2026-04-24).
+  substInTypeSchemeBodyCase "quantified variable shadows substitution"
+    [("a", T.int32)]
+    (scheme ["a"] (T.function (T.var "a") (T.var "a")))
+    (T.function (T.var "a") (T.var "a")),
+
+  -- Free variable in scheme body (not in quantifier list) is substituted.
+  substInTypeSchemeBodyCase "free variable in body is substituted"
+    [("b", T.string)]
+    (scheme ["a"] (T.function (T.var "a") (T.var "b")))
+    (T.function (T.var "a") T.string),
+
+  -- Mixed: substitute frees, not quantified
+  substInTypeSchemeBodyCase "mixed: free substituted, quantified shadowed"
+    [("a", T.int32), ("b", T.string)]
+    (scheme ["a"] (T.function (T.var "a") (T.var "b")))
+    (T.function (T.var "a") T.string),
+
+  -- Multiple quantifiers: all are shadowed
+  substInTypeSchemeBodyCase "multiple quantifiers shadow substitution"
+    [("a", T.int32), ("b", T.string)]
+    (scheme ["a", "b"] (T.pair (T.var "a") (T.var "b")))
+    (T.pair (T.var "a") (T.var "b")),
+
+  -- Empty quantifier list: substitution applies normally
+  substInTypeSchemeBodyCase "empty quantifiers: normal substitution"
+    [("a", T.int32)]
+    (scheme [] (T.var "a"))
+    T.int32]
+
+-- ============================================================
+-- All tests
 -- ============================================================
 
 substInTypeTests :: TTerm TestGroup
@@ -170,51 +218,3 @@ substInTypeTests = subgroup "substInType" [
 -- ============================================================
 -- substInTypeScheme tests: quantifier-shadowing
 -- ============================================================
-
-substInTypeSchemeTests :: TTerm TestGroup
-substInTypeSchemeTests = subgroup "substInTypeScheme" [
-  -- Bound variable in scheme's quantifier list must shadow the substitution.
-  -- Without proper shadowing, {t0 -> Foo} applied to `forall [t0]. t0 -> t0`
-  -- would incorrectly rewrite the body to `Foo -> Foo`, leaving the scheme
-  -- with quantifier [t0] and body Foo -> Foo — a scheme with no free t0
-  -- and an escaped Foo. Regression test for the incremental-inference
-  -- unification bug (2026-04-24).
-  substInTypeSchemeBodyCase "quantified variable shadows substitution"
-    [("a", T.int32)]
-    (scheme ["a"] (T.function (T.var "a") (T.var "a")))
-    (T.function (T.var "a") (T.var "a")),
-
-  -- Free variable in scheme body (not in quantifier list) is substituted.
-  substInTypeSchemeBodyCase "free variable in body is substituted"
-    [("b", T.string)]
-    (scheme ["a"] (T.function (T.var "a") (T.var "b")))
-    (T.function (T.var "a") T.string),
-
-  -- Mixed: substitute frees, not quantified
-  substInTypeSchemeBodyCase "mixed: free substituted, quantified shadowed"
-    [("a", T.int32), ("b", T.string)]
-    (scheme ["a"] (T.function (T.var "a") (T.var "b")))
-    (T.function (T.var "a") T.string),
-
-  -- Multiple quantifiers: all are shadowed
-  substInTypeSchemeBodyCase "multiple quantifiers shadow substitution"
-    [("a", T.int32), ("b", T.string)]
-    (scheme ["a", "b"] (T.pair (T.var "a") (T.var "b")))
-    (T.pair (T.var "a") (T.var "b")),
-
-  -- Empty quantifier list: substitution applies normally
-  substInTypeSchemeBodyCase "empty quantifiers: normal substitution"
-    [("a", T.int32)]
-    (scheme [] (T.var "a"))
-    T.int32]
-
--- ============================================================
--- All tests
--- ============================================================
-
-allTests :: TTermDefinition TestGroup
-allTests = define "allTests" $
-    doc "Test cases for type and term substitution operations" $
-    supergroup "substitution" [
-      substInTypeTests,
-      substInTypeSchemeTests]

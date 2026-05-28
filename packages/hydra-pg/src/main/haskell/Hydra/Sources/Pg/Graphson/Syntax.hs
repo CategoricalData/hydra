@@ -19,9 +19,6 @@ ns = ModuleName "hydra.pg.graphson.syntax"
 define :: String -> Type -> Binding
 define = defineType ns
 
-gson :: String -> Type
-gson = typeref ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -50,6 +47,13 @@ module_ = Module {
       vertex,
       vertexLabel,
       vertexPropertyValue]
+
+adjacentEdge :: Binding
+adjacentEdge = define "AdjacentEdge" $
+  T.record [
+    "id">: gson "Value",
+    "vertexId">: gson "Value",
+    "properties">: T.map (gson "PropertyKey") (gson "Value")]
 
 bigDecimalValue :: Binding
 bigDecimalValue = define "BigDecimalValue" $
@@ -89,16 +93,12 @@ floatValue = define "FloatValue" $
     "negativeInfinity">: T.unit,
     "notANumber">: T.unit]
 
+gson :: String -> Type
+gson = typeref ns
+
 map_ :: Binding
 map_ = define "Map" $
   T.wrap $ T.list $ gson "ValuePair"
-
-adjacentEdge :: Binding
-adjacentEdge = define "AdjacentEdge" $
-  T.record [
-    "id">: gson "Value",
-    "vertexId">: gson "Value",
-    "properties">: T.map (gson "PropertyKey") (gson "Value")]
 
 primitiveTypedValue :: Binding
 primitiveTypedValue = define "PrimitiveTypedValue" $
@@ -117,6 +117,12 @@ typeName_ = define "TypeName" $
 uuid_ :: Binding
 uuid_ = define "Uuid" $
   T.wrap T.string
+
+valuePair :: Binding
+valuePair = define "ValuePair" $
+  T.record [
+    "first">: gson "Value",
+    "second">: gson "Value"]
 
 -- Note: the following are currently unsupported as values:
 --   * BulkSet
@@ -156,12 +162,6 @@ value_ = define "Value" $
     "short">: T.int16,
     "string">: T.string,
     "uuid">: gson "Uuid"]
-
-valuePair :: Binding
-valuePair = define "ValuePair" $
-  T.record [
-    "first">: gson "Value",
-    "second">: gson "Value"]
 
 vertex :: Binding
 vertex = define "Vertex" $

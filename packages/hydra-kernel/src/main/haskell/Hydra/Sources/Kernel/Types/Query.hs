@@ -107,17 +107,6 @@ pathEquation = define "PathEquation" $
       doc "The right-hand side of the equation"
       path]
 
-patternImplication :: Binding
-patternImplication = define "PatternImplication" $
-  doc "A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns." $
-  T.record [
-    "antecedent">:
-      doc "The pattern which, if it matches, triggers the constraint"
-      pattern,
-    "consequent">:
-      doc "The pattern which must also match when the antecedent matches"
-      pattern]
-
 pattern :: Binding
 pattern = define "Pattern" $
   doc "A query pattern" $
@@ -137,6 +126,17 @@ pattern = define "Pattern" $
     "graph">:
       doc "A pattern which matches within a named subgraph"
       graphPattern]
+
+patternImplication :: Binding
+patternImplication = define "PatternImplication" $
+  doc "A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns." $
+  T.record [
+    "antecedent">:
+      doc "The pattern which, if it matches, triggers the constraint"
+      pattern,
+    "consequent">:
+      doc "The pattern which must also match when the antecedent matches"
+      pattern]
 
 query :: Binding
 query = define "Query" $

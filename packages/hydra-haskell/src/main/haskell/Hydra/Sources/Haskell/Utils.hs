@@ -89,9 +89,6 @@ import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 
 type HaskellNamespaces = Namespaces H.ModuleName
 
-haskellUtilsDefinition :: String -> TTerm a -> TTermDefinition a
-haskellUtilsDefinition = definitionInModule module_
-
 ns :: ModuleName
 ns = ModuleName "hydra.haskell.utils"
 
@@ -155,6 +152,9 @@ elementReference = haskellUtilsDefinition "elementReference" $
                 var "aliasStr",
                 string ".",
                 sanitizeHaskellName @@ var "local"]))
+
+haskellUtilsDefinition :: String -> TTerm a -> TTermDefinition a
+haskellUtilsDefinition = definitionInModule module_
 
 hsapp :: TTermDefinition (H.Expression -> H.Expression -> H.Expression)
 hsapp = haskellUtilsDefinition "hsapp" $

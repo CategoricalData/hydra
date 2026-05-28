@@ -17,15 +17,6 @@ ns = ModuleName "hydra.lib.pairs"
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModuleName ns
 
--- Local convenience: build a TermSignature from a TypeScheme.
-sig :: TypeScheme -> TermSignature
-sig = typeSchemeToTermSignature
-
--- Local convenience: build a no-default primitive Definition from a local name.
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -37,6 +28,15 @@ module_ = Module {
       toPrimitive "Map over both elements of a pair." bimapSig bimap_,
       primNoDef "first" "Get the first element of a pair." firstSig,
       primNoDef "second" "Get the second element of a pair." secondSig]
+
+-- Local convenience: build a no-default primitive Definition from a local name.
+primNoDef :: String -> String -> TermSignature -> Definition
+primNoDef localName description s =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+
+-- Local convenience: build a TermSignature from a TypeScheme.
+sig :: TypeScheme -> TermSignature
+sig = typeSchemeToTermSignature
 
 -- Signatures (derived from Hydra.Sources.Libraries primN declarations).
 

@@ -19,9 +19,6 @@ ns = ModuleName "hydra.pg.model"
 define :: String -> Type -> Binding
 define = defineType ns
 
-pg :: String -> Type
-pg = typeref ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -187,16 +184,8 @@ lazyGraph = define "LazyGraph" $
     "vertices">: T.list $ pg "Vertex" @@ "v",
     "edges">: T.list $ pg "Edge" @@ "v"]
 
-property_ :: Binding
-property_ = define "Property" $
-  doc "A key/value property" $
-  T.forAll "v" $ T.record [
-    "key">:
-      doc "They key of the property" $
-      pg "PropertyKey",
-    "value">:
-      doc "The value of the property"
-      "v"]
+pg :: String -> Type
+pg = typeref ns
 
 propertyKey :: Binding
 propertyKey = define "PropertyKey" $
@@ -216,6 +205,17 @@ propertyType = define "PropertyType" $
     "required">:
       doc "Whether the property is required; values may be omitted from a property map otherwise"
       T.boolean]
+
+property_ :: Binding
+property_ = define "Property" $
+  doc "A key/value property" $
+  T.forAll "v" $ T.record [
+    "key">:
+      doc "They key of the property" $
+      pg "PropertyKey",
+    "value">:
+      doc "The value of the property"
+      "v"]
 
 vertex :: Binding
 vertex = define "Vertex" $

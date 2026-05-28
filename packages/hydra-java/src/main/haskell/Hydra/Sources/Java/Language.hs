@@ -87,12 +87,6 @@ module_ = Module {
             moduleDefinitions = [toDefinition javaMaxTupleLength, toDefinition javaLanguage, toDefinition reservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints and reserved words for Java"}
-javaMaxTupleLength :: TTermDefinition Int
-javaMaxTupleLength = define "javaMaxTupleLength" $
-  doc ("The maximum supported length of a tuple in Hydra-Java. "
-    <> "Note: if this constant is changed, also change Tuples.java correspondingly") $
-  int32 9
-
 javaLanguage :: TTermDefinition Language
 javaLanguage = define "javaLanguage" $
   doc "Language constraints for Java" $ lets [
@@ -168,6 +162,12 @@ javaLanguage = define "javaLanguage" $
       (var "termVariants")
       (var "typeVariants")
       (var "typePredicate"))
+
+javaMaxTupleLength :: TTermDefinition Int
+javaMaxTupleLength = define "javaMaxTupleLength" $
+  doc ("The maximum supported length of a tuple in Hydra-Java. "
+    <> "Note: if this constant is changed, also change Tuples.java correspondingly") $
+  int32 9
 
 reservedWords :: TTermDefinition (S.Set String)
 reservedWords = define "reservedWords" $

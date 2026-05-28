@@ -122,12 +122,6 @@ module_ = Module {
       toDefinition termAlternatives,
       toDefinition typeAlternatives]
 
-formatError :: TTerm (Error -> String)
-formatError = "e" ~> ShowError.error_ @@ var "e"
-
-formatDecodingError :: TTerm (DecodingError -> Error)
-formatDecodingError = "e" ~> Error.errorDecoding $ var "e"
-
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
@@ -711,6 +705,12 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
   right $ pair
     (Graph.graphWithSchemaTypes (var "g") (Graph.graphSchemaTypes (var "adapted")))
     (var "defsGrouped")
+
+formatDecodingError :: TTerm (DecodingError -> Error)
+formatDecodingError = "e" ~> Error.errorDecoding $ var "e"
+
+formatError :: TTerm (Error -> String)
+formatError = "e" ~> ShowError.error_ @@ var "e"
 
 literalTypeSupported :: TTermDefinition (LanguageConstraints -> LiteralType -> Bool)
 literalTypeSupported = define "literalTypeSupported" $

@@ -94,15 +94,6 @@ type HydraAvroAdapter = Adapter Type Avro.Schema Term JM.Value
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-avroSchemaPhantomNs :: ModuleName
-avroSchemaPhantomNs = ModuleName "hydra.avro.schema"
-
-jsonModelNs :: ModuleName
-jsonModelNs = ModuleName "hydra.json.model"
-
-avroEnvironmentNs :: ModuleName
-avroEnvironmentNs = ModuleName "hydra.avro.environment"
-
 ns :: ModuleName
 ns = ModuleName "hydra.avro.encoder"
 
@@ -139,6 +130,12 @@ module_ = Module {
       toDefinition typeToName,
       toDefinition unionAsRecordAdapter]
 
+
+avroEnvironmentNs :: ModuleName
+avroEnvironmentNs = ModuleName "hydra.avro.environment"
+
+avroSchemaPhantomNs :: ModuleName
+avroSchemaPhantomNs = ModuleName "hydra.avro.schema"
 
 buildAvroField :: TTermDefinition ((Name, HydraAvroAdapter) -> Avro.Field)
 buildAvroField = define "buildAvroField" $
@@ -507,6 +504,9 @@ integerValueToDouble = define "integerValueToDouble" $
       _IntegerValue_uint16>>: lambda "i" $ Literals.bigintToDecimal (Literals.uint16ToBigint (var "i")),
       _IntegerValue_uint32>>: lambda "i" $ Literals.bigintToDecimal (Literals.uint32ToBigint (var "i")),
       _IntegerValue_uint64>>: lambda "i" $ Literals.bigintToDecimal (Literals.uint64ToBigint (var "i"))]
+
+jsonModelNs :: ModuleName
+jsonModelNs = ModuleName "hydra.json.model"
 
 literalAdapter :: TTermDefinition (InferenceContext -> Type -> LiteralType -> Result HydraAvroAdapter)
 literalAdapter = define "literalAdapter" $

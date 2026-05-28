@@ -111,9 +111,6 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-formatError :: TTerm (Error -> String)
-formatError = "e" ~> ShowError.error_ @@ var "e"
-
 aggregateAnnotations :: TTermDefinition ((x -> Maybe y) -> (y -> x) -> (y -> M.Map Name Term) -> x -> M.Map Name Term)
 aggregateAnnotations = define "aggregateAnnotations" $
   doc "Aggregate annotations from nested structures" $
@@ -136,6 +133,9 @@ commentsFromFieldType = define "commentsFromFieldType" $
   doc "Extract comments/description from a FieldType" $
   "cx" ~> "g" ~> "ft" ~>
   getTypeDescription @@ var "cx" @@ var "g" @@ (Core.fieldTypeType $ var "ft")
+
+formatError :: TTerm (Error -> String)
+formatError = "e" ~> ShowError.error_ @@ var "e"
 
 getDescription :: TTermDefinition (InferenceContext -> Graph -> M.Map Name Term -> Prelude.Either Error (Maybe String))
 getDescription = define "getDescription" $

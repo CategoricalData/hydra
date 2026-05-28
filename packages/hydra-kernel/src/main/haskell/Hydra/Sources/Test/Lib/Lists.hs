@@ -36,36 +36,6 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
--- Helper functions for building test terms
-intList :: [Int] -> TTerm Term
-intList els = list (int32 <$> els)
-
-intListList :: [[Int]] -> TTerm Term
-intListList lists = list (intList <$> lists)
-
-optionalInt32 :: Maybe Int -> TTerm Term
-optionalInt32 Nothing = Core.termMaybe nothing
-optionalInt32 (Just x) = Core.termMaybe  $ just (int32 x)
-
-optionalIntList :: Maybe [Int] -> TTerm Term
-optionalIntList Nothing = Core.termMaybe nothing
-optionalIntList (Just xs) = Core.termMaybe $ just (intList xs)
-
-optionalIntAndIntList :: Maybe (Int, [Int]) -> TTerm Term
-optionalIntAndIntList Nothing = Core.termMaybe nothing
-optionalIntAndIntList (Just (x, xs)) = Core.termMaybe $ just (pair (int32 x) (intList xs))
-
-optionalString :: Maybe String -> TTerm Term
-optionalString Nothing = Core.termMaybe nothing
-optionalString (Just x) = Core.termMaybe  $ just (string x)
-
-optionalStringList :: Maybe [String] -> TTerm Term
-optionalStringList Nothing = Core.termMaybe nothing
-optionalStringList (Just xs) = Core.termMaybe $ just (stringList xs)
-
-stringList :: [String] -> TTerm Term
-stringList els = list (string <$> els)
-
 allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for hydra.lib.lists primitives" $
@@ -461,3 +431,33 @@ allTests = define "allTests" $
         where
           testInt name op lst1 lst2 result = primCase name _lists_zipWith [op, intList lst1, intList lst2] (intList result)
           testStr name op lst1 lst2 result = primCase name _lists_zipWith [op, stringList lst1, stringList lst2] (stringList result)
+
+-- Helper functions for building test terms
+intList :: [Int] -> TTerm Term
+intList els = list (int32 <$> els)
+
+intListList :: [[Int]] -> TTerm Term
+intListList lists = list (intList <$> lists)
+
+optionalInt32 :: Maybe Int -> TTerm Term
+optionalInt32 Nothing = Core.termMaybe nothing
+optionalInt32 (Just x) = Core.termMaybe  $ just (int32 x)
+
+optionalIntAndIntList :: Maybe (Int, [Int]) -> TTerm Term
+optionalIntAndIntList Nothing = Core.termMaybe nothing
+optionalIntAndIntList (Just (x, xs)) = Core.termMaybe $ just (pair (int32 x) (intList xs))
+
+optionalIntList :: Maybe [Int] -> TTerm Term
+optionalIntList Nothing = Core.termMaybe nothing
+optionalIntList (Just xs) = Core.termMaybe $ just (intList xs)
+
+optionalString :: Maybe String -> TTerm Term
+optionalString Nothing = Core.termMaybe nothing
+optionalString (Just x) = Core.termMaybe  $ just (string x)
+
+optionalStringList :: Maybe [String] -> TTerm Term
+optionalStringList Nothing = Core.termMaybe nothing
+optionalStringList (Just xs) = Core.termMaybe $ just (stringList xs)
+
+stringList :: [String] -> TTerm Term
+stringList els = list (string <$> els)

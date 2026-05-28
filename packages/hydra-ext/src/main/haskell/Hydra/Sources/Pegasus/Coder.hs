@@ -89,10 +89,6 @@ import qualified Hydra.Sources.Pegasus.Serde as PegasusSerdeSource
 import qualified Hydra.Sources.Kernel.Terms.Dependencies as Dependencies
 
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
-
 ns :: ModuleName
 ns = ModuleName "hydra.pegasus.coder"
 
@@ -125,15 +121,6 @@ module_ = Module {
       toDefinition typeToSchema]
 
 
--- | err cx msg = Left (ErrorOther (OtherError msg))
-err :: TTerm InferenceContext -> TTerm String -> TTerm (Either Error a)
-err _cx msg = left (Error.errorOther $ Error.otherError msg)
-
--- | unexpectedE cx expected found = err cx $ "Expected " ++ expected ++ ", found: " ++ found
-unexpectedE :: TTerm InferenceContext -> TTerm String -> TTerm String -> TTerm (Either Error a)
-unexpectedE cx expected found = err cx (Strings.cat2 (string "Expected ") (Strings.cat2 expected (Strings.cat2 (string ", found: ") found)))
-
-
 constructModule :: TTermDefinition (InferenceContext -> Graph -> M.Map ModuleName String -> Module -> [TypeDefinition] -> Either Error (M.Map FilePath PDL.SchemaFile))
 constructModule = def "constructModule" $
   doc "Construct PDL schema files from type definitions, with topological sorting and cycle detection" $
@@ -148,6 +135,10 @@ constructModule = def "constructModule" $
       -- Cycle found
       (lambda "cycle" $
         err (var "cx") (Strings.cat2 (string "types form a cycle (unsupported in PDL): [") (Strings.cat2 (Strings.intercalate (string ", ") (Lists.map (lambda "td" $ Core.unName (Packaging.typeDefinitionName (var "td"))) (var "cycle"))) (string "]"))))
+
+def :: String -> TTerm a -> TTermDefinition a
+def = definitionInModule module_
+
 
 doc_ :: TTermDefinition (Maybe String -> PDL.Annotations)
 doc_ = def "doc" $
@@ -358,6 +349,10 @@ encodeUnionField = def "encodeUnionField" $
       PDL._UnionMember_value>>: var "schema",
       PDL._UnionMember_annotations>>: var "anns"])
 
+-- | err cx msg = Left (ErrorOther (OtherError msg))
+err :: TTerm InferenceContext -> TTerm String -> TTerm (Either Error a)
+err _cx msg = left (Error.errorOther $ Error.otherError msg)
+
 getAnns :: TTermDefinition (InferenceContext -> Graph -> Type -> Either Error PDL.Annotations)
 getAnns = def "getAnns" $
   "cx" ~> "g" ~> "typ" ~>
@@ -464,3 +459,8 @@ typeToSchema = def "typeToSchema" $
       PDL._NamedSchema_type>>: var "ptype",
       PDL._NamedSchema_annotations>>: var "anns"])
       (list ([] :: [TTerm PDL.QualifiedName])))
+
+-- | unexpectedE cx expected found = err cx $ "Expected " ++ expected ++ ", found: " ++ found
+unexpectedE :: TTerm InferenceContext -> TTerm String -> TTerm String -> TTerm (Either Error a)
+unexpectedE cx expected found = err cx (Strings.cat2 (string "Expected ") (Strings.cat2 expected (Strings.cat2 (string ", found: ") found)))
+

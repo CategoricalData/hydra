@@ -22,12 +22,6 @@ ns = ModuleName "hydra.pegasus.pdl"
 define :: String -> Type -> Binding
 define = defineType ns
 
-pdl :: String -> Type
-pdl = typeref ns
-
-json :: String -> Type
-json = typeref $ JsonModel.ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -84,6 +78,13 @@ fieldName_ :: Binding
 fieldName_ = define "FieldName" $
   T.wrap T.string
 
+json :: String -> Type
+json = typeref $ JsonModel.ns
+
+name_ :: Binding
+name_ = define "Name" $
+  T.wrap T.string
+
 namedSchema :: Binding
 namedSchema = define "NamedSchema" $
   T.record [
@@ -98,10 +99,6 @@ namedSchemaType = define "NamedSchemaType" $
     "enum">: pdl "EnumSchema",
     "typeref">: pdl "Schema"]
 
-name_ :: Binding
-name_ = define "Name" $
-  T.wrap T.string
-
 namespace_ :: Binding
 namespace_ = define "Namespace" $
   T.wrap T.string
@@ -109,6 +106,9 @@ namespace_ = define "Namespace" $
 package_ :: Binding
 package_ = define "Package" $
   T.wrap T.string
+
+pdl :: String -> Type
+pdl = typeref ns
 
 primitiveType_ :: Binding
 primitiveType_ = define "PrimitiveType" $

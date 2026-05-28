@@ -102,9 +102,6 @@ import qualified Hydra.Sources.Python.Utils as PyUtils
 import qualified Hydra.Dsl.Python.Helpers as PyDsl
 import qualified Hydra.Typing as HydraTyping
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
 ns :: ModuleName
 ns = ModuleName "hydra.python.coder"
 
@@ -262,6 +259,60 @@ analyzePythonFunction = def "analyzePythonFunction" $
       pythonEnvironmentSetGraph @@
       var "env" @@ var "term"
 
+-- | Encode a single case (Field) into a CaseBlock for a match statement.
+--   This handles both enum variants and class-based variants with value capture.
+--   The encodeBody function is passed in to allow different encoding strategies
+--   (inline vs multiline).
+--   Uses withLambda to extend Graph with the case binding variable.
+caseBlockToExpr :: TTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Bool -> (PyHelpers.PythonEnvironment -> Term -> Either Error [Py.Statement]) -> Field -> Either Error Py.CaseBlock)
+caseBlockToExpr = def "caseBlockToExpr" $
+  doc "Encode a single case (Field) into a CaseBlock for a match statement" $
+  "cx" ~> "env" ~> "tname" ~> "rowType" ~> "isEnum" ~> "encodeBody" ~> "field" ~>
+    "fname" <~ Core.fieldName (var "field") $
+    "fterm" <~ Core.fieldTerm (var "field") $
+    -- The field term should be a lambda; strip annotations and type wrappers to extract it.
+    -- After case-statement hoisting, field terms may be variable references to hoisted functions
+    -- instead of inline lambdas. The default case handles this by synthesizing a lambda wrapper.
+    "stripped" <~ (Strip.deannotateAndDetypeTerm @@ var "fterm") $
+    "effectiveLambda" <~ (cases _Term (var "stripped")
+      -- Default: fterm is not a lambda (e.g. hoisted variable reference).
+      -- Wrap it in a synthetic lambda: \v -> fterm(v)
+      (Just $ "syntheticVar" <~ Core.name (string "_matchValue") $
+        Core.lambda (var "syntheticVar") nothing
+          (Core.termApplication $ Core.application (var "stripped") (Core.termVariable $ var "syntheticVar"))) [
+      _Term_lambda>>: "lam" ~> var "lam"]) $
+    -- Now effectiveLambda is always a Lambda
+    "v" <~ Core.lambdaParameter (var "effectiveLambda") $
+    "rawBody" <~ Core.lambdaBody (var "effectiveLambda") $
+    -- Check if this variant has unit type
+    "isUnitVariant" <~ (isVariantUnitType @@ var "rowType" @@ var "fname") $
+    -- For unit variants, eliminate references to the lambda parameter
+    "effectiveBody" <~ (Logic.ifElse (var "isUnitVariant")
+      (eliminateUnitVar @@ var "v" @@ var "rawBody")
+      (var "rawBody")) $
+    -- Determine if we should capture the value
+    -- Don't capture if: unit variant, variable is free in body, or body is unit term
+    "shouldCapture" <~ (Logic.not $ Logic.or (var "isUnitVariant")
+      (Logic.or (Variables.isFreeVariableInTerm @@ var "v" @@ var "rawBody")
+                (Predicates.isUnitTerm @@ var "rawBody"))) $
+    -- Extend the Graph with the lambda parameter
+    -- to prevent the code generator from reducing it away
+    "env2" <~ (pythonEnvironmentSetGraph
+      @@ (Scoping.extendGraphForLambda @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "effectiveLambda")
+      @@ var "env") $
+    -- Deconflict the variant name in case it collides with a type name
+    "pyVariantName" <~ (deconflictVariantName @@ true @@ var "env2" @@ var "tname" @@ var "fname" @@ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env2")) $
+    -- Create the pattern using env2 (extended context)
+    "pattern" <~ (variantClosedPattern @@ var "env2" @@ var "tname" @@ var "fname" @@ var "pyVariantName"
+      @@ var "rowType" @@ var "isEnum" @@ var "v" @@ var "shouldCapture") $
+    -- Encode the body using the provided encoder with extended env
+    "stmts" <<~ (var "encodeBody" @@ var "env2" @@ var "effectiveBody") $
+    "pyBody" <~ (PyUtils.indentedBlock @@ nothing @@ list [var "stmts"]) $
+    right $ PyDsl.caseBlock
+      (PyUtils.pyClosedPatternToPyPatterns @@ var "pattern")
+      nothing
+      (var "pyBody")
+
 -- | Create a CaseBlock pattern for a class variant with no capture (unit variant).
 classVariantPatternUnit :: TTermDefinition (Py.Name -> Py.ClosedPattern)
 classVariantPatternUnit = def "classVariantPatternUnit" $
@@ -385,6 +436,9 @@ deduplicateCaseVariables = def "deduplicateCaseVariables" $
                   (pair (Maps.empty :: TTerm (M.Map Name I.Int32)) (list ([] :: [TTerm Field])))
                   (var "cases_") $
     Lists.reverse (Pairs.second $ var "result")
+
+def :: String -> TTerm a -> TTermDefinition a
+def = definitionInModule module_
 
 -- | Recursively dig through forall types to find wrap types.
 --   This is used to detect when we need to import Node for wrapped types
@@ -908,60 +962,6 @@ encodeBindingsAsDefs = def "encodeBindingsAsDefs" $
   "env" ~> "encodeBinding" ~> "bindings" ~>
     Eithers.mapList (var "encodeBinding" @@ var "env") (var "bindings")
 
--- | Encode a single case (Field) into a CaseBlock for a match statement.
---   This handles both enum variants and class-based variants with value capture.
---   The encodeBody function is passed in to allow different encoding strategies
---   (inline vs multiline).
---   Uses withLambda to extend Graph with the case binding variable.
-caseBlockToExpr :: TTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Bool -> (PyHelpers.PythonEnvironment -> Term -> Either Error [Py.Statement]) -> Field -> Either Error Py.CaseBlock)
-caseBlockToExpr = def "caseBlockToExpr" $
-  doc "Encode a single case (Field) into a CaseBlock for a match statement" $
-  "cx" ~> "env" ~> "tname" ~> "rowType" ~> "isEnum" ~> "encodeBody" ~> "field" ~>
-    "fname" <~ Core.fieldName (var "field") $
-    "fterm" <~ Core.fieldTerm (var "field") $
-    -- The field term should be a lambda; strip annotations and type wrappers to extract it.
-    -- After case-statement hoisting, field terms may be variable references to hoisted functions
-    -- instead of inline lambdas. The default case handles this by synthesizing a lambda wrapper.
-    "stripped" <~ (Strip.deannotateAndDetypeTerm @@ var "fterm") $
-    "effectiveLambda" <~ (cases _Term (var "stripped")
-      -- Default: fterm is not a lambda (e.g. hoisted variable reference).
-      -- Wrap it in a synthetic lambda: \v -> fterm(v)
-      (Just $ "syntheticVar" <~ Core.name (string "_matchValue") $
-        Core.lambda (var "syntheticVar") nothing
-          (Core.termApplication $ Core.application (var "stripped") (Core.termVariable $ var "syntheticVar"))) [
-      _Term_lambda>>: "lam" ~> var "lam"]) $
-    -- Now effectiveLambda is always a Lambda
-    "v" <~ Core.lambdaParameter (var "effectiveLambda") $
-    "rawBody" <~ Core.lambdaBody (var "effectiveLambda") $
-    -- Check if this variant has unit type
-    "isUnitVariant" <~ (isVariantUnitType @@ var "rowType" @@ var "fname") $
-    -- For unit variants, eliminate references to the lambda parameter
-    "effectiveBody" <~ (Logic.ifElse (var "isUnitVariant")
-      (eliminateUnitVar @@ var "v" @@ var "rawBody")
-      (var "rawBody")) $
-    -- Determine if we should capture the value
-    -- Don't capture if: unit variant, variable is free in body, or body is unit term
-    "shouldCapture" <~ (Logic.not $ Logic.or (var "isUnitVariant")
-      (Logic.or (Variables.isFreeVariableInTerm @@ var "v" @@ var "rawBody")
-                (Predicates.isUnitTerm @@ var "rawBody"))) $
-    -- Extend the Graph with the lambda parameter
-    -- to prevent the code generator from reducing it away
-    "env2" <~ (pythonEnvironmentSetGraph
-      @@ (Scoping.extendGraphForLambda @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "effectiveLambda")
-      @@ var "env") $
-    -- Deconflict the variant name in case it collides with a type name
-    "pyVariantName" <~ (deconflictVariantName @@ true @@ var "env2" @@ var "tname" @@ var "fname" @@ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env2")) $
-    -- Create the pattern using env2 (extended context)
-    "pattern" <~ (variantClosedPattern @@ var "env2" @@ var "tname" @@ var "fname" @@ var "pyVariantName"
-      @@ var "rowType" @@ var "isEnum" @@ var "v" @@ var "shouldCapture") $
-    -- Encode the body using the provided encoder with extended env
-    "stmts" <<~ (var "encodeBody" @@ var "env2" @@ var "effectiveBody") $
-    "pyBody" <~ (PyUtils.indentedBlock @@ nothing @@ list [var "stmts"]) $
-    right $ PyDsl.caseBlock
-      (PyUtils.pyClosedPatternToPyPatterns @@ var "pattern")
-      nothing
-      (var "pyBody")
-
 -- | Encode the default (wildcard) case block for a match statement.
 --   Takes: encoder function, isFull (whether all variants are covered), optional default term, type name
 --   Returns: list of CaseBlocks (empty or containing the wildcard case)
@@ -1141,62 +1141,6 @@ encodeForallType = def "encodeForallType" $
     right $ PyUtils.primaryAndParams
       @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBody")
       @@ (Lists.map ("n" ~> PyDsl.pyNameToPyExpression $ PyDsl.name $ Core.unName (var "n")) (var "params"))
-
--- | Encode a function definition with parameters and body.
---   Takes: environment, name, type params, arg names, body term, domain types, optional codomain, comment, prefix statements
-functionDefinitionToExpr :: TTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment
-  -> Name -> [Name] -> [Name] -> TTerm Term -> [Type] -> Maybe Type -> Maybe String -> [Py.Statement]
-  -> Either Error Py.Statement)
-functionDefinitionToExpr = def "functionDefinitionToExpr" $
-  doc "Encode a function definition with parameters and body" $
-  "cx" ~> "env" ~> "name" ~> "tparams" ~> "args" ~> "body" ~> "doms" ~> "mcod" ~> "comment" ~> "prefixes" ~>
-    -- Create parameters by zipping arg names with domain types
-    "pyArgs" <<~ Eithers.mapList
-      ("pair" ~>
-        "argName" <~ Pairs.first (var "pair") $
-        "typ" <~ Pairs.second (var "pair") $
-        "pyTyp" <<~ (encodeType @@ var "env" @@ var "typ") $
-        right $ PyDsl.paramNoDefaultSimple $ PyDsl.param
-          (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "argName")
-          (just $ PyDsl.annotation $ var "pyTyp"))
-      (Lists.zip (var "args") (var "doms")) $
-    "pyParams" <~ (PyDsl.parametersParamNoDefault $ PyDsl.paramNoDefaultParameters (var "pyArgs") (Phantoms.list ([] :: [TTerm Py.ParamWithDefault])) nothing) $
-    -- Check for tail-call optimization opportunity
-    "isTCO" <~ (Logic.and
-      (Logic.not $ Lists.null (var "args"))
-      (Analysis.isSelfTailRecursive @@ var "name" @@ var "body")) $
-    "block" <<~ (Logic.ifElse (var "isTCO")
-      -- TCO path: wrap body in while True loop
-      -- Note: prefixes (let-binding statements) go INSIDE the while loop so they are
-      -- re-evaluated each iteration when parameters change via reassignment + continue.
-      ("tcoStmts" <<~ (encodeTermMultilineTCO @@ var "cx" @@ var "env" @@ var "name" @@ var "args" @@ var "body") $
-        "trueExpr" <~ (PyDsl.namedExpressionSimple $ PyUtils.pyAtomToPyExpression @@ PyDsl.atomTrue) $
-        "whileBody" <~ (PyUtils.indentedBlock @@ nothing @@ list [Lists.concat2 (var "prefixes") (var "tcoStmts")]) $
-        "whileStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementWhile $
-          PyDsl.whileStatement (var "trueExpr") (var "whileBody") nothing) $
-        right $ PyUtils.indentedBlock @@ var "comment" @@ list [list [var "whileStmt"]])
-      -- Normal path: encode body as statements with return
-      ("stmts" <<~ (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "body") $
-        right $ PyUtils.indentedBlock @@ var "comment" @@ list [Lists.concat2 (var "prefixes") (var "stmts")])) $
-    -- Encode return type if present
-    "mreturnType" <<~ optCases (var "mcod")
-      (right (nothing :: TTerm (Maybe Py.Expression)))
-      ("cod" ~>
-        "pytyp" <<~ (encodeType @@ var "env" @@ var "cod") $
-        right $ just (var "pytyp")) $
-    -- Type parameters (only for Python 3.12+)
-    "pyTparams" <~ (Logic.ifElse useInlineTypeParams
-      (Lists.map (PyUtils.pyNameToPyTypeParameter <.> PyNames.encodeTypeVariable) (var "tparams"))
-      (Phantoms.list ([] :: [TTerm Py.TypeParameter]))) $
-    -- Check if this is a thunk (zero-argument function)
-    "isThunk" <~ (Lists.null $ var "args") $
-    "mDecorators" <~ (Logic.ifElse (var "isThunk")
-      (just $ wrap Py._Decorators $ list [lruCacheDecorator])
-      nothing) $
-    -- Metadata for lru_cache is now pre-computed in gatherMetadata
-    "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name") $
-    right $ PyDsl.statementCompound $ PyDsl.compoundStatementFunction $ PyDsl.functionDefinition (var "mDecorators") $
-      PyDsl.functionDefRaw false (var "pyName") (var "pyTparams") (just $ var "pyParams") (var "mreturnType") nothing (var "block")
 
 -- | Encode a function type to Python Callable[..., return_type].
 --   Gathers all domain types and the final codomain.
@@ -2369,6 +2313,62 @@ extendMetaForTerm = def "extendMetaForTerm" $
         _Term_inject>>: constant $
           setMetaUsesCast @@ true @@ var "meta"]) $
     Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "step" @@ var "meta0" @@ var "term"
+
+-- | Encode a function definition with parameters and body.
+--   Takes: environment, name, type params, arg names, body term, domain types, optional codomain, comment, prefix statements
+functionDefinitionToExpr :: TTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment
+  -> Name -> [Name] -> [Name] -> TTerm Term -> [Type] -> Maybe Type -> Maybe String -> [Py.Statement]
+  -> Either Error Py.Statement)
+functionDefinitionToExpr = def "functionDefinitionToExpr" $
+  doc "Encode a function definition with parameters and body" $
+  "cx" ~> "env" ~> "name" ~> "tparams" ~> "args" ~> "body" ~> "doms" ~> "mcod" ~> "comment" ~> "prefixes" ~>
+    -- Create parameters by zipping arg names with domain types
+    "pyArgs" <<~ Eithers.mapList
+      ("pair" ~>
+        "argName" <~ Pairs.first (var "pair") $
+        "typ" <~ Pairs.second (var "pair") $
+        "pyTyp" <<~ (encodeType @@ var "env" @@ var "typ") $
+        right $ PyDsl.paramNoDefaultSimple $ PyDsl.param
+          (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "argName")
+          (just $ PyDsl.annotation $ var "pyTyp"))
+      (Lists.zip (var "args") (var "doms")) $
+    "pyParams" <~ (PyDsl.parametersParamNoDefault $ PyDsl.paramNoDefaultParameters (var "pyArgs") (Phantoms.list ([] :: [TTerm Py.ParamWithDefault])) nothing) $
+    -- Check for tail-call optimization opportunity
+    "isTCO" <~ (Logic.and
+      (Logic.not $ Lists.null (var "args"))
+      (Analysis.isSelfTailRecursive @@ var "name" @@ var "body")) $
+    "block" <<~ (Logic.ifElse (var "isTCO")
+      -- TCO path: wrap body in while True loop
+      -- Note: prefixes (let-binding statements) go INSIDE the while loop so they are
+      -- re-evaluated each iteration when parameters change via reassignment + continue.
+      ("tcoStmts" <<~ (encodeTermMultilineTCO @@ var "cx" @@ var "env" @@ var "name" @@ var "args" @@ var "body") $
+        "trueExpr" <~ (PyDsl.namedExpressionSimple $ PyUtils.pyAtomToPyExpression @@ PyDsl.atomTrue) $
+        "whileBody" <~ (PyUtils.indentedBlock @@ nothing @@ list [Lists.concat2 (var "prefixes") (var "tcoStmts")]) $
+        "whileStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementWhile $
+          PyDsl.whileStatement (var "trueExpr") (var "whileBody") nothing) $
+        right $ PyUtils.indentedBlock @@ var "comment" @@ list [list [var "whileStmt"]])
+      -- Normal path: encode body as statements with return
+      ("stmts" <<~ (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "body") $
+        right $ PyUtils.indentedBlock @@ var "comment" @@ list [Lists.concat2 (var "prefixes") (var "stmts")])) $
+    -- Encode return type if present
+    "mreturnType" <<~ optCases (var "mcod")
+      (right (nothing :: TTerm (Maybe Py.Expression)))
+      ("cod" ~>
+        "pytyp" <<~ (encodeType @@ var "env" @@ var "cod") $
+        right $ just (var "pytyp")) $
+    -- Type parameters (only for Python 3.12+)
+    "pyTparams" <~ (Logic.ifElse useInlineTypeParams
+      (Lists.map (PyUtils.pyNameToPyTypeParameter <.> PyNames.encodeTypeVariable) (var "tparams"))
+      (Phantoms.list ([] :: [TTerm Py.TypeParameter]))) $
+    -- Check if this is a thunk (zero-argument function)
+    "isThunk" <~ (Lists.null $ var "args") $
+    "mDecorators" <~ (Logic.ifElse (var "isThunk")
+      (just $ wrap Py._Decorators $ list [lruCacheDecorator])
+      nothing) $
+    -- Metadata for lru_cache is now pre-computed in gatherMetadata
+    "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name") $
+    right $ PyDsl.statementCompound $ PyDsl.compoundStatementFunction $ PyDsl.functionDefinition (var "mDecorators") $
+      PyDsl.functionDefRaw false (var "pyName") (var "pyTparams") (just $ var "pyParams") (var "mreturnType") nothing (var "block")
 
 -- Helper functions to set individual metadata fields
 

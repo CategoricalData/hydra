@@ -19,9 +19,6 @@ ns = ModuleName "hydra.protobuf.any"
 define :: String -> Type -> Binding
 define = defineType ns
 
-pbAny :: String -> Type
-pbAny = typeref ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -43,3 +40,6 @@ any_ = define "Any" $
     "value">:
       doc "Must be a valid serialized protocol buffer of the above specified type."
       T.binary]
+
+pbAny :: String -> Type
+pbAny = typeref ns

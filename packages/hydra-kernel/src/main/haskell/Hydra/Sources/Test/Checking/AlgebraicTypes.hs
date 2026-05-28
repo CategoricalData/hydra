@@ -68,19 +68,6 @@ allTests = define "allTests" $
 
 ------ Unit ------
 
-unitTests :: TTermDefinition TestGroup
-unitTests = define "unitTests" $
-  supergroup "Unit" [
-  unitTermTests,
-  unitTermInPolymorphicContextTests]
-
-unitTermTests :: TTermDefinition TestGroup
-unitTermTests = define "unitTermTests" $
-  subgroup "Unit term" [
-  noChange "unit literal"
-    unit
-    T.unit]
-
 unitTermInPolymorphicContextTests :: TTermDefinition TestGroup
 unitTermInPolymorphicContextTests = define "unitTermInPolymorphicContextTests" $
   subgroup "Unit term in polymorphic context" [
@@ -89,16 +76,20 @@ unitTermInPolymorphicContextTests = define "unitTermInPolymorphicContextTests" $
     (tylam "t0" $ lambdaTyped "x" (T.var "t0") unit)
     (T.forAlls ["t0"] $ T.function (T.var "t0") T.unit)]
 
------- Pairs ------
+unitTermTests :: TTermDefinition TestGroup
+unitTermTests = define "unitTermTests" $
+  subgroup "Unit term" [
+  noChange "unit literal"
+    unit
+    T.unit]
 
-pairsTests :: TTermDefinition TestGroup
-pairsTests = define "pairsTests" $
-  supergroup "Pairs" [
-  basicPairsTests,
-  polymorphicPairsTests,
-  pairsInComplexContextsTests,
-  nestedPairsTests,
-  pairsWithComplexTypesTests]
+unitTests :: TTermDefinition TestGroup
+unitTests = define "unitTests" $
+  supergroup "Unit" [
+  unitTermTests,
+  unitTermInPolymorphicContextTests]
+
+------ Pairs ------
 
 basicPairsTests :: TTermDefinition TestGroup
 basicPairsTests = define "basicPairsTests" $
@@ -115,6 +106,64 @@ basicPairsTests = define "basicPairsTests" $
     (pair (boolean False) (int32 100))
     (tyapps (pair (boolean False) (int32 100)) [T.boolean, T.int32])
     (T.pair T.boolean T.int32)]
+
+nestedPairsTests :: TTermDefinition TestGroup
+nestedPairsTests = define "nestedPairsTests" $
+  subgroup "Nested pairs" [
+  checkTest "pair of pairs" []
+    (pair (pair (int32 1) (string "one")) (pair (boolean True) (int32 2)))
+    (tyapps (pair (tyapps (pair (int32 1) (string "one")) [T.int32, T.string]) (tyapps (pair (boolean True) (int32 2)) [T.boolean, T.int32])) [T.pair T.int32 T.string, T.pair T.boolean T.int32])
+    (T.pair (T.pair T.int32 T.string) (T.pair T.boolean T.int32)),
+  checkTest "pair with list" []
+    (pair (list [int32 1, int32 2]) (string "numbers"))
+    (tyapps (pair (list [int32 1, int32 2]) (string "numbers")) [T.list T.int32, T.string])
+    (T.pair (T.list T.int32) T.string),
+  checkTest "list of pairs" []
+    (list [pair (int32 1) (string "a"), pair (int32 2) (string "b")])
+    (list [tyapps (pair (int32 1) (string "a")) [T.int32, T.string], tyapps (pair (int32 2) (string "b")) [T.int32, T.string]])
+    (T.list $ T.pair T.int32 T.string)]
+
+pairsInComplexContextsTests :: TTermDefinition TestGroup
+pairsInComplexContextsTests = define "pairsInComplexContextsTests" $
+  subgroup "Pairs in complex contexts" [
+  checkTest "pair in list" []
+    (list [pair (int32 1) (string "one"), pair (int32 2) (string "two")])
+    (list [tyapps (pair (int32 1) (string "one")) [T.int32, T.string], tyapps (pair (int32 2) (string "two")) [T.int32, T.string]])
+    (T.list $ T.pair T.int32 T.string),
+  checkTest "pair in let binding" []
+    (lets ["result" >: pair (int32 42) (string "answer")] $
+      var "result")
+    (letsTyped [("result", tyapps (pair (int32 42) (string "answer")) [T.int32, T.string], T.mono $ T.pair T.int32 T.string)] $
+      var "result")
+    (T.pair T.int32 T.string)]
+
+pairsTests :: TTermDefinition TestGroup
+pairsTests = define "pairsTests" $
+  supergroup "Pairs" [
+  basicPairsTests,
+  polymorphicPairsTests,
+  pairsInComplexContextsTests,
+  nestedPairsTests,
+  pairsWithComplexTypesTests]
+
+pairsWithComplexTypesTests :: TTermDefinition TestGroup
+pairsWithComplexTypesTests = define "pairsWithComplexTypesTests" $
+  subgroup "Pairs with complex types" [
+  checkTest "pair with record on first" []
+    (pair (personRecord "Alice" "Smith" 30) (int32 1))
+    (tyapps (pair (personRecord "Alice" "Smith" 30) (int32 1)) [T.var "Person", T.int32])
+    (T.pair (T.var "Person") T.int32),
+  checkTest "pair with record on second" []
+    (pair (string "name") (personRecord "Bob" "Jones" 25))
+    (tyapps (pair (string "name") (personRecord "Bob" "Jones" 25)) [T.string, T.var "Person"])
+    (T.pair T.string (T.var "Person"))]
+
+personRecord :: String -> String -> Int -> TTerm Term
+personRecord fName lName age' =
+  record (name "Person") [
+    "firstName" >: string fName,
+    "lastName" >: string lName,
+    "age" >: int32 age']
 
 polymorphicPairsTests :: TTermDefinition TestGroup
 polymorphicPairsTests = define "polymorphicPairsTests" $
@@ -136,120 +185,7 @@ polymorphicPairsTests = define "polymorphicPairsTests" $
     (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ tyapps (pair (var "x") (var "x")) [T.var "t0", T.var "t0"])
     (T.forAll "t0" $ T.function (T.var "t0") (T.pair (T.var "t0") (T.var "t0")))]
 
-pairsInComplexContextsTests :: TTermDefinition TestGroup
-pairsInComplexContextsTests = define "pairsInComplexContextsTests" $
-  subgroup "Pairs in complex contexts" [
-  checkTest "pair in list" []
-    (list [pair (int32 1) (string "one"), pair (int32 2) (string "two")])
-    (list [tyapps (pair (int32 1) (string "one")) [T.int32, T.string], tyapps (pair (int32 2) (string "two")) [T.int32, T.string]])
-    (T.list $ T.pair T.int32 T.string),
-  checkTest "pair in let binding" []
-    (lets ["result" >: pair (int32 42) (string "answer")] $
-      var "result")
-    (letsTyped [("result", tyapps (pair (int32 42) (string "answer")) [T.int32, T.string], T.mono $ T.pair T.int32 T.string)] $
-      var "result")
-    (T.pair T.int32 T.string)]
-
-nestedPairsTests :: TTermDefinition TestGroup
-nestedPairsTests = define "nestedPairsTests" $
-  subgroup "Nested pairs" [
-  checkTest "pair of pairs" []
-    (pair (pair (int32 1) (string "one")) (pair (boolean True) (int32 2)))
-    (tyapps (pair (tyapps (pair (int32 1) (string "one")) [T.int32, T.string]) (tyapps (pair (boolean True) (int32 2)) [T.boolean, T.int32])) [T.pair T.int32 T.string, T.pair T.boolean T.int32])
-    (T.pair (T.pair T.int32 T.string) (T.pair T.boolean T.int32)),
-  checkTest "pair with list" []
-    (pair (list [int32 1, int32 2]) (string "numbers"))
-    (tyapps (pair (list [int32 1, int32 2]) (string "numbers")) [T.list T.int32, T.string])
-    (T.pair (T.list T.int32) T.string),
-  checkTest "list of pairs" []
-    (list [pair (int32 1) (string "a"), pair (int32 2) (string "b")])
-    (list [tyapps (pair (int32 1) (string "a")) [T.int32, T.string], tyapps (pair (int32 2) (string "b")) [T.int32, T.string]])
-    (T.list $ T.pair T.int32 T.string)]
-
-personRecord :: String -> String -> Int -> TTerm Term
-personRecord fName lName age' =
-  record (name "Person") [
-    "firstName" >: string fName,
-    "lastName" >: string lName,
-    "age" >: int32 age']
-
-pairsWithComplexTypesTests :: TTermDefinition TestGroup
-pairsWithComplexTypesTests = define "pairsWithComplexTypesTests" $
-  subgroup "Pairs with complex types" [
-  checkTest "pair with record on first" []
-    (pair (personRecord "Alice" "Smith" 30) (int32 1))
-    (tyapps (pair (personRecord "Alice" "Smith" 30) (int32 1)) [T.var "Person", T.int32])
-    (T.pair (T.var "Person") T.int32),
-  checkTest "pair with record on second" []
-    (pair (string "name") (personRecord "Bob" "Jones" 25))
-    (tyapps (pair (string "name") (personRecord "Bob" "Jones" 25)) [T.string, T.var "Person"])
-    (T.pair T.string (T.var "Person"))]
-
 ------ Eithers ------
-
-eithersTests :: TTermDefinition TestGroup
-eithersTests = define "eithersTests" $
-  supergroup "Eithers" [
-  leftValuesTests,
-  rightValuesTests,
-  polymorphicEithersTests,
-  eithersInComplexContextsTests,
-  nestedEithersTests,
-  eithersWithComplexTypesTests]
-
-leftValuesTests :: TTermDefinition TestGroup
-leftValuesTests = define "leftValuesTests" $
-  subgroup "Left values" [
-  checkTest "left int" []
-    (left $ int32 42)
-    (tylam "t0" $ tyapps (left $ int32 42) [T.int32, T.var "t0"])
-    (T.forAlls ["t0"] $ T.either_ T.int32 (T.var "t0")),
-  checkTest "left string" []
-    (left $ string "error")
-    (tylam "t0" $ tyapps (left $ string "error") [T.string, T.var "t0"])
-    (T.forAlls ["t0"] $ T.either_ T.string (T.var "t0")),
-  checkTest "left boolean" []
-    (left $ boolean False)
-    (tylam "t0" $ tyapps (left $ boolean False) [T.boolean, T.var "t0"])
-    (T.forAlls ["t0"] $ T.either_ T.boolean (T.var "t0"))]
-
-rightValuesTests :: TTermDefinition TestGroup
-rightValuesTests = define "rightValuesTests" $
-  subgroup "Right values" [
-  checkTest "right int" []
-    (right $ int32 42)
-    (tylam "t0" $ tyapps (right $ int32 42) [T.var "t0", T.int32])
-    (T.forAlls ["t0"] $ T.either_ (T.var "t0") T.int32),
-  checkTest "right string" []
-    (right $ string "success")
-    (tylam "t0" $ tyapps (right $ string "success") [T.var "t0", T.string])
-    (T.forAlls ["t0"] $ T.either_ (T.var "t0") T.string),
-  checkTest "right boolean" []
-    (right $ boolean True)
-    (tylam "t0" $ tyapps (right $ boolean True) [T.var "t0", T.boolean])
-    (T.forAlls ["t0"] $ T.either_ (T.var "t0") T.boolean)]
-
-polymorphicEithersTests :: TTermDefinition TestGroup
-polymorphicEithersTests = define "polymorphicEithersTests" $
-  subgroup "Polymorphic eithers" [
-  checkTest "left from lambda" []
-    (lambda "x" $ left $ var "x")
-    (tylams ["t0", "t1"] $ lambdaTyped "x" (T.var "t0") $ tyapps (left $ var "x") [T.var "t0", T.var "t1"])
-    (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.either_ (T.var "t0") (T.var "t1"))),
-  checkTest "right from lambda" []
-    (lambda "x" $ right $ var "x")
-    (tylams ["t0", "t1"] $ lambdaTyped "x" (T.var "t0") $ tyapps (right $ var "x") [T.var "t1", T.var "t0"])
-    (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.either_ (T.var "t1") (T.var "t0"))),
-  checkTest "either from two lambdas" []
-    (lambda "flag" $ lambda "x" $
-      primitive _logic_ifElse @@ var "flag" @@
-        (left $ var "x") @@
-        (right $ var "x"))
-    (tylam "t0" $ lambdaTyped "flag" T.boolean $ lambdaTyped "x" (T.var "t0") $
-      tyapp (primitive _logic_ifElse) (T.either_ (T.var "t0") (T.var "t0")) @@ var "flag" @@
-        tyapps (left $ var "x") [T.var "t0", T.var "t0"] @@
-        tyapps (right $ var "x") [T.var "t0", T.var "t0"])
-    (T.forAlls ["t0"] $ T.function T.boolean (T.function (T.var "t0") (T.either_ (T.var "t0") (T.var "t0"))))]
 
 eithersInComplexContextsTests :: TTermDefinition TestGroup
 eithersInComplexContextsTests = define "eithersInComplexContextsTests" $
@@ -265,29 +201,15 @@ eithersInComplexContextsTests = define "eithersInComplexContextsTests" $
       tyapp (var "result") (T.var "t0"))
     (T.forAlls ["t0"] $ T.either_ (T.var "t0") T.int32)]
 
-nestedEithersTests :: TTermDefinition TestGroup
-nestedEithersTests = define "nestedEithersTests" $
-  subgroup "Nested eithers" [
-  checkTest "either of either (left left)" []
-    (left $ left $ int32 1)
-    (tylams ["t0", "t1"] $ tyapps (left $ tyapps (left $ int32 1) [T.int32, T.var "t0"]) [T.either_ T.int32 (T.var "t0"), T.var "t1"])
-    (T.forAlls ["t0", "t1"] $ T.either_ (T.either_ T.int32 (T.var "t0")) (T.var "t1")),
-  checkTest "either of either (left right)" []
-    (left $ right $ string "nested")
-    (tylams ["t0", "t1"] $ tyapps (left $ tyapps (right $ string "nested") [T.var "t0", T.string]) [T.either_ (T.var "t0") T.string, T.var "t1"])
-    (T.forAlls ["t0", "t1"] $ T.either_ (T.either_ (T.var "t0") T.string) (T.var "t1")),
-  checkTest "either of either (right)" []
-    (right $ boolean True)
-    (tylam "t0" $ tyapps (right $ boolean True) [T.var "t0", T.boolean])
-    (T.forAlls ["t0"] $ T.either_ (T.var "t0") T.boolean),
-  checkTest "either of list" []
-    (left $ list [int32 1, int32 2])
-    (tylam "t0" $ tyapps (left $ list [int32 1, int32 2]) [T.list T.int32, T.var "t0"])
-    (T.forAlls ["t0"] $ T.either_ (T.list T.int32) (T.var "t0")),
-  checkTest "list of eithers" []
-    (list [left $ string "a", right $ int32 1, left $ string "b"])
-    (list [tyapps (left $ string "a") [T.string, T.int32], tyapps (right $ int32 1) [T.string, T.int32], tyapps (left $ string "b") [T.string, T.int32]])
-    (T.list $ T.either_ T.string T.int32)]
+eithersTests :: TTermDefinition TestGroup
+eithersTests = define "eithersTests" $
+  supergroup "Eithers" [
+  leftValuesTests,
+  rightValuesTests,
+  polymorphicEithersTests,
+  eithersInComplexContextsTests,
+  nestedEithersTests,
+  eithersWithComplexTypesTests]
 
 eithersWithComplexTypesTests :: TTermDefinition TestGroup
 eithersWithComplexTypesTests = define "eithersWithComplexTypesTests" $
@@ -313,16 +235,85 @@ eithersWithComplexTypesTests = define "eithersWithComplexTypesTests" $
       "age">: int32 25]) [T.var "t0", Core.typeVariable TestTypes.testTypePersonName])
     (T.forAlls ["t0"] $ T.either_ (T.var "t0") (Core.typeVariable TestTypes.testTypePersonName))]
 
------- Optionals ------
+leftValuesTests :: TTermDefinition TestGroup
+leftValuesTests = define "leftValuesTests" $
+  subgroup "Left values" [
+  checkTest "left int" []
+    (left $ int32 42)
+    (tylam "t0" $ tyapps (left $ int32 42) [T.int32, T.var "t0"])
+    (T.forAlls ["t0"] $ T.either_ T.int32 (T.var "t0")),
+  checkTest "left string" []
+    (left $ string "error")
+    (tylam "t0" $ tyapps (left $ string "error") [T.string, T.var "t0"])
+    (T.forAlls ["t0"] $ T.either_ T.string (T.var "t0")),
+  checkTest "left boolean" []
+    (left $ boolean False)
+    (tylam "t0" $ tyapps (left $ boolean False) [T.boolean, T.var "t0"])
+    (T.forAlls ["t0"] $ T.either_ T.boolean (T.var "t0"))]
 
-optionalsTests :: TTermDefinition TestGroup
-optionalsTests = define "optionalsTests" $
-  supergroup "Optionals" [
-  monomorphicOptionalsTests,
-  polymorphicOptionalsTests,
-  optionalsInComplexContextsTests,
-  nestedOptionalsTests,
-  optionalsWithComplexTypesTests]
+nestedEithersTests :: TTermDefinition TestGroup
+nestedEithersTests = define "nestedEithersTests" $
+  subgroup "Nested eithers" [
+  checkTest "either of either (left left)" []
+    (left $ left $ int32 1)
+    (tylams ["t0", "t1"] $ tyapps (left $ tyapps (left $ int32 1) [T.int32, T.var "t0"]) [T.either_ T.int32 (T.var "t0"), T.var "t1"])
+    (T.forAlls ["t0", "t1"] $ T.either_ (T.either_ T.int32 (T.var "t0")) (T.var "t1")),
+  checkTest "either of either (left right)" []
+    (left $ right $ string "nested")
+    (tylams ["t0", "t1"] $ tyapps (left $ tyapps (right $ string "nested") [T.var "t0", T.string]) [T.either_ (T.var "t0") T.string, T.var "t1"])
+    (T.forAlls ["t0", "t1"] $ T.either_ (T.either_ (T.var "t0") T.string) (T.var "t1")),
+  checkTest "either of either (right)" []
+    (right $ boolean True)
+    (tylam "t0" $ tyapps (right $ boolean True) [T.var "t0", T.boolean])
+    (T.forAlls ["t0"] $ T.either_ (T.var "t0") T.boolean),
+  checkTest "either of list" []
+    (left $ list [int32 1, int32 2])
+    (tylam "t0" $ tyapps (left $ list [int32 1, int32 2]) [T.list T.int32, T.var "t0"])
+    (T.forAlls ["t0"] $ T.either_ (T.list T.int32) (T.var "t0")),
+  checkTest "list of eithers" []
+    (list [left $ string "a", right $ int32 1, left $ string "b"])
+    (list [tyapps (left $ string "a") [T.string, T.int32], tyapps (right $ int32 1) [T.string, T.int32], tyapps (left $ string "b") [T.string, T.int32]])
+    (T.list $ T.either_ T.string T.int32)]
+
+polymorphicEithersTests :: TTermDefinition TestGroup
+polymorphicEithersTests = define "polymorphicEithersTests" $
+  subgroup "Polymorphic eithers" [
+  checkTest "left from lambda" []
+    (lambda "x" $ left $ var "x")
+    (tylams ["t0", "t1"] $ lambdaTyped "x" (T.var "t0") $ tyapps (left $ var "x") [T.var "t0", T.var "t1"])
+    (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.either_ (T.var "t0") (T.var "t1"))),
+  checkTest "right from lambda" []
+    (lambda "x" $ right $ var "x")
+    (tylams ["t0", "t1"] $ lambdaTyped "x" (T.var "t0") $ tyapps (right $ var "x") [T.var "t1", T.var "t0"])
+    (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.either_ (T.var "t1") (T.var "t0"))),
+  checkTest "either from two lambdas" []
+    (lambda "flag" $ lambda "x" $
+      primitive _logic_ifElse @@ var "flag" @@
+        (left $ var "x") @@
+        (right $ var "x"))
+    (tylam "t0" $ lambdaTyped "flag" T.boolean $ lambdaTyped "x" (T.var "t0") $
+      tyapp (primitive _logic_ifElse) (T.either_ (T.var "t0") (T.var "t0")) @@ var "flag" @@
+        tyapps (left $ var "x") [T.var "t0", T.var "t0"] @@
+        tyapps (right $ var "x") [T.var "t0", T.var "t0"])
+    (T.forAlls ["t0"] $ T.function T.boolean (T.function (T.var "t0") (T.either_ (T.var "t0") (T.var "t0"))))]
+
+rightValuesTests :: TTermDefinition TestGroup
+rightValuesTests = define "rightValuesTests" $
+  subgroup "Right values" [
+  checkTest "right int" []
+    (right $ int32 42)
+    (tylam "t0" $ tyapps (right $ int32 42) [T.var "t0", T.int32])
+    (T.forAlls ["t0"] $ T.either_ (T.var "t0") T.int32),
+  checkTest "right string" []
+    (right $ string "success")
+    (tylam "t0" $ tyapps (right $ string "success") [T.var "t0", T.string])
+    (T.forAlls ["t0"] $ T.either_ (T.var "t0") T.string),
+  checkTest "right boolean" []
+    (right $ boolean True)
+    (tylam "t0" $ tyapps (right $ boolean True) [T.var "t0", T.boolean])
+    (T.forAlls ["t0"] $ T.either_ (T.var "t0") T.boolean)]
+
+------ Optionals ------
 
 monomorphicOptionalsTests :: TTermDefinition TestGroup
 monomorphicOptionalsTests = define "monomorphicOptionalsTests" $
@@ -341,27 +332,19 @@ monomorphicOptionalsTests = define "monomorphicOptionalsTests" $
     (optional $ just $ boolean True)
     (T.optional T.boolean)]
 
-polymorphicOptionalsTests :: TTermDefinition TestGroup
-polymorphicOptionalsTests = define "polymorphicOptionalsTests" $
-  subgroup "Polymorphic optionals" [
-  checkTest "optional from lambda" []
-    (lambda "x" $ optional $ just $ var "x")
-    (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ optional $ just $ var "x")
-    (T.forAll "t0" $ T.function (T.var "t0") (T.optional $ T.var "t0")),
-  checkTest "nothing from lambda" []
-    (lambda "x" $ optional nothing)
-    (tylams ["t0", "t1"] $ lambdaTyped "x" (T.var "t0") $ tyapp (optional nothing) (T.var "t1"))
-    (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.optional $ T.var "t1")),
-  checkTest "conditional optional" []
-    (lambda "x" $ lambda "flag" $
-      primitive _logic_ifElse @@ var "flag" @@
-        (optional $ just $ var "x") @@
-        (optional nothing))
-    (tylams ["t0"] $ lambdaTyped "x" (T.var "t0") $ lambdaTyped "flag" T.boolean $
-      tyapp (primitive _logic_ifElse) (T.optional $ T.var "t0") @@ var "flag" @@
-        (optional $ just $ var "x") @@
-        (tyapp (optional nothing) (T.var "t0")))
-    (T.forAlls ["t0"] $ T.function (T.var "t0") (T.function T.boolean (T.optional $ T.var "t0")))]
+nestedOptionalsTests :: TTermDefinition TestGroup
+nestedOptionalsTests = define "nestedOptionalsTests" $
+  subgroup "Nested optionals" [
+  noChange "optional of optional"
+    (optional $ just $ optional $ just $ string "nested")
+    (T.optional $ T.optional T.string),
+  noChange "optional of list"
+    (optional $ just $ list [int32 1, int32 2, int32 3])
+    (T.optional $ T.list T.int32),
+  checkTest "list of optionals" []
+    (list [optional $ just $ string "a", optional nothing, optional $ just $ string "b"])
+    (list [optional $ just $ string "a", tyapp (optional nothing) T.string, optional $ just $ string "b"])
+    (T.list $ T.optional T.string)]
 
 optionalsInComplexContextsTests :: TTermDefinition TestGroup
 optionalsInComplexContextsTests = define "optionalsInComplexContextsTests" $
@@ -385,19 +368,14 @@ optionalsInComplexContextsTests = define "optionalsInComplexContextsTests" $
       var "maybeValue")
     (T.optional T.int32)]
 
-nestedOptionalsTests :: TTermDefinition TestGroup
-nestedOptionalsTests = define "nestedOptionalsTests" $
-  subgroup "Nested optionals" [
-  noChange "optional of optional"
-    (optional $ just $ optional $ just $ string "nested")
-    (T.optional $ T.optional T.string),
-  noChange "optional of list"
-    (optional $ just $ list [int32 1, int32 2, int32 3])
-    (T.optional $ T.list T.int32),
-  checkTest "list of optionals" []
-    (list [optional $ just $ string "a", optional nothing, optional $ just $ string "b"])
-    (list [optional $ just $ string "a", tyapp (optional nothing) T.string, optional $ just $ string "b"])
-    (T.list $ T.optional T.string)]
+optionalsTests :: TTermDefinition TestGroup
+optionalsTests = define "optionalsTests" $
+  supergroup "Optionals" [
+  monomorphicOptionalsTests,
+  polymorphicOptionalsTests,
+  optionalsInComplexContextsTests,
+  nestedOptionalsTests,
+  optionalsWithComplexTypesTests]
 
 optionalsWithComplexTypesTests :: TTermDefinition TestGroup
 optionalsWithComplexTypesTests = define "optionalsWithComplexTypesTests" $
@@ -405,3 +383,25 @@ optionalsWithComplexTypesTests = define "optionalsWithComplexTypesTests" $
   noChange "optional map"
     (optional $ just $ mapTerm [(string "key", int32 42)])
     (T.optional $ T.map T.string T.int32)]
+
+polymorphicOptionalsTests :: TTermDefinition TestGroup
+polymorphicOptionalsTests = define "polymorphicOptionalsTests" $
+  subgroup "Polymorphic optionals" [
+  checkTest "optional from lambda" []
+    (lambda "x" $ optional $ just $ var "x")
+    (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ optional $ just $ var "x")
+    (T.forAll "t0" $ T.function (T.var "t0") (T.optional $ T.var "t0")),
+  checkTest "nothing from lambda" []
+    (lambda "x" $ optional nothing)
+    (tylams ["t0", "t1"] $ lambdaTyped "x" (T.var "t0") $ tyapp (optional nothing) (T.var "t1"))
+    (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.optional $ T.var "t1")),
+  checkTest "conditional optional" []
+    (lambda "x" $ lambda "flag" $
+      primitive _logic_ifElse @@ var "flag" @@
+        (optional $ just $ var "x") @@
+        (optional nothing))
+    (tylams ["t0"] $ lambdaTyped "x" (T.var "t0") $ lambdaTyped "flag" T.boolean $
+      tyapp (primitive _logic_ifElse) (T.optional $ T.var "t0") @@ var "flag" @@
+        (optional $ just $ var "x") @@
+        (tyapp (optional nothing) (T.var "t0")))
+    (T.forAlls ["t0"] $ T.function (T.var "t0") (T.function T.boolean (T.optional $ T.var "t0")))]

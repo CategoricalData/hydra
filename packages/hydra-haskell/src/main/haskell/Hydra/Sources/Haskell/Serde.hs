@@ -86,9 +86,6 @@ import qualified Hydra.Sources.Haskell.Syntax as HaskellSyntax
 import qualified Hydra.Sources.Haskell.Operators as HaskellOperators
 
 
-haskellSerdeDefinition :: String -> TTerm a -> TTermDefinition a
-haskellSerdeDefinition = definitionInModule module_
-
 ns :: ModuleName
 ns = ModuleName "hydra.haskell.serde"
 
@@ -164,15 +161,6 @@ applicationPatternToExpr = haskellSerdeDefinition "applicationPatternToExpr" $
     "pats">: project H._ApplicationPattern H._ApplicationPattern_args @@ var "appPat"] $
     Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (Lists.map (patternToExpr) (var "pats")))
 
-constraintToExpr :: TTermDefinition (H.Constraint -> Expr)
-constraintToExpr = haskellSerdeDefinition "constraintToExpr" $
-  doc "Convert a type class constraint to an AST expression" $
-  lambda "sert" $
-    cases H._Constraint (var "sert") Nothing [
-      H._Constraint_class>>: lambda "cls" $ classConstraintToExpr @@ var "cls",
-      H._Constraint_tuple>>: lambda "serts" $
-        Serialization.parenList @@ false @@ (Lists.map (constraintToExpr) (var "serts"))]
-
 caseExpressionToExpr :: TTermDefinition (H.CaseExpression -> Expr)
 caseExpressionToExpr = haskellSerdeDefinition "caseExpressionToExpr" $
   doc "Convert a case expression to an AST expression" $
@@ -202,19 +190,14 @@ classConstraintToExpr = haskellSerdeDefinition "classConstraintToExpr" $
     Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (list [
       Serialization.commaSep @@ Serialization.halfBlockStyle @@ (Lists.map (typeToExpr) (var "types"))]))
 
-recordExpressionToExpr :: TTermDefinition (H.RecordExpression -> Expr)
-recordExpressionToExpr = haskellSerdeDefinition "recordExpressionToExpr" $
-  doc "Convert a record construction expression to an AST expression" $
-  lambda "constructRecord" $ lets [
-    "name">: project H._RecordExpression H._RecordExpression_name @@ var "constructRecord",
-    "updates">: project H._RecordExpression H._RecordExpression_fields @@ var "constructRecord",
-    "fromUpdate">: lambda "update" $ lets [
-      "fn">: project H._FieldUpdate H._FieldUpdate_name @@ var "update",
-      "val">: project H._FieldUpdate H._FieldUpdate_value @@ var "update"] $
-      Serialization.ifx @@ HaskellOperators.defineOp @@ (nameToExpr @@ var "fn") @@ (expressionToExpr @@ var "val"),
-    "body">: Serialization.commaSep @@ Serialization.halfBlockStyle @@ (Lists.map (var "fromUpdate") (var "updates"))] $
-    Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (list [
-      Serialization.brackets @@ Serialization.curlyBraces @@ Serialization.halfBlockStyle @@ var "body"]))
+constraintToExpr :: TTermDefinition (H.Constraint -> Expr)
+constraintToExpr = haskellSerdeDefinition "constraintToExpr" $
+  doc "Convert a type class constraint to an AST expression" $
+  lambda "sert" $
+    cases H._Constraint (var "sert") Nothing [
+      H._Constraint_class>>: lambda "cls" $ classConstraintToExpr @@ var "cls",
+      H._Constraint_tuple>>: lambda "serts" $
+        Serialization.parenList @@ false @@ (Lists.map (constraintToExpr) (var "serts"))]
 
 constructorToExpr :: TTermDefinition (H.Constructor -> Expr)
 constructorToExpr = haskellSerdeDefinition "constructorToExpr" $
@@ -341,6 +324,9 @@ fieldToExpr = haskellSerdeDefinition "fieldToExpr" $
       (lambda "c" $ Serialization.newlineSep @@ (Lists.cons (Serialization.cst @@ (toHaskellComments @@ var "c")) (list [var "body"])))
       (var "mc")
 
+haskellSerdeDefinition :: String -> TTerm a -> TTermDefinition a
+haskellSerdeDefinition = definitionInModule module_
+
 ifExpressionToExpr :: TTermDefinition (H.IfExpression -> Expr)
 ifExpressionToExpr = haskellSerdeDefinition "ifExpressionToExpr" $
   doc "Convert an if-then-else expression to an AST expression" $
@@ -359,11 +345,6 @@ ifExpressionToExpr = haskellSerdeDefinition "ifExpressionToExpr" $
     Serialization.ifx @@ var "ifOp" @@
       (Serialization.spaceSep @@ (Lists.cons (Serialization.cst @@ (string "if")) (list [expressionToExpr @@ var "eif"]))) @@
       var "body"
-
-namedImportExportToExpr :: TTermDefinition (H.NamedImportExport -> Expr)
-namedImportExportToExpr = haskellSerdeDefinition "namedImportExportToExpr" $
-  doc "Convert an import/export specification to an AST expression" $
-  lambda "spec" $ nameToExpr @@ (project H._NamedImportExport H._NamedImportExport_name @@ var "spec")
 
 importToExpr :: TTermDefinition (H.Import -> Expr)
 importToExpr = haskellSerdeDefinition "importToExpr" $
@@ -517,6 +498,11 @@ nameToExpr = haskellSerdeDefinition "nameToExpr" $
         H._Name_implicit>>: lambda "qn" $ Strings.cat2 (string "?") (writeQualifiedName @@ var "qn"),
         H._Name_normal>>: lambda "qn" $ writeQualifiedName @@ var "qn"]
 
+namedImportExportToExpr :: TTermDefinition (H.NamedImportExport -> Expr)
+namedImportExportToExpr = haskellSerdeDefinition "namedImportExportToExpr" $
+  doc "Convert an import/export specification to an AST expression" $
+  lambda "spec" $ nameToExpr @@ (project H._NamedImportExport H._NamedImportExport_name @@ var "spec")
+
 patternToExpr :: TTermDefinition (H.Pattern -> Expr)
 patternToExpr = haskellSerdeDefinition "patternToExpr" $
   doc "Convert a pattern to an AST expression" $
@@ -530,6 +516,20 @@ patternToExpr = haskellSerdeDefinition "patternToExpr" $
       H._Pattern_tuple>>: lambda "pats" $
         Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "pats")),
       H._Pattern_wildcard>>: constant $ Serialization.cst @@ (string "_")]
+
+recordExpressionToExpr :: TTermDefinition (H.RecordExpression -> Expr)
+recordExpressionToExpr = haskellSerdeDefinition "recordExpressionToExpr" $
+  doc "Convert a record construction expression to an AST expression" $
+  lambda "constructRecord" $ lets [
+    "name">: project H._RecordExpression H._RecordExpression_name @@ var "constructRecord",
+    "updates">: project H._RecordExpression H._RecordExpression_fields @@ var "constructRecord",
+    "fromUpdate">: lambda "update" $ lets [
+      "fn">: project H._FieldUpdate H._FieldUpdate_name @@ var "update",
+      "val">: project H._FieldUpdate H._FieldUpdate_value @@ var "update"] $
+      Serialization.ifx @@ HaskellOperators.defineOp @@ (nameToExpr @@ var "fn") @@ (expressionToExpr @@ var "val"),
+    "body">: Serialization.commaSep @@ Serialization.halfBlockStyle @@ (Lists.map (var "fromUpdate") (var "updates"))] $
+    Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (list [
+      Serialization.brackets @@ Serialization.curlyBraces @@ Serialization.halfBlockStyle @@ var "body"]))
 
 rightHandSideToExpr :: TTermDefinition (H.RightHandSide -> Expr)
 rightHandSideToExpr = haskellSerdeDefinition "rightHandSideToExpr" $

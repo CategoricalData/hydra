@@ -92,17 +92,8 @@ type AvroHydraAdapter = Adapter Avro.Schema Type JM.Value Term
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-avroSchemaPhantomNs :: ModuleName
-avroSchemaPhantomNs = ModuleName "hydra.avro.schema"
-
-jsonModelNs :: ModuleName
-jsonModelNs = ModuleName "hydra.json.model"
-
 ns :: ModuleName
 ns = ModuleName "hydra.avro.coder"
-
-avroEnvironmentNs :: ModuleName
-avroEnvironmentNs = ModuleName "hydra.avro.environment"
 
 module_ :: Module
 module_ = Module {
@@ -154,6 +145,9 @@ annotateAdapter = define "annotateAdapter" $
       (var "ad")
       (lambda "n" $ Coders.adapterWithTarget (var "ad") (MetaTypes.annot (var "n") (Coders.adapterTarget (var "ad"))))
       (var "ann")
+
+avroEnvironmentNs :: ModuleName
+avroEnvironmentNs = ModuleName "hydra.avro.environment"
 
 avroHydraAdapter :: TTermDefinition (InferenceContext -> Avro.Schema -> AvroEnv.AvroEnvironment -> Result (AvroHydraAdapter, AvroEnv.AvroEnvironment))
 avroHydraAdapter = define "avroHydraAdapter" $
@@ -477,6 +471,9 @@ avroNameToHydraName = define "avroNameToHydraName" $
       (Maybes.map (lambda "s" $ wrap _ModuleName (var "s")) (var "mns"))
       (var "local")
 
+avroSchemaPhantomNs :: ModuleName
+avroSchemaPhantomNs = ModuleName "hydra.avro.schema"
+
 avro_foreignKey :: TTermDefinition String
 avro_foreignKey = define "avro_foreignKey" $
   string "@foreignKey"
@@ -593,6 +590,9 @@ getAvroHydraAdapter = define "getAvroHydraAdapter" $
   doc "Look up an adapter by qualified name in the environment" $
   lambda "qname" $ lambda "env" $
     Maps.lookup (var "qname") (project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namedAdapters @@ var "env")
+
+jsonModelNs :: ModuleName
+jsonModelNs = ModuleName "hydra.json.model"
 
 jsonToStringE :: TTermDefinition (InferenceContext -> JM.Value -> Result String)
 jsonToStringE = define "jsonToStringE" $

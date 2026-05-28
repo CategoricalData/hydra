@@ -18,13 +18,6 @@ ns = ModuleName "hydra.lib.maybes"
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModuleName ns
 
-sig :: TypeScheme -> TermSignature
-sig = typeSchemeToTermSignature
-
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -46,6 +39,13 @@ module_ = Module {
       primNoDef "maybe" "Case analysis on an optional, applying a function if present or returning a default if absent." maybeSig,
       toPrimitive "Wrap a value in Just." pureSig pure_,
       toPrimitive "Convert an optional to a list: Just x maps to [x], Nothing to []." toListSig toList_]
+
+primNoDef :: String -> String -> TermSignature -> Definition
+primNoDef localName description s =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+
+sig :: TypeScheme -> TermSignature
+sig = typeSchemeToTermSignature
 
 -- Signatures.
 
@@ -104,20 +104,20 @@ isJustSig = sig $ TypeScheme [Name "x"]
 isNothingSig :: TermSignature
 isNothingSig = isJustSig
 
--- map : forall a b. (a -> b) -> Maybe a -> Maybe b
-mapSig :: TermSignature
-mapSig = sig $ TypeScheme [Name "x", Name "y"]
-  ((Types.var "x" Types.~> Types.var "y") Types.~>
-   Types.optional (Types.var "x") Types.~>
-   Types.optional (Types.var "y"))
-  Nothing
-
 -- mapMaybe : forall a b. (a -> Maybe b) -> [a] -> [b]
 mapMaybeSig :: TermSignature
 mapMaybeSig = sig $ TypeScheme [Name "x", Name "y"]
   ((Types.var "x" Types.~> Types.optional (Types.var "y")) Types.~>
    Types.list (Types.var "x") Types.~>
    Types.list (Types.var "y"))
+  Nothing
+
+-- map : forall a b. (a -> b) -> Maybe a -> Maybe b
+mapSig :: TermSignature
+mapSig = sig $ TypeScheme [Name "x", Name "y"]
+  ((Types.var "x" Types.~> Types.var "y") Types.~>
+   Types.optional (Types.var "x") Types.~>
+   Types.optional (Types.var "y"))
   Nothing
 
 -- maybe : forall a b. b -> (a -> b) -> Maybe a -> b
@@ -191,17 +191,17 @@ isNothing_ = define "isNothing" $
   doc "Test for absence, defined in terms of maybe." $
   "m" ~> Maybes.maybe true ("_" ~> false) (var "m")
 
--- map f m = maybe Nothing (\x -> Just (f x)) m
-map_ :: TTermDefinition ((a -> b) -> Maybe a -> Maybe b)
-map_ = define "map" $
-  doc "Map a function over an optional, defined in terms of maybe." $
-  "f" ~> "m" ~> Maybes.maybe nothing ("x" ~> just (var "f" @@ var "x")) (var "m")
-
 -- mapMaybe f xs = cat (Lists.map f xs)
 mapMaybe_ :: TTermDefinition ((a -> Maybe b) -> [a] -> [b])
 mapMaybe_ = define "mapMaybe" $
   doc "Map a partial function and keep only the present results, defined in terms of lists.map and cat." $
   "f" ~> "xs" ~> Maybes.cat (Lists.map (var "f") (var "xs"))
+
+-- map f m = maybe Nothing (\x -> Just (f x)) m
+map_ :: TTermDefinition ((a -> b) -> Maybe a -> Maybe b)
+map_ = define "map" $
+  doc "Map a function over an optional, defined in terms of maybe." $
+  "f" ~> "m" ~> Maybes.maybe nothing ("x" ~> just (var "f" @@ var "x")) (var "m")
 
 -- pure x = Just x
 pure_ :: TTermDefinition (a -> Maybe a)

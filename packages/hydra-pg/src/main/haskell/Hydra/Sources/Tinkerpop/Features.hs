@@ -19,15 +19,6 @@ ns = ModuleName "hydra.tinkerpop.features"
 define :: String -> Type -> Binding
 define = defineType ns
 
-core :: String -> Type
-core = typeref $ Core.ns
-
-features :: String -> Type
-features = typeref ns
-
-supports :: String -> String -> FieldType
-supports name comment = ("supports" ++ capitalize name)>: doc comment T.boolean
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -53,6 +44,9 @@ module_ = Module {
       variableFeatures,
       vertexFeatures,
       vertexPropertyFeatures]
+
+core :: String -> Type
+core = typeref $ Core.ns
 
 dataTypeFeatures :: Binding
 dataTypeFeatures = define "DataTypeFeatures" $
@@ -114,6 +108,9 @@ extraFeatures = define "ExtraFeatures" $
   T.forAll "a" $ T.record [
     "supportsMapKey">: T.function (core "Type") T.boolean]
 
+features :: String -> Type
+features = typeref ns
+
 features_ :: Binding
 features_ = define "Features" $
   doc ("An interface that represents the capabilities of a Graph implementation. By default all methods of " ++
@@ -155,6 +152,9 @@ propertyFeatures = define "PropertyFeatures" $
   T.record [
     "dataTypeFeatures">: features "DataTypeFeatures",
     supports "properties" "Determines if an Element allows for the processing of at least one data type defined by the features."]
+
+supports :: String -> String -> FieldType
+supports name comment = ("supports" ++ capitalize name)>: doc comment T.boolean
 
 variableFeatures :: Binding
 variableFeatures = define "VariableFeatures" $

@@ -19,9 +19,6 @@ ns = ModuleName "hydra.protobuf.sourceContext"
 define :: String -> Type -> Binding
 define = defineType ns
 
-pbSourceContext :: String -> Type
-pbSourceContext = typeref ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -30,6 +27,9 @@ module_ = Module {
             moduleDescription = Just "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/source_context.proto"}
   where
     definitions = [sourceContext]
+
+pbSourceContext :: String -> Type
+pbSourceContext = typeref ns
 
 sourceContext :: Binding
 sourceContext = define "SourceContext" $

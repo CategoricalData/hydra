@@ -19,9 +19,6 @@ ns = ModuleName "hydra.osv.schema"
 define :: String -> Type -> Binding
 define = defineType ns
 
-osv :: String -> Type
-osv = typeref ns
-
 -- Note: database_specific and ecosystem_specific fields are ignored, though they must be tolerated when reading entry JSON
 module_ :: Module
 module_ = Module {
@@ -103,17 +100,13 @@ markdown = define "Markdown" $
   doc "CommonMark markdown text" $
   T.wrap T.string
 
+osv :: String -> Type
+osv = typeref ns
+
 osvVersion :: Binding
 osvVersion = define "OsvVersion" $
   doc "A string which follows the SemVer 2.0.0 format, with no leading 'v' prefix" $
   T.wrap T.string
-
-package_ :: Binding
-package_ = define "Package" $
-  T.record [
-    "ecosystem">: osv "Ecosystem",
-    "name">: T.string,
-    "purl">: T.maybe $ osv "Url"]
 
 packageVersions :: Binding
 packageVersions = define "PackageVersions" $
@@ -121,6 +114,13 @@ packageVersions = define "PackageVersions" $
     "package">: osv "Package",
     "ranges">: T.maybe $ T.list $ osv "VersionRange",
     "versions">: T.maybe $ T.list $ osv "Version"]
+
+package_ :: Binding
+package_ = define "Package" $
+  T.record [
+    "ecosystem">: osv "Ecosystem",
+    "name">: T.string,
+    "purl">: T.maybe $ osv "Url"]
 
 reference :: Binding
 reference = define "Reference" $

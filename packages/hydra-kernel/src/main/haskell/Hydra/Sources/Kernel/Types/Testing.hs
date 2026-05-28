@@ -42,17 +42,6 @@ testCase = define "TestCase" $
       doc "A universal test case (string comparison)"
       universalTestCase]
 
-universalTestCase :: Binding
-universalTestCase = define "UniversalTestCase" $
-  doc "A universal test case: the actual and expected values are thunks producing strings." $
-  T.record [
-    "actual">:
-      doc "A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time." $
-      T.unit ~> T.string,
-    "expected">:
-      doc "A thunk producing the expected result string." $
-      T.unit ~> T.string]
-
 testCaseWithMetadata :: Binding
 testCaseWithMetadata = define "TestCaseWithMetadata" $
   doc "A test case together with metadata" $
@@ -86,3 +75,14 @@ testGroup = define "TestGroup" $
     "cases">:
       doc "Zero or more test cases" $
       T.list testCaseWithMetadata]
+
+universalTestCase :: Binding
+universalTestCase = define "UniversalTestCase" $
+  doc "A universal test case: the actual and expected values are thunks producing strings." $
+  T.record [
+    "actual">:
+      doc "A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time." $
+      T.unit ~> T.string,
+    "expected">:
+      doc "A thunk producing the expected result string." $
+      T.unit ~> T.string]

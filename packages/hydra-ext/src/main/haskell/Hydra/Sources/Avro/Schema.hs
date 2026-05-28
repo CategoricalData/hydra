@@ -22,12 +22,6 @@ ns = ModuleName "hydra.avro.schema"
 define :: String -> Type -> Binding
 define = defineType ns
 
-avro :: String -> Type
-avro = typeref ns
-
-json :: String -> Type
-json = typeref $ JsonModel.ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -54,6 +48,9 @@ array_ :: Binding
 array_ = define "Array" $
   T.record [
     "items">: avro "Schema"]
+
+avro :: String -> Type
+avro = typeref ns
 
 enum_ :: Binding
 enum_ = define "Enum" $
@@ -100,6 +97,9 @@ fixed_ = define "Fixed" $
     "size">:
       doc "an integer, specifying the number of bytes per value"
       T.int32]
+
+json :: String -> Type
+json = typeref $ JsonModel.ns
 
 map_ :: Binding
 map_ = define "Map" $

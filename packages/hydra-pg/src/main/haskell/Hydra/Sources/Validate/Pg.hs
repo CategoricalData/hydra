@@ -27,9 +27,6 @@ import qualified Hydra.Sources.Pg.Model as PgModel
 import qualified Hydra.Sources.Error.Pg as ErrorPg
 
 
-validationDefinition :: String -> TTerm a -> TTermDefinition a
-validationDefinition = definitionInModule module_
-
 module_ :: Module
 module_ = Module {
             moduleName = (ModuleName "hydra.validate.pg"),
@@ -52,65 +49,6 @@ module_ = Module {
 -- ============================================================================
 -- Profile helpers (host-side)
 -- ============================================================================
-
--- | Compose a fully qualified rule identifier from a union-type qualified
--- name and a variant local name, joined with '.'. Mirrors the helper of the
--- same name in Validate/Core.hs and Validate/Packaging.hs.
-qualifiedRule :: Name -> Name -> Name
-qualifiedRule (Name u) (Name v) = Name (L.concat [u, ".", v])
-
--- | Wrap a leaf-shaped 'Maybe InvalidVertexError' finding with the rule that
--- produced it, gated by the active profile. Same pattern as 'guardedTermRule'
--- in Validate/Core.hs.
-guardedVertexRule
-  :: TTerm ValidationProfile
-  -> Name -- ^ Union-type qualified name (e.g. _InvalidVertexError).
-  -> Name -- ^ Variant local name (e.g. _InvalidVertexError_label).
-  -> TTerm (Maybe InvalidVertexError)
-  -> TTerm (Maybe (Name, InvalidVertexError))
-guardedVertexRule profile unionName variantName findingExpr =
-  Logic.ifElse (enabledPg @@ profile @@ ruleNameTerm)
-    (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
-    nothing
-  where
-    ruleNameTerm = nameLift (qualifiedRule unionName variantName)
-
--- | Edge counterpart of 'guardedVertexRule'.
-guardedEdgeRule
-  :: TTerm ValidationProfile
-  -> Name
-  -> Name
-  -> TTerm (Maybe InvalidEdgeError)
-  -> TTerm (Maybe (Name, InvalidEdgeError))
-guardedEdgeRule profile unionName variantName findingExpr =
-  Logic.ifElse (enabledPg @@ profile @@ ruleNameTerm)
-    (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
-    nothing
-  where
-    ruleNameTerm = nameLift (qualifiedRule unionName variantName)
-
--- | Property counterpart. The payload is 'InvalidElementPropertyError'
--- (the wrapper that pairs the property key with the inner
--- 'InvalidPropertyError'), but the rule name still refers to the inner
--- 'InvalidPropertyError' variant.
-guardedPropertyRule
-  :: TTerm ValidationProfile
-  -> Name -- ^ _InvalidPropertyError
-  -> Name -- ^ Variant local name (e.g. _InvalidPropertyError_missingRequired).
-  -> TTerm (Maybe InvalidElementPropertyError)
-  -> TTerm (Maybe (Name, InvalidElementPropertyError))
-guardedPropertyRule profile unionName variantName findingExpr =
-  Logic.ifElse (enabledPg @@ profile @@ ruleNameTerm)
-    (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
-    nothing
-  where
-    ruleNameTerm = nameLift (qualifiedRule unionName variantName)
-
--- | An empty ValidationResult parameterized by 'e'.
-emptyResult :: TTerm (ValidationResult e)
-emptyResult = Validation.validationResult
-  (list ([] :: [TTerm e]))
-  (list ([] :: [TTerm e]))
 
 -- | The full set of PG rule names used by 'defaultPgProfile' and the
 -- strict-profile legacy shims. Single source of truth: any rule wired
@@ -145,64 +83,6 @@ allPgRuleNames = L.concat
 -- Profile-aware helpers (DSL definitions)
 -- ============================================================================
 
--- | Test whether a rule is active in a profile (in either errorRules or
--- warningRules). Local counterpart of 'enabled' in Validate/Core.hs;
--- named 'enabledPg' to avoid clashing if both modules are imported into
--- the same scope.
-enabledPg :: TTermDefinition (ValidationProfile -> Name -> Bool)
-enabledPg = validationDefinition "enabledPg" $
-  doc "True iff the given rule name appears in the profile's errorRules or warningRules." $
-  "p" ~> "ruleName" ~>
-  Logic.or
-    (Sets.member (var "ruleName") (Validation.validationProfileErrorRules $ var "p"))
-    (Sets.member (var "ruleName") (Validation.validationProfileWarningRules $ var "p"))
-
--- | The default validation profile for hydra.validate.pg. Every PG rule
--- is classified as an error; no warnings; 'maxErrors = 1' preserves the
--- legacy 'first error wins' behaviour; 'maxWarnings = 20' is a small
--- starting cap.
-defaultPgProfile :: TTermDefinition ValidationProfile
-defaultPgProfile = validationDefinition "defaultPgProfile" $
-  doc "The default validation profile for property-graph validation. Every PG rule classified as an error; no warnings; maxErrors=1, maxWarnings=20." $
-  Validation.validationProfile
-    (Sets.fromList $ list $ nameLift <$> allPgRuleNames)
-    Sets.empty
-    (int32 1)
-    (int32 20)
-
--- | Classify a rule-tagged 'Maybe (Name, InvalidVertexError)' finding
--- against the active profile and append the payload (without its rule
--- tag) to the appropriate list in the accumulator. Same semantics as
--- 'appendFinding' in Validate/Core.hs.
-appendFindingVertex :: TTermDefinition (
-  ValidationProfile
-  -> ValidationResult InvalidVertexError
-  -> Maybe (Name, InvalidVertexError)
-  -> ValidationResult InvalidVertexError)
-appendFindingVertex = validationDefinition "appendFindingVertex" $
-  doc "Append a rule-tagged InvalidVertexError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds." $
-  "p" ~> "acc" ~> "finding" ~>
-  Maybes.cases (var "finding")
-    (var "acc")
-    ("rp" ~>
-      "ruleName" <~ Pairs.first (var "rp") $
-      "payload" <~ Pairs.second (var "rp") $
-      "errs" <~ Validation.validationResultErrors (var "acc") $
-      "wrns" <~ Validation.validationResultWarnings (var "acc") $
-      Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileErrorRules $ var "p"))
-        (Logic.ifElse (Equality.lt (Lists.length $ var "errs") (Validation.validationProfileMaxErrors $ var "p"))
-          (Validation.validationResult
-            (Lists.concat2 (var "errs") (Lists.singleton $ var "payload"))
-            (var "wrns"))
-          (var "acc"))
-        (Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileWarningRules $ var "p"))
-          (Logic.ifElse (Equality.lt (Lists.length $ var "wrns") (Validation.validationProfileMaxWarnings $ var "p"))
-            (Validation.validationResult
-              (var "errs")
-              (Lists.concat2 (var "wrns") (Lists.singleton $ var "payload")))
-            (var "acc"))
-          (var "acc")))
-
 -- | Edge counterpart of 'appendFindingVertex'.
 appendFindingEdge :: TTermDefinition (
   ValidationProfile
@@ -211,36 +91,6 @@ appendFindingEdge :: TTermDefinition (
   -> ValidationResult InvalidEdgeError)
 appendFindingEdge = validationDefinition "appendFindingEdge" $
   doc "Append a rule-tagged InvalidEdgeError finding to a ValidationResult." $
-  "p" ~> "acc" ~> "finding" ~>
-  Maybes.cases (var "finding")
-    (var "acc")
-    ("rp" ~>
-      "ruleName" <~ Pairs.first (var "rp") $
-      "payload" <~ Pairs.second (var "rp") $
-      "errs" <~ Validation.validationResultErrors (var "acc") $
-      "wrns" <~ Validation.validationResultWarnings (var "acc") $
-      Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileErrorRules $ var "p"))
-        (Logic.ifElse (Equality.lt (Lists.length $ var "errs") (Validation.validationProfileMaxErrors $ var "p"))
-          (Validation.validationResult
-            (Lists.concat2 (var "errs") (Lists.singleton $ var "payload"))
-            (var "wrns"))
-          (var "acc"))
-        (Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileWarningRules $ var "p"))
-          (Logic.ifElse (Equality.lt (Lists.length $ var "wrns") (Validation.validationProfileMaxWarnings $ var "p"))
-            (Validation.validationResult
-              (var "errs")
-              (Lists.concat2 (var "wrns") (Lists.singleton $ var "payload")))
-            (var "acc"))
-          (var "acc")))
-
--- | Property counterpart. Payload type is 'InvalidElementPropertyError'.
-appendFindingProperty :: TTermDefinition (
-  ValidationProfile
-  -> ValidationResult InvalidElementPropertyError
-  -> Maybe (Name, InvalidElementPropertyError)
-  -> ValidationResult InvalidElementPropertyError)
-appendFindingProperty = validationDefinition "appendFindingProperty" $
-  doc "Append a rule-tagged InvalidElementPropertyError finding to a ValidationResult." $
   "p" ~> "acc" ~> "finding" ~>
   Maybes.cases (var "finding")
     (var "acc")
@@ -302,60 +152,152 @@ appendFindingGraph = validationDefinition "appendFindingGraph" $
 -- 'InvalidGraphError', and accumulates into its own result.
 -- ============================================================================
 
--- | Validate a single vertex against its expected type. Each per-rule
--- check ('label', 'id', 'property') is gated by the profile.
-validateVertex :: TTermDefinition (
-     ValidationProfile
-  -> (t -> v -> Maybe InvalidValueError)
-  -> PG.VertexType t
-  -> PG.Vertex v
+-- | Property counterpart. Payload type is 'InvalidElementPropertyError'.
+appendFindingProperty :: TTermDefinition (
+  ValidationProfile
+  -> ValidationResult InvalidElementPropertyError
+  -> Maybe (Name, InvalidElementPropertyError)
+  -> ValidationResult InvalidElementPropertyError)
+appendFindingProperty = validationDefinition "appendFindingProperty" $
+  doc "Append a rule-tagged InvalidElementPropertyError finding to a ValidationResult." $
+  "p" ~> "acc" ~> "finding" ~>
+  Maybes.cases (var "finding")
+    (var "acc")
+    ("rp" ~>
+      "ruleName" <~ Pairs.first (var "rp") $
+      "payload" <~ Pairs.second (var "rp") $
+      "errs" <~ Validation.validationResultErrors (var "acc") $
+      "wrns" <~ Validation.validationResultWarnings (var "acc") $
+      Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileErrorRules $ var "p"))
+        (Logic.ifElse (Equality.lt (Lists.length $ var "errs") (Validation.validationProfileMaxErrors $ var "p"))
+          (Validation.validationResult
+            (Lists.concat2 (var "errs") (Lists.singleton $ var "payload"))
+            (var "wrns"))
+          (var "acc"))
+        (Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileWarningRules $ var "p"))
+          (Logic.ifElse (Equality.lt (Lists.length $ var "wrns") (Validation.validationProfileMaxWarnings $ var "p"))
+            (Validation.validationResult
+              (var "errs")
+              (Lists.concat2 (var "wrns") (Lists.singleton $ var "payload")))
+            (var "acc"))
+          (var "acc")))
+
+-- | Classify a rule-tagged 'Maybe (Name, InvalidVertexError)' finding
+-- against the active profile and append the payload (without its rule
+-- tag) to the appropriate list in the accumulator. Same semantics as
+-- 'appendFinding' in Validate/Core.hs.
+appendFindingVertex :: TTermDefinition (
+  ValidationProfile
+  -> ValidationResult InvalidVertexError
+  -> Maybe (Name, InvalidVertexError)
   -> ValidationResult InvalidVertexError)
-validateVertex = validationDefinition "validateVertex" $
-  doc "Validate a vertex against its VertexType under the given ValidationProfile, returning a ValidationResult InvalidVertexError." $
-  "p" ~> "checkValue" ~> "typ" ~> "el" ~>
-  Lists.foldl
-    ("acc" ~> "guarded" ~>
-      Logic.ifElse
-        (Equality.gte
-          (Lists.length $ Validation.validationResultErrors $ var "acc")
-          (Validation.validationProfileMaxErrors $ var "p"))
-        (var "acc")
-        (appendFindingVertex @@ var "p" @@ var "acc" @@ var "guarded"))
-    emptyResult
-    (list [
-      -- label: vertex label must match its VertexType label
-      guardedVertexRule (var "p") _InvalidVertexError _InvalidVertexError_label
-        (lets [
-          "expected">: project _VertexType _VertexType_label @@ var "typ",
-          "actual">: project _Vertex _Vertex_label @@ var "el"]
-          $ Logic.ifElse
-              (Equality.equal
-                (unwrap _VertexLabel @@ var "actual")
-                (unwrap _VertexLabel @@ var "expected"))
-              nothing
-              (just $ inject _InvalidVertexError _InvalidVertexError_label $
-                record _NoSuchVertexLabelError [
-                  _NoSuchVertexLabelError_label>>: var "actual"])),
-      -- id: caller's checkValue applied to the id; lift into InvalidVertexError.id
-      guardedVertexRule (var "p") _InvalidVertexError _InvalidVertexError_id
-        (Maybes.map
-          ("err" ~> inject _InvalidVertexError _InvalidVertexError_id $ var "err")
-          (var "checkValue"
-            @@ (project _VertexType _VertexType_id @@ var "typ")
-            @@ (project _Vertex _Vertex_id @@ var "el"))),
-      -- property: delegates to validateProperties; lift first finding into InvalidVertexError.property.
-      -- Note: validateProperties returns a ValidationResult; for the rule-tagged
-      -- finding here we only need the *head* of its errors list, since the
-      -- per-vertex-rule guard fires once per vertex. Multi-property accumulation
-      -- across the whole graph happens at the orchestrator level via maxErrors.
-      guardedVertexRule (var "p") _InvalidVertexError _InvalidVertexError_property
-        (Maybes.map
-          ("err" ~> inject _InvalidVertexError _InvalidVertexError_property $ var "err")
-          (Lists.maybeHead $ Validation.validationResultErrors $ validateProperties
-            @@ var "p"
-            @@ var "checkValue"
-            @@ (project _VertexType _VertexType_properties @@ var "typ")
-            @@ (project _Vertex _Vertex_properties @@ var "el")))])
+appendFindingVertex = validationDefinition "appendFindingVertex" $
+  doc "Append a rule-tagged InvalidVertexError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds." $
+  "p" ~> "acc" ~> "finding" ~>
+  Maybes.cases (var "finding")
+    (var "acc")
+    ("rp" ~>
+      "ruleName" <~ Pairs.first (var "rp") $
+      "payload" <~ Pairs.second (var "rp") $
+      "errs" <~ Validation.validationResultErrors (var "acc") $
+      "wrns" <~ Validation.validationResultWarnings (var "acc") $
+      Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileErrorRules $ var "p"))
+        (Logic.ifElse (Equality.lt (Lists.length $ var "errs") (Validation.validationProfileMaxErrors $ var "p"))
+          (Validation.validationResult
+            (Lists.concat2 (var "errs") (Lists.singleton $ var "payload"))
+            (var "wrns"))
+          (var "acc"))
+        (Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileWarningRules $ var "p"))
+          (Logic.ifElse (Equality.lt (Lists.length $ var "wrns") (Validation.validationProfileMaxWarnings $ var "p"))
+            (Validation.validationResult
+              (var "errs")
+              (Lists.concat2 (var "wrns") (Lists.singleton $ var "payload")))
+            (var "acc"))
+          (var "acc")))
+
+-- | The default validation profile for hydra.validate.pg. Every PG rule
+-- is classified as an error; no warnings; 'maxErrors = 1' preserves the
+-- legacy 'first error wins' behaviour; 'maxWarnings = 20' is a small
+-- starting cap.
+defaultPgProfile :: TTermDefinition ValidationProfile
+defaultPgProfile = validationDefinition "defaultPgProfile" $
+  doc "The default validation profile for property-graph validation. Every PG rule classified as an error; no warnings; maxErrors=1, maxWarnings=20." $
+  Validation.validationProfile
+    (Sets.fromList $ list $ nameLift <$> allPgRuleNames)
+    Sets.empty
+    (int32 1)
+    (int32 20)
+
+-- | An empty ValidationResult parameterized by 'e'.
+emptyResult :: TTerm (ValidationResult e)
+emptyResult = Validation.validationResult
+  (list ([] :: [TTerm e]))
+  (list ([] :: [TTerm e]))
+
+-- | Test whether a rule is active in a profile (in either errorRules or
+-- warningRules). Local counterpart of 'enabled' in Validate/Core.hs;
+-- named 'enabledPg' to avoid clashing if both modules are imported into
+-- the same scope.
+enabledPg :: TTermDefinition (ValidationProfile -> Name -> Bool)
+enabledPg = validationDefinition "enabledPg" $
+  doc "True iff the given rule name appears in the profile's errorRules or warningRules." $
+  "p" ~> "ruleName" ~>
+  Logic.or
+    (Sets.member (var "ruleName") (Validation.validationProfileErrorRules $ var "p"))
+    (Sets.member (var "ruleName") (Validation.validationProfileWarningRules $ var "p"))
+
+-- | Compose a fully qualified rule identifier from a union-type qualified
+-- name and a variant local name, joined with '.'. Mirrors the helper of the
+-- same name in Validate/Core.hs and Validate/Packaging.hs.
+qualifiedRule :: Name -> Name -> Name
+qualifiedRule (Name u) (Name v) = Name (L.concat [u, ".", v])
+
+-- | Wrap a leaf-shaped 'Maybe InvalidVertexError' finding with the rule that
+-- produced it, gated by the active profile. Same pattern as 'guardedTermRule'
+-- in Validate/Core.hs.
+guardedVertexRule
+  :: TTerm ValidationProfile
+  -> Name -- ^ Union-type qualified name (e.g. _InvalidVertexError).
+  -> Name -- ^ Variant local name (e.g. _InvalidVertexError_label).
+  -> TTerm (Maybe InvalidVertexError)
+  -> TTerm (Maybe (Name, InvalidVertexError))
+guardedVertexRule profile unionName variantName findingExpr =
+  Logic.ifElse (enabledPg @@ profile @@ ruleNameTerm)
+    (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
+    nothing
+  where
+    ruleNameTerm = nameLift (qualifiedRule unionName variantName)
+
+-- | Edge counterpart of 'guardedVertexRule'.
+guardedEdgeRule
+  :: TTerm ValidationProfile
+  -> Name
+  -> Name
+  -> TTerm (Maybe InvalidEdgeError)
+  -> TTerm (Maybe (Name, InvalidEdgeError))
+guardedEdgeRule profile unionName variantName findingExpr =
+  Logic.ifElse (enabledPg @@ profile @@ ruleNameTerm)
+    (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
+    nothing
+  where
+    ruleNameTerm = nameLift (qualifiedRule unionName variantName)
+
+-- | Property counterpart. The payload is 'InvalidElementPropertyError'
+-- (the wrapper that pairs the property key with the inner
+-- 'InvalidPropertyError'), but the rule name still refers to the inner
+-- 'InvalidPropertyError' variant.
+guardedPropertyRule
+  :: TTerm ValidationProfile
+  -> Name -- ^ _InvalidPropertyError
+  -> Name -- ^ Variant local name (e.g. _InvalidPropertyError_missingRequired).
+  -> TTerm (Maybe InvalidElementPropertyError)
+  -> TTerm (Maybe (Name, InvalidElementPropertyError))
+guardedPropertyRule profile unionName variantName findingExpr =
+  Logic.ifElse (enabledPg @@ profile @@ ruleNameTerm)
+    (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
+    nothing
+  where
+    ruleNameTerm = nameLift (qualifiedRule unionName variantName)
 
 -- | Validate a single edge against its expected type. Each per-rule
 -- check is gated by the profile.
@@ -460,85 +402,6 @@ validateEdge = validationDefinition "validateEdge" $
             (var "f" @@ (project _Edge _Edge_in @@ var "el")))
           (var "labelForVertexId"))])
 
--- | Validate a property map against its expected schema. Three rules:
--- 'missingRequired' (per required type), 'unexpectedKey' (per actual key
--- not in schema), 'invalidValue' (per actual key whose value fails the
--- caller's checkValue). Each finding is a per-property
--- 'InvalidElementPropertyError' (key + inner InvalidPropertyError).
-validateProperties :: TTermDefinition (
-     ValidationProfile
-  -> (t -> v -> Maybe InvalidValueError)
-  -> [PG.PropertyType t]
-  -> M.Map PG.PropertyKey v
-  -> ValidationResult InvalidElementPropertyError)
-validateProperties = validationDefinition "validateProperties" $
-  doc "Validate a map of properties against a list of PropertyType under the given ValidationProfile, returning a ValidationResult InvalidElementPropertyError." $
-  "p" ~> "checkValue" ~> "types" ~> "props" ~>
-  lets [
-    -- m: property-key -> expected-type, for fast lookup during invalidValue/unexpectedKey checks
-    "m">: Maps.fromList (Lists.map
-      ("pt" ~> pair
-        (project _PropertyType _PropertyType_key @@ var "pt")
-        (project _PropertyType _PropertyType_value @@ var "pt"))
-      (var "types")),
-    -- For each schema entry, build a guarded missingRequired finding.
-    "missingChecks">: Lists.map
-      ("t" ~> guardedPropertyRule (var "p") _InvalidPropertyError _InvalidPropertyError_missingRequired
-        (Logic.ifElse (project _PropertyType _PropertyType_required @@ var "t")
-          (Maybes.maybe
-            (just (record _InvalidElementPropertyError [
-              _InvalidElementPropertyError_key>>: project _PropertyType _PropertyType_key @@ var "t",
-              _InvalidElementPropertyError_error>>:
-                inject _InvalidPropertyError _InvalidPropertyError_missingRequired $
-                  project _PropertyType _PropertyType_key @@ var "t"]))
-            (constant nothing)
-            (Maps.lookup (project _PropertyType _PropertyType_key @@ var "t") $ var "props"))
-          nothing))
-      (var "types"),
-    -- For each actual property, build two guarded checks: unexpectedKey
-    -- (key not in schema) or invalidValue (value fails checkValue). At
-    -- most one of the two fires per property: if the key isn't in the
-    -- schema, only unexpectedKey fires (invalidValue produces nothing
-    -- because there's no expected type). If the key is in the schema,
-    -- only invalidValue can fire.
-    "valueChecks">: Lists.bind (Maps.toList $ var "props")
-      ("kv" ~> lets [
-        "key">: Pairs.first $ var "kv",
-        "val">: Pairs.second $ var "kv"]
-        $ list [
-          guardedPropertyRule (var "p") _InvalidPropertyError _InvalidPropertyError_unexpectedKey
-            (Maybes.maybe
-              (just (record _InvalidElementPropertyError [
-                _InvalidElementPropertyError_key>>: var "key",
-                _InvalidElementPropertyError_error>>:
-                  inject _InvalidPropertyError _InvalidPropertyError_unexpectedKey $ var "key"]))
-              (constant nothing)
-              (Maps.lookup (var "key") (var "m"))),
-          guardedPropertyRule (var "p") _InvalidPropertyError _InvalidPropertyError_invalidValue
-            (Maybes.maybe
-              nothing
-              ("typ" ~> Maybes.map
-                ("err" ~> record _InvalidElementPropertyError [
-                  _InvalidElementPropertyError_key>>: var "key",
-                  _InvalidElementPropertyError_error>>:
-                    inject _InvalidPropertyError _InvalidPropertyError_invalidValue $ var "err"])
-                (var "checkValue" @@ var "typ" @@ var "val"))
-              (Maps.lookup (var "key") (var "m")))])]
-    $ Lists.foldl
-      ("acc" ~> "guarded" ~>
-        Logic.ifElse
-          (Equality.gte
-            (Lists.length $ Validation.validationResultErrors $ var "acc")
-            (Validation.validationProfileMaxErrors $ var "p"))
-          (var "acc")
-          (appendFindingProperty @@ var "p" @@ var "acc" @@ var "guarded"))
-      emptyResult
-      (Lists.concat2 (var "missingChecks") (var "valueChecks"))
-
--- ============================================================================
--- Profile-aware orchestrator
--- ============================================================================
-
 -- | Validate a property graph against a schema under the given
 -- ValidationProfile. Walks vertices first, then edges, lifting each
 -- per-element finding into 'InvalidGraphError' via the
@@ -633,3 +496,140 @@ validateGraph = validationDefinition "validateGraph" $
           (var "newErrs")
           (Validation.validationResultWarnings $ var "acc0")
 
+
+-- | Validate a property map against its expected schema. Three rules:
+-- 'missingRequired' (per required type), 'unexpectedKey' (per actual key
+-- not in schema), 'invalidValue' (per actual key whose value fails the
+-- caller's checkValue). Each finding is a per-property
+-- 'InvalidElementPropertyError' (key + inner InvalidPropertyError).
+validateProperties :: TTermDefinition (
+     ValidationProfile
+  -> (t -> v -> Maybe InvalidValueError)
+  -> [PG.PropertyType t]
+  -> M.Map PG.PropertyKey v
+  -> ValidationResult InvalidElementPropertyError)
+validateProperties = validationDefinition "validateProperties" $
+  doc "Validate a map of properties against a list of PropertyType under the given ValidationProfile, returning a ValidationResult InvalidElementPropertyError." $
+  "p" ~> "checkValue" ~> "types" ~> "props" ~>
+  lets [
+    -- m: property-key -> expected-type, for fast lookup during invalidValue/unexpectedKey checks
+    "m">: Maps.fromList (Lists.map
+      ("pt" ~> pair
+        (project _PropertyType _PropertyType_key @@ var "pt")
+        (project _PropertyType _PropertyType_value @@ var "pt"))
+      (var "types")),
+    -- For each schema entry, build a guarded missingRequired finding.
+    "missingChecks">: Lists.map
+      ("t" ~> guardedPropertyRule (var "p") _InvalidPropertyError _InvalidPropertyError_missingRequired
+        (Logic.ifElse (project _PropertyType _PropertyType_required @@ var "t")
+          (Maybes.maybe
+            (just (record _InvalidElementPropertyError [
+              _InvalidElementPropertyError_key>>: project _PropertyType _PropertyType_key @@ var "t",
+              _InvalidElementPropertyError_error>>:
+                inject _InvalidPropertyError _InvalidPropertyError_missingRequired $
+                  project _PropertyType _PropertyType_key @@ var "t"]))
+            (constant nothing)
+            (Maps.lookup (project _PropertyType _PropertyType_key @@ var "t") $ var "props"))
+          nothing))
+      (var "types"),
+    -- For each actual property, build two guarded checks: unexpectedKey
+    -- (key not in schema) or invalidValue (value fails checkValue). At
+    -- most one of the two fires per property: if the key isn't in the
+    -- schema, only unexpectedKey fires (invalidValue produces nothing
+    -- because there's no expected type). If the key is in the schema,
+    -- only invalidValue can fire.
+    "valueChecks">: Lists.bind (Maps.toList $ var "props")
+      ("kv" ~> lets [
+        "key">: Pairs.first $ var "kv",
+        "val">: Pairs.second $ var "kv"]
+        $ list [
+          guardedPropertyRule (var "p") _InvalidPropertyError _InvalidPropertyError_unexpectedKey
+            (Maybes.maybe
+              (just (record _InvalidElementPropertyError [
+                _InvalidElementPropertyError_key>>: var "key",
+                _InvalidElementPropertyError_error>>:
+                  inject _InvalidPropertyError _InvalidPropertyError_unexpectedKey $ var "key"]))
+              (constant nothing)
+              (Maps.lookup (var "key") (var "m"))),
+          guardedPropertyRule (var "p") _InvalidPropertyError _InvalidPropertyError_invalidValue
+            (Maybes.maybe
+              nothing
+              ("typ" ~> Maybes.map
+                ("err" ~> record _InvalidElementPropertyError [
+                  _InvalidElementPropertyError_key>>: var "key",
+                  _InvalidElementPropertyError_error>>:
+                    inject _InvalidPropertyError _InvalidPropertyError_invalidValue $ var "err"])
+                (var "checkValue" @@ var "typ" @@ var "val"))
+              (Maps.lookup (var "key") (var "m")))])]
+    $ Lists.foldl
+      ("acc" ~> "guarded" ~>
+        Logic.ifElse
+          (Equality.gte
+            (Lists.length $ Validation.validationResultErrors $ var "acc")
+            (Validation.validationProfileMaxErrors $ var "p"))
+          (var "acc")
+          (appendFindingProperty @@ var "p" @@ var "acc" @@ var "guarded"))
+      emptyResult
+      (Lists.concat2 (var "missingChecks") (var "valueChecks"))
+
+-- ============================================================================
+-- Profile-aware orchestrator
+-- ============================================================================
+
+-- | Validate a single vertex against its expected type. Each per-rule
+-- check ('label', 'id', 'property') is gated by the profile.
+validateVertex :: TTermDefinition (
+     ValidationProfile
+  -> (t -> v -> Maybe InvalidValueError)
+  -> PG.VertexType t
+  -> PG.Vertex v
+  -> ValidationResult InvalidVertexError)
+validateVertex = validationDefinition "validateVertex" $
+  doc "Validate a vertex against its VertexType under the given ValidationProfile, returning a ValidationResult InvalidVertexError." $
+  "p" ~> "checkValue" ~> "typ" ~> "el" ~>
+  Lists.foldl
+    ("acc" ~> "guarded" ~>
+      Logic.ifElse
+        (Equality.gte
+          (Lists.length $ Validation.validationResultErrors $ var "acc")
+          (Validation.validationProfileMaxErrors $ var "p"))
+        (var "acc")
+        (appendFindingVertex @@ var "p" @@ var "acc" @@ var "guarded"))
+    emptyResult
+    (list [
+      -- label: vertex label must match its VertexType label
+      guardedVertexRule (var "p") _InvalidVertexError _InvalidVertexError_label
+        (lets [
+          "expected">: project _VertexType _VertexType_label @@ var "typ",
+          "actual">: project _Vertex _Vertex_label @@ var "el"]
+          $ Logic.ifElse
+              (Equality.equal
+                (unwrap _VertexLabel @@ var "actual")
+                (unwrap _VertexLabel @@ var "expected"))
+              nothing
+              (just $ inject _InvalidVertexError _InvalidVertexError_label $
+                record _NoSuchVertexLabelError [
+                  _NoSuchVertexLabelError_label>>: var "actual"])),
+      -- id: caller's checkValue applied to the id; lift into InvalidVertexError.id
+      guardedVertexRule (var "p") _InvalidVertexError _InvalidVertexError_id
+        (Maybes.map
+          ("err" ~> inject _InvalidVertexError _InvalidVertexError_id $ var "err")
+          (var "checkValue"
+            @@ (project _VertexType _VertexType_id @@ var "typ")
+            @@ (project _Vertex _Vertex_id @@ var "el"))),
+      -- property: delegates to validateProperties; lift first finding into InvalidVertexError.property.
+      -- Note: validateProperties returns a ValidationResult; for the rule-tagged
+      -- finding here we only need the *head* of its errors list, since the
+      -- per-vertex-rule guard fires once per vertex. Multi-property accumulation
+      -- across the whole graph happens at the orchestrator level via maxErrors.
+      guardedVertexRule (var "p") _InvalidVertexError _InvalidVertexError_property
+        (Maybes.map
+          ("err" ~> inject _InvalidVertexError _InvalidVertexError_property $ var "err")
+          (Lists.maybeHead $ Validation.validationResultErrors $ validateProperties
+            @@ var "p"
+            @@ var "checkValue"
+            @@ (project _VertexType _VertexType_properties @@ var "typ")
+            @@ (project _Vertex _Vertex_properties @@ var "el")))])
+
+validationDefinition :: String -> TTerm a -> TTermDefinition a
+validationDefinition = definitionInModule module_

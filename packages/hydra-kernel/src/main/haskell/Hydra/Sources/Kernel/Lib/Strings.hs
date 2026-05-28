@@ -13,13 +13,6 @@ import           Prelude hiding ((++))
 ns :: ModuleName
 ns = ModuleName "hydra.lib.strings"
 
-sig :: TypeScheme -> TermSignature
-sig = typeSchemeToTermSignature
-
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -67,6 +60,13 @@ module_ = Module {
       primNoDef "unlines"
         "Join a list of strings with newlines, appending a trailing newline."
         (sigFn (Types.list Types.string) Types.string)]
+
+primNoDef :: String -> String -> TermSignature -> Definition
+primNoDef localName description s =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+
+sig :: TypeScheme -> TermSignature
+sig = typeSchemeToTermSignature
 
 -- Helpers: build TermSignatures from monomorphic function types.
 

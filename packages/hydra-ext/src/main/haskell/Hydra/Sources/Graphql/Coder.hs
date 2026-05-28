@@ -118,26 +118,6 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
--- | Helper: find namespace prefixes from type definitions
-findPrefixes :: TTerm (ModuleName -> [TypeDefinition] -> M.Map ModuleName String)
-findPrefixes = lambda "modNs" $ lambda "tdefs" $ lets [
-  "namespaces">: (Lists.nub :: TTerm [ModuleName] -> TTerm [ModuleName]) $ Maybes.cat $ Lists.map
-    (lambda "td" $ Names.namespaceOf @@ (Packaging.typeDefinitionName $ var "td"))
-    (var "tdefs")] $
-  Maps.fromList $ Lists.map
-    (lambda "ns_" $ pair (var "ns_")
-      (Logic.ifElse (Equality.equal (var "ns_") (var "modNs"))
-        (string "")
-        (Strings.cat2 (Formatting.sanitizeWithUnderscores @@ Sets.empty @@ (Packaging.unModuleName $ var "ns_")) (string "_"))))
-    (var "namespaces")
-
--- | Helper: wrap a type in a record with a single "value" field
-wrapAsRecord :: TTerm Name -> TTerm InferenceContext -> TTerm Graph -> TTerm (M.Map ModuleName String) -> TTerm Type -> TTerm (Either Error G.TypeDefinition)
-wrapAsRecord name cx g prefixes innerTyp =
-  encodeNamedType @@ cx @@ g @@ prefixes @@ name @@
-    (inject _Type _Type_record $ list [
-      Core.fieldType (Core.name $ string "value") innerTyp])
-
 -- | Get the description from a type as a GraphQL Description
 descriptionFromType :: TTermDefinition (InferenceContext -> Graph -> Type -> Either Error (Maybe G.Description))
 descriptionFromType = define "descriptionFromType" $
@@ -396,6 +376,19 @@ encodeUnionFieldType = define "encodeUnionFieldType" $
       G._FieldDefinition_Type>>: var "gtype",
       G._FieldDefinition_Directives>>: nothing])
 
+-- | Helper: find namespace prefixes from type definitions
+findPrefixes :: TTerm (ModuleName -> [TypeDefinition] -> M.Map ModuleName String)
+findPrefixes = lambda "modNs" $ lambda "tdefs" $ lets [
+  "namespaces">: (Lists.nub :: TTerm [ModuleName] -> TTerm [ModuleName]) $ Maybes.cat $ Lists.map
+    (lambda "td" $ Names.namespaceOf @@ (Packaging.typeDefinitionName $ var "td"))
+    (var "tdefs")] $
+  Maps.fromList $ Lists.map
+    (lambda "ns_" $ pair (var "ns_")
+      (Logic.ifElse (Equality.equal (var "ns_") (var "modNs"))
+        (string "")
+        (Strings.cat2 (Formatting.sanitizeWithUnderscores @@ Sets.empty @@ (Packaging.unModuleName $ var "ns_")) (string "_"))))
+    (var "namespaces")
+
 -- | Top-level entry point: convert a module to GraphQL schema files.
 moduleToGraphql :: TTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
 moduleToGraphql = define "moduleToGraphql" $
@@ -420,3 +413,10 @@ moduleToGraphql = define "moduleToGraphql" $
 sanitize :: TTermDefinition (String -> String)
 sanitize = define "sanitize" $
   lambda "s" $ Formatting.sanitizeWithUnderscores @@ GraphqlLanguage.graphqlReservedWords @@ var "s"
+
+-- | Helper: wrap a type in a record with a single "value" field
+wrapAsRecord :: TTerm Name -> TTerm InferenceContext -> TTerm Graph -> TTerm (M.Map ModuleName String) -> TTerm Type -> TTerm (Either Error G.TypeDefinition)
+wrapAsRecord name cx g prefixes innerTyp =
+  encodeNamedType @@ cx @@ g @@ prefixes @@ name @@
+    (inject _Type _Type_record $ list [
+      Core.fieldType (Core.name $ string "value") innerTyp])

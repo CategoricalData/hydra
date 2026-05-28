@@ -157,33 +157,6 @@ expString = define "expString" $
   "cx" ~> "term" ~>
     ExtractCore.string @@ Graph.emptyGraph @@ var "term"
 
--- | Get all elements from a property graph
-propertyGraphElements :: TTermDefinition (PG.Graph v -> [PG.Element v])
-propertyGraphElements = define "propertyGraphElements" $
-  doc "Get all elements from a property graph" $
-  "g" ~>
-    Lists.concat2
-      (Lists.map ("x" ~> inject PG._Element PG._Element_vertex (var "x")) (Maps.elems $ project PG._Graph PG._Graph_vertices @@ var "g"))
-      (Lists.map ("x" ~> inject PG._Element PG._Element_edge (var "x")) (Maps.elems $ project PG._Graph PG._Graph_edges @@ var "g"))
-
--- | Convert a type-annotated term to property graph elements
-typeApplicationTermToPropertyGraph :: TTermDefinition (PGM.Schema Graph t v -> Type -> t -> t -> InferenceContext -> Graph
-  -> Either Error (Term -> InferenceContext -> Either Error [PG.Element v]))
-typeApplicationTermToPropertyGraph = define "typeApplicationTermToPropertyGraph" $
-  doc "Convert a type-annotated term to property graph elements" $
-  "schema" ~> "typ" ~> "vidType" ~> "eidType" ~> "cx" ~> "g" ~>
-    Eithers.bind (PgCoder.elementCoder @@ nothing @@ var "schema" @@ var "typ" @@ var "vidType" @@ var "eidType" @@ var "cx" @@ var "g")
-      ("adapter" ~> right
-        ("term" ~> "cx'" ~>
-          Eithers.map
-            ("tree" ~> lets [
-              "flattenTree">: "t" ~>
-                Lists.cons
-                  (project PG._ElementTree PG._ElementTree_self @@ var "t")
-                  (Lists.concat (Lists.map (var "flattenTree") (project PG._ElementTree PG._ElementTree_dependencies @@ var "t")))]
-              $ var "flattenTree" @@ var "tree")
-            (Coders.coderEncode (Coders.adapterCoder $ var "adapter") @@ var "cx'" @@ var "term")))
-
 -- | Get all elements from a lazy graph
 lazyGraphToElements :: TTermDefinition (PG.LazyGraph v -> [PG.Element v])
 lazyGraphToElements = define "lazyGraphToElements" $
@@ -234,6 +207,15 @@ pgElementsToJson = define "pgElementsToJson" $
   "schema" ~> "els" ~> "cx" ~>
     Eithers.map ("els'" ~> Json.valueArray (var "els'")) (Eithers.mapList ("el" ~> pgElementToJson @@ var "schema" @@ var "el" @@ var "cx") (var "els"))
 
+-- | Get all elements from a property graph
+propertyGraphElements :: TTermDefinition (PG.Graph v -> [PG.Element v])
+propertyGraphElements = define "propertyGraphElements" $
+  doc "Get all elements from a property graph" $
+  "g" ~>
+    Lists.concat2
+      (Lists.map ("x" ~> inject PG._Element PG._Element_vertex (var "x")) (Maps.elems $ project PG._Graph PG._Graph_vertices @@ var "g"))
+      (Lists.map ("x" ~> inject PG._Element PG._Element_edge (var "x")) (Maps.elems $ project PG._Graph PG._Graph_edges @@ var "g"))
+
 -- Internal helper (not exported as a binding)
 propsToJson :: TTerm (PGM.Schema Graph t v -> InferenceContext -> M.Map PG.PropertyKey v -> Either Error (Y.Maybe (String, JM.Value)))
 propsToJson = "schema" ~> "cx" ~> "pairs" ~>
@@ -248,3 +230,21 @@ propsToJson = "schema" ~> "cx" ~> "pairs" ~>
           Eithers.bind (Coders.coderDecode (project PGM._Schema PGM._Schema_propertyValues @@ var "schema") @@ var "cx" @@ var "v")
             ("term" ~> right (pair (unwrap PG._PropertyKey @@ var "key") (Json.valueString $ ShowCore.term @@ var "term"))))
         (Maps.toList $ var "pairs")))
+
+-- | Convert a type-annotated term to property graph elements
+typeApplicationTermToPropertyGraph :: TTermDefinition (PGM.Schema Graph t v -> Type -> t -> t -> InferenceContext -> Graph
+  -> Either Error (Term -> InferenceContext -> Either Error [PG.Element v]))
+typeApplicationTermToPropertyGraph = define "typeApplicationTermToPropertyGraph" $
+  doc "Convert a type-annotated term to property graph elements" $
+  "schema" ~> "typ" ~> "vidType" ~> "eidType" ~> "cx" ~> "g" ~>
+    Eithers.bind (PgCoder.elementCoder @@ nothing @@ var "schema" @@ var "typ" @@ var "vidType" @@ var "eidType" @@ var "cx" @@ var "g")
+      ("adapter" ~> right
+        ("term" ~> "cx'" ~>
+          Eithers.map
+            ("tree" ~> lets [
+              "flattenTree">: "t" ~>
+                Lists.cons
+                  (project PG._ElementTree PG._ElementTree_self @@ var "t")
+                  (Lists.concat (Lists.map (var "flattenTree") (project PG._ElementTree PG._ElementTree_dependencies @@ var "t")))]
+              $ var "flattenTree" @@ var "tree")
+            (Coders.coderEncode (Coders.adapterCoder $ var "adapter") @@ var "cx'" @@ var "term")))

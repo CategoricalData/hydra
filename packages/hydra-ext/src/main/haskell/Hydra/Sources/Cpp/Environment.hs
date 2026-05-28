@@ -18,15 +18,6 @@ ns = ModuleName "hydra.cpp.environment"
 define :: String -> Type -> Binding
 define = defineType ns
 
-coreType :: String -> Type
-coreType = typeref CoreTypes.ns
-
-modulType :: String -> Type
-modulType = typeref ModuleTypes.ns
-
-utilType :: String -> Type
-utilType = typeref UtilTypes.ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -36,6 +27,9 @@ module_ = Module {
   where
     definitions = [
       cppEnvironmentType]
+
+coreType :: String -> Type
+coreType = typeref CoreTypes.ns
 
 -- | The CppEnvironment type definition
 cppEnvironmentType :: Binding
@@ -48,3 +42,9 @@ cppEnvironmentType = define "CppEnvironment" $
     "boundTypeVariables" >:
       doc "Type variables in scope, with their C++ names" $
       T.pair (T.list (coreType "Name")) (T.map (coreType "Name") T.string)]
+
+modulType :: String -> Type
+modulType = typeref ModuleTypes.ns
+
+utilType :: String -> Type
+utilType = typeref UtilTypes.ns

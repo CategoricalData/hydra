@@ -22,12 +22,6 @@ ns = ModuleName "hydra.geojson.model"
 define :: String -> Type -> Binding
 define = defineType ns
 
-geoj :: String -> Type
-geoj = typeref ns
-
-json :: String -> Type
-json = typeref $ JsonModel.ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -108,15 +102,8 @@ featureCollection = define "FeatureCollection" $
     "features">: T.list $ geoj "Feature",
     "bbox">: T.maybe $ geoj "BoundingBox"]
 
-geometryCollection :: Binding
-geometryCollection = define "GeometryCollection" $
-  doc ("A GeoJSON object with type \"GeometryCollection\" is a Geometry object. " ++
-       "A GeometryCollection has a member with the name \"geometries\".  The " ++
-       "value of \"geometries\" is an array.  Each element of this array is a " ++
-       "GeoJSON Geometry object.  It is possible for this array to be empty.") $
-  T.record [
-    "geometries">: T.list $ geoj "Geometry",
-    "bbox">: T.maybe $ geoj "BoundingBox"]
+geoj :: String -> Type
+geoj = typeref ns
 
 geometry :: Binding
 geometry = define "Geometry" $
@@ -132,11 +119,24 @@ geometry = define "Geometry" $
     "multiPolygon">: geoj "MultiPolygon",
     "geometryCollection">: geoj "GeometryCollection"]
 
+geometryCollection :: Binding
+geometryCollection = define "GeometryCollection" $
+  doc ("A GeoJSON object with type \"GeometryCollection\" is a Geometry object. " ++
+       "A GeometryCollection has a member with the name \"geometries\".  The " ++
+       "value of \"geometries\" is an array.  Each element of this array is a " ++
+       "GeoJSON Geometry object.  It is possible for this array to be empty.") $
+  T.record [
+    "geometries">: T.list $ geoj "Geometry",
+    "bbox">: T.maybe $ geoj "BoundingBox"]
+
 id_ :: Binding
 id_ = define "Id" $
   T.union [
     "number">: T.float64,
     "string">: T.string]
+
+json :: String -> Type
+json = typeref $ JsonModel.ns
 
 lineString :: Binding
 lineString = define "LineString" $

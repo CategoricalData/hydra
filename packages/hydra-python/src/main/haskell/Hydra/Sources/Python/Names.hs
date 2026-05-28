@@ -90,14 +90,8 @@ import qualified Hydra.Sources.Python.Language as PyLanguage
 import qualified Hydra.Dsl.Python.Helpers as PyDsl
 
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
 ns :: ModuleName
 ns = ModuleName "hydra.python.names"
-
-pyLanguageNs :: ModuleName
-pyLanguageNs = ModuleName "hydra.python.language"
 
 module_ :: Module
 module_ = Module {
@@ -121,6 +115,9 @@ module_ = Module {
       toDefinition useFutureAnnotations,
       toDefinition variableReference,
       toDefinition variantName]
+
+def :: String -> TTerm a -> TTermDefinition a
+def = definitionInModule module_
 
 -- | Encode a constant name for a field (e.g., FIELD_NAME as a class-level attribute).
 encodeConstantForFieldName :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> Name -> Py.Name)
@@ -242,6 +239,9 @@ encodeTypeVariable :: TTermDefinition (Name -> Py.Name)
 encodeTypeVariable = def "encodeTypeVariable" $
   doc "Encode a type variable name (capitalized)" $
   lambda "name" $ wrap Py._Name $ Formatting.capitalize @@ (Core.unName $ var "name")
+
+pyLanguageNs :: ModuleName
+pyLanguageNs = ModuleName "hydra.python.language"
 
 -- | Sanitize a string to be a valid Python name.
 sanitizePythonName :: TTermDefinition (String -> String)

@@ -22,9 +22,6 @@ ns = ModuleName "com.gdblab.pathAlgebra.expressions"
 define :: String -> Type -> Binding
 define = defineType ns
 
-expr :: String -> Type
-expr = typeref ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -43,12 +40,146 @@ module_ = Module {
       resultProjection, propertyExtraction, propertySource, nodePropertyRef,
       edgePropertyRef, pathPropertyRef]
 
-queryExpression :: Binding
-queryExpression = define "QueryExpression" $
-  doc "Complete query with path algebra and result projection" $
+andCondition :: Binding
+andCondition = define "AndCondition" $
   T.record [
-    "pathExpression">: expr "PathExpression",
-    "resultProjection">: T.optional $ expr "ResultProjection"]
+    "left">: expr "SelectionCondition",
+    "right">: expr "SelectionCondition"]
+
+baseExpression :: Binding
+baseExpression = define "BaseExpression" $
+  doc "Base path expressions that extract paths from graph" $
+  T.union [
+    "paths0">:
+      doc "Paths0(G): all paths of length 0 (nodes)" $
+      expr "GraphReference",
+    "paths1">:
+      doc "Paths1(G): all paths of length 1 (edges)" $
+      expr "GraphReference",
+    "pathsStar">:
+      doc "Paths*(G): all paths in graph (infinite without restrictions)" $
+      expr "GraphReference"]
+
+comparisonOperator :: Binding
+comparisonOperator = define "ComparisonOperator" $
+  doc "Comparison operators for property conditions" $
+  T.enum [
+    "equal",
+    "notEqual",
+    "lessThan",
+    "lessThanOrEqual",
+    "greaterThan",
+    "greaterThanOrEqual"]
+
+edgePropertyRef :: Binding
+edgePropertyRef = define "EdgePropertyRef" $
+  doc "Reference to an edge property: edge.property" $
+  T.record [
+    "element">: expr "PathElement",
+    "property">: T.string]
+
+expr :: String -> Type
+expr = typeref ns
+
+graphReference :: Binding
+graphReference = define "GraphReference" $
+  doc "Reference to a property graph" $
+  T.wrap T.string
+
+groupByCriterion :: Binding
+groupByCriterion = define "GroupByCriterion" $
+  doc "Grouping criteria corresponding to paper's γ variants" $
+  T.enum [
+    "none",
+    "source",
+    "target",
+    "length",
+    "sourceTarget",
+    "sourceLength",
+    "targetLength",
+    "sourceTargetLength"]
+
+groupByExpression_ :: Binding
+groupByExpression_ = define "GroupByExpression" $
+  doc "Group-by operator: γ_criterion(expression)" $
+  T.record [
+    "criterion">: expr "GroupByCriterion",
+    "expression">: expr "PathExpression"]
+
+joinExpression :: Binding
+joinExpression = define "JoinExpression" $
+  doc "Join operator: expr1 ⊲⊳ expr2" $
+  T.record [
+    "left">: expr "PathExpression",
+    "right">: expr "PathExpression"]
+
+labelCondition :: Binding
+labelCondition = define "LabelCondition" $
+  doc "Conditions on node/edge labels: label(node(i)) = v" $
+  T.record [
+    "target">: expr "PathElement",
+    "value">: T.string]
+
+lengthCondition :: Binding
+lengthCondition = define "LengthCondition" $
+  doc "Condition on path length: len() = i" $
+  T.record [
+    "length">: T.int32]
+
+literalValue :: Binding
+literalValue = define "LiteralValue" $
+  doc "Literal values for comparisons" $
+  T.union [
+    "string">: T.string,
+    "integer">: T.int32,
+    "float">: T.float64,
+    "boolean">: T.boolean]
+
+nodePropertyRef :: Binding
+nodePropertyRef = define "NodePropertyRef" $
+  doc "Reference to a node property: node.property" $
+  T.record [
+    "element">: expr "PathElement",
+    "property">: T.string]
+
+notCondition :: Binding
+notCondition = define "NotCondition" $
+  T.record [
+    "condition">: expr "SelectionCondition"]
+
+orCondition :: Binding
+orCondition = define "OrCondition" $
+  T.record [
+    "left">: expr "SelectionCondition",
+    "right">: expr "SelectionCondition"]
+
+orderByCriterion :: Binding
+orderByCriterion = define "OrderByCriterion" $
+  doc "Ordering criteria corresponding to paper's τ variants" $
+  T.enum [
+    "partition",
+    "group",
+    "path",
+    "partitionGroup",
+    "partitionPath",
+    "groupPath",
+    "partitionGroupPath"]
+
+orderByExpression_ :: Binding
+orderByExpression_ = define "OrderByExpression" $
+  doc "Order-by operator: τ_criterion(solutionSpace)" $
+  T.record [
+    "criterion">: expr "OrderByCriterion",
+    "expression">: expr "SolutionSpaceExpression"]
+
+pathElement :: Binding
+pathElement = define "PathElement" $
+  doc "References to elements within a path" $
+  T.union [
+    "node">: T.int32,
+    "edge">: T.int32,
+    "first">: T.unit,
+    "last">: T.unit]
 
 pathExpression :: Binding
 pathExpression = define "PathExpression" $
@@ -79,146 +210,13 @@ pathExpression = define "PathExpression" $
       doc "Projection operator (π): extract paths from solution space" $
       expr "ProjectionExpression"]
 
-baseExpression :: Binding
-baseExpression = define "BaseExpression" $
-  doc "Base path expressions that extract paths from graph" $
-  T.union [
-    "paths0">:
-      doc "Paths0(G): all paths of length 0 (nodes)" $
-      expr "GraphReference",
-    "paths1">:
-      doc "Paths1(G): all paths of length 1 (edges)" $
-      expr "GraphReference",
-    "pathsStar">:
-      doc "Paths*(G): all paths in graph (infinite without restrictions)" $
-      expr "GraphReference"]
-
-graphReference :: Binding
-graphReference = define "GraphReference" $
-  doc "Reference to a property graph" $
-  T.wrap T.string
-
-selectionExpression :: Binding
-selectionExpression = define "SelectionExpression" $
-  doc "Selection operator: σ_condition(expression)" $
-  T.record [
-    "condition">: expr "SelectionCondition",
-    "expression">: expr "PathExpression"]
-
-selectionCondition :: Binding
-selectionCondition = define "SelectionCondition" $
-  doc "Conditions for filtering paths" $
-  T.union [
-    "simple">: expr "SimpleCondition",
-    "and">: expr "AndCondition",
-    "or">: expr "OrCondition",
-    "not">: expr "NotCondition"]
-
-simpleCondition :: Binding
-simpleCondition = define "SimpleCondition" $
-  doc "Atomic selection conditions" $
-  T.union [
-    "labelEquals">: expr "LabelCondition",
-    "propertyEquals">: expr "PropertyCondition",
-    "propertyComparison">: expr "PropertyComparisonCondition",
-    "lengthEquals">: expr "LengthCondition"]
-
-labelCondition :: Binding
-labelCondition = define "LabelCondition" $
-  doc "Conditions on node/edge labels: label(node(i)) = v" $
-  T.record [
-    "target">: expr "PathElement",
-    "value">: T.string]
-
-propertyCondition :: Binding
-propertyCondition = define "PropertyCondition" $
-  doc "Property equality conditions: node(i).prop = v" $
-  T.record [
-    "target">: expr "PathElement",
-    "property">: T.string,
-    "value">: expr "LiteralValue"]
-
-propertyComparisonCondition :: Binding
-propertyComparisonCondition = define "PropertyComparisonCondition" $
-  doc "Property comparison conditions: node(i).prop > v, etc." $
-  T.record [
-    "target">: expr "PathElement",
-    "property">: T.string,
-    "operator">: expr "ComparisonOperator",
-    "value">: expr "LiteralValue"]
-
-comparisonOperator :: Binding
-comparisonOperator = define "ComparisonOperator" $
-  doc "Comparison operators for property conditions" $
+pathPropertyRef :: Binding
+pathPropertyRef = define "PathPropertyRef" $
+  doc "Reference to path-level properties: length, etc." $
   T.enum [
-    "equal",
-    "notEqual",
-    "lessThan",
-    "lessThanOrEqual",
-    "greaterThan",
-    "greaterThanOrEqual"]
-
-literalValue :: Binding
-literalValue = define "LiteralValue" $
-  doc "Literal values for comparisons" $
-  T.union [
-    "string">: T.string,
-    "integer">: T.int32,
-    "float">: T.float64,
-    "boolean">: T.boolean]
-
-lengthCondition :: Binding
-lengthCondition = define "LengthCondition" $
-  doc "Condition on path length: len() = i" $
-  T.record [
-    "length">: T.int32]
-
-pathElement :: Binding
-pathElement = define "PathElement" $
-  doc "References to elements within a path" $
-  T.union [
-    "node">: T.int32,
-    "edge">: T.int32,
-    "first">: T.unit,
-    "last">: T.unit]
-
-andCondition :: Binding
-andCondition = define "AndCondition" $
-  T.record [
-    "left">: expr "SelectionCondition",
-    "right">: expr "SelectionCondition"]
-
-orCondition :: Binding
-orCondition = define "OrCondition" $
-  T.record [
-    "left">: expr "SelectionCondition",
-    "right">: expr "SelectionCondition"]
-
-notCondition :: Binding
-notCondition = define "NotCondition" $
-  T.record [
-    "condition">: expr "SelectionCondition"]
-
-joinExpression :: Binding
-joinExpression = define "JoinExpression" $
-  doc "Join operator: expr1 ⊲⊳ expr2" $
-  T.record [
-    "left">: expr "PathExpression",
-    "right">: expr "PathExpression"]
-
-unionExpression :: Binding
-unionExpression = define "UnionExpression" $
-  doc "Union operator: expr1 ∪ expr2" $
-  T.record [
-    "left">: expr "PathExpression",
-    "right">: expr "PathExpression"]
-
-recursiveExpression :: Binding
-recursiveExpression = define "RecursiveExpression" $
-  doc "Recursive operator with path semantics" $
-  T.record [
-    "semantics">: expr "PathSemantics",
-    "expression">: expr "PathExpression"]
+    "length",
+    "startNode",
+    "endNode"]
 
 pathSemantics :: Binding
 pathSemantics = define "PathSemantics" $
@@ -229,52 +227,6 @@ pathSemantics = define "PathSemantics" $
     "acyclic",
     "simple",
     "shortest"]
-
-solutionSpaceExpression :: Binding
-solutionSpaceExpression = define "SolutionSpaceExpression" $
-  doc "Expressions that work with solution spaces" $
-  T.union [
-    "groupBy">: expr "GroupByExpression",
-    "orderBy">: expr "OrderByExpression"]
-
-groupByExpression_ :: Binding
-groupByExpression_ = define "GroupByExpression" $
-  doc "Group-by operator: γ_criterion(expression)" $
-  T.record [
-    "criterion">: expr "GroupByCriterion",
-    "expression">: expr "PathExpression"]
-
-groupByCriterion :: Binding
-groupByCriterion = define "GroupByCriterion" $
-  doc "Grouping criteria corresponding to paper's γ variants" $
-  T.enum [
-    "none",
-    "source",
-    "target",
-    "length",
-    "sourceTarget",
-    "sourceLength",
-    "targetLength",
-    "sourceTargetLength"]
-
-orderByExpression_ :: Binding
-orderByExpression_ = define "OrderByExpression" $
-  doc "Order-by operator: τ_criterion(solutionSpace)" $
-  T.record [
-    "criterion">: expr "OrderByCriterion",
-    "expression">: expr "SolutionSpaceExpression"]
-
-orderByCriterion :: Binding
-orderByCriterion = define "OrderByCriterion" $
-  doc "Ordering criteria corresponding to paper's τ variants" $
-  T.enum [
-    "partition",
-    "group",
-    "path",
-    "partitionGroup",
-    "partitionPath",
-    "groupPath",
-    "partitionGroupPath"]
 
 projectionExpression :: Binding
 projectionExpression = define "ProjectionExpression" $
@@ -292,11 +244,22 @@ projectionSpec = define "ProjectionSpec" $
     "all">: T.unit,
     "limited">: T.int32]
 
-resultProjection :: Binding
-resultProjection = define "ResultProjection" $
-  doc "Extract specific values from paths for RETURN clause" $
+propertyComparisonCondition :: Binding
+propertyComparisonCondition = define "PropertyComparisonCondition" $
+  doc "Property comparison conditions: node(i).prop > v, etc." $
   T.record [
-    "projections">: T.list $ expr "PropertyExtraction"]
+    "target">: expr "PathElement",
+    "property">: T.string,
+    "operator">: expr "ComparisonOperator",
+    "value">: expr "LiteralValue"]
+
+propertyCondition :: Binding
+propertyCondition = define "PropertyCondition" $
+  doc "Property equality conditions: node(i).prop = v" $
+  T.record [
+    "target">: expr "PathElement",
+    "property">: T.string,
+    "value">: expr "LiteralValue"]
 
 propertyExtraction :: Binding
 propertyExtraction = define "PropertyExtraction" $
@@ -313,24 +276,61 @@ propertySource = define "PropertySource" $
     "edgeProperty">: expr "EdgePropertyRef",
     "pathProperty">: expr "PathPropertyRef"]
 
-nodePropertyRef :: Binding
-nodePropertyRef = define "NodePropertyRef" $
-  doc "Reference to a node property: node.property" $
+queryExpression :: Binding
+queryExpression = define "QueryExpression" $
+  doc "Complete query with path algebra and result projection" $
   T.record [
-    "element">: expr "PathElement",
-    "property">: T.string]
+    "pathExpression">: expr "PathExpression",
+    "resultProjection">: T.optional $ expr "ResultProjection"]
 
-edgePropertyRef :: Binding
-edgePropertyRef = define "EdgePropertyRef" $
-  doc "Reference to an edge property: edge.property" $
+recursiveExpression :: Binding
+recursiveExpression = define "RecursiveExpression" $
+  doc "Recursive operator with path semantics" $
   T.record [
-    "element">: expr "PathElement",
-    "property">: T.string]
+    "semantics">: expr "PathSemantics",
+    "expression">: expr "PathExpression"]
 
-pathPropertyRef :: Binding
-pathPropertyRef = define "PathPropertyRef" $
-  doc "Reference to path-level properties: length, etc." $
-  T.enum [
-    "length",
-    "startNode",
-    "endNode"]
+resultProjection :: Binding
+resultProjection = define "ResultProjection" $
+  doc "Extract specific values from paths for RETURN clause" $
+  T.record [
+    "projections">: T.list $ expr "PropertyExtraction"]
+
+selectionCondition :: Binding
+selectionCondition = define "SelectionCondition" $
+  doc "Conditions for filtering paths" $
+  T.union [
+    "simple">: expr "SimpleCondition",
+    "and">: expr "AndCondition",
+    "or">: expr "OrCondition",
+    "not">: expr "NotCondition"]
+
+selectionExpression :: Binding
+selectionExpression = define "SelectionExpression" $
+  doc "Selection operator: σ_condition(expression)" $
+  T.record [
+    "condition">: expr "SelectionCondition",
+    "expression">: expr "PathExpression"]
+
+simpleCondition :: Binding
+simpleCondition = define "SimpleCondition" $
+  doc "Atomic selection conditions" $
+  T.union [
+    "labelEquals">: expr "LabelCondition",
+    "propertyEquals">: expr "PropertyCondition",
+    "propertyComparison">: expr "PropertyComparisonCondition",
+    "lengthEquals">: expr "LengthCondition"]
+
+solutionSpaceExpression :: Binding
+solutionSpaceExpression = define "SolutionSpaceExpression" $
+  doc "Expressions that work with solution spaces" $
+  T.union [
+    "groupBy">: expr "GroupByExpression",
+    "orderBy">: expr "OrderByExpression"]
+
+unionExpression :: Binding
+unionExpression = define "UnionExpression" $
+  doc "Union operator: expr1 ∪ expr2" $
+  T.record [
+    "left">: expr "PathExpression",
+    "right">: expr "PathExpression"]

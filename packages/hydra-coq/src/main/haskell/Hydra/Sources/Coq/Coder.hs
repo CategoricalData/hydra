@@ -43,11 +43,6 @@ import qualified Hydra.Coq.Environment as CE
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
--- | Local helper: listAny via Lists.find + Maybes.isJust, since the DSL list
--- library does not expose an `any` primitive directly.
-listAny :: TTerm (a -> Bool) -> TTerm [a] -> TTerm Bool
-listAny pred xs = Maybes.isJust (Lists.find pred xs)
-
 ns :: ModuleName
 ns = ModuleName "hydra.coq.coder"
 
@@ -190,109 +185,6 @@ coqTypeTerm :: TTermDefinition (C.Term -> C.Type)
 coqTypeTerm = define "coqTypeTerm" $
   lambda "t" $ wrap C._Type $ var "t"
 
--- | Escape double quotes in a Coq string literal by doubling them.
-escapeCoqString :: TTermDefinition (String -> String)
-escapeCoqString = define "escapeCoqString" $
-  doc "Escape a string for Coq string literals: double any embedded quotes" $
-  lambda "s" $ Strings.intercalate (string "\"\"") (Strings.splitOn (string "\"") (var "s"))
-
--- | Sanitize a variable name to avoid Coq reserved words by appending an underscore.
-sanitizeVar :: TTermDefinition (String -> String)
-sanitizeVar = define "sanitizeVar" $
-  doc "Append an underscore if the name collides with a Coq reserved word" $
-  lambda "s" $ Formatting.escapeWithUnderscore @@ CoqLanguage.coqReservedWords @@ var "s"
-
--- | Sanitize a stripped local reference. Uses a narrower reserved-word set
--- than `sanitizeVar`, matching the old text-stripper's behaviour.
-sanitizeStripped :: TTermDefinition (String -> String)
-sanitizeStripped = define "sanitizeStripped" $
-  doc "Append an underscore if a stripped-local-name reference collides with a Coq reserved word" $
-  lambda "s" $ Formatting.escapeWithUnderscore @@ CoqLanguage.coqStrippedReservedWords @@ var "s"
-
--- | Encode a Hydra LiteralType to a Coq Term (qualid reference).
-encodeLiteralType :: TTermDefinition (LiteralType -> C.Term)
-encodeLiteralType = define "encodeLiteralType" $
-  doc "Map a Hydra LiteralType to its Coq stdlib counterpart" $
-  lambda "lt" $ cases _LiteralType (var "lt") Nothing [
-    _LiteralType_boolean>>: constant (coqTermQualid @@ string "bool"),
-    _LiteralType_decimal>>: constant (coqTermQualid @@ string "Q"),
-    _LiteralType_float>>: constant (coqTermQualid @@ string "Q"),
-    _LiteralType_integer>>: "it" ~> cases _IntegerType (var "it") Nothing [
-      _IntegerType_bigint>>: constant (coqTermQualid @@ string "Z"),
-      _IntegerType_int8>>: constant (coqTermQualid @@ string "Z"),
-      _IntegerType_int16>>: constant (coqTermQualid @@ string "Z"),
-      _IntegerType_int32>>: constant (coqTermQualid @@ string "Z"),
-      _IntegerType_int64>>: constant (coqTermQualid @@ string "Z"),
-      _IntegerType_uint8>>: constant (coqTermQualid @@ string "nat"),
-      _IntegerType_uint16>>: constant (coqTermQualid @@ string "nat"),
-      _IntegerType_uint32>>: constant (coqTermQualid @@ string "nat"),
-      _IntegerType_uint64>>: constant (coqTermQualid @@ string "nat")],
-    _LiteralType_string>>: constant (coqTermQualid @@ string "string"),
-    _LiteralType_binary>>: constant (coqTermQualid @@ string "string")]
-
--- | Encode a Hydra Type to a Coq Term.
-encodeType :: TTermDefinition (CE.CoqEnvironment -> Type -> C.Term)
-encodeType = define "encodeType" $
-  doc "Translate a Hydra Type into a Coq Term representing that type. The environment is consulted to resolve qualified type variable references" $
-  lambdas ["env", "ty"] $ cases _Type (var "ty") Nothing [
-    _Type_annotated>>: "at" ~> encodeType @@ var "env" @@ (Core.annotatedTypeBody $ var "at"),
-    _Type_application>>: "app" ~>
-      coqTermApp
-        @@ (encodeType @@ var "env" @@ (Core.applicationTypeFunction $ var "app"))
-        @@ list [encodeType @@ var "env" @@ (Core.applicationTypeArgument $ var "app")],
-    _Type_either>>: "et" ~>
-      coqTermApp @@ (coqTermQualid @@ string "sum") @@ list [
-        encodeType @@ var "env" @@ (Core.eitherTypeLeft $ var "et"),
-        encodeType @@ var "env" @@ (Core.eitherTypeRight $ var "et")],
-    _Type_forall>>: "ft" ~>
-      inject C._Term C._Term_forallOrFun $
-        inject C._ForallOrFun C._ForallOrFun_forall $
-          record C._Forall [
-            C._Forall_binders>>: inject C._OpenBinders C._OpenBinders_binders (list [
-              inject C._Binder C._Binder_type $
-                record C._TypeBinders [
-                  C._TypeBinders_names>>:
-                    list [coqName @@ (unwrap _Name @@ (Core.forallTypeParameter $ var "ft"))],
-                  C._TypeBinders_type>>: coqTypeTerm @@ (coqTermQualid @@ string "Type")]]),
-            C._Forall_type>>: coqTypeTerm @@ (encodeType @@ var "env" @@ (Core.forallTypeBody $ var "ft"))],
-    _Type_function>>: "ft" ~>
-      coqArrow
-        @@ (encodeType @@ var "env" @@ (Core.functionTypeDomain $ var "ft"))
-        @@ (encodeType @@ var "env" @@ (Core.functionTypeCodomain $ var "ft")),
-    _Type_list>>: "t" ~>
-      coqTermApp @@ (coqTermQualid @@ string "list") @@ list [encodeType @@ var "env" @@ var "t"],
-    _Type_literal>>: "lt" ~> encodeLiteralType @@ var "lt",
-    _Type_map>>: "mt" ~>
-      coqTermApp @@ (coqTermQualid @@ string "list") @@ list [
-        coqTermApp @@ (coqTermQualid @@ string "prod") @@ list [
-          encodeType @@ var "env" @@ (Core.mapTypeKeys $ var "mt"),
-          encodeType @@ var "env" @@ (Core.mapTypeValues $ var "mt")]],
-    _Type_maybe>>: "t" ~>
-      coqTermApp @@ (coqTermQualid @@ string "option") @@ list [encodeType @@ var "env" @@ var "t"],
-    _Type_pair>>: "pt" ~>
-      coqTermApp @@ (coqTermQualid @@ string "prod") @@ list [
-        encodeType @@ var "env" @@ (Core.pairTypeFirst $ var "pt"),
-        encodeType @@ var "env" @@ (Core.pairTypeSecond $ var "pt")],
-    _Type_record>>: constant (coqTermQualid @@ string "unit"),
-    _Type_set>>: "t" ~>
-      coqTermApp @@ (coqTermQualid @@ string "list") @@ list [encodeType @@ var "env" @@ var "t"],
-    _Type_union>>: constant (coqTermQualid @@ string "unit"),
-    _Type_unit>>: constant (coqTermQualid @@ string "unit"),
-    _Type_variable>>: "n" ~> lets [
-      "raw">: unwrap _Name @@ var "n",
-      -- Type-variable references are emitted raw when unqualified (Coq
-      -- primitives like `Type`, locally-bound type-param names like `t0`);
-      -- only `hydra.<ns>.<x>` / `Build_hydra.<ns>.<x>` references need to
-      -- flow through the full qualified-name resolver.
-      "headSeg">: Maybes.fromMaybe (var "raw") (Lists.maybeHead (Strings.splitOn (string ".") (var "raw")))] $
-      Logic.ifElse (Logic.or
-          (Equality.equal (var "headSeg") (string "hydra"))
-          (Equality.equal (var "headSeg") (string "Build_hydra")))
-        (coqTermQualid @@ (resolveQualifiedName @@ var "env" @@ var "raw"))
-        (coqTermQualid @@ var "raw"),
-    _Type_void>>: constant (coqTermQualid @@ string "Empty_set"),
-    _Type_wrap>>: "wt" ~> encodeType @@ var "env" @@ var "wt"]
-
 -- | Encode a (name, Type) pair as a Coq Sentence containing an Axiom declaration.
 -- Used for modules whose definitions cannot practically compile under coqc (e.g.
 -- hydra.hoisting, hydra.inference) — their term definitions are replaced by
@@ -379,6 +271,27 @@ encodeLiteral = define "encodeLiteral" $
     _Literal_string>>: "s" ~> coqTermQualid @@ Strings.cat (list [
       string "\"", escapeCoqString @@ var "s", string "\"%string"]),
     _Literal_binary>>: constant (coqTermQualid @@ string "\"\"")]
+
+-- | Encode a Hydra LiteralType to a Coq Term (qualid reference).
+encodeLiteralType :: TTermDefinition (LiteralType -> C.Term)
+encodeLiteralType = define "encodeLiteralType" $
+  doc "Map a Hydra LiteralType to its Coq stdlib counterpart" $
+  lambda "lt" $ cases _LiteralType (var "lt") Nothing [
+    _LiteralType_boolean>>: constant (coqTermQualid @@ string "bool"),
+    _LiteralType_decimal>>: constant (coqTermQualid @@ string "Q"),
+    _LiteralType_float>>: constant (coqTermQualid @@ string "Q"),
+    _LiteralType_integer>>: "it" ~> cases _IntegerType (var "it") Nothing [
+      _IntegerType_bigint>>: constant (coqTermQualid @@ string "Z"),
+      _IntegerType_int8>>: constant (coqTermQualid @@ string "Z"),
+      _IntegerType_int16>>: constant (coqTermQualid @@ string "Z"),
+      _IntegerType_int32>>: constant (coqTermQualid @@ string "Z"),
+      _IntegerType_int64>>: constant (coqTermQualid @@ string "Z"),
+      _IntegerType_uint8>>: constant (coqTermQualid @@ string "nat"),
+      _IntegerType_uint16>>: constant (coqTermQualid @@ string "nat"),
+      _IntegerType_uint32>>: constant (coqTermQualid @@ string "nat"),
+      _IntegerType_uint64>>: constant (coqTermQualid @@ string "nat")],
+    _LiteralType_string>>: constant (coqTermQualid @@ string "string"),
+    _LiteralType_binary>>: constant (coqTermQualid @@ string "string")]
 
 -- | Encode a Hydra record projection as a Coq `fun r_ => r_.(field)` term.
 -- If the projection refers to a field that was sanitised to `unit` during
@@ -620,6 +533,69 @@ encodeTermDefinitionPair = define "encodeTermDefinitionPair" $
       C._Sentence_comment>>: (nothing :: TTerm (Maybe C.Comment)),
       C._Sentence_content>>: encodeTermDefinition @@ var "env" @@ Pairs.first (var "ed") @@ Pairs.second (var "ed")]
 
+-- | Encode a Hydra Type to a Coq Term.
+encodeType :: TTermDefinition (CE.CoqEnvironment -> Type -> C.Term)
+encodeType = define "encodeType" $
+  doc "Translate a Hydra Type into a Coq Term representing that type. The environment is consulted to resolve qualified type variable references" $
+  lambdas ["env", "ty"] $ cases _Type (var "ty") Nothing [
+    _Type_annotated>>: "at" ~> encodeType @@ var "env" @@ (Core.annotatedTypeBody $ var "at"),
+    _Type_application>>: "app" ~>
+      coqTermApp
+        @@ (encodeType @@ var "env" @@ (Core.applicationTypeFunction $ var "app"))
+        @@ list [encodeType @@ var "env" @@ (Core.applicationTypeArgument $ var "app")],
+    _Type_either>>: "et" ~>
+      coqTermApp @@ (coqTermQualid @@ string "sum") @@ list [
+        encodeType @@ var "env" @@ (Core.eitherTypeLeft $ var "et"),
+        encodeType @@ var "env" @@ (Core.eitherTypeRight $ var "et")],
+    _Type_forall>>: "ft" ~>
+      inject C._Term C._Term_forallOrFun $
+        inject C._ForallOrFun C._ForallOrFun_forall $
+          record C._Forall [
+            C._Forall_binders>>: inject C._OpenBinders C._OpenBinders_binders (list [
+              inject C._Binder C._Binder_type $
+                record C._TypeBinders [
+                  C._TypeBinders_names>>:
+                    list [coqName @@ (unwrap _Name @@ (Core.forallTypeParameter $ var "ft"))],
+                  C._TypeBinders_type>>: coqTypeTerm @@ (coqTermQualid @@ string "Type")]]),
+            C._Forall_type>>: coqTypeTerm @@ (encodeType @@ var "env" @@ (Core.forallTypeBody $ var "ft"))],
+    _Type_function>>: "ft" ~>
+      coqArrow
+        @@ (encodeType @@ var "env" @@ (Core.functionTypeDomain $ var "ft"))
+        @@ (encodeType @@ var "env" @@ (Core.functionTypeCodomain $ var "ft")),
+    _Type_list>>: "t" ~>
+      coqTermApp @@ (coqTermQualid @@ string "list") @@ list [encodeType @@ var "env" @@ var "t"],
+    _Type_literal>>: "lt" ~> encodeLiteralType @@ var "lt",
+    _Type_map>>: "mt" ~>
+      coqTermApp @@ (coqTermQualid @@ string "list") @@ list [
+        coqTermApp @@ (coqTermQualid @@ string "prod") @@ list [
+          encodeType @@ var "env" @@ (Core.mapTypeKeys $ var "mt"),
+          encodeType @@ var "env" @@ (Core.mapTypeValues $ var "mt")]],
+    _Type_maybe>>: "t" ~>
+      coqTermApp @@ (coqTermQualid @@ string "option") @@ list [encodeType @@ var "env" @@ var "t"],
+    _Type_pair>>: "pt" ~>
+      coqTermApp @@ (coqTermQualid @@ string "prod") @@ list [
+        encodeType @@ var "env" @@ (Core.pairTypeFirst $ var "pt"),
+        encodeType @@ var "env" @@ (Core.pairTypeSecond $ var "pt")],
+    _Type_record>>: constant (coqTermQualid @@ string "unit"),
+    _Type_set>>: "t" ~>
+      coqTermApp @@ (coqTermQualid @@ string "list") @@ list [encodeType @@ var "env" @@ var "t"],
+    _Type_union>>: constant (coqTermQualid @@ string "unit"),
+    _Type_unit>>: constant (coqTermQualid @@ string "unit"),
+    _Type_variable>>: "n" ~> lets [
+      "raw">: unwrap _Name @@ var "n",
+      -- Type-variable references are emitted raw when unqualified (Coq
+      -- primitives like `Type`, locally-bound type-param names like `t0`);
+      -- only `hydra.<ns>.<x>` / `Build_hydra.<ns>.<x>` references need to
+      -- flow through the full qualified-name resolver.
+      "headSeg">: Maybes.fromMaybe (var "raw") (Lists.maybeHead (Strings.splitOn (string ".") (var "raw")))] $
+      Logic.ifElse (Logic.or
+          (Equality.equal (var "headSeg") (string "hydra"))
+          (Equality.equal (var "headSeg") (string "Build_hydra")))
+        (coqTermQualid @@ (resolveQualifiedName @@ var "env" @@ var "raw"))
+        (coqTermQualid @@ var "raw"),
+    _Type_void>>: constant (coqTermQualid @@ string "Empty_set"),
+    _Type_wrap>>: "wt" ~> encodeType @@ var "env" @@ var "wt"]
+
 -- | Wrap an encoded type body as a Coq Definition sentence content (typed `: Type`).
 encodeTypeDefinition :: TTermDefinition (CE.CoqEnvironment -> String -> Type -> C.SentenceContent)
 encodeTypeDefinition = define "encodeTypeDefinition" $
@@ -777,6 +753,12 @@ encodeWrapElim = define "encodeWrapElim" $
             inject C._Binder C._Binder_name (coqName @@ string "w_")]),
           C._Fun_body>>: coqTermQualid @@ string "w_"]
 
+-- | Escape double quotes in a Coq string literal by doubling them.
+escapeCoqString :: TTermDefinition (String -> String)
+escapeCoqString = define "escapeCoqString" $
+  doc "Escape a string for Coq string literals: double any embedded quotes" $
+  lambda "s" $ Strings.intercalate (string "\"\"") (Strings.splitOn (string "\"") (var "s"))
+
 -- | Walk a Hydra term, collecting the leading lambda binders as Coq Binders.
 extractLambdaBinders :: TTermDefinition (CE.CoqEnvironment -> Term -> [C.Binder])
 extractLambdaBinders = define "extractLambdaBinders" $
@@ -822,6 +804,11 @@ isUnitLambda = define "isUnitLambda" $
       Logic.and
         (isUnitDomain @@ (Core.lambdaDomain $ var "lam"))
         (var "unused")]
+
+-- | Local helper: listAny via Lists.find + Maybes.isJust, since the DSL list
+-- library does not expose an `any` primitive directly.
+listAny :: TTerm (a -> Bool) -> TTerm [a] -> TTerm Bool
+listAny pred xs = Maybes.isJust (Lists.find pred xs)
 
 -- | Given a possibly-qualified name (e.g. "hydra.core.Term"), return its local
 -- part sanitized to avoid Coq reserved words. Used as the lookup key for the
@@ -945,6 +932,19 @@ resolveQualifiedName = define "resolveQualifiedName" $
       -- variable references (lambda parameters like `at`, `end` etc., which
       -- must become `at_`, `end_` to avoid Coq keyword conflicts).
       (sanitizeVar @@ var "s")
+
+-- | Sanitize a stripped local reference. Uses a narrower reserved-word set
+-- than `sanitizeVar`, matching the old text-stripper's behaviour.
+sanitizeStripped :: TTermDefinition (String -> String)
+sanitizeStripped = define "sanitizeStripped" $
+  doc "Append an underscore if a stripped-local-name reference collides with a Coq reserved word" $
+  lambda "s" $ Formatting.escapeWithUnderscore @@ CoqLanguage.coqStrippedReservedWords @@ var "s"
+
+-- | Sanitize a variable name to avoid Coq reserved words by appending an underscore.
+sanitizeVar :: TTermDefinition (String -> String)
+sanitizeVar = define "sanitizeVar" $
+  doc "Append an underscore if the name collides with a Coq reserved word" $
+  lambda "s" $ Formatting.escapeWithUnderscore @@ CoqLanguage.coqReservedWords @@ var "s"
 
 -- | The fixed set of imports used at the head of every generated .v file.
 standardImports :: TTermDefinition C.Sentence

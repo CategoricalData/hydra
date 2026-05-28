@@ -19,9 +19,6 @@ ns = ModuleName "hydra.kusto.kql"
 define :: String -> Type -> Binding
 define = defineType ns
 
-kql :: String -> Type
-kql = typeref ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -206,12 +203,6 @@ expression = define "Expression" $
     "property">: kql "PropertyExpression",
     "unary">: kql "UnaryExpression"]
 
-function_ :: Binding
-function_ = define "Function" $
-  T.union [
-    "builtIn">: kql "BuiltInFunction",
-    "custom">: kql "FunctionName"]
-
 functionExpression :: Binding
 functionExpression = define "FunctionExpression" $
   T.record [
@@ -220,6 +211,12 @@ functionExpression = define "FunctionExpression" $
 
 functionName :: Binding
 functionName = define "FunctionName" $ T.wrap T.string
+
+function_ :: Binding
+function_ = define "Function" $
+  T.union [
+    "builtIn">: kql "BuiltInFunction",
+    "custom">: kql "FunctionName"]
 
 indexExpression :: Binding
 indexExpression = define "IndexExpression" $
@@ -243,6 +240,9 @@ keyValuePair = define "KeyValuePair" $
   T.record [
     "key">: T.string,
     "value">: kql "Expression"]
+
+kql :: String -> Type
+kql = typeref ns
 
 letBinding :: Binding
 letBinding = define "LetBinding" $
@@ -317,6 +317,12 @@ searchCommand = define "SearchCommand" $
     "datasets">: T.list $ kql "TableName",
     "pattern">: kql "Expression"]
 
+sortBy :: Binding
+sortBy = define "SortBy" $
+  T.record [
+    "column">: kql "ColumnName",
+    "order">: T.maybe $ kql "Order"]
+
 summarizeCommand :: Binding
 summarizeCommand = define "SummarizeCommand" $
   T.record [
@@ -326,18 +332,6 @@ summarizeCommand = define "SummarizeCommand" $
 tableName :: Binding
 tableName = define "TableName" $ T.wrap T.string
 
-topCommand :: Binding
-topCommand = define "TopCommand" $
-  T.record [
-    "count">: T.int32,
-    "sort">: T.list $ kql "SortBy"]
-
-sortBy :: Binding
-sortBy = define "SortBy" $
-  T.record [
-    "column">: kql "ColumnName",
-    "order">: T.maybe $ kql "Order"]
-
 tabularExpression :: Binding
 tabularExpression = define "TabularExpression" $
   T.union [
@@ -345,6 +339,12 @@ tabularExpression = define "TabularExpression" $
     "pipeline">: kql "PipelineExpression",
     "let">: kql "LetExpression",
     "table">: kql "TableName"]
+
+topCommand :: Binding
+topCommand = define "TopCommand" $
+  T.record [
+    "count">: T.int32,
+    "sort">: T.list $ kql "SortBy"]
 
 unaryExpression :: Binding
 unaryExpression = define "UnaryExpression" $

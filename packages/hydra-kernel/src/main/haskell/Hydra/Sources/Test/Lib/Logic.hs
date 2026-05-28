@@ -34,6 +34,15 @@ module_ = Module {
 
 -- Test groups for hydra.lib.logic primitives
 
+allTests :: TTermDefinition TestGroup
+allTests = definitionInModule module_ "allTests" $
+    Phantoms.doc "Test cases for hydra.lib.logic primitives" $
+    supergroup "hydra.lib.logic primitives" [
+      logicAnd,
+      logicIfElse,
+      logicNot,
+      logicOr]
+
 logicAnd :: TTerm TestGroup
 logicAnd = subgroup "and" [
   test "true and true" true true true,
@@ -42,22 +51,6 @@ logicAnd = subgroup "and" [
   test "false and false" false false false]
   where
     test name x y result = primCase name _logic_and [x, y] (result)
-
-logicOr :: TTerm TestGroup
-logicOr = subgroup "or" [
-  test "true or true" true true true,
-  test "true or false" true false true,
-  test "false or true" false true true,
-  test "false or false" false false false]
-  where
-    test name x y result = primCase name _logic_or [x, y] (result)
-
-logicNot :: TTerm TestGroup
-logicNot = subgroup "not" [
-  test "not true" true false,
-  test "not false" false true]
-  where
-    test name x result = primCase name _logic_not [x] (result)
 
 logicIfElse :: TTerm TestGroup
 logicIfElse = supergroup "ifElse" [
@@ -78,11 +71,18 @@ logicIfElse = supergroup "ifElse" [
     testStr name cond thenVal elseVal result =
       primCase name _logic_ifElse [cond, string thenVal, string elseVal] (string result)
 
-allTests :: TTermDefinition TestGroup
-allTests = definitionInModule module_ "allTests" $
-    Phantoms.doc "Test cases for hydra.lib.logic primitives" $
-    supergroup "hydra.lib.logic primitives" [
-      logicAnd,
-      logicIfElse,
-      logicNot,
-      logicOr]
+logicNot :: TTerm TestGroup
+logicNot = subgroup "not" [
+  test "not true" true false,
+  test "not false" false true]
+  where
+    test name x result = primCase name _logic_not [x] (result)
+
+logicOr :: TTerm TestGroup
+logicOr = subgroup "or" [
+  test "true or true" true true true,
+  test "true or false" true false true,
+  test "false or true" false true true,
+  test "false or false" false false false]
+  where
+    test name x y result = primCase name _logic_or [x, y] (result)

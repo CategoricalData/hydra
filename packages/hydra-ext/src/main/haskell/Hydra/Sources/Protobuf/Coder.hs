@@ -59,55 +59,6 @@ import qualified Hydra.Sources.Protobuf.Environment as ProtobufEnvironment
 import qualified Hydra.Sources.Protobuf.Serde as ProtobufSerdeSource
 
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
--- | Name for the StructuralTypeRef union type (either | pair)
-_StructuralTypeRef :: Name
-_StructuralTypeRef = Name "hydra.protobuf.environment.StructuralTypeRef"
-
--- | Name for the EncoderState record type (kept locally to avoid extra imports)
-_EncoderState :: Name
-_EncoderState = Name "hydra.protobuf.environment.EncoderState"
-
-_EncoderState_context :: Name
-_EncoderState_context = Name "context"
-
-_EncoderState_fieldIndex :: Name
-_EncoderState_fieldIndex = Name "fieldIndex"
-
--- | An empty list term, avoiding ambiguous type variable issues with 'list []'
-emptyList :: TTerm [a]
-emptyList = TTerm $ TermList []
-
--- | Reference to the hydra.decode.core.type function (Graph -> Term -> Either DecodingError Type)
-decodeType :: TTerm (Graph -> Term -> Either DecodingError Type)
-decodeType = TTerm $ TermVariable $ Name "hydra.decode.core.type"
-
--- | Project the InferenceContext out of an EncoderState
-esContext :: TTerm PE.EncoderState -> TTerm InferenceContext
-esContext es = project _EncoderState _EncoderState_context @@ es
-
--- | Project the field-index counter out of an EncoderState
-esFieldIndex :: TTerm PE.EncoderState -> TTerm Int
-esFieldIndex es = project _EncoderState _EncoderState_fieldIndex @@ es
-
--- | Build a new EncoderState with the given context and field index
-mkEncoderState :: TTerm InferenceContext -> TTerm Int -> TTerm PE.EncoderState
-mkEncoderState ctx fi = record _EncoderState [
-    _EncoderState_context >>: ctx,
-    _EncoderState_fieldIndex >>: fi]
-
--- | Reset the field-index counter to zero, preserving the InferenceContext
-esResetFieldIndex :: TTerm PE.EncoderState -> TTerm PE.EncoderState
-esResetFieldIndex es = mkEncoderState (esContext es) (int32 0)
-
--- | Yield (current field index, EncoderState with field index incremented)
-esNextFieldIndex :: TTerm PE.EncoderState -> TTerm (Int, PE.EncoderState)
-esNextFieldIndex es = pair
-  (esFieldIndex es)
-  (mkEncoderState (esContext es) (Math.add (esFieldIndex es) (int32 1)))
-
 ns :: ModuleName
 ns = ModuleName "hydra.protobuf.coder"
 
@@ -159,6 +110,20 @@ module_ = Module {
 -- =============================================================================
 -- Constants
 -- =============================================================================
+
+-- | Name for the EncoderState record type (kept locally to avoid extra imports)
+_EncoderState :: Name
+_EncoderState = Name "hydra.protobuf.environment.EncoderState"
+
+_EncoderState_context :: Name
+_EncoderState_context = Name "context"
+
+_EncoderState_fieldIndex :: Name
+_EncoderState_fieldIndex = Name "fieldIndex"
+
+-- | Name for the StructuralTypeRef union type (either | pair)
+_StructuralTypeRef :: Name
+_StructuralTypeRef = Name "hydra.protobuf.environment.StructuralTypeRef"
 
 -- | Collect all structural type references (Either, Pair) from a list of types
 collectStructuralTypes :: TTermDefinition ([Type] -> S.Set Term)
@@ -270,6 +235,17 @@ constructModule = def "constructModule" $
 -- =============================================================================
 -- Accumulator helper
 -- =============================================================================
+
+-- | Reference to the hydra.decode.core.type function (Graph -> Term -> Either DecodingError Type)
+decodeType :: TTerm (Graph -> Term -> Either DecodingError Type)
+decodeType = TTerm $ TermVariable $ Name "hydra.decode.core.type"
+
+def :: String -> TTerm a -> TTermDefinition a
+def = definitionInModule module_
+
+-- | An empty list term, avoiding ambiguous type variable issues with 'list []'
+emptyList :: TTerm [a]
+emptyList = TTerm $ TermList []
 
 encodeDefinition :: TTermDefinition (PE.EncoderState -> Graph -> ModuleName -> Name -> Type -> Either Error P3.Definition)
 encodeDefinition = def "encodeDefinition" $
@@ -551,6 +527,24 @@ err = def "err" $
   "cx" ~> "msg" ~>
   left (Error.errorOther $ Error.otherError (var "msg"))
 
+-- | Project the InferenceContext out of an EncoderState
+esContext :: TTerm PE.EncoderState -> TTerm InferenceContext
+esContext es = project _EncoderState _EncoderState_context @@ es
+
+-- | Project the field-index counter out of an EncoderState
+esFieldIndex :: TTerm PE.EncoderState -> TTerm Int
+esFieldIndex es = project _EncoderState _EncoderState_fieldIndex @@ es
+
+-- | Yield (current field index, EncoderState with field index incremented)
+esNextFieldIndex :: TTerm PE.EncoderState -> TTerm (Int, PE.EncoderState)
+esNextFieldIndex es = pair
+  (esFieldIndex es)
+  (mkEncoderState (esContext es) (Math.add (esFieldIndex es) (int32 1)))
+
+-- | Reset the field-index counter to zero, preserving the InferenceContext
+esResetFieldIndex :: TTerm PE.EncoderState -> TTerm PE.EncoderState
+esResetFieldIndex es = mkEncoderState (esContext es) (int32 0)
+
 findOptions :: TTermDefinition (PE.EncoderState -> Graph -> Type -> Either Error [P3.Option])
 findOptions = def "findOptions" $
   doc "Find Protobuf options for a type (description and deprecated)" $
@@ -719,6 +713,12 @@ mapAccumResult = def "mapAccumResult" $
 -- =============================================================================
 -- Definition encoding
 -- =============================================================================
+
+-- | Build a new EncoderState with the given context and field index
+mkEncoderState :: TTerm InferenceContext -> TTerm Int -> TTerm PE.EncoderState
+mkEncoderState ctx fi = record _EncoderState [
+    _EncoderState_context >>: ctx,
+    _EncoderState_fieldIndex >>: fi]
 
 -- | Note: follows the Protobuf Style Guide (https://protobuf.dev/programming-guides/style)
 -- | The boundary signature uses InferenceContext to fit the shared

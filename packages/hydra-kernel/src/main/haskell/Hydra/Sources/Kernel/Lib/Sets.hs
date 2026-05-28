@@ -20,13 +20,6 @@ ns = ModuleName "hydra.lib.sets"
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModuleName ns
 
-sig :: TypeScheme -> TermSignature
-sig = typeSchemeToTermSignature
-
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -52,16 +45,23 @@ module_ = Module {
       toPrimitive "Compute the union of two sets: elements in either." (setOpSig (ssx Types.~> ssx Types.~> ssx)) union_,
       toPrimitive "Compute the union of a list of sets." (setOpSig (Types.list ssx Types.~> ssx)) unions_]
 
--- Helper: build a TermSignature for a one-ord-var-x signature.
-setOpSig :: Type -> TermSignature
-setOpSig body = sig $ Types.polyConstrained [("x", [Name "ordering"])] body
-
 -- map needs two ord-constrained type vars: x and y
 mapSig :: TermSignature
 mapSig = sig $ Types.polyConstrained [("x", [Name "ordering"]), ("y", [Name "ordering"])]
   ((Types.var "x" Types.~> Types.var "y") Types.~>
    Types.set (Types.var "x") Types.~>
    Types.set (Types.var "y"))
+
+primNoDef :: String -> String -> TermSignature -> Definition
+primNoDef localName description s =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+
+-- Helper: build a TermSignature for a one-ord-var-x signature.
+setOpSig :: Type -> TermSignature
+setOpSig body = sig $ Types.polyConstrained [("x", [Name "ordering"])] body
+
+sig :: TypeScheme -> TermSignature
+sig = typeSchemeToTermSignature
 
 -- Default implementations.
 

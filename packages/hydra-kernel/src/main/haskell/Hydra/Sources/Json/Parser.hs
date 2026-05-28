@@ -85,9 +85,6 @@ import qualified Hydra.Sources.Kernel.Terms.Parsers        as Parsers
 import qualified Hydra.Json.Model as J
 
 
-jsonParserDefinition :: String -> TTerm a -> TTermDefinition a
-jsonParserDefinition = definitionInModule module_
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -160,9 +157,6 @@ letterRCode = int32 114   -- 'r'
 letterFCode = int32 102   -- 'f'
 letterACode = int32 97    -- 'a'
 letterSCode = int32 115   -- 's'
-
-letterBCode :: TTerm Int
-letterBCode = int32 98    -- 'b'
 
 -- | Parse a single digit (0-9)
 digit :: TTermDefinition (Parser Int)
@@ -321,6 +315,9 @@ jsonObject = define "jsonObject" $
           @@ jsonKeyValue
           @@ (token @@ (Parsers.char @@ commaCode))))
 
+jsonParserDefinition :: String -> TTerm a -> TTermDefinition a
+jsonParserDefinition = definitionInModule module_
+
 -- | Parse any JSON value
 -- | Parse a JSON string
 jsonString :: TTermDefinition (Parser J.Value)
@@ -359,6 +356,9 @@ jsonValue = define "jsonValue" $
     jsonString,
     jsonArray,
     jsonObject]
+
+letterBCode :: TTerm Int
+letterBCode = int32 98    -- 'b'
 
 -- | Parse a JSON document (value with optional surrounding whitespace)
 -- | Parse a JSON document (value with optional surrounding whitespace)

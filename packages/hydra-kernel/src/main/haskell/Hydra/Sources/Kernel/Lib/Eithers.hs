@@ -18,13 +18,6 @@ ns = ModuleName "hydra.lib.eithers"
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModuleName ns
 
-sig :: TypeScheme -> TermSignature
-sig = typeSchemeToTermSignature
-
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -58,6 +51,13 @@ tw = Types.var "w"
 
 ee :: Type -> Type -> Type
 ee = Types.either_
+
+primNoDef :: String -> String -> TermSignature -> Definition
+primNoDef localName description s =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+
+sig :: TypeScheme -> TermSignature
+sig = typeSchemeToTermSignature
 
 -- Signatures.
 
@@ -105,11 +105,6 @@ leftsSig :: TermSignature
 leftsSig = sig $ TypeScheme [Name "x", Name "y"]
   (Types.list (ee tx ty) Types.~> Types.list tx) Nothing
 
--- map : forall a b c. (a -> b) -> Either c a -> Either c b
-mapSig :: TermSignature
-mapSig = sig $ TypeScheme [Name "x", Name "y", Name "z"]
-  ((tx Types.~> ty) Types.~> ee tz tx Types.~> ee tz ty) Nothing
-
 -- mapList : forall a b c. (a -> Either c b) -> [a] -> Either c [b]
 mapListSig :: TermSignature
 mapListSig = sig $ TypeScheme [Name "x", Name "y", Name "z"]
@@ -126,6 +121,11 @@ mapMaybeSig = sig $ TypeScheme [Name "x", Name "y", Name "z"]
 mapSetSig :: TermSignature
 mapSetSig = sig $ TypeScheme [Name "x", Name "y", Name "z"]
   ((tx Types.~> ee tz ty) Types.~> Types.set tx Types.~> ee tz (Types.set ty)) Nothing
+
+-- map : forall a b c. (a -> b) -> Either c a -> Either c b
+mapSig :: TermSignature
+mapSig = sig $ TypeScheme [Name "x", Name "y", Name "z"]
+  ((tx Types.~> ty) Types.~> ee tz tx Types.~> ee tz ty) Nothing
 
 -- partitionEithers : forall a b. [Either a b] -> ([a], [b])
 partitionEithersSig :: TermSignature

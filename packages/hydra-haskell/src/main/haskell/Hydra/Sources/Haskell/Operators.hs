@@ -82,9 +82,6 @@ import qualified Data.Maybe                                as Y
 import Hydra.Ast
 
 
-haskellOperatorsDefinition :: String -> TTerm a -> TTermDefinition a
-haskellOperatorsDefinition = definitionInModule module_
-
 ns :: ModuleName
 ns = ModuleName "hydra.haskell.operators"
 
@@ -234,6 +231,9 @@ gteOp :: TTermDefinition Op
 gteOp = haskellOperatorsDefinition "gteOp" $
   doc "Greater than or equal (>=)" $
   Serialization.op @@ string ">=" @@ int32 4 @@ Ast.associativityNone
+
+haskellOperatorsDefinition :: String -> TTerm a -> TTermDefinition a
+haskellOperatorsDefinition = definitionInModule module_
 
 indexOp :: TTermDefinition Op
 indexOp = haskellOperatorsDefinition "indexOp" $

@@ -17,15 +17,6 @@ import qualified Hydra.Sources.Kernel.Types.Core           as Core
 ns :: ModuleName
 ns = ModuleName "hydra.coq.environment"
 
-def :: String -> Type -> Binding
-def = datatype ns
-
-environment :: String -> Type
-environment = typeref ns
-
-core :: String -> Type
-core = typeref Core.ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -57,3 +48,12 @@ coqEnvironment = def "CoqEnvironment" $
     "sanitizedAccessors">:
       doc "Accessor names for record fields that were sanitized to unit due to Coq's strict positivity requirement. Applications of these accessors are replaced with hydra_unreachable at emission time." $
       T.set T.string]
+
+core :: String -> Type
+core = typeref Core.ns
+
+def :: String -> Type -> Binding
+def = datatype ns
+
+environment :: String -> Type
+environment = typeref ns

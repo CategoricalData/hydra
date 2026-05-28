@@ -196,15 +196,6 @@ freeVariablesInTypeOrdered = define "freeVariablesInTypeOrdered" $
           (Core.forallTypeBody $ var "ft")]) $
   (Lists.nub :: TTerm [Name] -> TTerm [Name]) $ var "collectVars" @@ Sets.empty @@ var "typ"
 
-freeVariablesInTypeSimple :: TTermDefinition (Type -> S.Set Name)
-freeVariablesInTypeSimple = define "freeVariablesInTypeSimple" $
-  doc "Same as freeVariablesInType, but ignores the binding action of lambda types" $
-  "typ" ~>
-  "helper" <~ ("types" ~> "typ" ~> cases _Type (var "typ")
-    (Just $ var "types") [
-    _Type_variable>>: "v" ~> Sets.insert (var "v") (var "types")]) $
-  Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "helper" @@ Sets.empty @@ var "typ"
-
 freeVariablesInTypeScheme :: TTermDefinition (TypeScheme -> S.Set Name)
 freeVariablesInTypeScheme = define "freeVariablesInTypeScheme" $
   doc "Find free variables in a type scheme" $
@@ -220,6 +211,15 @@ freeVariablesInTypeSchemeSimple = define "freeVariablesInTypeSchemeSimple" $
   "vars" <~ Core.typeSchemeVariables (var "ts") $
   "t" <~ Core.typeSchemeBody (var "ts") $
   Sets.difference (freeVariablesInTypeSimple @@ var "t") (Sets.fromList $ var "vars")
+
+freeVariablesInTypeSimple :: TTermDefinition (Type -> S.Set Name)
+freeVariablesInTypeSimple = define "freeVariablesInTypeSimple" $
+  doc "Same as freeVariablesInType, but ignores the binding action of lambda types" $
+  "typ" ~>
+  "helper" <~ ("types" ~> "typ" ~> cases _Type (var "typ")
+    (Just $ var "types") [
+    _Type_variable>>: "v" ~> Sets.insert (var "v") (var "types")]) $
+  Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "helper" @@ Sets.empty @@ var "typ"
 
 isFreeVariableInTerm :: TTermDefinition (Name -> Term -> Bool)
 isFreeVariableInTerm = define "isFreeVariableInTerm" $

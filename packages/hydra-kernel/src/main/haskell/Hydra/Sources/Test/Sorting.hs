@@ -49,12 +49,30 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
+-- Helper to create adjacency list
+adj :: [(Int, [Int])] -> TTerm [(Int, [Int])]
+adj pairs = list [pair (int32 n) (list (int32 <$> deps)) | (n, deps) <- pairs]
+
 allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
     doc "Test cases for topological sorting" $
     supergroup "sorting" [
       topologicalSortGroup,
       topologicalSortSCCGroup]
+
+-- Helper for Left result (cycles)
+cycles :: [[Int]] -> TTerm (Either [[Int]] [Int])
+cycles cs = left $ list [list (int32 <$> c) | c <- cs]
+
+-- Helper for SCC result
+sccs :: [[Int]] -> TTerm [[Int]]
+sccs cs = list [list (int32 <$> c) | c <- cs]
+
+-- | Show Either [[Int]] [Int] as "left([[1, 2]])" or "right([1, 2, 3])"
+showEitherResult :: TTerm (Either [[Int]] [Int]) -> TTerm String
+showEitherResult = Eithers.either_
+  (lambda "cs" (Strings.cat2 (string "left(") (Strings.cat2 (showIntListList (var "cs")) (string ")"))))
+  (lambda "xs" (Strings.cat2 (string "right(") (Strings.cat2 (showIntList (var "xs")) (string ")"))))
 
 -- | Show a list of Int32 as a string like "[1, 2, 3]"
 showIntList :: TTerm [Int] -> TTerm String
@@ -63,16 +81,6 @@ showIntList xs = ShowCore.list_ @@ reify Literals.showInt32 @@ xs
 -- | Show a list of lists of Int32 as a string like "[[1, 2], [3]]"
 showIntListList :: TTerm [[Int]] -> TTerm String
 showIntListList xs = ShowCore.list_ @@ reify showIntList @@ xs
-
--- | Show Either [[Int]] [Int] as "left([[1, 2]])" or "right([1, 2, 3])"
-showEitherResult :: TTerm (Either [[Int]] [Int]) -> TTerm String
-showEitherResult = Eithers.either_
-  (lambda "cs" (Strings.cat2 (string "left(") (Strings.cat2 (showIntListList (var "cs")) (string ")"))))
-  (lambda "xs" (Strings.cat2 (string "right(") (Strings.cat2 (showIntList (var "xs")) (string ")"))))
-
--- Helper to create adjacency list
-adj :: [(Int, [Int])] -> TTerm [(Int, [Int])]
-adj pairs = list [pair (int32 n) (list (int32 <$> deps)) | (n, deps) <- pairs]
 
 -- Universal sort test case
 sortCase :: String -> TTerm [(Int, [Int])] -> TTerm (Either [[Int]] [Int]) -> TTerm TestCaseWithMetadata
@@ -91,14 +99,6 @@ sortSCCCase cname adjList expected =
 -- Helper for Right result (sorted list)
 sorted :: [Int] -> TTerm (Either [[Int]] [Int])
 sorted xs = right $ list (int32 <$> xs)
-
--- Helper for Left result (cycles)
-cycles :: [[Int]] -> TTerm (Either [[Int]] [Int])
-cycles cs = left $ list [list (int32 <$> c) | c <- cs]
-
--- Helper for SCC result
-sccs :: [[Int]] -> TTerm [[Int]]
-sccs cs = list [list (int32 <$> c) | c <- cs]
 
 -- | Test cases for topological sort (without cycles)
 topologicalSortGroup :: TTerm TestGroup

@@ -21,13 +21,6 @@ ns = ModuleName "hydra.lib.math"
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModuleName ns
 
-sig :: TypeScheme -> TermSignature
-sig = typeSchemeToTermSignature
-
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -83,13 +76,39 @@ module_ = Module {
       primNoDef "tanh"      "The hyperbolic tangent of a floating-point number." f64To,
       primNoDef "truncate"  "Truncate a floating-point number toward zero, as a float." f64To]
 
+primNoDef :: String -> String -> TermSignature -> Definition
+primNoDef localName description s =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+
+sig :: TypeScheme -> TermSignature
+sig = typeSchemeToTermSignature
+
 -- Shared monomorphic signatures.
+
+f64Const :: TermSignature
+f64Const = sig $ TypeScheme [] Types.float64 Nothing
+
+f64To :: TermSignature
+f64To = sig $ TypeScheme [] (Types.float64 Types.~> Types.float64) Nothing
+
+f64To2 :: TermSignature
+f64To2 = sig $ TypeScheme [] (Types.float64 Types.~> Types.float64 Types.~> Types.float64) Nothing
+
+int32F32ToF32 :: TermSignature
+int32F32ToF32 = sig $ TypeScheme [] (Types.int32 Types.~> Types.float32 Types.~> Types.float32) Nothing
+
+int32F64ToF64 :: TermSignature
+int32F64ToF64 = sig $ TypeScheme [] (Types.int32 Types.~> Types.float64 Types.~> Types.float64) Nothing
 
 int32To :: TermSignature
 int32To = sig $ TypeScheme [] (Types.int32 Types.~> Types.int32) Nothing
 
 int32To2 :: TermSignature
 int32To2 = sig $ TypeScheme [] (Types.int32 Types.~> Types.int32 Types.~> Types.int32) Nothing
+
+int32To2List :: TermSignature
+int32To2List = sig $ TypeScheme []
+  (Types.int32 Types.~> Types.int32 Types.~> Types.list Types.int32) Nothing
 
 int32To2Maybe :: TermSignature
 int32To2Maybe = sig $ TypeScheme []
@@ -100,25 +119,6 @@ int32ToBool = sig $ TypeScheme [] (Types.int32 Types.~> Types.boolean) Nothing
 
 int32ToMaybe :: TermSignature
 int32ToMaybe = sig $ TypeScheme [] (Types.int32 Types.~> Types.optional Types.int32) Nothing
-
-int32To2List :: TermSignature
-int32To2List = sig $ TypeScheme []
-  (Types.int32 Types.~> Types.int32 Types.~> Types.list Types.int32) Nothing
-
-f64To :: TermSignature
-f64To = sig $ TypeScheme [] (Types.float64 Types.~> Types.float64) Nothing
-
-f64To2 :: TermSignature
-f64To2 = sig $ TypeScheme [] (Types.float64 Types.~> Types.float64 Types.~> Types.float64) Nothing
-
-f64Const :: TermSignature
-f64Const = sig $ TypeScheme [] Types.float64 Nothing
-
-int32F32ToF32 :: TermSignature
-int32F32ToF32 = sig $ TypeScheme [] (Types.int32 Types.~> Types.float32 Types.~> Types.float32) Nothing
-
-int32F64ToF64 :: TermSignature
-int32F64ToF64 = sig $ TypeScheme [] (Types.int32 Types.~> Types.float64 Types.~> Types.float64) Nothing
 
 -- Default implementations.
 

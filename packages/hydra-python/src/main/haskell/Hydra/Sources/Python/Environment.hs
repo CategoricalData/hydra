@@ -21,30 +21,6 @@ import qualified Hydra.Sources.Python.Syntax as Syntax
 ns :: ModuleName
 ns = ModuleName "hydra.python.environment"
 
-def :: String -> Type -> Binding
-def = datatype ns
-
-environment :: String -> Type
-environment = typeref ns
-
-syntax :: String -> Type
-syntax = typeref Syntax.ns
-
-core :: String -> Type
-core = typeref Core.ns
-
-graph :: String -> Type
-graph = typeref Graph.ns
-
-modul :: String -> Type
-modul = typeref Module.ns
-
-util :: String -> Type
-util = typeref Util.ns
-
-typing :: String -> Type
-typing = typeref Typing.ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -58,13 +34,32 @@ module_ = Module {
       pythonModuleMetadata,
       pyGraph]
 
--- | Target Python version for code generation.
-pythonVersion :: Binding
-pythonVersion = def "PythonVersion" $
-  doc "Target Python version for code generation" $
-  T.enum [
-    "python310",  -- Python 3.10+ compatible (e.g., for PyPy)
-    "python312"]  -- Python 3.12+ with PEP 695 type alias syntax
+core :: String -> Type
+core = typeref Core.ns
+
+def :: String -> Type -> Binding
+def = datatype ns
+
+environment :: String -> Type
+environment = typeref ns
+
+graph :: String -> Type
+graph = typeref Graph.ns
+
+modul :: String -> Type
+modul = typeref Module.ns
+
+-- | Combined graph and metadata state for Python code generation.
+pyGraph :: Binding
+pyGraph = def "PyGraph" $
+  doc "Combined graph and metadata state for Python code generation" $
+  T.record [
+    "graph">:
+      doc "The Hydra graph being processed" $
+      graph "Graph",
+    "metadata">:
+      doc "Accumulated module metadata" $
+      environment "PythonModuleMetadata"]
 
 -- | Environment for Python code generation.
 pythonEnvironment :: Binding
@@ -126,14 +121,19 @@ pythonModuleMetadata = def "PythonModuleMetadata" $
     "usesRight">: T.boolean,
     "usesTypeVar">: T.boolean]
 
--- | Combined graph and metadata state for Python code generation.
-pyGraph :: Binding
-pyGraph = def "PyGraph" $
-  doc "Combined graph and metadata state for Python code generation" $
-  T.record [
-    "graph">:
-      doc "The Hydra graph being processed" $
-      graph "Graph",
-    "metadata">:
-      doc "Accumulated module metadata" $
-      environment "PythonModuleMetadata"]
+-- | Target Python version for code generation.
+pythonVersion :: Binding
+pythonVersion = def "PythonVersion" $
+  doc "Target Python version for code generation" $
+  T.enum [
+    "python310",  -- Python 3.10+ compatible (e.g., for PyPy)
+    "python312"]  -- Python 3.12+ with PEP 695 type alias syntax
+
+syntax :: String -> Type
+syntax = typeref Syntax.ns
+
+typing :: String -> Type
+typing = typeref Typing.ns
+
+util :: String -> Type
+util = typeref Util.ns

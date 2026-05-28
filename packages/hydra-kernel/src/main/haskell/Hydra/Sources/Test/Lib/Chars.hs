@@ -35,6 +35,17 @@ module_ = Module {
 
 -- Test groups for hydra.lib.chars primitives
 
+allTests :: TTermDefinition TestGroup
+allTests = definitionInModule module_ "allTests" $
+    Phantoms.doc "Test cases for hydra.lib.chars primitives" $
+    supergroup "hydra.lib.chars primitives" [
+      charsIsAlphaNum,
+      charsIsLower,
+      charsIsSpace,
+      charsIsUpper,
+      charsToLower,
+      charsToUpper]
+
 charsIsAlphaNum :: TTerm TestGroup
 charsIsAlphaNum = subgroup "isAlphaNum" [
   test "letter" (ord 'a') true,
@@ -84,14 +95,3 @@ charsToUpper = subgroup "toUpper" [
   test "digit" (ord '5') (ord '5')]
   where
     test name x result = primCase name _chars_toUpper [int32 x] (int32 result)
-
-allTests :: TTermDefinition TestGroup
-allTests = definitionInModule module_ "allTests" $
-    Phantoms.doc "Test cases for hydra.lib.chars primitives" $
-    supergroup "hydra.lib.chars primitives" [
-      charsIsAlphaNum,
-      charsIsLower,
-      charsIsSpace,
-      charsIsUpper,
-      charsToLower,
-      charsToUpper]

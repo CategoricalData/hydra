@@ -19,14 +19,6 @@ import Hydra.Sources.Cypher.Functions
 ns :: ModuleName
 ns = ModuleName "hydra.cypher.features"
 
-cypherFeatures :: String -> Type
-cypherFeatures = typeref ns
-
-data FeatureSet = FeatureSet {
-  featureSetName :: String,
-  featureSetDescription :: String,
-  featureSetChildren :: [FeatureSet]}
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -56,6 +48,14 @@ module_ = Module {
       (first, _:rest) -> decapitalize first ++ capitalize (dotsToCamel rest)
     featureSetNameToTypeName name = capitalize name ++ "Features"
     featureSetDesc desc = capitalize desc
+
+cypherFeatures :: String -> Type
+cypherFeatures = typeref ns
+
+data FeatureSet = FeatureSet {
+  featureSetName :: String,
+  featureSetDescription :: String,
+  featureSetChildren :: [FeatureSet]}
 
 openCypherFeatures :: FeatureSet
 openCypherFeatures =  FeatureSet "Cypher"
@@ -217,23 +217,6 @@ openCypherFeatures =  FeatureSet "Cypher"
             -- Note: signatures are currently not used
             desc = L.intercalate "; " (cypherFunctionFormDescription <$> forms)
 
--- | An alternative model of (Open)Cypher features, flattened into an enumeration.
--- Usage:
---   writeProtobuf "/tmp/proto" [openCypherFeaturesEnumModule]
-openCypherFeaturesEnumModule :: Module
-openCypherFeaturesEnumModule = Module {
-                                 moduleName = ns2,
-                                 moduleDefinitions = (map toTypeDef definitions),
-                                 moduleDependencies = unqualifiedDep <$> [Core.ns],
-                                 moduleDescription = Just ("A model with an enumeration of (Open)Cypher features.")}
-  where
-    ns2 = ModuleName "hydra.org/opencypher/features"
-    def = datatype ns2
-    definitions = [
-      def "CypherFeature" $
-        doc "An enumeration of (Open)Cypher features."
-        openCypherFeaturesEnum]
-
 openCypherFeaturesEnum :: Type
 openCypherFeaturesEnum = T.union $ gatherFields True "" openCypherFeatures
   where
@@ -251,3 +234,20 @@ openCypherFeaturesEnum = T.union $ gatherFields True "" openCypherFeatures
       where
         removeLastN n xs = L.take (L.length xs - n) xs
         flen = L.length ("Function" :: String)
+
+-- | An alternative model of (Open)Cypher features, flattened into an enumeration.
+-- Usage:
+--   writeProtobuf "/tmp/proto" [openCypherFeaturesEnumModule]
+openCypherFeaturesEnumModule :: Module
+openCypherFeaturesEnumModule = Module {
+                                 moduleName = ns2,
+                                 moduleDefinitions = (map toTypeDef definitions),
+                                 moduleDependencies = unqualifiedDep <$> [Core.ns],
+                                 moduleDescription = Just ("A model with an enumeration of (Open)Cypher features.")}
+  where
+    ns2 = ModuleName "hydra.org/opencypher/features"
+    def = datatype ns2
+    definitions = [
+      def "CypherFeature" $
+        doc "An enumeration of (Open)Cypher features."
+        openCypherFeaturesEnum]

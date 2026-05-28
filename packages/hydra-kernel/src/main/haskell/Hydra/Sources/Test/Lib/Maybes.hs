@@ -42,21 +42,6 @@ module_ = Module {
     definitions = [Phantoms.toDefinition allTests]
 
 
-showInt32 :: TTerm (Int -> String)
-showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
-
-showBool :: TTerm (Bool -> String)
-showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
-
-showMaybeInt :: TTerm (Maybe Int -> String)
-showMaybeInt = Phantoms.lambda "mx" $ ShowCore.maybe_ @@ showInt32 @@ Phantoms.var "mx"
-
-showIntList :: TTerm ([Int] -> String)
-showIntList = Phantoms.lambda "xs" $ ShowCore.list_ @@ showInt32 @@ Phantoms.var "xs"
-
-showMaybeString :: TTerm (Maybe String -> String)
-showMaybeString = Phantoms.lambda "mx" $ ShowCore.maybe_ @@ (Phantoms.lambda "s" $ Literals.showString (Phantoms.var "s")) @@ Phantoms.var "mx"
-
 -- Phantom-typed helpers
 justInt :: Int -> TTerm (Maybe Int)
 justInt x = Phantoms.just (Phantoms.int32 x)
@@ -64,75 +49,40 @@ justInt x = Phantoms.just (Phantoms.int32 x)
 nothingInt :: TTerm (Maybe Int)
 nothingInt = Phantoms.nothing
 
+showBool :: TTerm (Bool -> String)
+showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
+
+showInt32 :: TTerm (Int -> String)
+showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
+
+showIntList :: TTerm ([Int] -> String)
+showIntList = Phantoms.lambda "xs" $ ShowCore.list_ @@ showInt32 @@ Phantoms.var "xs"
+
+showMaybeInt :: TTerm (Maybe Int -> String)
+showMaybeInt = Phantoms.lambda "mx" $ ShowCore.maybe_ @@ showInt32 @@ Phantoms.var "mx"
+
+showMaybeString :: TTerm (Maybe String -> String)
+showMaybeString = Phantoms.lambda "mx" $ ShowCore.maybe_ @@ (Phantoms.lambda "s" $ Literals.showString (Phantoms.var "s")) @@ Phantoms.var "mx"
+
 -- Test groups
 
-maybesIsJust :: TTerm TestGroup
-maybesIsJust = subgroup "isJust" [
-  test "just value" (justInt 42) True,
-  test "nothing" nothingInt False]
-  where
-    test name x result = evalPair name showBool
-      (Maybes.isJust x)
-      (Phantoms.boolean result)
-
-maybesIsNothing :: TTerm TestGroup
-maybesIsNothing = subgroup "isNothing" [
-  test "just value" (justInt 42) False,
-  test "nothing" nothingInt True]
-  where
-    test name x result = evalPair name showBool
-      (Maybes.isNothing x)
-      (Phantoms.boolean result)
-
-maybesFromMaybe :: TTerm TestGroup
-maybesFromMaybe = subgroup "fromMaybe" [
-  test "just value" 0 (justInt 42) 42,
-  test "nothing with default" 99 nothingInt 99]
-  where
-    test name def x result = evalPair name showInt32
-      (Maybes.fromMaybe (Phantoms.int32 def) x)
-      (Phantoms.int32 result)
-
-maybesMaybe :: TTerm TestGroup
-maybesMaybe = subgroup "maybe" [
-  test "just value applies function" 0 (justInt 5) 10,
-  test "nothing returns default" 99 nothingInt 99]
-  where
-    test name def x result = evalPair name showInt32
-      (Maybes.maybe (Phantoms.int32 def) (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2)) x)
-      (Phantoms.int32 result)
-
-maybesPure :: TTerm TestGroup
-maybesPure = subgroup "pure" [
-  testInt "wraps integer" 42 42,
-  testStr "wraps string" "hello" "hello"]
-  where
-    testInt name x expected = evalPair name showMaybeInt
-      (Maybes.pure (Phantoms.int32 x))
-      (justInt expected)
-    testStr name x expected = evalPair name showMaybeString
-      (Maybes.pure (Phantoms.string x))
-      (Phantoms.just (Phantoms.string expected))
-
-maybesCat :: TTerm TestGroup
-maybesCat = subgroup "cat" [
-  test "filters nothings" [justInt 1, nothingInt, justInt 2] [1, 2],
-  test "all justs" [justInt 1, justInt 2] [1, 2],
-  test "all nothings" [nothingInt, nothingInt] [],
-  test "empty list" ([] :: [TTerm (Maybe Int)]) []]
-  where
-    test name input expected = evalPair name showIntList
-      (Maybes.cat (Phantoms.list input))
-      (Phantoms.list (Phantoms.int32 <$> expected))
-
-maybesMap :: TTerm TestGroup
-maybesMap = subgroup "map" [
-  test "maps just value" (justInt 5) (justInt 10),
-  test "nothing unchanged" nothingInt nothingInt]
-  where
-    test name x expected = evalPair name showMaybeInt
-      (Maybes.map (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2)) x)
-      expected
+allTests :: TTermDefinition TestGroup
+allTests = definitionInModule module_ "allTests" $
+    Phantoms.doc "Test cases for hydra.lib.maybes primitives" $
+    supergroup "hydra.lib.maybes primitives" [
+      maybesApply,
+      maybesBind,
+      maybesCases,
+      maybesCat,
+      maybesCompose,
+      maybesFromMaybe,
+      maybesIsJust,
+      maybesIsNothing,
+      maybesMap,
+      maybesMapMaybe,
+      maybesMaybe,
+      maybesPure,
+      maybesToList]
 
 maybesApply :: TTerm TestGroup
 maybesApply = subgroup "apply" [
@@ -162,19 +112,16 @@ maybesCases = subgroup "cases" [
       (Maybes.cases opt (Phantoms.int32 def) (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
       (Phantoms.int32 expected)
 
-maybesMapMaybe :: TTerm TestGroup
-maybesMapMaybe = subgroup "mapMaybe" [
-  test "filter and transform" [1, 2, 3, 4, 5] [6, 8, 10],
-  test "empty result" [1, 2] [],
-  test "empty input" [] []]
+maybesCat :: TTerm TestGroup
+maybesCat = subgroup "cat" [
+  test "filters nothings" [justInt 1, nothingInt, justInt 2] [1, 2],
+  test "all justs" [justInt 1, justInt 2] [1, 2],
+  test "all nothings" [nothingInt, nothingInt] [],
+  test "empty list" ([] :: [TTerm (Maybe Int)]) []]
   where
-    filterFn = Phantoms.lambda "x" $
-      Logic.ifElse (Equality.gt (Phantoms.var "x") (Phantoms.int32 2))
-        (Phantoms.just (Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
-        (Phantoms.nothing :: TTerm (Maybe Int))
-    test name xs expected = evalPair name showIntList
-      (Maybes.mapMaybe filterFn (Phantoms.list $ Phantoms.int32 <$> xs))
-      (Phantoms.list $ Phantoms.int32 <$> expected)
+    test name input expected = evalPair name showIntList
+      (Maybes.cat (Phantoms.list input))
+      (Phantoms.list (Phantoms.int32 <$> expected))
 
 maybesCompose :: TTerm TestGroup
 maybesCompose = subgroup "compose" [
@@ -199,6 +146,77 @@ maybesCompose = subgroup "compose" [
       (Maybes.compose funF funG @@ Phantoms.int32 input)
       nothingInt
 
+maybesFromMaybe :: TTerm TestGroup
+maybesFromMaybe = subgroup "fromMaybe" [
+  test "just value" 0 (justInt 42) 42,
+  test "nothing with default" 99 nothingInt 99]
+  where
+    test name def x result = evalPair name showInt32
+      (Maybes.fromMaybe (Phantoms.int32 def) x)
+      (Phantoms.int32 result)
+
+maybesIsJust :: TTerm TestGroup
+maybesIsJust = subgroup "isJust" [
+  test "just value" (justInt 42) True,
+  test "nothing" nothingInt False]
+  where
+    test name x result = evalPair name showBool
+      (Maybes.isJust x)
+      (Phantoms.boolean result)
+
+maybesIsNothing :: TTerm TestGroup
+maybesIsNothing = subgroup "isNothing" [
+  test "just value" (justInt 42) False,
+  test "nothing" nothingInt True]
+  where
+    test name x result = evalPair name showBool
+      (Maybes.isNothing x)
+      (Phantoms.boolean result)
+
+maybesMap :: TTerm TestGroup
+maybesMap = subgroup "map" [
+  test "maps just value" (justInt 5) (justInt 10),
+  test "nothing unchanged" nothingInt nothingInt]
+  where
+    test name x expected = evalPair name showMaybeInt
+      (Maybes.map (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2)) x)
+      expected
+
+maybesMapMaybe :: TTerm TestGroup
+maybesMapMaybe = subgroup "mapMaybe" [
+  test "filter and transform" [1, 2, 3, 4, 5] [6, 8, 10],
+  test "empty result" [1, 2] [],
+  test "empty input" [] []]
+  where
+    filterFn = Phantoms.lambda "x" $
+      Logic.ifElse (Equality.gt (Phantoms.var "x") (Phantoms.int32 2))
+        (Phantoms.just (Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
+        (Phantoms.nothing :: TTerm (Maybe Int))
+    test name xs expected = evalPair name showIntList
+      (Maybes.mapMaybe filterFn (Phantoms.list $ Phantoms.int32 <$> xs))
+      (Phantoms.list $ Phantoms.int32 <$> expected)
+
+maybesMaybe :: TTerm TestGroup
+maybesMaybe = subgroup "maybe" [
+  test "just value applies function" 0 (justInt 5) 10,
+  test "nothing returns default" 99 nothingInt 99]
+  where
+    test name def x result = evalPair name showInt32
+      (Maybes.maybe (Phantoms.int32 def) (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2)) x)
+      (Phantoms.int32 result)
+
+maybesPure :: TTerm TestGroup
+maybesPure = subgroup "pure" [
+  testInt "wraps integer" 42 42,
+  testStr "wraps string" "hello" "hello"]
+  where
+    testInt name x expected = evalPair name showMaybeInt
+      (Maybes.pure (Phantoms.int32 x))
+      (justInt expected)
+    testStr name x expected = evalPair name showMaybeString
+      (Maybes.pure (Phantoms.string x))
+      (Phantoms.just (Phantoms.string expected))
+
 maybesToList :: TTerm TestGroup
 maybesToList = subgroup "toList" [
   test "just value" (justInt 42) [42],
@@ -207,21 +225,3 @@ maybesToList = subgroup "toList" [
     test name x expected = evalPair name showIntList
       (Maybes.toList x)
       (Phantoms.list $ Phantoms.int32 <$> expected)
-
-allTests :: TTermDefinition TestGroup
-allTests = definitionInModule module_ "allTests" $
-    Phantoms.doc "Test cases for hydra.lib.maybes primitives" $
-    supergroup "hydra.lib.maybes primitives" [
-      maybesApply,
-      maybesBind,
-      maybesCases,
-      maybesCat,
-      maybesCompose,
-      maybesFromMaybe,
-      maybesIsJust,
-      maybesIsNothing,
-      maybesMap,
-      maybesMapMaybe,
-      maybesMaybe,
-      maybesPure,
-      maybesToList]

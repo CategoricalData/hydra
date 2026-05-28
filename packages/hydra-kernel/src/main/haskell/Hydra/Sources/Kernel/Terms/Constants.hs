@@ -92,6 +92,11 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
+debugInference :: TTermDefinition Bool
+debugInference = define "debugInference" $
+  doc "Disable type checking by default, for better performance" $
+  true
+
 defineAnnotationKey :: String -> Maybe String -> TTermDefinition Name
 defineAnnotationKey name mdesc = define ("key" <> capitalize name) $ case mdesc of
     Nothing -> def
@@ -100,11 +105,6 @@ defineAnnotationKey name mdesc = define ("key" <> capitalize name) $ case mdesc 
     def = wrap _Name $ string name
     capitalize [] = []
     capitalize (c:cs) = Char.toUpper c : cs
-
-debugInference :: TTermDefinition Bool
-debugInference = define "debugInference" $
-  doc "Disable type checking by default, for better performance" $
-  true
 
 ignoredVariable :: TTermDefinition String
 ignoredVariable = define "ignoredVariable" $

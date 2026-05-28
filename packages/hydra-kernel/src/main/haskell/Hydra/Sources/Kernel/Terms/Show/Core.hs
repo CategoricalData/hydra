@@ -166,19 +166,19 @@ fields = define "fields" $
     Strings.intercalate (string ", ") (var "fieldStrs"),
     string "}"]
 
-floatValue :: TTermDefinition (FloatValue -> String)
-floatValue = define "float" $
-  doc "Show a float value as a string" $
-  "fv" ~> cases _FloatValue (var "fv") Nothing [
-    _FloatValue_float32>>: "v" ~> Literals.showFloat32 (var "v") ++ (string ":float32"),
-    _FloatValue_float64>>: "v" ~> Literals.showFloat64 (var "v") ++ (string ":float64")]
-
 floatType :: TTermDefinition (FloatType -> String)
 floatType = define "floatType" $
   doc "Show a float type as a string" $
   "ft" ~> cases _FloatType (var "ft") Nothing [
     _FloatType_float32>>: constant $ string "float32",
     _FloatType_float64>>: constant $ string "float64"]
+
+floatValue :: TTermDefinition (FloatValue -> String)
+floatValue = define "float" $
+  doc "Show a float value as a string" $
+  "fv" ~> cases _FloatValue (var "fv") Nothing [
+    _FloatValue_float32>>: "v" ~> Literals.showFloat32 (var "v") ++ (string ":float32"),
+    _FloatValue_float64>>: "v" ~> Literals.showFloat64 (var "v") ++ (string ":float64")]
 
 injection :: TTermDefinition (Injection -> String)
 injection = define "injection" $
@@ -191,20 +191,6 @@ injection = define "injection" $
     unwrap _Name @@ var "tname",
     string ")",
     fields @@ (list [var "f"])]
-
-integerValue :: TTermDefinition (IntegerValue -> String)
-integerValue = define "integer" $
-  doc "Show an integer value as a string" $
-  "iv" ~> cases _IntegerValue (var "iv") Nothing [
-    _IntegerValue_bigint>>: "v" ~> Literals.showBigint (var "v") ++ (string ":bigint"),
-    _IntegerValue_int8>>: "v" ~> Literals.showInt8 (var "v") ++ (string ":int8"),
-    _IntegerValue_int16>>: "v" ~> Literals.showInt16 (var "v") ++ (string ":int16"),
-    _IntegerValue_int32>>: "v" ~> Literals.showInt32 (var "v") ++ (string ":int32"),
-    _IntegerValue_int64>>: "v" ~> Literals.showInt64 (var "v") ++ (string ":int64"),
-    _IntegerValue_uint8>>: "v" ~> Literals.showUint8 (var "v") ++ (string ":uint8"),
-    _IntegerValue_uint16>>: "v" ~> Literals.showUint16 (var "v") ++ (string ":uint16"),
-    _IntegerValue_uint32>>: "v" ~> Literals.showUint32 (var "v") ++ (string ":uint32"),
-    _IntegerValue_uint64>>: "v" ~> Literals.showUint64 (var "v") ++ (string ":uint64")]
 
 integerType :: TTermDefinition (IntegerType -> String)
 integerType = define "integerType" $
@@ -219,6 +205,20 @@ integerType = define "integerType" $
     _IntegerType_uint16>>: constant $ string "uint16",
     _IntegerType_uint32>>: constant $ string "uint32",
     _IntegerType_uint64>>: constant $ string "uint64"]
+
+integerValue :: TTermDefinition (IntegerValue -> String)
+integerValue = define "integer" $
+  doc "Show an integer value as a string" $
+  "iv" ~> cases _IntegerValue (var "iv") Nothing [
+    _IntegerValue_bigint>>: "v" ~> Literals.showBigint (var "v") ++ (string ":bigint"),
+    _IntegerValue_int8>>: "v" ~> Literals.showInt8 (var "v") ++ (string ":int8"),
+    _IntegerValue_int16>>: "v" ~> Literals.showInt16 (var "v") ++ (string ":int16"),
+    _IntegerValue_int32>>: "v" ~> Literals.showInt32 (var "v") ++ (string ":int32"),
+    _IntegerValue_int64>>: "v" ~> Literals.showInt64 (var "v") ++ (string ":int64"),
+    _IntegerValue_uint8>>: "v" ~> Literals.showUint8 (var "v") ++ (string ":uint8"),
+    _IntegerValue_uint16>>: "v" ~> Literals.showUint16 (var "v") ++ (string ":uint16"),
+    _IntegerValue_uint32>>: "v" ~> Literals.showUint32 (var "v") ++ (string ":uint32"),
+    _IntegerValue_uint64>>: "v" ~> Literals.showUint64 (var "v") ++ (string ":uint64")]
 
 lambda :: TTermDefinition (Lambda -> String)
 lambda = define "lambda" $
@@ -449,6 +449,42 @@ term = define "term" $
         term @@ var "term1",
         string "}"]]
 
+typeScheme :: TTermDefinition (TypeScheme -> String)
+typeScheme = define "typeScheme" $
+  doc "Show a type scheme as a string" $
+  "ts" ~>
+  "vars" <~ Core.typeSchemeVariables (var "ts") $
+  "body" <~ Core.typeSchemeBody (var "ts") $
+  "varNames" <~ Lists.map (unwrap _Name) (var "vars") $
+  "fa" <~ Logic.ifElse (Lists.null $ var "vars")
+    (string "")
+    (Strings.cat $ list [
+      string "forall ",
+      Strings.intercalate (string ",") (var "varNames"),
+      string ". "]) $
+  "toConstraintPair" <~ ("v" ~> "c" ~> Strings.cat $ list [
+    match _TypeClassConstraint Nothing [
+      _TypeClassConstraint_simple>>: "n" ~> Core.unName (var "n")] @@ (var "c"),
+    string " ",
+    Core.unName (var "v")]) $
+  "toConstraintPairs" <~ ("p" ~> Lists.map
+    (var "toConstraintPair" @@ (Pairs.first $ var "p")) $
+    Core.typeVariableMetadataClasses $ Pairs.second $ var "p") $
+  "tc" <~ optCases (Core.typeSchemeConstraints (var "ts"))
+    (list ([] :: [TTerm String]))
+    ("m" ~> Lists.concat $ Lists.map (var "toConstraintPairs") $ Maps.toList $ var "m") $
+  Strings.cat $ list [
+    string "(",
+    var "fa",
+    Logic.ifElse (Lists.null $ var "tc")
+      (string "")
+      (Strings.cat $ list [
+        string "(",
+        Strings.intercalate (string ", ") (var "tc"),
+        string ") => "]),
+    type_ @@ var "body",
+    string ")"]
+
 type_ :: TTermDefinition (Type -> String)
 type_ = define "type" $
   doc "Show a type as a string" $
@@ -544,39 +580,3 @@ type_ = define "type" $
     _Type_void>>: constant $ string "void",
     _Type_wrap>>: "wt" ~>
       Strings.cat $ list [string "wrap(", type_ @@ var "wt", string ")"]]
-
-typeScheme :: TTermDefinition (TypeScheme -> String)
-typeScheme = define "typeScheme" $
-  doc "Show a type scheme as a string" $
-  "ts" ~>
-  "vars" <~ Core.typeSchemeVariables (var "ts") $
-  "body" <~ Core.typeSchemeBody (var "ts") $
-  "varNames" <~ Lists.map (unwrap _Name) (var "vars") $
-  "fa" <~ Logic.ifElse (Lists.null $ var "vars")
-    (string "")
-    (Strings.cat $ list [
-      string "forall ",
-      Strings.intercalate (string ",") (var "varNames"),
-      string ". "]) $
-  "toConstraintPair" <~ ("v" ~> "c" ~> Strings.cat $ list [
-    match _TypeClassConstraint Nothing [
-      _TypeClassConstraint_simple>>: "n" ~> Core.unName (var "n")] @@ (var "c"),
-    string " ",
-    Core.unName (var "v")]) $
-  "toConstraintPairs" <~ ("p" ~> Lists.map
-    (var "toConstraintPair" @@ (Pairs.first $ var "p")) $
-    Core.typeVariableMetadataClasses $ Pairs.second $ var "p") $
-  "tc" <~ optCases (Core.typeSchemeConstraints (var "ts"))
-    (list ([] :: [TTerm String]))
-    ("m" ~> Lists.concat $ Lists.map (var "toConstraintPairs") $ Maps.toList $ var "m") $
-  Strings.cat $ list [
-    string "(",
-    var "fa",
-    Logic.ifElse (Lists.null $ var "tc")
-      (string "")
-      (Strings.cat $ list [
-        string "(",
-        Strings.intercalate (string ", ") (var "tc"),
-        string ") => "]),
-    type_ @@ var "body",
-    string ")"]
