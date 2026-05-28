@@ -8828,7 +8828,7 @@
         "name": "hydra.scala.coder.encodeUntypeApplicationTerm",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
           "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.scala.syntax.Data"}}}},
@@ -8860,7 +8860,7 @@
                                           "application": {
                                             "argument": {"variable": "cx"},
                                             "function": {
-                                              "typeApplication": {"body": {"variable": "hydra.scala.coder.encodeTerm"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                              "typeApplication": {"body": {"variable": "hydra.scala.coder.encodeTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                 "domain": {"variable": "hydra.typing.InferenceResult"},
                                 "parameter": "result"}},
                             "function": {
@@ -8883,7 +8883,7 @@
                         "parameter": "term"}},
                     "domain": {"variable": "hydra.graph.Graph"},
                     "parameter": "g"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
@@ -10550,7 +10550,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

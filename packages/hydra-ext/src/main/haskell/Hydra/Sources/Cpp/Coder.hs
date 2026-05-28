@@ -20,7 +20,6 @@ import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Coders                     as Coders
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Util                       as Util
@@ -504,12 +503,12 @@ encodeLiteralType = def "encodeLiteralType" $
           inject Cpp._BasicType Cpp._BasicType_string unit]
 
 -- | Encode a Hydra type as a C++ type expression
-encodeType :: TTermDefinition (Context -> Graph -> Type -> Either Error Cpp.TypeExpression)
+encodeType :: TTermDefinition (InferenceContext -> Graph -> Type -> Either Error Cpp.TypeExpression)
 encodeType = def "encodeType" $
   "cx" ~> "g" ~> lambda "typ" $
     "t" <~ (Strip.deannotateType @@ var "typ") $
     cases _Type (var "t") (Just $
-      Ctx.failInContext (Error.errorOther $ Error.otherError $ string "Unsupported type") (var "cx"))
+      left (Error.errorOther $ Error.otherError $ string "Unsupported type"))
     [_Type_application>>: lambda "at" $
        encodeApplicationType @@ var "cx" @@ var "g" @@ var "at",
      _Type_either>>: lambda "et" $
@@ -537,28 +536,28 @@ encodeType = def "encodeType" $
        "st" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.pairTypeSecond (var "pt")) $
          right (toConstType @@ (createTemplateType @@ string "std::pair" @@ list [var "ft", var "st"])),
      _Type_record>>: lambda "rt" $
-       Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous record type")) (var "cx"),
+       left (Error.errorOther $ Error.otherError (string "unexpected anonymous record type")),
      _Type_set>>: lambda "et" $
        Eithers.map (lambda "enc" $ toConstType @@ (createTemplateType @@ string "std::set" @@ list [var "enc"]))
          (encodeType @@ var "cx" @@ var "g" @@ var "et"),
      _Type_union>>: lambda "rt" $
-       Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous union type")) (var "cx"),
+       left (Error.errorOther $ Error.otherError (string "unexpected anonymous union type")),
      _Type_variable>>: lambda "name" $
        right (inject Cpp._TypeExpression Cpp._TypeExpression_basic $
          inject Cpp._BasicType Cpp._BasicType_named (sanitizeCppName @@ Core.unName (var "name"))),
      _Type_wrap>>: lambda "wt" $
-       Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous wrapped type")) (var "cx"),
+       left (Error.errorOther $ Error.otherError (string "unexpected anonymous wrapped type")),
      _Type_unit>>: constant $
        right (createTemplateType @@ string "std::tuple" @@ list ([] :: [TTerm Cpp.TypeExpression]))]
 
 -- | Encode a forall type (strip the quantifier)
-encodeForallType :: TTermDefinition (Context -> Graph -> ForallType -> Either Error Cpp.TypeExpression)
+encodeForallType :: TTermDefinition (InferenceContext -> Graph -> ForallType -> Either Error Cpp.TypeExpression)
 encodeForallType = def "encodeForallType" $
   "cx" ~> "g" ~> lambda "lt" $
     encodeType @@ var "cx" @@ var "g" @@ Core.forallTypeBody (var "lt")
 
 -- | Encode a function type as std::function<R(Args...)>
-encodeFunctionType :: TTermDefinition (Context -> Graph -> FunctionType -> Either Error Cpp.TypeExpression)
+encodeFunctionType :: TTermDefinition (InferenceContext -> Graph -> FunctionType -> Either Error Cpp.TypeExpression)
 encodeFunctionType = def "encodeFunctionType" $
   "cx" ~> "g" ~> lambda "ft" $
     "dom" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeDomain (var "ft")) $
@@ -574,7 +573,7 @@ encodeFunctionType = def "encodeFunctionType" $
               Cpp._Parameter_defaultValue>>: nothing]]])
 
 -- | Encode a type application (template instantiation)
-encodeApplicationType :: TTermDefinition (Context -> Graph -> ApplicationType -> Either Error Cpp.TypeExpression)
+encodeApplicationType :: TTermDefinition (InferenceContext -> Graph -> ApplicationType -> Either Error Cpp.TypeExpression)
 encodeApplicationType = def "encodeApplicationType" $
   "cx" ~> "g" ~> lambda "at" $
     "body" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.applicationTypeFunction (var "at")) $
@@ -582,7 +581,7 @@ encodeApplicationType = def "encodeApplicationType" $
       right (createTemplateType @@ string "TODO_template" @@ list [var "body", var "arg"])
 
 -- | Encode a type as a typedef / using declaration
-encodeTypeAlias :: TTermDefinition (Context -> Graph -> Name -> Type -> Maybe String -> Either Error Cpp.Declaration)
+encodeTypeAlias :: TTermDefinition (InferenceContext -> Graph -> Name -> Type -> Maybe String -> Either Error Cpp.Declaration)
 encodeTypeAlias = def "encodeTypeAlias" $
   "cx" ~> "g" ~> lambda "name" $ lambda "typ" $ lambda "comment" $
     "cppType" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
@@ -593,12 +592,12 @@ encodeTypeAlias = def "encodeTypeAlias" $
           Cpp._TypedefDeclaration_isUsing>>: boolean True])
 
 -- | Encode a top-level type definition (dispatches to record/union/wrap)
-encodeTypeDefinition :: TTermDefinition (Context -> Graph -> Name -> Type -> Either Error [Cpp.Declaration])
+encodeTypeDefinition :: TTermDefinition (InferenceContext -> Graph -> Name -> Type -> Either Error [Cpp.Declaration])
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "name" $ lambda "typ" $
     "t" <~ (Strip.deannotateType @@ var "typ") $
     cases _Type (var "t") (Just $
-      Ctx.failInContext (Error.errorOther $ Error.otherError $ string "unexpected type in definition: " ++ (ShowCore.type_ @@ var "typ")) (var "cx"))
+      left (Error.errorOther $ Error.otherError $ string "unexpected type in definition: " ++ (ShowCore.type_ @@ var "typ")))
     [_Type_forall>>: lambda "fa" $
        encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "name" @@ Core.forallTypeBody (var "fa"),
      _Type_record>>: lambda "rt" $
@@ -614,7 +613,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
 -- ============================================================================
 
 -- | Encode a field type as a VariableDeclaration
-encodeFieldType :: TTermDefinition (Bool -> FieldType -> Context -> Graph -> Either Error Cpp.VariableDeclaration)
+encodeFieldType :: TTermDefinition (Bool -> FieldType -> InferenceContext -> Graph -> Either Error Cpp.VariableDeclaration)
 encodeFieldType = def "encodeFieldType" $
   lambda "isParameter" $ lambda "ft" $ "cx" ~> lambda "g" $
     "fname" <~ Core.fieldTypeName (var "ft") $
@@ -627,7 +626,7 @@ encodeFieldType = def "encodeFieldType" $
         Cpp._VariableDeclaration_isAuto>>: boolean False])
 
 -- | Encode a record type as a C++ class with fields and constructor
-encodeRecordType :: TTermDefinition (Context -> Graph -> Name -> [FieldType] -> Maybe String -> Either Error [Cpp.Declaration])
+encodeRecordType :: TTermDefinition (InferenceContext -> Graph -> Name -> [FieldType] -> Maybe String -> Either Error [Cpp.Declaration])
 encodeRecordType = def "encodeRecordType" $
   "cx" ~> "g" ~> lambda "name" $ lambda "rt" $ lambda "comment" $
     "cppFields" <<~ (Eithers.mapList (lambda "f" $ encodeFieldType @@ boolean False @@ var "f" @@ var "cx" @@ var "g") (var "rt")) $
@@ -668,7 +667,7 @@ encodeRecordType = def "encodeRecordType" $
       in right (list [classDecl, ltOp])
 
 -- | Encode a union type (dispatches to enum or variant based on content)
-encodeUnionType :: TTermDefinition (Context -> Graph -> Name -> [FieldType] -> Maybe String -> Either Error [Cpp.Declaration])
+encodeUnionType :: TTermDefinition (InferenceContext -> Graph -> Name -> [FieldType] -> Maybe String -> Either Error [Cpp.Declaration])
 encodeUnionType = def "encodeUnionType" $
   "cx" ~> "g" ~> lambda "name" $ lambda "rt" $ lambda "comment" $
     Logic.ifElse (Predicates.isEnumRowType @@ var "rt")
@@ -676,7 +675,7 @@ encodeUnionType = def "encodeUnionType" $
       (encodeVariantType @@ var "cx" @@ var "g" @@ var "name" @@ var "rt" @@ var "comment")
 
 -- | Encode an enum type as a C++ enum class
-encodeEnumType :: TTermDefinition (Context -> Graph -> Name -> [FieldType] -> Maybe String -> Either Error [Cpp.Declaration])
+encodeEnumType :: TTermDefinition (InferenceContext -> Graph -> Name -> [FieldType] -> Maybe String -> Either Error [Cpp.Declaration])
 encodeEnumType = def "encodeEnumType" $
   "cx" ~> "g" ~> lambda "name" $ lambda "tfields" $ lambda "comment" $
     right (list [
@@ -693,7 +692,7 @@ encodeEnumType = def "encodeEnumType" $
           (var "tfields"))))])
 
 -- | Encode a variant (tagged union) type as a class hierarchy with visitor pattern
-encodeVariantType :: TTermDefinition (Context -> Graph -> Name -> [FieldType] -> Maybe String -> Either Error [Cpp.Declaration])
+encodeVariantType :: TTermDefinition (InferenceContext -> Graph -> Name -> [FieldType] -> Maybe String -> Either Error [Cpp.Declaration])
 encodeVariantType = def "encodeVariantType" $
   "cx" ~> "g" ~> lambda "name" $ lambda "variants" $ lambda "comment" $
     "variantClasses" <<~ (Eithers.mapList
@@ -708,7 +707,7 @@ encodeVariantType = def "encodeVariantType" $
         list [createAcceptImplementation @@ var "name" @@ var "variants"]]))
 
 -- | Encode a wrapped type as a single-field record
-encodeWrappedType :: TTermDefinition (Context -> Graph -> Name -> Type -> Maybe String -> Either Error [Cpp.Declaration])
+encodeWrappedType :: TTermDefinition (InferenceContext -> Graph -> Name -> Type -> Maybe String -> Either Error [Cpp.Declaration])
 encodeWrappedType = def "encodeWrappedType" $
   "cx" ~> "g" ~> lambda "name" $ lambda "typ" $ lambda "comment" $
     encodeRecordType @@ var "cx" @@ var "g" @@ var "name"
@@ -892,7 +891,7 @@ createUnionBaseClass = def "createUnionBaseClass" $
                     Cpp._FunctionDeclaration_body>>: inject Cpp._FunctionBody Cpp._FunctionBody_declaration unit]]])))
 
 -- | Create a variant subclass (one branch of a union type)
-createVariantClass :: TTermDefinition (Context -> Graph -> Name -> Name -> FieldType -> Either Error Cpp.Declaration)
+createVariantClass :: TTermDefinition (InferenceContext -> Graph -> Name -> Name -> FieldType -> Either Error Cpp.Declaration)
 createVariantClass = def "createVariantClass" $
   "cx" ~> "g" ~> lambda "tname" $ lambda "parentClass" $ lambda "ft" $
     "fname" <~ Core.fieldTypeName (var "ft") $
@@ -1189,7 +1188,7 @@ isTemplateType = def "isTemplateType" $
 -- ============================================================================
 
 -- | Generate a single type header file
-generateTypeFile :: TTermDefinition (ModuleName -> TypeDefinition -> Context -> Graph -> Either Error (FilePath, String))
+generateTypeFile :: TTermDefinition (ModuleName -> TypeDefinition -> InferenceContext -> Graph -> Either Error (FilePath, String))
 generateTypeFile = def "generateTypeFile" $
   lambda "ns" $ lambda "def_" $ "cx" ~> lambda "g" $
     "name" <~ Packaging.typeDefinitionName (var "def_") $
@@ -1200,7 +1199,7 @@ generateTypeFile = def "generateTypeFile" $
         @@ list [namespaceDecl @@ var "ns" @@ var "decls"])
 
 -- | Generate all type header files for a module (fwd file + individual class files)
-generateTypeFiles :: TTermDefinition (ModuleName -> [TypeDefinition] -> Context -> Graph -> Either Error [(FilePath, String)])
+generateTypeFiles :: TTermDefinition (ModuleName -> [TypeDefinition] -> InferenceContext -> Graph -> Either Error [(FilePath, String)])
 generateTypeFiles = def "generateTypeFiles" $
   lambda "ns" $ lambda "defs" $ "cx" ~> lambda "g" $
     "classFiles" <<~ (Eithers.mapList
@@ -1209,7 +1208,7 @@ generateTypeFiles = def "generateTypeFiles" $
       right (var "classFiles")
 
 -- | Convert a module to C++ code files (entry point)
-moduleToCpp :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
+moduleToCpp :: TTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
 moduleToCpp = def "moduleToCpp" $
   lambda "mod" $ lambda "defs" $ "cx" ~> lambda "g" $
     "ns" <~ Packaging.moduleName (var "mod") $

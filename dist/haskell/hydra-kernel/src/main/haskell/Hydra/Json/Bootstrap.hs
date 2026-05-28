@@ -2,7 +2,17 @@
 -- | A module which provides a minimal typing environment for decoding other modules from JSON. This avoids certain problems with generating entire source modules into target languages like Java, which is subject to method size limits for large modules like hydra.core.
 
 module Hydra.Json.Bootstrap where
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -154,7 +164,7 @@ typesByName =
                   Core.fieldTypeName = (Core.Name "encode"),
                   Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                     Core.annotatedTypeBody = (Core.TypeFunction (Core.FunctionType {
-                      Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.context.Context")),
+                      Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.typing.InferenceContext")),
                       Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                         Core.functionTypeDomain = (Core.TypeVariable (Core.Name "v1")),
                         Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
@@ -163,12 +173,12 @@ typesByName =
                     Core.annotatedTypeAnnotation = (M.fromList [
                       (
                         Core.Name "description",
-                        (Core.TermLiteral (Core.LiteralString "A function which encodes source values as target values in a given context")))])}))},
+                        (Core.TermLiteral (Core.LiteralString "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing")))])}))},
                 Core.FieldType {
                   Core.fieldTypeName = (Core.Name "decode"),
                   Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                     Core.annotatedTypeBody = (Core.TypeFunction (Core.FunctionType {
-                      Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.context.Context")),
+                      Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.typing.InferenceContext")),
                       Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                         Core.functionTypeDomain = (Core.TypeVariable (Core.Name "v2")),
                         Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
@@ -177,7 +187,7 @@ typesByName =
                     Core.annotatedTypeAnnotation = (M.fromList [
                       (
                         Core.Name "description",
-                        (Core.TermLiteral (Core.LiteralString "A function which decodes target values as source values in a given context")))])}))}])}))})),
+                        (Core.TermLiteral (Core.LiteralString "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing")))])}))}])}))})),
           Core.annotatedTypeAnnotation = (M.fromList [
             (
               Core.Name "description",
@@ -326,38 +336,6 @@ typesByName =
             (
               Core.Name "description",
               (Core.TermLiteral (Core.LiteralString "A function which maps a Hydra type to a symmetric adapter between types and terms")))])}))),
-      (
-        Core.Name "hydra.context.Context",
-        (Core.TypeAnnotated (Core.AnnotatedType {
-          Core.annotatedTypeBody = (Core.TypeRecord [
-            Core.FieldType {
-              Core.fieldTypeName = (Core.Name "trace"),
-              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString)),
-                Core.annotatedTypeAnnotation = (M.fromList [
-                  (
-                    Core.Name "description",
-                    (Core.TermLiteral (Core.LiteralString "A stack of context labels describing the current execution path")))])}))},
-            Core.FieldType {
-              Core.fieldTypeName = (Core.Name "messages"),
-              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString)),
-                Core.annotatedTypeAnnotation = (M.fromList [
-                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A log of warnings and/or info messages")))])}))},
-            Core.FieldType {
-              Core.fieldTypeName = (Core.Name "other"),
-              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMap (Core.MapType {
-                  Core.mapTypeKeys = (Core.TypeVariable (Core.Name "hydra.core.Name")),
-                  Core.mapTypeValues = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-                Core.annotatedTypeAnnotation = (M.fromList [
-                  (
-                    Core.Name "description",
-                    (Core.TermLiteral (Core.LiteralString "A map of string keys to arbitrary terms as values, for application-specific use")))])}))}]),
-          Core.annotatedTypeAnnotation = (M.fromList [
-            (
-              Core.Name "description",
-              (Core.TermLiteral (Core.LiteralString "An execution context for tracing and diagnostics, threaded through function calls")))])}))),
       (
         Core.Name "hydra.core.AnnotatedTerm",
         (Core.TypeAnnotated (Core.AnnotatedType {
@@ -1866,7 +1844,7 @@ typesByName =
               Core.fieldTypeName = (Core.Name "implementation"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = (Core.TypeFunction (Core.FunctionType {
-                  Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.context.Context")),
+                  Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.typing.InferenceContext")),
                   Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
                     Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
@@ -1877,7 +1855,7 @@ typesByName =
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (
                     Core.Name "description",
-                    (Core.TermLiteral (Core.LiteralString "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting.")))])}))}]),
+                    (Core.TermLiteral (Core.LiteralString "A concrete implementation of the primitive function. The InferenceContext and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the InferenceContext supports subterm-path tracing for error reporting.")))])}))}]),
           Core.annotatedTypeAnnotation = (M.fromList [
             (
               Core.Name "description",
@@ -1898,7 +1876,7 @@ typesByName =
                 Core.fieldTypeName = (Core.Name "encode"),
                 Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                   Core.annotatedTypeBody = (Core.TypeFunction (Core.FunctionType {
-                    Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.context.Context")),
+                    Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.typing.InferenceContext")),
                     Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
                       Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
@@ -1912,7 +1890,7 @@ typesByName =
                 Core.fieldTypeName = (Core.Name "decode"),
                 Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                   Core.annotatedTypeBody = (Core.TypeFunction (Core.FunctionType {
-                    Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.context.Context")),
+                    Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.typing.InferenceContext")),
                     Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                       Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
@@ -2311,6 +2289,30 @@ typesByName =
               Core.Name "description",
               (Core.TermLiteral (Core.LiteralString "A structured representation of a function term's components, replacing ad-hoc tuples. This captures all the information extracted from peeling lambdas, type lambdas, lets, and type applications from a term.")))])}))),
       (
+        Core.Name "hydra.typing.InferenceContext",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeRecord [
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "freshTypeVariableCount"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (
+                    Core.Name "description",
+                    (Core.TermLiteral (Core.LiteralString "Counter used to generate distinct fresh type variables during inference")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "trace"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.paths.SubtermStep"))),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (
+                    Core.Name "description",
+                    (Core.TermLiteral (Core.LiteralString "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error.")))])}))}]),
+          Core.annotatedTypeAnnotation = (M.fromList [
+            (
+              Core.Name "description",
+              (Core.TermLiteral (Core.LiteralString "State threaded through type inference: the fresh type variable counter and the current subterm-path trace.")))])}))),
+      (
         Core.Name "hydra.typing.InferenceResult",
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeRecord [
@@ -2345,11 +2347,11 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "context"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.context.Context")),
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.typing.InferenceContext")),
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (
                     Core.Name "description",
-                    (Core.TermLiteral (Core.LiteralString "The updated context after inference (carries fresh variable state)")))])}))}]),
+                    (Core.TermLiteral (Core.LiteralString "The updated InferenceContext after inference (carries fresh-variable counter and trace)")))])}))}]),
           Core.annotatedTypeAnnotation = (M.fromList [
             (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The result of applying inference rules to a term.")))])}))),
       (

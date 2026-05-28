@@ -18,7 +18,7 @@ import qualified Data.Map                     as M
 -- Additional imports specific to this file
 import Hydra.Testing
 import Hydra.Sources.Libraries
-import qualified Hydra.Lib.Math as Math
+import qualified Hydra.Haskell.Lib.Math as Math
 
 
 optionalInt32 :: Maybe Int -> TTerm Term

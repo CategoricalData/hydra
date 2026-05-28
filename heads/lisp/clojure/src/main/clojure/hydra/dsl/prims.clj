@@ -1,7 +1,7 @@
 (ns hydra.dsl.prims
   (:require [hydra.core :refer :all]
             [hydra.graph :refer :all]
-            [hydra.context :refer :all]
+            [hydra.typing :refer :all]
             [hydra.errors :refer :all]
             [hydra.packaging :refer :all]
             [hydra.scoping :refer [hydra_scoping_type_scheme_to_term_signature]])
