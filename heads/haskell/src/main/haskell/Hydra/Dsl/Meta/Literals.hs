@@ -49,9 +49,6 @@ float64 = TTerm . Terms.float64
 int :: Int -> TTerm Int
 int = int32
 
-int8 :: Int8 -> TTerm Int8
-int8 = TTerm . Terms.int8
-
 int16 :: Int16 -> TTerm Int16
 int16 = TTerm . Terms.int16
 
@@ -61,14 +58,14 @@ int32 = TTerm . Terms.int32
 int64 :: Int64 -> TTerm Int64
 int64 = TTerm . Terms.int64
 
+int8 :: Int8 -> TTerm Int8
+int8 = TTerm . Terms.int8
+
 string :: String -> TTerm String
 string = TTerm . Terms.string
 
 true :: TTerm Bool
 true = bool True
-
-uint8 :: Int16 -> TTerm Int16
-uint8 = TTerm . Terms.uint8
 
 uint16 :: Int -> TTerm Int
 uint16 = TTerm . Terms.uint16
@@ -78,3 +75,6 @@ uint32 = TTerm . Terms.uint32
 
 uint64 :: Integer -> TTerm Integer
 uint64 = TTerm . Terms.uint64
+
+uint8 :: Int16 -> TTerm Int16
+uint8 = TTerm . Terms.uint8

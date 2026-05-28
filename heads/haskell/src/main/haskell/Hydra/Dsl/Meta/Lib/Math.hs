@@ -96,13 +96,25 @@ max = primitive2 _math_max
 maybeDiv :: TTerm Int -> TTerm Int -> TTerm (Maybe Int)
 maybeDiv = primitive2 _math_maybeDiv
 
--- | Return the minimum of two values.
-min :: Ord a => TTerm a -> TTerm a -> TTerm a
-min = primitive2 _math_min
-
 -- | Mathematical modulo, returning Nothing on division by zero.
 maybeMod :: TTerm Int -> TTerm Int -> TTerm (Maybe Int)
 maybeMod = primitive2 _math_maybeMod
+
+-- | Return the predecessor (x - 1), returning Nothing on minBound.
+maybePred :: TTerm Int -> TTerm (Maybe Int)
+maybePred = primitive1 _math_maybePred
+
+-- | Integer remainder, returning Nothing on division by zero.
+maybeRem :: TTerm Int -> TTerm Int -> TTerm (Maybe Int)
+maybeRem = primitive2 _math_maybeRem
+
+-- | Return the successor (x + 1), returning Nothing on maxBound.
+maybeSucc :: TTerm Int -> TTerm (Maybe Int)
+maybeSucc = primitive1 _math_maybeSucc
+
+-- | Return the minimum of two values.
+min :: Ord a => TTerm a -> TTerm a -> TTerm a
+min = primitive2 _math_min
 
 -- | Multiply two numbers.
 mul :: Num a => TTerm a -> TTerm a -> TTerm a
@@ -132,17 +144,9 @@ pi = primitive _math_pi
 pow :: TTerm Double -> TTerm Double -> TTerm Double
 pow = primitive2 _math_pow
 
--- | Return the predecessor (x - 1), returning Nothing on minBound.
-maybePred :: TTerm Int -> TTerm (Maybe Int)
-maybePred = primitive1 _math_maybePred
-
 -- | Generate a range of values from start to end (inclusive).
 range :: Enum a => TTerm a -> TTerm a -> TTerm [a]
 range start end = primitive2 _math_range start end
-
--- | Integer remainder, returning Nothing on division by zero.
-maybeRem :: TTerm Int -> TTerm Int -> TTerm (Maybe Int)
-maybeRem = primitive2 _math_maybeRem
 
 -- | Return x rounded to the nearest integer, as a float64.
 -- DIVERGENCE FROM HASKELL: returns Double rather than Integer so that NaN and
@@ -181,10 +185,6 @@ sub = primitive2 _math_sub
 -- | Subtract two Float64 numbers.
 subFloat64 :: TTerm Double -> TTerm Double -> TTerm Double
 subFloat64 = primitive2 _math_subFloat64
-
--- | Return the successor (x + 1), returning Nothing on maxBound.
-maybeSucc :: TTerm Int -> TTerm (Maybe Int)
-maybeSucc = primitive1 _math_maybeSucc
 
 -- | Return the tangent of x radians.
 tan :: TTerm Double -> TTerm Double

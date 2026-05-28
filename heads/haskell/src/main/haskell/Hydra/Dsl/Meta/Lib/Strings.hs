@@ -28,13 +28,13 @@ intercalate = primitive2 _strings_intercalate
 length :: TTerm String -> TTerm Int
 length = primitive1 _strings_length
 
--- | Get the Unicode code point of the character at a specific index, returning Nothing if out of bounds.
-maybeCharAt :: TTerm Int -> TTerm String -> TTerm (Maybe Int)
-maybeCharAt = primitive2 _strings_maybeCharAt
-
 -- | Split a string into lines.
 lines :: TTerm String -> TTerm [String]
 lines = primitive1 _strings_lines
+
+-- | Get the Unicode code point of the character at a specific index, returning Nothing if out of bounds.
+maybeCharAt :: TTerm Int -> TTerm String -> TTerm (Maybe Int)
+maybeCharAt = primitive2 _strings_maybeCharAt
 
 -- | Check whether a string is empty.
 null :: TTerm String -> TTerm Bool

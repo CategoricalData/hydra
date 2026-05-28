@@ -16,10 +16,6 @@ import Data.Int
 bigintToDecimal :: TTerm Integer -> TTerm Sci.Scientific
 bigintToDecimal = primitive1 _literals_bigintToDecimal
 
--- | Convert a bigint (Integer) to an int8.
-bigintToInt8 :: TTerm Integer -> TTerm Int8
-bigintToInt8 = primitive1 _literals_bigintToInt8
-
 -- | Convert a bigint (Integer) to an int16.
 bigintToInt16 :: TTerm Integer -> TTerm Int16
 bigintToInt16 = primitive1 _literals_bigintToInt16
@@ -32,9 +28,9 @@ bigintToInt32 = primitive1 _literals_bigintToInt32
 bigintToInt64 :: TTerm Integer -> TTerm Int64
 bigintToInt64 = primitive1 _literals_bigintToInt64
 
--- | Convert a bigint (Integer) to a uint8.
-bigintToUint8 :: TTerm Integer -> TTerm Int16
-bigintToUint8 = primitive1 _literals_bigintToUint8
+-- | Convert a bigint (Integer) to an int8.
+bigintToInt8 :: TTerm Integer -> TTerm Int8
+bigintToInt8 = primitive1 _literals_bigintToInt8
 
 -- | Convert a bigint (Integer) to a uint16.
 bigintToUint16 :: TTerm Integer -> TTerm Int
@@ -47,6 +43,10 @@ bigintToUint32 = primitive1 _literals_bigintToUint32
 -- | Convert a bigint (Integer) to a uint64.
 bigintToUint64 :: TTerm Integer -> TTerm Integer
 bigintToUint64 = primitive1 _literals_bigintToUint64
+
+-- | Convert a bigint (Integer) to a uint8.
+bigintToUint8 :: TTerm Integer -> TTerm Int16
+bigintToUint8 = primitive1 _literals_bigintToUint8
 
 -- | Convert binary to a list of byte values (0-255).
 binaryToBytes :: TTerm B.ByteString -> TTerm [Int]
@@ -84,10 +84,6 @@ float64ToDecimal = primitive1 _literals_float64ToDecimal
 float64ToFloat32 :: TTerm Double -> TTerm Float
 float64ToFloat32 = primitive1 _literals_float64ToFloat32
 
--- | Convert an int8 to a bigint (Integer).
-int8ToBigint :: TTerm Int8 -> TTerm Integer
-int8ToBigint = primitive1 _literals_int8ToBigint
-
 -- | Convert an int16 to a bigint (Integer).
 int16ToBigint :: TTerm Int16 -> TTerm Integer
 int16ToBigint = primitive1 _literals_int16ToBigint
@@ -99,6 +95,10 @@ int32ToBigint = primitive1 _literals_int32ToBigint
 -- | Convert an int64 to a bigint (Integer).
 int64ToBigint :: TTerm Int64 -> TTerm Integer
 int64ToBigint = primitive1 _literals_int64ToBigint
+
+-- | Convert an int8 to a bigint (Integer).
+int8ToBigint :: TTerm Int8 -> TTerm Integer
+int8ToBigint = primitive1 _literals_int8ToBigint
 
 -- | Parse a string to a bigint (Integer).
 readBigint :: TTerm String -> TTerm (Maybe Integer)
@@ -120,10 +120,6 @@ readFloat32 = primitive1 _literals_readFloat32
 readFloat64 :: TTerm String -> TTerm (Maybe Double)
 readFloat64 = primitive1 _literals_readFloat64
 
--- | Parse a string to an int8 (-128 to 127).
-readInt8 :: TTerm String -> TTerm (Maybe Int8)
-readInt8 = primitive1 _literals_readInt8
-
 -- | Parse a string to an int16 (-32768 to 32767).
 readInt16 :: TTerm String -> TTerm (Maybe Int16)
 readInt16 = primitive1 _literals_readInt16
@@ -136,13 +132,13 @@ readInt32 = primitive1 _literals_readInt32
 readInt64 :: TTerm String -> TTerm (Maybe Int64)
 readInt64 = primitive1 _literals_readInt64
 
+-- | Parse a string to an int8 (-128 to 127).
+readInt8 :: TTerm String -> TTerm (Maybe Int8)
+readInt8 = primitive1 _literals_readInt8
+
 -- | Parse a string literal.
 readString :: TTerm String -> TTerm (Maybe String)
 readString = primitive1 _literals_readString
-
--- | Parse a string to a uint8 (0 to 255).
-readUint8 :: TTerm String -> TTerm (Maybe Int16)
-readUint8 = primitive1 _literals_readUint8
 
 -- | Parse a string to a uint16 (0 to 65535).
 readUint16 :: TTerm String -> TTerm (Maybe Int)
@@ -155,6 +151,10 @@ readUint32 = primitive1 _literals_readUint32
 -- | Parse a string to a uint64 (0 to 18446744073709551615).
 readUint64 :: TTerm String -> TTerm (Maybe Integer)
 readUint64 = primitive1 _literals_readUint64
+
+-- | Parse a string to a uint8 (0 to 255).
+readUint8 :: TTerm String -> TTerm (Maybe Int16)
+readUint8 = primitive1 _literals_readUint8
 
 -- | Convert a bigint (Integer) to string.
 showBigint :: TTerm Integer -> TTerm String
@@ -176,10 +176,6 @@ showFloat32 = primitive1 _literals_showFloat32
 showFloat64 :: TTerm Double -> TTerm String
 showFloat64 = primitive1 _literals_showFloat64
 
--- | Convert an int8 to string.
-showInt8 :: TTerm Int8 -> TTerm String
-showInt8 = primitive1 _literals_showInt8
-
 -- | Convert an int16 to string.
 showInt16 :: TTerm Int16 -> TTerm String
 showInt16 = primitive1 _literals_showInt16
@@ -192,13 +188,13 @@ showInt32 = primitive1 _literals_showInt32
 showInt64 :: TTerm Int64 -> TTerm String
 showInt64 = primitive1 _literals_showInt64
 
+-- | Convert an int8 to string.
+showInt8 :: TTerm Int8 -> TTerm String
+showInt8 = primitive1 _literals_showInt8
+
 -- | Convert a string to a quoted string representation.
 showString :: TTerm String -> TTerm String
 showString = primitive1 _literals_showString
-
--- | Convert a uint8 to string.
-showUint8 :: TTerm Int16 -> TTerm String
-showUint8 = primitive1 _literals_showUint8
 
 -- | Convert a uint16 to string.
 showUint16 :: TTerm Int -> TTerm String
@@ -212,13 +208,13 @@ showUint32 = primitive1 _literals_showUint32
 showUint64 :: TTerm Integer -> TTerm String
 showUint64 = primitive1 _literals_showUint64
 
+-- | Convert a uint8 to string.
+showUint8 :: TTerm Int16 -> TTerm String
+showUint8 = primitive1 _literals_showUint8
+
 -- | Convert string to binary by base64 decoding.
 stringToBinary :: TTerm String -> TTerm B.ByteString
 stringToBinary = primitive1 _literals_stringToBinary
-
--- | Convert a uint8 to a bigint (Integer).
-uint8ToBigint :: TTerm Int16 -> TTerm Integer
-uint8ToBigint = primitive1 _literals_uint8ToBigint
 
 -- | Convert a uint16 to a bigint (Integer).
 uint16ToBigint :: TTerm Int -> TTerm Integer
@@ -231,3 +227,7 @@ uint32ToBigint = primitive1 _literals_uint32ToBigint
 -- | Convert a uint64 to a bigint (Integer).
 uint64ToBigint :: TTerm Integer -> TTerm Integer
 uint64ToBigint = primitive1 _literals_uint64ToBigint
+
+-- | Convert a uint8 to a bigint (Integer).
+uint8ToBigint :: TTerm Int16 -> TTerm Integer
+uint8ToBigint = primitive1 _literals_uint8ToBigint

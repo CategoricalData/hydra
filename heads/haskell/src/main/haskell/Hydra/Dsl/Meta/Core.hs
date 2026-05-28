@@ -31,18 +31,6 @@ import Prelude hiding (map, product)
 binding :: AsTerm t Term => TTerm Name -> t -> TTerm (Maybe TypeScheme) -> TTerm Binding
 binding n t ts = Gen.binding n (asTerm t) ts
 
-injection :: AsTerm t Name => t -> TTerm Field -> TTerm Injection
-injection n f = Gen.injection (asTerm n) f
-
-typeVariable :: AsTerm t Name => t -> TTerm Type
-typeVariable n = Gen.typeVariable (asTerm n)
-
-
--- | Non-standard helpers (used in kernel source modules)
-
-equalName_ :: TTerm Name -> TTerm Name -> TTerm Bool
-equalName_ left right = Equality.equal (Gen.unName left) (Gen.unName right)
-
 equalNameList_ :: TTerm [Name] -> TTerm [Name] -> TTerm Bool
 equalNameList_ lefts rights = Logic.and
   (Equality.equal (Lists.length lefts) (Lists.length rights))
@@ -52,5 +40,17 @@ equalNameList_ lefts rights = Logic.and
       (Gen.unName (var "left" :: TTerm Name))
       (Gen.unName (var "right" :: TTerm Name))
 
+equalName_ :: TTerm Name -> TTerm Name -> TTerm Bool
+equalName_ left right = Equality.equal (Gen.unName left) (Gen.unName right)
+
 false :: TTerm Term
 false = termLiteral $ literalBoolean $ TTerm $ TermLiteral $ LiteralBoolean False
+
+injection :: AsTerm t Name => t -> TTerm Field -> TTerm Injection
+injection n f = Gen.injection (asTerm n) f
+
+typeVariable :: AsTerm t Name => t -> TTerm Type
+typeVariable n = Gen.typeVariable (asTerm n)
+
+
+-- | Non-standard helpers (used in kernel source modules)

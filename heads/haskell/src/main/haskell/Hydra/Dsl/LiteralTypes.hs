@@ -20,6 +20,11 @@ binary = LiteralTypeBinary
 boolean :: LiteralType
 boolean = LiteralTypeBoolean
 
+-- | Create a floating point type with the specified precision
+-- Example: float FloatTypeFloat32
+float :: FloatType -> LiteralType
+float = LiteralTypeFloat
+
 -- | 32-bit floating point type
 -- Example: float32
 float32 :: LiteralType
@@ -29,11 +34,6 @@ float32 = float FloatTypeFloat32
 -- Example: float64
 float64 :: LiteralType
 float64 = float FloatTypeFloat64
-
--- | Create a floating point type with the specified precision
--- Example: float FloatTypeFloat32
-float :: FloatType -> LiteralType
-float = LiteralTypeFloat
 
 -- | 16-bit signed integer type
 -- Example: int16

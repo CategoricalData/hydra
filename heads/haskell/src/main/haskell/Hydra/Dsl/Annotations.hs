@@ -39,6 +39,9 @@ boundedSet min max et = bounded min max $ Types.set (asType et)
 boundedString :: Maybe Int -> Maybe Int -> Type
 boundedString min max = bounded min max Types.string
 
+dataDoc :: String -> Term -> Term
+dataDoc s = setTermDescription (Just s)
+
 deprecated :: AsType a => a -> Type
 deprecated = setTypeAnnotation keyDeprecated (Just $ Terms.boolean True) . asType
 
@@ -50,9 +53,6 @@ doc70 = doc . wrapLine 70
 
 doc80 :: AsType a => String -> a -> Type
 doc80 = doc . wrapLine 80
-
-dataDoc :: String -> Term -> Term
-dataDoc s = setTermDescription (Just s)
 
 exclude :: AsType a => a -> Type
 exclude = setTypeAnnotation keyExclude (Just $ Terms.boolean True) . asType
