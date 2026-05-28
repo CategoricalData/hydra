@@ -111,6 +111,17 @@ notAFunctionTypeError = define "NotAFunctionTypeError" $
       doc "The actual type encountered" $
       Core.type_]
 
+otherCheckingError :: Binding
+otherCheckingError = define "OtherCheckingError" $
+  doc "A generic checking error: message + subterm path" $
+  T.record [
+    "path">:
+      doc "The subterm path at which the error was observed" $
+      Paths.subtermPath,
+    "message">:
+      doc "A human-readable error message" $
+      T.string]
+
 typeArityMismatchError :: Binding
 typeArityMismatchError = define "TypeArityMismatchError" $
   doc "A type constructor applied to the wrong number of type arguments" $
@@ -150,6 +161,17 @@ unboundTypeVariablesError = define "UnboundTypeVariablesError" $
       doc "The type containing the unbound variables" $
       Core.type_]
 
+undefinedTermVariableCheckingError :: Binding
+undefinedTermVariableCheckingError = define "UndefinedTermVariableCheckingError" $
+  doc "A reference to a term variable that is not bound in scope, encountered during checking" $
+  T.record [
+    "path">:
+      doc "The subterm path at which the variable was referenced" $
+      Paths.subtermPath,
+    "name">:
+      doc "The name of the undefined variable" $
+      Core.name]
+
 unequalTypesError :: Binding
 unequalTypesError = define "UnequalTypesError" $
   doc "Multiple types that should all be equal but are not" $
@@ -184,28 +206,6 @@ untypedLetBindingError = define "UntypedLetBindingError" $
     "binding">:
       doc "The untyped binding" $
       Core.binding]
-
-otherCheckingError :: Binding
-otherCheckingError = define "OtherCheckingError" $
-  doc "A generic checking error: message + subterm path" $
-  T.record [
-    "path">:
-      doc "The subterm path at which the error was observed" $
-      Paths.subtermPath,
-    "message">:
-      doc "A human-readable error message" $
-      T.string]
-
-undefinedTermVariableCheckingError :: Binding
-undefinedTermVariableCheckingError = define "UndefinedTermVariableCheckingError" $
-  doc "A reference to a term variable that is not bound in scope, encountered during checking" $
-  T.record [
-    "path">:
-      doc "The subterm path at which the variable was referenced" $
-      Paths.subtermPath,
-    "name">:
-      doc "The name of the undefined variable" $
-      Core.name]
 
 untypedTermVariableCheckingError :: Binding
 untypedTermVariableCheckingError = define "UntypedTermVariableCheckingError" $

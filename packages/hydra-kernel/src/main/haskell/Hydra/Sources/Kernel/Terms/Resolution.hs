@@ -124,6 +124,14 @@ dereferenceType = define "dereferenceType" $
       (Eithers.bimap ("_e" ~> Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "type") (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
           (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))))
 
+fTypeIsPolymorphic :: TTermDefinition (Type -> Bool)
+fTypeIsPolymorphic = define "fTypeIsPolymorphic" $
+  doc "Test whether a given System F type is polymorphic (i.e., a forall type)" $
+  "typ" ~> cases _Type (var "typ")
+    (Just false) [
+    _Type_annotated>>: "at" ~> fTypeIsPolymorphic @@ Core.annotatedTypeBody (var "at"),
+    _Type_forall>>: "ft" ~> true]
+
 fieldMap :: TTermDefinition ([Field] -> M.Map Name Term)
 fieldMap = define "fieldMap" $
   doc "Build a map from field name to field term, given a list of fields" $
@@ -175,14 +183,6 @@ findFieldType = define "findFieldType" $
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingFields")) (int32 1))
       (Maybes.maybe (var "noMatch") ("ft" ~> right (Core.fieldTypeType $ var "ft")) (Lists.maybeHead $ var "matchingFields"))
       (left (Error.errorExtraction $ Error.extractionErrorMultipleFields $ Error.multipleFieldsError (var "fname"))))
-
-fTypeIsPolymorphic :: TTermDefinition (Type -> Bool)
-fTypeIsPolymorphic = define "fTypeIsPolymorphic" $
-  doc "Test whether a given System F type is polymorphic (i.e., a forall type)" $
-  "typ" ~> cases _Type (var "typ")
-    (Just false) [
-    _Type_annotated>>: "at" ~> fTypeIsPolymorphic @@ Core.annotatedTypeBody (var "at"),
-    _Type_forall>>: "ft" ~> true]
 
 fullyStripAndNormalizeType :: TTermDefinition (Type -> Type)
 fullyStripAndNormalizeType = define "fullyStripAndNormalizeType" $

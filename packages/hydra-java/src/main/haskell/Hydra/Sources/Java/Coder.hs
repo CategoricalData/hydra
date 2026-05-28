@@ -68,20 +68,6 @@ import qualified Hydra.Sources.Decode.Core                 as DecodeCore
 import qualified Hydra.Sources.Encode.Core                 as EncodeCore
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as SerializationSource
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
--- | Get a type annotation, converting DecodingError to Error.
-getTypeE :: TTerm InferenceContext -> TTerm Graph -> TTerm (M.Map Name Term) -> TTerm (Either Error (Maybe Type))
-getTypeE cx g ann = Eithers.bimap
-  ("__de" ~> Error.errorOther (Error.otherError ((unwrap _DecodingError) @@ var "__de")))
-  ("__a" ~> var "__a")
-  (Annotations.getType @@ g @@ ann)
-
--- | Reference to the hydra.encode.core.type function (Type -> Term encoder)
-encodeTypeAsTerm :: TTerm (Type -> Term)
-encodeTypeAsTerm = TTerm $ TermVariable $ Name "hydra.encode.core.type"
-
 ns :: ModuleName
 ns = ModuleName "hydra.java.coder"
 
@@ -292,10 +278,6 @@ module_ = Module {
       toDefinition withTypeLambda,
       toDefinition wrapInSupplierLambda,
       toDefinition wrapLazyArguments]
-
--- | Helper: coerce bigint to int for javaInt/javaIntExpression TTermDefinition (phantom type mismatch workaround)
-bigintAsInt :: TTerm Integer -> TTerm Int
-bigintAsInt = coerce
 
 -- | Add a comment from a FieldType to a class body declaration
 addComment :: TTermDefinition (Java.ClassBodyDeclaration -> FieldType -> InferenceContext -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
@@ -582,6 +564,10 @@ augmentVariantClass = def "augmentVariantClass" $
           Java._NormalClassDeclaration_permits>>:
             project Java._NormalClassDeclaration Java._NormalClassDeclaration_permits @@ var "ncd",
           Java._NormalClassDeclaration_body>>: var "newBody"])]
+
+-- | Helper: coerce bigint to int for javaInt/javaIntExpression TTermDefinition (phantom type mismatch workaround)
+bigintAsInt :: TTerm Integer -> TTerm Int
+bigintAsInt = coerce
 
 -- | Check if a Binding has function type.
 bindingIsFunctionType :: TTermDefinition (Binding -> Bool)
@@ -1826,6 +1812,9 @@ dedupBindings = def "dedupBindings" $
          (Lists.cons (var "b")
            (dedupBindings @@ Sets.insert (var "name") (var "inScope") @@ var "rest")))
       (Lists.uncons (var "bs")))
+
+def :: String -> TTerm a -> TTermDefinition a
+def = definitionInModule module_
 
 -- | Detect over-generalized type variables in a scheme type.
 detectAccumulatorUnification :: TTermDefinition ([Type] -> Type -> [Name] -> M.Map Name Type)
@@ -3547,6 +3536,10 @@ encodeType = def "encodeType" $
       _Type_wrap>>: lambda "_" $
         left (Error.errorOther $ Error.otherError (string "unexpected anonymous wrap type"))]
 
+-- | Reference to the hydra.encode.core.type function (Type -> Term encoder)
+encodeTypeAsTerm :: TTerm (Type -> Term)
+encodeTypeAsTerm = TTerm $ TermVariable $ Name "hydra.encode.core.type"
+
 -- | Encode a type definition as a Java compilation unit.
 encodeTypeDefinition :: TTermDefinition (Java.PackageDeclaration -> JavaHelpers.Aliases -> TypeDefinition -> InferenceContext -> Graph -> Either Error (Name, Java.CompilationUnit))
 encodeTypeDefinition = def "encodeTypeDefinition" $
@@ -4058,6 +4051,13 @@ getFunctionType = def "getFunctionType" $
         (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "expected function type, got: ") (ShowCore.type_ @@ var "t"))) [
         _Type_function>>: lambda "ft" $ right (var "ft")])
 
+-- | Get a type annotation, converting DecodingError to Error.
+getTypeE :: TTerm InferenceContext -> TTerm Graph -> TTerm (M.Map Name Term) -> TTerm (Either Error (Maybe Type))
+getTypeE cx g ann = Eithers.bimap
+  ("__de" ~> Error.errorOther (Error.otherError ((unwrap _DecodingError) @@ var "__de")))
+  ("__a" ~> var "__a")
+  (Annotations.getType @@ g @@ ann)
+
 -- | Group pairs by their first element, collecting second elements into lists.
 groupPairsByFirst :: TTermDefinition ([(Name, Name)] -> M.Map Name [Name])
 groupPairsByFirst = def "groupPairsByFirst" $
@@ -4464,26 +4464,12 @@ noComment :: TTermDefinition (Java.ClassBodyDeclaration -> Java.ClassBodyDeclara
 noComment = def "noComment" $
   lambda "decl" $ JavaDsl.classBodyDeclarationWithComments (var "decl") nothing
 
--- | Wrap a class body declaration with a Javadoc comment.
-withCommentString :: TTermDefinition (String -> Java.ClassBodyDeclaration -> Java.ClassBodyDeclarationWithComments)
-withCommentString = def "withCommentString" $
-  lambda "comment" $ lambda "decl" $
-    JavaDsl.classBodyDeclarationWithComments (var "decl") (just (var "comment"))
-
 -- | Wrap an interface member declaration with no comment.
 noInterfaceComment :: TTermDefinition (Java.InterfaceMemberDeclaration -> Java.InterfaceMemberDeclarationWithComments)
 noInterfaceComment = def "noInterfaceComment" $
   lambda "decl" $ record Java._InterfaceMemberDeclarationWithComments [
     Java._InterfaceMemberDeclarationWithComments_value>>: var "decl",
     Java._InterfaceMemberDeclarationWithComments_comments>>: nothing]
-
--- | Wrap an interface member declaration with a Javadoc comment.
-withInterfaceCommentString :: TTermDefinition (String -> Java.InterfaceMemberDeclaration -> Java.InterfaceMemberDeclarationWithComments)
-withInterfaceCommentString = def "withInterfaceCommentString" $
-  lambda "comment" $ lambda "decl" $
-    record Java._InterfaceMemberDeclarationWithComments [
-      Java._InterfaceMemberDeclarationWithComments_value>>: var "decl",
-      Java._InterfaceMemberDeclarationWithComments_comments>>: just (var "comment")]
 
 -- | Generate the otherwise (default) branch of a visitor.
 otherwiseBranch :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Type -> Type -> Name -> Java.Type -> [Java.TypeArgument] -> Term -> InferenceContext -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
@@ -5343,6 +5329,20 @@ visitBranch = def "visitBranch" $
           "allStmts" <~ Lists.concat2 (var "bindingStmts") (list [var "returnStmt"]) $
           right (noComment @@ (JavaUtilsSource.methodDeclaration @@ var "mods" @@ list ([] :: [TTerm Java.TypeParameter]) @@ var "anns"
             @@ asTerm JavaNamesSource.visitMethodName @@ list [var "param"] @@ var "result" @@ just (var "allStmts"))))]
+
+-- | Wrap a class body declaration with a Javadoc comment.
+withCommentString :: TTermDefinition (String -> Java.ClassBodyDeclaration -> Java.ClassBodyDeclarationWithComments)
+withCommentString = def "withCommentString" $
+  lambda "comment" $ lambda "decl" $
+    JavaDsl.classBodyDeclarationWithComments (var "decl") (just (var "comment"))
+
+-- | Wrap an interface member declaration with a Javadoc comment.
+withInterfaceCommentString :: TTermDefinition (String -> Java.InterfaceMemberDeclaration -> Java.InterfaceMemberDeclarationWithComments)
+withInterfaceCommentString = def "withInterfaceCommentString" $
+  lambda "comment" $ lambda "decl" $
+    record Java._InterfaceMemberDeclarationWithComments [
+      Java._InterfaceMemberDeclarationWithComments_value>>: var "decl",
+      Java._InterfaceMemberDeclarationWithComments_comments>>: just (var "comment")]
 
 -- | Execute a computation in the context of a lambda, extending both the Graph
 -- and aliasesLambdaVars with the lambda parameter.

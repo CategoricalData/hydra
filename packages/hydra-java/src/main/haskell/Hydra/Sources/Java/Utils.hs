@@ -43,9 +43,6 @@ import qualified Hydra.Sources.Java.Names as JavaNamesSource
 import qualified Hydra.Sources.Java.Serde as JavaSerdeSource
 
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
 ns :: ModuleName
 ns = ModuleName "hydra.java.utils"
 
@@ -303,6 +300,9 @@ addVarRename = def "addVarRename" $
         project JavaHelpers._Aliases JavaHelpers._Aliases_methodCodomain @@ var "aliases",
       JavaHelpers._Aliases_thunkedVars>>:
         project JavaHelpers._Aliases JavaHelpers._Aliases_thunkedVars @@ var "aliases"]
+
+def :: String -> TTerm a -> TTermDefinition a
+def = definitionInModule module_
 
 fieldExpression :: TTermDefinition (Java.Identifier -> Java.Identifier -> Java.ExpressionName)
 fieldExpression = def "fieldExpression" $

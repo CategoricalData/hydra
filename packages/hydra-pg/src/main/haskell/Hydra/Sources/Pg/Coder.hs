@@ -142,13 +142,6 @@ module_ = Module {
       toDefinition vertexCoder,
       toDefinition vertexIdAdapter]
 
--- Helper for error results
-err :: TTerm InferenceContext -> TTerm String -> TTerm (Either Error a)
-err cx msg = left $ Error.errorOther $ Error.otherError msg
-
-unexpectedE :: TTerm InferenceContext -> TTerm String -> TTerm String -> TTerm (Either Error a)
-unexpectedE cx expected found = err cx (string "Expected " ++ expected ++ string ", found: " ++ found)
-
 -- | Check a condition, returning an error if false
 check :: TTermDefinition (InferenceContext -> Bool -> Either Error () -> Either Error ())
 check = define "check" $
@@ -430,6 +423,10 @@ encodeProperty = define "encodeProperty" $
           (var "encodeValue" @@ var "value"))
       (Maps.lookup (var "fname") (var "fields"))
 
+-- Helper for error results
+err :: TTerm InferenceContext -> TTerm String -> TTerm (Either Error a)
+err cx msg = left $ Error.errorOther $ Error.otherError msg
+
 -- | Bridge an ExtractCore function into Result
 extractString :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error String)
 extractString = define "extractString" $
@@ -679,6 +676,9 @@ traverseToSingleTerm = define "traverseToSingleTerm" $
               (reify right)
               (Lists.maybeHead $ var "terms"))
             (err (var "cx") (var "desc" ++ string " resolved to multiple terms"))))
+
+unexpectedE :: TTerm InferenceContext -> TTerm String -> TTerm String -> TTerm (Either Error a)
+unexpectedE cx expected found = err cx (string "Expected " ++ expected ++ string ", found: " ++ found)
 
 -- | Create a vertex coder given all components
 vertexCoder :: TTermDefinition (Graph -> PGM.Schema Graph t v -> Type -> t -> Name -> PG.VertexLabel

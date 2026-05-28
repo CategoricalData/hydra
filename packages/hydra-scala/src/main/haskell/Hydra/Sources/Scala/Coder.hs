@@ -62,14 +62,6 @@ import qualified Hydra.Sources.Scala.Utils as ScalaUtilsSource
 import qualified Hydra.Sources.Scala.Serde as ScalaSerdeSource
 
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
--- | An empty list term, avoiding ambiguous type variable issues with 'emptyList'
-emptyList :: TTerm [a]
-emptyList = TTerm $ TermList []
-
-
 ns :: ModuleName
 ns = ModuleName "hydra.scala.coder"
 
@@ -154,6 +146,9 @@ constructModule = def "constructModule" $
     toScalaName n = record _NameData [
       _NameData_value>>: wrap _PredefString (Strings.intercalate (string ".") (Strings.splitOn (string ".") n))]
 
+def :: String -> TTerm a -> TTermDefinition a
+def = definitionInModule module_
+
 -- | Drop N domain types from a function type, returning the remaining type.
 --   dropDomains 0 (A -> B -> C) = A -> B -> C
 --   dropDomains 1 (A -> B -> C) = B -> C
@@ -168,6 +163,11 @@ dropDomains = def "dropDomains" $
         (Just $ var "t") [
         _Type_function>>: ("ft" ~> dropDomains @@ (Math.sub (var "n") (int32 1)) @@ (Core.functionTypeCodomain $ var "ft")),
         _Type_forall>>: ("fa" ~> dropDomains @@ var "n" @@ (Core.forallTypeBody $ var "fa"))])
+
+-- | An empty list term, avoiding ambiguous type variable issues with 'emptyList'
+emptyList :: TTerm [a]
+emptyList = TTerm $ TermList []
+
 
 encodeCase :: TTermDefinition (InferenceContext -> Graph -> M.Map Name Type -> Maybe Name -> Field -> Either Error Scala.Case)
 encodeCase = def "encodeCase" $
@@ -415,16 +415,6 @@ encodeFunction = def "encodeFunction" $
                           _MatchData_expr>>: var "sa",
                           _MatchData_cases>>: var "scases"]))))
                   (var "arg"))))])
-
--- | Helper to construct a lazy val statement (for top-level definitions to avoid forward reference errors)
-mkLazyVal :: TTerm String -> TTerm (Maybe Scala.Type) -> TTerm Scala.Data -> TTerm Scala.Stat
-mkLazyVal vname mdecltpe rhs =
-  inject _Stat _Stat_defn (inject _Defn _Defn_val (record _ValDefn [
-    _ValDefn_mods>>: list [inject Scala._Mod Scala._Mod_lazy unit],
-    _ValDefn_pats>>: list [inject _Pat _Pat_var (record _VarPat [
-      _VarPat_name>>: record _NameData [_NameData_value>>: wrap _PredefString vname]])],
-    _ValDefn_decltpe>>: mdecltpe,
-    _ValDefn_rhs>>: rhs]))
 
 encodeLetBinding :: TTermDefinition (InferenceContext -> Graph -> S.Set Name -> Binding -> Either Error Scala.Stat)
 encodeLetBinding = def "encodeLetBinding" $
@@ -1221,13 +1211,6 @@ fieldToParam = def "fieldToParam" $
 -- | Type alias for Result
 -- type Result a = Either Error a
 
--- | Get a type annotation, converting DecodingError to Error.
-getTypeE :: TTerm InferenceContext -> TTerm Graph -> TTerm (M.Map Name Term) -> TTerm (Either Error (Maybe Type))
-getTypeE cx g ann = Eithers.bimap
-  ("__de" ~> Error.errorOther (Error.otherError ((unwrap _DecodingError) @@ var "__de")))
-  ("__a" ~> var "__a")
-  (Annotations.getType @@ g @@ ann)
-
 findDomain :: TTermDefinition (InferenceContext -> Graph -> M.Map Name Term -> Either Error Type)
 findDomain = def "findDomain" $
   doc "Find the domain type from annotations" $
@@ -1282,6 +1265,34 @@ findSdom = def "findSdom" $
                 (asTerm encodeType @@ var "cx" @@ var "g" @@ var "dom2")
                 ("sdom2" ~> right (just (var "sdom2"))))])])
         (var "mtyp"))
+
+-- | Get a type annotation, converting DecodingError to Error.
+getTypeE :: TTerm InferenceContext -> TTerm Graph -> TTerm (M.Map Name Term) -> TTerm (Either Error (Maybe Type))
+getTypeE cx g ann = Eithers.bimap
+  ("__de" ~> Error.errorOther (Error.otherError ((unwrap _DecodingError) @@ var "__de")))
+  ("__a" ~> var "__a")
+  (Annotations.getType @@ g @@ ann)
+
+-- | Helper to construct a lazy val statement (for top-level definitions to avoid forward reference errors)
+mkLazyVal :: TTerm String -> TTerm (Maybe Scala.Type) -> TTerm Scala.Data -> TTerm Scala.Stat
+mkLazyVal vname mdecltpe rhs =
+  inject _Stat _Stat_defn (inject _Defn _Defn_val (record _ValDefn [
+    _ValDefn_mods>>: list [inject Scala._Mod Scala._Mod_lazy unit],
+    _ValDefn_pats>>: list [inject _Pat _Pat_var (record _VarPat [
+      _VarPat_name>>: record _NameData [_NameData_value>>: wrap _PredefString vname]])],
+    _ValDefn_decltpe>>: mdecltpe,
+    _ValDefn_rhs>>: rhs]))
+
+-- | Helper to construct a Scala val statement
+mkVal :: TTerm String -> TTerm (Maybe Scala.Type) -> TTerm Scala.Data -> TTerm Scala.Stat
+mkVal vname mdecltpe rhs =
+  inject _Stat _Stat_defn (inject _Defn _Defn_val (record _ValDefn [
+    _ValDefn_mods>>: emptyList,
+    _ValDefn_pats>>: list [inject _Pat _Pat_var (record _VarPat [
+      _VarPat_name>>: record _NameData [_NameData_value>>: wrap _PredefString vname]])],
+    _ValDefn_decltpe>>: mdecltpe,
+    _ValDefn_rhs>>: rhs]))
+
 
 moduleToScala :: TTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
 moduleToScala = def "moduleToScala" $
@@ -1360,17 +1371,6 @@ typeParamToTypeVar = def "typeParamToTypeVar" $
       Scala._Name_value>>: ("v" ~> var "v")]] $
     inject Scala._Type _Type_var (record _VarType [
       _VarType_name>>: record _NameType [_NameType_value>>: var "s"]])
-
--- | Helper to construct a Scala val statement
-mkVal :: TTerm String -> TTerm (Maybe Scala.Type) -> TTerm Scala.Data -> TTerm Scala.Stat
-mkVal vname mdecltpe rhs =
-  inject _Stat _Stat_defn (inject _Defn _Defn_val (record _ValDefn [
-    _ValDefn_mods>>: emptyList,
-    _ValDefn_pats>>: list [inject _Pat _Pat_var (record _VarPat [
-      _VarPat_name>>: record _NameData [_NameData_value>>: wrap _PredefString vname]])],
-    _ValDefn_decltpe>>: mdecltpe,
-    _ValDefn_rhs>>: rhs]))
-
 
 -- Name references used by Coder
 

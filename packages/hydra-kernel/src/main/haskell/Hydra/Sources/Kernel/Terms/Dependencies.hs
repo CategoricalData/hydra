@@ -104,6 +104,16 @@ module_ = Module {
      toDefinition typeDependencyNames,
      toDefinition typeNamesInType]
 
+definitionsWithDependencies :: TTermDefinition (InferenceContext -> Graph -> [Binding] -> Either Error [Binding])
+definitionsWithDependencies = define "definitionsWithDependencies" $
+  doc "Get definitions with their dependencies" $
+  "cx" ~> "graph" ~> "original" ~>
+  "depNames" <~ ("el" ~> Sets.toList (termDependencyNames @@ true @@ false @@ false @@ (Core.bindingTerm (var "el")))) $
+  "allDepNames" <~ Lists.nub (Lists.concat2
+    (Lists.map (reify Core.bindingName) (var "original"))
+    (Lists.concat (Lists.map (var "depNames") (var "original")))) $
+  Eithers.mapList ("name" ~> Lexical.requireBinding @@ var "graph" @@ var "name") (var "allDepNames")
+
 flattenLetTerms :: TTermDefinition (Term -> Term)
 flattenLetTerms = define "flattenLetTerms" $
   doc "Flatten nested let expressions" $
@@ -385,6 +395,20 @@ topologicalSortBindings = define "topologicalSortBindings" $
     (Sets.toList $ termDependencyNames @@ false @@ true @@ true @@ (Core.bindingTerm $ var "e"))) $
   Sorting.topologicalSort @@ Lists.map (var "adjlist") (var "els")
 
+topologicalSortTypeDefinitions :: TTermDefinition ([TypeDefinition] -> [[TypeDefinition]])
+topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
+  doc "Topologically sort type definitions by dependencies" $
+  "defs" ~>
+  "toPair" <~ ("def" ~> pair
+    (Packaging.typeDefinitionName (var "def"))
+    (Sets.toList (typeDependencyNames @@ false @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "def"))))) $
+  "nameToDef" <~ Maps.fromList (Lists.map
+    ("d" ~> pair (Packaging.typeDefinitionName (var "d")) (var "d"))
+    (var "defs")) $
+  "sorted" <~ Sorting.topologicalSortComponents @@ Lists.map (var "toPair") (var "defs") $
+  Lists.map ("names" ~> Maybes.cat (Lists.map ("n" ~> Maps.lookup (var "n") (var "nameToDef")) (var "names"))) (
+    var "sorted")
+
 typeDependencyNames :: TTermDefinition (Bool -> Type -> S.Set Name)
 typeDependencyNames = define "typeDependencyNames" $
   doc "Collect all type names referenced by a type. The boolean controls whether type-scheme references (free variables in type expressions) are included alongside structural references" $
@@ -400,27 +424,3 @@ typeNamesInType = define "typeNamesInType" $
   "typ0" ~>
   "addNames" <~ ("names" ~> "typ" ~> var "names") $
   Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty @@ var "typ0"
-
-definitionsWithDependencies :: TTermDefinition (InferenceContext -> Graph -> [Binding] -> Either Error [Binding])
-definitionsWithDependencies = define "definitionsWithDependencies" $
-  doc "Get definitions with their dependencies" $
-  "cx" ~> "graph" ~> "original" ~>
-  "depNames" <~ ("el" ~> Sets.toList (termDependencyNames @@ true @@ false @@ false @@ (Core.bindingTerm (var "el")))) $
-  "allDepNames" <~ Lists.nub (Lists.concat2
-    (Lists.map (reify Core.bindingName) (var "original"))
-    (Lists.concat (Lists.map (var "depNames") (var "original")))) $
-  Eithers.mapList ("name" ~> Lexical.requireBinding @@ var "graph" @@ var "name") (var "allDepNames")
-
-topologicalSortTypeDefinitions :: TTermDefinition ([TypeDefinition] -> [[TypeDefinition]])
-topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
-  doc "Topologically sort type definitions by dependencies" $
-  "defs" ~>
-  "toPair" <~ ("def" ~> pair
-    (Packaging.typeDefinitionName (var "def"))
-    (Sets.toList (typeDependencyNames @@ false @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "def"))))) $
-  "nameToDef" <~ Maps.fromList (Lists.map
-    ("d" ~> pair (Packaging.typeDefinitionName (var "d")) (var "d"))
-    (var "defs")) $
-  "sorted" <~ Sorting.topologicalSortComponents @@ Lists.map (var "toPair") (var "defs") $
-  Lists.map ("names" ~> Maybes.cat (Lists.map ("n" ~> Maps.lookup (var "n") (var "nameToDef")) (var "names"))) (
-    var "sorted")

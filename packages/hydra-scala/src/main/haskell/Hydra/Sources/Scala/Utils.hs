@@ -85,14 +85,8 @@ import qualified Hydra.Sources.Scala.Syntax as ScalaSyntax
 import qualified Hydra.Sources.Scala.Language as ScalaLanguageSource
 
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
 ns :: ModuleName
 ns = ModuleName "hydra.scala.utils"
-
-scalaLanguageNs :: ModuleName
-scalaLanguageNs = moduleName ScalaLanguageSource.module_
 
 module_ :: Module
 module_ = Module {
@@ -121,6 +115,9 @@ module_ = Module {
       toDefinition svar,
       toDefinition typeToString]
 
+
+def :: String -> TTerm a -> TTermDefinition a
+def = definitionInModule module_
 
 nameOfType :: TTermDefinition (Graph -> Type -> Y.Maybe Name)
 nameOfType = def "nameOfType" $
@@ -202,6 +199,9 @@ scalaEscapeName = def "scalaEscapeName" $
     Logic.ifElse (var "needsBackticks")
       (Strings.cat (list [string "`", var "sanitized3", string "`"]))
       (var "sanitized3")
+
+scalaLanguageNs :: ModuleName
+scalaLanguageNs = moduleName ScalaLanguageSource.module_
 
 scalaReservedWordsRef :: TTermDefinition (S.Set String)
 scalaReservedWordsRef = def "scalaReservedWords" $

@@ -13,25 +13,6 @@ import           Prelude hiding ((++))
 ns :: ModuleName
 ns = ModuleName "hydra.lib.maps"
 
-sig :: TypeScheme -> TermSignature
-sig = typeSchemeToTermSignature
-
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
-
--- Type-var shortcuts.
-tk, tk1, tk2, tv, tv1, tv2 :: Type
-tk  = Types.var "k"
-tk1 = Types.var "k1"
-tk2 = Types.var "k2"
-tv  = Types.var "v"
-tv1 = Types.var "v1"
-tv2 = Types.var "v2"
-
-mp :: Type -> Type -> Type
-mp = Types.map
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -60,6 +41,25 @@ module_ = Module {
       primNoDef "size"            "Return the number of key-value pairs in a map." sizeSig,
       primNoDef "toList"          "Convert a map to a list of key-value pairs (in key order)." toListSig,
       primNoDef "union"           "Compute the union of two maps; the first map's bindings take precedence on key collision." unionSig]
+
+mp :: Type -> Type -> Type
+mp = Types.map
+
+primNoDef :: String -> String -> TermSignature -> Definition
+primNoDef localName description s =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+
+-- Type-var shortcuts.
+tk, tk1, tk2, tv, tv1, tv2 :: Type
+tk  = Types.var "k"
+tk1 = Types.var "k1"
+tk2 = Types.var "k2"
+tv  = Types.var "v"
+tv1 = Types.var "v1"
+tv2 = Types.var "v2"
+
+sig :: TypeScheme -> TermSignature
+sig = typeSchemeToTermSignature
 
 -- Signatures (k/v unconstrained except where ordering is required on key types).
 
@@ -113,14 +113,14 @@ lookupSig :: TermSignature
 lookupSig = sig $ Types.polyConstrained [("k", [Name "ordering"]), ("v", [])]
   (tk Types.~> mp tk tv Types.~> Types.optional tv)
 
-mapSig :: TermSignature
-mapSig = sig $ Types.polyConstrained [("v1", []), ("v2", []), ("k", [Name "ordering"])]
-  ((tv1 Types.~> tv2) Types.~> mp tk tv1 Types.~> mp tk tv2)
-
 mapKeysSig :: TermSignature
 mapKeysSig = sig $ Types.polyConstrained
   [("k1", [Name "ordering"]), ("k2", [Name "ordering"]), ("v", [])]
   ((tk1 Types.~> tk2) Types.~> mp tk1 tv Types.~> mp tk2 tv)
+
+mapSig :: TermSignature
+mapSig = sig $ Types.polyConstrained [("v1", []), ("v2", []), ("k", [Name "ordering"])]
+  ((tv1 Types.~> tv2) Types.~> mp tk tv1 Types.~> mp tk tv2)
 
 memberSig :: TermSignature
 memberSig = sig $ Types.polyConstrained [("k", [Name "ordering"]), ("v", [])]

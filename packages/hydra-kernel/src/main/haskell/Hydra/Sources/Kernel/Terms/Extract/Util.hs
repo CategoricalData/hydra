@@ -72,9 +72,6 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-formatError :: TTerm (Error -> String)
-formatError = "e" ~> ShowError.error_ @@ var "e"
-
 comparison :: TTermDefinition (InferenceContext -> Graph -> Term -> Prelude.Either Error Comparison)
 comparison = define "comparison" $
   doc "Extract a comparison from a term" $
@@ -87,3 +84,6 @@ comparison = define "comparison" $
             (Logic.ifElse (Equality.equal (Core.unName $ var "fname") (string $ unName _Comparison_greaterThan))
               (right Graph.comparisonGreaterThan)
               (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "comparison") (Core.unName (var "fname"))))))
+
+formatError :: TTerm (Error -> String)
+formatError = "e" ~> ShowError.error_ @@ var "e"

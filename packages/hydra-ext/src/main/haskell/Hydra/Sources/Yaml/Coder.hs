@@ -37,10 +37,6 @@ import qualified Data.Set                                  as S
 import qualified Hydra.Yaml.Model as YM
 
 
--- | Lift Either String to Either Error using a context
-liftStringError :: TTerm InferenceContext -> TTerm (Either String a) -> TTerm (Either Error a)
-liftStringError cx = Eithers.bimap ("_s" ~> Error.errorOther (Error.otherError $ var "_s")) ("_x" ~> var "_x")
-
 ns :: ModuleName
 ns = ModuleName "hydra.yaml.coder"
 
@@ -111,6 +107,10 @@ encodeRecord = define "encodeRecord" $
   "fields" <~ (Core.recordFields $ var "record") $
   "maybeFields" <<~ Eithers.mapList (var "encodeField") (Lists.zip (var "coders") (var "fields")) $
   right (Yaml.nodeMapping $ Maps.fromList $ Maybes.cat $ var "maybeFields")
+
+-- | Lift Either String to Either Error using a context
+liftStringError :: TTerm InferenceContext -> TTerm (Either String a) -> TTerm (Either Error a)
+liftStringError cx = Eithers.bimap ("_s" ~> Error.errorOther (Error.otherError $ var "_s")) ("_x" ~> var "_x")
 
 literalYamlCoder :: TTermDefinition (LiteralType -> Either Error (Coder Literal YM.Scalar))
 literalYamlCoder = define "literalYamlCoder" $

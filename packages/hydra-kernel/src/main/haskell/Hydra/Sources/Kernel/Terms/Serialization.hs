@@ -160,14 +160,6 @@ bracesListAdaptive = define "bracesListAdaptive" $
       @@ (curlyBracesList @@ nothing @@ inlineStyle @@ var "els")
       @@ (curlyBracesList @@ nothing @@ halfBlockStyle @@ var "els")
 
-bracketListAdaptive :: TTermDefinition ([Expr] -> Expr)
-bracketListAdaptive = define "bracketListAdaptive" $
-  doc "Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression." $
-  "els" ~>
-    chooseLayout @@ maxLineWidth
-      @@ (bracketList @@ inlineStyle @@ var "els")
-      @@ (bracketList @@ halfBlockStyle @@ var "els")
-
 bracketList :: TTermDefinition (BlockStyle -> [Expr] -> Expr)
 bracketList = define "bracketList" $
   doc "Comma-separate the elements inside square brackets in the given block style; renders as `[]` when empty" $
@@ -175,6 +167,14 @@ bracketList = define "bracketList" $
     Logic.ifElse (Lists.null $ var "els")
       (cst @@ string "[]")
       (brackets @@ squareBrackets @@ var "style" @@ (commaSep @@ var "style" @@ var "els"))
+
+bracketListAdaptive :: TTermDefinition ([Expr] -> Expr)
+bracketListAdaptive = define "bracketListAdaptive" $
+  doc "Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression." $
+  "els" ~>
+    chooseLayout @@ maxLineWidth
+      @@ (bracketList @@ inlineStyle @@ var "els")
+      @@ (bracketList @@ halfBlockStyle @@ var "els")
 
 brackets :: TTermDefinition (Brackets -> BlockStyle -> Expr -> Expr)
 brackets = define "brackets" $
@@ -232,6 +232,17 @@ curlyBracesList = define "curlyBracesList" $
       (brackets @@ curlyBraces @@ var "style" @@
         (symbolSep @@ (Maybes.fromMaybe (string ",") (var "msymb")) @@ var "style" @@ var "els"))
 
+customIndent :: TTermDefinition (String -> String -> String)
+customIndent = define "customIndent" $
+  doc ("Indent every non-empty line of `s` by `idt`. Empty lines stay empty"
+    <> " (no trailing whitespace) so downstream byte-identity checks don't"
+    <> " care about indent depth.") $
+  "idt" ~> "s" ~> Strings.cat $
+    Lists.intersperse (string "\n") $
+      Lists.map ("line" ~>
+        Logic.ifElse (Equality.equal (var "line") (string "")) (var "line") (var "idt" ++ var "line")) $
+      Strings.lines $ var "s"
+
 customIndentBlock :: TTermDefinition (String -> [Expr] -> Expr)
 customIndentBlock = define "customIndentBlock" $
   doc "Render a list of expressions as a block whose first element starts where the surrounding context placed it and subsequent elements break onto fresh lines indented by the given prefix" $
@@ -246,17 +257,6 @@ customIndentBlock = define "customIndentBlock" $
         (var "head")
         (ifx @@ var "idtOp" @@ var "head" @@ (newlineSep @@ Lists.drop (int32 1) (var "els"))))
       (Lists.maybeHead $ var "els")
-
-customIndent :: TTermDefinition (String -> String -> String)
-customIndent = define "customIndent" $
-  doc ("Indent every non-empty line of `s` by `idt`. Empty lines stay empty"
-    <> " (no trailing whitespace) so downstream byte-identity checks don't"
-    <> " care about indent depth.") $
-  "idt" ~> "s" ~> Strings.cat $
-    Lists.intersperse (string "\n") $
-      Lists.map ("line" ~>
-        Logic.ifElse (Equality.equal (var "line") (string "")) (var "line") (var "idt" ++ var "line")) $
-      Strings.lines $ var "s"
 
 dotSep :: TTermDefinition ([Expr] -> Expr)
 dotSep = define "dotSep" $
@@ -353,15 +353,15 @@ ifx = define "ifx" $
   "op" ~> "lhs" ~> "rhs" ~>
     Ast.exprOp $ Ast.opExpr (var "op") (var "lhs") (var "rhs")
 
-indentBlock :: TTermDefinition ([Expr] -> Expr)
-indentBlock = define "indentBlock" $
-  doc "Like `customIndentBlock`, but using `doubleSpace` as the indent prefix" $
-  customIndentBlock @@ doubleSpace
-
 indent :: TTermDefinition (String -> String)
 indent = define "indent" $
   doc "Indent every non-empty line of a string by `doubleSpace`" $
   customIndent @@ doubleSpace
+
+indentBlock :: TTermDefinition ([Expr] -> Expr)
+indentBlock = define "indentBlock" $
+  doc "Like `customIndentBlock`, but using `doubleSpace` as the indent prefix" $
+  customIndentBlock @@ doubleSpace
 
 indentSubsequentLines :: TTermDefinition (String -> Expr -> Expr)
 indentSubsequentLines = define "indentSubsequentLines" $
@@ -735,6 +735,11 @@ spaceSepAdaptive = define "spaceSepAdaptive" $
       @@ (spaceSep @@ var "els")
       @@ (newlineSep @@ var "els")
 
+squareBrackets :: TTermDefinition Brackets
+squareBrackets = define "squareBrackets" $
+  doc "Square bracket pair `[` `]` for use with `brackets`" $
+  Ast.brackets (Ast.symbol (string "[")) (Ast.symbol (string "]"))
+
 structuralSep :: TTermDefinition (Op -> [Expr] -> Expr)
 structuralSep = define "structuralSep" $
   doc "Like sep, but produces a SeqExpr instead of an OpExpr chain. SeqExpr is treated as structural layout and is not subject to parenthesization." $
@@ -753,11 +758,6 @@ structuralSpaceSep = define "structuralSpaceSep" $
     (Ast.padding Ast.wsSpace Ast.wsNone)
     (Ast.precedence $ int32 0)
     Ast.associativityNone)
-
-squareBrackets :: TTermDefinition Brackets
-squareBrackets = define "squareBrackets" $
-  doc "Square bracket pair `[` `]` for use with `brackets`" $
-  Ast.brackets (Ast.symbol (string "[")) (Ast.symbol (string "]"))
 
 suffix :: TTermDefinition (String -> Expr -> Expr)
 suffix = define "suffix" $

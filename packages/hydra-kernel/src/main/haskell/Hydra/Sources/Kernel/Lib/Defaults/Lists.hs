@@ -151,6 +151,24 @@ dropWhile_ = define "dropWhile" $
         (var "predTerm"))
       (var "listTerm"))
 
+-- | Interpreter-friendly elem for List terms.
+-- Tests whether an element is in the list: elem x xs = isJust (find (equal x) xs)
+elem_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+elem_ = define "elem" $
+  doc "Interpreter-friendly elem for List terms." $
+  "cx" ~> "g" ~>
+  "x" ~> "listTerm" ~>
+  -- Build: isJust (find (equal x) listTerm)
+  right $ Core.termApplication $ Core.application
+    (Core.termVariable $ encodedName _maybes_isJust)
+    (Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (Core.termVariable $ encodedName _lists_find)
+        (Core.termApplication $ Core.application
+          (Core.termVariable $ encodedName _equality_equal)
+          (var "x")))
+      (var "listTerm"))
+
 -- | Interpreter-friendly filter for List terms.
 -- Keeps elements where predTerm returns true.
 filter_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
@@ -231,6 +249,100 @@ foldr_ = define "foldr" $
     (right $ var "initTerm")
     (var "elements")
 
+-- | Interpreter-friendly group for List terms.
+-- Groups consecutive equal elements: group [1,1,2,2,2,3] = [[1,1],[2,2,2],[3]]
+-- Returns a term that delegates to the lists.foldl primitive with a term-level lambda.
+-- The interpreter's native foldl uses functionWithReduce, which reduces each step
+-- via reduceTerm — so the accumulator is always a value, not an unreduced expression.
+-- Uses maybeHead+maybe instead of null+head+ifElse to avoid eager evaluation of head on empty lists.
+group_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
+group_ = define "group" $
+  doc "Interpreter-friendly group for List terms." $
+  "cx" ~> "g" ~>
+  "listTerm" ~>
+  right $ Core.termApplication $ Core.application flushFn foldExpr
+  where
+    -- Helper: build a primitive application
+    prim1 n x = Core.termApplication $ Core.application (Core.termVariable $ encodedName n) x
+    prim2 n x y = Core.termApplication $ Core.application (Core.termApplication $ Core.application (Core.termVariable $ encodedName n) x) y
+    prim3 n x y z = Core.termApplication $ Core.application (Core.termApplication $ Core.application (Core.termApplication $ Core.application (Core.termVariable $ encodedName n) x) y) z
+    -- Helper: term-level variable
+    tv s = Core.termVariable $ wrap _Name $ string s
+    -- Helper: term-level lambda
+    lam s body = Core.termLambda $ Core.lambda (wrap _Name $ string s) nothing body
+
+    -- stepFn: \acc el -> maybe ([el], snd acc) (\h -> ifElse (equal el h) (extend) (flush)) (maybeHead (fst acc))
+    stepFn = lam "acc" $ lam "el" $
+      prim3 _maybes_maybe
+        -- Nothing (empty group): start new with [el]
+        (Core.termPair $ pair
+          (Core.termList $ list [tv "el"])
+          (prim1 _pairs_second (tv "acc")))
+        -- Just h: check equality
+        (lam "h" $
+          prim3 _logic_ifElse
+            (prim2 _equality_equal (tv "el") (tv "h"))
+            -- Same: extend current group
+            (Core.termPair $ pair
+              (prim2 _lists_concat2 (prim1 _pairs_first (tv "acc")) (Core.termList $ list [tv "el"]))
+              (prim1 _pairs_second (tv "acc")))
+            -- Different: flush and start new
+            (Core.termPair $ pair
+              (Core.termList $ list [tv "el"])
+              (prim2 _lists_concat2
+                (prim1 _pairs_second (tv "acc"))
+                (Core.termList $ list [prim1 _pairs_first (tv "acc")]))))
+        -- maybeHead (fst acc)
+        (prim1 _lists_maybeHead (prim1 _pairs_first (tv "acc")))
+
+    initState = Core.termPair $ pair
+      (Core.termList $ list ([] :: [TTerm Term]))
+      (Core.termList $ list ([] :: [TTerm Term]))
+
+    foldExpr = prim3 _lists_foldl stepFn initState (var "listTerm")
+
+    -- Flush: \foldResult -> ifElse (null (fst r)) (snd r) (concat2 (snd r) [fst r])
+    flushFn = lam "foldResult" $
+      prim3 _logic_ifElse
+        (prim1 _lists_null (prim1 _pairs_first (tv "foldResult")))
+        (prim1 _pairs_second (tv "foldResult"))
+        (prim2 _lists_concat2
+          (prim1 _pairs_second (tv "foldResult"))
+          (Core.termList $ list [prim1 _pairs_first (tv "foldResult")]))
+
+-- | Interpreter-friendly intercalate for List terms.
+-- intercalate sep xss = concat (intersperse sep xss)
+intercalate_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+intercalate_ = define "intercalate" $
+  doc "Interpreter-friendly intercalate for List terms." $
+  "cx" ~> "g" ~>
+  "sep" ~> "listsTerm" ~>
+  -- Build: concat (intersperse sep listsTerm)
+  right $ Core.termApplication $ Core.application
+    (Core.termVariable $ encodedName _lists_concat)
+    (Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (Core.termVariable $ encodedName _lists_intersperse)
+        (var "sep"))
+      (var "listsTerm"))
+
+-- | Interpreter-friendly intersperse for List terms.
+-- intersperse sep [a,b,c] = [a,sep,b,sep,c]
+intersperse_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+intersperse_ = define "intersperse" $
+  doc "Interpreter-friendly intersperse for List terms." $
+  "cx" ~> "g" ~>
+  "sep" ~> "listTerm" ~>
+  "elements" <<~ (ExtractCore.list @@ var "g" @@ var "listTerm") $
+  right $ Core.termList $ Maybes.maybe
+    (list ([] :: [TTerm Term]))
+    ("p" ~> Lists.cons
+      (Pairs.first (var "p"))
+      (Lists.concat $ Lists.map
+        ("el" ~> list [var "sep", var "el"])
+        (Pairs.second (var "p"))))
+    (Lists.uncons (var "elements"))
+
 -- | Interpreter-friendly map for List terms.
 -- Applies funTerm to each element of listTerm.
 -- Note: builds result directly using foldl to avoid recursive primitive calls.
@@ -248,6 +360,56 @@ map_ = define "map" $
       (var "acc"))
     (list ([] :: [TTerm Term]))
     (var "elements")
+
+-- | Interpreter-friendly maybeHead for List terms.
+-- maybeHead xs = maybe Nothing (Just . fst) (uncons xs)
+maybeHead_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
+maybeHead_ = define "maybeHead" $
+  doc "Interpreter-friendly maybeHead for List terms." $
+  "cx" ~> "g" ~>
+  "listTerm" ~>
+  "elements" <<~ (ExtractCore.list @@ var "g" @@ var "listTerm") $
+  right $ Core.termMaybe $ Maybes.maybe
+    nothing
+    ("p" ~> just (Pairs.first (var "p")))
+    (Lists.uncons (var "elements"))
+
+-- | Interpreter-friendly nub for List terms.
+-- Removes duplicates using equality. nub xs = foldl (\acc x -> ifElse (elem x acc) acc (concat2 acc [x])) [] xs
+nub_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
+nub_ = define "nub" $
+  doc "Interpreter-friendly nub for List terms." $
+  "cx" ~> "g" ~>
+  "listTerm" ~>
+  "elements" <<~ (ExtractCore.list @@ var "g" @@ var "listTerm") $
+  -- Build: foldl (\acc x -> ifElse (elem x acc) acc (concat2 acc [x])) [] xs
+  -- This must be entirely at the term level since we need runtime equality checks
+  right $ Core.termApplication $ Core.application
+    (Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (Core.termVariable $ encodedName _lists_foldl)
+        -- fold function: \acc x -> ifElse (elem x acc) acc (concat2 acc [x])
+        (Core.termLambda $ Core.lambda (wrap _Name $ string "acc") nothing $
+          Core.termLambda $ Core.lambda (wrap _Name $ string "x") nothing $
+            Core.termApplication $ Core.application
+              (Core.termApplication $ Core.application
+                (Core.termApplication $ Core.application
+                  (Core.termVariable $ encodedName _logic_ifElse)
+                  (Core.termApplication $ Core.application
+                    (Core.termApplication $ Core.application
+                      (Core.termVariable $ encodedName _lists_elem)
+                      (Core.termVariable $ wrap _Name $ string "x"))
+                    (Core.termVariable $ wrap _Name $ string "acc")))
+                (Core.termVariable $ wrap _Name $ string "acc"))
+              (Core.termApplication $ Core.application
+                (Core.termApplication $ Core.application
+                  (Core.termVariable $ encodedName _lists_concat2)
+                  (Core.termVariable $ wrap _Name $ string "acc"))
+                (Core.termList $ list [Core.termVariable $ wrap _Name $ string "x"]))))
+      -- initial: []
+      (Core.termList $ list ([] :: [TTerm Term])))
+    -- list
+    (var "listTerm")
 
 -- | Interpreter-friendly partition for List terms.
 -- Partitions elements into (satisfying predicate, not satisfying predicate).
@@ -302,6 +464,43 @@ partition_ = define "partition" $
   -- Return the final state directly (it's already a pair)
   right $ var "finalState"
 
+-- | Interpreter-friendly pure for List terms.
+-- Wraps a single element in a list: pure x = [x]
+pure_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
+pure_ = define "pure" $
+  doc "Interpreter-friendly pure for List terms." $
+  "cx" ~> "g" ~>
+  "x" ~>
+  right $ Core.termList $ list [var "x"]
+
+-- | Interpreter-friendly replicate for List terms.
+-- replicate n x = map (const x) (range 0 n)
+replicate_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+replicate_ = define "replicate" $
+  doc "Interpreter-friendly replicate for List terms." $
+  "cx" ~> "g" ~>
+  "n" ~> "x" ~>
+  -- Build: map (\_ -> x) (range 1 n)  -- range is inclusive, so range 1 n has n elements
+  right $ Core.termApplication $ Core.application
+    (Core.termApplication $ Core.application
+      (Core.termVariable $ encodedName _lists_map)
+      (Core.termLambda $ Core.lambda (wrap _Name $ string "_") nothing $
+        var "x"))
+    (Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (Core.termVariable $ encodedName _math_range)
+        (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ MetaLiterals.int32 1))
+      (var "n"))
+
+-- | Interpreter-friendly singleton for List terms.
+-- singleton x = [x]
+singleton_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
+singleton_ = define "singleton" $
+  doc "Interpreter-friendly singleton for List terms." $
+  "cx" ~> "g" ~>
+  "x" ~>
+  right $ Core.termList $ list [var "x"]
+
 -- | Interpreter-friendly sortOn for List terms.
 -- Sorts elements by comparing the results of applying projTerm to each.
 -- Uses insertion sort: for each element, use span to find insertion point.
@@ -348,6 +547,20 @@ sortOn_ = define "sortOn" $
           (var "after")))
     (Core.termList $ list ([] :: [TTerm Term]))
     (var "elements")
+
+-- | Interpreter-friendly sort for List terms.
+-- sort xs = sortOn identity xs
+sort_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
+sort_ = define "sort" $
+  doc "Interpreter-friendly sort for List terms." $
+  "cx" ~> "g" ~>
+  "listTerm" ~>
+  -- Build: sortOn identity listTerm
+  right $ Core.termApplication $ Core.application
+    (Core.termApplication $ Core.application
+      (Core.termVariable $ encodedName _lists_sortOn)
+      (Core.termVariable $ encodedName _equality_identity))
+    (var "listTerm")
 
 -- | Interpreter-friendly span for List terms.
 -- Splits the list into (takeWhile pred list, dropWhile pred list).
@@ -461,216 +674,3 @@ zipWith_ = define "zipWith" $
         (Core.termApplication $ Core.application (var "funTerm") (var "a"))
         (var "b"))
     (Lists.zip (var "elements1") (var "elements2"))
-
--- | Interpreter-friendly elem for List terms.
--- Tests whether an element is in the list: elem x xs = isJust (find (equal x) xs)
-elem_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
-elem_ = define "elem" $
-  doc "Interpreter-friendly elem for List terms." $
-  "cx" ~> "g" ~>
-  "x" ~> "listTerm" ~>
-  -- Build: isJust (find (equal x) listTerm)
-  right $ Core.termApplication $ Core.application
-    (Core.termVariable $ encodedName _maybes_isJust)
-    (Core.termApplication $ Core.application
-      (Core.termApplication $ Core.application
-        (Core.termVariable $ encodedName _lists_find)
-        (Core.termApplication $ Core.application
-          (Core.termVariable $ encodedName _equality_equal)
-          (var "x")))
-      (var "listTerm"))
-
--- | Interpreter-friendly group for List terms.
--- Groups consecutive equal elements: group [1,1,2,2,2,3] = [[1,1],[2,2,2],[3]]
--- Returns a term that delegates to the lists.foldl primitive with a term-level lambda.
--- The interpreter's native foldl uses functionWithReduce, which reduces each step
--- via reduceTerm — so the accumulator is always a value, not an unreduced expression.
--- Uses maybeHead+maybe instead of null+head+ifElse to avoid eager evaluation of head on empty lists.
-group_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
-group_ = define "group" $
-  doc "Interpreter-friendly group for List terms." $
-  "cx" ~> "g" ~>
-  "listTerm" ~>
-  right $ Core.termApplication $ Core.application flushFn foldExpr
-  where
-    -- Helper: build a primitive application
-    prim1 n x = Core.termApplication $ Core.application (Core.termVariable $ encodedName n) x
-    prim2 n x y = Core.termApplication $ Core.application (Core.termApplication $ Core.application (Core.termVariable $ encodedName n) x) y
-    prim3 n x y z = Core.termApplication $ Core.application (Core.termApplication $ Core.application (Core.termApplication $ Core.application (Core.termVariable $ encodedName n) x) y) z
-    -- Helper: term-level variable
-    tv s = Core.termVariable $ wrap _Name $ string s
-    -- Helper: term-level lambda
-    lam s body = Core.termLambda $ Core.lambda (wrap _Name $ string s) nothing body
-
-    -- stepFn: \acc el -> maybe ([el], snd acc) (\h -> ifElse (equal el h) (extend) (flush)) (maybeHead (fst acc))
-    stepFn = lam "acc" $ lam "el" $
-      prim3 _maybes_maybe
-        -- Nothing (empty group): start new with [el]
-        (Core.termPair $ pair
-          (Core.termList $ list [tv "el"])
-          (prim1 _pairs_second (tv "acc")))
-        -- Just h: check equality
-        (lam "h" $
-          prim3 _logic_ifElse
-            (prim2 _equality_equal (tv "el") (tv "h"))
-            -- Same: extend current group
-            (Core.termPair $ pair
-              (prim2 _lists_concat2 (prim1 _pairs_first (tv "acc")) (Core.termList $ list [tv "el"]))
-              (prim1 _pairs_second (tv "acc")))
-            -- Different: flush and start new
-            (Core.termPair $ pair
-              (Core.termList $ list [tv "el"])
-              (prim2 _lists_concat2
-                (prim1 _pairs_second (tv "acc"))
-                (Core.termList $ list [prim1 _pairs_first (tv "acc")]))))
-        -- maybeHead (fst acc)
-        (prim1 _lists_maybeHead (prim1 _pairs_first (tv "acc")))
-
-    initState = Core.termPair $ pair
-      (Core.termList $ list ([] :: [TTerm Term]))
-      (Core.termList $ list ([] :: [TTerm Term]))
-
-    foldExpr = prim3 _lists_foldl stepFn initState (var "listTerm")
-
-    -- Flush: \foldResult -> ifElse (null (fst r)) (snd r) (concat2 (snd r) [fst r])
-    flushFn = lam "foldResult" $
-      prim3 _logic_ifElse
-        (prim1 _lists_null (prim1 _pairs_first (tv "foldResult")))
-        (prim1 _pairs_second (tv "foldResult"))
-        (prim2 _lists_concat2
-          (prim1 _pairs_second (tv "foldResult"))
-          (Core.termList $ list [prim1 _pairs_first (tv "foldResult")]))
-
--- | Interpreter-friendly intercalate for List terms.
--- intercalate sep xss = concat (intersperse sep xss)
-intercalate_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
-intercalate_ = define "intercalate" $
-  doc "Interpreter-friendly intercalate for List terms." $
-  "cx" ~> "g" ~>
-  "sep" ~> "listsTerm" ~>
-  -- Build: concat (intersperse sep listsTerm)
-  right $ Core.termApplication $ Core.application
-    (Core.termVariable $ encodedName _lists_concat)
-    (Core.termApplication $ Core.application
-      (Core.termApplication $ Core.application
-        (Core.termVariable $ encodedName _lists_intersperse)
-        (var "sep"))
-      (var "listsTerm"))
-
--- | Interpreter-friendly intersperse for List terms.
--- intersperse sep [a,b,c] = [a,sep,b,sep,c]
-intersperse_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
-intersperse_ = define "intersperse" $
-  doc "Interpreter-friendly intersperse for List terms." $
-  "cx" ~> "g" ~>
-  "sep" ~> "listTerm" ~>
-  "elements" <<~ (ExtractCore.list @@ var "g" @@ var "listTerm") $
-  right $ Core.termList $ Maybes.maybe
-    (list ([] :: [TTerm Term]))
-    ("p" ~> Lists.cons
-      (Pairs.first (var "p"))
-      (Lists.concat $ Lists.map
-        ("el" ~> list [var "sep", var "el"])
-        (Pairs.second (var "p"))))
-    (Lists.uncons (var "elements"))
-
--- | Interpreter-friendly maybeHead for List terms.
--- maybeHead xs = maybe Nothing (Just . fst) (uncons xs)
-maybeHead_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
-maybeHead_ = define "maybeHead" $
-  doc "Interpreter-friendly maybeHead for List terms." $
-  "cx" ~> "g" ~>
-  "listTerm" ~>
-  "elements" <<~ (ExtractCore.list @@ var "g" @@ var "listTerm") $
-  right $ Core.termMaybe $ Maybes.maybe
-    nothing
-    ("p" ~> just (Pairs.first (var "p")))
-    (Lists.uncons (var "elements"))
-
--- | Interpreter-friendly nub for List terms.
--- Removes duplicates using equality. nub xs = foldl (\acc x -> ifElse (elem x acc) acc (concat2 acc [x])) [] xs
-nub_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
-nub_ = define "nub" $
-  doc "Interpreter-friendly nub for List terms." $
-  "cx" ~> "g" ~>
-  "listTerm" ~>
-  "elements" <<~ (ExtractCore.list @@ var "g" @@ var "listTerm") $
-  -- Build: foldl (\acc x -> ifElse (elem x acc) acc (concat2 acc [x])) [] xs
-  -- This must be entirely at the term level since we need runtime equality checks
-  right $ Core.termApplication $ Core.application
-    (Core.termApplication $ Core.application
-      (Core.termApplication $ Core.application
-        (Core.termVariable $ encodedName _lists_foldl)
-        -- fold function: \acc x -> ifElse (elem x acc) acc (concat2 acc [x])
-        (Core.termLambda $ Core.lambda (wrap _Name $ string "acc") nothing $
-          Core.termLambda $ Core.lambda (wrap _Name $ string "x") nothing $
-            Core.termApplication $ Core.application
-              (Core.termApplication $ Core.application
-                (Core.termApplication $ Core.application
-                  (Core.termVariable $ encodedName _logic_ifElse)
-                  (Core.termApplication $ Core.application
-                    (Core.termApplication $ Core.application
-                      (Core.termVariable $ encodedName _lists_elem)
-                      (Core.termVariable $ wrap _Name $ string "x"))
-                    (Core.termVariable $ wrap _Name $ string "acc")))
-                (Core.termVariable $ wrap _Name $ string "acc"))
-              (Core.termApplication $ Core.application
-                (Core.termApplication $ Core.application
-                  (Core.termVariable $ encodedName _lists_concat2)
-                  (Core.termVariable $ wrap _Name $ string "acc"))
-                (Core.termList $ list [Core.termVariable $ wrap _Name $ string "x"]))))
-      -- initial: []
-      (Core.termList $ list ([] :: [TTerm Term])))
-    -- list
-    (var "listTerm")
-
--- | Interpreter-friendly pure for List terms.
--- Wraps a single element in a list: pure x = [x]
-pure_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
-pure_ = define "pure" $
-  doc "Interpreter-friendly pure for List terms." $
-  "cx" ~> "g" ~>
-  "x" ~>
-  right $ Core.termList $ list [var "x"]
-
--- | Interpreter-friendly replicate for List terms.
--- replicate n x = map (const x) (range 0 n)
-replicate_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
-replicate_ = define "replicate" $
-  doc "Interpreter-friendly replicate for List terms." $
-  "cx" ~> "g" ~>
-  "n" ~> "x" ~>
-  -- Build: map (\_ -> x) (range 1 n)  -- range is inclusive, so range 1 n has n elements
-  right $ Core.termApplication $ Core.application
-    (Core.termApplication $ Core.application
-      (Core.termVariable $ encodedName _lists_map)
-      (Core.termLambda $ Core.lambda (wrap _Name $ string "_") nothing $
-        var "x"))
-    (Core.termApplication $ Core.application
-      (Core.termApplication $ Core.application
-        (Core.termVariable $ encodedName _math_range)
-        (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ MetaLiterals.int32 1))
-      (var "n"))
-
--- | Interpreter-friendly singleton for List terms.
--- singleton x = [x]
-singleton_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
-singleton_ = define "singleton" $
-  doc "Interpreter-friendly singleton for List terms." $
-  "cx" ~> "g" ~>
-  "x" ~>
-  right $ Core.termList $ list [var "x"]
-
--- | Interpreter-friendly sort for List terms.
--- sort xs = sortOn identity xs
-sort_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
-sort_ = define "sort" $
-  doc "Interpreter-friendly sort for List terms." $
-  "cx" ~> "g" ~>
-  "listTerm" ~>
-  -- Build: sortOn identity listTerm
-  right $ Core.termApplication $ Core.application
-    (Core.termApplication $ Core.application
-      (Core.termVariable $ encodedName _lists_sortOn)
-      (Core.termVariable $ encodedName _equality_identity))
-    (var "listTerm")

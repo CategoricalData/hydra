@@ -102,17 +102,77 @@ alternative = define "Alternative" $
       doc "Optional local bindings" $
       T.maybe localBindings]
 
-constraint :: Binding
-constraint = define "Constraint" $
-  doc "A type constraint" $
-  T.union [
-    "class">:
-      doc "A class constraint"
-      classConstraint,
-    "tuple">:
-      doc "A tuple of constraints" $
-      T.list constraint]
-  -- omitted for now: implicit and infix constraints
+applicationDeclarationHead :: Binding
+applicationDeclarationHead = define "ApplicationDeclarationHead" $
+  doc "An application-style declaration head" $
+  T.record [
+    "function">:
+      doc "The function being applied"
+      declarationHead,
+    "operand">:
+      doc "The type variable operand"
+      variable]
+
+applicationExpression :: Binding
+applicationExpression = define "ApplicationExpression" $
+  doc "An application expression" $
+  T.record [
+    "function">:
+      doc "The function being applied"
+      expression,
+    "argument">:
+      doc "The argument"
+      expression]
+
+applicationPattern :: Binding
+applicationPattern = define "ApplicationPattern" $
+  doc "An application pattern" $
+  T.record [
+    "name">:
+      doc "The constructor name"
+      name,
+    "args">:
+      doc "The pattern arguments" $
+      T.list pattern]
+
+applicationType :: Binding
+applicationType = define "ApplicationType" $
+  doc "An application type" $
+  T.record [
+    "context">:
+      doc "The type being applied"
+      type_,
+    "argument">:
+      doc "The type argument"
+      type_]
+
+asPattern :: Binding
+asPattern = define "AsPattern" $
+  doc "An 'as' pattern" $
+  T.record [
+    "name">:
+      doc "The bound name"
+      name,
+    "inner">:
+      doc "The inner pattern"
+      pattern]
+
+caseExpression :: Binding
+caseExpression = define "CaseExpression" $
+  doc "A case expression" $
+  T.record [
+    "case">:
+      doc "The expression being matched"
+      expression,
+    "alternatives">:
+      doc "The pattern-matching alternatives" $
+      T.list alternative]
+
+caseRhs :: Binding
+caseRhs = define "CaseRhs" $
+  doc "The right-hand side of a pattern-matching alternative" $
+  -- omitted for now: guarded
+  T.wrap expression
 
 classConstraint :: Binding
 classConstraint = define "ClassConstraint" $
@@ -125,11 +185,28 @@ classConstraint = define "ClassConstraint" $
       doc "The types to which the class is applied" $
       T.list type_]
 
-caseRhs :: Binding
-caseRhs = define "CaseRhs" $
-  doc "The right-hand side of a pattern-matching alternative" $
-  -- omitted for now: guarded
-  T.wrap expression
+constrainedType :: Binding
+constrainedType = define "ConstrainedType" $
+  doc "A type with a context (type class constraints)" $
+  T.record [
+    "ctx">:
+      doc "The type class context"
+      constraint,
+    "type">:
+      doc "The constrained type"
+      type_]
+
+constraint :: Binding
+constraint = define "Constraint" $
+  doc "A type constraint" $
+  T.union [
+    "class">:
+      doc "A class constraint"
+      classConstraint,
+    "tuple">:
+      doc "A tuple of constraints" $
+      T.list constraint]
+  -- omitted for now: implicit and infix constraints
 
 constructor :: Binding
 constructor = define "Constructor" $
@@ -142,34 +219,6 @@ constructor = define "Constructor" $
     "record">:
       doc "A record constructor"
       recordConstructor]
-
-positionalConstructor :: Binding
-positionalConstructor = define "PositionalConstructor" $
-  doc "An ordinary (positional) data constructor" $
-  T.record [
-    "name">:
-      doc "The name of the constructor"
-      name,
-    "fields">:
-      doc "The types of the positional fields" $
-      T.list type_,
-    "comments">:
-      doc "Optional comments" $
-      T.maybe T.string]
-
-recordConstructor :: Binding
-recordConstructor = define "RecordConstructor" $
-  doc "A record-style data constructor" $
-  T.record [
-    "name">:
-      doc "The name of the constructor"
-      name,
-    "fields">:
-      doc "The named fields of the record" $
-      T.list field,
-    "comments">:
-      doc "Optional comments" $
-      T.maybe T.string]
 
 dataDeclaration :: Binding
 dataDeclaration = define "DataDeclaration" $
@@ -230,17 +279,6 @@ declarationHead = define "DeclarationHead" $
     "simple">:
       doc "A simple name"
       name]
-
-applicationDeclarationHead :: Binding
-applicationDeclarationHead = define "ApplicationDeclarationHead" $
-  doc "An application-style declaration head" $
-  T.record [
-    "function">:
-      doc "The function being applied"
-      declarationHead,
-    "operand">:
-      doc "The type variable operand"
-      variable]
 
 derivingClause :: Binding
 derivingClause = define "DerivingClause" $
@@ -316,122 +354,6 @@ expression = define "Expression" $
       doc "A variable reference"
       name]
 
-applicationExpression :: Binding
-applicationExpression = define "ApplicationExpression" $
-  doc "An application expression" $
-  T.record [
-    "function">:
-      doc "The function being applied"
-      expression,
-    "argument">:
-      doc "The argument"
-      expression]
-
-caseExpression :: Binding
-caseExpression = define "CaseExpression" $
-  doc "A case expression" $
-  T.record [
-    "case">:
-      doc "The expression being matched"
-      expression,
-    "alternatives">:
-      doc "The pattern-matching alternatives" $
-      T.list alternative]
-
-recordExpression :: Binding
-recordExpression = define "RecordExpression" $
-  doc "A record constructor expression" $
-  T.record [
-    "name">:
-      doc "The constructor name"
-      name,
-    "fields">:
-      doc "The field assignments" $
-      T.list fieldUpdate]
-
-ifExpression :: Binding
-ifExpression = define "IfExpression" $
-  doc "An 'if' expression" $
-  T.record [
-    "condition">:
-      doc "The condition expression"
-      expression,
-    "then">:
-      doc "The 'then' branch"
-      expression,
-    "else">:
-      doc "The 'else' branch"
-      expression]
-
-infixExpression :: Binding
-infixExpression = define "InfixExpression" $
-  doc "An infix application expression" $
-  T.record [
-    "lhs">:
-      doc "The left-hand operand"
-      expression,
-    "operator">:
-      doc "The infix operator"
-      operator,
-    "rhs">:
-      doc "The right-hand operand"
-      expression]
-
-lambdaExpression :: Binding
-lambdaExpression = define "LambdaExpression" $
-  doc "A lambda expression" $
-  T.record [
-    "bindings">:
-      doc "The patterns binding parameters" $
-      T.list pattern,
-    "inner">:
-      doc "The body of the lambda"
-      expression]
-
-letExpression :: Binding
-letExpression = define "LetExpression" $
-  doc "A 'let' expression" $
-  T.record [
-    "bindings">:
-      doc "The local bindings" $
-      T.list localBinding,
-    "inner">:
-      doc "The body of the let expression"
-      expression]
-
-sectionExpression :: Binding
-sectionExpression = define "SectionExpression" $
-  doc "A section expression" $
-  T.record [
-    "operator">:
-      doc "The operator"
-      operator,
-    "expression">:
-      doc "The operand"
-      expression]
-
-typedExpression :: Binding
-typedExpression = define "TypedExpression" $
-  doc "A type signature expression" $
-  T.record [
-    "inner">:
-      doc "The expression being typed"
-      expression,
-    "type">:
-      doc "The type signature"
-      type_]
-
-recordUpdateExpression :: Binding
-recordUpdateExpression = define "RecordUpdateExpression" $
-  doc "An update record expression" $
-  T.record [
-    "inner">:
-      doc "The record being updated"
-      expression,
-    "fields">:
-      doc "The field updates" $
-      T.list fieldUpdate]
-
 field :: Binding
 field = define "Field" $
   doc "A field (name/type pair)" $
@@ -458,6 +380,58 @@ fieldUpdate = define "FieldUpdate" $
       doc "The field value"
       expression]
 
+functionType :: Binding
+functionType = define "FunctionType" $
+  doc "A function type" $
+  T.record [
+    "domain">:
+      doc "The domain type"
+      type_,
+    "codomain">:
+      doc "The codomain type"
+      type_]
+
+ifExpression :: Binding
+ifExpression = define "IfExpression" $
+  doc "An 'if' expression" $
+  T.record [
+    "condition">:
+      doc "The condition expression"
+      expression,
+    "then">:
+      doc "The 'then' branch"
+      expression,
+    "else">:
+      doc "The 'else' branch"
+      expression]
+
+importExportSubspec :: Binding
+importExportSubspec = define "ImportExportSubspec" $
+  doc "A subspecification within an import/export" $
+  T.union [
+    "all">:
+      doc "Import/export all"
+      T.unit,
+    "list">:
+      doc "Import/export specific names" $
+      T.list name]
+
+importModifier :: Binding
+importModifier = define "ImportModifier" $
+  doc "An import modifier ('pattern' or 'type')" $
+  T.enum ["pattern", "type"]
+
+importSpec :: Binding
+importSpec = define "ImportSpec" $
+  doc "An import specification" $
+  T.union [
+    "list">:
+      doc "A list of imports to include" $
+      T.list namedImportExport,
+    "hiding">:
+      doc "A list of imports to exclude" $
+      T.list namedImportExport]
+
 import_ :: Binding
 import_ = define "Import" $
   doc "An import statement" $
@@ -476,46 +450,55 @@ import_ = define "Import" $
       doc "Optional import specification" $
       T.maybe importSpec]
 
-importSpec :: Binding
-importSpec = define "ImportSpec" $
-  doc "An import specification" $
-  T.union [
-    "list">:
-      doc "A list of imports to include" $
-      T.list namedImportExport,
-    "hiding">:
-      doc "A list of imports to exclude" $
-      T.list namedImportExport]
-
-importModifier :: Binding
-importModifier = define "ImportModifier" $
-  doc "An import modifier ('pattern' or 'type')" $
-  T.enum ["pattern", "type"]
-
-namedImportExport :: Binding
-namedImportExport = define "NamedImportExport" $
-  doc "An import or export specification" $
+infixExpression :: Binding
+infixExpression = define "InfixExpression" $
+  doc "An infix application expression" $
   T.record [
-    "modifier">:
-      doc "Optional import modifier" $
-      T.maybe importModifier,
-    "name">:
-      doc "The name being imported or exported"
-      name,
-    "subspec">:
-      doc "Optional subspecification" $
-      T.maybe importExportSubspec]
+    "lhs">:
+      doc "The left-hand operand"
+      expression,
+    "operator">:
+      doc "The infix operator"
+      operator,
+    "rhs">:
+      doc "The right-hand operand"
+      expression]
 
-importExportSubspec :: Binding
-importExportSubspec = define "ImportExportSubspec" $
-  doc "A subspecification within an import/export" $
-  T.union [
-    "all">:
-      doc "Import/export all"
-      T.unit,
-    "list">:
-      doc "Import/export specific names" $
-      T.list name]
+infixType :: Binding
+infixType = define "InfixType" $
+  doc "An infix type application" $
+  T.record [
+    "lhs">:
+      doc "The left-hand type"
+      type_,
+    "operator">:
+      doc "The type operator"
+      operator,
+    "rhs">:
+      doc "The right-hand type"
+      type_]
+
+lambdaExpression :: Binding
+lambdaExpression = define "LambdaExpression" $
+  doc "A lambda expression" $
+  T.record [
+    "bindings">:
+      doc "The patterns binding parameters" $
+      T.list pattern,
+    "inner">:
+      doc "The body of the lambda"
+      expression]
+
+letExpression :: Binding
+letExpression = define "LetExpression" $
+  doc "A 'let' expression" $
+  T.record [
+    "bindings">:
+      doc "The local bindings" $
+      T.list localBinding,
+    "inner">:
+      doc "The body of the let expression"
+      expression]
 
 literal :: Binding
 literal = define "Literal" $
@@ -609,6 +592,20 @@ namePart = define "NamePart" $
   doc "A component of a qualified name" $
   T.wrap T.string
 
+namedImportExport :: Binding
+namedImportExport = define "NamedImportExport" $
+  doc "An import or export specification" $
+  T.record [
+    "modifier">:
+      doc "Optional import modifier" $
+      T.maybe importModifier,
+    "name">:
+      doc "The name being imported or exported"
+      name,
+    "subspec">:
+      doc "Optional subspecification" $
+      T.maybe importExportSubspec]
+
 operator :: Binding
 operator = define "Operator" $
   doc "An operator" $
@@ -653,50 +650,6 @@ pattern = define "Pattern" $
       doc "A wildcard pattern"
       T.unit]
 
-applicationPattern :: Binding
-applicationPattern = define "ApplicationPattern" $
-  doc "An application pattern" $
-  T.record [
-    "name">:
-      doc "The constructor name"
-      name,
-    "args">:
-      doc "The pattern arguments" $
-      T.list pattern]
-
-asPattern :: Binding
-asPattern = define "AsPattern" $
-  doc "An 'as' pattern" $
-  T.record [
-    "name">:
-      doc "The bound name"
-      name,
-    "inner">:
-      doc "The inner pattern"
-      pattern]
-
-recordPattern :: Binding
-recordPattern = define "RecordPattern" $
-  doc "A record pattern" $
-  T.record [
-    "name">:
-      doc "The constructor name"
-      name,
-    "fields">:
-      doc "The field patterns" $
-      T.list patternField]
-
-typedPattern :: Binding
-typedPattern = define "TypedPattern" $
-  doc "A typed pattern" $
-  T.record [
-    "inner">:
-      doc "The inner pattern"
-      pattern,
-    "type">:
-      doc "The type annotation"
-      type_]
-
 patternField :: Binding
 patternField = define "PatternField" $
   doc "A pattern field" $
@@ -709,6 +662,20 @@ patternField = define "PatternField" $
       doc "The field pattern"
       pattern]
 
+positionalConstructor :: Binding
+positionalConstructor = define "PositionalConstructor" $
+  doc "An ordinary (positional) data constructor" $
+  T.record [
+    "name">:
+      doc "The name of the constructor"
+      name,
+    "fields">:
+      doc "The types of the positional fields" $
+      T.list type_,
+    "comments">:
+      doc "Optional comments" $
+      T.maybe T.string]
+
 qualifiedName :: Binding
 qualifiedName = define "QualifiedName" $
   doc "A qualified name" $
@@ -720,16 +687,116 @@ qualifiedName = define "QualifiedName" $
       doc "The unqualified name part"
       namePart]
 
+recordConstructor :: Binding
+recordConstructor = define "RecordConstructor" $
+  doc "A record-style data constructor" $
+  T.record [
+    "name">:
+      doc "The name of the constructor"
+      name,
+    "fields">:
+      doc "The named fields of the record" $
+      T.list field,
+    "comments">:
+      doc "Optional comments" $
+      T.maybe T.string]
+
+recordExpression :: Binding
+recordExpression = define "RecordExpression" $
+  doc "A record constructor expression" $
+  T.record [
+    "name">:
+      doc "The constructor name"
+      name,
+    "fields">:
+      doc "The field assignments" $
+      T.list fieldUpdate]
+
+recordPattern :: Binding
+recordPattern = define "RecordPattern" $
+  doc "A record pattern" $
+  T.record [
+    "name">:
+      doc "The constructor name"
+      name,
+    "fields">:
+      doc "The field patterns" $
+      T.list patternField]
+
+recordUpdateExpression :: Binding
+recordUpdateExpression = define "RecordUpdateExpression" $
+  doc "An update record expression" $
+  T.record [
+    "inner">:
+      doc "The record being updated"
+      expression,
+    "fields">:
+      doc "The field updates" $
+      T.list fieldUpdate]
+
 rightHandSide :: Binding
 rightHandSide = define "RightHandSide" $
   doc "A right-hand side of a binding" $
   -- omitted for now: guarded rhs
   T.wrap expression
 
+sectionExpression :: Binding
+sectionExpression = define "SectionExpression" $
+  doc "A section expression" $
+  T.record [
+    "operator">:
+      doc "The operator"
+      operator,
+    "expression">:
+      doc "The operand"
+      expression]
+
+simpleValueBinding :: Binding
+simpleValueBinding = define "SimpleValueBinding" $
+  doc "A simple value binding" $
+  T.record [
+    "pattern">:
+      doc "The pattern being bound"
+      pattern,
+    "rhs">:
+      doc "The right-hand side"
+      rightHandSide,
+    "localBindings">:
+      doc "Optional local bindings (where clause)" $
+      T.maybe localBindings,
+    "comments">:
+      doc "Optional comments" $
+      T.maybe T.string]
+
 statement :: Binding
 statement = define "Statement" $
   doc "A do-notation statement" $
   T.wrap expression
+
+typeSignature :: Binding
+typeSignature = define "TypeSignature" $
+  doc "A type signature" $
+  T.record [
+    "name">:
+      doc "The name being typed"
+      name,
+    "type">:
+      doc "The type"
+      type_]
+
+typeSynonymDeclaration :: Binding
+typeSynonymDeclaration = define "TypeSynonymDeclaration" $
+  doc "A type synonym declaration" $
+  T.record [
+    "name">:
+      doc "The declaration head"
+      declarationHead,
+    "type">:
+      doc "The type being defined"
+      type_,
+    "comments">:
+      doc "Optional comments" $
+      T.maybe T.string]
 
 type_ :: Binding
 type_ = define "Type" $
@@ -759,78 +826,6 @@ type_ = define "Type" $
       doc "A type variable or type name"
       name]
 
-applicationType :: Binding
-applicationType = define "ApplicationType" $
-  doc "An application type" $
-  T.record [
-    "context">:
-      doc "The type being applied"
-      type_,
-    "argument">:
-      doc "The type argument"
-      type_]
-
-constrainedType :: Binding
-constrainedType = define "ConstrainedType" $
-  doc "A type with a context (type class constraints)" $
-  T.record [
-    "ctx">:
-      doc "The type class context"
-      constraint,
-    "type">:
-      doc "The constrained type"
-      type_]
-
-functionType :: Binding
-functionType = define "FunctionType" $
-  doc "A function type" $
-  T.record [
-    "domain">:
-      doc "The domain type"
-      type_,
-    "codomain">:
-      doc "The codomain type"
-      type_]
-
-infixType :: Binding
-infixType = define "InfixType" $
-  doc "An infix type application" $
-  T.record [
-    "lhs">:
-      doc "The left-hand type"
-      type_,
-    "operator">:
-      doc "The type operator"
-      operator,
-    "rhs">:
-      doc "The right-hand type"
-      type_]
-
-typeSynonymDeclaration :: Binding
-typeSynonymDeclaration = define "TypeSynonymDeclaration" $
-  doc "A type synonym declaration" $
-  T.record [
-    "name">:
-      doc "The declaration head"
-      declarationHead,
-    "type">:
-      doc "The type being defined"
-      type_,
-    "comments">:
-      doc "Optional comments" $
-      T.maybe T.string]
-
-typeSignature :: Binding
-typeSignature = define "TypeSignature" $
-  doc "A type signature" $
-  T.record [
-    "name">:
-      doc "The name being typed"
-      name,
-    "type">:
-      doc "The type"
-      type_]
-
 typedBinding :: Binding -- Added for convenience
 typedBinding = define "TypedBinding" $
   doc "A binding with its type signature" $
@@ -845,6 +840,28 @@ typedBinding = define "TypedBinding" $
       doc "Optional comments" $
       T.maybe T.string]
 
+typedExpression :: Binding
+typedExpression = define "TypedExpression" $
+  doc "A type signature expression" $
+  T.record [
+    "inner">:
+      doc "The expression being typed"
+      expression,
+    "type">:
+      doc "The type signature"
+      type_]
+
+typedPattern :: Binding
+typedPattern = define "TypedPattern" $
+  doc "A typed pattern" $
+  T.record [
+    "inner">:
+      doc "The inner pattern"
+      pattern,
+    "type">:
+      doc "The type annotation"
+      type_]
+
 valueBinding :: Binding
 valueBinding = define "ValueBinding" $
   doc "A value binding" $
@@ -853,23 +870,6 @@ valueBinding = define "ValueBinding" $
     "simple">:
       doc "A simple value binding"
       simpleValueBinding]
-
-simpleValueBinding :: Binding
-simpleValueBinding = define "SimpleValueBinding" $
-  doc "A simple value binding" $
-  T.record [
-    "pattern">:
-      doc "The pattern being bound"
-      pattern,
-    "rhs">:
-      doc "The right-hand side"
-      rightHandSide,
-    "localBindings">:
-      doc "Optional local bindings (where clause)" $
-      T.maybe localBindings,
-    "comments">:
-      doc "Optional comments" $
-      T.maybe T.string]
 
 variable :: Binding
 variable = define "Variable" $

@@ -47,9 +47,6 @@ import qualified Hydra.Sources.Rust.Serde as RustSerdeSource
 import qualified Hydra.Sources.Rust.Language as RustLanguageSource
 
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
 ns :: ModuleName
 ns = ModuleName "hydra.rust.coder"
 
@@ -89,6 +86,9 @@ module_ = Module {
 -- =============================================================================
 -- Standard derives
 -- =============================================================================
+
+def :: String -> TTerm a -> TTermDefinition a
+def = definitionInModule module_
 
 -- | Encode a Hydra union field as a Rust enum variant
 encodeEnumVariant :: TTermDefinition (InferenceContext -> Graph -> FieldType -> Either Error R.EnumVariant)

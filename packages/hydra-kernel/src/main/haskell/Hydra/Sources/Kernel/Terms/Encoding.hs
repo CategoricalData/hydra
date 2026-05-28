@@ -119,10 +119,6 @@ module_ = Module {
 define :: String -> TTerm x -> TTermDefinition x
 define = definitionInModule module_
 
--- | Format a DecodingError as a string
-formatDecodingError :: TTerm (DecodingError -> String)
-formatDecodingError = "e" ~> unwrap _DecodingError @@ var "e"
-
 -- | Encode a single type binding into an encoder binding
 -- This decodes the term to a Type, then generates an encoder function.
 -- Type variables that appear as Map keys or Set elements get Ord constraints
@@ -885,6 +881,10 @@ filterTypeBindings = define "filterTypeBindings" $
     Eithers.map (primitive _maybes_cat) $
       Eithers.mapList (isEncodableBinding @@ var "cx" @@ var "graph") $
         primitive _lists_filter @@ Annotations.isNativeType @@ var "bindings"
+
+-- | Format a DecodingError as a string
+formatDecodingError :: TTerm (DecodingError -> String)
+formatDecodingError = "e" ~> unwrap _DecodingError @@ var "e"
 
 -- | Check if a binding is encodable and return Just binding if so, Nothing otherwise
 -- | Check if a binding is encodable and return Just binding if so, Nothing otherwise

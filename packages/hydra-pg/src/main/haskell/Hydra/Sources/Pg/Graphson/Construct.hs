@@ -115,16 +115,6 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
--- Type references
-gson :: String -> Type
-gson = Bootstrap.typeref GraphsonSyntax.ns
-
-pg :: String -> Type
-pg = Bootstrap.typeref PgModel.ns
-
-jsonValue :: Type
-jsonValue = Bootstrap.typeref JsonModel.ns "Value"
-
 -- | Convert a PG adjacent edge to GraphSON format
 adjacentEdgeToGraphson :: TTermDefinition ((v -> Either Error G.Value) -> PG.AdjacentEdge v -> Either Error (G.EdgeLabel, G.AdjacentEdge))
 adjacentEdgeToGraphson = define "adjacentEdgeToGraphson" $
@@ -189,6 +179,16 @@ graphsonVertexToJsonCoder = define "graphsonVertexToJsonCoder" $
   Coders.coder
     ("_cx" ~> "v" ~> right (Coder.vertexToJson @@ var "v"))
     ("_cx" ~> "_" ~> left (Error.errorOther $ Error.otherError $ string "decoding GraphSON JSON is currently unsupported"))
+
+-- Type references
+gson :: String -> Type
+gson = Bootstrap.typeref GraphsonSyntax.ns
+
+jsonValue :: Type
+jsonValue = Bootstrap.typeref JsonModel.ns "Value"
+
+pg :: String -> Type
+pg = Bootstrap.typeref PgModel.ns
 
 -- | Convert a PG vertex with adjacent edges to a GraphSON vertex
 pgVertexWithAdjacentEdgesToGraphsonVertex :: TTermDefinition ((v -> Either Error G.Value) -> PG.VertexWithAdjacentEdges v -> Either Error G.Vertex)

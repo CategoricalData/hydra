@@ -13,13 +13,6 @@ import           Prelude hiding ((++))
 ns :: ModuleName
 ns = ModuleName "hydra.lib.chars"
 
-sig :: TypeScheme -> TermSignature
-sig = typeSchemeToTermSignature
-
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -34,6 +27,13 @@ module_ = Module {
       primNoDef "isUpper"    "Check whether a character is uppercase." intToBoolSig,
       primNoDef "toLower"    "Convert a character to lowercase." intToIntSig,
       primNoDef "toUpper"    "Convert a character to uppercase." intToIntSig]
+
+primNoDef :: String -> String -> TermSignature -> Definition
+primNoDef localName description s =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+
+sig :: TypeScheme -> TermSignature
+sig = typeSchemeToTermSignature
 
 -- Shared signatures.
 
