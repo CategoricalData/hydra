@@ -2303,14 +2303,26 @@
                                                             "argument": {"variable": "def0"},
                                                             "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.PrimitiveDefinition"}}}}},
                                                       {
+                                                        "name": "signature",
+                                                        "term": {"application": {"argument": {"variable": "ts1"}, "function": {"variable": "hydra.scoping.typeSchemeToTermSignature"}}}},
+                                                      {
                                                         "name": "description",
                                                         "term": {
                                                           "application": {
                                                             "argument": {"variable": "def0"},
                                                             "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.PrimitiveDefinition"}}}}},
                                                       {
-                                                        "name": "signature",
-                                                        "term": {"application": {"argument": {"variable": "ts1"}, "function": {"variable": "hydra.scoping.typeSchemeToTermSignature"}}}},
+                                                        "name": "comments",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {"variable": "def0"},
+                                                            "function": {"project": {"fieldName": "comments", "typeName": "hydra.packaging.PrimitiveDefinition"}}}}},
+                                                      {
+                                                        "name": "seeAlso",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {"variable": "def0"},
+                                                            "function": {"project": {"fieldName": "seeAlso", "typeName": "hydra.packaging.PrimitiveDefinition"}}}}},
                                                       {
                                                         "name": "isPure",
                                                         "term": {
@@ -2323,6 +2335,18 @@
                                                           "application": {
                                                             "argument": {"variable": "def0"},
                                                             "function": {"project": {"fieldName": "isTotal", "typeName": "hydra.packaging.PrimitiveDefinition"}}}}},
+                                                      {
+                                                        "name": "availableSince",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {"variable": "def0"},
+                                                            "function": {"project": {"fieldName": "availableSince", "typeName": "hydra.packaging.PrimitiveDefinition"}}}}},
+                                                      {
+                                                        "name": "deprecatedSince",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {"variable": "def0"},
+                                                            "function": {"project": {"fieldName": "deprecatedSince", "typeName": "hydra.packaging.PrimitiveDefinition"}}}}},
                                                       {
                                                         "name": "defaultImplementation",
                                                         "term": {

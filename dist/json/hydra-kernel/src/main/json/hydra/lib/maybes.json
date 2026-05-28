@@ -31,6 +31,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maybes.apply",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -62,6 +63,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maybes.bind",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"maybe": {"variable": "x"}}},
@@ -77,6 +79,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maybes.cases",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"maybe": {"variable": "x"}}},
@@ -127,6 +130,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maybes.cat",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"maybe": {"variable": "x"}}}}],
           "result": {"type": {"list": {"variable": "x"}}},
@@ -157,6 +161,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maybes.compose",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -195,6 +200,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maybes.fromMaybe",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
@@ -220,6 +226,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maybes.isJust",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"maybe": {"variable": "x"}}}],
           "result": {"type": {"literal": {"boolean": {}}}},
@@ -243,6 +250,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maybes.isNothing",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"maybe": {"variable": "x"}}}],
           "result": {"type": {"literal": {"boolean": {}}}},
@@ -271,6 +279,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maybes.map",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}},
@@ -303,6 +312,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maybes.mapMaybe",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -318,6 +328,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maybes.maybe",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "y"}},
@@ -335,6 +346,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maybes.pure",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "x"}}],
           "result": {"type": {"maybe": {"variable": "x"}}},
@@ -358,6 +370,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maybes.toList",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"maybe": {"variable": "x"}}}],
           "result": {"type": {"list": {"variable": "x"}}},

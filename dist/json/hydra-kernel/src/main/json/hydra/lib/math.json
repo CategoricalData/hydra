@@ -6,6 +6,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.abs",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
           "result": {"type": {"literal": {"integer": {"int32": {}}}}},
@@ -16,6 +17,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.acos",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
           "result": {"type": {"literal": {"float": {"float64": {}}}}},
@@ -26,6 +28,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.acosh",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
           "result": {"type": {"literal": {"float": {"float64": {}}}}},
@@ -36,6 +39,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.add",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
@@ -48,6 +52,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.addFloat64",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}},
@@ -60,6 +65,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.asin",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
           "result": {"type": {"literal": {"float": {"float64": {}}}}},
@@ -70,6 +76,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.asinh",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
           "result": {"type": {"literal": {"float": {"float64": {}}}}},
@@ -80,6 +87,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.atan",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
           "result": {"type": {"literal": {"float": {"float64": {}}}}},
@@ -90,6 +98,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.atan2",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}},
@@ -102,6 +111,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.atanh",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
           "result": {"type": {"literal": {"float": {"float64": {}}}}},
@@ -112,6 +122,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.ceiling",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
           "result": {"type": {"literal": {"float": {"float64": {}}}}},
@@ -122,6 +133,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.cos",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
           "result": {"type": {"literal": {"float": {"float64": {}}}}},
@@ -132,6 +144,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.cosh",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
           "result": {"type": {"literal": {"float": {"float64": {}}}}},
@@ -142,6 +155,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.e",
+        "seeAlso": [],
         "signature": {"parameters": [], "result": {"type": {"literal": {"float": {"float64": {}}}}}, "typeParameters": []}}},
     {
       "primitive": {
@@ -172,6 +186,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.even",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
           "result": {"type": {"literal": {"boolean": {}}}},
@@ -182,6 +197,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.exp",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
           "result": {"type": {"literal": {"float": {"float64": {}}}}},
@@ -192,6 +208,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.floor",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
           "result": {"type": {"literal": {"float": {"float64": {}}}}},
@@ -202,6 +219,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.log",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
           "result": {"type": {"literal": {"float": {"float64": {}}}}},
@@ -212,6 +230,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.logBase",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}},
@@ -224,6 +243,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.max",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
@@ -236,6 +256,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.maybeDiv",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
@@ -248,6 +269,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.maybeMod",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
@@ -260,6 +282,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.maybePred",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
           "result": {"type": {"maybe": {"literal": {"integer": {"int32": {}}}}}},
@@ -270,6 +293,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.maybeRem",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
@@ -282,6 +306,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.maybeSucc",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
           "result": {"type": {"maybe": {"literal": {"integer": {"int32": {}}}}}},
@@ -292,6 +317,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.min",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
@@ -304,6 +330,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.mul",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
@@ -316,6 +343,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.mulFloat64",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}},
@@ -328,6 +356,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.negate",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
           "result": {"type": {"literal": {"integer": {"int32": {}}}}},
@@ -338,6 +367,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.negateFloat64",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
           "result": {"type": {"literal": {"float": {"float64": {}}}}},
@@ -361,6 +391,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.odd",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
           "result": {"type": {"literal": {"boolean": {}}}},
@@ -371,6 +402,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.pi",
+        "seeAlso": [],
         "signature": {"parameters": [], "result": {"type": {"literal": {"float": {"float64": {}}}}}, "typeParameters": []}}},
     {
       "primitive": {
@@ -378,6 +410,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.pow",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}},
@@ -390,6 +423,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.range",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
@@ -402,6 +436,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.round",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
           "result": {"type": {"literal": {"float": {"float64": {}}}}},
@@ -412,6 +447,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.roundFloat32",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
@@ -424,6 +460,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.roundFloat64",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
@@ -436,6 +473,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.signum",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
           "result": {"type": {"literal": {"integer": {"int32": {}}}}},
@@ -446,6 +484,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.sin",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
           "result": {"type": {"literal": {"float": {"float64": {}}}}},
@@ -456,6 +495,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.sinh",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
           "result": {"type": {"literal": {"float": {"float64": {}}}}},
@@ -466,6 +506,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.sqrt",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
           "result": {"type": {"literal": {"float": {"float64": {}}}}},
@@ -476,6 +517,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.sub",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
@@ -488,6 +530,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.subFloat64",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}},
@@ -500,6 +543,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.tan",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
           "result": {"type": {"literal": {"float": {"float64": {}}}}},
@@ -510,6 +554,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.tanh",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
           "result": {"type": {"literal": {"float": {"float64": {}}}}},
@@ -520,6 +565,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.math.truncate",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
           "result": {"type": {"literal": {"float": {"float64": {}}}}},

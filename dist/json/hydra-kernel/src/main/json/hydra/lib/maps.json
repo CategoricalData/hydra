@@ -6,6 +6,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maps.alter",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -22,6 +23,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maps.bimap",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "k2"}, "domain": {"variable": "k1"}}}},
@@ -39,6 +41,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maps.delete",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "k"}},
@@ -51,6 +54,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maps.elems",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
           "result": {"type": {"list": {"variable": "v"}}},
@@ -61,6 +65,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maps.empty",
+        "seeAlso": [],
         "signature": {
           "parameters": [],
           "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}},
@@ -71,6 +76,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maps.filter",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -86,6 +92,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maps.filterWithKey",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -104,6 +111,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maps.findWithDefault",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "v"}},
@@ -117,6 +125,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maps.fromList",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"list": {"pair": {"first": {"variable": "k"}, "second": {"variable": "v"}}}}}],
@@ -128,6 +137,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maps.insert",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "k"}},
@@ -141,6 +151,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maps.keys",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
           "result": {"type": {"list": {"variable": "k"}}},
@@ -151,6 +162,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maps.lookup",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "k"}},
@@ -163,6 +175,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maps.map",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "v2"}, "domain": {"variable": "v1"}}}},
@@ -178,6 +191,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maps.mapKeys",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "k2"}, "domain": {"variable": "k1"}}}},
@@ -193,6 +207,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maps.member",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "k"}},
@@ -205,6 +220,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maps.null",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
           "result": {"type": {"literal": {"boolean": {}}}},
@@ -215,6 +231,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maps.singleton",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "k"}},
@@ -227,6 +244,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maps.size",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
           "result": {"type": {"literal": {"integer": {"int32": {}}}}},
@@ -237,6 +255,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maps.toList",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
           "result": {"type": {"list": {"pair": {"first": {"variable": "k"}, "second": {"variable": "v"}}}}},
@@ -247,6 +266,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.maps.union",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}},

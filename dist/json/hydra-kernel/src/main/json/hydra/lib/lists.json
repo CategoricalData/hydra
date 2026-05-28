@@ -6,6 +6,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.apply",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -21,6 +22,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.bind",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}},
@@ -36,6 +38,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.concat",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"list": {"variable": "x"}}}}],
           "result": {"type": {"list": {"variable": "x"}}},
@@ -46,6 +49,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.concat2",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}},
@@ -58,6 +62,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.cons",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
@@ -70,6 +75,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.drop",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
@@ -82,6 +88,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.dropWhile",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -97,6 +104,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.elem",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
@@ -109,6 +117,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.filter",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -124,6 +133,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.find",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -139,6 +149,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.foldl",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -156,6 +167,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.foldr",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -173,6 +185,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.group",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
           "result": {"type": {"list": {"list": {"variable": "x"}}}},
@@ -183,6 +196,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.intercalate",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}},
@@ -195,6 +209,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.intersperse",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
@@ -207,6 +222,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.length",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
           "result": {"type": {"literal": {"integer": {"int32": {}}}}},
@@ -217,6 +233,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.map",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}},
@@ -229,6 +246,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.maybeAt",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
@@ -241,6 +259,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.maybeHead",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
           "result": {"type": {"maybe": {"variable": "x"}}},
@@ -251,6 +270,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.maybeInit",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
           "result": {"type": {"maybe": {"list": {"variable": "x"}}}},
@@ -261,6 +281,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.maybeLast",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
           "result": {"type": {"maybe": {"variable": "x"}}},
@@ -271,6 +292,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.maybeTail",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
           "result": {"type": {"maybe": {"list": {"variable": "x"}}}},
@@ -281,6 +303,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.nub",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
           "result": {"type": {"list": {"variable": "x"}}},
@@ -291,6 +314,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.null",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
           "result": {"type": {"literal": {"boolean": {}}}},
@@ -301,6 +325,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.partition",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -316,6 +341,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.pure",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "x"}}],
           "result": {"type": {"list": {"variable": "x"}}},
@@ -326,6 +352,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.replicate",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
@@ -338,6 +365,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.reverse",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
           "result": {"type": {"list": {"variable": "x"}}},
@@ -348,6 +376,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.singleton",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "x"}}],
           "result": {"type": {"list": {"variable": "x"}}},
@@ -358,6 +387,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.sort",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
           "result": {"type": {"list": {"variable": "x"}}},
@@ -368,6 +398,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.sortOn",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}},
@@ -380,6 +411,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.span",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -395,6 +427,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.take",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
@@ -407,6 +440,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.transpose",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"list": {"variable": "x"}}}}],
           "result": {"type": {"list": {"list": {"variable": "x"}}}},
@@ -417,6 +451,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.uncons",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
           "result": {"type": {"maybe": {"pair": {"first": {"variable": "x"}, "second": {"list": {"variable": "x"}}}}}},
@@ -427,6 +462,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.zip",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}},
@@ -439,6 +475,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.lists.zipWith",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {
