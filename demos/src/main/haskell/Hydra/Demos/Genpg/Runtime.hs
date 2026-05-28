@@ -4,7 +4,7 @@ import Hydra.Kernel hiding (Result)
 import qualified Hydra.Show.Errors as ShowError
 import qualified Hydra.Pg.Model as Pg
 import Hydra.Dsl.Pg.Mappings
-import Hydra.Lib.Literals
+import Hydra.Haskell.Lib.Literals
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Dsl.Terms as Terms
@@ -22,10 +22,10 @@ type PgTransform = M.Map String ([Pg.Vertex Term], [Pg.Edge Term])
 
 type Result a = Either Error a
 
-evaluate :: Context -> Graph -> Term -> Result Term
+evaluate :: InferenceContext -> Graph -> Term -> Result Term
 evaluate cx g term = reduceTerm cx g True term
 
-evaluateEdge :: Context -> Graph -> Pg.Edge Term -> Term -> Result (Maybe (Pg.Edge Term))
+evaluateEdge :: InferenceContext -> Graph -> Pg.Edge Term -> Term -> Result (Maybe (Pg.Edge Term))
 evaluateEdge cx g (Pg.Edge label idSpec outSpec inSpec propSpecs) term = do
     id <- evaluate cx g $ Terms.apply idSpec term
     mOutId <- evaluate cx g (Terms.apply outSpec term) >>= ExtractCore.maybeTerm Right g
@@ -37,7 +37,7 @@ evaluateEdge cx g (Pg.Edge label idSpec outSpec inSpec propSpecs) term = do
         Nothing -> Nothing
         Just inId -> Just $ Pg.Edge label id outId inId props
 
-evaluateProperties :: Context -> Graph -> M.Map Pg.PropertyKey Term -> Term -> Result (M.Map Pg.PropertyKey Term)
+evaluateProperties :: InferenceContext -> Graph -> M.Map Pg.PropertyKey Term -> Term -> Result (M.Map Pg.PropertyKey Term)
 evaluateProperties cx g specs record = M.fromList . Y.catMaybes <$> (CM.mapM forPair $ M.toList specs)
   where
     forPair (k, spec) = do
@@ -48,7 +48,7 @@ evaluateProperties cx g specs record = M.fromList . Y.catMaybes <$> (CM.mapM for
           Just v -> return $ Just (k, v)
         _ -> Left $ ErrorOther (OtherError $ "expected an optional value for property " ++ Pg.unPropertyKey k ++ " but got " ++ ShowCore.term value)
 
-evaluateVertex :: Context -> Graph -> Pg.Vertex Term -> Term -> Result (Maybe (Pg.Vertex Term))
+evaluateVertex :: InferenceContext -> Graph -> Pg.Vertex Term -> Term -> Result (Maybe (Pg.Vertex Term))
 evaluateVertex cx g (Pg.Vertex label idSpec propSpecs) record = do
   mId <- evaluate cx g (Terms.apply idSpec record) >>= ExtractCore.maybeTerm Right g
   props <- evaluateProperties cx g propSpecs record
@@ -107,7 +107,7 @@ termRowToRecord (TableType (RelationName tname) colTypes) (DataRow cells) = Term
   where
     toField (ColumnType (ColumnName cname) _) mvalue = Field (Name cname) $ TermMaybe mvalue
 
-transformRecord :: Context -> Graph -> [Pg.Vertex Term] -> [Pg.Edge Term] -> Term -> Result ([Pg.Vertex Term], [Pg.Edge Term])
+transformRecord :: InferenceContext -> Graph -> [Pg.Vertex Term] -> [Pg.Edge Term] -> Term -> Result ([Pg.Vertex Term], [Pg.Edge Term])
 transformRecord cx g vspecs especs term = do
   vertices <- CM.mapM (\s -> evaluateVertex cx g s term) vspecs
   edges <- CM.mapM (\s -> evaluateEdge cx g s term) especs
@@ -116,7 +116,7 @@ transformRecord cx g vspecs especs term = do
 transformTable :: TableType -> FilePath -> [Pg.Vertex Term] -> [Pg.Edge Term] -> IO ([Pg.Vertex Term], [Pg.Edge Term])
 transformTable tableType@(TableType (RelationName tableName) _) path vspecs especs = do
     (Table _ rows) <- decodeTableIo tableType path
-    let cx = emptyContext
+    let cx = emptyInferenceContext
     pairs <- case CM.mapM (transformRecord cx hydraCoreGraph vspecs especs . termRowToRecord tableType) rows of
       Left ic -> fail $ ShowError.error ic
       Right ps -> return ps

@@ -3,19 +3,19 @@
 
 module Hydra.Pg.Utils where
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Context as Context
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as JsonModel
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Pg.Coder as Coder
 import qualified Hydra.Pg.Mapping as Mapping
 import qualified Hydra.Pg.Model as PgModel
@@ -83,7 +83,7 @@ lazyGraphToElements :: PgModel.LazyGraph t0 -> [PgModel.Element t0]
 lazyGraphToElements lg =
     Lists.concat2 (Lists.map (\x -> PgModel.ElementVertex x) (PgModel.lazyGraphVertices lg)) (Lists.map (\x -> PgModel.ElementEdge x) (PgModel.lazyGraphEdges lg))
 -- | Convert a property graph element to JSON
-pgElementToJson :: Mapping.Schema t0 t1 t2 -> PgModel.Element t2 -> Context.Context -> Either Errors.Error JsonModel.Value
+pgElementToJson :: Mapping.Schema t0 t1 t2 -> PgModel.Element t2 -> Typing.InferenceContext -> Either Errors.Error JsonModel.Value
 pgElementToJson schema el cx =
     (\x -> case x of
       PgModel.ElementVertex v0 -> Eithers.bind (Coders.coderDecode (Mapping.schemaVertexIds schema) cx (PgModel.vertexId v0)) (\term ->
@@ -107,7 +107,7 @@ pgElementToJson schema el cx =
               v = Pairs.second pair
           in (Eithers.bind (Coders.coderDecode (Mapping.schemaPropertyValues schema) cx v) (\term2 -> Right (PgModel.unPropertyKey key, (JsonModel.ValueString (ShowCore.term term2)))))) (Maps.toList pairs)))) (PgModel.edgeProperties v0))))))) el
 -- | Convert a list of property graph elements to JSON
-pgElementsToJson :: Mapping.Schema t0 t1 t2 -> [PgModel.Element t2] -> Context.Context -> Either Errors.Error JsonModel.Value
+pgElementsToJson :: Mapping.Schema t0 t1 t2 -> [PgModel.Element t2] -> Typing.InferenceContext -> Either Errors.Error JsonModel.Value
 pgElementsToJson schema els cx =
     Eithers.map (\els_ -> JsonModel.ValueArray els_) (Eithers.mapList (\el -> pgElementToJson schema el cx) els)
 -- | Get all elements from a property graph
@@ -115,7 +115,7 @@ propertyGraphElements :: Ord t0 => (PgModel.Graph t0 -> [PgModel.Element t0])
 propertyGraphElements g =
     Lists.concat2 (Lists.map (\x -> PgModel.ElementVertex x) (Maps.elems (PgModel.graphVertices g))) (Lists.map (\x -> PgModel.ElementEdge x) (Maps.elems (PgModel.graphEdges g)))
 -- | Convert a type-annotated term to property graph elements
-typeApplicationTermToPropertyGraph :: Mapping.Schema t0 t1 t2 -> Core.Type -> t1 -> t1 -> Context.Context -> Graph.Graph -> Either Errors.Error (Core.Term -> Context.Context -> Either Errors.Error [PgModel.Element t2])
+typeApplicationTermToPropertyGraph :: Mapping.Schema t0 t1 t2 -> Core.Type -> t1 -> t1 -> Typing.InferenceContext -> Graph.Graph -> Either Errors.Error (Core.Term -> Typing.InferenceContext -> Either Errors.Error [PgModel.Element t2])
 typeApplicationTermToPropertyGraph schema typ vidType eidType cx g =
     Eithers.bind (Coder.elementCoder Nothing schema typ vidType eidType cx g) (\adapter -> Right (\term -> \cx_ -> Eithers.map (\tree ->
       let flattenTree =

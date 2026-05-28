@@ -198,7 +198,6 @@ import qualified Hydra.Dsl.Literals             as Literals
 import qualified Hydra.Dsl.LiteralTypes         as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base            as MetaBase
 import qualified Hydra.Dsl.Meta.Core            as Core
-import qualified Hydra.Dsl.Meta.Context         as Ctx
 import qualified Hydra.Dsl.Meta.Graph           as Graph
 import qualified Hydra.Dsl.Meta.Lib.Chars       as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers     as Eithers

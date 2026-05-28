@@ -9,7 +9,7 @@ description:  >
   Hydra is an implementation of the LambdaGraph data model, which takes advantage of an isomorphism
   between labeled hypergraphs and typed lambda calculus: in Hydra, "graphs are programs, and programs are graphs".
   The Haskell head provides the hand-written Haskell runtime Hydra needs in order to build and
-  regenerate itself: primitive libraries (Hydra.Lib.*), the embedded DSL infrastructure
+  regenerate itself: primitive libraries (Hydra.Haskell.Lib.*), the embedded DSL infrastructure
   (Hydra.Dsl.*), the generation driver (Hydra.Generation), the kernel entry point (Hydra.Kernel),
   module support utilities, and the exec binaries that drive Hydra's Haskell code generation.
   It consumes the language-independent kernel DSL sources and generated kernel runtime from

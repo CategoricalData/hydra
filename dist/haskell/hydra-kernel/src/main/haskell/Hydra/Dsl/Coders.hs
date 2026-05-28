@@ -3,11 +3,16 @@
 
 module Hydra.Dsl.Coders where
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Dsl.Errors as DslErrors
+import qualified Hydra.Dsl.Graph as DslGraph
+import qualified Hydra.Dsl.Typing as DslTyping
+import qualified Hydra.Dsl.Variants as DslVariants
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -352,7 +357,7 @@ bicoderWithEncode original newVal =
               Core.projectionFieldName = (Core.Name "decode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.coders.Coder
-coder :: Phantoms.TTerm (Context.Context -> v1 -> Either Errors.Error v2) -> Phantoms.TTerm (Context.Context -> v2 -> Either Errors.Error v1) -> Phantoms.TTerm (Coders.Coder v1 v2)
+coder :: Phantoms.TTerm (Typing.InferenceContext -> v1 -> Either Errors.Error v2) -> Phantoms.TTerm (Typing.InferenceContext -> v2 -> Either Errors.Error v1) -> Phantoms.TTerm (Coders.Coder v1 v2)
 coder encode decode =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coders.Coder"),
@@ -364,7 +369,7 @@ coder encode decode =
           Core.fieldName = (Core.Name "decode"),
           Core.fieldTerm = (Phantoms.unTTerm decode)}]}))
 -- | DSL accessor for the decode field of hydra.coders.Coder
-coderDecode :: Phantoms.TTerm (Coders.Coder v1 v2) -> Phantoms.TTerm (Context.Context -> v2 -> Either Errors.Error v1)
+coderDecode :: Phantoms.TTerm (Coders.Coder v1 v2) -> Phantoms.TTerm (Typing.InferenceContext -> v2 -> Either Errors.Error v1)
 coderDecode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -388,7 +393,7 @@ coderDirectionEncode =
         Core.fieldName = (Core.Name "encode"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL accessor for the encode field of hydra.coders.Coder
-coderEncode :: Phantoms.TTerm (Coders.Coder v1 v2) -> Phantoms.TTerm (Context.Context -> v1 -> Either Errors.Error v2)
+coderEncode :: Phantoms.TTerm (Coders.Coder v1 v2) -> Phantoms.TTerm (Typing.InferenceContext -> v1 -> Either Errors.Error v2)
 coderEncode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -396,7 +401,7 @@ coderEncode x =
         Core.projectionFieldName = (Core.Name "encode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the decode field of hydra.coders.Coder
-coderWithDecode :: Phantoms.TTerm (Coders.Coder v1 v2) -> Phantoms.TTerm (Context.Context -> v2 -> Either Errors.Error v1) -> Phantoms.TTerm (Coders.Coder v1 v2)
+coderWithDecode :: Phantoms.TTerm (Coders.Coder v1 v2) -> Phantoms.TTerm (Typing.InferenceContext -> v2 -> Either Errors.Error v1) -> Phantoms.TTerm (Coders.Coder v1 v2)
 coderWithDecode original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coders.Coder"),
@@ -412,7 +417,7 @@ coderWithDecode original newVal =
           Core.fieldName = (Core.Name "decode"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL updater for the encode field of hydra.coders.Coder
-coderWithEncode :: Phantoms.TTerm (Coders.Coder v1 v2) -> Phantoms.TTerm (Context.Context -> v1 -> Either Errors.Error v2) -> Phantoms.TTerm (Coders.Coder v1 v2)
+coderWithEncode :: Phantoms.TTerm (Coders.Coder v1 v2) -> Phantoms.TTerm (Typing.InferenceContext -> v1 -> Either Errors.Error v2) -> Phantoms.TTerm (Coders.Coder v1 v2)
 coderWithEncode original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coders.Coder"),

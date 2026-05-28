@@ -44,7 +44,6 @@ import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
 import qualified Hydra.Dsl.Util         as Util
 import qualified Hydra.Dsl.Meta.Variants     as Variants
-import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Errors       as Error
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
@@ -110,7 +109,7 @@ alphaConvert = define "alphaConvert" $
 
 -- Note: this is eager beta reduction, in that we always descend into subtypes,
 --       and always reduce the right-hand side of an application prior to substitution
-betaReduceType :: TTermDefinition (Context -> Graph -> Type -> Prelude.Either Error Type)
+betaReduceType :: TTermDefinition (InferenceContext -> Graph -> Type -> Prelude.Either Error Type)
 betaReduceType = define "betaReduceType" $
   doc "Eagerly beta-reduce a type by substituting type arguments into type lambdas" $
   "cx" ~> "graph" ~> "typ" ~>
@@ -521,7 +520,7 @@ etaExpandTerm = define "etaExpandTerm" $
   contractTerm @@ (var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx0" @@ var "term0")
 
 -- TODO: add lambda domains as part of the rewriting process, so inference does not need to be performed again.
-etaExpandTypedTerm :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either Error Term)
+etaExpandTypedTerm :: TTermDefinition (InferenceContext -> Graph -> Term -> Prelude.Either Error Term)
 etaExpandTypedTerm = define "etaExpandTypedTerm" $
   doc ("Recursively transform arbitrary terms like 'add 42' into terms like '\\x.add 42 x',"
     <> " eliminating partial application. Variable references are not expanded."
@@ -740,7 +739,7 @@ etaReduceTerm = define "etaReduceTerm" $
         (Core.annotatedTermAnnotation $ var "at"),
     _Term_lambda>>: "l" ~> var "reduceLambda" @@ var "l"]
 
-reduceTerm :: TTermDefinition (Context -> Graph -> Bool -> Term -> Prelude.Either Error Term)
+reduceTerm :: TTermDefinition (InferenceContext -> Graph -> Bool -> Term -> Prelude.Either Error Term)
 reduceTerm = define "reduceTerm" $
   doc "A term evaluation function which is alternatively lazy or eager" $
   "cx" ~> "graph" ~> "eager" ~> "term" ~>
@@ -772,7 +771,7 @@ reduceTerm = define "reduceTerm" $
       ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.projectionFieldName $ var "proj"))
       (var "fields")) $
     Maybes.maybe
-      (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.projectionFieldName $ var "proj")) (var "cx"))
+      (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.projectionFieldName $ var "proj")))
       ("mf" ~> right $ Core.fieldTerm $ var "mf")
       (var "matching")) $
   "applyCases" <~ ("cs" ~> "reducedArg" ~>
@@ -782,7 +781,7 @@ reduceTerm = define "reduceTerm" $
       (Core.caseStatementCases $ var "cs")) $
     Maybes.maybe
       (Maybes.maybe
-        (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.fieldName $ var "field")) (var "cx"))
+        (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.fieldName $ var "field")))
         (reify right)
         (Core.caseStatementDefault $ var "cs"))
       ("mf" ~> right $ Core.termApplication $ Core.application

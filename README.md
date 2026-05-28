@@ -110,7 +110,7 @@ entry to Hydra: you can pick the head you're most comfortable with and ignore th
 | [Scheme](packages/hydra-lisp/hydra-scheme/README.md) | Complete | ([Scheme](https://en.wikipedia.org/wiki/Scheme_(programming_language))) |
 | [Common Lisp](packages/hydra-lisp/hydra-common-lisp/README.md) | Complete | ([Common Lisp](https://common-lisp.net/)) |
 | [Emacs Lisp](packages/hydra-lisp/hydra-emacs-lisp/README.md) | In progress | ([Emacs Lisp](https://www.gnu.org/software/emacs/manual/eintr.html)) |
-| [TypeScript](packages/hydra-typescript/README.md) | In progress | Most of the common test suite passes; see the package README for current detail. ([TypeScript](https://www.typescriptlang.org/)) |
+| [TypeScript](packages/hydra-typescript/README.md) | In progress | Passes the common test suite as a target, and as a host can bootstrap every other head except Java; see the [stack-limit caveat](packages/hydra-typescript/README.md#ts-as-host-stack-limit-caveat-ts--java-only) for details. ([TypeScript](https://www.typescriptlang.org/)) |
 | [Go](packages/hydra-go/README.md) | In progress | ([Go](https://go.dev/)) |
 | [Rust](packages/hydra-ext/src/main/haskell/Hydra/Sources/Rust) | In progress | Coder lives in `hydra-ext`; the Rust head has not yet been split into its own package. ([Rust](https://www.rust-lang.org/)) |
 | [Coq](packages/hydra-coq/README.md) | In progress | Generation-only target; there is no Coq-side runtime. ([Coq](https://coq.inria.fr/)) |

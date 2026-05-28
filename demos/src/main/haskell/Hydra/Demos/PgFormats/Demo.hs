@@ -139,7 +139,7 @@ generatePgFormats outDir = do
         else fail $ "writeJsonSchema did not produce expected file " ++ src
     writeAvroSchema dir tmap typeNameStr fname =
       let typeName = Core.Name typeNameStr
-          cx = Lexical.emptyContext
+          cx = Lexical.emptyInferenceContext
       in case AvroEncoder.encodeType cx tmap typeName of
         Left err -> fail $ "Avro encodeType failed for " ++ typeNameStr
                             ++ ": " ++ ShowError.error err

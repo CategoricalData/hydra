@@ -87,7 +87,7 @@ module_ = Module {
 -- | Interpreter-friendly bimap for Either terms.
 -- Takes two function terms (for left and right) and an Either term, applies
 -- the appropriate function to the contained value and re-wraps the result.
-bimap_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either Error Term)
+bimap_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
 bimap_ = define "bimap" $
   doc "Interpreter-friendly bimap for Either terms." $
   "cx" ~> "g" ~>
@@ -103,7 +103,7 @@ bimap_ = define "bimap" $
 -- | Interpreter-friendly bind for Either terms.
 -- Takes an Either term and a function term, applies the function to the Right
 -- value and returns the result (which should be an Either), or returns the Left unchanged.
-bind_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+bind_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 bind_ = define "bind" $
   doc "Interpreter-friendly bind for Either terms." $
   "cx" ~> "g" ~>
@@ -121,7 +121,7 @@ bind_ = define "bind" $
 -- | Interpreter-friendly case analysis for Either terms.
 -- Takes two function terms and an Either term, applies the appropriate function
 -- to the contained value.
-either_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either Error Term)
+either_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
 either_ = define "either" $
   doc "Interpreter-friendly case analysis for Either terms." $
   "cx" ~> "g" ~>
@@ -137,7 +137,7 @@ either_ = define "either" $
 -- | Interpreter-friendly foldl for Either.
 -- foldl funTerm initTerm listTerm: folds funTerm over elements of listTerm,
 -- threading an accumulator starting from initTerm. Short-circuits on first Left.
-foldl_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either Error Term)
+foldl_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
 foldl_ = define "foldl" $
   doc "Interpreter-friendly foldl for Either." $
   "cx" ~> "g" ~>
@@ -166,7 +166,7 @@ foldl_ = define "foldl" $
 
 -- | Interpreter-friendly fromLeft for Either terms.
 -- fromLeft default eitherTerm: returns the Left value, or default if Right.
-fromLeft_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+fromLeft_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 fromLeft_ = define "fromLeft" $
   doc "Interpreter-friendly fromLeft for Either terms." $
   "cx" ~> "g" ~>
@@ -181,7 +181,7 @@ fromLeft_ = define "fromLeft" $
 
 -- | Interpreter-friendly fromRight for Either terms.
 -- fromRight default eitherTerm: returns the Right value, or default if Left.
-fromRight_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+fromRight_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 fromRight_ = define "fromRight" $
   doc "Interpreter-friendly fromRight for Either terms." $
   "cx" ~> "g" ~>
@@ -195,7 +195,7 @@ fromRight_ = define "fromRight" $
         (var "e")]
 
 -- | Interpreter-friendly isLeft for Either terms.
-isLeft_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+isLeft_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 isLeft_ = define "isLeft" $
   doc "Interpreter-friendly isLeft for Either terms." $
   "cx" ~> "g" ~>
@@ -209,7 +209,7 @@ isLeft_ = define "isLeft" $
         (var "e")]
 
 -- | Interpreter-friendly isRight for Either terms.
-isRight_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+isRight_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 isRight_ = define "isRight" $
   doc "Interpreter-friendly isRight for Either terms." $
   "cx" ~> "g" ~>
@@ -224,7 +224,7 @@ isRight_ = define "isRight" $
 
 -- | Interpreter-friendly lefts for list of Either terms.
 -- Extracts all Left values from a list.
-lefts_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+lefts_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 lefts_ = define "lefts" $
   doc "Interpreter-friendly lefts for list of Either terms." $
   "cx" ~> "g" ~>
@@ -242,7 +242,7 @@ lefts_ = define "lefts" $
     (list ([] :: [TTerm Term]))
     (var "elements")
 
-map_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+map_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for Either terms." $
   "cx" ~> "g" ~>
@@ -258,7 +258,7 @@ map_ = define "map" $
 -- | Interpreter-friendly mapList for Either (traverse).
 -- mapList funTerm listTerm: applies funTerm to each element, collecting results.
 -- Short-circuits on first Left error.
-mapList_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+mapList_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 mapList_ = define "mapList" $
   doc "Interpreter-friendly mapList for Either (traverse)." $
   "cx" ~> "g" ~>
@@ -305,7 +305,7 @@ mapList_ = define "mapList" $
 -- | Interpreter-friendly mapSet for Either (traverse over Set).
 -- mapSet funTerm setTerm: applies funTerm to each element, collecting results as a set.
 -- Short-circuits on first Left error.
-mapSet_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+mapSet_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 mapSet_ = define "mapSet" $
   doc "Interpreter-friendly mapSet for Either (traverse over Set)." $
   "cx" ~> "g" ~>
@@ -349,7 +349,7 @@ mapSet_ = define "mapSet" $
 
 -- | Interpreter-friendly mapMaybe for Either (traverse over Maybe).
 -- mapMaybe funTerm maybeTerm: if Just, applies funTerm to the value.
-mapMaybe_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+mapMaybe_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 mapMaybe_ = define "mapMaybe" $
   doc "Interpreter-friendly mapMaybe for Either (traverse over Maybe)." $
   "cx" ~> "g" ~>
@@ -375,7 +375,7 @@ mapMaybe_ = define "mapMaybe" $
 
 -- | Interpreter-friendly partitionEithers for list of Either terms.
 -- Splits a list of Eithers into (lefts, rights).
-partitionEithers_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+partitionEithers_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 partitionEithers_ = define "partitionEithers" $
   doc "Interpreter-friendly partitionEithers for list of Either terms." $
   "cx" ~> "g" ~>
@@ -397,7 +397,7 @@ partitionEithers_ = define "partitionEithers" $
 
 -- | Interpreter-friendly rights for list of Either terms.
 -- Extracts all Right values from a list.
-rights_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+rights_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 rights_ = define "rights" $
   doc "Interpreter-friendly rights for list of Either terms." $
   "cx" ~> "g" ~>

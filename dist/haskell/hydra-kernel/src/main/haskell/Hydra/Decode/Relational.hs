@@ -3,11 +3,15 @@
 
 module Hydra.Decode.Relational where
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Eithers as Eithers
+import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Relational as Relational
+import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Decoder for hydra.relational.ColumnName

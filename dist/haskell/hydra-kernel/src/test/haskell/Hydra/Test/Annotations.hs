@@ -2,9 +2,12 @@
 -- | Test cases for hydra.annotations functions
 
 module Hydra.Test.Annotations where
+import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Core as Core
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Maps as Maps
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Reduction as Reduction
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Test.TestGraph as TestGraph
@@ -1404,7 +1407,7 @@ allTests =
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.annotations.getTermDescription")),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyContext"))})),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyInferenceContext"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyGraph"))})),
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -1433,7 +1436,7 @@ allTests =
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.annotations.getTermDescription")),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyContext"))})),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyInferenceContext"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyGraph"))})),
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -1458,7 +1461,7 @@ allTests =
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.annotations.getTermDescription")),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyContext"))})),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyInferenceContext"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyGraph"))})),
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -1483,7 +1486,7 @@ allTests =
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.annotations.getTermDescription")),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyContext"))})),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyInferenceContext"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyGraph"))})),
                   Core.applicationArgument = (Core.TermInject (Core.Injection {
                     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
@@ -1508,7 +1511,7 @@ allTests =
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.annotations.getTermDescription")),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyContext"))})),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyInferenceContext"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyGraph"))})),
                   Core.applicationArgument = (Core.TermInject (Core.Injection {
                     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
@@ -1529,7 +1532,7 @@ allTests =
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.annotations.getTermDescription")),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyContext"))})),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyInferenceContext"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyGraph"))})),
                   Core.applicationArgument = (Core.TermInject (Core.Injection {
                     Core.injectionTypeName = (Core.Name "hydra.core.Term"),

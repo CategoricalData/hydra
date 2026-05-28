@@ -3,22 +3,22 @@
 
 module Hydra.Demos.Genpg.Transform where
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Context as Context
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Chars as Chars
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Literals as Literals
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Chars as Chars
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Literals as Literals
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Pg.Model as Model
 import qualified Hydra.Reduction as Reduction
 import qualified Hydra.Relational as Relational
@@ -124,7 +124,7 @@ elementSpecsByTable graph =
             vertexMap = Lists.foldl addVertex Maps.empty vertexPairs
         in (Right (Lists.foldl addEdge vertexMap edgePairs)))))
 -- | Evaluate an edge specification against a record term to produce an optional edge
-evaluateEdge :: Context.Context -> Graph.Graph -> Model.Edge Core.Term -> Core.Term -> Either Errors.Error (Maybe (Model.Edge Core.Term))
+evaluateEdge :: Typing.InferenceContext -> Graph.Graph -> Model.Edge Core.Term -> Core.Term -> Either Errors.Error (Maybe (Model.Edge Core.Term))
 evaluateEdge cx g edgeSpec record =
 
       let label = Model.edgeLabel edgeSpec
@@ -145,7 +145,7 @@ evaluateEdge cx g edgeSpec record =
         Model.edgeIn = inId,
         Model.edgeProperties = props}) mInId)))))))
 -- | Evaluate property specifications against a record term
-evaluateProperties :: Ord t0 => (Context.Context -> Graph.Graph -> M.Map t0 Core.Term -> Core.Term -> Either Errors.Error (M.Map t0 Core.Term))
+evaluateProperties :: Ord t0 => (Typing.InferenceContext -> Graph.Graph -> M.Map t0 Core.Term -> Core.Term -> Either Errors.Error (M.Map t0 Core.Term))
 evaluateProperties cx g specs record =
 
       let extractMaybe =
@@ -158,7 +158,7 @@ evaluateProperties cx g specs record =
           Core.applicationFunction = spec,
           Core.applicationArgument = record}))) (\value -> extractMaybe k (Strip.deannotateTerm value)))) (Maps.toList specs)))
 -- | Evaluate a vertex specification against a record term to produce an optional vertex
-evaluateVertex :: Context.Context -> Graph.Graph -> Model.Vertex Core.Term -> Core.Term -> Either Errors.Error (Maybe (Model.Vertex Core.Term))
+evaluateVertex :: Typing.InferenceContext -> Graph.Graph -> Model.Vertex Core.Term -> Core.Term -> Either Errors.Error (Maybe (Model.Vertex Core.Term))
 evaluateVertex cx g vertexSpec record =
 
       let label = Model.vertexLabel vertexSpec
@@ -287,10 +287,10 @@ termRowToRecord tableType row =
             Core.fieldName = (Core.Name cname),
             Core.fieldTerm = (Core.TermMaybe mvalue)}) colTypes cells)}))
 -- | Transform a record through vertex and edge specifications to produce vertices and edges
-transformRecord :: Context.Context -> Graph.Graph -> [Model.Vertex Core.Term] -> [Model.Edge Core.Term] -> Core.Term -> Either Errors.Error ([Model.Vertex Core.Term], [Model.Edge Core.Term])
+transformRecord :: Typing.InferenceContext -> Graph.Graph -> [Model.Vertex Core.Term] -> [Model.Edge Core.Term] -> Core.Term -> Either Errors.Error ([Model.Vertex Core.Term], [Model.Edge Core.Term])
 transformRecord cx g vspecs especs record =
     Eithers.bind (Eithers.mapList (\spec -> evaluateVertex cx g spec record) vspecs) (\mVertices -> Eithers.bind (Eithers.mapList (\spec -> evaluateEdge cx g spec record) especs) (\mEdges -> Right (Maybes.cat mVertices, (Maybes.cat mEdges))))
 -- | Transform all rows from a table through vertex/edge specifications
-transformTableRows :: Context.Context -> Graph.Graph -> [Model.Vertex Core.Term] -> [Model.Edge Core.Term] -> Tabular.TableType -> [Tabular.DataRow Core.Term] -> Either Errors.Error ([Model.Vertex Core.Term], [Model.Edge Core.Term])
+transformTableRows :: Typing.InferenceContext -> Graph.Graph -> [Model.Vertex Core.Term] -> [Model.Edge Core.Term] -> Tabular.TableType -> [Tabular.DataRow Core.Term] -> Either Errors.Error ([Model.Vertex Core.Term], [Model.Edge Core.Term])
 transformTableRows cx g vspecs especs tableType rows =
     Eithers.map (\pairs -> Lists.foldl concatPairs ([], []) pairs) (Eithers.mapList (\row -> transformRecord cx g vspecs especs (termRowToRecord tableType row)) rows)

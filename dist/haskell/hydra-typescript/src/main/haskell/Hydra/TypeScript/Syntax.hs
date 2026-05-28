@@ -189,13 +189,16 @@ data PropertySignature =
     -- | Whether the property is optional
     propertySignatureOptional :: Bool,
     -- | Whether the property is readonly
-    propertySignatureReadonly :: Bool}
+    propertySignatureReadonly :: Bool,
+    -- | Optional JSDoc documentation comment to emit above this property
+    propertySignatureComments :: (Maybe DocumentationComment)}
   deriving (Eq, Ord, Read, Show)
 _PropertySignature = Core.Name "hydra.typeScript.syntax.PropertySignature"
 _PropertySignature_name = Core.Name "name"
 _PropertySignature_type = Core.Name "type"
 _PropertySignature_optional = Core.Name "optional"
 _PropertySignature_readonly = Core.Name "readonly"
+_PropertySignature_comments = Core.Name "comments"
 -- | A type parameter (generic)
 data TypeParameter =
   TypeParameter {

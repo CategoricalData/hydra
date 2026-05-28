@@ -11,7 +11,7 @@ import Hydra.Util
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Extract.Core as ExtractCore
-import qualified Hydra.Context as Context
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Errors as Error
 import qualified Hydra.Extract.Util as ExtractUtil
 import qualified Hydra.Dsl.Terms as Terms
@@ -30,7 +30,7 @@ import Data.String(IsString(..))
 import Data.Either (Either)
 
 -- | A helper to create an Error from a string message and context
-otherErr :: Context.Context -> String -> Error.Error
+otherErr :: Typing.InferenceContext -> String -> Error.Error
 otherErr _cx msg = Error.ErrorOther (Error.OtherError msg)
 
 -- | A type variable specification with optional class constraints
@@ -151,7 +151,7 @@ function dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType 
 -- | A TermCoder for function types, using a reducer to bridge term-level functions to native functions.
 --   The reducer is called to evaluate function application at the term level.
 --   Failures in reduction or encoding/decoding will result in a runtime error.
-functionWithReduce :: (Context.Context -> Graph -> Term -> Either Error.Error Term) -> TermCoder x -> TermCoder y -> TermCoder (x -> y)
+functionWithReduce :: (Typing.InferenceContext -> Graph -> Term -> Either Error.Error Term) -> TermCoder x -> TermCoder y -> TermCoder (x -> y)
 functionWithReduce reduce dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType cod)) encode decode
   where
     encode cx g funTerm = Right $ \x ->

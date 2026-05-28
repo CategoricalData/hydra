@@ -159,10 +159,10 @@ export const float = (f: number): FloatValue => ({ tag: "float64", value: f });
 // so this is the identity for string inputs. For Uint8Array (e.g. when
 // constructed programmatically), encode to base64. Treats null/undefined
 // as the empty binary.
-export const binaryToString = (b: Uint8Array | string | null | undefined): string => {
+export const binaryToString = (b: Uint8Array | ReadonlyArray<number> | string | null | undefined): string => {
   if (b === null || b === undefined) return "";
   if (typeof b === "string") return b;
-  // Uint8Array → base64
+  // Uint8Array or readonly number[] → base64
   let raw = "";
   for (const byte of b) raw += String.fromCharCode(byte);
   return typeof btoa !== "undefined"
@@ -180,7 +180,7 @@ export const stringToBinary = (s: string): string => s;
 // `binaryToBytes` decodes a binary value into a list of byte values
 // (0-255). Mirrors Python's `binary_to_bytes`. The TS runtime stores
 // binary as base64-encoded strings, so we decode then return byte ints.
-export const binaryToBytes = (b: Uint8Array | string | null | undefined): readonly number[] => {
+export const binaryToBytes = (b: Uint8Array | ReadonlyArray<number> | string | null | undefined): readonly number[] => {
   if (b === null || b === undefined) return [];
   if (typeof b !== "string") return Array.from(b);
   // Decode base64. Use atob in browser, Buffer in Node.

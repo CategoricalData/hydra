@@ -14,7 +14,7 @@ import static hydra.dsl.Types.float32;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
-import hydra.context.Context;
+import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -45,7 +45,7 @@ public class ShowFloat32 extends PrimitiveFunction {
      * @return a function that converts float32 terms to string terms
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<Float, Term>) f -> Terms.string(apply(f)), hydra.extract.Core.float32(graph, args.get(0)));
     }
 

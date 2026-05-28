@@ -6,7 +6,7 @@ module Hydra.Coq.GenerateDriver where
 
 import qualified Hydra.Packaging as Pkg
 import qualified Hydra.Coq.Generate as CoqGenerate
-import qualified Hydra.Context as Context
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Errors as Errors
 import qualified Data.Map as Map
@@ -21,7 +21,7 @@ import System.FilePath ((</>), takeDirectory)
 -- Thin wrapper over the DSL-ported `Hydra.Coq.Generate.moduleToCoq` that
 -- adapts the generateSources signature (accepting unused Context/Graph
 -- parameters and wrapping the result in Either).
-moduleToCoq :: Map.Map (String, String) String -> Map.Map String Int -> Set.Set String -> Set.Set String -> Pkg.Module -> [Pkg.Definition] -> Context.Context -> Graph.Graph
+moduleToCoq :: Map.Map (String, String) String -> Map.Map String Int -> Set.Set String -> Set.Set String -> Pkg.Module -> [Pkg.Definition] -> Typing.InferenceContext -> Graph.Graph
   -> Either Errors.Error (Map.Map FilePath String)
 moduleToCoq fieldMap constrCounts ambiguousNames globalSanitizedAcc mod defs _cx _g =
   Right (CoqGenerate.moduleToCoq fieldMap constrCounts ambiguousNames globalSanitizedAcc mod defs)

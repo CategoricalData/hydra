@@ -3,6 +3,7 @@
 
 module Hydra.Dsl.Go.Syntax where
 import qualified Hydra.Core as Core
+import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Go.Syntax as Syntax
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)

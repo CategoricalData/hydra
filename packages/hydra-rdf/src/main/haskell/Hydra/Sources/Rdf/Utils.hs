@@ -92,7 +92,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Names.ns, Annotations.ns] L.++ (RdfSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Names.ns] L.++ (RdfSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Utility functions for working with RDF graphs and descriptions"}
   where
     definitions = [
@@ -104,7 +104,6 @@ module_ = Module {
       toDefinition forObjects,
       toDefinition iri,
       toDefinition keyIri,
-      toDefinition key_rdfBlankNodeCounter,
       toDefinition mergeGraphs,
       toDefinition nameToIri,
       toDefinition nextBlankNode,
@@ -251,12 +250,6 @@ keyIri = define "keyIri" $
   lambda "local" $
     iri @@ string "urn:key:" @@ var "local"
 
--- | The key used for tracking blank node counters
-key_rdfBlankNodeCounter :: TTermDefinition Name
-key_rdfBlankNodeCounter = define "key_rdfBlankNodeCounter" $
-  doc "The key used for tracking blank node counters" $
-  wrap _Name $ string "rdfBlankNodeCounter"
-
 -- | Merge a list of RDF graphs into a single graph
 mergeGraphs :: TTermDefinition ([Rdf.Graph] -> Rdf.Graph)
 mergeGraphs = define "mergeGraphs" $
@@ -272,18 +265,15 @@ nameToIri = define "nameToIri" $
   lambda "name" $
     wrap Rdf._Iri (Strings.cat2 (string "urn:") (Core.unName $ var "name"))
 
--- | Generate the next blank node and an updated context
-nextBlankNode :: TTermDefinition (Context -> (Rdf.Resource, Context))
+-- | Generate the next blank node and an updated counter
+nextBlankNode :: TTermDefinition (I.Int32 -> (Rdf.Resource, I.Int32))
 nextBlankNode = define "nextBlankNode" $
-  doc "Generate the next blank node and an updated context" $
-  lambda "cx" $ lets [
-    "result">: Annotations.nextCount @@ key_rdfBlankNodeCounter @@ var "cx",
-    "count">: Pairs.first (var "result"),
-    "cx'">: Pairs.second (var "result")] $
+  doc "Generate the next blank node and an incremented counter" $
+  lambda "counter" $
     pair
       (inject Rdf._Resource Rdf._Resource_bnode
-        (wrap Rdf._BlankNode (Strings.cat2 (string "b") (Literals.showInt32 (var "count")))))
-      (var "cx'")
+        (wrap Rdf._BlankNode (Strings.cat2 (string "b") (Literals.showInt32 (var "counter")))))
+      (Math.add (var "counter") (int32 1))
 
 -- | Construct a property IRI from a record name and field name
 propertyIri :: TTermDefinition (Name -> Name -> Rdf.Iri)

@@ -54,10 +54,6 @@
 (register-make 'hydra.core "WrappedTerm" 'make-wrappedTerm)
 (register-make 'hydra.core "WrappedType" 'make-wrappedType)
 
-;; ---- hydra.context ----
-(register-make 'hydra.context "Context" 'make-context)
-(register-make 'hydra.context "InContext" 'make-inContext)
-
 ;; ---- hydra.error ----
 (register-make 'hydra.error "DecodingError" 'make-decodingError)
 (register-make 'hydra.error "OtherError" 'make-otherError)

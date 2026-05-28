@@ -50,7 +50,7 @@ tableCsvCoder hasHeader = Coder encode decode
 
 type DomainCoders t v = M.Map t (Coder v String)
 
-relationCsvCoder :: (Ord t, Show t) => DomainCoders t v -> RM.RelationSchema t -> Bool -> Context -> Either Error (Coder (RM.Relation v) [String])
+relationCsvCoder :: (Ord t, Show t) => DomainCoders t v -> RM.RelationSchema t -> Bool -> InferenceContext -> Either Error (Coder (RM.Relation v) [String])
 relationCsvCoder coderMap schema hasHeader cx = do
     coder <- rowCsvCoder coderMap schema cx
     return $ Coder (encode coder) (decode coder)
@@ -69,7 +69,7 @@ relationCsvCoder coderMap schema hasHeader cx = do
         dataRows = if hasHeader then L.tail inRows else inRows
 
 -- | Encodes a single Row as a line of a CSV, and vice versa.
-rowCsvCoder :: (Ord t, Show t) => DomainCoders t v -> RM.RelationSchema t -> Context -> Either Error (Coder (RM.Row v) String)
+rowCsvCoder :: (Ord t, Show t) => DomainCoders t v -> RM.RelationSchema t -> InferenceContext -> Either Error (Coder (RM.Row v) String)
 rowCsvCoder coderMap schema cx = do
     coders <- CM.mapM findCoder (RM.columnSchemaDomain <$> RM.relationSchemaColumns schema)
     return $ Coder (encode coders) (decode coders)

@@ -132,7 +132,7 @@ object Generation:
 
   /** Generate source files and write them to disk. Returns number of files written. */
   def generateSources(
-      coder: Module => Seq[Definition] => hydra.context.Context => Graph =>
+      coder: Module => Seq[Definition] => hydra.typing.InferenceContext => Graph =>
         Either[hydra.errors.Error, Map[String, String]],
       language: hydra.coders.Language,
       doInfer: Boolean,
@@ -142,7 +142,7 @@ object Generation:
       basePath: String,
       universe: Seq[Module],
       modsToGenerate: Seq[Module]): Int =
-    val cx = hydra.context.Context(Seq.empty, Seq.empty, Map.empty)
+    val cx = hydra.typing.InferenceContext(0, Seq.empty)
     val bsGraph = bootstrapGraph()
     hydra.codegen.generateSourceFiles(
       coder)(language)(doInfer)(doExpand)(doHoistCaseStatements)(doHoistPolymorphicLetBindings)(

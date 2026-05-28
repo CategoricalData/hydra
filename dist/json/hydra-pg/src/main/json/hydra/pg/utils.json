@@ -75,7 +75,7 @@
                                                                 "type": {"unit": {}}}},
                                                             "domain": {"variable": "hydra.core.Type"},
                                                             "parameter": "_"}},
-                                                        "domain": {"variable": "hydra.context.Context"},
+                                                        "domain": {"variable": "hydra.typing.InferenceContext"},
                                                         "parameter": "_"}}},
                                                   {
                                                     "name": "decode",
@@ -92,7 +92,7 @@
                                                                 "type": {"variable": "hydra.core.Type"}}},
                                                             "domain": {"unit": {}},
                                                             "parameter": "_"}},
-                                                        "domain": {"variable": "hydra.context.Context"},
+                                                        "domain": {"variable": "hydra.typing.InferenceContext"},
                                                         "parameter": "_"}}}],
                                                 "typeName": "hydra.coders.Coder"}},
                                             "type": {"variable": "hydra.core.Type"}}},
@@ -118,10 +118,11 @@
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"variable": "cx"},
-                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.pg.utils.expString"}, "type": {"variable": "hydra.context.Context"}}}}}}},
+                                                                    "function": {
+                                                                      "typeApplication": {"body": {"variable": "hydra.pg.utils.expString"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}},
                                                             "domain": {"variable": "hydra.core.Term"},
                                                             "parameter": "t"}},
-                                                        "domain": {"variable": "hydra.context.Context"},
+                                                        "domain": {"variable": "hydra.typing.InferenceContext"},
                                                         "parameter": "cx"}}},
                                                   {
                                                     "name": "decode",
@@ -145,7 +146,7 @@
                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                             "domain": {"literal": {"string": {}}},
                                                             "parameter": "s"}},
-                                                        "domain": {"variable": "hydra.context.Context"},
+                                                        "domain": {"variable": "hydra.typing.InferenceContext"},
                                                         "parameter": "_cx"}}}],
                                                 "typeName": "hydra.coders.Coder"}},
                                             "type": {"variable": "hydra.core.Term"}}},
@@ -171,7 +172,7 @@
                                                                 "type": {"unit": {}}}},
                                                             "domain": {"variable": "hydra.core.Type"},
                                                             "parameter": "_"}},
-                                                        "domain": {"variable": "hydra.context.Context"},
+                                                        "domain": {"variable": "hydra.typing.InferenceContext"},
                                                         "parameter": "_"}}},
                                                   {
                                                     "name": "decode",
@@ -188,7 +189,7 @@
                                                                 "type": {"variable": "hydra.core.Type"}}},
                                                             "domain": {"unit": {}},
                                                             "parameter": "_"}},
-                                                        "domain": {"variable": "hydra.context.Context"},
+                                                        "domain": {"variable": "hydra.typing.InferenceContext"},
                                                         "parameter": "_"}}}],
                                                 "typeName": "hydra.coders.Coder"}},
                                             "type": {"variable": "hydra.core.Type"}}},
@@ -214,10 +215,11 @@
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"variable": "cx"},
-                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.pg.utils.expString"}, "type": {"variable": "hydra.context.Context"}}}}}}},
+                                                                    "function": {
+                                                                      "typeApplication": {"body": {"variable": "hydra.pg.utils.expString"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}},
                                                             "domain": {"variable": "hydra.core.Term"},
                                                             "parameter": "t"}},
-                                                        "domain": {"variable": "hydra.context.Context"},
+                                                        "domain": {"variable": "hydra.typing.InferenceContext"},
                                                         "parameter": "cx"}}},
                                                   {
                                                     "name": "decode",
@@ -241,7 +243,7 @@
                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                             "domain": {"literal": {"string": {}}},
                                                             "parameter": "s"}},
-                                                        "domain": {"variable": "hydra.context.Context"},
+                                                        "domain": {"variable": "hydra.typing.InferenceContext"},
                                                         "parameter": "_cx"}}}],
                                                 "typeName": "hydra.coders.Coder"}},
                                             "type": {"variable": "hydra.core.Term"}}},
@@ -267,7 +269,7 @@
                                                                 "type": {"unit": {}}}},
                                                             "domain": {"variable": "hydra.core.Type"},
                                                             "parameter": "_"}},
-                                                        "domain": {"variable": "hydra.context.Context"},
+                                                        "domain": {"variable": "hydra.typing.InferenceContext"},
                                                         "parameter": "_"}}},
                                                   {
                                                     "name": "decode",
@@ -284,7 +286,7 @@
                                                                 "type": {"variable": "hydra.core.Type"}}},
                                                             "domain": {"unit": {}},
                                                             "parameter": "_"}},
-                                                        "domain": {"variable": "hydra.context.Context"},
+                                                        "domain": {"variable": "hydra.typing.InferenceContext"},
                                                         "parameter": "_"}}}],
                                                 "typeName": "hydra.coders.Coder"}},
                                             "type": {"variable": "hydra.core.Type"}}},
@@ -310,10 +312,11 @@
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"variable": "cx"},
-                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.pg.utils.expString"}, "type": {"variable": "hydra.context.Context"}}}}}}},
+                                                                    "function": {
+                                                                      "typeApplication": {"body": {"variable": "hydra.pg.utils.expString"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}},
                                                             "domain": {"variable": "hydra.core.Term"},
                                                             "parameter": "t"}},
-                                                        "domain": {"variable": "hydra.context.Context"},
+                                                        "domain": {"variable": "hydra.typing.InferenceContext"},
                                                         "parameter": "cx"}}},
                                                   {
                                                     "name": "decode",
@@ -337,7 +340,7 @@
                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                             "domain": {"literal": {"string": {}}},
                                                             "parameter": "s"}},
-                                                        "domain": {"variable": "hydra.context.Context"},
+                                                        "domain": {"variable": "hydra.typing.InferenceContext"},
                                                         "parameter": "_cx"}}}],
                                                 "typeName": "hydra.coders.Coder"}},
                                             "type": {"variable": "hydra.core.Term"}}},
@@ -522,7 +525,7 @@
               "isLazy": false,
               "name": "arg1",
               "type": {"application": {"argument": {"variable": "t2"}, "function": {"variable": "hydra.pg.model.Element"}}}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.context.Context"}}],
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.typing.InferenceContext"}}],
           "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.json.model.Value"}}}},
           "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}, {"constraints": [], "name": "t2"}]},
         "term": {
@@ -785,7 +788,7 @@
                                                                                                                     "right": {"maybe": {"pair": {"first": {"literal": {"string": {}}}, "second": {"variable": "hydra.json.model.Value"}}}}}}}}}}}}}},
                                                                                                 "domain": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t2"}}},
                                                                                                 "parameter": "pairs"}},
-                                                                                            "domain": {"variable": "hydra.context.Context"},
+                                                                                            "domain": {"variable": "hydra.typing.InferenceContext"},
                                                                                             "parameter": "cx"}},
                                                                                         "domain": {
                                                                                           "application": {
@@ -1143,7 +1146,7 @@
                                                                                                                                     "right": {"maybe": {"pair": {"first": {"literal": {"string": {}}}, "second": {"variable": "hydra.json.model.Value"}}}}}}}}}}}}}},
                                                                                                                 "domain": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t2"}}},
                                                                                                                 "parameter": "pairs"}},
-                                                                                                            "domain": {"variable": "hydra.context.Context"},
+                                                                                                            "domain": {"variable": "hydra.typing.InferenceContext"},
                                                                                                             "parameter": "cx"}},
                                                                                                         "domain": {
                                                                                                           "application": {
@@ -1372,7 +1375,7 @@
                                                         "parameter": "edge"}}}],
                                                 "typeName": "hydra.pg.model.Element"}},
                                             "type": {"variable": "t2"}}}}},
-                                    "domain": {"variable": "hydra.context.Context"},
+                                    "domain": {"variable": "hydra.typing.InferenceContext"},
                                     "parameter": "cx"}},
                                 "domain": {"application": {"argument": {"variable": "t2"}, "function": {"variable": "hydra.pg.model.Element"}}},
                                 "parameter": "el"}},
@@ -1406,7 +1409,7 @@
               "isLazy": false,
               "name": "arg1",
               "type": {"list": {"application": {"argument": {"variable": "t2"}, "function": {"variable": "hydra.pg.model.Element"}}}}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.context.Context"}}],
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.typing.InferenceContext"}}],
           "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.json.model.Value"}}}},
           "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}, {"constraints": [], "name": "t2"}]},
         "term": {
@@ -1476,7 +1479,7 @@
                                                       "typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"list": {"variable": "hydra.json.model.Value"}}}},
                                                     "type": {"variable": "hydra.json.model.Value"}}},
                                                 "type": {"variable": "hydra.errors.Error"}}}}}}},
-                                    "domain": {"variable": "hydra.context.Context"},
+                                    "domain": {"variable": "hydra.typing.InferenceContext"},
                                     "parameter": "cx"}},
                                 "domain": {"list": {"application": {"argument": {"variable": "t2"}, "function": {"variable": "hydra.pg.model.Element"}}}},
                                 "parameter": "els"}},
@@ -1599,7 +1602,7 @@
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Type"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "t1"}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "t1"}},
-            {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg5", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {
@@ -1613,7 +1616,7 @@
                           "either": {
                             "left": {"variable": "hydra.errors.Error"},
                             "right": {"list": {"application": {"argument": {"variable": "t2"}, "function": {"variable": "hydra.pg.model.Element"}}}}}},
-                        "domain": {"variable": "hydra.context.Context"}}},
+                        "domain": {"variable": "hydra.typing.InferenceContext"}}},
                     "domain": {"variable": "hydra.core.Term"}}}}}},
           "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}, {"constraints": [], "name": "t2"}]},
         "term": {
@@ -1760,7 +1763,7 @@
                                                                                                 "type": {"application": {"argument": {"variable": "t2"}, "function": {"variable": "hydra.pg.model.ElementTree"}}}}},
                                                                                             "type": {"list": {"application": {"argument": {"variable": "t2"}, "function": {"variable": "hydra.pg.model.Element"}}}}}},
                                                                                         "type": {"variable": "hydra.errors.Error"}}}}}}},
-                                                                            "domain": {"variable": "hydra.context.Context"},
+                                                                            "domain": {"variable": "hydra.typing.InferenceContext"},
                                                                             "parameter": "cx'"}},
                                                                         "domain": {"variable": "hydra.core.Term"},
                                                                         "parameter": "term"}}}},
@@ -1773,7 +1776,7 @@
                                                                       "either": {
                                                                         "left": {"variable": "hydra.errors.Error"},
                                                                         "right": {"list": {"application": {"argument": {"variable": "t2"}, "function": {"variable": "hydra.pg.model.Element"}}}}}},
-                                                                    "domain": {"variable": "hydra.context.Context"}}},
+                                                                    "domain": {"variable": "hydra.typing.InferenceContext"}}},
                                                                 "domain": {"variable": "hydra.core.Term"}}}}},
                                                         "domain": {
                                                           "application": {
@@ -1842,11 +1845,11 @@
                                                                       "either": {
                                                                         "left": {"variable": "hydra.errors.Error"},
                                                                         "right": {"list": {"application": {"argument": {"variable": "t2"}, "function": {"variable": "hydra.pg.model.Element"}}}}}},
-                                                                    "domain": {"variable": "hydra.context.Context"}}},
+                                                                    "domain": {"variable": "hydra.typing.InferenceContext"}}},
                                                                 "domain": {"variable": "hydra.core.Term"}}}}}}}}},
                                                 "domain": {"variable": "hydra.graph.Graph"},
                                                 "parameter": "g"}},
-                                            "domain": {"variable": "hydra.context.Context"},
+                                            "domain": {"variable": "hydra.typing.InferenceContext"},
                                             "parameter": "cx"}},
                                         "domain": {"variable": "t1"},
                                         "parameter": "eidType"}},
@@ -1874,7 +1877,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

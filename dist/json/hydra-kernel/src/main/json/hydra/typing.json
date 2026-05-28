@@ -65,6 +65,40 @@
           "variables": []}}},
     {
       "type": {
+        "name": "hydra.typing.InferenceContext",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {"string": "State threaded through type inference: the fresh type variable counter and the current subterm-path trace."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "freshTypeVariableCount",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}],
+                        "body": {"literal": {"integer": {"int32": {}}}}}}},
+                  {
+                    "name": "trace",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {
+                                "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}],
+                        "body": {"list": {"variable": "hydra.paths.SubtermStep"}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
         "name": "hydra.typing.InferenceResult",
         "typeScheme": {
           "body": {
@@ -106,8 +140,8 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {"literal": {"string": "The updated context after inference (carries fresh variable state)"}}}],
-                        "body": {"variable": "hydra.context.Context"}}}}]}}},
+                            "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}],
+                        "body": {"variable": "hydra.typing.InferenceContext"}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -309,6 +343,6 @@
               "annotation": [{"key": "description", "value": {"literal": {"string": "A substitution of type variables for types"}}}],
               "body": {"wrap": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}}}}},
           "variables": []}}}],
-  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.context"}],
+  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.paths"}],
   "description": "Types supporting type inference and type reconstruction.",
   "name": "hydra.typing"}

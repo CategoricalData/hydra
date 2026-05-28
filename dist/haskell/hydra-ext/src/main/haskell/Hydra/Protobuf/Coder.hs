@@ -7,7 +7,7 @@ import qualified Hydra.Analysis as Analysis
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
-import qualified Hydra.Context as Context
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Environment as Environment
@@ -16,16 +16,16 @@ import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Math as Math
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Math as Math
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Predicates as Predicates
@@ -56,7 +56,7 @@ collectStructuralTypes_collectFromType typ =
         Core.TypePair v0 -> Sets.insert (ProtobufEnvironment.StructuralTypeRefPair (Core.pairTypeFirst v0, (Core.pairTypeSecond v0))) acc
         _ -> acc) Sets.empty typ
 -- | Construct a Protobuf file from a Hydra module and its type definitions
-constructModule :: Context.Context -> Graph.Graph -> Packaging.Module -> [Packaging.TypeDefinition] -> Either Errors.Error Proto3.ProtoFile
+constructModule :: Typing.InferenceContext -> Graph.Graph -> Packaging.Module -> [Packaging.TypeDefinition] -> Either Errors.Error Proto3.ProtoFile
 constructModule cx g mod typeDefs =
 
       let ns_ = Packaging.moduleName mod
@@ -121,11 +121,11 @@ constructModule cx g mod typeDefs =
               definitions]),
             Proto3.protoFileOptions = (Lists.cons descOption javaOptions)})))))))
 -- | Encode a Hydra type as a Protobuf definition
-encodeDefinition :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> Core.Name -> Core.Type -> Either Errors.Error Proto3.Definition
+encodeDefinition :: Typing.InferenceContext -> Graph.Graph -> Packaging.ModuleName -> Core.Name -> Core.Type -> Either Errors.Error Proto3.Definition
 encodeDefinition cx g localNs name typ =
 
-      let cx1 = Annotations.resetCount key_proto_field_index cx
-          cx2 = Pairs.second (Annotations.nextCount key_proto_field_index cx1)
+      let cx1 = cx
+          cx2 = Pairs.second ((0::Int, cx))
           wrapAsRecordType =
                   \t -> Core.TypeRecord [
                     Core.FieldType {
@@ -175,7 +175,7 @@ encodeFieldName :: Bool -> Core.Name -> Proto3.FieldName
 encodeFieldName preserve name =
     Proto3.FieldName (Logic.ifElse preserve (Core.unName name) (Formatting.convertCaseCamelToLowerSnake (Core.unName name)))
 -- | Encode a Hydra field type as a Protobuf field
-encodeFieldType :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> Core.FieldType -> Either Errors.Error (Proto3.Field, Context.Context)
+encodeFieldType :: Typing.InferenceContext -> Graph.Graph -> Packaging.ModuleName -> Core.FieldType -> Either Errors.Error (Proto3.Field, Typing.InferenceContext)
 encodeFieldType cx g localNs ft =
 
       let fname = Core.fieldTypeName ft
@@ -213,7 +213,7 @@ encodeFieldType cx g localNs ft =
                         in (Eithers.bind (Eithers.bimap (\de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError de))) (\t -> t) (DecodeCore.type_ g0 term)) (\resolvedTyp -> encodeSimpleType_ cx0 g0 ns0 noms resolvedTyp))))
                       _ -> unexpectedE cx0 "simple type" (ShowCore.type_ (Strip.removeTypeAnnotations typ))
       in (Eithers.bind (findOptions cx g ftype) (\options -> Eithers.bind (encodeType_ cx g localNs ftype) (\ft_ ->
-        let idxPair = Annotations.nextCount key_proto_field_index cx
+        let idxPair = (0::Int, cx)
             idx = Pairs.first idxPair
             cx1 = Pairs.second idxPair
         in (Eithers.bind (readBooleanAnnotation cx g Constants.keyPreserveFieldName ftype) (\preserve -> Right (
@@ -225,7 +225,7 @@ encodeFieldType cx g localNs ft =
             Proto3.fieldOptions = options},
           cx1))))))
 -- | Encode a Hydra record type as a Protobuf message definition
-encodeRecordType :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> [Proto3.Option] -> Core.Name -> [Core.FieldType] -> Either Errors.Error Proto3.MessageDefinition
+encodeRecordType :: Typing.InferenceContext -> Graph.Graph -> Packaging.ModuleName -> [Proto3.Option] -> Core.Name -> [Core.FieldType] -> Either Errors.Error Proto3.MessageDefinition
 encodeRecordType cx g localNs options tname fts =
     Eithers.bind (mapAccumResult (\cx_ -> \f -> encodeFieldType cx_ g localNs f) cx fts) (\result ->
       let pfields = Pairs.first result
@@ -331,14 +331,14 @@ flattenType typ =
 fromEitherString :: t0 -> Either String t1 -> Either Errors.Error t1
 fromEitherString cx e = Eithers.bimap (\msg -> Errors.ErrorOther (Errors.OtherError msg)) (\a -> a) e
 -- | Generate a helper message definition for a structural type
-generateStructuralTypeMessage :: Context.Context -> t0 -> Packaging.ModuleName -> ProtobufEnvironment.StructuralTypeRef -> Either Errors.Error (Proto3.Definition, Context.Context)
+generateStructuralTypeMessage :: Typing.InferenceContext -> t0 -> Packaging.ModuleName -> ProtobufEnvironment.StructuralTypeRef -> Either Errors.Error (Proto3.Definition, Typing.InferenceContext)
 generateStructuralTypeMessage cx g localNs ref =
 
-      let cx1 = Annotations.resetCount key_proto_field_index cx
-          cx2 = Pairs.second (Annotations.nextCount key_proto_field_index cx1)
+      let cx1 = cx
+          cx2 = Pairs.second ((0::Int, cx))
           makeField =
                   \cx0 -> \fname -> \ftyp -> Eithers.bind (encodeSimpleTypeForHelper cx0 localNs ftyp) (\ft ->
-                    let idxPair = Annotations.nextCount key_proto_field_index cx0
+                    let idxPair = (0::Int, cx)
                         idx = Pairs.first idxPair
                         cx1_ = Pairs.second idxPair
                     in (Right (
@@ -413,7 +413,7 @@ mapAccumResult f cx0 xs =
             Pairs.first resultPair]],
         (Pairs.second resultPair))) (f cxN x)))) (Right ([], cx0)) xs
 -- | Convert a Hydra module to Protocol Buffers v3 source files
-moduleToProtobuf :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either Errors.Error (M.Map String String)
+moduleToProtobuf :: Packaging.Module -> [Packaging.Definition] -> Typing.InferenceContext -> Graph.Graph -> Either Errors.Error (M.Map String String)
 moduleToProtobuf mod defs cx g =
 
       let ns_ = Packaging.moduleName mod

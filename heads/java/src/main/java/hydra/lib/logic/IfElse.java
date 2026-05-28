@@ -14,7 +14,7 @@ import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.var;
-import hydra.context.Context;
+import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -46,7 +46,7 @@ public class IfElse extends PrimitiveFunction {
      * @return a function that takes a list of terms and returns an Either producing the selected value
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply(b -> IfElse.apply(b, args.get(1), args.get(2)), hydra.extract.Core.boolean_(graph, args.get(0)));
     }
 

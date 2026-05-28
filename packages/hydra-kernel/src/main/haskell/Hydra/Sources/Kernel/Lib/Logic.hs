@@ -3,7 +3,6 @@
 module Hydra.Sources.Kernel.Lib.Logic where
 
 import Hydra.Kernel
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms

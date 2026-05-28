@@ -7,7 +7,7 @@ import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
-import qualified Hydra.Sources.Kernel.Types.Context as Context
+import qualified Hydra.Sources.Kernel.Types.Paths as Paths
 
 
 ns :: ModuleName
@@ -20,11 +20,12 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = unqualifiedDep <$> [Core.ns, Context.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns, Paths.ns],
             moduleDescription = Just "Types supporting type inference and type reconstruction."}
   where
     definitions = [
       functionStructure,
+      inferenceContext,
       inferenceResult,
       parameter,
       result,
@@ -34,6 +35,21 @@ module_ = Module {
       typeConstraint,
       typeParameter,
       typeSubst]
+
+inferenceContext :: Binding
+inferenceContext = define "InferenceContext" $
+  doc ("State threaded through type inference: the fresh type variable counter"
+    ++ " and the current subterm-path trace.") $
+  T.record [
+    "freshTypeVariableCount">:
+      doc "Counter used to generate distinct fresh type variables during inference"
+      T.int32,
+    "trace">:
+      doc ("The current subterm-path trace, accumulated backwards (head = most-recently-pushed step,"
+        ++ " corresponding to the deepest point in the descent). At the moment an inference error is"
+        ++ " constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order)"
+        ++ " and stamped onto the error.") $
+      T.list Paths.subtermStep]
 
 inferenceResult :: Binding
 inferenceResult = define "InferenceResult" $
@@ -52,8 +68,8 @@ inferenceResult = define "InferenceResult" $
       doc "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)" $
       T.map Core.name Core.typeVariableMetadata,
     "context">:
-      doc "The updated context after inference (carries fresh variable state)" $
-      Context.context]
+      doc "The updated InferenceContext after inference (carries fresh-variable counter and trace)" $
+      inferenceContext]
 
 termSubst :: Binding
 termSubst = define "TermSubst" $

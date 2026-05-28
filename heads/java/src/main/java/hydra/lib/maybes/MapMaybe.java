@@ -16,7 +16,7 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
-import hydra.context.Context;
+import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -47,13 +47,13 @@ public class MapMaybe extends PrimitiveFunction {
      * @return a function that maps an optional-returning function over a list
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(1)), inputList -> {
                 Term f = args.get(0);
                 ConsList<Term> reversed = ConsList.empty();
                 for (Term item : inputList) {
                     Either<Error_, Term> r = hydra.Reduction.reduceTerm(
-                        hydra.Lexical.emptyContext(), graph, true, Terms.apply(f, item));
+                        hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(f, item));
                     if (r.isLeft()) return (Either) r;
                     Either<Error_, Maybe<Term>> maybeResult = hydra.extract.Core.maybeTerm(
                         t -> Either.right(t), graph, ((Either.Right<Error_, Term>) r).value);

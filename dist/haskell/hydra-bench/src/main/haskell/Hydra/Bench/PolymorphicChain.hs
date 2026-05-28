@@ -2,7 +2,7 @@
 -- | Polymorphic-chain inference benchmark. polyWalker_K :: Maybe a -> Maybe a; chains via Maybes.bind, instantiating forall a at each cross-def call site.
 
 module Hydra.Bench.PolymorphicChain where
-import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Polymorphic walker level 0; recurses to polyWalker0.

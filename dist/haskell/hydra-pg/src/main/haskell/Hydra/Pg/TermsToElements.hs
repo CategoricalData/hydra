@@ -4,20 +4,20 @@
 module Hydra.Pg.TermsToElements where
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Context as Context
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Literals as Literals
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Literals as Literals
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Pg.Mapping as Mapping
 import qualified Hydra.Pg.Model as Model
 import qualified Hydra.Resolution as Resolution
@@ -105,11 +105,11 @@ evalStep cx step term =
 expectList :: t0 -> Graph.Graph -> (t0 -> Graph.Graph -> Core.Term -> Either Errors.Error t1) -> Core.Term -> Either Errors.Error [t1]
 expectList cx g f term = Eithers.bind (ExtractCore.list g term) (\elems -> Eithers.mapList (f cx g) elems)
 -- | Parse an edge id pattern from a value spec and schema
-parseEdgeIdPattern :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.ValueSpec -> Either t5 (Context.Context -> Core.Term -> Either Errors.Error [t4])
+parseEdgeIdPattern :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.ValueSpec -> Either t5 (Typing.InferenceContext ->Core.Term -> Either Errors.Error [t4])
 parseEdgeIdPattern cx g schema spec =
     Eithers.bind (parseValueSpec cx g spec) (\fun -> Right (\cx_ -> \term -> Eithers.bind (fun cx_ term) (\terms -> Eithers.mapList (Coders.coderEncode (Mapping.schemaEdgeIds schema) cx_) terms)))
 -- | Parse an edge specification into a label and encoder function
-parseEdgeSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.EdgeSpec -> Either t5 (Model.Label, (Context.Context -> Core.Term -> Either Errors.Error [Model.Element t4]))
+parseEdgeSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.EdgeSpec -> Either t5 (Model.Label, (Typing.InferenceContext ->Core.Term -> Either Errors.Error [Model.Element t4]))
 parseEdgeSpec cx g schema spec =
 
       let label = Mapping.edgeSpecLabel spec
@@ -127,7 +127,7 @@ parseEdgeSpec cx g schema spec =
             Model.edgeIn = tin,
             Model.edgeProperties = tprops})])))))))))))
 -- | Parse an element specification into a label and encoder function
-parseElementSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.ElementSpec -> Either t5 (Model.Label, (Context.Context -> Core.Term -> Either Errors.Error [Model.Element t4]))
+parseElementSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.ElementSpec -> Either t5 (Model.Label, (Typing.InferenceContext ->Core.Term -> Either Errors.Error [Model.Element t4]))
 parseElementSpec cx g schema spec =
     case spec of
       Mapping.ElementSpecVertex v0 -> parseVertexSpec cx g schema v0
@@ -148,7 +148,7 @@ parsePattern cx _g pat =
                     in (pathSteps, litPart)) rest
       in (Right (\cx_ -> \term -> applyPattern cx_ firstLit parsed term))
 -- | Parse a property specification into an encoder function
-parsePropertySpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.PropertySpec -> Either t5 (Context.Context -> Core.Term -> Either Errors.Error [(Model.PropertyKey, t4)])
+parsePropertySpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.PropertySpec -> Either t5 (Typing.InferenceContext ->Core.Term -> Either Errors.Error [(Model.PropertyKey, t4)])
 parsePropertySpec cx g schema spec =
 
       let key = Mapping.propertySpecKey spec
@@ -162,11 +162,11 @@ parseValueSpec cx g spec =
         term])
       Mapping.ValueSpecPattern v0 -> parsePattern cx g v0
 -- | Parse a vertex id pattern from a value spec and schema
-parseVertexIdPattern :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.ValueSpec -> Either t5 (Context.Context -> Core.Term -> Either Errors.Error [t4])
+parseVertexIdPattern :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.ValueSpec -> Either t5 (Typing.InferenceContext ->Core.Term -> Either Errors.Error [t4])
 parseVertexIdPattern cx g schema spec =
     Eithers.bind (parseValueSpec cx g spec) (\fun -> Right (\cx_ -> \term -> Eithers.bind (fun cx_ term) (\terms -> Eithers.mapList (Coders.coderEncode (Mapping.schemaVertexIds schema) cx_) terms)))
 -- | Parse a vertex specification into a label and encoder function
-parseVertexSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.VertexSpec -> Either t5 (Model.Label, (Context.Context -> Core.Term -> Either Errors.Error [Model.Element t4]))
+parseVertexSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.VertexSpec -> Either t5 (Model.Label, (Typing.InferenceContext ->Core.Term -> Either Errors.Error [Model.Element t4]))
 parseVertexSpec cx g schema spec =
 
       let label = Mapping.vertexSpecLabel spec

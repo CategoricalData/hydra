@@ -15,9 +15,6 @@ module_ =
       Packaging.moduleName = (Packaging.ModuleName "hydra.encode.errors"),
       Packaging.moduleDependencies = [
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.context"),
-          Packaging.moduleDependencyPackage = Nothing},
-        Packaging.ModuleDependency {
           Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.core"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {

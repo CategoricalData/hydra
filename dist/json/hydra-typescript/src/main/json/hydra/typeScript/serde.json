@@ -5545,7 +5545,7 @@
                             "term": {
                               "lambda": {
                                 "body": {"literal": {"string": "Object"}},
-                                "domain": {"variable": "hydra.typeScript.syntax.ObjectTypeExpression"},
+                                "domain": {"list": {"variable": "hydra.typeScript.syntax.PropertySignature"}},
                                 "parameter": "_"}}},
                           {
                             "name": "union",
@@ -5863,7 +5863,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

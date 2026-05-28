@@ -130,7 +130,7 @@
       (flush)
 
       (let [bs-graph (bootstrap-graph)
-            cx ((r '->hydra_context_context) (list) (list) {})
+            cx ((r '->hydra_typing_inference_context) 0 (list))
             coder (case target
                     "python" @(rc 'hydra_ext_python_coder_module_to_python)
                     "clojure" (let [mtl @(rc 'hydra_ext_lisp_coder_module_to_lisp)

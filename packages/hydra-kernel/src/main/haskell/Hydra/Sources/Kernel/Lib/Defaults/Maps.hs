@@ -78,7 +78,7 @@ module_ = Module {
 
 -- | Interpreter-friendly alter for Map terms.
 -- Applies funTerm to the current value (or Nothing) and updates accordingly.
-alter_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either Error Term)
+alter_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
 alter_ = define "alter" $
   doc "Interpreter-friendly alter for Map terms." $
   "cx" ~> "g" ~>
@@ -118,7 +118,7 @@ alter_ = define "alter" $
 
 -- | Interpreter-friendly bimap for Map terms.
 -- Applies keyFun to each key and valFun to each value.
-bimap_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either Error Term)
+bimap_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
 bimap_ = define "bimap" $
   doc "Interpreter-friendly bimap for Map terms." $
   "cx" ~> "g" ~>
@@ -140,7 +140,7 @@ bimap_ = define "bimap" $
 
 -- | Interpreter-friendly filter for Map terms.
 -- Keeps entries where valPred returns true for the value.
-filter_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+filter_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 filter_ = define "filter" $
   doc "Interpreter-friendly filter for Map terms." $
   "cx" ~> "g" ~>
@@ -168,7 +168,7 @@ filter_ = define "filter" $
 
 -- | Interpreter-friendly filterWithKey for Map terms.
 -- Keeps entries where pred returns true for the key and value.
-filterWithKey_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+filterWithKey_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 filterWithKey_ = define "filterWithKey" $
   doc "Interpreter-friendly filterWithKey for Map terms." $
   "cx" ~> "g" ~>
@@ -199,7 +199,7 @@ filterWithKey_ = define "filterWithKey" $
 
 -- | Interpreter-friendly findWithDefault for Map terms.
 -- findWithDefault default key map: returns the value at key, or default if not found.
-findWithDefault_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either Error Term)
+findWithDefault_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
 findWithDefault_ = define "findWithDefault" $
   doc "Interpreter-friendly findWithDefault for Map terms." $
   "cx" ~> "g" ~>
@@ -217,7 +217,7 @@ findWithDefault_ = define "findWithDefault" $
 
 -- | Interpreter-friendly map for Map terms.
 -- Applies valFun to each value.
-map_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+map_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for Map terms." $
   "cx" ~> "g" ~>
@@ -236,7 +236,7 @@ map_ = define "map" $
 
 -- | Interpreter-friendly mapKeys for Map terms.
 -- Applies keyFun to each key.
-mapKeys_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+mapKeys_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 mapKeys_ = define "mapKeys" $
   doc "Interpreter-friendly mapKeys for Map terms." $
   "cx" ~> "g" ~>

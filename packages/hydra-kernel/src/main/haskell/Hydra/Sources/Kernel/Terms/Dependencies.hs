@@ -401,7 +401,7 @@ typeNamesInType = define "typeNamesInType" $
   "addNames" <~ ("names" ~> "typ" ~> var "names") $
   Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty @@ var "typ0"
 
-definitionsWithDependencies :: TTermDefinition (Context -> Graph -> [Binding] -> Either Error [Binding])
+definitionsWithDependencies :: TTermDefinition (InferenceContext -> Graph -> [Binding] -> Either Error [Binding])
 definitionsWithDependencies = define "definitionsWithDependencies" $
   doc "Get definitions with their dependencies" $
   "cx" ~> "graph" ~> "original" ~>

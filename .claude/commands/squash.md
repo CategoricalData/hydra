@@ -43,16 +43,25 @@ Per the CLAUDE.md "Commit workflow" section:
    - **Generated files last** — `dist/json/**` and `dist/haskell/**`
      in a separate commit, or grouped with related source if the
      coupling is tight.
-   - One topic per commit. Each commit message should describe the
-     *why*, not just the *what* — pull from the prior WIP messages and
-     the relevant issue.
+   - **One topic per commit.** A "topic" is one focused change a
+     reviewer would read as a unit (e.g. "migrate kernel inference",
+     "delete dead stubs", "regenerate dist"). A whole feature branch
+     squashed into a single commit is too aggressive — a typical
+     branch lands as 3–10 topic commits.
+   - Each commit message should describe the *why*, not just the
+     *what* — pull from the prior WIP messages and the relevant issue.
 
 5. **Commit message format** — per CLAUDE.md:
-   - 120 characters or less, single line
-   - No `Co-Authored-By` line
+   - **No `WIP:` prefix** — its absence is the signal that this
+     commit has been squashed and is shippable. WIP is *only* for
+     pre-squash interim work.
+   - **120 characters or less, single line, no body.** If one line
+     isn't enough to explain the change, **split into more commits**.
+     Never append a multi-line body to compensate — that defeats the
+     purpose of focused topic commits.
+   - No `Co-Authored-By` line.
    - End with `For #<issue>` (or `Resolves #<issue>` if this branch
-     closes it)
-   - No "WIP:" prefix on shippable commits
+     closes it).
 
 6. **Verify.** `git log --oneline <fork-point>..HEAD` again. Then
    `git diff <fork-point> HEAD --stat` to confirm the net diff

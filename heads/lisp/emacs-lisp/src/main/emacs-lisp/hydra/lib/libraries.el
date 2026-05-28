@@ -633,7 +633,7 @@
                                            native-d))))))
                          (funcall (funcall hydra_annotations_set_term_description native-str-d) term))))
                    nil t_ t_ t_))
-      ;; getTermDescription :: Context -> Graph -> Term -> Either (Maybe String)
+      ;; getTermDescription :: InferenceContext -> Graph -> Term -> Either (Maybe String)
       (cons "hydra.annotations.getTermDescription"
             (prim3 "hydra.annotations.getTermDescription"
                    (lambda (cx)

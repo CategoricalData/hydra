@@ -60,7 +60,6 @@ import qualified Hydra.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
@@ -114,7 +113,7 @@ module_ = Module {
       toDefinition resolveType,
       toDefinition typeToTypeScheme]
 
-dereferenceType :: TTermDefinition (Context -> Graph -> Name -> Either Error (Maybe Type))
+dereferenceType :: TTermDefinition (InferenceContext -> Graph -> Name -> Either Error (Maybe Type))
 dereferenceType = define "dereferenceType" $
   doc "Dereference a type name to get the actual type (Either version)" $
   "cx" ~> "graph" ~> "name" ~>
@@ -139,15 +138,15 @@ fieldTypeMap = define "fieldTypeMap" $
   "toPair" <~ ("f" ~> pair (Core.fieldTypeName $ var "f") (Core.fieldTypeType $ var "f")) $
   Maps.fromList $ Lists.map (var "toPair") (var "fields")
 
-fieldTypes :: TTermDefinition (Context -> Graph -> Type -> Either Error (M.Map Name Type))
+fieldTypes :: TTermDefinition (InferenceContext -> Graph -> Type -> Either Error (M.Map Name Type))
 fieldTypes = define "fieldTypes" $
   doc "Get field types from a record or union type (Either version)" $
   "cx" ~> "graph" ~> "t" ~>
   "toMap" <~ ("fields" ~> Maps.fromList (Lists.map
     ("ft" ~> pair (Core.fieldTypeName (var "ft")) (Core.fieldTypeType (var "ft")))
     (var "fields"))) $
-  match _Type (Just (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $
-    Error.unexpectedShapeError (string "record or union type") (ShowCore.type_ @@ var "t")) (var "cx"))) [
+  match _Type (Just (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $
+    Error.unexpectedShapeError (string "record or union type") (ShowCore.type_ @@ var "t")))) [
     _Type_forall>>: "ft" ~> fieldTypes @@ var "cx" @@ var "graph" @@ Core.forallTypeBody (var "ft"),
     _Type_record>>: "rt" ~> right (var "toMap" @@ var "rt"),
     _Type_union>>: "rt" ~> right (var "toMap" @@ var "rt"),
@@ -163,19 +162,19 @@ fieldTypes = define "fieldTypes" $
         (Maps.lookup (var "name") (Graph.graphSchemaTypes $ var "graph"))]
   @@ (Strip.deannotateType @@ var "t")
 
-findFieldType :: TTermDefinition (Context -> Name -> [FieldType] -> Either Error Type)
+findFieldType :: TTermDefinition (InferenceContext -> Name -> [FieldType] -> Either Error Type)
 findFieldType = define "findFieldType" $
   doc "Find a field type by name in a list of field types" $
   "cx" ~> "fname" ~> "fields" ~>
   "matchingFields" <~ Lists.filter
     ("ft" ~> Equality.equal (Core.unName (Core.fieldTypeName (var "ft"))) (Core.unName (var "fname")))
     (var "fields") $
-  "noMatch" <~ (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname")) (var "cx")) $
+  "noMatch" <~ (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname"))) $
   Logic.ifElse (Lists.null (var "matchingFields"))
     (var "noMatch")
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingFields")) (int32 1))
       (Maybes.maybe (var "noMatch") ("ft" ~> right (Core.fieldTypeType $ var "ft")) (Lists.maybeHead $ var "matchingFields"))
-      (Ctx.failInContext (Error.errorExtraction $ Error.extractionErrorMultipleFields $ Error.multipleFieldsError (var "fname")) (var "cx")))
+      (left (Error.errorExtraction $ Error.extractionErrorMultipleFields $ Error.multipleFieldsError (var "fname"))))
 
 fTypeIsPolymorphic :: TTermDefinition (Type -> Bool)
 fTypeIsPolymorphic = define "fTypeIsPolymorphic" $
@@ -213,16 +212,16 @@ fullyStripType = define "fullyStripType" $
     _Type_forall>>: "ft" ~> fullyStripType @@ Core.forallTypeBody (var "ft")]
   @@ (Strip.deannotateType @@ var "typ")
 
-instantiateType :: TTermDefinition (Context -> Type -> (Type, Context))
+instantiateType :: TTermDefinition (InferenceContext -> Type -> (Type, InferenceContext))
 instantiateType = define "instantiateType" $
-  doc "Instantiate a type by replacing all forall-bound type variables with fresh variables, threading Context" $
+  doc "Instantiate a type by replacing all forall-bound type variables with fresh variables, threading InferenceContext" $
   "cx" ~> "typ" ~>
   "result" <~ instantiateTypeScheme @@ var "cx" @@ (typeToTypeScheme @@ var "typ") $
   pair (Scoping.typeSchemeToFType @@ Pairs.first (var "result")) (Pairs.second (var "result"))
 
-instantiateTypeScheme :: TTermDefinition (Context -> TypeScheme -> (TypeScheme, Context))
+instantiateTypeScheme :: TTermDefinition (InferenceContext -> TypeScheme -> (TypeScheme, InferenceContext))
 instantiateTypeScheme = define "instantiateTypeScheme" $
-  doc "Instantiate a type scheme with fresh variables, threading Context" $
+  doc "Instantiate a type scheme with fresh variables, threading InferenceContext" $
   "cx" ~> "scheme" ~>
   "oldVars" <~ Core.typeSchemeVariables (var "scheme") $
   "result" <~ Names.freshNames @@ Lists.length (var "oldVars") @@ var "cx" $
@@ -254,7 +253,7 @@ nominalApplication = define "nominalApplication" $
     (Core.typeVariable $ var "tname")
     (var "args")
 
-requireRecordType :: TTermDefinition (Context -> Graph -> Name -> Either Error [FieldType])
+requireRecordType :: TTermDefinition (InferenceContext -> Graph -> Name -> Either Error [FieldType])
 requireRecordType = define "requireRecordType" $
   doc "Require a name to resolve to a record type" $
   "cx" ~> "graph" ~> "name" ~>
@@ -262,7 +261,7 @@ requireRecordType = define "requireRecordType" $
     _Type_record>>: "rt" ~> just (var "rt")]) $
   requireRowType @@ var "cx" @@ string "record type" @@ var "toRecord" @@ var "graph" @@ var "name"
 
-requireRowType :: TTermDefinition (Context -> String -> (Type -> Maybe [FieldType]) -> Graph -> Name -> Either Error [FieldType])
+requireRowType :: TTermDefinition (InferenceContext -> String -> (Type -> Maybe [FieldType]) -> Graph -> Name -> Either Error [FieldType])
 requireRowType = define "requireRowType" $
   doc "Require a name to resolve to a row type" $
   "cx" ~> "label" ~> "getter" ~> "graph" ~> "name" ~>
@@ -272,15 +271,15 @@ requireRowType = define "requireRowType" $
   Eithers.bind (requireType @@ var "cx" @@ var "graph" @@ var "name") (
     "t" ~>
     Maybes.maybe
-      (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError
+      (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError
         (Strings.cat2 (var "label") (string " type"))
-        (Strings.cat2 (Core.unName (var "name")) (Strings.cat2 (string ": ") (ShowCore.type_ @@ var "t")))) (var "cx"))
+        (Strings.cat2 (Core.unName (var "name")) (Strings.cat2 (string ": ") (ShowCore.type_ @@ var "t")))))
       (reify right)
       (var "getter" @@ (var "rawType" @@ var "t")))
 
-requireSchemaType :: TTermDefinition (Context -> M.Map Name TypeScheme -> Name -> Either Error (TypeScheme, Context))
+requireSchemaType :: TTermDefinition (InferenceContext -> M.Map Name TypeScheme -> Name -> Either Error (TypeScheme, InferenceContext))
 requireSchemaType = define "requireSchemaType" $
-  doc "Look up a schema type and instantiate it, threading Context" $
+  doc "Look up a schema type and instantiate it, threading InferenceContext" $
   "cx" ~> "types" ~> "tname" ~>
   Maybes.maybe
     (left $
@@ -288,25 +287,25 @@ requireSchemaType = define "requireSchemaType" $
     ("ts" ~> right $ instantiateTypeScheme @@ var "cx" @@ (Strip.deannotateTypeSchemeRecursive @@ var "ts"))
     (Maps.lookup (var "tname") (var "types"))
 
-requireType :: TTermDefinition (Context -> Graph -> Name -> Either Error Type)
+requireType :: TTermDefinition (InferenceContext -> Graph -> Name -> Either Error Type)
 requireType = define "requireType" $
   doc "Require a type by name" $
   "cx" ~> "graph" ~> "name" ~>
   -- Look up in schema types first, then fall back to bound types
   Maybes.maybe
     (Maybes.maybe
-      (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "name")) (var "cx"))
+      (left (Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "name")))
       ("ts" ~> right (Scoping.typeSchemeToFType @@ var "ts"))
       (Maps.lookup (var "name") (Graph.graphBoundTypes (var "graph"))))
     ("ts" ~> right (Scoping.typeSchemeToFType @@ var "ts"))
     (Maps.lookup (var "name") (Graph.graphSchemaTypes (var "graph")))
 
-requireUnionField_ :: TTermDefinition (Context -> Graph -> Name -> Name -> Either Error Type)
+requireUnionField_ :: TTermDefinition (InferenceContext -> Graph -> Name -> Name -> Either Error Type)
 requireUnionField_ = define "requireUnionField" $
   doc "Require a field type from a union type" $
   "cx" ~> "graph" ~> "tname" ~> "fname" ~>
   "withRowType" <~ ("rt" ~>
-    "noMatchErr" <~ (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname")) (var "cx")) $
+    "noMatchErr" <~ (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname"))) $
     Maybes.maybe
       (var "noMatchErr")
       ("ft" ~> right $ Core.fieldTypeType $ var "ft")
@@ -315,7 +314,7 @@ requireUnionField_ = define "requireUnionField" $
         (var "rt"))) $
   Eithers.bind (requireUnionType @@ var "cx" @@ var "graph" @@ var "tname") (var "withRowType")
 
-requireUnionType :: TTermDefinition (Context -> Graph -> Name -> Either Error [FieldType])
+requireUnionType :: TTermDefinition (InferenceContext -> Graph -> Name -> Either Error [FieldType])
 requireUnionType = define "requireUnionType" $
   doc "Require a name to resolve to a union type" $
   "cx" ~> "graph" ~> "name" ~>

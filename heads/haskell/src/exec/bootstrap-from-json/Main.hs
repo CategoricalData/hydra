@@ -29,6 +29,7 @@ module Main where
 
 import Hydra.Kernel
 import Hydra.Generation
+import qualified Hydra.Codegen as CodeGeneration
 import Hydra.PackageRouting (groupByPackage, namespaceToPackage, packagePrefixes)
 import qualified Hydra.TargetFilePaths as TargetFilePaths
 import qualified Hydra.Digest as Digest
@@ -528,8 +529,25 @@ main = do
 
   -- Prepend synthesized source modules to modsToGenerate (deduping by namespace
   -- to keep ordering stable). They go into the same universe as the main modules.
-  let modsToGenerate' = modsToGenerateScopedFiltered ++ synthesizedSourceMods
-  let allModsFinal'   = allModsFinal ++ synthesizedSourceMods
+  --
+  -- The translingual lowerPrimitiveDefinitions rewrites Definition.primitive arms
+  -- to Definition.term arms (with term-encoded PrimitiveDefinition values), so
+  -- the host coder sees a uniform terms module. Applied to both the emit set
+  -- and the universe to keep references consistent. Defaults from defaultImplementation
+  -- are already typed (inference ran in update-json-main).
+  --
+  -- For now we apply the lowering only to the Haskell target, because the
+  -- Java/Python/Scala/Lisp/Go coders haven't been adapted to handle the
+  -- term-encoded PrimitiveDefinition record (they fail with "extraction
+  -- error" in resolution). Once those coders gain support, drop this
+  -- target check and apply lowering universally.
+  let applyLowering = if target == "haskell"
+        then map CodeGeneration.lowerPrimitiveDefinitions
+        else id
+  let modsToGenerate' = applyLowering
+        (modsToGenerateScopedFiltered ++ synthesizedSourceMods)
+  let allModsFinal'   = applyLowering
+        (allModsFinal ++ synthesizedSourceMods)
 
   -- Generate main modules
   let stepNum = if optIncludeCoders opts then "3" else "2"
@@ -567,7 +585,7 @@ main = do
         "python"     -> generateSources moduleToPython     pythonLanguage     False True  True  False dir allModsFinal' mods
         "scala"      -> generateSourcesWithTransform wrapLongScalaText moduleToScala scalaLanguage False True False False dir allModsFinal' mods
         "go"         -> generateSources moduleToGo  goLanguage         False False False False dir allModsFinal' mods
-        "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False True  False False dir allModsFinal' mods
+        "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False True  True  False dir allModsFinal' mods
         _ | Just g <- lispGenerator ->
               generateSources g lispLanguage True False False False dir allModsFinal' mods
         _ -> do
@@ -698,7 +716,7 @@ main = do
             "java"       -> generateSources moduleToJava       javaLanguage       False True  False True  outMain allUniverse extModsForTests >> return ()
             "python"     -> generateSources moduleToPython     pythonLanguage     False True  True  False outMain allUniverse extModsForTests >> return ()
             "go"         -> generateSources moduleToGo  goLanguage         False False False False outMain allUniverse extModsForTests >> return ()
-            "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False True  False False outMain allUniverse extModsForTests >> return ()
+            "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False True  True  False outMain allUniverse extModsForTests >> return ()
             _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False False False False outMain allUniverse extModsForTests >> return ()
             _ -> return ()
           putStrLn ""
@@ -728,7 +746,7 @@ main = do
             "python"     -> generateSources moduleToPython     pythonLanguage     False True  True  False dir allUniverse mods
             "scala"      -> generateSourcesWithTransform wrapLongScalaText moduleToScala scalaLanguage False True False False dir allUniverse mods
             "go"         -> generateSources moduleToGo  goLanguage         False False False False dir allUniverse mods
-            "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False True  False False dir allUniverse mods
+            "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False True  True  False dir allUniverse mods
             _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False False False False dir allUniverse mods
             _ -> return []
 

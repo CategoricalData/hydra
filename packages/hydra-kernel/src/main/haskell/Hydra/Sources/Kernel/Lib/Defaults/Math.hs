@@ -71,7 +71,7 @@ module_ = Module {
 
 -- | Interpreter-friendly even.
 -- even x = equal (mod x 2) 0
-even_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+even_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 even_ = define "even" $
   doc "Interpreter-friendly even." $
   "cx" ~> "g" ~>
@@ -93,7 +93,7 @@ even_ = define "even" $
 
 -- | Interpreter-friendly odd.
 -- odd x = not (even x)
-odd_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+odd_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 odd_ = define "odd" $
   doc "Interpreter-friendly odd." $
   "cx" ~> "g" ~>
@@ -108,4 +108,4 @@ odd_ = define "odd" $
 --   The recursive definition causes the interpreter to loop. The eval primitive returns a term
 --   containing ifElse(gt(lo,hi), [], cons(lo, range(add(lo,1), hi))), but reduction does not
 --   terminate. Needs investigation of the reducer's handling of recursive primitive references.
--- range_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+-- range_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)

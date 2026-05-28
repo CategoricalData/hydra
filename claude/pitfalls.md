@@ -812,3 +812,59 @@ so Phase 2 keeps re-failing the same way.
 Documented in the build-system cache model
 ([docs/build-system.md §Cache files are not tracked](../docs/build-system.md#cache-files-are-not-tracked)),
 but the silent-exit mechanism deserves the explicit pitfall callout.
+
+### "Found untyped bindings (after case hoisting)" usually means stale JSON field shapes
+
+A non-baseline package whose `dist/json/.../*.json` files were generated
+before a kernel record-field rename can carry stale field names that match
+no current `TermDefinition` shape. The Haskell decoder silently falls back
+to "untyped" and Phase 1 eventually fails with `Found N untyped bindings
+(after case hoisting): ...`. Seen during the #368 merge: `dist/json/hydra-java/...`
+JSON files still had `"typeScheme": {...}` while `TermDefinition` had renamed
+the field to `"signature"` (#156), so every Java/Python definition lost its
+type and downstream inference saw a wall of untyped bindings.
+
+Recovery: regenerate the affected packages' JSON. If the rename only affects
+Java/Python packages (which native generators own per #344), the targeted
+fix is `bin/update-json-main --include-java-python` after busting the input
+caches. For other packages, run `assemble-distribution.sh <pkg>` explicitly.
+Resist the urge to patch one untyped binding at a time — the field rename
+hit every record in the package.
+
+### Post-merge bootstrap patches when cached binaries expect old field shapes
+
+When merging a branch that renames a generated record field into a target
+branch with a stale `.stack-work/` cache, source DSL changes propagate
+cleanly but the cached `update-json-main` / `bootstrap-from-json` /
+`digest-check` binaries still encode the *old* field shape. Running `/sync`
+then fails in Phase 1 because the binaries can't decode the new JSON.
+
+Two options:
+- **Rebuild the binaries.** `stack build` from `heads/haskell/` is the
+  clean fix, but it can be 20+ minutes and may itself fail if the kernel
+  is mid-migration.
+- **Bootstrap-patch the generated Haskell.** Edit
+  `dist/haskell/hydra-kernel/.../Encode/<Type>.hs`,
+  `Decode/<Type>.hs`, and any `Inference.hs` call sites so the binary's
+  expected field names match. The patch is overwritten by the next clean
+  regeneration once the kernel is stable, so it's bootstrap-safe.
+
+During the #368 merge the second path was needed because every patch
+attempt to rebuild triggered another wave of kernel-source changes. Trace
+the binary's expected shape by reading the relevant
+`Sources/Encode/<Type>.hs` and `Sources/Decode/<Type>.hs` at the merge base.
+
+### `git reset --soft` after the user ran their own git commands
+
+If you've been committing across a session, your mental model of HEAD
+can lag behind reality. Common case: the user runs `git pull` (or
+`git merge`) between your turns. Their merge commit becomes the new
+HEAD, and `git reset --soft HEAD~` now undoes *their* merge, not the
+commit you intended to amend.
+
+Before any `git reset --soft HEAD~` (or `HEAD~N`), check `git log
+-1 --oneline` and `git reflog | head -5`. If the most recent commit
+isn't yours, stop and ask. Recovery is straightforward via the
+reflog (`git reset --soft <sha-of-the-merge>`) provided you notice
+quickly — but the safer rule is "verify before reset," not "recover
+after reset."

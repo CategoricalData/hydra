@@ -8,8 +8,8 @@ import qualified Hydra.Encode.Paths as Paths
 import qualified Hydra.Encode.Typing as Typing
 import qualified Hydra.Encode.Variants as Variants
 import qualified Hydra.Error.Checking as Checking
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Sets as Sets
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Encoder for hydra.error.checking.CheckingError

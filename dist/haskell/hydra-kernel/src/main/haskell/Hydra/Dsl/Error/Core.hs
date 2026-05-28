@@ -3,6 +3,9 @@
 
 module Hydra.Dsl.Error.Core where
 import qualified Hydra.Core as Core
+import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Dsl.Paths as DslPaths
+import qualified Hydra.Dsl.Variants as DslVariants
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Phantoms as Phantoms

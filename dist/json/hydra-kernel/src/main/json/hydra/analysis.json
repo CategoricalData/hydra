@@ -139,7 +139,7 @@
         "name": "hydra.analysis.analyzeFunctionTerm",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -239,7 +239,7 @@
                                 "parameter": "setTC"}},
                             "domain": {"function": {"codomain": {"variable": "hydra.graph.Graph"}, "domain": {"variable": "t0"}}},
                             "parameter": "getTC"}},
-                        "domain": {"variable": "hydra.context.Context"},
+                        "domain": {"variable": "hydra.typing.InferenceContext"},
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}}}},
@@ -248,7 +248,7 @@
         "name": "hydra.analysis.analyzeFunctionTermWith",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -350,7 +350,7 @@
                                 "codomain": {"function": {"codomain": {"maybe": {"variable": "hydra.core.Term"}}, "domain": {"variable": "hydra.core.Binding"}}},
                                 "domain": {"variable": "hydra.graph.Graph"}}},
                             "parameter": "forBinding"}},
-                        "domain": {"variable": "hydra.context.Context"},
+                        "domain": {"variable": "hydra.typing.InferenceContext"},
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}}}},
@@ -359,7 +359,7 @@
         "name": "hydra.analysis.analyzeFunctionTermWithFinish",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -525,7 +525,7 @@
                                 "parameter": "fEnv"}},
                             "domain": {"function": {"codomain": {"variable": "hydra.graph.Graph"}, "domain": {"variable": "t0"}}},
                             "parameter": "getTC"}},
-                        "domain": {"variable": "hydra.context.Context"},
+                        "domain": {"variable": "hydra.typing.InferenceContext"},
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}}}},
@@ -534,7 +534,7 @@
         "name": "hydra.analysis.analyzeFunctionTermWithGather",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -1078,7 +1078,7 @@
                                 "codomain": {"function": {"codomain": {"maybe": {"variable": "hydra.core.Term"}}, "domain": {"variable": "hydra.core.Binding"}}},
                                 "domain": {"variable": "hydra.graph.Graph"}}},
                             "parameter": "forBinding"}},
-                        "domain": {"variable": "hydra.context.Context"},
+                        "domain": {"variable": "hydra.typing.InferenceContext"},
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}}}},
@@ -3177,7 +3177,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

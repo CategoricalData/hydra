@@ -17,7 +17,6 @@ import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Coders       as Coders
 import qualified Hydra.Dsl.Util      as Util
-import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Dsl.Meta.Graph        as Graph
@@ -52,7 +51,6 @@ import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
 import qualified Hydra.Dsl.Util         as Util
 import qualified Hydra.Dsl.Meta.Variants     as Variants
-import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Errors       as Error
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
@@ -133,7 +131,7 @@ formatDecodingError = "e" ~> Error.errorDecoding $ var "e"
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-adaptDataGraph :: TTermDefinition (LanguageConstraints -> Bool -> [Binding] -> Context -> Graph -> Prelude.Either Error (Graph, [Binding]))
+adaptDataGraph :: TTermDefinition (LanguageConstraints -> Bool -> [Binding] -> InferenceContext -> Graph -> Prelude.Either Error (Graph, [Binding]))
 adaptDataGraph = define "adaptDataGraph" $
   doc ("Adapt a graph and its schema to the given language constraints."
     <> " The doExpand flag controls eta expansion of partial applications."
@@ -402,7 +400,7 @@ adaptPrimitive = define "adaptPrimitive" $
 --       similar to what is done for literals.
 -- Note: this function could be made more efficient through precomputation of alternatives,
 --       similar to what is done for literals.
-adaptTerm :: TTermDefinition (LanguageConstraints -> M.Map LiteralType LiteralType -> Context -> Graph -> Term -> Prelude.Either Error Term)
+adaptTerm :: TTermDefinition (LanguageConstraints -> M.Map LiteralType LiteralType -> InferenceContext -> Graph -> Term -> Prelude.Either Error Term)
 adaptTerm = define "adaptTerm" $
   doc "Adapt a term using the given language constraints" $
   "constraints" ~> "litmap" ~> "cx" ~> "graph" ~> "term0" ~>
@@ -452,7 +450,7 @@ adaptTerm = define "adaptTerm" $
        _Term_typeLambda>>:      "_" ~> right $ var "term1"]) $
   Rewriting.rewriteTermM @@ var "rewrite" @@ var "term0"
 
-adaptTermForLanguage :: TTermDefinition (Language -> Context -> Graph -> Term -> Prelude.Either Error Term)
+adaptTermForLanguage :: TTermDefinition (Language -> InferenceContext -> Graph -> Term -> Prelude.Either Error Term)
 adaptTermForLanguage = define "adaptTermForLanguage" $
   doc "Adapt a term using the constraints of a given language" $
   "lang" ~> "cx" ~> "g" ~> "term" ~>
@@ -523,7 +521,7 @@ composeCoders = define "composeCoders" $
       "b2" <<~ Coders.coderDecode (var "c2") @@ var "cx" @@ var "c" $
       Coders.coderDecode (var "c1") @@ var "cx" @@ var "b2")
 
-dataGraphToDefinitions :: TTermDefinition (LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Graph -> [ModuleName] -> Context -> Prelude.Either Error (Graph, [[TermDefinition]]))
+dataGraphToDefinitions :: TTermDefinition (LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Graph -> [ModuleName] -> InferenceContext -> Prelude.Either Error (Graph, [[TermDefinition]]))
 dataGraphToDefinitions = define "dataGraphToDefinitions" $
   doc ("Given a data graph along with language constraints, original ordered bindings, and a designated list of namespaces,"
     <> " adapt the graph to the language constraints,"
@@ -954,7 +952,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
         (Core.wrappedTermTypeName $ var "wt")
         (var "go" @@ (Core.wrappedTermBody $ var "wt"))])] $
   var "go" @@ var "term"
-schemaGraphToDefinitions :: TTermDefinition (LanguageConstraints -> Graph -> [[Name]] -> Context -> Prelude.Either Error (M.Map Name Type, [[TypeDefinition]]))
+schemaGraphToDefinitions :: TTermDefinition (LanguageConstraints -> Graph -> [[Name]] -> InferenceContext -> Prelude.Either Error (M.Map Name Type, [[TypeDefinition]]))
 schemaGraphToDefinitions = define "schemaGraphToDefinitions" $
   doc ("Given a schema graph along with language constraints and a designated list of element names,"
     <> " adapt the graph to the language constraints,"
@@ -975,7 +973,7 @@ schemaGraphToDefinitions = define "schemaGraphToDefinitions" $
           ("n" ~> Maybes.map ("t" ~> pair (var "n") (var "t")) (Maps.lookup (var "n") (var "tmap1")))
           (var "names"))
       (var "nameLists"))
-simpleLanguageAdapter :: TTermDefinition (Language -> Context -> Graph -> Type -> Prelude.Either Error (Adapter Type Type Term Term))
+simpleLanguageAdapter :: TTermDefinition (Language -> InferenceContext -> Graph -> Type -> Prelude.Either Error (Adapter Type Type Term Term))
 simpleLanguageAdapter = define "simpleLanguageAdapter" $
   doc "Given a target language and a source type, produce an adapter which rewrites the type and its terms according to the language's constraints. The encode direction adapts terms; the decode direction is identity." $
   "lang" ~> "cx" ~> "g" ~> "typ" ~>
@@ -1002,7 +1000,7 @@ simpleLanguageAdapter = define "simpleLanguageAdapter" $
 
 -- | Prepare a literal type, substituting unsupported types.
 -- Returns (adapted literal type, literal value transformer, diagnostic messages).
-termAlternatives :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either Error [Term])
+termAlternatives :: TTermDefinition (InferenceContext -> Graph -> Term -> Prelude.Either Error [Term])
 termAlternatives = define "termAlternatives" $
   doc "Find a list of alternatives for a given term, if any" $
   "cx" ~> "graph" ~> "term" ~> cases _Term (var "term")

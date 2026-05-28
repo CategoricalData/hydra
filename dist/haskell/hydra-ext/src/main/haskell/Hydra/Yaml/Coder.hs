@@ -4,28 +4,28 @@
 module Hydra.Yaml.Coder where
 import qualified Hydra.Adapt as Adapt
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Literals as Literals
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Literals as Literals
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Yaml.Language as Language
 import qualified Hydra.Yaml.Model as Model
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Decode a YAML value to a record term
-decodeRecord :: Core.Name -> [(Core.FieldType, (Coders.Coder Core.Term Model.Node))] -> Context.Context -> Model.Node -> Either Errors.Error Core.Term
+decodeRecord :: Core.Name -> [(Core.FieldType, (Coders.Coder Core.Term Model.Node))] -> Typing.InferenceContext -> Model.Node -> Either Errors.Error Core.Term
 decodeRecord tname coders cx n =
 
       let decodeObjectBody =
@@ -47,7 +47,7 @@ decodeRecord tname coders cx n =
         Model.NodeMapping v0 -> decodeObjectBody v0
         _ -> Left (Errors.ErrorOther (Errors.OtherError "expected mapping"))
 -- | Encode a record term to YAML
-encodeRecord :: [(Core.FieldType, (Coders.Coder Core.Term Model.Node))] -> Context.Context -> Graph.Graph -> Core.Term -> Either Errors.Error Model.Node
+encodeRecord :: [(Core.FieldType, (Coders.Coder Core.Term Model.Node))] -> Typing.InferenceContext -> Graph.Graph -> Core.Term -> Either Errors.Error Model.Node
 encodeRecord coders cx graph term =
 
       let stripped = Strip.deannotateTerm term
@@ -111,9 +111,10 @@ literalYamlCoder lt =
                       Coders.coderDecode = decodeDecimal}
                     Core.LiteralTypeFloat _ -> Coders.Coder {
                       Coders.coderEncode = (\cx -> \lit -> Eithers.bind (ExtractCore.floatLiteral lit) (\f ->
-                        let bf = case f of
-                              Core.FloatValueFloat32 v -> Literals.float32ToFloat64 v
-                              Core.FloatValueFloat64 v -> v
+                        let bf =
+                                case f of
+                                  Core.FloatValueFloat32 v1 -> Literals.float32ToFloat64 v1
+                                  Core.FloatValueFloat64 v1 -> v1
                             shown = Literals.showFloat64 bf
                         in (Logic.ifElse (requiresYamlStringSentinel shown) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                           "YAML cannot represent float value: ",

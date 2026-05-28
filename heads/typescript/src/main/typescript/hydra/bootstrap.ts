@@ -115,17 +115,20 @@ const readJsonTree = (root: string): Array<{ path: string; json: unknown }> => {
 // importPath is resolved from `dist/typescript/hydra-kernel/src/main/typescript/hydra/bootstrap.ts`,
 // so going up 5 levels lands at `dist/typescript/`, then dispatching into each sibling package.
 // Flags mirror the Haskell bootstrap-from-json switch (Main.hs): doInfer/doExpand/doHoistCase/doHoistPoly.
+// `lispDialect` and `lispFileExt` are set for the four Lisp dialects, which
+// share a single hydra-lisp coder package (moduleToLisp takes a dialect arg).
 const CODER_DISPATCH: Record<string, {
   coderPath: string; coderExport: string;
   languagePath: string; languageExport: string;
   doInfer: boolean; doExpand: boolean; doHoistCase: boolean; doHoistPoly: boolean;
+  lispDialect?: string; lispFileExt?: string;
 }> = {
   typescript: {
     coderPath:    "../../../../../hydra-typescript/src/main/typescript/hydra/typeScript/coder.js",
     coderExport:  "moduleToTypeScript",
     languagePath: "../../../../../hydra-typescript/src/main/typescript/hydra/typeScript/language.js",
     languageExport: "typeScriptLanguage",
-    doInfer: false, doExpand: true, doHoistCase: false, doHoistPoly: false,
+    doInfer: false, doExpand: true, doHoistCase: true, doHoistPoly: false,
   },
   python:     {
     coderPath:    "../../../../../hydra-python/src/main/typescript/hydra/python/coder.js",
@@ -147,6 +150,81 @@ const CODER_DISPATCH: Record<string, {
     languagePath: "../../../../../hydra-haskell/src/main/typescript/hydra/haskell/language.js",
     languageExport: "haskellLanguage",
     doInfer: false, doExpand: false, doHoistCase: false, doHoistPoly: false,
+  },
+  scala:      {
+    coderPath:    "../../../../../hydra-scala/src/main/typescript/hydra/scala/coder.js",
+    coderExport:  "moduleToScala",
+    languagePath: "../../../../../hydra-scala/src/main/typescript/hydra/scala/language.js",
+    languageExport: "scalaLanguage",
+    // doInfer=false because the kernel JSON already carries TypeSchemes;
+    // running full inference in TS-host (where it does in the Haskell
+    // host) trips V8's stack ceiling on deeply-polymorphic modules and
+    // takes hours. The other targets that use the JSON path also skip it.
+    doInfer: false, doExpand: true, doHoistCase: false, doHoistPoly: false,
+  },
+  // The four Lisp dialects share a single coder (moduleToLisp) and language
+  // (lispLanguage). The dialect arg selects per-target syntax (constructor
+  // prefix, lambda keyword, etc.); fileExt selects the output extension.
+  // Mirrors heads/haskell/.../ExtGeneration.hs writeClojure/writeScheme/etc.
+  clojure: {
+    coderPath:    "../../../../../hydra-lisp/src/main/typescript/hydra/lisp/coder.js",
+    coderExport:  "moduleToLisp",
+    languagePath: "../../../../../hydra-lisp/src/main/typescript/hydra/lisp/language.js",
+    languageExport: "lispLanguage",
+    // doInfer: false because the kernel JSON already carries per-binding
+    // TypeSchemes; running full inference is redundant in TS-host and trips
+    // the V8 stack ceiling (the same issue as TS->Java). Haskell host uses
+    // doInfer=True because its bootstrap path doesn't always carry schemes,
+    // but the JSON path always does. Verified empirically: TS->Clojure with
+    // doInfer=true ran 10+ hours and emitted only 7 .clj files; with
+    // doInfer=false it completes in minutes (see #126 plan).
+    doInfer: false, doExpand: false, doHoistCase: false, doHoistPoly: false,
+    lispDialect: "clojure", lispFileExt: "clj",
+  },
+  scheme: {
+    coderPath:    "../../../../../hydra-lisp/src/main/typescript/hydra/lisp/coder.js",
+    coderExport:  "moduleToLisp",
+    languagePath: "../../../../../hydra-lisp/src/main/typescript/hydra/lisp/language.js",
+    languageExport: "lispLanguage",
+    // doInfer: false because the kernel JSON already carries per-binding
+    // TypeSchemes; running full inference is redundant in TS-host and trips
+    // the V8 stack ceiling (the same issue as TS->Java). Haskell host uses
+    // doInfer=True because its bootstrap path doesn't always carry schemes,
+    // but the JSON path always does. Verified empirically: TS->Clojure with
+    // doInfer=true ran 10+ hours and emitted only 7 .clj files; with
+    // doInfer=false it completes in minutes (see #126 plan).
+    doInfer: false, doExpand: false, doHoistCase: false, doHoistPoly: false,
+    lispDialect: "scheme", lispFileExt: "scm",
+  },
+  "common-lisp": {
+    coderPath:    "../../../../../hydra-lisp/src/main/typescript/hydra/lisp/coder.js",
+    coderExport:  "moduleToLisp",
+    languagePath: "../../../../../hydra-lisp/src/main/typescript/hydra/lisp/language.js",
+    languageExport: "lispLanguage",
+    // doInfer: false because the kernel JSON already carries per-binding
+    // TypeSchemes; running full inference is redundant in TS-host and trips
+    // the V8 stack ceiling (the same issue as TS->Java). Haskell host uses
+    // doInfer=True because its bootstrap path doesn't always carry schemes,
+    // but the JSON path always does. Verified empirically: TS->Clojure with
+    // doInfer=true ran 10+ hours and emitted only 7 .clj files; with
+    // doInfer=false it completes in minutes (see #126 plan).
+    doInfer: false, doExpand: false, doHoistCase: false, doHoistPoly: false,
+    lispDialect: "commonLisp", lispFileExt: "lisp",
+  },
+  "emacs-lisp": {
+    coderPath:    "../../../../../hydra-lisp/src/main/typescript/hydra/lisp/coder.js",
+    coderExport:  "moduleToLisp",
+    languagePath: "../../../../../hydra-lisp/src/main/typescript/hydra/lisp/language.js",
+    languageExport: "lispLanguage",
+    // doInfer: false because the kernel JSON already carries per-binding
+    // TypeSchemes; running full inference is redundant in TS-host and trips
+    // the V8 stack ceiling (the same issue as TS->Java). Haskell host uses
+    // doInfer=True because its bootstrap path doesn't always carry schemes,
+    // but the JSON path always does. Verified empirically: TS->Clojure with
+    // doInfer=true ran 10+ hours and emitted only 7 .clj files; with
+    // doInfer=false it completes in minutes (see #126 plan).
+    doInfer: false, doExpand: false, doHoistCase: false, doHoistPoly: false,
+    lispDialect: "emacsLisp", lispFileExt: "el",
   },
 };
 
@@ -180,15 +258,47 @@ const main = async (): Promise<void> => {
     console.error(`       (target=${opts.target} requires the corresponding hydra-${opts.target} package to be assembled into dist/typescript/)`);
     process.exit(1);
   }
-  const moduleTo = coderMod[dispatch.coderExport] as ((m: unknown, defs: unknown[], cx: unknown, g: unknown) => { tag: "left"; value: unknown } | { tag: "right"; value: Map<string, string> });
+  const rawModuleTo = coderMod[dispatch.coderExport] as (...args: unknown[]) => { tag: "left"; value: unknown } | { tag: "right"; value: unknown };
   const language = langMod[dispatch.languageExport];
-  if (typeof moduleTo !== "function") {
+  if (typeof rawModuleTo !== "function") {
     console.error(`error: ${dispatch.coderExport} not found in ${dispatch.coderPath}`);
     process.exit(1);
   }
   if (!language) {
     console.error(`error: ${dispatch.languageExport} not found in ${dispatch.languagePath}`);
     process.exit(1);
+  }
+
+  // For Lisp dialects, wrap the raw coder so that:
+  //   1. The dialect tag is prepended to the args (moduleToLisp(dialect, mod, ...))
+  //   2. The returned LispProgram is post-processed via programToExpr → parenthesize →
+  //      printExpr to a single string, then keyed under the module's per-dialect file
+  //      path. Mirrors heads/haskell/.../ExtGeneration.hs moduleToLispDialect.
+  let moduleTo: ((m: unknown, defs: unknown[], cx: unknown, g: unknown) => { tag: "left"; value: unknown } | { tag: "right"; value: Map<string, string> });
+  if (dispatch.lispDialect) {
+    const dialectArg = { tag: dispatch.lispDialect } as const;
+    const fileExt = dispatch.lispFileExt!;
+    // clojure uses Camel case for namespace components; the other three use lower-snake
+    // (matches heads/haskell/.../ExtGeneration.hs moduleToLispDialect).
+    const caseConvention = dispatch.lispDialect === "clojure"
+      ? { tag: "camel" }
+      : { tag: "lowerSnake" };
+    const lispSerde = await import("../../../../../hydra-lisp/src/main/typescript/hydra/lisp/serde.js") as { programToExpr: (p: unknown) => unknown };
+    const serialization = await import("./serialization.js") as { parenthesize: (e: unknown) => unknown; printExpr: (e: unknown) => string };
+    const namesMod = await import("./names.js") as { namespaceToFilePath: (cc: unknown, ext: unknown, ns: unknown) => string };
+    moduleTo = (mod, defs, cx, g) => {
+      const result = rawModuleTo(dialectArg, mod, defs, cx, g);
+      if (result.tag === "left") return result;
+      const program = result.value;
+      const exprStr = serialization.printExpr(serialization.parenthesize(lispSerde.programToExpr(program)));
+      const modName = (mod as { name?: { value?: string } } | null)?.name;
+      const filePath = namesMod.namespaceToFilePath(caseConvention, { value: fileExt }, modName);
+      const out = new Map<string, string>();
+      out.set(filePath, exprStr);
+      return { tag: "right" as const, value: out };
+    };
+  } else {
+    moduleTo = rawModuleTo as typeof moduleTo;
   }
 
   // Step 2: collect JSON files. The kernel JSON layout is per-namespace:
@@ -264,9 +374,9 @@ const main = async (): Promise<void> => {
   // without them, every module that calls `hydra.lib.maps.empty` etc.
   // fails with `Unknown variable`. Mirrors Python's bootstrap_graph()
   // which calls standard_library() to populate `primitives`.
-  const stdPrims = (libraries as { standardPrimitives: () => ReadonlyArray<{ name: { value: string } }> }).standardPrimitives();
+  const stdPrims = (libraries as { standardPrimitives: () => ReadonlyArray<{ definition: { name: { value: string } } }> }).standardPrimitives();
   const primMap = (maps as { fromList: (entries: ReadonlyArray<readonly [unknown, unknown]>) => unknown }).fromList(
-    stdPrims.map((p) => [p.name, p] as const)
+    stdPrims.map((p) => [p.definition.name, p] as const)
   );
   const bsGraph = { ...(lexical.emptyGraph as object), primitives: primMap };
   const schemaMap = (jsonBootstrap as { typesByName: unknown }).typesByName;
@@ -324,13 +434,14 @@ const main = async (): Promise<void> => {
     // bootstrap patch) doesn't abort the whole codegen — we record
     // a warning and continue.
     for (const m of mods) {
+      const modName = (m as { name?: { value?: string } } | null)?.name?.value ?? "<unknown>";
       try {
         const result = generateSourceFiles(
           printDefinitions, language,
           dispatch.doInfer, dispatch.doExpand, dispatch.doHoistCase, dispatch.doHoistPoly,
           bsGraph, allModules, [m], cx);
         if (result.tag === "left") {
-          console.error(`  warning: codegen failed for module: ${JSON.stringify(result.value).slice(0, 200)}`);
+          console.error(`  warning: codegen failed for module ${modName}: ${JSON.stringify(result.value).slice(0, 200)}`);
           continue;
         }
         for (const entry of result.value) {
@@ -342,7 +453,8 @@ const main = async (): Promise<void> => {
         }
       } catch (e) {
         const err = e as Error;
-        console.error(`  warning: ${isTest ? "test" : "main"} codegen exception on module: ${err.message}`);
+        console.error(`  warning: ${isTest ? "test" : "main"} codegen exception on module ${modName}: ${err.message}`);
+        if (process.env.HYDRA_DEBUG) console.error(err.stack);
       }
     }
     return count;

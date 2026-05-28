@@ -4,6 +4,10 @@
 module Hydra.Encode.Coders where
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Encode.Errors as Errors
+import qualified Hydra.Encode.Typing as Typing
+import qualified Hydra.Encode.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Encoder for hydra.coders.CoderDirection

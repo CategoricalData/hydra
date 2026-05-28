@@ -3,7 +3,7 @@
 All notable changes to the Hydra project are documented in this file.
 
 This changelog tracks changes across all Hydra implementations
-(Haskell, Java, Python, Scala, Clojure, Common Lisp, Emacs Lisp, Scheme)
+(Haskell, Java, Python, Scala, TypeScript, Clojure, Common Lisp, Emacs Lisp, Scheme)
 and supporting infrastructure.
 
 The format is inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
@@ -29,6 +29,9 @@ and primitive-metadata reification.
 - **Homogenized writer conventions** across all target languages (#339).
 - **Unified `Module.dependencies`** (replaces split term/type dependency fields) (#354).
 - **`PrimitiveDefinition` and per-namespace registry modules** (#156).
+- **TypeScript head completion** (#126): passes the common test suite as a
+  target, and as a host can bootstrap every other head except Java (#390
+  tracks the remaining V8 stack-budget constraint).
 
 ### New features
 

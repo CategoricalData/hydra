@@ -2,8 +2,10 @@
 -- | DSL functions for hydra.typing
 
 module Hydra.Dsl.Typing where
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Dsl.Paths as DslPaths
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -449,8 +451,68 @@ functionStructureWithTypeParams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
               Core.projectionFieldName = (Core.Name "environment")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL constructor for hydra.typing.InferenceContext
+inferenceContext :: Phantoms.TTerm Int -> Phantoms.TTerm [Paths.SubtermStep] -> Phantoms.TTerm Typing.InferenceContext
+inferenceContext freshTypeVariableCount trace =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.InferenceContext"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "freshTypeVariableCount"),
+          Core.fieldTerm = (Phantoms.unTTerm freshTypeVariableCount)},
+        Core.Field {
+          Core.fieldName = (Core.Name "trace"),
+          Core.fieldTerm = (Phantoms.unTTerm trace)}]}))
+-- | DSL accessor for the freshTypeVariableCount field of hydra.typing.InferenceContext
+inferenceContextFreshTypeVariableCount :: Phantoms.TTerm Typing.InferenceContext -> Phantoms.TTerm Int
+inferenceContextFreshTypeVariableCount x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.InferenceContext"),
+        Core.projectionFieldName = (Core.Name "freshTypeVariableCount")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the trace field of hydra.typing.InferenceContext
+inferenceContextTrace :: Phantoms.TTerm Typing.InferenceContext -> Phantoms.TTerm [Paths.SubtermStep]
+inferenceContextTrace x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.typing.InferenceContext"),
+        Core.projectionFieldName = (Core.Name "trace")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the freshTypeVariableCount field of hydra.typing.InferenceContext
+inferenceContextWithFreshTypeVariableCount :: Phantoms.TTerm Typing.InferenceContext -> Phantoms.TTerm Int -> Phantoms.TTerm Typing.InferenceContext
+inferenceContextWithFreshTypeVariableCount original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.InferenceContext"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "freshTypeVariableCount"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "trace"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceContext"),
+              Core.projectionFieldName = (Core.Name "trace")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the trace field of hydra.typing.InferenceContext
+inferenceContextWithTrace :: Phantoms.TTerm Typing.InferenceContext -> Phantoms.TTerm [Paths.SubtermStep] -> Phantoms.TTerm Typing.InferenceContext
+inferenceContextWithTrace original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.InferenceContext"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "freshTypeVariableCount"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.typing.InferenceContext"),
+              Core.projectionFieldName = (Core.Name "freshTypeVariableCount")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "trace"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL constructor for hydra.typing.InferenceResult
-inferenceResult :: Phantoms.TTerm Core.Term -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Typing.TypeSubst -> Phantoms.TTerm (M.Map Core.Name Core.TypeVariableMetadata) -> Phantoms.TTerm Context.Context -> Phantoms.TTerm Typing.InferenceResult
+inferenceResult :: Phantoms.TTerm Core.Term -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Typing.TypeSubst -> Phantoms.TTerm (M.Map Core.Name Core.TypeVariableMetadata) -> Phantoms.TTerm Typing.InferenceContext -> Phantoms.TTerm Typing.InferenceResult
 inferenceResult term type_ subst classConstraints context =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.typing.InferenceResult"),
@@ -479,7 +541,7 @@ inferenceResultClassConstraints x =
         Core.projectionFieldName = (Core.Name "classConstraints")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the context field of hydra.typing.InferenceResult
-inferenceResultContext :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm Context.Context
+inferenceResultContext :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm Typing.InferenceContext
 inferenceResultContext x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -548,7 +610,7 @@ inferenceResultWithClassConstraints original newVal =
               Core.projectionFieldName = (Core.Name "context")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the context field of hydra.typing.InferenceResult
-inferenceResultWithContext :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm Context.Context -> Phantoms.TTerm Typing.InferenceResult
+inferenceResultWithContext :: Phantoms.TTerm Typing.InferenceResult -> Phantoms.TTerm Typing.InferenceContext -> Phantoms.TTerm Typing.InferenceResult
 inferenceResultWithContext original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.typing.InferenceResult"),

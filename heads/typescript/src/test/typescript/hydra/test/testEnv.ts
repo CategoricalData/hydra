@@ -6,11 +6,11 @@
 // hand-written modules in the Java, Scala and Lisp heads.
 //
 // The Hydra DSL declares:
-//   hydra.test.testEnv.testContext :: Context
+//   hydra.test.testEnv.testContext :: InferenceContext
 //   hydra.test.testEnv.testGraph   :: Map Name Type -> Map Name Term -> Graph
 //
 // This file MUST expose those two FQNs at the same arity:
-//   - testContext: a Context value (not a function)
+//   - testContext: an InferenceContext value (not a function)
 //   - testGraph(testTypes)(testTerms): a curried function returning a Graph
 //
 // The TypeScript coder filters hydra.test.testEnv from emitted output (via
@@ -18,14 +18,14 @@
 // TypeScript runtime counterpart that the generated test_graph.ts resolves
 // against at import time.
 
-// `Context`, `Graph`, `Primitive`, `Name`, `Term`, `Type`, and
+// `InferenceContext`, `Graph`, `Primitive`, `Name`, `Term`, `Type`, and
 // `TypeScheme` are imported from the GENERATED kernel modules. At src/
 // authoring time these sibling files don't exist (they only land in
 // dist after the sync runs), so the source-tree tsc check (tsconfig.json,
 // which excludes the src/test tree from compilation) skips this file.
 // At test time the file is copied into dist/.../src/test/typescript/hydra/test/
 // where the imports resolve normally as `../../../../main/typescript/hydra/<mod>.js`.
-import type { Context } from "../../../../main/typescript/hydra/context.js";
+import type { InferenceContext } from "../../../../main/typescript/hydra/typing.js";
 import type { Graph, Primitive } from "../../../../main/typescript/hydra/graph.js";
 import type { Name, Term, Type, TypeScheme } from "../../../../main/typescript/hydra/core.js";
 import * as maps from "../../../../main/typescript/hydra/lib/maps.js";
@@ -34,18 +34,17 @@ import * as sets from "../../../../main/typescript/hydra/lib/sets.js";
 import { standardPrimitives } from "../../../../main/typescript/hydra/lib/libraries.js";
 import { loadAll } from "./jsonBindings.js";
 
-// An empty Context value. No side effects.
-export const testContext: Context = {
+// An empty InferenceContext value. No side effects.
+export const testContext: InferenceContext = {
+  freshTypeVariableCount: 0,
   trace: [],
-  messages: [],
-  other: maps.empty,
 };
 
 // Build the primitives map via lib_maps.fromList so the runtime's
 // value-equality keying handles wrapped Name lookups consistently with
 // how the generated kernel constructs all other Map<Name, _> values.
 const buildPrimitivesMap = (): ReadonlyMap<Name, Primitive> =>
-  maps.fromList(standardPrimitives().map((p) => [p.name, p] as const));
+  maps.fromList(standardPrimitives().map((p) => [p.definition.name, p] as const));
 
 // The primitives map is computed once and shared across all calls
 // (cheap: ~50 entries, constructed from a static list).

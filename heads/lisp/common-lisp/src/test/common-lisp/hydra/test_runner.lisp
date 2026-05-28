@@ -414,7 +414,7 @@
          (maybe-val (if term-val (list :maybe term-val) (list :maybe (list :nothing)))))
     (prim-set-term-annotation cx g (list desc-key maybe-val term))))
 
-;; getTermDescription :: Context -> Graph -> Term -> Either Error (Maybe String)
+;; getTermDescription :: InferenceContext -> Graph -> Term -> Either Error (Maybe String)
 (defun prim-get-term-description (cx g args)
   (declare (ignore cx g))
   (let* ((term (third args))

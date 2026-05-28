@@ -3,7 +3,7 @@
 -- This module contains a single binding, typesByName, which maps type Names to Types
 -- for all types defined in the kernel modules needed to decode the Module type
 -- and to provide schema types for inference tests:
--- hydra.coders, hydra.context, hydra.core, hydra.error, hydra.graph, hydra.packaging, and hydra.util.
+-- hydra.coders, hydra.core, hydra.error, hydra.graph, hydra.packaging, and hydra.util.
 --
 -- By consolidating these types into a single map, we avoid the need to generate
 -- individual Source modules for each kernel type module (which can exceed the JVM's
@@ -16,7 +16,6 @@ import Hydra.Kernel
 import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Sources.Kernel.Types.Coders as Coders
-import qualified Hydra.Sources.Kernel.Types.Context as Context
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Errors as Error
 import qualified Hydra.Sources.Kernel.Types.Graph as Graph
@@ -35,7 +34,6 @@ ns = ModuleName "hydra.json.bootstrap"
 bootstrapTypeModules :: [Module]
 bootstrapTypeModules = [
   Coders.module_,
-  Context.module_,
   Core.module_,
   Error.module_,
   Graph.module_,
@@ -47,7 +45,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = [DefinitionTerm typesByNameDefinition],
-            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core", ModuleName "hydra.coders", ModuleName "hydra.context", ModuleName "hydra.error.checking", ModuleName "hydra.error.core", ModuleName "hydra.errors", ModuleName "hydra.graph", ModuleName "hydra.packaging", ModuleName "hydra.paths", ModuleName "hydra.typing", ModuleName "hydra.util", ModuleName "hydra.variants"],
+            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.coders", ModuleName "hydra.core", ModuleName "hydra.error.checking", ModuleName "hydra.error.core", ModuleName "hydra.errors", ModuleName "hydra.graph", ModuleName "hydra.packaging", ModuleName "hydra.paths", ModuleName "hydra.typing", ModuleName "hydra.util", ModuleName "hydra.variants"],
             moduleDescription = Just ("A module which provides a minimal typing environment for decoding other modules from JSON."
       ++ " This avoids certain problems with generating entire source modules into target languages like Java,"
       ++ " which is subject to method size limits for large modules like hydra.core.")}

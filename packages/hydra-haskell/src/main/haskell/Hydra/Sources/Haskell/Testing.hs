@@ -9,7 +9,6 @@ import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
@@ -115,7 +114,7 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
       (Eithers.bimap
         (lambda "e" $ ShowError.error_ @@ var "e")
         (lambda "a" $ var "a")
-        (HaskellUtilsSource.namespacesForModule @@ var "tempModule" @@ asTerm Lexical.emptyContext @@ var "graph_"))
+        (HaskellUtilsSource.namespacesForModule @@ var "tempModule" @@ asTerm Lexical.emptyInferenceContext @@ var "graph_"))
       (lambda "baseNamespaces" $ lets [
         "encodedNames">: Sets.unions (Lists.map (lambda "t" $ extractEncodedTermVariableNames @@ var "graph_" @@ var "t") (var "testTerms"))] $
         right (addNamespacesToNamespaces @@ var "baseNamespaces" @@ var "encodedNames"))

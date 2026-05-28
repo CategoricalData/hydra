@@ -5172,6 +5172,32 @@
                                                 "domain": {"variable": "hydra.core.Name"},
                                                 "parameter": "_"}}},
                                           {
+                                            "name": "typeApplicationTerm",
+                                            "term": {
+                                              "lambda": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"pair": {"first": {"literal": {"boolean": true}}, "second": {"variable": "usedApp"}}},
+                                                        "type": {"literal": {"boolean": {}}}}},
+                                                    "type": {"literal": {"boolean": {}}}}},
+                                                "domain": {"unit": {}},
+                                                "parameter": "_"}}},
+                                          {
+                                            "name": "typeLambdaBody",
+                                            "term": {
+                                              "lambda": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"pair": {"first": {"literal": {"boolean": true}}, "second": {"variable": "usedApp"}}},
+                                                        "type": {"literal": {"boolean": {}}}}},
+                                                    "type": {"literal": {"boolean": {}}}}},
+                                                "domain": {"unit": {}},
+                                                "parameter": "_"}}},
+                                          {
                                             "name": "lambdaBody",
                                             "term": {
                                               "lambda": {
@@ -5349,7 +5375,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

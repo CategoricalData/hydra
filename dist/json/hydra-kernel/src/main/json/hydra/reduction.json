@@ -3035,7 +3035,7 @@
         "name": "hydra.reduction.etaExpandTypedTerm",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
           "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}},
@@ -3357,9 +3357,9 @@
                                                                                                         "function": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.Type"}}},
-                                                                                                            "type": {"variable": "hydra.context.Context"}}}}},
+                                                                                                            "type": {"variable": "hydra.typing.InferenceContext"}}}}},
                                                                                                     "function": {"variable": "hydra.arity.typeArity"}}},
-                                                                                                "domain": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.context.Context"}}},
+                                                                                                "domain": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                 "parameter": "_tc"}},
                                                                                             "function": {
                                                                                               "typeApplication": {
@@ -3368,7 +3368,7 @@
                                                                                                     "body": {
                                                                                                       "typeApplication": {
                                                                                                         "body": {"variable": "hydra.lib.eithers.map"},
-                                                                                                        "type": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.context.Context"}}}}},
+                                                                                                        "type": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.typing.InferenceContext"}}}}},
                                                                                                     "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                 "type": {"variable": "hydra.errors.Error"}}}}}}},
                                                                                     "typeScheme": {
@@ -3580,9 +3580,9 @@
                                                                                                                                 "function": {
                                                                                                                                   "typeApplication": {
                                                                                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.Type"}}},
-                                                                                                                                    "type": {"variable": "hydra.context.Context"}}}}},
+                                                                                                                                    "type": {"variable": "hydra.typing.InferenceContext"}}}}},
                                                                                                                             "function": {"variable": "hydra.arity.typeArity"}}},
-                                                                                                                        "domain": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.context.Context"}}},
+                                                                                                                        "domain": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                                         "parameter": "_tc"}},
                                                                                                                     "function": {
                                                                                                                       "typeApplication": {
@@ -3591,7 +3591,7 @@
                                                                                                                             "body": {
                                                                                                                               "typeApplication": {
                                                                                                                                 "body": {"variable": "hydra.lib.eithers.map"},
-                                                                                                                                "type": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.context.Context"}}}}},
+                                                                                                                                "type": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.typing.InferenceContext"}}}}},
                                                                                                                             "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                         "type": {"variable": "hydra.errors.Error"}}}}}}},
                                                                                                             "function": {
@@ -3837,7 +3837,7 @@
                                                                                                                     "function": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.Type"}}},
-                                                                                                                        "type": {"variable": "hydra.context.Context"}}}}},
+                                                                                                                        "type": {"variable": "hydra.typing.InferenceContext"}}}}},
                                                                                                                 "function": {"variable": "hydra.arity.typeArity"}}},
                                                                                                             "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                                                                                         "body": {
@@ -3852,7 +3852,7 @@
                                                                                                                         "function": {"application": {"argument": {"variable": "arity"}, "function": {"variable": "padn"}}}}}}},
                                                                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
-                                                                                                    "domain": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.context.Context"}}},
+                                                                                                    "domain": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                     "parameter": "typCx"}},
                                                                                                 "function": {
                                                                                                   "application": {
@@ -3871,7 +3871,7 @@
                                                                                                         "body": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                                                            "type": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.context.Context"}}}}},
+                                                                                                            "type": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.typing.InferenceContext"}}}}},
                                                                                                         "type": {"variable": "hydra.core.Term"}}}}}}},
                                                                                             "domain": {"variable": "hydra.core.Term"},
                                                                                             "parameter": "t"}},
@@ -4591,7 +4591,7 @@
                         "parameter": "term0"}},
                     "domain": {"variable": "hydra.graph.Graph"},
                     "parameter": "tx0"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
@@ -4972,7 +4972,7 @@
         "name": "hydra.reduction.reduceTerm",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
             {"isLazy": false, "name": "arg2", "type": {"literal": {"boolean": {}}}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Term"}}],
@@ -6817,7 +6817,7 @@
                         "parameter": "eager"}},
                     "domain": {"variable": "hydra.graph.Graph"},
                     "parameter": "graph"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
@@ -7179,7 +7179,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
