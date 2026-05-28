@@ -203,10 +203,14 @@ adaptPrimitive constraints litmap prim0 =
         let def1 =
                 Packaging.PrimitiveDefinition {
                   Packaging.primitiveDefinitionName = (Packaging.primitiveDefinitionName def0),
-                  Packaging.primitiveDefinitionDescription = (Packaging.primitiveDefinitionDescription def0),
                   Packaging.primitiveDefinitionSignature = (Scoping.typeSchemeToTermSignature ts1),
+                  Packaging.primitiveDefinitionDescription = (Packaging.primitiveDefinitionDescription def0),
+                  Packaging.primitiveDefinitionComments = (Packaging.primitiveDefinitionComments def0),
+                  Packaging.primitiveDefinitionSeeAlso = (Packaging.primitiveDefinitionSeeAlso def0),
                   Packaging.primitiveDefinitionIsPure = (Packaging.primitiveDefinitionIsPure def0),
                   Packaging.primitiveDefinitionIsTotal = (Packaging.primitiveDefinitionIsTotal def0),
+                  Packaging.primitiveDefinitionAvailableSince = (Packaging.primitiveDefinitionAvailableSince def0),
+                  Packaging.primitiveDefinitionDeprecatedSince = (Packaging.primitiveDefinitionDeprecatedSince def0),
                   Packaging.primitiveDefinitionDefaultImplementation = (Packaging.primitiveDefinitionDefaultImplementation def0)}
         in (Right (Graph.Primitive {
           Graph.primitiveDefinition = def1,

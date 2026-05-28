@@ -37,6 +37,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.eithers.bimap",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "z"}, "domain": {"variable": "x"}}}},
@@ -73,6 +74,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.eithers.bind",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}},
@@ -89,6 +91,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.eithers.either",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "z"}, "domain": {"variable": "x"}}}},
@@ -102,6 +105,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.eithers.foldl",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -144,6 +148,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.eithers.fromLeft",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
@@ -178,6 +183,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.eithers.fromRight",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "y"}},
@@ -209,6 +215,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.eithers.isLeft",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}}],
           "result": {"type": {"literal": {"boolean": {}}}},
@@ -238,6 +245,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.eithers.isRight",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}}],
           "result": {"type": {"literal": {"boolean": {}}}},
@@ -248,6 +256,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.eithers.lefts",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"list": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}}}],
@@ -284,6 +293,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.eithers.map",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}},
@@ -296,6 +306,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.eithers.mapList",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -312,6 +323,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.eithers.mapMaybe",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -328,6 +340,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.eithers.mapSet",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -344,6 +357,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.eithers.partitionEithers",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"list": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}}}],
@@ -355,6 +369,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.eithers.rights",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"list": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}}}],
