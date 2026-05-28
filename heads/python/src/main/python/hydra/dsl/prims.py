@@ -88,10 +88,14 @@ def default_primitive_definition(name: Name, typ) -> PrimitiveDefinition:
     """Build a PrimitiveDefinition with default metadata (mirrors Haskell default). For #156."""
     return PrimitiveDefinition(
         name=name,
-        description="",
         signature=type_scheme_to_term_signature(typ),
+        description="",
+        comments=Nothing(),
+        see_also=[],
         is_pure=True,
         is_total=True,
+        available_since=Nothing(),
+        deprecated_since=Nothing(),
         default_implementation=Nothing(),
     )
 
