@@ -40,10 +40,14 @@ mkPrim :: Name -> Int -> (Context -> Graph -> [Term] -> Either Error Term) -> Pr
 mkPrim name arity impl = Primitive {
   primitiveDefinition = PrimitiveDefinition {
     primitiveDefinitionName = name,
-    primitiveDefinitionDescription = "",
     primitiveDefinitionSignature = typeSchemeToTermSignature (dummyType arity),
+    primitiveDefinitionDescription = "",
+    primitiveDefinitionComments = Nothing,
+    primitiveDefinitionSeeAlso = [],
     primitiveDefinitionIsPure = True,
     primitiveDefinitionIsTotal = True,
+    primitiveDefinitionAvailableSince = Nothing,
+    primitiveDefinitionDeprecatedSince = Nothing,
     primitiveDefinitionDefaultImplementation = Nothing},
   primitiveImplementation = impl}
 

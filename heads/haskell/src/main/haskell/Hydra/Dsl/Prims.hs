@@ -259,10 +259,14 @@ pair xCoder yCoder = TermCoder (Types.pair (termCoderType xCoder) (termCoderType
 defaultPrimitiveDefinition :: Name -> TypeScheme -> PrimitiveDefinition
 defaultPrimitiveDefinition name typ = PrimitiveDefinition {
   primitiveDefinitionName = name,
-  primitiveDefinitionDescription = "",
   primitiveDefinitionSignature = typeSchemeToTermSignature typ,
+  primitiveDefinitionDescription = "",
+  primitiveDefinitionComments = Nothing,
+  primitiveDefinitionSeeAlso = [],
   primitiveDefinitionIsPure = True,
   primitiveDefinitionIsTotal = True,
+  primitiveDefinitionAvailableSince = Nothing,
+  primitiveDefinitionDeprecatedSince = Nothing,
   primitiveDefinitionDefaultImplementation = Nothing}
 
 prim0 :: Name -> x -> [TypeVar] -> TermCoder x -> Primitive

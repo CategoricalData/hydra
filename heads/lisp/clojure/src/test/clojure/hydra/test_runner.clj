@@ -132,7 +132,7 @@
   [name arity]
   (let [ts (make-type-scheme arity)
         sig (hydra_scoping_type_scheme_to_term_signature ts)]
-    (->hydra_packaging_primitive_definition name "" sig true true (list :nothing))))
+    (->hydra_packaging_primitive_definition name sig "" (list :nothing) (list) true true (list :nothing) (list :nothing) (list :nothing))))
 
 (defn- make-annotation-primitive
   "Create a Primitive that takes raw term arguments and returns a term result.
