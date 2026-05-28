@@ -387,10 +387,14 @@ adaptPrimitive = define "adaptPrimitive" $
   "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts0" $
   "def1" <~ Packaging.primitiveDefinition
     (Packaging.primitiveDefinitionName (var "def0"))
-    (Packaging.primitiveDefinitionDescription (var "def0"))
     (Scoping.typeSchemeToTermSignature @@ var "ts1")
+    (Packaging.primitiveDefinitionDescription (var "def0"))
+    (Packaging.primitiveDefinitionComments (var "def0"))
+    (Packaging.primitiveDefinitionSeeAlso (var "def0"))
     (Packaging.primitiveDefinitionIsPure (var "def0"))
     (Packaging.primitiveDefinitionIsTotal (var "def0"))
+    (Packaging.primitiveDefinitionAvailableSince (var "def0"))
+    (Packaging.primitiveDefinitionDeprecatedSince (var "def0"))
     (Packaging.primitiveDefinitionDefaultImplementation (var "def0")) $
   right $ Graph.primitiveWithDefinition (var "prim0") (var "def1")
 
