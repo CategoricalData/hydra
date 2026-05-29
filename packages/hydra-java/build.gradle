@@ -26,11 +26,11 @@ sourceSets {
             srcDirs += file("$projectDir/../../dist/java/hydra-lisp/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-typescript/src/main/java")
             // Java-language DSL sources for the hydra-java coder
-            // (issue #344 self-hosting): packages/hydra-java/src/main/java/
-            // mirrors packages/hydra-python/src/main/python/ for the Python
-            // path. Each class under hydra/sources/java/* exposes a static
-            // module_ : Module field; the JavaSelfHostDemo driver discovers
-            // them via reflection.
+            // (originally issue #344 self-hosting): packages/hydra-java/
+            // src/main/java/ mirrors packages/hydra-python/src/main/python/
+            // for the Python path. Each class under hydra/sources/java/*
+            // exposes a static module_ : Module field; the UpdateJavaJson
+            // driver discovers them via reflection.
             srcDirs += file("$projectDir/src/main/java")
             // hydra-pg, hydra-rdf, hydra-ext are NOT included here — they're
             // independent Maven artifacts (published per-package from their
@@ -58,7 +58,7 @@ sourceSets {
             include 'hydra/Bootstrap.java'
             include 'hydra/Generation.java'
             include 'hydra/HydraTestBase.java'
-            include 'hydra/JavaSelfHostDemo.java'
+            include 'hydra/UpdateJavaJson.java'
             include 'hydra/ProfileJavaCoder.java'
             include 'hydra/json/JsonIoCoder.java'
             include 'hydra/json/JsonSerde.java'

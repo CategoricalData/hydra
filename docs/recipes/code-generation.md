@@ -238,10 +238,10 @@ Both scripts:
    (~3 minutes for full, less for scoped); cold-cache is self-healing.
    See [`claude/pitfalls.md`](../../claude/pitfalls.md) under "Wrapper
    scripts auto-sync; testers don't" for the full convention.
-2. Run the self-host driver (`hydra.JavaSelfHostDemo` /
-   `bin/python-self-host-demo.py`), which loads the kernel universe from
-   `dist/json/hydra-kernel/`, imports/reflects on the package's DSL source
-   modules, infers types, and writes the resulting JSON.
+2. Run the native DSL → JSON driver (`hydra.UpdateJavaJson` via
+   `bin/update-java-json.sh` / `bin/update-python-json.py`), which loads the
+   kernel universe from `dist/json/hydra-kernel/`, imports/reflects on the
+   package's DSL source modules, infers types, and writes the resulting JSON.
 3. Optionally byte-compare the new output to the existing
    `dist/json/hydra-{java,python}/` to verify byte-identical reproduction
    of canonical.
@@ -250,8 +250,8 @@ Use these when you have edited the Java or Python DSL sources and need to
 refresh `dist/json/` from them, or to validate that the host-native sources
 and the legacy Haskell sources still agree.
 
-> See [bin/java-self-host-demo.md](../../bin/java-self-host-demo.md) and
-> [bin/python-self-host-demo.md](../../bin/python-self-host-demo.md) for
+> See [bin/update-java-json.md](../../bin/update-java-json.md) and
+> [bin/update-python-json.md](../../bin/update-python-json.md) for
 > background on how each driver works internally, including the
 > pre-computed type-scheme workaround used for `hydra.java.coder`.
 
