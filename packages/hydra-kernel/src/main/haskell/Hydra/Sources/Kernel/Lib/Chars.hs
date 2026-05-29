@@ -21,12 +21,42 @@ module_ = Module {
             moduleDescription = Just "Primitives in the hydra.lib.chars namespace."}
   where
     definitions = [
-      primNoDef "isAlphaNum" "Check whether a character is alphanumeric." intToBoolSig Nothing,
-      primNoDef "isLower"    "Check whether a character is lowercase." intToBoolSig Nothing,
-      primNoDef "isSpace"    "Check whether a character is a whitespace character." intToBoolSig Nothing,
-      primNoDef "isUpper"    "Check whether a character is uppercase." intToBoolSig Nothing,
-      primNoDef "toLower"    "Convert a character to lowercase." intToIntSig Nothing,
-      primNoDef "toUpper"    "Convert a character to uppercase." intToIntSig Nothing]
+      primNoDef "isAlphaNum" "Check whether a character is alphanumeric." intToBoolSig (Just
+        "True if the argument is a Unicode letter or digit, false otherwise. The argument is interpreted as a\
+        \ Unicode code point: arguments outside the valid code-point range [0, 0x10FFFF] yield an\
+        \ implementation-defined result (typically false). The classification is based on Unicode general\
+        \ categories (any of L*, Nd, Nl, No). Total. Corresponds to Haskell's Data.Char.isAlphaNum :: Char ->\
+        \ Bool."),
+      primNoDef "isLower"    "Check whether a character is lowercase." intToBoolSig (Just
+        "True if the argument is a Unicode lowercase letter (general category Ll), false otherwise. The\
+        \ argument is interpreted as a Unicode code point: arguments outside [0, 0x10FFFF] yield an\
+        \ implementation-defined result (typically false). Note that not every letter is classified as\
+        \ uppercase or lowercase (e.g. titlecase letters, modifier letters, and letters in scripts without a\
+        \ case distinction are neither). Total. Corresponds to Haskell's Data.Char.isLower :: Char -> Bool."),
+      primNoDef "isSpace"    "Check whether a character is a whitespace character." intToBoolSig (Just
+        "True if the argument is a Unicode whitespace character, false otherwise. The whitespace set follows\
+        \ Haskell's Data.Char.isSpace, which recognises U+0020 (space), U+0009 (tab), U+000A (line feed),\
+        \ U+000B (vertical tab), U+000C (form feed), U+000D (carriage return), U+00A0 (no-break space), and\
+        \ other Unicode characters with general category Zs, Zl, or Zp. Total. Corresponds to Haskell's\
+        \ Data.Char.isSpace :: Char -> Bool."),
+      primNoDef "isUpper"    "Check whether a character is uppercase." intToBoolSig (Just
+        "True if the argument is a Unicode uppercase letter (general category Lu), false otherwise. The\
+        \ argument is interpreted as a Unicode code point: arguments outside [0, 0x10FFFF] yield an\
+        \ implementation-defined result (typically false). Note that titlecase letters (Lt) are not\
+        \ classified as uppercase by this predicate. Total. Corresponds to Haskell's Data.Char.isUpper ::\
+        \ Char -> Bool."),
+      primNoDef "toLower"    "Convert a character to lowercase." intToIntSig (Just
+        "Return the simple (one-to-one) Unicode lowercase mapping of the argument, or the argument itself if\
+        \ it has no lowercase mapping. This is a code-point-to-code-point mapping, so it does not handle the\
+        \ string-changing cases of full Unicode case folding (e.g. U+00DF \"\xDF\" does not lowercase to\
+        \ \"ss\"; it returns itself). The argument is interpreted as a Unicode code point. Total. Corresponds\
+        \ to Haskell's Data.Char.toLower :: Char -> Char."),
+      primNoDef "toUpper"    "Convert a character to uppercase." intToIntSig (Just
+        "Return the simple (one-to-one) Unicode uppercase mapping of the argument, or the argument itself if\
+        \ it has no uppercase mapping. This is a code-point-to-code-point mapping, so it does not handle the\
+        \ string-changing cases of full Unicode case folding (e.g. U+00DF \"\xDF\" does not uppercase to\
+        \ \"SS\"; it returns itself). The argument is interpreted as a Unicode code point. Total. Corresponds\
+        \ to Haskell's Data.Char.toUpper :: Char -> Char.")]
 
 primNoDef :: String -> String -> TermSignature -> Maybe String -> Definition
 primNoDef localName description s comments =
