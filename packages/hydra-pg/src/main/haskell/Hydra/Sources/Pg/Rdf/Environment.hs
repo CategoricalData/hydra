@@ -22,13 +22,13 @@ import qualified Hydra.Sources.Pg.Model      as PgModel
 ns :: ModuleName
 ns = ModuleName "hydra.pg.rdf.environment"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [RdfSyntax.ns, PgModel.ns, Core.ns],
             moduleDescription = Just "Environment types for property graph to RDF mapping"}
   where
@@ -46,7 +46,7 @@ pg = typeref PgModel.ns
 
 -- | The environment for property graph to RDF mapping, providing configurable
 -- functions for encoding property graph labels, keys, ids, and values as RDF terms.
-pgRdfEnvironment :: Binding
+pgRdfEnvironment :: TypeDefinition
 pgRdfEnvironment = define "PgRdfEnvironment" $
   doc "The environment for property graph to RDF mapping" $
   T.forAlls ["v"] $ T.record [

@@ -16,19 +16,19 @@ import qualified Data.Maybe                      as Y
 ns :: ModuleName
 ns = ModuleName "hydra.protobuf.any"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto"}
   where
     definitions = [any_]
 
-any_ :: Binding
+any_ :: TypeDefinition
 any_ = define "Any" $
   doc ("`Any` contains an arbitrary serialized protocol buffer message along with a " ++
        "URL that describes the type of the serialized message.") $

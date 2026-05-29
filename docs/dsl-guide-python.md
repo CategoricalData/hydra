@@ -577,37 +577,43 @@ Type-level modules define Hydra data types using the Direct Types DSL.
 ### Pattern
 
 ```python
-import hydra.annotations
+from hydra.core import Name, Type, TypeScheme
+from hydra.dsl.python import Nothing
+from hydra.packaging import DefinitionType, ModuleName, TypeDefinition
 import hydra.dsl.types as T
-from hydra.core import Binding, Name
 
-NS = "my.namespace"
+NS = ModuleName("my.namespace")
 
-def define(local_name: str, typ) -> Binding:
-    return hydra.annotations.type_element(
-        Name(NS + "." + local_name), typ)
+def _typeref(local: str) -> Type:
+    """A TypeVariable reference within this namespace; use for forward/self references."""
+    return T.variable(f"{NS.value}.{local}")
 
-# Forward references
-_Person = T.variable(NS + ".Person")
-_Address = T.variable(NS + ".Address")
+def _def(local_name: str, typ: Type) -> DefinitionType:
+    """Build a DefinitionType for a named type definition."""
+    name = Name(f"{NS.value}.{local_name}")
+    ts = TypeScheme((), typ, Nothing())
+    return DefinitionType(TypeDefinition(name, ts))
 
-# Type definitions
-person: Binding = define("Person",
-    T.record([
+# Type definitions are collected into the module's `definitions` list; references to
+# other definitions use _typeref (no wrapper coercion as on the Haskell side).
+definitions = [
+    _def("Person", T.record([
         T.field("name", T.string()),
         T.field("age", T.int32()),
-        T.field("address", _Address)]))
-
-address: Binding = define("Address",
-    T.record([
+        T.field("address", _typeref("Address"))])),
+    _def("Address", T.record([
         T.field("street", T.string()),
-        T.field("city", T.string())]))
+        T.field("city", T.string())])),
+]
 ```
 
-### Complete example: hydra.core
+Each `_def(...)` returns a `DefinitionType` wrapping a `TypeDefinition`, mirroring the Haskell
+type-module shape (`moduleDefinitions = DefinitionType <$> definitions`).
 
-See `heads/python/src/main/python/hydra/dsl/meta/examples/core_types.py` for a complete
-implementation of all 33 `hydra.core` types using this pattern.
+### Complete example: hydra.python.syntax
+
+See `packages/hydra-python/src/main/python/hydra/sources/python/syntax.py` for a complete native
+Python type module using this pattern (module-local `_def`/`_typeref` helpers and a `definitions` list).
 
 ## Term definitions
 
@@ -664,19 +670,12 @@ deannotate_term = define("deannotateTerm",
         apply(_self("deannotateTerm"), ...)))  # Works!
 ```
 
-### Complete example: hydra.rewriting
+### Complete examples
 
-See `heads/python/src/main/python/hydra/dsl/meta/examples/rewriting.py` for a partial
-implementation of `hydra.rewriting` demonstrating:
-
-- Simple pattern matching (`deannotate_term`)
-- Multiple case branches (`deannotate_and_detype_term`)
-- Composition with projection (`deannotate_type`)
-- Let-bindings and recursive rewriting (`deannotate_type_recursive`)
-- Nested pattern matching (`is_lambda`)
-- Complex operations with sets, folds, and binding-aware rewriting (`free_variables_in_term`)
-- Structural rewriting patterns (`remove_term_annotations`)
-- TraversalOrder dispatching (`fold_over_term`)
+The native Python coder package is authored with this DSL. See
+`packages/hydra-python/src/main/python/hydra/sources/python/coder.py` and `utils.py` for complete
+term modules demonstrating pattern matching, multiple case branches, composition with projection,
+let-bindings, recursive rewriting, and qualified self-references.
 
 ## Common patterns
 

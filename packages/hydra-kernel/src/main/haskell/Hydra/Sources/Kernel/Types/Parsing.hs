@@ -12,13 +12,13 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 ns :: ModuleName
 ns = ModuleName "hydra.parsing"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "Parser combinator types for text parsing"}
   where
@@ -28,7 +28,7 @@ module_ = Module {
       parseSuccess,
       parser]
 
-parseError :: Binding
+parseError :: TypeDefinition
 parseError = define "ParseError" $
   doc "An error which occurred while parsing" $
   T.record [
@@ -39,7 +39,7 @@ parseError = define "ParseError" $
       doc "The remaining input at the point of failure" $
       T.string]
 
-parseResult :: Binding
+parseResult :: TypeDefinition
 parseResult = define "ParseResult" $
   doc "The result of a parse operation" $
   T.forAll "a" $ T.union [
@@ -50,7 +50,7 @@ parseResult = define "ParseResult" $
       doc "A failed parse, with an error message and the remaining input"
       parseError]
 
-parseSuccess :: Binding
+parseSuccess :: TypeDefinition
 parseSuccess = define "ParseSuccess" $
   doc "A successful parse result" $
   T.forAll "a" $ T.record [
@@ -61,7 +61,7 @@ parseSuccess = define "ParseSuccess" $
       doc "The remaining unparsed input" $
       T.string]
 
-parser :: Binding
+parser :: TypeDefinition
 parser = define "Parser" $
   doc "A parser which consumes characters from a string and produces a value" $
   T.forAll "a" $ T.wrap $
