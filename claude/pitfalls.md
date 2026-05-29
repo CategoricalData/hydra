@@ -868,3 +868,51 @@ isn't yours, stop and ask. Recovery is straightforward via the
 reflog (`git reset --soft <sha-of-the-merge>`) provided you notice
 quickly — but the safer rule is "verify before reset," not "recover
 after reset."
+
+### `stack build` may relink stale executables even with fresh `.hi` files
+
+Editing a file in `dist/.../Hydra/<Mod>.hs` and running `stack build`
+sometimes recompiles the module (fresh `.hi` mtime) but does *not* relink
+downstream executables. The executable in
+`.stack-work/install/.../bin/<exe>` keeps its old behavior even though the
+.hi files have changed. Symptom seen on this branch: a patched
+`Hydra/Show/Errors.error` was not visible to `update-json-kernel` after a
+clean `stack build`; the old "inference error" message kept appearing.
+
+Fix: `find .stack-work -name <exe> -type f -delete && stack build`. The
+forced relink restores the expected behavior. Suspect this any time a
+binary's behavior contradicts source you know you edited.
+
+### Bash CWD drifts across foreground `cd` and into background tasks
+
+Documented in memory but worth surfacing here too:
+- Foreground `cd /path && cmd` does *not* change CWD for the next
+  foreground Bash call. The next call still runs in the worktree root
+  (or wherever the shell snapshot left it).
+- A foreground `cd` does *not* propagate to a `run_in_background: true`
+  Bash invocation either.
+- This bites `git`, `stack`, and any path-relative tool.
+
+Default to absolute paths in Bash invocations. If you must `cd`, do it
+inside the same single Bash invocation as the work it sets up for.
+
+### Schema-extending `hydra.packaging.Module` or `Package` ramifies into DSL term sources
+
+`dist/haskell/hydra-kernel/.../Sources/Decode/Packaging.hs` and
+`Sources/Encode/Packaging.hs` contain 1500–2000 line nested-AST Hydra
+*Term* representations of the per-type encoders and decoders, generated
+during a prior `bootstrap-from-json --synthesize-sources` run. They are
+imported by `Hydra.Sources.Kernel.Terms.All` as `DecodeModule`/
+`EncodeModule` and are part of `kernelTermsModules`, so `update-json-kernel`
+infers them every run.
+
+Adding a field to `Module` or `Package` (or reordering) is therefore
+*not* a localized change: the new field must be threaded through the
+DSL term AST in both files, with carefully-matched paren counts. Worse,
+`update-json-kernel` may report success while emitting JSON that doesn't
+match the on-disk source schema, because the term-DSL files encode their
+own (now-stale) view of the schema.
+
+Issue #402 tracks the proper sequencing: (1) reorder existing fields,
+(2) add `comments`, (3) populate. Do not attempt this as a sidecar to
+unrelated work; the regen pipeline needs investigation/fix in tandem.
