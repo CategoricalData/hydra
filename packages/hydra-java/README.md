@@ -145,7 +145,7 @@ Hydra's Java code is split across three locations
     persistent collection helpers `ConsList` / `PersistentMap` / `PersistentSet`
     (see [Collection classes](#collection-classes) under design notes)
   - `hydra/tools/` — framework classes (PrimitiveFunction, MapperBase, ...)
-  - `hydra/JavaSelfHostDemo.java` — driver that generates `dist/json/hydra-java/`
+  - `hydra/UpdateJavaJson.java` — driver that updates `dist/json/hydra-java/`
     from the Java DSL sources in this package (see [Generate Java code](#generate-java-code))
 
 - **Generated Java kernel** ([`dist/java/hydra-kernel/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/dist/java/hydra-kernel/src/main/java))
@@ -188,11 +188,12 @@ The script:
    `HYDRA_IN_SYNC=1` so that `sync.sh` Phase 5 invoking us doesn't recurse.
    Warm-cache sync is ~3 minutes.
 2. Compiles the rollup (`(cd heads/java && ./gradlew :hydra-java:compileHeadsExtrasJava)`).
-3. Runs `hydra.JavaSelfHostDemo`, which loads the kernel universe from
-   `dist/json/hydra-kernel/`, discovers the Java DSL source modules via reflection,
-   infers types for those that don't carry pre-computed type schemes (Coder ships
-   its schemes pre-computed; see [bin/java-self-host-demo.md](../../bin/java-self-host-demo.md)
-   for the rationale), and writes the resulting JSON.
+3. Runs `hydra.UpdateJavaJson` (via `bin/update-java-json.sh`), which loads the
+   kernel universe from `dist/json/hydra-kernel/`, discovers the Java DSL source
+   modules via reflection, infers types for those that don't carry pre-computed
+   type schemes (Coder ships its schemes pre-computed; see
+   [bin/update-java-json.md](../../bin/update-java-json.md) for the rationale),
+   and writes the resulting JSON.
 
 End-to-end is ~30 seconds once `dist/` is current.
 

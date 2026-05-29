@@ -386,12 +386,12 @@ Phase 5 (native DSL → JSON for hydra-java and hydra-python) now routes through
 per-package iterative driver that mirrors the Haskell-side
 `inferAndWriteByPackage`: `Generation.inferAndWriteByPackage` in
 `heads/java/src/main/java/hydra/Generation.java` and `infer_and_write_by_package`
-in `heads/python/src/main/python/hydra/generation.py`. Both demos
-(`bin/python-self-host-demo.py` and `JavaSelfHostDemo`) call this driver after
+in `heads/python/src/main/python/hydra/generation.py`. Both drivers
+(`bin/update-python-json.py` and `UpdateJavaJson`) call this routine after
 loading the kernel universe and the package's source modules. Today's runs
 collapse to a one-iteration loop (only hydra-java or hydra-python is being
-re-inferred); the structure is in place for multi-package self-hosts once
-additional packages are owned by these native pipelines.
+re-inferred); the structure is in place for multi-package native-coder updates
+once additional packages are owned by these native pipelines.
 
 ## The end-state design
 

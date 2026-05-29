@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 # Generate dist/json/hydra-python entirely from the Python DSL sources.
 #
-# This is the user-callable wrapper around bin/python-self-host-demo.py:
+# This is the user-callable wrapper around bin/update-python-json.py:
 # it checks whether the Python host is built (kernel JSON + kernel Python
 # runtime + hydra-python dist helpers), runs `bin/sync-python.sh` to build
-# them if not, then invokes the self-host demo. Issue #344.
+# them if not, then invokes the driver. Originally introduced for issue
+# #344 (the "Python self-host demo"); now the canonical Python DSL → JSON
+# step in the regular sync pipeline (Phase 5).
 #
 # Usage:
 #   bin/generate-hydra-python-from-python.sh                  # CPython
@@ -70,7 +72,7 @@ PP="$PP:$HYDRA_ROOT/dist/python/hydra-python/src/main/python"
 PP="$PP:$HYDRA_ROOT/heads/python/src/main/python"
 
 echo ""
-echo "=== Running python-self-host-demo.py (interp: $INTERP) ==="
+echo "=== Running update-python-json.py (interp: $INTERP) ==="
 
 # If --compare was requested without an explicit --out-root, write to a
 # temp directory so we can compare against the in-tree canonical (which
@@ -85,15 +87,15 @@ fi
 
 case "$INTERP" in
     pypy3)
-        PYTHONPATH="$PP" pypy3 "$HYDRA_ROOT/bin/python-self-host-demo.py" \
+        PYTHONPATH="$PP" pypy3 "$HYDRA_ROOT/bin/update-python-json.py" \
             --out-root "$ACTUAL_OUT_ROOT" "${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}"
         ;;
     uv)
-        # uv resolves its own venv; pass PYTHONPATH explicitly so the demo
+        # uv resolves its own venv; pass PYTHONPATH explicitly so the driver
         # picks up packages/hydra-python and the dist trees.
         PYTHONPATH="$PP" \
             uv --directory "$HYDRA_ROOT/heads/python" run python \
-            "$HYDRA_ROOT/bin/python-self-host-demo.py" \
+            "$HYDRA_ROOT/bin/update-python-json.py" \
             --out-root "$ACTUAL_OUT_ROOT" "${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}"
         ;;
     *)
@@ -115,7 +117,7 @@ if [ "$DO_COMPARE" = "1" ]; then
     fi
     echo ""
     echo "=== Byte-comparing $OURS_PATH against the Haskell-generated canonical at $CANON_ROOT ==="
-    "$HYDRA_ROOT/bin/compare-self-host.py" --ours "$OURS_PATH" --canon "$CANON_ROOT"
+    "$HYDRA_ROOT/bin/compare-dsl-json-output.py" --ours "$OURS_PATH" --canon "$CANON_ROOT"
     if [ -n "$COMPARE_CLEANUP" ]; then
         rm -rf "$COMPARE_CLEANUP"
     fi

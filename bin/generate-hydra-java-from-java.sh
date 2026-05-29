@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # Generate dist/json/hydra-java entirely from the Java DSL sources.
 #
-# Companion to bin/generate-hydra-python-from-python.sh; issue #344.
-# Checks whether the Java host is built (kernel JSON + dist/java/hydra-java
-# compiled), runs `bin/sync-java.sh` to build it if not, then invokes the
-# Java self-host driver (hydra.JavaSelfHostDemo).
+# Companion to bin/generate-hydra-python-from-python.sh; originally issue
+# #344. Checks whether the Java host is built (kernel JSON + dist/java/
+# hydra-java compiled), runs `bin/sync-java.sh` to build it if not, then
+# invokes the Java DSL→JSON driver (bin/update-java-json.sh, which runs
+# hydra.UpdateJavaJson).
 #
 # Usage:
 #   bin/generate-hydra-java-from-java.sh                   # default settings
@@ -61,8 +62,8 @@ fi
 
 # Check whether Java DSL source files exist at all. They live under
 # packages/hydra-java/src/main/java/hydra/sources/java/. As of 2026-05-11
-# these are being ported from the Haskell DSL sources; the Java self-host
-# is only usable once that port is complete.
+# these are being ported from the Haskell DSL sources; the Java DSL→JSON
+# driver is only usable once that port is complete.
 SOURCES_DIR="$HYDRA_ROOT/packages/hydra-java/src/main/java/hydra/sources/java"
 if [ ! -d "$SOURCES_DIR" ]; then
     echo ""
@@ -71,19 +72,6 @@ if [ ! -d "$SOURCES_DIR" ]; then
     echo "See feature_344_self_hosting_coders-plan.md."
     echo ""
 fi
-
-# Compile the Java rollup (which includes JavaSelfHostDemo) and get classpath.
-cd "$HYDRA_ROOT/heads/java"
-echo ""
-echo "=== Compiling Java head (rollup) ==="
-./gradlew --quiet :hydra-java:compileHeadsExtrasJava
-echo ""
-echo "=== Resolving classpath ==="
-JAVA_CP=$(./gradlew --quiet :hydra-java:printHeadsExtrasRuntimeClasspath)
-
-echo ""
-echo "=== Running JavaSelfHostDemo ==="
-# -Xss large for deeply nested type inference; -Xmx large for many bindings.
 
 # If --compare was requested without an explicit --out-root, write to a
 # temp directory so we can compare against the in-tree canonical (which
@@ -96,8 +84,9 @@ if [ "$DO_COMPARE" = "1" ] && [ "$USER_SET_OUT_ROOT" = "0" ]; then
     mkdir -p "$ACTUAL_OUT_ROOT"
 fi
 
-java -Xss64m -Xmx8g -cp "$JAVA_CP" hydra.JavaSelfHostDemo \
-    --hydra-root "$HYDRA_ROOT" --out-root "$ACTUAL_OUT_ROOT" \
+echo ""
+"$HYDRA_ROOT/bin/update-java-json.sh" \
+    --out-root "$ACTUAL_OUT_ROOT" \
     "${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}"
 
 if [ "$DO_COMPARE" = "1" ]; then
