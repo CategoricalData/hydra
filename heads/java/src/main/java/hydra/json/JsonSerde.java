@@ -3,7 +3,7 @@ package hydra.json;
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 import hydra.coders.Coder;
-import hydra.context.Context;
+import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.errors.OtherError;
 import hydra.json.model.Value;
@@ -31,7 +31,7 @@ public class JsonSerde extends Coder<Value, String> {
     /**
      * Convert a simple Either-based function to the Coder's Context-based Either signature.
      */
-    private static <A, B> java.util.function.Function<Context, java.util.function.Function<A, Either<Error_, B>>>
+    private static <A, B> java.util.function.Function<InferenceContext, java.util.function.Function<A, Either<Error_, B>>>
             toCoderFn(java.util.function.Function<A, Either<String, B>> fn) {
         return cx -> a -> {
             Either<String, B> result = fn.apply(a);

@@ -1,7 +1,6 @@
 (define-library (hydra prims)
   (import (scheme base) (scheme cxr) (scheme inexact)
           (hydra core)
-          (hydra context)
           (hydra graph)
           (hydra packaging)
           (hydra scoping)
@@ -95,7 +94,7 @@
       (let* ((constraints (if (pair? rest) (car rest) #f))
              (ts (build-type-scheme variables inputs output constraints))
              (sig (hydra_scoping_type_scheme_to_term_signature ts)))
-        (make-hydra_packaging_primitive_definition pname "" sig #t #t (list 'nothing))))
+        (make-hydra_packaging_primitive_definition pname sig "" (list 'nothing) (list) #t #t (list 'nothing) (list 'nothing) (list 'nothing))))
 
     ;; Convert an alist of (varname . TypeVariableMetadata) into the wrapped
     ;; Option[Map[Name, TypeVariableMetadata]] shape that TypeScheme expects.

@@ -2,25 +2,43 @@
 -- | A module for lexical operations over graphs.
 
 module Hydra.Lexical where
-import qualified Hydra.Context as Context
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Literals as Literals
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Math as Math
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Json.Model as Model
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Literals as Literals
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Math as Math
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Show.Errors as ShowErrors
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -95,13 +113,6 @@ elementsToGraph parent schemaTypes elements =
         Graph.graphPrimitives = (Graph.graphPrimitives g),
         Graph.graphSchemaTypes = schemaTypes,
         Graph.graphTypeVariables = (Graph.graphTypeVariables g)}
--- | An empty context; no trace, no messages, no other data.
-emptyContext :: Context.Context
-emptyContext =
-    Context.Context {
-      Context.contextTrace = [],
-      Context.contextMessages = [],
-      Context.contextOther = Maps.empty}
 -- | An empty graph; no elements, no primitives, no schema.
 emptyGraph :: Graph.Graph
 emptyGraph =
@@ -114,6 +125,12 @@ emptyGraph =
       Graph.graphPrimitives = Maps.empty,
       Graph.graphSchemaTypes = Maps.empty,
       Graph.graphTypeVariables = Sets.empty}
+-- | An empty inference context; fresh-variable counter at zero and empty trace.
+emptyInferenceContext :: Typing.InferenceContext
+emptyInferenceContext =
+    Typing.InferenceContext {
+      Typing.inferenceContextFreshTypeVariableCount = 0,
+      Typing.inferenceContextTrace = []}
 -- | Extract the fields of a record or union type
 fieldsOf :: Core.Type -> [Core.FieldType]
 fieldsOf t =

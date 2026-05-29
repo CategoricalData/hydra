@@ -91,9 +91,6 @@ import qualified Hydra.Sources.Python.Names as PyNames
 import qualified Hydra.Dsl.Python.Helpers as PyDsl
 
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
 ns :: ModuleName
 ns = ModuleName "hydra.python.utils"
 
@@ -303,6 +300,9 @@ decodePyPowerToPyPrimary = def "decodePyPowerToPyPrimary" $
     Logic.ifElse (var "await")
       nothing
       (just $ var "prim")
+
+def :: String -> TTerm a -> TTermDefinition a
+def = definitionInModule module_
 
 -- | Create a dotted assignment statement: obj.attr = expr
 dottedAssignmentStatement :: TTermDefinition (Py.Name -> Py.Name -> Py.Expression -> Py.Statement)

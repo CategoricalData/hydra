@@ -91,17 +91,14 @@ data CppEnvironment
 _CppEnvironment :: Name
 _CppEnvironment = Name "hydra.cpp.environment.CppEnvironment"
 
-_CppEnvironment_namespaces :: Name
-_CppEnvironment_namespaces = Name "namespaces"
-
 _CppEnvironment_boundTypeVariables :: Name
 _CppEnvironment_boundTypeVariables = Name "boundTypeVariables"
 
 
--- Term-level definitions
+_CppEnvironment_namespaces :: Name
+_CppEnvironment_namespaces = Name "namespaces"
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
+-- Term-level definitions
 
 ns :: ModuleName
 ns = ModuleName "hydra.cpp.utils"
@@ -503,6 +500,9 @@ createVariantExpr = def "createVariantExpr" $
   cppPostfixExpressionToCppExpression @@
     (inject Cpp._PostfixExpression Cpp._PostfixExpression_primary $
       inject Cpp._PrimaryExpression Cpp._PrimaryExpression_identifier $ string "variant")
+
+def :: String -> TTerm a -> TTermDefinition a
+def = definitionInModule module_
 
 -- | An empty function body
 emptyFunctionBody :: TTermDefinition Cpp.FunctionBody

@@ -1,7 +1,7 @@
 package hydra.demos.genpg;
 
 import hydra.Generation;
-import hydra.context.Context;
+import hydra.typing.InferenceContext;
 import hydra.core.Term;
 import hydra.errors.Error_;
 import hydra.graph.Graph;
@@ -83,7 +83,7 @@ public class Demo {
             List<Vertex<Term>> vspecs,
             List<Edge<Term>> especs) throws IOException {
         Table<Term> table = decodeTableIo(tableType, path);
-        Context cx = new Context(Collections.emptyList(), Collections.emptyList(), Collections.emptyMap());
+        InferenceContext cx = new InferenceContext(0, Collections.emptyList());
         Either<Error_, Pair<List<Vertex<Term>>, List<Edge<Term>>>> result =
             Transform.transformTableRows(cx, graphContext, vspecs, especs, tableType, table.data);
         if (result.isLeft()) {

@@ -2825,14 +2825,16 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "A function which encodes source values as target values in a given context"}}}],
+                          "value": {
+                            "literal": {
+                              "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
                       "body": {
                         "function": {
                           "codomain": {
                             "function": {
                               "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v2"}}},
                               "domain": {"variable": "v1"}}},
-                          "domain": {"variable": "hydra.context.Context"}}}}},
+                          "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}},
             {
               "isLazy": false,
@@ -2844,14 +2846,16 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "A function which decodes target values as source values in a given context"}}}],
+                          "value": {
+                            "literal": {
+                              "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
                       "body": {
                         "function": {
                           "codomain": {
                             "function": {
                               "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v1"}}},
                               "domain": {"variable": "v2"}}},
-                          "domain": {"variable": "hydra.context.Context"}}}}},
+                          "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}],
           "result": {
             "type": {
@@ -2911,14 +2915,16 @@
                             "annotation": [
                               {
                                 "key": "description",
-                                "value": {"literal": {"string": "A function which decodes target values as source values in a given context"}}}],
+                                "value": {
+                                  "literal": {
+                                    "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
                             "body": {
                               "function": {
                                 "codomain": {
                                   "function": {
                                     "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v1"}}},
                                     "domain": {"variable": "v2"}}},
-                                "domain": {"variable": "hydra.context.Context"}}}}},
+                                "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "decode"}},
                 "domain": {
@@ -2928,14 +2934,16 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {"literal": {"string": "A function which encodes source values as target values in a given context"}}}],
+                            "value": {
+                              "literal": {
+                                "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
                         "body": {
                           "function": {
                             "codomain": {
                               "function": {
                                 "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v2"}}},
                                 "domain": {"variable": "v1"}}},
-                            "domain": {"variable": "hydra.context.Context"}}}}},
+                            "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "encode"}}}}}},
     {
@@ -2961,14 +2969,16 @@
                     "annotation": [
                       {
                         "key": "description",
-                        "value": {"literal": {"string": "A function which encodes source values as target values in a given context"}}}],
+                        "value": {
+                          "literal": {
+                            "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
                     "body": {
                       "function": {
                         "codomain": {
                           "function": {
                             "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v2"}}},
                             "domain": {"variable": "v1"}}},
-                        "domain": {"variable": "hydra.context.Context"}}}}},
+                        "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v1"}, {"constraints": [], "name": "v2"}]},
         "term": {
@@ -3037,14 +3047,16 @@
                     "annotation": [
                       {
                         "key": "description",
-                        "value": {"literal": {"string": "A function which decodes target values as source values in a given context"}}}],
+                        "value": {
+                          "literal": {
+                            "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
                     "body": {
                       "function": {
                         "codomain": {
                           "function": {
                             "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v1"}}},
                             "domain": {"variable": "v2"}}},
-                        "domain": {"variable": "hydra.context.Context"}}}}},
+                        "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v1"}, {"constraints": [], "name": "v2"}]},
         "term": {
@@ -3115,14 +3127,16 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "A function which encodes source values as target values in a given context"}}}],
+                          "value": {
+                            "literal": {
+                              "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
                       "body": {
                         "function": {
                           "codomain": {
                             "function": {
                               "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v2"}}},
                               "domain": {"variable": "v1"}}},
-                          "domain": {"variable": "hydra.context.Context"}}}}},
+                          "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}],
           "result": {
             "type": {
@@ -3208,14 +3222,16 @@
                             "annotation": [
                               {
                                 "key": "description",
-                                "value": {"literal": {"string": "A function which encodes source values as target values in a given context"}}}],
+                                "value": {
+                                  "literal": {
+                                    "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
                             "body": {
                               "function": {
                                 "codomain": {
                                   "function": {
                                     "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v2"}}},
                                     "domain": {"variable": "v1"}}},
-                                "domain": {"variable": "hydra.context.Context"}}}}},
+                                "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -3251,14 +3267,16 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "A function which decodes target values as source values in a given context"}}}],
+                          "value": {
+                            "literal": {
+                              "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
                       "body": {
                         "function": {
                           "codomain": {
                             "function": {
                               "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v1"}}},
                               "domain": {"variable": "v2"}}},
-                          "domain": {"variable": "hydra.context.Context"}}}}},
+                          "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}],
           "result": {
             "type": {
@@ -3344,14 +3362,16 @@
                             "annotation": [
                               {
                                 "key": "description",
-                                "value": {"literal": {"string": "A function which decodes target values as source values in a given context"}}}],
+                                "value": {
+                                  "literal": {
+                                    "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
                             "body": {
                               "function": {
                                 "codomain": {
                                   "function": {
                                     "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v1"}}},
                                     "domain": {"variable": "v2"}}},
-                                "domain": {"variable": "hydra.context.Context"}}}}},
+                                "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -6074,15 +6094,15 @@
   "dependencies": [
     {"module": "hydra.coders"},
     {"module": "hydra.phantoms"},
-    {"module": "hydra.context"},
     {"module": "hydra.errors"},
     {"module": "hydra.graph"},
     {"module": "hydra.variants"},
     {"module": "hydra.core"},
-    {"module": "hydra.dsl.context"},
+    {"module": "hydra.typing"},
     {"module": "hydra.dsl.errors"},
     {"module": "hydra.dsl.graph"},
     {"module": "hydra.dsl.variants"},
-    {"module": "hydra.dsl.core"}],
+    {"module": "hydra.dsl.core"},
+    {"module": "hydra.dsl.typing"}],
   "description": "DSL functions for hydra.coders",
   "name": "hydra.dsl.coders"}

@@ -49,25 +49,20 @@ annotated term ann = TermAnnotated $ AnnotatedTerm term ann
 apply :: Term -> Term -> Term
 apply fun arg = TermApplication $ Application fun arg
 
--- | Create a binary data literal from a ByteString.
--- Example: binary (B.pack [0x48, 0x65, 0x00, 0xff, 0x20, 0x7a, 0x1b, 0x80])
-binary :: B.ByteString -> Term
-binary = literal . Literals.binary
-
 -- | Create a bigint literal
 -- Example: bigint 9223372036854775808
 bigint :: Integer -> Term
 bigint = literal . Literals.bigint
 
+-- | Create a binary data literal from a ByteString.
+-- Example: binary (B.pack [0x48, 0x65, 0x00, 0xff, 0x20, 0x7a, 0x1b, 0x80])
+binary :: B.ByteString -> Term
+binary = literal . Literals.binary
+
 -- | Create a boolean literal
 -- Example: boolean True
 boolean :: Bool -> Term
 boolean = literal . Literals.boolean
-
--- | Create an arbitrary-precision decimal literal.
--- Example: decimal (Sci.scientific 314159265359 (-11))
-decimal :: Sci.Scientific -> Term
-decimal = literal . Literals.decimal
 
 char :: Char -> Term
 char = int32 . C.ord
@@ -89,6 +84,11 @@ compose f g = lambda "arg_" $ apply f (apply g $ var "arg_")
 -- Example: constant true
 constant :: Term -> Term
 constant = lambda ignoredVariable
+
+-- | Create an arbitrary-precision decimal literal.
+-- Example: decimal (Sci.scientific 314159265359 (-11))
+decimal :: Sci.Scientific -> Term
+decimal = literal . Literals.decimal
 
 -- | Boolean false literal
 false :: Term
@@ -135,11 +135,6 @@ inject tname fname term = TermInject $ Injection tname $ Field fname term
 injectUnit :: Name -> Name -> Term
 injectUnit tname fname = inject tname fname unit
 
--- | Create an int8 literal
--- Example: int8 127
-int8 :: Int8 -> Term
-int8 = literal . Literals.int8
-
 -- | Create an int16 literal
 -- Example: int16 32767
 int16 :: Int16 -> Term
@@ -155,6 +150,11 @@ int32 = literal . Literals.int32
 int64 :: Int64 -> Term
 int64 = literal . Literals.int64
 
+-- | Create an int8 literal
+-- Example: int8 127
+int8 :: Int8 -> Term
+int8 = literal . Literals.int8
+
 -- | Create an integer literal with specified bit width
 -- Example: integer (IntegerValueInt32 42)
 integer :: IntegerValue -> Term
@@ -165,15 +165,15 @@ integer = literal . Literals.integer
 just :: Term -> Term
 just = optional . Just
 
--- | Create a 'Left' either value
--- Example: left (string "error")
-left :: Term -> Term
-left term = TermEither (Left term)
-
 -- | Create a lambda function with one parameter
 -- Example: lambda "x" (var "x" @@ int32 1)
 lambda :: String -> Term -> Term
 lambda param body = TermLambda $ Lambda (Name param) Nothing body
+
+-- | Create a lambda function with a given domain
+-- Example: lambdaTyped "x" Types.int32 (list [var "x"])
+lambdaTyped :: String -> Type -> Term -> Term
+lambdaTyped param dom body = TermLambda $ Lambda (Name param) (Just dom) body
 
 -- | Create a multi-parameter lambda function (curried)
 -- Example: lambdas ["x", "y"] (var "add" @@ var "x" @@ var "y")
@@ -183,10 +183,10 @@ lambdas params body = case params of
   [] -> body
   (h:r) -> lambda h $ lambdas r body
 
--- | Create a lambda function with a given domain
--- Example: lambdaTyped "x" Types.int32 (list [var "x"])
-lambdaTyped :: String -> Type -> Term -> Term
-lambdaTyped param dom body = TermLambda $ Lambda (Name param) (Just dom) body
+-- | Create a 'Left' either value
+-- Example: left (string "error")
+left :: Term -> Term
+left term = TermEither (Left term)
 
 -- | Create a let term with any number of bindings
 -- Example: lets ["x">: int32 1, "y">: int32 2] (pair (var "x") (var "y"))
@@ -317,15 +317,6 @@ tylam var body = TermTypeLambda $ TypeLambda (Name var) body
 tylams :: [String] -> Term -> Term
 tylams vars body = L.foldl (\b v -> TermTypeLambda $ TypeLambda (Name v) b) body $ L.reverse vars
 
--- | Create a type abstraction (universal quantification)
--- Example: typeLambda [Name "a", Name "b"] (lambdaTyped "f" (Types.function (Types.var "a") (Types.var "b"))
---                                               (lambdaTyped "x" (Types.var "a") (var "f" @@ var "x")))
--- This creates a polymorphic term with type variables.
--- The example creates a higher-order function with type 'forall a b. (a -> b) -> a -> b',
--- which is the polymorphic apply function that works for any types a and b.
-typeLambda :: [Name] -> Term -> Term
-typeLambda vars body = L.foldl (\b v -> TermTypeLambda $ TypeLambda v b) body vars
-
 -- | Apply type arguments to a polymorphic term
 -- Example: typeApplication (var "map") [Types.int32, Types.string]
 -- This instantiates a polymorphic function with concrete types.
@@ -334,10 +325,14 @@ typeLambda vars body = L.foldl (\b v -> TermTypeLambda $ TypeLambda v b) body va
 typeApplication :: Term -> [Type] -> Term
 typeApplication term types = L.foldl (\t ty -> TermTypeApplication $ TypeApplicationTerm t ty) term types
 
--- | Create a uint8 literal
--- Example: uint8 255
-uint8 :: Int16 -> Term
-uint8 = literal . Literals.uint8
+-- | Create a type abstraction (universal quantification)
+-- Example: typeLambda [Name "a", Name "b"] (lambdaTyped "f" (Types.function (Types.var "a") (Types.var "b"))
+--                                               (lambdaTyped "x" (Types.var "a") (var "f" @@ var "x")))
+-- This creates a polymorphic term with type variables.
+-- The example creates a higher-order function with type 'forall a b. (a -> b) -> a -> b',
+-- which is the polymorphic apply function that works for any types a and b.
+typeLambda :: [Name] -> Term -> Term
+typeLambda vars body = L.foldl (\b v -> TermTypeLambda $ TypeLambda v b) body vars
 
 -- | Create a uint16 literal
 -- Example: uint16 65535
@@ -353,6 +348,11 @@ uint32 = literal . Literals.uint32
 -- Example: uint64 18446744073709551615
 uint64 :: Integer -> Term
 uint64 = literal . Literals.uint64
+
+-- | Create a uint8 literal
+-- Example: uint8 255
+uint8 :: Int16 -> Term
+uint8 = literal . Literals.uint8
 
 -- | Unit value (empty record)
 unit :: Term

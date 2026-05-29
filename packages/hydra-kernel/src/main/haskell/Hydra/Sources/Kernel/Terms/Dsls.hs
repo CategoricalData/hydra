@@ -24,7 +24,6 @@ import           Hydra.Dsl.Meta.Phantoms     as Phantoms hiding (
   elimination, field, fieldType, floatType, floatValue, function, injection, integerType, integerValue, lambda, literal,
   literalType, record, term, type_, typeScheme, wrap)
 import qualified Hydra.Dsl.Terms             as Terms
-import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Errors       as Error
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
@@ -72,10 +71,6 @@ module_ = Module {
 define :: String -> TTerm x -> TTermDefinition x
 define = definitionInModule module_
 
--- | Wrap a type in TTerm: TypeApplication (TypeVariable "hydra.phantoms.TTerm") innerType
-wrapInTTerm :: TTerm Type -> TTerm Type
-wrapInTTerm t = Core.typeApplication $ Core.applicationType (Core.typeVariable (Core.nameLift _TTerm)) t
-
 -- | Collect forall type variables from a type (stripping annotations)
 collectForallVars :: TTermDefinition (Type -> [Name])
 collectForallVars = define "collectForallVars" $
@@ -108,6 +103,63 @@ deduplicateBindings = define "deduplicateBindings" $
           (Core.bindingTypeScheme (var "b"))]))
     (list ([] :: [TTerm Binding]))
     (var "bindings")
+
+-- | Build a deep Application as a Term value
+deepApplication :: TTerm Term -> TTerm Term -> TTerm Term
+deepApplication fun arg =
+  injectTermApplication $
+    Core.termRecord $ Core.record (Core.nameLift _Application) (list [
+      Core.field (Core.nameLift _Application_function) fun,
+      Core.field (Core.nameLift _Application_argument) arg])
+
+-- | Build a deep Field record
+deepField :: TTerm Name -> TTerm Term -> TTerm Term
+deepField name term =
+  Core.termRecord $ Core.record (Core.nameLift _Field) (list [
+    Core.field (Core.nameLift _Field_name) (deepName (Core.unName name)),
+    Core.field (Core.nameLift _Field_term) term])
+
+-- | Build a deep Injection as a Term value (injected into Term.union)
+deepInjection :: TTerm Name -> TTerm Term -> TTerm Term
+deepInjection typeName fieldTerm =
+  injectTermUnion $
+    Core.termRecord $ Core.record (Core.nameLift _Injection) (list [
+      Core.field (Core.nameLift _Injection_typeName) (deepName (Core.unName typeName)),
+      Core.field (Core.nameLift _Injection_field) fieldTerm])
+
+-- | Build a deep Name: TermWrap(_Name, TermLiteral(LiteralString(s)))
+deepName :: TTerm String -> TTerm Term
+deepName s = Core.termWrap $ Core.wrappedTerm (Core.nameLift _Name) (Core.termLiteral $ Core.literalString s)
+
+-- | Build a deep Projection as a Term value
+deepProjection :: TTerm Name -> TTerm Name -> TTerm Term
+deepProjection typeName fieldName =
+  injectTermProject $
+    Core.termRecord $ Core.record (Core.nameLift _Projection) (list [
+      Core.field (Core.nameLift _Projection_typeName) (deepName (Core.unName typeName)),
+      Core.field (Core.nameLift _Projection_fieldName) (deepName (Core.unName fieldName))])
+
+-- | Build a deep Record as a Term value (injected into Term.record)
+deepRecord :: TTerm Name -> TTerm [Term] -> TTerm Term
+deepRecord typeName fields =
+  injectTermRecord $
+    Core.termRecord $ Core.record (Core.nameLift _Record) (list [
+      Core.field (Core.nameLift _Record_typeName) (deepName (Core.unName typeName)),
+      Core.field (Core.nameLift _Record_fields) (Core.termList fields)])
+
+-- | Build a deep TermUnwrap value
+deepUnwrap :: TTerm Name -> TTerm Term
+deepUnwrap typeName =
+  injectTermUnwrap $
+    deepName (Core.unName typeName)
+
+-- | Build a deep WrappedTerm as a Term value (injected into Term.wrap)
+deepWrap :: TTerm Name -> TTerm Term -> TTerm Term
+deepWrap typeName body =
+  injectTermWrap $
+    Core.termRecord $ Core.record (Core.nameLift _WrappedTerm) (list [
+      Core.field (Core.nameLift _WrappedTerm_typeName) (deepName (Core.unName typeName)),
+      Core.field (Core.nameLift _WrappedTerm_body) body])
 
 -- | Filter bindings to only DSL-eligible type definitions
 -- | Generate a fully qualified binding name for a DSL function from a type name
@@ -145,106 +197,6 @@ dslBindingName = define "dslBindingName" $
 -- For example, ("hydra.core.AnnotatedTerm", "annotatedTermBody") -> "hydra.dsl.core.annotatedTermBody"
 -- This extracts the namespace from the type name, transforms it to the DSL namespace,
 -- and appends the local element name.
-injectTermRecord :: TTerm Term -> TTerm Term
-injectTermRecord t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_record) t)
-
--- | Inject a term into the Term.application variant
-injectTermApplication :: TTerm Term -> TTerm Term
-injectTermApplication t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_application) t)
-
--- | Inject a term into the Term.cases variant
-injectTermCases :: TTerm Term -> TTerm Term
-injectTermCases t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_cases) t)
-
--- | Inject a term into the Term.project variant
-injectTermProject :: TTerm Term -> TTerm Term
-injectTermProject t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_project) t)
-
--- | Inject a term into the Term.union variant
-injectTermUnion :: TTerm Term -> TTerm Term
-injectTermUnion t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_inject) t)
-
--- | Inject a term into the Term.unwrap variant
-injectTermUnwrap :: TTerm Term -> TTerm Term
-injectTermUnwrap t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_unwrap) t)
-
--- | Inject a term into the Term.wrap variant
-injectTermWrap :: TTerm Term -> TTerm Term
-injectTermWrap t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_wrap) t)
-
--- | Build a deep Name: TermWrap(_Name, TermLiteral(LiteralString(s)))
-deepName :: TTerm String -> TTerm Term
-deepName s = Core.termWrap $ Core.wrappedTerm (Core.nameLift _Name) (Core.termLiteral $ Core.literalString s)
-
--- | Build a deep Projection as a Term value
-deepProjection :: TTerm Name -> TTerm Name -> TTerm Term
-deepProjection typeName fieldName =
-  injectTermProject $
-    Core.termRecord $ Core.record (Core.nameLift _Projection) (list [
-      Core.field (Core.nameLift _Projection_typeName) (deepName (Core.unName typeName)),
-      Core.field (Core.nameLift _Projection_fieldName) (deepName (Core.unName fieldName))])
-
--- | Build a deep Application as a Term value
-deepApplication :: TTerm Term -> TTerm Term -> TTerm Term
-deepApplication fun arg =
-  injectTermApplication $
-    Core.termRecord $ Core.record (Core.nameLift _Application) (list [
-      Core.field (Core.nameLift _Application_function) fun,
-      Core.field (Core.nameLift _Application_argument) arg])
-
--- | Build a deep Field record
-deepField :: TTerm Name -> TTerm Term -> TTerm Term
-deepField name term =
-  Core.termRecord $ Core.record (Core.nameLift _Field) (list [
-    Core.field (Core.nameLift _Field_name) (deepName (Core.unName name)),
-    Core.field (Core.nameLift _Field_term) term])
-
--- | Build a deep Record as a Term value (injected into Term.record)
-deepRecord :: TTerm Name -> TTerm [Term] -> TTerm Term
-deepRecord typeName fields =
-  injectTermRecord $
-    Core.termRecord $ Core.record (Core.nameLift _Record) (list [
-      Core.field (Core.nameLift _Record_typeName) (deepName (Core.unName typeName)),
-      Core.field (Core.nameLift _Record_fields) (Core.termList fields)])
-
--- | Build a deep Injection as a Term value (injected into Term.union)
-deepInjection :: TTerm Name -> TTerm Term -> TTerm Term
-deepInjection typeName fieldTerm =
-  injectTermUnion $
-    Core.termRecord $ Core.record (Core.nameLift _Injection) (list [
-      Core.field (Core.nameLift _Injection_typeName) (deepName (Core.unName typeName)),
-      Core.field (Core.nameLift _Injection_field) fieldTerm])
-
--- | Build a deep WrappedTerm as a Term value (injected into Term.wrap)
-deepWrap :: TTerm Name -> TTerm Term -> TTerm Term
-deepWrap typeName body =
-  injectTermWrap $
-    Core.termRecord $ Core.record (Core.nameLift _WrappedTerm) (list [
-      Core.field (Core.nameLift _WrappedTerm_typeName) (deepName (Core.unName typeName)),
-      Core.field (Core.nameLift _WrappedTerm_body) body])
-
--- | Build a deep TermUnwrap value
-deepUnwrap :: TTerm Name -> TTerm Term
-deepUnwrap typeName =
-  injectTermUnwrap $
-    deepName (Core.unName typeName)
-
--- | Unwrap a TTerm argument: apply (TermUnwrap _TTerm) to the variable
-unwrapTTerm :: TTerm Term -> TTerm Term
-unwrapTTerm v = Core.termApplication $ Core.application
-  (Core.termUnwrap (Core.nameLift _TTerm))
-  v
-
--- | Wrap a term in TTerm: WrappedTerm _TTerm term
-wrapTermInTTerm :: TTerm Term -> TTerm Term
-wrapTermInTTerm t = Core.termWrap $ Core.wrappedTerm (Core.nameLift _TTerm) t
-
-
-
--- | Generate a DSL element name from a type name and a local element name.
--- For example, ("hydra.core.AnnotatedTerm", "annotatedTermBody") -> "hydra.dsl.core.annotatedTermBody"
--- This extracts the namespace from the type name, transforms it to the DSL namespace,
--- and appends the local element name.
 dslDefinitionName :: TTermDefinition (Name -> String -> Name)
 dslDefinitionName = define "dslDefinitionName" $
   doc "Generate a qualified DSL element name from a type name and local element name" $
@@ -277,7 +229,7 @@ dslDefinitionName = define "dslDefinitionName" $
 --   annotatedTerm body annotation = Core.TermRecord (Core.Record { ... })
 -- | Transform a type module into a DSL module.
 -- Returns Nothing if the module has no eligible type definitions.
-dslModule :: TTermDefinition (Context -> Graph -> Module -> Either Error (Maybe Module))
+dslModule :: TTermDefinition (InferenceContext -> Graph -> Module -> Either Error (Maybe Module))
 dslModule = define "dslModule" $
   doc "Transform a type module into a DSL module" $
   "cx" ~> "graph" ~> "mod" ~>
@@ -354,7 +306,7 @@ dslTypeScheme = define "dslTypeScheme" $
 
 -- | Collect forall type variables from a type (stripping annotations)
 -- | Filter bindings to only DSL-eligible type definitions
-filterTypeBindings :: TTermDefinition (Context -> Graph -> [Binding] -> Either Error [Binding])
+filterTypeBindings :: TTermDefinition (InferenceContext -> Graph -> [Binding] -> Either Error [Binding])
 filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only DSL-eligible type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
@@ -369,7 +321,7 @@ filterTypeBindings = define "filterTypeBindings" $
 -- - Records: constructor + accessors + withXxx updaters
 -- - Unions: injection helpers
 -- - Wrapped types: wrap + unwrap
-generateBindingsForType :: TTermDefinition (Context -> Graph -> Binding -> Either DecodingError [Binding])
+generateBindingsForType :: TTermDefinition (InferenceContext -> Graph -> Binding -> Either DecodingError [Binding])
 generateBindingsForType = define "generateBindingsForType" $
   doc "Generate all DSL bindings for a type binding" $
   "cx" ~> "graph" ~> "b" ~>
@@ -424,15 +376,6 @@ generateRecordAccessor = define "generateRecordAccessor" $
     (var "accessorName")
     (var "body")
     (just (var "ts"))
-
--- | Generate a "withXxx" record field updater function.
--- For a field "name" in record type "Binding" (with fields name, term, type), produces:
---   bindingWithName :: Binding -> Name -> Binding
---   bindingWithName b newName = Binding newName (bindingTerm b) (bindingType b)
--- This constructs a new record with the specified field replaced and all others projected.
-isUnitType_ :: TTerm (Type -> Bool)
-isUnitType_ = "t" ~> cases _Type (Strip.deannotateType @@ var "t") (Just Phantoms.false) [
-  _Type_unit>>: constant Phantoms.true]
 
 -- | Generate a record constructor function.
 -- For a record type like {body: Term, annotation: Map(Name, Term)},
@@ -627,6 +570,37 @@ generateWrappedTypeAccessors = define "generateWrappedTypeAccessors" $
     Core.binding (var "wrapName") (var "wrapBody") (just (var "wrapTs")),
     Core.binding (var "unwrapName") (var "unwrapBody") (just (var "unwrapTs"))]
 
+-- | Inject a term into the Term.application variant
+injectTermApplication :: TTerm Term -> TTerm Term
+injectTermApplication t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_application) t)
+
+-- | Inject a term into the Term.cases variant
+injectTermCases :: TTerm Term -> TTerm Term
+injectTermCases t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_cases) t)
+
+-- | Inject a term into the Term.project variant
+injectTermProject :: TTerm Term -> TTerm Term
+injectTermProject t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_project) t)
+
+-- | Generate a DSL element name from a type name and a local element name.
+-- For example, ("hydra.core.AnnotatedTerm", "annotatedTermBody") -> "hydra.dsl.core.annotatedTermBody"
+-- This extracts the namespace from the type name, transforms it to the DSL namespace,
+-- and appends the local element name.
+injectTermRecord :: TTerm Term -> TTerm Term
+injectTermRecord t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_record) t)
+
+-- | Inject a term into the Term.union variant
+injectTermUnion :: TTerm Term -> TTerm Term
+injectTermUnion t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_inject) t)
+
+-- | Inject a term into the Term.unwrap variant
+injectTermUnwrap :: TTerm Term -> TTerm Term
+injectTermUnwrap t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_unwrap) t)
+
+-- | Inject a term into the Term.wrap variant
+injectTermWrap :: TTerm Term -> TTerm Term
+injectTermWrap t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_wrap) t)
+
 -- | Generate all DSL bindings for a single type binding.
 -- Inspects the type definition and generates appropriate helpers:
 -- - Records: constructor + accessors + withXxx updaters
@@ -634,7 +608,7 @@ generateWrappedTypeAccessors = define "generateWrappedTypeAccessors" $
 -- - Wrapped types: wrap + unwrap
 -- | Check if a binding is eligible for DSL generation.
 -- Excludes phantom types (TTerm, TBinding) since they are meta-infrastructure.
-isDslEligibleBinding :: TTermDefinition (Context -> Graph -> Binding -> Either Error (Maybe Binding))
+isDslEligibleBinding :: TTermDefinition (InferenceContext -> Graph -> Binding -> Either Error (Maybe Binding))
 isDslEligibleBinding = define "isDslEligibleBinding" $
   doc "Check if a binding is eligible for DSL generation" $
   "cx" ~> "graph" ~> "b" ~>
@@ -642,6 +616,15 @@ isDslEligibleBinding = define "isDslEligibleBinding" $
   Logic.ifElse (Equality.equal (Maybes.maybe (string "") (reify Packaging.unModuleName) (var "ns")) (string "hydra.phantoms"))
     (right nothing)
     (right (just (var "b")))
+
+-- | Generate a "withXxx" record field updater function.
+-- For a field "name" in record type "Binding" (with fields name, term, type), produces:
+--   bindingWithName :: Binding -> Name -> Binding
+--   bindingWithName b newName = Binding newName (bindingTerm b) (bindingType b)
+-- This constructs a new record with the specified field replaced and all others projected.
+isUnitType_ :: TTerm (Type -> Bool)
+isUnitType_ = "t" ~> cases _Type (Strip.deannotateType @@ var "t") (Just Phantoms.false) [
+  _Type_unit>>: constant Phantoms.true]
 
 -- | Transform a type module into a DSL module.
 -- Returns Nothing if the module has no eligible type definitions.
@@ -660,3 +643,19 @@ nominalResultType = define "nominalResultType" $
 
 -- | Inject a Record-typed term into the Term.record variant
 -- Produces TermInject(Injection _Term (Field _Term_record innerRecord))
+
+-- | Unwrap a TTerm argument: apply (TermUnwrap _TTerm) to the variable
+unwrapTTerm :: TTerm Term -> TTerm Term
+unwrapTTerm v = Core.termApplication $ Core.application
+  (Core.termUnwrap (Core.nameLift _TTerm))
+  v
+
+-- | Wrap a type in TTerm: TypeApplication (TypeVariable "hydra.phantoms.TTerm") innerType
+wrapInTTerm :: TTerm Type -> TTerm Type
+wrapInTTerm t = Core.typeApplication $ Core.applicationType (Core.typeVariable (Core.nameLift _TTerm)) t
+
+-- | Wrap a term in TTerm: WrappedTerm _TTerm term
+wrapTermInTTerm :: TTerm Term -> TTerm Term
+wrapTermInTTerm t = Core.termWrap $ Core.wrappedTerm (Core.nameLift _TTerm) t
+
+

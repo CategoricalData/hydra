@@ -2,12 +2,32 @@
 -- | String representations of hydra.error.core types
 
 module Hydra.Show.Error.Core where
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
-import qualified Hydra.Lib.Literals as Literals
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
+import qualified Hydra.Haskell.Lib.Literals as Literals
+import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Show.Core as ShowCore
-import qualified Hydra.Show.Variants as Variants
+import qualified Hydra.Show.Variants as ShowVariants
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Show a constant condition error as a string
@@ -242,7 +262,7 @@ unexpectedTermVariantError e =
           actual = ErrorCore.unexpectedTermVariantErrorActualTerm e
       in (Strings.cat [
         "expected ",
-        (Variants.termVariant expected),
+        (ShowVariants.termVariant expected),
         " term but found ",
         (ShowCore.term actual)])
 -- | Show an unexpected type variant error as a string
@@ -253,7 +273,7 @@ unexpectedTypeVariantError e =
           actual = ErrorCore.unexpectedTypeVariantErrorActualType e
       in (Strings.cat [
         "expected ",
-        (Variants.typeVariant expected),
+        (ShowVariants.typeVariant expected),
         " type but found ",
         (ShowCore.type_ actual)])
 -- | Show an unknown primitive name error as a string

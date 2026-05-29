@@ -98,6 +98,58 @@ boolean_ = define "Boolean" $ T.wrap T.boolean
 byte_ :: Binding
 byte_ = define "Byte" $ T.wrap T.int8
 
+constrainingFacet :: Binding
+constrainingFacet = define "ConstrainingFacet" $
+  see "https://www.w3.org/TR/xmlschema-2/#non-fundamental" $
+  T.wrap T.unit -- TODO: concrete facets
+
+datatype_ :: Binding
+datatype_ = define "Datatype" $ T.enum [
+  "anySimpleType",
+  "anyType",
+  "anyURI",
+  "base64Binary",
+  "boolean",
+  "byte",
+  "date",
+  "dateTime",
+  "decimal",
+  "double",
+  "duration",
+  "ENTITIES",
+  "ENTITY",
+  "float",
+  "gDay",
+  "gMonth",
+  "gMonthDay",
+  "gYear",
+  "gYearMonth",
+  "hexBinary",
+  "ID",
+  "IDREF",
+  "IDREFS",
+  "int",
+  "integer",
+  "language",
+  "long",
+  "NMTOKEN",
+  "NOTATION",
+  "name",
+  "negativeInteger",
+  "nonNegativeInteger",
+  "nonPositiveInteger",
+  "normalizedString",
+  "positiveInteger",
+  "qName",
+  "short",
+  "string",
+  "time",
+  "token",
+  "unsignedByte",
+  "unsignedInt",
+  "unsignedLong",
+  "unsignedShort"]
+
 date :: Binding
 date = define "Date" $ T.wrap T.string
 
@@ -161,17 +213,14 @@ language_ = define "Language" $ T.wrap T.string
 long_ :: Binding
 long_ = define "Long" $ T.wrap T.int64
 
-nmtoken :: Binding
-nmtoken = define "NMTOKEN" $ T.wrap T.string
-
-notation :: Binding
-notation = define "NOTATION" $ T.wrap T.string
-
 name_ :: Binding
 name_ = define "Name" $ T.wrap T.string
 
 negativeInteger :: Binding
 negativeInteger = define "NegativeInteger" $ T.wrap T.bigint
+
+nmtoken :: Binding
+nmtoken = define "NMTOKEN" $ T.wrap T.string
 
 nonNegativeInteger :: Binding
 nonNegativeInteger = define "NonNegativeInteger" $ T.wrap T.bigint
@@ -181,6 +230,9 @@ nonPositiveInteger = define "NonPositiveInteger" $ T.wrap T.bigint
 
 normalizedString :: Binding
 normalizedString = define "NormalizedString" $ T.wrap T.string
+
+notation :: Binding
+notation = define "NOTATION" $ T.wrap T.string
 
 positiveInteger :: Binding
 positiveInteger = define "PositiveInteger" $ T.wrap T.bigint
@@ -211,55 +263,3 @@ unsignedLong = define "UnsignedLong" $ T.wrap T.uint64
 
 unsignedShort :: Binding
 unsignedShort = define "UnsignedShort" $ T.wrap T.uint16
-
-constrainingFacet :: Binding
-constrainingFacet = define "ConstrainingFacet" $
-  see "https://www.w3.org/TR/xmlschema-2/#non-fundamental" $
-  T.wrap T.unit -- TODO: concrete facets
-
-datatype_ :: Binding
-datatype_ = define "Datatype" $ T.enum [
-  "anySimpleType",
-  "anyType",
-  "anyURI",
-  "base64Binary",
-  "boolean",
-  "byte",
-  "date",
-  "dateTime",
-  "decimal",
-  "double",
-  "duration",
-  "ENTITIES",
-  "ENTITY",
-  "float",
-  "gDay",
-  "gMonth",
-  "gMonthDay",
-  "gYear",
-  "gYearMonth",
-  "hexBinary",
-  "ID",
-  "IDREF",
-  "IDREFS",
-  "int",
-  "integer",
-  "language",
-  "long",
-  "NMTOKEN",
-  "NOTATION",
-  "name",
-  "negativeInteger",
-  "nonNegativeInteger",
-  "nonPositiveInteger",
-  "normalizedString",
-  "positiveInteger",
-  "qName",
-  "short",
-  "string",
-  "time",
-  "token",
-  "unsignedByte",
-  "unsignedInt",
-  "unsignedLong",
-  "unsignedShort"]

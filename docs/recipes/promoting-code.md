@@ -117,7 +117,7 @@ The block has these sections:
 3. **Qualified generated DSL imports** —
    `Hydra.Dsl.*` modules auto-generated from type definitions (Coders, Module, Ast, Error, Util, etc.).
    These provide constructors, accessors, and updaters for all Hydra types.
-4. **Qualified meta DSL imports** — `Hydra.Dsl.Meta.*` wrapper modules (Core, Context, Graph, Base, Terms, Types,
+4. **Qualified meta DSL imports** — `Hydra.Dsl.Meta.*` wrapper modules (Core, Graph, Base, Terms, Types,
    Variants, etc.). These re-export the generated DSLs and add custom helpers such as AsTerm-flexible overrides and
    expression conversion utilities.
 5. **Qualified library DSL imports** — `Hydra.Dsl.Meta.Lib.*` (Chars, Eithers, Equality, Lists, Literals, Logic, Maps,
@@ -579,7 +579,6 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
 
 8. **DSL module naming conventions**: Functions in DSL modules often have different names than their Haskell
    counterparts:
-   - `Monads.getState` is used for accessing `Context` state
    - `Maybes.catMaybes` doesn't exist — use `Maybes.mapMaybe ("x" ~> var "x")`
    - `Maps.values` doesn't exist — use `Maps.elems`
    - `Lists.any` doesn't exist — use foldl with `Logic.or`
@@ -994,7 +993,7 @@ console output), the I/O must be separated out first. Only the pure logic can be
    Example from `Generation.hs`:
    ```haskell
    -- Pure core (promotable):
-   generateSourceFiles :: ... -> Context -> Graph -> Either Error [(FilePath, String)]
+   generateSourceFiles :: ... -> InferenceContext -> Graph -> Either Error [(FilePath, String)]
    generateSourceFiles printDefs lang ... cx bsGraph universe mods = ...
 
    -- I/O wrapper (stays in Haskell):

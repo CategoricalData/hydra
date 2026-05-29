@@ -30,6 +30,11 @@ import qualified Hydra.Sources.Kernel.Terms.Hoisting as Hoisting
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 
 
+-- Field constructor for cases/match (Phantoms.>>: creates Field; unqualified >>: from Testing creates tuples)
+(~>:) :: AsTerm t a => Name -> t -> Field
+(~>:) = (Phantoms.>>:)
+infixr 0 ~>:
+
 ns :: ModuleName
 ns = ModuleName "hydra.test.hoisting.cases"
 
@@ -49,45 +54,10 @@ allTests = definitionInModule module_ "allTests" $
       hoistSubtermsGroup,
       hoistCaseStatementsGroup]
 
--- Helper to build names
-nm :: String -> TTerm Name
-nm s = Core.name $ Phantoms.string s
-
 -- Helper to build an empty annotation map
 emptyAnnMap :: TTerm (M.Map Name Term)
 emptyAnnMap = Phantoms.map M.empty
 
-
--- | Show a term as a string using ShowCore.term
-showTerm :: TTerm Term -> TTerm String
-showTerm t = ShowCore.term @@ t
-
--- Field constructor for cases/match (Phantoms.>>: creates Field; unqualified >>: from Testing creates tuples)
-(~>:) :: AsTerm t a => Name -> t -> Field
-(~>:) = (Phantoms.>>:)
-infixr 0 ~>:
-
--- | Predicate: never hoist anything
-hoistPredicateNothing :: TTerm (([SubtermStep], Term) -> Bool)
-hoistPredicateNothing = Phantoms.lambda "_" Phantoms.false
-
--- | Predicate: hoist list terms
-hoistPredicateLists :: TTerm (([SubtermStep], Term) -> Bool)
-hoistPredicateLists = Phantoms.lambda "pt" $
-  Phantoms.cases _Term (Pairs.second (Phantoms.var "pt")) (Just Phantoms.false) [
-    _Term_list ~>: Phantoms.lambda "_" Phantoms.true]
-
--- | Predicate: hoist function applications
-hoistPredicateApplications :: TTerm (([SubtermStep], Term) -> Bool)
-hoistPredicateApplications = Phantoms.lambda "pt" $
-  Phantoms.cases _Term (Pairs.second (Phantoms.var "pt")) (Just Phantoms.false) [
-    _Term_application ~>: Phantoms.lambda "_" Phantoms.true]
-
--- | Predicate: hoist case statements (elimination unions)
-hoistPredicateCaseStatements :: TTerm (([SubtermStep], Term) -> Bool)
-hoistPredicateCaseStatements = Phantoms.lambda "pt" $
-  Phantoms.cases _Term (Pairs.second (Phantoms.var "pt")) (Just Phantoms.false) [
-    _Term_cases ~>: Phantoms.lambda "_" Phantoms.true]
 
 -- | Universal hoistSubterms test case
 hoistCase :: String -> TTerm (([SubtermStep], Term) -> Bool) -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
@@ -101,337 +71,41 @@ hoistCaseStatementsCase cname input output = universalCase cname
   (showTerm (Hoisting.hoistCaseStatements @@ Lexical.emptyGraph @@ input))
   (showTerm output)
 
+-- | Predicate: hoist function applications
+hoistPredicateApplications :: TTerm (([SubtermStep], Term) -> Bool)
+hoistPredicateApplications = Phantoms.lambda "pt" $
+  Phantoms.cases _Term (Pairs.second (Phantoms.var "pt")) (Just Phantoms.false) [
+    _Term_application ~>: Phantoms.lambda "_" Phantoms.true]
+
+-- | Predicate: hoist case statements (elimination unions)
+hoistPredicateCaseStatements :: TTerm (([SubtermStep], Term) -> Bool)
+hoistPredicateCaseStatements = Phantoms.lambda "pt" $
+  Phantoms.cases _Term (Pairs.second (Phantoms.var "pt")) (Just Phantoms.false) [
+    _Term_cases ~>: Phantoms.lambda "_" Phantoms.true]
+
+-- | Predicate: hoist list terms
+hoistPredicateLists :: TTerm (([SubtermStep], Term) -> Bool)
+hoistPredicateLists = Phantoms.lambda "pt" $
+  Phantoms.cases _Term (Pairs.second (Phantoms.var "pt")) (Just Phantoms.false) [
+    _Term_list ~>: Phantoms.lambda "_" Phantoms.true]
+
+-- | Predicate: never hoist anything
+hoistPredicateNothing :: TTerm (([SubtermStep], Term) -> Bool)
+hoistPredicateNothing = Phantoms.lambda "_" Phantoms.false
+
 -- Helper for single-binding let
 letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term
 letExpr varName value body = lets [(nm varName, value)] body
 
+-- Helper to build names
+nm :: String -> TTerm Name
+nm s = Core.name $ Phantoms.string s
+
+-- | Show a term as a string using ShowCore.term
+showTerm :: TTerm Term -> TTerm String
+showTerm t = ShowCore.term @@ t
+
 -- Helper for multi-binding let
-
--- | Test cases for hoistSubterms
--- This function hoists subterms matching a predicate into local let bindings.
--- The predicate receives the term and returns True if the term should be hoisted.
--- For each let term, immediate subterms (binding values and body) are processed:
--- matching subterms are collected and hoisted into a local let that wraps
--- that immediate subterm.
-hoistSubtermsGroup :: TTerm TestGroup
-hoistSubtermsGroup = subgroup "hoistSubterms" [
-    -- ============================================================
-    -- Test: hoistNothing predicate (identity transformation)
-    -- The hoistNothing predicate never hoists anything.
-    -- ============================================================
-
-    hoistCase "hoistNothing: simple let unchanged"
-      hoistPredicateNothing
-      -- Input: let x = 42 in x
-      (letExpr "x" (int32 42) (var "x"))
-      -- Output: unchanged
-      (letExpr "x" (int32 42) (var "x")),
-
-    hoistCase "hoistNothing: let with list in body unchanged"
-      hoistPredicateNothing
-      -- Input: let x = 1 in [x, 2, 3]
-      (letExpr "x" (int32 1) (list [var "x", int32 2, int32 3]))
-      -- Output: unchanged - hoistNothing never hoists
-      (letExpr "x" (int32 1) (list [var "x", int32 2, int32 3])),
-
-    hoistCase "hoistNothing: let with application in body unchanged"
-      hoistPredicateNothing
-      -- Input: let f = g in f (h 42)
-      (letExpr "f" (var "g") (apply (var "f") (apply (var "h") (int32 42))))
-      -- Output: unchanged
-      (letExpr "f" (var "g") (apply (var "f") (apply (var "h") (int32 42)))),
-
-    -- ============================================================
-    -- Test: hoistLists predicate
-    -- Hoists list terms. Matching subterms within an immediate subterm
-    -- are collected and wrapped in a local let around that subterm.
-    -- ============================================================
-
-    hoistCase "hoistLists: list in body is hoisted into local let"
-      hoistPredicateLists
-      -- Input: let x = 1 in f [1, 2, 3]
-      (letExpr "x" (int32 1) (apply (var "f") (list [int32 1, int32 2, int32 3])))
-      -- Output: body is wrapped in local let with hoisted list
-      (letExpr "x" (int32 1)
-        (letExpr "_hoist_x_body_1" (list [int32 1, int32 2, int32 3])
-          (apply (var "f") (var "_hoist_x_body_1")))),
-
-    hoistCase "hoistLists: multiple lists in body are hoisted together"
-      hoistPredicateLists
-      -- Input: let x = 1 in pair [1, 2] [3, 4]
-      (letExpr "x" (int32 1)
-        (apply (apply (var "pair") (list [int32 1, int32 2]))
-                                         (list [int32 3, int32 4])))
-      -- Output: body is wrapped in local let with both hoisted lists
-      (letExpr "x" (int32 1)
-        (lets [
-          (nm "_hoist_x_body_1", list [int32 1, int32 2]),
-          (nm "_hoist_x_body_2", list [int32 3, int32 4])]
-          (apply (apply (var "pair") (var "_hoist_x_body_1")) (var "_hoist_x_body_2")))),
-
-    hoistCase "hoistLists: list in binding value is hoisted into local let"
-      hoistPredicateLists
-      -- Input: let x = f [1, 2] in x
-      (letExpr "x" (apply (var "f") (list [int32 1, int32 2])) (var "x"))
-      -- Output: binding value is wrapped in local let
-      (letExpr "x"
-        (letExpr "_hoist_x_1" (list [int32 1, int32 2])
-          (apply (var "f") (var "_hoist_x_1")))
-        (var "x")),
-
-    hoistCase "hoistLists: nested lists hoisted from inside out"
-      hoistPredicateLists
-      -- Input: let x = 1 in f [[1, 2], 3]
-      (letExpr "x" (int32 1)
-        (apply (var "f") (list [list [int32 1, int32 2], int32 3])))
-      -- Output: inner list hoisted first, then outer list
-      (letExpr "x" (int32 1)
-        (lets [
-          (nm "_hoist_x_body_1", list [int32 1, int32 2]),
-          (nm "_hoist_x_body_2", list [var "_hoist_x_body_1", int32 3])]
-          (apply (var "f") (var "_hoist_x_body_2")))),
-
-    -- ============================================================
-    -- Test: hoistApplications predicate
-    -- Hoists function applications.
-    -- ============================================================
-
-    hoistCase "hoistApplications: application in list element is hoisted"
-      hoistPredicateApplications
-      -- Input: let x = 1 in [f x, y]
-      (letExpr "x" (int32 1)
-        (list [apply (var "f") (var "x"), var "y"]))
-      -- Output: body is wrapped in local let
-      (letExpr "x" (int32 1)
-        (letExpr "_hoist_x_body_1" (apply (var "f") (var "x"))
-          (list [var "_hoist_x_body_1", var "y"]))),
-
-    hoistCase "hoistApplications: application in record field is hoisted"
-      hoistPredicateApplications
-      -- Input: let x = 1 in {value: f x}
-      (letExpr "x" (int32 1)
-        (record (nm "Data") [(nm "value", apply (var "f") (var "x"))]))
-      -- Output: body is wrapped in local let
-      (letExpr "x" (int32 1)
-        (letExpr "_hoist_x_body_1" (apply (var "f") (var "x"))
-          (record (nm "Data") [(nm "value", var "_hoist_x_body_1")]))),
-
-    hoistCase "hoistApplications: nested applications hoisted from inside out"
-      hoistPredicateApplications
-      -- Input: let x = 1 in [f (g x)]
-      (letExpr "x" (int32 1)
-        (list [apply (var "f") (apply (var "g") (var "x"))]))
-      -- Output: inner application hoisted first, then outer
-      (letExpr "x" (int32 1)
-        (lets [
-          (nm "_hoist_x_body_1", apply (var "g") (var "x")),
-          (nm "_hoist_x_body_2", apply (var "f") (var "_hoist_x_body_1"))]
-          (list [var "_hoist_x_body_2"]))),
-
-    -- ============================================================
-    -- Test: hoistCaseStatements predicate
-    -- Hoists case/match statements.
-    -- ============================================================
-
-    hoistCase "hoistCaseStatements: case in application argument is hoisted"
-      hoistPredicateCaseStatements
-      -- Input: let x = just 42 in f (match x with just y -> y | nothing -> 0)
-      (letExpr "x" (optional $ just $ int32 42)
-        (apply (var "f")
-          (match (nm "Optional") (just $ var "x")
-            [(nm "just", lambda "y" (var "y")),
-             (nm "nothing", int32 0)])))
-      -- Output: body is wrapped in local let with hoisted case
-      (letExpr "x" (optional $ just $ int32 42)
-        (letExpr "_hoist_x_body_1"
-          (match (nm "Optional") (just $ var "x")
-            [(nm "just", lambda "y" (var "y")),
-             (nm "nothing", int32 0)])
-          (apply (var "f") (var "_hoist_x_body_1")))),
-
-    hoistCase "hoistCaseStatements: case in list element is hoisted"
-      hoistPredicateCaseStatements
-      -- Input: let x = 1 in [match y with ok -> x | err -> 0]
-      (letExpr "x" (int32 1)
-        (list [match (nm "Result") (just $ var "y")
-          [(nm "ok", var "x"),
-           (nm "err", int32 0)]]))
-      -- Output: body is wrapped in local let
-      (letExpr "x" (int32 1)
-        (letExpr "_hoist_x_body_1"
-          (match (nm "Result") (just $ var "y")
-            [(nm "ok", var "x"),
-             (nm "err", int32 0)])
-          (list [var "_hoist_x_body_1"]))),
-
-    -- ============================================================
-    -- Test: Nested let expressions
-    -- Each let is processed independently; inner lets are processed first.
-    -- ============================================================
-
-    hoistCase "hoistLists: nested let - inner let processed independently"
-      hoistPredicateLists
-      -- Input: let x = 1 in (let y = 2 in f [x, y])
-      (letExpr "x" (int32 1)
-        (letExpr "y" (int32 2)
-          (apply (var "f") (list [var "x", var "y"]))))
-      -- Output: the list is hoisted in the inner let's body
-      (letExpr "x" (int32 1)
-        (letExpr "y" (int32 2)
-          (letExpr "_hoist_y_body_1" (list [var "x", var "y"])
-            (apply (var "f") (var "_hoist_y_body_1"))))),
-
-    -- ============================================================
-    -- Test: Non-let terms are unchanged
-    -- hoistSubterms only processes let expressions.
-    -- ============================================================
-
-    hoistCase "hoistLists: non-let term is unchanged"
-      hoistPredicateLists
-      -- Input: f [1, 2, 3] (no enclosing let)
-      (apply (var "f") (list [int32 1, int32 2, int32 3]))
-      -- Output: unchanged - no let to hoist into
-      (apply (var "f") (list [int32 1, int32 2, int32 3])),
-
-    hoistCase "hoistApplications: bare application unchanged"
-      hoistPredicateApplications
-      -- Input: f (g x) (no enclosing let)
-      (apply (var "f") (apply (var "g") (var "x")))
-      -- Output: unchanged
-      (apply (var "f") (apply (var "g") (var "x"))),
-
-    -- ============================================================
-    -- Test: Lambda-bound variable capture during hoisting
-    -- When hoisting a term that contains free variables which are
-    -- lambda-bound at an enclosing scope within the immediate subterm,
-    -- those variables must be captured: the hoisted binding is wrapped
-    -- in lambdas for those variables, and the reference is replaced
-    -- with an application of those variables.
-    -- ============================================================
-
-    -- Case 1: Hoisted term refers to let-bound variable (no capture needed)
-    hoistCase "hoistLists: term referring to let-bound variable needs no capture"
-      hoistPredicateLists
-      -- Input: let x = 1 in f [x, 2]
-      -- The list refers to x which is let-bound, not lambda-bound
-      (letExpr "x" (int32 1)
-        (apply (var "f") (list [var "x", int32 2])))
-      -- Output: list is hoisted without any lambda wrapping
-      (letExpr "x" (int32 1)
-        (letExpr "_hoist_x_body_1" (list [var "x", int32 2])
-          (apply (var "f") (var "_hoist_x_body_1")))),
-
-    -- Case 2: Hoisted term refers to lambda-bound variable ABOVE the let (no capture needed)
-    hoistCase "hoistLists: term referring to lambda above let needs no capture"
-      hoistPredicateLists
-      -- Input: \y -> let x = 1 in f [y, x]
-      -- y is lambda-bound above the let, so it's not in the immediate subterm's scope
-      (lambda "y"
-        (letExpr "x" (int32 1)
-          (apply (var "f") (list [var "y", var "x"]))))
-      -- Output: list is hoisted without lambda wrapping (y was bound before let)
-      (lambda "y"
-        (letExpr "x" (int32 1)
-          (letExpr "_hoist_x_body_1" (list [var "y", var "x"])
-            (apply (var "f") (var "_hoist_x_body_1"))))),
-
-    -- Case 3: Lambda-bound variable between let and hoisted term, but NOT free in hoisted term
-    hoistCase "hoistLists: lambda-bound var not free in hoisted term needs no capture"
-      hoistPredicateLists
-      -- Input: let x = 1 in (\y -> f [x, 2])
-      -- y is lambda-bound between let and list, but y does not appear in the list [x, 2]
-      -- So [x, 2] should be hoisted without capturing y
-      (letExpr "x" (int32 1)
-        (lambda "y" (apply (var "f") (list [var "x", int32 2]))))
-      -- Output: list [x, 2] is hoisted without lambda wrapping for y (y not free in list)
-      (letExpr "x" (int32 1)
-        (letExpr "_hoist_x_body_1" (list [var "x", int32 2])
-          (lambda "y" (apply (var "f") (var "_hoist_x_body_1"))))),
-
-    -- Case 4: Lambda-bound variable between let and hoisted term, IS free in hoisted term
-    hoistCase "hoistLists: lambda-bound var free in hoisted term requires capture"
-      hoistPredicateLists
-      -- Input: let x = 1 in (\y -> f [x, y])
-      -- y is lambda-bound between let and list, and y appears in the list [x, y]
-      -- So [x, y] should be hoisted with y captured
-      (letExpr "x" (int32 1)
-        (lambda "y" (apply (var "f") (list [var "x", var "y"]))))
-      -- Output: _hoist_x_body_1 = \y -> [x, y], reference becomes _hoist_x_body_1 y
-      (letExpr "x" (int32 1)
-        (letExpr "_hoist_x_body_1" (lambda "y" (list [var "x", var "y"]))
-          (lambda "y" (apply (var "f") (apply (var "_hoist_x_body_1") (var "y")))))),
-
-    -- Case 5: Multiple lambda-bound variables, only some free in hoisted term
-    hoistCase "hoistLists: only free lambda-bound vars are captured"
-      hoistPredicateLists
-      -- Input: let x = 1 in (\a -> \b -> f [x, b])
-      -- Both a and b are lambda-bound between let and list
-      -- But only b appears in the list [x, b], so only b is captured
-      (letExpr "x" (int32 1)
-        (lambda "a" (lambda "b" (apply (var "f") (list [var "x", var "b"])))))
-      -- Output: _hoist_x_body_1 = \b -> [x, b], reference becomes _hoist_x_body_1 b
-      (letExpr "x" (int32 1)
-        (letExpr "_hoist_x_body_1" (lambda "b" (list [var "x", var "b"]))
-          (lambda "a" (lambda "b" (apply (var "f") (apply (var "_hoist_x_body_1") (var "b"))))))),
-
-    -- ============================================================
-    -- Test: Stable naming for sibling immediate subterms
-    -- Each sibling uses its parent binding name as a prefix, ensuring
-    -- that changes to one sibling don't affect the names in another.
-    -- ============================================================
-
-    hoistCase "hoistLists: stable naming for binding and body"
-      hoistPredicateLists
-      -- Input: let x = f [1, 2] in g [3, 4]
-      -- Both binding value and body have lists to hoist
-      (letExpr "x" (apply (var "f") (list [int32 1, int32 2]))
-                   (apply (var "g") (list [int32 3, int32 4])))
-      -- Output: binding uses _hoist_x_1, body uses _hoist_x_body_1
-      (letExpr "x"
-        (letExpr "_hoist_x_1" (list [int32 1, int32 2])
-          (apply (var "f") (var "_hoist_x_1")))
-        (letExpr "_hoist_x_body_1" (list [int32 3, int32 4])
-          (apply (var "g") (var "_hoist_x_body_1")))),
-
-    hoistCase "hoistLists: stable naming for multiple bindings"
-      hoistPredicateLists
-      -- Input: let x = f [1]; y = g [2] in x
-      (lets [
-        (nm "x", apply (var "f") (list [int32 1])),
-        (nm "y", apply (var "g") (list [int32 2]))]
-        (var "x"))
-      -- Output: each binding uses its own name as prefix (_hoist_x_1, _hoist_y_1)
-      (lets [
-        (nm "x", letExpr "_hoist_x_1" (list [int32 1])
-                (apply (var "f") (var "_hoist_x_1"))),
-        (nm "y", letExpr "_hoist_y_1" (list [int32 2])
-                (apply (var "g") (var "_hoist_y_1")))]
-        (var "x")),
-
-    -- ============================================================
-    -- Test: Polymorphic recursion - this is the key test case
-    -- The new local-let approach avoids polymorphic mutual recursion
-    -- by keeping hoisted bindings local to each immediate subterm.
-    -- ============================================================
-
-    hoistCase "hoistLists: polymorphic binding with self-reference below hoisted term"
-      hoistPredicateLists
-      -- Input: let f = \x -> pair (f x) [x, 1] in f 42
-      -- f is polymorphic and has a self-reference, with a list below it
-      -- With sibling hoisting, this would create: let f = ...; _hoist_f_1 = [x, 1] in ...
-      -- which causes polymorphic mutual recursion issues.
-      -- With local hoisting, we get: let f = (let _hoist_f_1 = ... in ...) in ...
-      -- which is polymorphic nesting (OK) rather than mutual recursion.
-      (letExpr "f"
-        (lambda "x" (apply (apply (var "pair") (apply (var "f") (var "x")))
-                               (list [var "x", int32 1])))
-        (apply (var "f") (int32 42)))
-      -- Output: the list is hoisted into a local let within f's binding value
-      (letExpr "f"
-        (letExpr "_hoist_f_1" (lambda "x" (list [var "x", int32 1]))
-          (lambda "x" (apply (apply (var "pair") (apply (var "f") (var "x")))
-                                 (apply (var "_hoist_f_1") (var "x")))))
-        (apply (var "f") (int32 42)))]
 
 -- | Test cases for hoistCaseStatements
 -- This function hoists case statements (eliminations) that are NOT at "top level".
@@ -1297,3 +971,329 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
                (nm "nothing", int32 0)])
             (var "a")))
         (var "f"))]
+
+-- | Test cases for hoistSubterms
+-- This function hoists subterms matching a predicate into local let bindings.
+-- The predicate receives the term and returns True if the term should be hoisted.
+-- For each let term, immediate subterms (binding values and body) are processed:
+-- matching subterms are collected and hoisted into a local let that wraps
+-- that immediate subterm.
+hoistSubtermsGroup :: TTerm TestGroup
+hoistSubtermsGroup = subgroup "hoistSubterms" [
+    -- ============================================================
+    -- Test: hoistNothing predicate (identity transformation)
+    -- The hoistNothing predicate never hoists anything.
+    -- ============================================================
+
+    hoistCase "hoistNothing: simple let unchanged"
+      hoistPredicateNothing
+      -- Input: let x = 42 in x
+      (letExpr "x" (int32 42) (var "x"))
+      -- Output: unchanged
+      (letExpr "x" (int32 42) (var "x")),
+
+    hoistCase "hoistNothing: let with list in body unchanged"
+      hoistPredicateNothing
+      -- Input: let x = 1 in [x, 2, 3]
+      (letExpr "x" (int32 1) (list [var "x", int32 2, int32 3]))
+      -- Output: unchanged - hoistNothing never hoists
+      (letExpr "x" (int32 1) (list [var "x", int32 2, int32 3])),
+
+    hoistCase "hoistNothing: let with application in body unchanged"
+      hoistPredicateNothing
+      -- Input: let f = g in f (h 42)
+      (letExpr "f" (var "g") (apply (var "f") (apply (var "h") (int32 42))))
+      -- Output: unchanged
+      (letExpr "f" (var "g") (apply (var "f") (apply (var "h") (int32 42)))),
+
+    -- ============================================================
+    -- Test: hoistLists predicate
+    -- Hoists list terms. Matching subterms within an immediate subterm
+    -- are collected and wrapped in a local let around that subterm.
+    -- ============================================================
+
+    hoistCase "hoistLists: list in body is hoisted into local let"
+      hoistPredicateLists
+      -- Input: let x = 1 in f [1, 2, 3]
+      (letExpr "x" (int32 1) (apply (var "f") (list [int32 1, int32 2, int32 3])))
+      -- Output: body is wrapped in local let with hoisted list
+      (letExpr "x" (int32 1)
+        (letExpr "_hoist_x_body_1" (list [int32 1, int32 2, int32 3])
+          (apply (var "f") (var "_hoist_x_body_1")))),
+
+    hoistCase "hoistLists: multiple lists in body are hoisted together"
+      hoistPredicateLists
+      -- Input: let x = 1 in pair [1, 2] [3, 4]
+      (letExpr "x" (int32 1)
+        (apply (apply (var "pair") (list [int32 1, int32 2]))
+                                         (list [int32 3, int32 4])))
+      -- Output: body is wrapped in local let with both hoisted lists
+      (letExpr "x" (int32 1)
+        (lets [
+          (nm "_hoist_x_body_1", list [int32 1, int32 2]),
+          (nm "_hoist_x_body_2", list [int32 3, int32 4])]
+          (apply (apply (var "pair") (var "_hoist_x_body_1")) (var "_hoist_x_body_2")))),
+
+    hoistCase "hoistLists: list in binding value is hoisted into local let"
+      hoistPredicateLists
+      -- Input: let x = f [1, 2] in x
+      (letExpr "x" (apply (var "f") (list [int32 1, int32 2])) (var "x"))
+      -- Output: binding value is wrapped in local let
+      (letExpr "x"
+        (letExpr "_hoist_x_1" (list [int32 1, int32 2])
+          (apply (var "f") (var "_hoist_x_1")))
+        (var "x")),
+
+    hoistCase "hoistLists: nested lists hoisted from inside out"
+      hoistPredicateLists
+      -- Input: let x = 1 in f [[1, 2], 3]
+      (letExpr "x" (int32 1)
+        (apply (var "f") (list [list [int32 1, int32 2], int32 3])))
+      -- Output: inner list hoisted first, then outer list
+      (letExpr "x" (int32 1)
+        (lets [
+          (nm "_hoist_x_body_1", list [int32 1, int32 2]),
+          (nm "_hoist_x_body_2", list [var "_hoist_x_body_1", int32 3])]
+          (apply (var "f") (var "_hoist_x_body_2")))),
+
+    -- ============================================================
+    -- Test: hoistApplications predicate
+    -- Hoists function applications.
+    -- ============================================================
+
+    hoistCase "hoistApplications: application in list element is hoisted"
+      hoistPredicateApplications
+      -- Input: let x = 1 in [f x, y]
+      (letExpr "x" (int32 1)
+        (list [apply (var "f") (var "x"), var "y"]))
+      -- Output: body is wrapped in local let
+      (letExpr "x" (int32 1)
+        (letExpr "_hoist_x_body_1" (apply (var "f") (var "x"))
+          (list [var "_hoist_x_body_1", var "y"]))),
+
+    hoistCase "hoistApplications: application in record field is hoisted"
+      hoistPredicateApplications
+      -- Input: let x = 1 in {value: f x}
+      (letExpr "x" (int32 1)
+        (record (nm "Data") [(nm "value", apply (var "f") (var "x"))]))
+      -- Output: body is wrapped in local let
+      (letExpr "x" (int32 1)
+        (letExpr "_hoist_x_body_1" (apply (var "f") (var "x"))
+          (record (nm "Data") [(nm "value", var "_hoist_x_body_1")]))),
+
+    hoistCase "hoistApplications: nested applications hoisted from inside out"
+      hoistPredicateApplications
+      -- Input: let x = 1 in [f (g x)]
+      (letExpr "x" (int32 1)
+        (list [apply (var "f") (apply (var "g") (var "x"))]))
+      -- Output: inner application hoisted first, then outer
+      (letExpr "x" (int32 1)
+        (lets [
+          (nm "_hoist_x_body_1", apply (var "g") (var "x")),
+          (nm "_hoist_x_body_2", apply (var "f") (var "_hoist_x_body_1"))]
+          (list [var "_hoist_x_body_2"]))),
+
+    -- ============================================================
+    -- Test: hoistCaseStatements predicate
+    -- Hoists case/match statements.
+    -- ============================================================
+
+    hoistCase "hoistCaseStatements: case in application argument is hoisted"
+      hoistPredicateCaseStatements
+      -- Input: let x = just 42 in f (match x with just y -> y | nothing -> 0)
+      (letExpr "x" (optional $ just $ int32 42)
+        (apply (var "f")
+          (match (nm "Optional") (just $ var "x")
+            [(nm "just", lambda "y" (var "y")),
+             (nm "nothing", int32 0)])))
+      -- Output: body is wrapped in local let with hoisted case
+      (letExpr "x" (optional $ just $ int32 42)
+        (letExpr "_hoist_x_body_1"
+          (match (nm "Optional") (just $ var "x")
+            [(nm "just", lambda "y" (var "y")),
+             (nm "nothing", int32 0)])
+          (apply (var "f") (var "_hoist_x_body_1")))),
+
+    hoistCase "hoistCaseStatements: case in list element is hoisted"
+      hoistPredicateCaseStatements
+      -- Input: let x = 1 in [match y with ok -> x | err -> 0]
+      (letExpr "x" (int32 1)
+        (list [match (nm "Result") (just $ var "y")
+          [(nm "ok", var "x"),
+           (nm "err", int32 0)]]))
+      -- Output: body is wrapped in local let
+      (letExpr "x" (int32 1)
+        (letExpr "_hoist_x_body_1"
+          (match (nm "Result") (just $ var "y")
+            [(nm "ok", var "x"),
+             (nm "err", int32 0)])
+          (list [var "_hoist_x_body_1"]))),
+
+    -- ============================================================
+    -- Test: Nested let expressions
+    -- Each let is processed independently; inner lets are processed first.
+    -- ============================================================
+
+    hoistCase "hoistLists: nested let - inner let processed independently"
+      hoistPredicateLists
+      -- Input: let x = 1 in (let y = 2 in f [x, y])
+      (letExpr "x" (int32 1)
+        (letExpr "y" (int32 2)
+          (apply (var "f") (list [var "x", var "y"]))))
+      -- Output: the list is hoisted in the inner let's body
+      (letExpr "x" (int32 1)
+        (letExpr "y" (int32 2)
+          (letExpr "_hoist_y_body_1" (list [var "x", var "y"])
+            (apply (var "f") (var "_hoist_y_body_1"))))),
+
+    -- ============================================================
+    -- Test: Non-let terms are unchanged
+    -- hoistSubterms only processes let expressions.
+    -- ============================================================
+
+    hoistCase "hoistLists: non-let term is unchanged"
+      hoistPredicateLists
+      -- Input: f [1, 2, 3] (no enclosing let)
+      (apply (var "f") (list [int32 1, int32 2, int32 3]))
+      -- Output: unchanged - no let to hoist into
+      (apply (var "f") (list [int32 1, int32 2, int32 3])),
+
+    hoistCase "hoistApplications: bare application unchanged"
+      hoistPredicateApplications
+      -- Input: f (g x) (no enclosing let)
+      (apply (var "f") (apply (var "g") (var "x")))
+      -- Output: unchanged
+      (apply (var "f") (apply (var "g") (var "x"))),
+
+    -- ============================================================
+    -- Test: Lambda-bound variable capture during hoisting
+    -- When hoisting a term that contains free variables which are
+    -- lambda-bound at an enclosing scope within the immediate subterm,
+    -- those variables must be captured: the hoisted binding is wrapped
+    -- in lambdas for those variables, and the reference is replaced
+    -- with an application of those variables.
+    -- ============================================================
+
+    -- Case 1: Hoisted term refers to let-bound variable (no capture needed)
+    hoistCase "hoistLists: term referring to let-bound variable needs no capture"
+      hoistPredicateLists
+      -- Input: let x = 1 in f [x, 2]
+      -- The list refers to x which is let-bound, not lambda-bound
+      (letExpr "x" (int32 1)
+        (apply (var "f") (list [var "x", int32 2])))
+      -- Output: list is hoisted without any lambda wrapping
+      (letExpr "x" (int32 1)
+        (letExpr "_hoist_x_body_1" (list [var "x", int32 2])
+          (apply (var "f") (var "_hoist_x_body_1")))),
+
+    -- Case 2: Hoisted term refers to lambda-bound variable ABOVE the let (no capture needed)
+    hoistCase "hoistLists: term referring to lambda above let needs no capture"
+      hoistPredicateLists
+      -- Input: \y -> let x = 1 in f [y, x]
+      -- y is lambda-bound above the let, so it's not in the immediate subterm's scope
+      (lambda "y"
+        (letExpr "x" (int32 1)
+          (apply (var "f") (list [var "y", var "x"]))))
+      -- Output: list is hoisted without lambda wrapping (y was bound before let)
+      (lambda "y"
+        (letExpr "x" (int32 1)
+          (letExpr "_hoist_x_body_1" (list [var "y", var "x"])
+            (apply (var "f") (var "_hoist_x_body_1"))))),
+
+    -- Case 3: Lambda-bound variable between let and hoisted term, but NOT free in hoisted term
+    hoistCase "hoistLists: lambda-bound var not free in hoisted term needs no capture"
+      hoistPredicateLists
+      -- Input: let x = 1 in (\y -> f [x, 2])
+      -- y is lambda-bound between let and list, but y does not appear in the list [x, 2]
+      -- So [x, 2] should be hoisted without capturing y
+      (letExpr "x" (int32 1)
+        (lambda "y" (apply (var "f") (list [var "x", int32 2]))))
+      -- Output: list [x, 2] is hoisted without lambda wrapping for y (y not free in list)
+      (letExpr "x" (int32 1)
+        (letExpr "_hoist_x_body_1" (list [var "x", int32 2])
+          (lambda "y" (apply (var "f") (var "_hoist_x_body_1"))))),
+
+    -- Case 4: Lambda-bound variable between let and hoisted term, IS free in hoisted term
+    hoistCase "hoistLists: lambda-bound var free in hoisted term requires capture"
+      hoistPredicateLists
+      -- Input: let x = 1 in (\y -> f [x, y])
+      -- y is lambda-bound between let and list, and y appears in the list [x, y]
+      -- So [x, y] should be hoisted with y captured
+      (letExpr "x" (int32 1)
+        (lambda "y" (apply (var "f") (list [var "x", var "y"]))))
+      -- Output: _hoist_x_body_1 = \y -> [x, y], reference becomes _hoist_x_body_1 y
+      (letExpr "x" (int32 1)
+        (letExpr "_hoist_x_body_1" (lambda "y" (list [var "x", var "y"]))
+          (lambda "y" (apply (var "f") (apply (var "_hoist_x_body_1") (var "y")))))),
+
+    -- Case 5: Multiple lambda-bound variables, only some free in hoisted term
+    hoistCase "hoistLists: only free lambda-bound vars are captured"
+      hoistPredicateLists
+      -- Input: let x = 1 in (\a -> \b -> f [x, b])
+      -- Both a and b are lambda-bound between let and list
+      -- But only b appears in the list [x, b], so only b is captured
+      (letExpr "x" (int32 1)
+        (lambda "a" (lambda "b" (apply (var "f") (list [var "x", var "b"])))))
+      -- Output: _hoist_x_body_1 = \b -> [x, b], reference becomes _hoist_x_body_1 b
+      (letExpr "x" (int32 1)
+        (letExpr "_hoist_x_body_1" (lambda "b" (list [var "x", var "b"]))
+          (lambda "a" (lambda "b" (apply (var "f") (apply (var "_hoist_x_body_1") (var "b"))))))),
+
+    -- ============================================================
+    -- Test: Stable naming for sibling immediate subterms
+    -- Each sibling uses its parent binding name as a prefix, ensuring
+    -- that changes to one sibling don't affect the names in another.
+    -- ============================================================
+
+    hoistCase "hoistLists: stable naming for binding and body"
+      hoistPredicateLists
+      -- Input: let x = f [1, 2] in g [3, 4]
+      -- Both binding value and body have lists to hoist
+      (letExpr "x" (apply (var "f") (list [int32 1, int32 2]))
+                   (apply (var "g") (list [int32 3, int32 4])))
+      -- Output: binding uses _hoist_x_1, body uses _hoist_x_body_1
+      (letExpr "x"
+        (letExpr "_hoist_x_1" (list [int32 1, int32 2])
+          (apply (var "f") (var "_hoist_x_1")))
+        (letExpr "_hoist_x_body_1" (list [int32 3, int32 4])
+          (apply (var "g") (var "_hoist_x_body_1")))),
+
+    hoistCase "hoistLists: stable naming for multiple bindings"
+      hoistPredicateLists
+      -- Input: let x = f [1]; y = g [2] in x
+      (lets [
+        (nm "x", apply (var "f") (list [int32 1])),
+        (nm "y", apply (var "g") (list [int32 2]))]
+        (var "x"))
+      -- Output: each binding uses its own name as prefix (_hoist_x_1, _hoist_y_1)
+      (lets [
+        (nm "x", letExpr "_hoist_x_1" (list [int32 1])
+                (apply (var "f") (var "_hoist_x_1"))),
+        (nm "y", letExpr "_hoist_y_1" (list [int32 2])
+                (apply (var "g") (var "_hoist_y_1")))]
+        (var "x")),
+
+    -- ============================================================
+    -- Test: Polymorphic recursion - this is the key test case
+    -- The new local-let approach avoids polymorphic mutual recursion
+    -- by keeping hoisted bindings local to each immediate subterm.
+    -- ============================================================
+
+    hoistCase "hoistLists: polymorphic binding with self-reference below hoisted term"
+      hoistPredicateLists
+      -- Input: let f = \x -> pair (f x) [x, 1] in f 42
+      -- f is polymorphic and has a self-reference, with a list below it
+      -- With sibling hoisting, this would create: let f = ...; _hoist_f_1 = [x, 1] in ...
+      -- which causes polymorphic mutual recursion issues.
+      -- With local hoisting, we get: let f = (let _hoist_f_1 = ... in ...) in ...
+      -- which is polymorphic nesting (OK) rather than mutual recursion.
+      (letExpr "f"
+        (lambda "x" (apply (apply (var "pair") (apply (var "f") (var "x")))
+                               (list [var "x", int32 1])))
+        (apply (var "f") (int32 42)))
+      -- Output: the list is hoisted into a local let within f's binding value
+      (letExpr "f"
+        (letExpr "_hoist_f_1" (lambda "x" (list [var "x", int32 1]))
+          (lambda "x" (apply (apply (var "pair") (apply (var "f") (var "x")))
+                                 (apply (var "_hoist_f_1") (var "x")))))
+        (apply (var "f") (int32 42)))]
