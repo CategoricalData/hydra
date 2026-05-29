@@ -1,5 +1,5 @@
 ---
-description: Run bin/sync-java.sh (--hosts java --targets java). Regenerates Java kernel + coder + Java host's own outputs.
+description: Run bin/sync-java.sh (--hosts java --targets java). Regenerates Java kernel + coder + Java host's own outputs. Does NOT run target tests — use /test java for that.
 allowed-tools:
   - Bash(bin/sync-java.sh*)
   - Read
@@ -19,9 +19,8 @@ the Java kernel, Java coder, and any Java-side derived sources into
 `dist/java/hydra-{kernel,java,pg,rdf}/`.
 
 This script does **not** run the Java test suite. To validate the
-generated code, run `heads/java/bin/test-distribution.sh hydra-kernel`
-or do a `/bootstrap java`. (Pending #387: `/test java` will roll
-sync + tests into one step.)
+generated code, use `/test java` (which rolls sync + tests into one
+step) or `/bootstrap java`.
 
 > **Caveat.** This skill is narrow — `dist/java/` will contain only
 > `hydra-{kernel,pg,rdf,java}/` afterward, not `dist/java/hydra-{haskell,python,scala,lisp,typescript}/`.

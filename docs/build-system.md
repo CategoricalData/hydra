@@ -127,9 +127,12 @@ the re-assemble block above.
 
 `bin/sync.sh` runs Phases 0–5 over the matrix the caller specifies via `--hosts` and
 `--targets`. `bin/sync.sh` does NOT run target-language tests; only Haskell `stack test`
-is invoked (via `sync-haskell.sh`'s Step 6). To validate a target's runtime, run that
-head's own `bin/run-tests.sh` or `bin/test-distribution.sh`, or use
-`bin/sync-packages.sh` which adds a Phase 3 test gate.
+is invoked (via `sync-haskell.sh`'s Step 6). To validate a target's runtime, run
+**`bin/test.sh`** (or `/test` from a Claude session — same scoping vocabulary as `/sync`),
+which pre-syncs and then invokes each requested target's `heads/<lang>/bin/test-distribution.sh`.
+You can also run a single per-target tester directly (e.g.
+`heads/python/bin/test-distribution.sh hydra-kernel`) or use `bin/sync-packages.sh`,
+which adds a Phase 3 test gate.
 
 ### Phase 1's memory envelope
 
