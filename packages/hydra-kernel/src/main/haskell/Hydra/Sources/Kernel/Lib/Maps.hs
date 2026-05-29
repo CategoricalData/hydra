@@ -21,33 +21,33 @@ module_ = Module {
             moduleDescription = Just "Primitives in the hydra.lib.maps namespace."}
   where
     definitions = [
-      primNoDef "alter"           "Alter a value at a key using a function which sees the optional current value." alterSig,
-      primNoDef "bimap"           "Map functions over both the keys and values of a map." bimapSig,
-      primNoDef "delete"          "Remove a key from a map." deleteSig,
-      primNoDef "elems"           "Return the values of a map (in key order)." elemsSig,
-      primNoDef "empty"           "The empty map." emptySig,
-      primNoDef "filter"          "Filter a map by value." filterSig,
-      primNoDef "filterWithKey"   "Filter a map by key and value." filterWithKeySig,
-      primNoDef "findWithDefault" "Look up a value with a default if the key is absent." findWithDefaultSig,
-      primNoDef "fromList"        "Build a map from a list of key-value pairs." fromListSig,
-      primNoDef "insert"          "Insert a key-value pair into a map." insertSig,
-      primNoDef "keys"            "Return the keys of a map (in key order)." keysSig,
-      primNoDef "lookup"          "Look up a value in a map by key, returning Nothing if absent." lookupSig,
-      primNoDef "map"             "Map a function over the values of a map." mapSig,
-      primNoDef "mapKeys"         "Map a function over the keys of a map." mapKeysSig,
-      primNoDef "member"          "Test whether a key is present in a map." memberSig,
-      primNoDef "null"            "Test whether a map is empty." nullSig,
-      primNoDef "singleton"       "Construct a map with a single key-value pair." singletonSig,
-      primNoDef "size"            "Return the number of key-value pairs in a map." sizeSig,
-      primNoDef "toList"          "Convert a map to a list of key-value pairs (in key order)." toListSig,
-      primNoDef "union"           "Compute the union of two maps; the first map's bindings take precedence on key collision." unionSig]
+      primNoDef "alter"           "Alter a value at a key using a function which sees the optional current value." alterSig Nothing,
+      primNoDef "bimap"           "Map functions over both the keys and values of a map." bimapSig Nothing,
+      primNoDef "delete"          "Remove a key from a map." deleteSig Nothing,
+      primNoDef "elems"           "Return the values of a map (in key order)." elemsSig Nothing,
+      primNoDef "empty"           "The empty map." emptySig Nothing,
+      primNoDef "filter"          "Filter a map by value." filterSig Nothing,
+      primNoDef "filterWithKey"   "Filter a map by key and value." filterWithKeySig Nothing,
+      primNoDef "findWithDefault" "Look up a value with a default if the key is absent." findWithDefaultSig Nothing,
+      primNoDef "fromList"        "Build a map from a list of key-value pairs." fromListSig Nothing,
+      primNoDef "insert"          "Insert a key-value pair into a map." insertSig Nothing,
+      primNoDef "keys"            "Return the keys of a map (in key order)." keysSig Nothing,
+      primNoDef "lookup"          "Look up a value in a map by key, returning Nothing if absent." lookupSig Nothing,
+      primNoDef "map"             "Map a function over the values of a map." mapSig Nothing,
+      primNoDef "mapKeys"         "Map a function over the keys of a map." mapKeysSig Nothing,
+      primNoDef "member"          "Test whether a key is present in a map." memberSig Nothing,
+      primNoDef "null"            "Test whether a map is empty." nullSig Nothing,
+      primNoDef "singleton"       "Construct a map with a single key-value pair." singletonSig Nothing,
+      primNoDef "size"            "Return the number of key-value pairs in a map." sizeSig Nothing,
+      primNoDef "toList"          "Convert a map to a list of key-value pairs (in key order)." toListSig Nothing,
+      primNoDef "union"           "Compute the union of two maps; the first map's bindings take precedence on key collision." unionSig Nothing]
 
 mp :: Type -> Type -> Type
 mp = Types.map
 
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+primNoDef :: String -> String -> TermSignature -> Maybe String -> Definition
+primNoDef localName description s comments =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName)) comments
 
 -- Type-var shortcuts.
 tk, tk1, tk2, tv, tv1, tv2 :: Type
