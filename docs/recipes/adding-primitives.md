@@ -89,13 +89,15 @@ primitives exist, their signatures, and their default implementations.
 
 | Concern | Location |
 |---------|----------|
-| Universal primitive metadata (name, description, signature, isPure, isTotal, defaultImplementation) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs` |
-| Primitive-name constants (`_logic_and`, `_chars_isAlphaNum`, ...) for use in source code | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Names.hs` |
-| Native Haskell implementation | `heads/haskell/src/main/haskell/Hydra/Lib/<Sub>.hs` |
+| Universal primitive metadata (name, type signature, description, purity flags, default implementation) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs` |
+| Interpreter-friendly term-level reference impls (for higher-order primitives) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Defaults/<Sub>.hs` |
+| Primitive-name `Name` constants (`charsIsAlphaNum`, `logicAnd`, ...) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Names.hs` |
+| Legacy `_<namespace>_<localName>` aliases (`_chars_isAlphaNum`, `_logic_and`, ...) used by host registrations | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` |
+| Native Haskell implementation | `heads/haskell/src/main/haskell/Hydra/Haskell/Lib/<Sub>.hs` |
 | Native Java implementation | `heads/java/src/main/java/hydra/lib/<sub>/<FunctionName>.java` |
 | Native Python implementation | `heads/python/src/main/python/hydra/lib/<sub>.py` |
-| Host-side primitive registry (binds names to native impls) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` (Haskell) and analogous per host |
-| Phantom-typed DSL wrappers (for writing Hydra programs) | `heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/<Sub>.hs` |
+| Host-side primitive registry (binds names to native impls) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` (Haskell) and `heads/<lang>/.../lib/Libraries.<ext>` per host |
+| Phantom-typed DSL wrappers (for writing Hydra source modules) | `heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/<Sub>.hs` |
 | Common test cases | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/Lib/<Sub>.hs` |
 
 **Important:** the canonical metadata for every primitive is the
@@ -149,14 +151,31 @@ registrations, then DSL wrappers, then tests.
 ### 1. Pick the namespace and add the name constant
 
 Open `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Names.hs`
-and add the name constant in the appropriate library section (alphabetical):
+and add the primitive's `Name` constant in the appropriate library section
+(alphabetical):
 
 ```haskell
-charsIsAlphaNum = defineName "charsIsAlphaNum" "hydra.lib.chars" "isAlphaNum"
+charsIsAlphaNum :: Name
+charsIsAlphaNum = qname chars "isAlphaNum"
 ```
 
-Also add it to the `definitions` list in the same file. These constants are used
-everywhere a primitive is referenced by name.
+This module is a derived Haskell-side index — it has no `module_ :: Module`
+declaration and no `definitions` list to update. Each constant has type
+`Name` (not `TTermDefinition Name`), matching the type expected by
+`prim1` / `prim2` / `prim3` and `primitive1` / `primitive2` / `primitive3`.
+
+Then add a legacy-style alias in
+`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` so
+existing call sites that use the underscored convention keep working:
+
+```haskell
+-- Chars
+_chars_isAlphaNum = LibNames.charsIsAlphaNum
+```
+
+Both names refer to the same `Name` value; the alias just adapts to the
+legacy `_<namespace>_<localName>` naming style used by `prim1`/`prim2`/`prim3`
+registrations and host-side primitive lists.
 
 ### 2. Declare the primitive's metadata
 
@@ -230,10 +249,10 @@ validator enforces this.
 
 #### Haskell
 
-Add the implementation in `heads/haskell/src/main/haskell/Hydra/Lib/<Library>.hs`:
+Add the implementation in `heads/haskell/src/main/haskell/Hydra/Haskell/Lib/<Library>.hs`:
 
 ```haskell
--- Hydra/Lib/Chars.hs
+-- Hydra/Haskell/Lib/Chars.hs
 isAlphaNum :: Int -> Bool
 isAlphaNum = C.isAlphaNum . C.chr
 ```
@@ -252,117 +271,189 @@ implementation. They reference the canonical metadata in the kernel by name
 (via the `_chars_isAlphaNum` constant) — the type information passed to them is
 a sanity-check repetition, not the source of truth.
 
-#### Java
+#### Default term-level implementations (`Defaults/<Sub>.hs`)
 
-Higher-order primitives (functions that take other functions as arguments) may have associated "eval elements."
-These eval elements provide term-level implementations of the primitive --
-they construct unevaluated application terms rather than calling native code.
+The "default implementation" recorded on every `PrimitiveDefinition` is a
+pure Hydra-term reference — directly executable by any host with a term
+reducer, no native call required. Most primitives can express their default
+this way; see Step 2 above for an example using `toPrimitive`.
 
-**Why do eval elements exist?**
+For primitives whose canonical default is *not* a pure
+`Term`-of-the-declared-type but instead a small interpreter routine —
+typically higher-order operations like `lists.foldl` / `eithers.bimap`
+that need to construct unevaluated `(Core.termApplication ...)` terms
+and recurse — the term-level reference is published as a separate
+"defaults" module under
+`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Defaults/<Sub>.hs`.
+These modules emit a sibling kernel namespace
+`hydra.lib.defaults.<sub>` whose `TTermDefinition`s take the standard
+interpreter context: `InferenceContext -> Graph -> ... -> Either Error Term`.
 
-Eval elements are not required for the main interpreter, which can call all primitives natively.
-They exist to support *minimal Hydra implementations* (sometimes called "minimal heads") that may choose
-not to implement every primitive natively.
-A minimal head can fall back to an eval element to get correct behavior using only basic term reduction,
-without needing a native implementation of the primitive.
-
-**When should you add an eval element?**
-- Any higher-order primitive (one that accepts function arguments, e.g., `map`, `filter`, `foldl`, `foldr`)
-- The eval element constructs application terms that the interpreter can reduce without calling native code
-
-**Adding an eval element:**
-
-1. Create or update the Sources module in `/heads/haskell/src/main/haskell/Hydra/Sources/Eval/Lib/<Library>.hs`:
+If your new primitive belongs to a namespace that already has a
+`Defaults/<Sub>.hs`, add an interpreter-friendly companion there
+alongside the existing entries:
 
 ```haskell
-module Hydra.Sources.Eval.Lib.Eithers where
-
-import Hydra.Kernel
-import Hydra.Sources.Libraries
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
--- ... other imports
-
-ns :: ModuleName
-ns = ModuleName "hydra.eval.lib.eithers"
-
-define :: String -> TTerm a -> TTermDefinition a
-define = definitionInModuleName ns
-
-module_ :: Module
-module_ = Module {
-    moduleName = ns,
-    moduleDefinitions = definitions,
-    moduleDependencies = unqualifiedDep <$>
-      ([moduleName Monads.module_, moduleName ShowCore.module_]
-       L.++ kernelTypesModuleNames),
-    moduleDescription = Just "Evaluation-level implementations of Either functions."}
-  where
-    definitions = [toDefinition bimap_]
-
--- | Interpreter-friendly bimap for Either terms.
+-- packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Defaults/Eithers.hs
 bimap_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
 bimap_ = define "bimap" $
   doc "Interpreter-friendly bimap for Either terms." $
+  "cx" ~> "g" ~>
   "leftFun" ~> "rightFun" ~> "eitherTerm" ~>
   cases _Term (var "eitherTerm")
-    (Just (Monads.unexpected @@ string "either value" @@ (ShowCore.term @@ var "eitherTerm"))) [
+    (Just (ExtractCore.unexpected (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
     _Term_either>>: "e" ~>
-      produce $ Eithers.either_
+      right $ Eithers.either_
         ("val" ~> Core.termEither $ left $ Core.termApplication $ Core.application (var "leftFun") (var "val"))
         ("val" ~> Core.termEither $ right $ Core.termApplication $ Core.application (var "rightFun") (var "val"))
         (var "e")]
 ```
 
-2. Add the module to `/heads/haskell/src/main/haskell/Hydra/Sources/Eval/Lib/All.hs`:
+Then add `toDefinition bimap_` to the `definitions` list at the top of
+the same module, keeping alphabetical order. The `define` helper is
+locally bound to `definitionInModuleName ns` where `ns = ModuleName
+"hydra.lib.defaults.eithers"`. No registry-table update is needed:
+the kernel sync picks up the new entry through the
+`Defaults/<Sub>.hs` module's own `module_` declaration.
 
-```haskell
-import qualified Hydra.Sources.Eval.Lib.Eithers as EvalEithers
+If the namespace has no `Defaults/<Sub>.hs` yet, you usually don't need
+to create one — the in-line `defaultImplementation` body inside
+`Kernel/Lib/<Sub>.hs` (as shown in Step 2 with `toPrimitive`) is
+sufficient for almost all cases. The separate `Defaults/<Sub>.hs`
+module is reserved for the "needs the interpreter context to do its
+job" pattern.
 
-evalLibModules :: [Module]
-evalLibModules = [
-  EvalEithers.module_,
-  -- ... other modules
-  ]
+Host-side registrations are unchanged regardless of which kind of
+default is used: each primitive is bound with `prim1` / `prim2` /
+`prim3` referencing the same `_<namespace>_<localName>` constant.
+
+#### Java
+
+Create the per-primitive class
+`heads/java/src/main/java/hydra/lib/<library>/<FunctionName>.java`:
+
+```java
+package hydra.lib.chars;
+
+import hydra.core.Name;
+import hydra.core.Term;
+import hydra.core.TypeScheme;
+import hydra.dsl.Terms;
+import hydra.graph.Graph;
+import hydra.tools.PrimitiveFunction;
+
+import java.util.List;
+import java.util.function.Function;
+
+import static hydra.dsl.Types.boolean_;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.int32;
+import static hydra.dsl.Types.scheme;
+import hydra.typing.InferenceContext;
+import hydra.errors.Error_;
+import hydra.util.Either;
+
+public class IsAlphaNum extends PrimitiveFunction {
+    public Name name() { return new Name("hydra.lib.chars.isAlphaNum"); }
+
+    @Override
+    public TypeScheme type() {
+        return scheme(function(int32(), boolean_()));
+    }
+
+    @Override
+    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
+        return args -> cx -> graph ->
+            hydra.lib.eithers.Map.apply(
+                c -> Terms.boolean_(apply(c)),
+                hydra.extract.Core.int32(graph, args.get(0)));
+    }
+
+    public static boolean apply(int codePoint) {
+        return Character.isLetterOrDigit(codePoint);
+    }
+}
 ```
 
-3. Generate the Haskell runtime code.
-   The generated module goes in `/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Eval/Lib/<Library>.hs`.
+**Structure:**
+- `name()`: returns the fully qualified Hydra name.
+- `type()`: declares the type scheme (use type parameters for polymorphic functions).
+- `implementation()`: extracts arguments via `hydra.extract.Core.*` and wraps
+  the result with `Terms.*`. The shape is `args -> cx -> graph -> Either<Error_, Term>`.
+- `apply()`: static Java method(s) for direct host-language calls.
 
-   **Note:** The generated eval module is a bootstrap file. If you add a new eval element,
-   you may need to manually add the function to the generated file initially, then regenerate.
-   The export list in the generated file must include your new function
-   for the `Libraries.hs` import to work.
+Note: the error type is `hydra.errors.Error_` (trailing underscore) — Hydra-side
+`hydra.core.Error` would clash with `java.lang.Error`.
 
-4. Update the primitive registration in `Libraries.hs` to use `prim3Eval` instead of `prim3`:
+**Higher-order primitives in Java:** when the primitive takes function arguments,
+the `implementation()` method must use `Reduction.reduceTerm(cx, graph, eager, term)`
+to evaluate function applications. See `hydra/lib/lists/Foldr.java` for an example
+that iterates in reverse and reduces on each step.
 
-```haskell
-import qualified Hydra.Eval.Lib.Eithers as EvalEithers
+Then register the new primitive in
+`heads/java/src/main/java/hydra/lib/Libraries.java` by adding it to its
+category's list (`charsPrimitives()` in this case). The category will already
+be enumerated in `standardPrimitives()`.
 
-hydraLibEithers :: Library
-hydraLibEithers = standardLibrary _hydra_lib_eithers [
-    prim3Eval _eithers_bimap EvalEithers.bimap ["x", "y", "z", "w"] ...,
-    -- Use prim3Eval for higher-order, prim3 for first-order
-    ]
+```java
+private static List<PrimitiveFunction> charsPrimitives() {
+    return Arrays.asList(
+        new IsAlphaNum(),
+        new IsLower(),
+        // ...
+        new ToUpper());
+}
 ```
 
-**Key differences between `primN` and `primNEval`:**
-- `prim3` uses the native Haskell implementation directly
-- `prim3Eval` uses the eval element, which returns unevaluated application terms
+`PrimitiveFunction.toNative()` builds a `PrimitiveDefinition` from the host-side
+`name()` and `type()` (via `Scoping.typeSchemeToTermSignature`) and pairs it
+with the host implementation. Hand-written PrimitiveDefinition constructions
+in the Java head use the kernel's current 10-field shape; the helper does the
+expansion for you.
 
-**Important nuance:** Not all higher-order primitives use `primNEval`.
-Some higher-order primitives (e.g., `foldl`, `foldr`) are registered with `prim3`
-even though they have eval elements.
-The eval element exists as a fallback for minimal implementations,
-but the primitive registration itself uses the native implementation.
-Follow the pattern of similar existing primitives when deciding which to use.
+#### Python
 
-### 4. Create DSL wrapper
+Add the implementation in `heads/python/src/main/python/hydra/lib/<library>.py`:
 
-Add typed wrapper in `/heads/haskell/src/main/haskell/Hydra/Dsl/Lib/<Library>.hs`:
+```python
+def is_alpha_num(value: int) -> bool:
+    """Check whether a character (as int code point) is alphanumeric."""
+    return chr(value).isalnum()
+```
+
+Then register it in the Python source registry at
+`heads/python/src/main/python/hydra/sources/libraries.py`. Each namespace has
+its own `register_<sub>_primitives()` function that returns a
+`dict[Name, Primitive]`; add an entry there using `prims.prim1` /
+`prims.prim2` / `prims.prim3` to match the kernel signature:
+
+```python
+def register_chars_primitives() -> dict[Name, Primitive]:
+    from hydra.lib import chars
+
+    namespace = "hydra.lib.chars"
+    primitives: dict[Name, Primitive] = {}
+
+    primitives[qname(namespace, "isAlphaNum")] = prims.prim1(
+        qname(namespace, "isAlphaNum"), chars.is_alpha_num, [],
+        prims.int32(), prims.boolean())
+    # ... other chars primitives
+    return primitives
+```
+
+The `prims` helpers (from `hydra.dsl.prims`) provide the same first-order
+argument list — primitive Name, native callable, type-variable list, then
+argument and result `TermCoder`s. See the existing entries for examples of
+polymorphic primitives and higher-order patterns (`fun(dom, cod)` for
+function-typed arguments).
+
+### 4. Add the DSL wrapper
+
+Add typed wrappers in
+`heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/<Library>.hs`:
 
 ```haskell
--- In Hydra/Dsl/Lib/Chars.hs
+-- Hydra/Dsl/Meta/Lib/Chars.hs
 module Hydra.Dsl.Meta.Lib.Chars where
 
 import Hydra.Phantoms
@@ -377,115 +468,16 @@ toLower :: TTerm Int -> TTerm Int
 toLower = primitive1 _chars_toLower
 ```
 
+These wrappers are what Hydra source modules (kernel and per-host DSL)
+call to construct phantom-typed term applications referencing the
+primitive by name. The phantom type must match the primitive's
+signature.
+
 **Guidelines:**
-- Use phantom types (`TTerm`) to ensure type safety
-- Use `primitive1` for unary, `primitive2` for binary functions
-- Reference the name constants defined in `Libraries.hs`
-
-## Adding a primitive to Java
-
-### 1. Implement the PrimitiveFunction class
-
-Create `/heads/java/src/main/java/hydra/lib/<library>/<FunctionName>.java`:
-
-```java
-package hydra.lib.chars;
-
-import hydra.typing.InferenceContext;
-import hydra.core.Name;
-import hydra.core.Term;
-import hydra.core.TypeScheme;
-import hydra.dsl.Terms;
-import hydra.errors.Error;
-import hydra.graph.Graph;
-import hydra.tools.PrimitiveFunction;
-import hydra.util.Either;
-
-import java.util.List;
-import java.util.function.Function;
-
-import static hydra.dsl.Types.boolean_;
-import static hydra.dsl.Types.function;
-import static hydra.dsl.Types.int32;
-import static hydra.dsl.Types.scheme;
-
-public class IsAlphaNum extends PrimitiveFunction {
-    public Name name() { return new Name("hydra.lib.chars.isAlphaNum"); }
-
-    @Override
-    public TypeScheme type() {
-        return scheme(function(int32(), boolean_()));
-    }
-
-    @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
-            c -> Terms.boolean_(apply(c)),
-            hydra.extract.Core.int32(cx, graph, args.get(0)));
-    }
-
-    public static boolean apply(int codePoint) {
-        return Character.isLetterOrDigit(codePoint);
-    }
-}
-```
-
-**Structure:**
-- `name()`: Returns the fully qualified Hydra name
-- `type()`: Declares the type scheme (use type parameters for polymorphic functions)
-- `implementation()`: Either-based wrapper that extracts arguments and wraps results,
-  taking `InferenceContext` and `Graph` parameters
-- `apply()`: Static method(s) for direct Java usage
-
-**Higher-order primitives in Java:** When the primitive takes function arguments,
-the `implementation()` method must use `Reduction.reduceTerm()` to evaluate function applications.
-The `apply()` method receives Java `Function` objects that can be called directly.
-See `hydra/lib/lists/Foldr.java` for an example that iterates in reverse
-and calls `reduceTerm` on each application.
-
-### 2. Register in Libraries
-
-Update `/heads/java/src/main/java/hydra/lib/Libraries.java`. Add the new
-primitive to its category's list, and ensure the category is included in
-`standardPrimitives()`. Per the Java head's collection conventions
-(see [Java collection conventions](#java-collection-conventions) below),
-new code should return `ConsList`/`PersistentMap`/`PersistentSet`
-typed as `List`/`Map`/`Set` rather than building via `ArrayList`/`HashMap`/`HashSet`.
-
-```java
-private static List<PrimitiveFunction> charsPrimitives() {
-    return Arrays.asList(new IsAlphaNum(), new ToLower(), ...);
-}
-```
-
-`PrimitiveFunction.toNative()` builds a `PrimitiveDefinition` from the host-side
-`name()` and `type()` (via `Scoping.typeSchemeToTermSignature`) and pairs it
-with the host implementation.
-
-#### Python
-
-Add the implementation in `heads/python/src/main/python/hydra/lib/<library>.py`:
-
-```python
-def is_alpha_num(value: int) -> bool:
-    """Check if a character (as int) is alphanumeric."""
-    return chr(value).isalnum()
-```
-
-Register it in the Python source registry (`heads/python/src/main/python/hydra/sources/libraries.py`).
-
-### 4. Add the DSL wrapper
-
-Add typed wrappers in `heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/<Library>.hs`:
-
-```haskell
-isAlphaNum :: TTerm Int -> TTerm Bool
-isAlphaNum = primitive1 _chars_isAlphaNum
-```
-
-These wrappers are what Hydra programs call. They construct phantom-typed term
-applications referencing the primitive by name. The phantom type matches the
-primitive's signature.
+- Use phantom types (`TTerm`) for type safety.
+- Use `primitive1` for unary, `primitive2` for binary, `primitive3` for ternary.
+- Reference the name constants exposed via `Hydra.Sources.Libraries`
+  (`_chars_isAlphaNum`, etc.).
 
 ### 5. Add common test cases
 
@@ -545,7 +537,7 @@ When adding a new primitive function:
   - [ ] Signature definition (`TypeScheme` → `TermSignature` via `typeSchemeToTermSignature`)
   - [ ] **(If applicable)** Default implementation as a `TTermDefinition`
 - [ ] **Haskell**
-  - [ ] Native implementation in `Hydra.Lib.<Library>`
+  - [ ] Native implementation in `Hydra.Haskell.Lib.<Library>`
   - [ ] Registration via `primN` in `Libraries.hs`
   - [ ] DSL wrapper in `Hydra.Dsl.Meta.Lib.<Library>`
 - [ ] **Java**
@@ -598,7 +590,7 @@ implementation notes:
 - **In native impls**, the function argument arrives as a Hydra `Term`. To
   apply it, the host uses its term-reduction machinery (Haskell:
   `Reduction.reduceTerm`; Java: `Reduction.reduceTerm()`). See
-  `heads/haskell/src/main/haskell/Hydra/Lib/Lists.hs` for the Haskell pattern
+  `heads/haskell/src/main/haskell/Hydra/Haskell/Lib/Lists.hs` for the Haskell pattern
   and `heads/java/src/main/java/hydra/lib/lists/Foldr.java` for the Java
   pattern.
 
@@ -619,7 +611,7 @@ The `hydra.lib.maybes` namespace is a good case study: 13 primitives, 11 of
 which have default implementations in terms of `maybe`. See:
 
 - Metadata: [Hydra/Sources/Kernel/Lib/Maybes.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Maybes.hs)
-- Haskell native impl: [Hydra/Lib/Maybes.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Lib/Maybes.hs)
+- Haskell native impl: [Hydra/Haskell/Lib/Maybes.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Haskell/Lib/Maybes.hs)
 - Haskell DSL wrapper: [Hydra/Dsl/Meta/Lib/Maybes.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/Maybes.hs)
 - Java native impls: [hydra/lib/maybes/](https://github.com/CategoricalData/hydra/tree/main/heads/java/src/main/java/hydra/lib/maybes)
 
