@@ -29,9 +29,9 @@ isn't built yet — i.e. `python` was not in `--hosts` of a prior sync; in that
 case the JSON remains whatever Phase 1 last wrote.
 
 When you make changes to:
-- **the kernel, eval lib, or test suite** (in Hydra-Haskell): regenerate
-  `dist/json/hydra-kernel/`, then run `bin/sync-python.sh` to refresh
-  `dist/python/`.
+- **the kernel, default-impls (`Hydra.Sources.Kernel.Lib.Defaults.*`), or test suite**
+  (in Hydra-Haskell): regenerate `dist/json/hydra-kernel/`, then run
+  `bin/sync-python.sh` to refresh `dist/python/`.
 - **the Python coder DSL sources**: run `bin/sync-python.sh`, which now
   invokes `bin/generate-hydra-python-from-python.sh` in Phase 5. You can
   also run the native generator directly with `--compare` to verify
@@ -42,7 +42,7 @@ The synchronization process generates four categories of Python code:
 | Category | Source | Target | Description |
 |----------|--------|--------|-------------|
 | Kernel modules | `Hydra.Sources.All.kernelModules` | `dist/python/hydra-kernel/src/main/python/hydra/` | Core Hydra types and functions |
-| Eval lib modules | `Hydra.Sources.Eval.Lib.All.evalLibModules` | `dist/python/hydra-kernel/src/main/python/hydra/eval/` | Interpreter-level primitives |
+| Default-impl modules | `Hydra.Sources.Kernel.Lib.Defaults.*` (per-namespace) | `dist/python/hydra-kernel/src/main/python/hydra/lib/defaults/` | Interpreter-friendly term-level reference implementations |
 | Kernel tests | `Hydra.Sources.Test.All.testModules` | `dist/python/hydra-kernel/src/test/python/hydra/test/` | Test data structures |
 | Generation tests | TestSuite + TestGroups | `dist/python/hydra-kernel/src/test/python/generation/` | Executable pytest tests |
 
@@ -111,7 +111,7 @@ stack build hydra:exe:bootstrap-from-json
 
 ### Step 2: Generate all Python artifacts
 
-The `bootstrap-from-json` executable generates kernel modules, eval lib, coder modules, kernel tests,
+The `bootstrap-from-json` executable generates kernel modules, default-impl modules, coder modules, kernel tests,
 and generation tests in a single invocation:
 
 ```bash
