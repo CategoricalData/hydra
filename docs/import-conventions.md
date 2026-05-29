@@ -86,7 +86,7 @@ binPrim = reify2 (\x y -> Maths.add x (Maths.mul x y))
 
 **Tag**: `kernel type modules`
 
-**Definition shape**: `define :: String -> Type -> Binding`
+**Definition shape**: `define :: String -> Type -> TypeDefinition`
 
 **Centrally important (unqualified)**:
 - `Hydra.Kernel`

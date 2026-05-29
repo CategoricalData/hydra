@@ -207,7 +207,7 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 module_ :: Module
 module_ = Module {
     moduleName = ns,
-    moduleDefinitions = map toTypeDef definitions,
+    moduleDefinitions = DefinitionType <$> definitions,
     moduleDependencies = unqualifiedDep <$> [moduleName Core.module_],
     moduleDescription = Just description}
   where
