@@ -68,5 +68,5 @@ testGraph testTypes _testTerms = let
     graphBoundTypes = boundTypes }
 
 -- | The test context (empty).
-testContext :: Context
-testContext = emptyContext
+testContext :: InferenceContext
+testContext = emptyInferenceContext

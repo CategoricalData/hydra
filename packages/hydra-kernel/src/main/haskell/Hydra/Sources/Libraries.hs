@@ -5,24 +5,24 @@ module Hydra.Sources.Libraries (
 ) where
 
 import Hydra.Kernel
-import qualified Hydra.Lib.Names as LibNames
+import qualified Hydra.Sources.Kernel.Lib.Names as LibNames
 import Hydra.Dsl.Prims as Prims
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
-import qualified Hydra.Lib.Chars as Chars
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Literals as Literals
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Math as Math
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Regex as Regex
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Chars as Chars
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Literals as Literals
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Math as Math
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Regex as Regex
+import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Strings as Strings
 
 import qualified Data.List as L
 
@@ -367,29 +367,6 @@ x_ = variable "x"
 y_ = variable "y"
 z_ = variable "z"
 
-standardLibraries :: [Library]
-standardLibraries = [
-  hydraLibChars,
-  hydraLibEithers,
-  hydraLibEquality,
-  hydraLibLists,
-  hydraLibLiterals,
-  hydraLibLogic,
-  hydraLibMaps,
-  hydraLibMathFloat64,
-  hydraLibMathInt32,
-  hydraLibMaybes,
-  hydraLibPairs,
-  hydraLibRegex,
-  hydraLibSets,
-  hydraLibStrings]
-
-standardLibrary :: ModuleName -> [Primitive] -> Library
-standardLibrary ns prims = Library {
-  libraryNamespace = ns,
-  libraryPrefix = L.drop (L.length ("hydra.lib." :: String)) $ unModuleName ns,
-  libraryPrimitives = prims}
-
 -- | A TermCoder for function types which uses beta reduction to bridge term-level
 --   functions to native functions. This allows higher-order primitives like map,
 --   filter, foldl, etc. to use native implementations rather than eval-level ones.
@@ -639,6 +616,15 @@ hydraLibPairs = standardLibrary _hydra_lib_pairs [
     prim1     _pairs_first  Pairs.first      [_a, _b]         (pair a_ b_) a_,
     prim1     _pairs_second Pairs.second     [_a, _b]         (pair a_ b_) b_]
 
+hydraLibRegex :: Library
+hydraLibRegex = standardLibrary _hydra_lib_regex [
+  prim2 _regex_find       Regex.find       [] string string (optional string),
+  prim2 _regex_findAll    Regex.findAll    [] string string (list string),
+  prim2 _regex_matches    Regex.matches    [] string string boolean,
+  prim3 _regex_replace    Regex.replace    [] string string string string,
+  prim3 _regex_replaceAll Regex.replaceAll [] string string string string,
+  prim2 _regex_split      Regex.split      [] string string (list string)]
+
 hydraLibSets :: Library
 hydraLibSets = standardLibrary _hydra_lib_sets [
     prim2     _sets_delete       Sets.delete       [_xOrd]        x_ (set x_) (set x_),
@@ -656,15 +642,6 @@ hydraLibSets = standardLibrary _hydra_lib_sets [
     prim2     _sets_union        Sets.union        [_xOrd]        (set x_) (set x_) (set x_),
     prim1     _sets_unions       Sets.unions       [_xOrd]        (list $ set x_) (set x_)]
 
-hydraLibRegex :: Library
-hydraLibRegex = standardLibrary _hydra_lib_regex [
-  prim2 _regex_find       Regex.find       [] string string (optional string),
-  prim2 _regex_findAll    Regex.findAll    [] string string (list string),
-  prim2 _regex_matches    Regex.matches    [] string string boolean,
-  prim3 _regex_replace    Regex.replace    [] string string string string,
-  prim3 _regex_replaceAll Regex.replaceAll [] string string string string,
-  prim2 _regex_split      Regex.split      [] string string (list string)]
-
 hydraLibStrings :: Library
 hydraLibStrings = standardLibrary _hydra_lib_strings [
   prim1 _strings_cat         Strings.cat         [] (list string) string,
@@ -680,3 +657,26 @@ hydraLibStrings = standardLibrary _hydra_lib_strings [
   prim1 _strings_toLower     Strings.toLower     [] string string,
   prim1 _strings_toUpper     Strings.toUpper     [] string string,
   prim1 _strings_unlines     Strings.unlines     [] (list string) string]
+
+standardLibraries :: [Library]
+standardLibraries = [
+  hydraLibChars,
+  hydraLibEithers,
+  hydraLibEquality,
+  hydraLibLists,
+  hydraLibLiterals,
+  hydraLibLogic,
+  hydraLibMaps,
+  hydraLibMathFloat64,
+  hydraLibMathInt32,
+  hydraLibMaybes,
+  hydraLibPairs,
+  hydraLibRegex,
+  hydraLibSets,
+  hydraLibStrings]
+
+standardLibrary :: ModuleName -> [Primitive] -> Library
+standardLibrary ns prims = Library {
+  libraryNamespace = ns,
+  libraryPrefix = L.drop (L.length ("hydra.lib." :: String)) $ unModuleName ns,
+  libraryPrimitives = prims}

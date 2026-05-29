@@ -22,7 +22,6 @@ def testGraph(testTypes: Map[hydra.core.Name, hydra.core.Type])
   cachedGraph
 }
 
-lazy val testContext: hydra.context.Context = hydra.context.Context(
-  trace = Seq.empty,
-  messages = Seq.empty,
-  other = Map.empty)
+lazy val testContext: hydra.typing.InferenceContext = hydra.typing.InferenceContext(
+  freshTypeVariableCount = 0,
+  trace = Seq.empty)

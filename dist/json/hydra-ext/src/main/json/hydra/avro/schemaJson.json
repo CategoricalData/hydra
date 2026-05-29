@@ -2071,7 +2071,7 @@
                                                 "type": {"variable": "hydra.json.model.Value"}}},
                                             "domain": {"variable": "hydra.avro.schema.Schema"},
                                             "parameter": "schema"}},
-                                        "domain": {"variable": "hydra.context.Context"},
+                                        "domain": {"variable": "hydra.typing.InferenceContext"},
                                         "parameter": "_cx"}}},
                                   {
                                     "name": "decode",
@@ -2086,10 +2086,10 @@
                                                   "application": {
                                                     "argument": {"variable": "cx2"},
                                                     "function": {
-                                                      "typeApplication": {"body": {"variable": "hydra.avro.schemaJson.decodeSchema"}, "type": {"variable": "hydra.context.Context"}}}}}}},
+                                                      "typeApplication": {"body": {"variable": "hydra.avro.schemaJson.decodeSchema"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}},
                                             "domain": {"variable": "hydra.json.model.Value"},
                                             "parameter": "json"}},
-                                        "domain": {"variable": "hydra.context.Context"},
+                                        "domain": {"variable": "hydra.typing.InferenceContext"},
                                         "parameter": "cx2"}}}],
                                 "typeName": "hydra.coders.Coder"}},
                             "type": {"variable": "hydra.avro.schema.Schema"}}},
@@ -2142,7 +2142,7 @@
                                                 "type": {"literal": {"string": {}}}}},
                                             "domain": {"variable": "hydra.avro.schema.Schema"},
                                             "parameter": "schema"}},
-                                        "domain": {"variable": "hydra.context.Context"},
+                                        "domain": {"variable": "hydra.typing.InferenceContext"},
                                         "parameter": "_cx"}}},
                                   {
                                     "name": "decode",
@@ -2161,7 +2161,7 @@
                                                           "application": {
                                                             "argument": {"variable": "cx2"},
                                                             "function": {
-                                                              "typeApplication": {"body": {"variable": "hydra.avro.schemaJson.decodeSchema"}, "type": {"variable": "hydra.context.Context"}}}}}}},
+                                                              "typeApplication": {"body": {"variable": "hydra.avro.schemaJson.decodeSchema"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}},
                                                     "domain": {"variable": "hydra.json.model.Value"},
                                                     "parameter": "json"}},
                                                 "function": {
@@ -2191,7 +2191,8 @@
                                                                             "argument": {"variable": "cx2"},
                                                                             "function": {
                                                                               "typeApplication": {
-                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.avro.schemaJson.err"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                "body": {
+                                                                                  "typeApplication": {"body": {"variable": "hydra.avro.schemaJson.err"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                 "type": {"variable": "hydra.json.model.Value"}}}}}}},
                                                                     "domain": {"literal": {"string": {}}},
                                                                     "parameter": "e"}},
@@ -2211,7 +2212,7 @@
                                                         "type": {"variable": "hydra.avro.schema.Schema"}}}}}}},
                                             "domain": {"literal": {"string": {}}},
                                             "parameter": "s"}},
-                                        "domain": {"variable": "hydra.context.Context"},
+                                        "domain": {"variable": "hydra.typing.InferenceContext"},
                                         "parameter": "cx2"}}}],
                                 "typeName": "hydra.coders.Coder"}},
                             "type": {"variable": "hydra.avro.schema.Schema"}}},
@@ -4081,7 +4082,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

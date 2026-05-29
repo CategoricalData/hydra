@@ -516,7 +516,7 @@ by the per-target `assemble-distribution.sh`. The pattern, target by target:
 - Emacs Lisp: `heads/lisp/emacs-lisp/src/test/emacs-lisp/hydra/test/test_env.el`
 - Scheme: `heads/lisp/scheme/src/test/scheme/hydra/test/test_env.scm`
 
-Each provides `hydra_test_test_env_test_context` (a `Context` value) and
+Each provides `hydra_test_test_env_test_context` (an `InferenceContext` value) and
 `hydra_test_test_env_test_graph` (a function `Map Name Type → Map Name Term → Graph`),
 matching the DSL signature in `Hydra.Sources.Test.TestEnv`. Scala and the
 four Lisp dialects (Clojure, Common Lisp, Emacs Lisp, Scheme) curry the
@@ -547,10 +547,45 @@ definition bodies appear in **alphabetical order** within each module.
 This applies to:
 - Kernel Source modules (`packages/hydra-kernel/src/main/haskell/Hydra/Sources/`)
 - Per-language coder Source modules (`packages/hydra-haskell/`, `packages/hydra-java/`, `packages/hydra-python/`, `packages/hydra-scala/`, `packages/hydra-lisp/`, `packages/hydra-ext/`, `packages/hydra-pg/`, `packages/hydra-rdf/`, `packages/hydra-coq/`, `packages/hydra-typescript/`, `packages/hydra-bench/`)
-- Hand-written runtime modules (`heads/haskell/src/main/haskell/Hydra/`)
+- Hand-written runtime modules (`heads/haskell/src/main/haskell/Hydra/`),
+  including the hand-written DSL helper libraries under
+  `heads/haskell/src/main/haskell/Hydra/Dsl/` and its `Meta/`, `Meta/Lib/`,
+  and `Deep/Lib/` subdirectories. These are pure Haskell modules without a
+  `definitions` list, but each module's top-level binding *bodies* must
+  still appear in alphabetical order within their respective sections.
 
 Generated files inherit their ordering from Source modules,
 so fixing the Source fixes all implementations.
+
+**Sort order is case-sensitive ASCII** — uppercase before lowercase,
+matching `checkDefinitionOrdering`. E.g. `substTypesInTerm` sorts
+before `substituteInBinding` because `T` (0x54) precedes `i` (0x69).
+
+**Exemption: conventional anchors.** Some bindings are positioned by
+convention rather than alphabetical order and should be left where they
+are. These include:
+
+- Source-module anchors: `module_`, `ns`, `definitions`, `define`,
+  `self`, `ext`.
+- Registry-file anchors: `mainModules`, `kernelModules`,
+  `kernelTypesModules`, `kernelPrimaryTermsModules`,
+  `kernelTermsModules`, `dslSourceModules`, `kernelDslInputModules`,
+  `haskellDslInputModules`, `haskellModules`, `jsonModules`,
+  `otherModules`, `bootstrapTypeModules`, `dslTypeModules`,
+  `hydraExtModules`. The whole `Sources/All.hs` style of registry file
+  (one per package) is exempt from the ordering check entirely; their
+  bindings are list aliases that have a logical layered order.
+- Operator definitions (any binding whose name begins with a
+  non-alphanumeric character, e.g. `(@@)`, `(<.>)`, `(>:)`). These are
+  conventionally placed at the top of a module as a block before the
+  alphabetical bindings; they retain whatever internal order makes sense
+  (often by precedence or usage), not alphabetical.
+
+**Section boundaries.** A file may be divided into multiple alphabetical
+sections separated by comment dividers (e.g. `-- Unary functions`,
+`-- Binary functions`, or `----------------------------------------`).
+Each section is alphabetized internally; bindings do not move across
+section boundaries. Section ordering itself is by convention.
 
 **Generator-derived modules are exempt.** The `hydra.dsl.*`, `hydra.encode.*`,
 and `hydra.decode.*` module families are produced by `dslModule`,
@@ -579,7 +614,20 @@ For each Source module, walk the file and confirm that top-level bindings
 appear in the same order as their entries in the `definitions` list.
 
 **Fixing violations:** reorder both the `definitions` list entry *and* the corresponding
-definition body together — they must stay in sync.
+definition body together — they must stay in sync. When the module has no
+`definitions` list (e.g. hand-written DSL helpers under `Hydra/Dsl/`), only
+the body order applies. Reordering pure Haskell bindings has no semantic
+effect — Haskell does not depend on top-level declaration order.
+
+**When reordering, move each binding together with all of its attached
+material**: doc comments above it, its type signature line(s), its
+`where`-clauses, and any pragmas. Do not split these.
+
+After reordering source files, run `bin/sync.sh --hosts all --targets all`
+to regenerate downstream artifacts (a body reorder in a Source module
+changes the file order in `dist/haskell/`, even when the underlying
+`definitions` list — which controls emission order in target languages
+— is already sorted).
 
 When reordering, preserve the original list shape.
 Term-style modules (e.g. `Hydra/Sources/Kernel/Terms/*.hs`) wrap each

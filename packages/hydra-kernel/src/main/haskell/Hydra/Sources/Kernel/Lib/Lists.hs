@@ -3,7 +3,6 @@
 module Hydra.Sources.Kernel.Lib.Lists where
 
 import Hydra.Kernel
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Types             as Types
@@ -13,22 +12,6 @@ import           Prelude hiding ((++))
 
 ns :: ModuleName
 ns = ModuleName "hydra.lib.lists"
-
-sig :: TypeScheme -> TermSignature
-sig = typeSchemeToTermSignature
-
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
-
--- Shared type variables.
-tx, ty, tz :: Type
-tx = Types.var "x"
-ty = Types.var "y"
-tz = Types.var "z"
-
-l :: Type -> Type
-l = Types.list
 
 module_ :: Module
 module_ = Module {
@@ -75,6 +58,22 @@ module_ = Module {
       primNoDef "uncons"      "Decompose a list into its head and tail, or Nothing if empty." unconsSig,
       primNoDef "zip"         "Zip two lists element-wise into pairs." zipSig,
       primNoDef "zipWith"     "Zip two lists with a combining function." zipWithSig]
+
+l :: Type -> Type
+l = Types.list
+
+primNoDef :: String -> String -> TermSignature -> Definition
+primNoDef localName description s =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+
+-- Shared type variables.
+tx, ty, tz :: Type
+tx = Types.var "x"
+ty = Types.var "y"
+tz = Types.var "z"
+
+sig :: TypeScheme -> TermSignature
+sig = typeSchemeToTermSignature
 
 -- Signatures.
 

@@ -378,7 +378,7 @@ public class Generation {
      * Generate source files and write them to disk.
      */
     public static void generateSources(
-            Function<Module, Function<List<Definition>, Function<hydra.context.Context, Function<Graph, Either<hydra.errors.Error_, Map<String, String>>>>>> coder,
+            Function<Module, Function<List<Definition>, Function<hydra.typing.InferenceContext, Function<Graph, Either<hydra.errors.Error_, Map<String, String>>>>>> coder,
             hydra.coders.Language language,
             boolean doInfer,
             boolean doExpand,
@@ -388,8 +388,7 @@ public class Generation {
             List<Module> universe,
             List<Module> modulesToGenerate) {
         Graph bsGraph = bootstrapGraph();
-        hydra.context.Context cx = new hydra.context.Context(
-                new ArrayList<>(), new ArrayList<>(), new HashMap<>());
+        hydra.typing.InferenceContext cx = new hydra.typing.InferenceContext(0, new java.util.ArrayList<>());
         Either<hydra.errors.Error_, List<Pair<String, String>>> result =
                 Codegen.generateSourceFiles(coder, language,
                         doInfer, doExpand, doHoistCase, doHoistPoly,
@@ -440,12 +439,17 @@ public class Generation {
 
     /**
      * Generate TypeScript source files from modules.
+     *
+     * doHoistCaseStatements=true mirrors Python's TS-host setting and the
+     * per-target dispatch in heads/typescript/.../bootstrap.ts. Hoisting
+     * pulls cases out of inline IIFEs into top-level helpers, saving
+     * stack frames when the TS runtime walks deeply-nested terms.
      */
     public static void writeTypeScript(String basePath, List<Module> universe, List<Module> mods) {
         generateSources(
                 mod -> defs -> cx -> g -> hydra.typeScript.Coder.moduleToTypeScript(mod, defs, cx, g),
                 hydra.typeScript.Language.typeScriptLanguage(),
-                false, true, false, false,
+                false, true, true, false,
                 basePath, universe, mods);
     }
 
@@ -865,10 +869,8 @@ public class Generation {
         System.err.println("  Per-package inference: " + ordered.size()
             + " packages in dep order: " + String.join(" -> ", ordered));
 
-        hydra.context.Context ctx = new hydra.context.Context(
-            java.util.Collections.emptyList(),
-            java.util.Collections.emptyList(),
-            java.util.Collections.emptyMap());
+        hydra.typing.InferenceContext ctx = new hydra.typing.InferenceContext(
+            0, new java.util.ArrayList<>());
         Graph bsGraph = bootstrapGraph();
         List<Module> acc = new ArrayList<>(seedAcc);
         List<Module> inferredAll = new ArrayList<>();

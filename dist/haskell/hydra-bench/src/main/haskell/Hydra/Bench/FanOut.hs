@@ -3,7 +3,7 @@
 
 module Hydra.Bench.FanOut where
 import qualified Hydra.Core as Core
-import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci

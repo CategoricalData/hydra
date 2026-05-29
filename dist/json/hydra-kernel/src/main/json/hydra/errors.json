@@ -491,7 +491,6 @@
                         "body": {"variable": "hydra.errors.UnificationError"}}}}]}}},
           "variables": []}}}],
   "dependencies": [
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

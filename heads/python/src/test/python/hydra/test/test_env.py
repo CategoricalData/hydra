@@ -4,11 +4,11 @@
 # heads/java/.../TestEnv.java and heads/scala/.../testEnv.scala.
 #
 # The DSL declares:
-#   hydra.test.testEnv.testContext :: Context
+#   hydra.test.testEnv.testContext :: InferenceContext
 #   hydra.test.testEnv.testGraph   :: Map Name Type -> Map Name Term -> Graph
 #
 # This file MUST expose those two FQNs at the same arity:
-#   - test_context: a Context value (not a function)
+#   - test_context: an InferenceContext value (not a function)
 #   - test_graph(test_types, test_terms): a function returning a Graph
 #
 # The Python coder filters hydra.test.testEnv from emitted output (via
@@ -16,12 +16,12 @@
 # Python runtime counterpart that the generated test_graph.py resolves
 # against at import time.
 
-import hydra.context
+import hydra.typing
 import hydra.lib.maps
 
-# Test context: an empty Context value. Eager — no side effects beyond
-# the Context constructor and an empty FrozenDict.
-test_context = hydra.context.Context((), (), hydra.lib.maps.empty())
+# Test context: an empty InferenceContext value. Eager — no side effects beyond
+# the InferenceContext constructor.
+test_context = hydra.typing.InferenceContext(fresh_type_variable_count=0, trace=())
 
 # Test graph: a function (matches DSL signature
 # Map Name Type -> Map Name Term -> Graph). Cached on first call so

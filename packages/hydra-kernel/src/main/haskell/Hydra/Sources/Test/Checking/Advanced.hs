@@ -55,42 +55,6 @@ annotatedTermsTests = define "annotatedTermsTests" $
     nestedAnnotationsTests,
     annotationsInComplexContextsTests]
 
-topLevelAnnotationsTests :: TTermDefinition TestGroup
-topLevelAnnotationsTests = define "topLevelAnnotationsTests" $
-  subgroup "Top-level annotations" [
-    noChange "annotated literal"
-      (annotated (int32 42) mapTermEmpty)
-      T.int32,
-    noChange "annotated list"
-      (annotated (list [string "a", string "b"]) mapTermEmpty)
-      (T.list T.string),
-    noChange "annotated record"
-      (annotated (record TestTypes.testTypePersonName [
-        "firstName">: string "John",
-        "lastName">: string "Doe",
-        "age">: int32 25]) mapTermEmpty)
-      (Core.typeVariable TestTypes.testTypePersonName),
-    checkTest "annotated lambda" []
-      (annotated (lambda "x" $ var "x") mapTermEmpty)
-      (annotated (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ var "x") mapTermEmpty)
-      (T.forAlls ["t0"] $ T.function (T.var "t0") (T.var "t0"))]
-
-nestedAnnotationsTests :: TTermDefinition TestGroup
-nestedAnnotationsTests = define "nestedAnnotationsTests" $
-  subgroup "Nested annotations" [
-    noChange "annotation within annotation"
-      (annotated (annotated (int32 100) mapTermEmpty) mapTermEmpty)
-      T.int32,
-    checkTest "annotated terms in tuple" []
-      (tuple [annotated (int32 1) mapTermEmpty,
-              annotated (string "hello") mapTermEmpty])
-      (tyapps (pair (annotated (int32 1) mapTermEmpty) (annotated (string "hello") mapTermEmpty)) [T.int32, T.string])
-      (T.pair T.int32 T.string),
-    checkTest "annotated term in function application" []
-      (annotated (lambda "x" $ var "x") mapTermEmpty @@ annotated (int32 42) mapTermEmpty)
-      (annotated (lambdaTyped "x" T.int32 $ var "x") mapTermEmpty @@ annotated (int32 42) mapTermEmpty)
-      T.int32]
-
 annotationsInComplexContextsTests :: TTermDefinition TestGroup
 annotationsInComplexContextsTests = define "annotationsInComplexContextsTests" $
   subgroup "Annotations in complex contexts" [
@@ -123,3 +87,39 @@ annotationsInComplexContextsTests = define "annotationsInComplexContextsTests" $
 --      Types.int32
 
 
+
+nestedAnnotationsTests :: TTermDefinition TestGroup
+nestedAnnotationsTests = define "nestedAnnotationsTests" $
+  subgroup "Nested annotations" [
+    noChange "annotation within annotation"
+      (annotated (annotated (int32 100) mapTermEmpty) mapTermEmpty)
+      T.int32,
+    checkTest "annotated terms in tuple" []
+      (tuple [annotated (int32 1) mapTermEmpty,
+              annotated (string "hello") mapTermEmpty])
+      (tyapps (pair (annotated (int32 1) mapTermEmpty) (annotated (string "hello") mapTermEmpty)) [T.int32, T.string])
+      (T.pair T.int32 T.string),
+    checkTest "annotated term in function application" []
+      (annotated (lambda "x" $ var "x") mapTermEmpty @@ annotated (int32 42) mapTermEmpty)
+      (annotated (lambdaTyped "x" T.int32 $ var "x") mapTermEmpty @@ annotated (int32 42) mapTermEmpty)
+      T.int32]
+
+topLevelAnnotationsTests :: TTermDefinition TestGroup
+topLevelAnnotationsTests = define "topLevelAnnotationsTests" $
+  subgroup "Top-level annotations" [
+    noChange "annotated literal"
+      (annotated (int32 42) mapTermEmpty)
+      T.int32,
+    noChange "annotated list"
+      (annotated (list [string "a", string "b"]) mapTermEmpty)
+      (T.list T.string),
+    noChange "annotated record"
+      (annotated (record TestTypes.testTypePersonName [
+        "firstName">: string "John",
+        "lastName">: string "Doe",
+        "age">: int32 25]) mapTermEmpty)
+      (Core.typeVariable TestTypes.testTypePersonName),
+    checkTest "annotated lambda" []
+      (annotated (lambda "x" $ var "x") mapTermEmpty)
+      (annotated (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ var "x") mapTermEmpty)
+      (T.forAlls ["t0"] $ T.function (T.var "t0") (T.var "t0"))]

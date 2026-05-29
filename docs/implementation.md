@@ -169,9 +169,6 @@ the descriptions below cover the main ones:
 - `equality` and `ordering` bindings of type `TypeClass`
 - See the [Concepts wiki § Type classes](https://github.com/CategoricalData/hydra/wiki/Concepts#type-classes)
 
-**Context.hs** - `hydra.context` namespace
-- Execution context: trace, messages, error attribution
-
 #### Error model
 
 **Errors.hs** - `hydra.errors` namespace and the `Error/` subdirectory
@@ -429,7 +426,6 @@ compatibility shims.
 
 - **Meta/Core.hs** - Wraps `Hydra.Dsl.Core`; adds `AsTerm` overrides for `binding`, `injection`,
   `typeVariable`; helpers like `equalName_`, `false`
-- **Meta/Context.hs** - Wraps `Hydra.Dsl.Context`; adds `withContext`, `pushTrace`, `failInContext`
 - **Meta/Graph.hs** - Wraps `Hydra.Dsl.Graph`; adds graph construction helpers
 - **Meta/Phantoms.hs** - Phantom-typed term construction (`TTerm a`), operators (`@@`, `~>`, `<~`)
 - **Meta/Terms.hs** - Phantom-typed term-encoded terms
@@ -492,7 +488,7 @@ Here's a complete example showing DSL usage in type inference:
 
 ```haskell
 -- From Hydra.Sources.Kernel.Terms.Inference
-inferTypeOfEither :: TTermDefinition (Context -> Graph -> Either Term Term -> Either Error InferenceResult)
+inferTypeOfEither :: TTermDefinition (InferenceContext -> Graph -> Either Term Term -> Either Error InferenceResult)
 inferTypeOfEitherDef = define "inferTypeOfEither" $
   doc "Infer the type of an Either term" $
   "cx" ~> "e" ~>
@@ -606,15 +602,17 @@ registry:
 ```haskell
 def "Primitive" $
   record [
-    "definition">:     doc "Universal metadata" $ packaging "PrimitiveDefinition",
-    "implementation">: doc "Host-specific native implementation" $
-      context "Context" ~> graph "Graph" ~> list (core "Term") ~>
+    "definition">: doc "Host-independent metadata (name, signature, purity, totality)" $
+      packaging "PrimitiveDefinition",
+    "implementation">: doc "Concrete implementation" $
+      typing "InferenceContext" ~> graph "Graph" ~> list (core "Term") ~>
         Types.either_ (errors "Error") (core "Term")
   ]
 ```
 
 (The Either-based implementation replaces the former `Flow` monad, removed in #245.
-The split into `PrimitiveDefinition` + `Primitive` happened in #156.)
+The host-independent `PrimitiveDefinition` was split out from the implementation
+in #156; the `InferenceContext` parameter replaced the legacy `Context` in #368.)
 
 #### Level 2: PrimitiveDefinition declaration (the canonical registry)
 
@@ -844,11 +842,12 @@ type from `hydra.errors`:
 type Result a = Either Error a
 ```
 
-A `Context` value is threaded alongside the `Graph` as an explicit parameter, carrying
-debug traces and diagnostic messages. This provides:
+An `InferenceContext` value is threaded alongside the `Graph` as an explicit
+parameter, carrying inference state (the fresh-variable counter and the
+current subterm-path trace, accumulated backward). This provides:
 - Explicit error handling with short-circuit semantics
-- Debug traces via the threaded `Context` parameter
-- No hidden state — all context is passed explicitly
+- Subterm-path tracing via the threaded `InferenceContext` parameter
+- No hidden state — all inference state is passed explicitly
 
 ---
 
@@ -1010,9 +1009,9 @@ file paths to contents comes out, and errors are reported via `Either Error`.
 
 Examples:
 ```haskell
-moduleToJava   :: Context -> Graph -> Module -> Either Error (M.Map FilePath String)
-moduleToPython :: Context -> Graph -> Module -> Either Error (M.Map FilePath String)
-moduleToCpp    :: Context -> Graph -> Module -> Either Error (M.Map FilePath String)
+moduleToJava   :: InferenceContext -> Graph -> Module -> Either Error (M.Map FilePath String)
+moduleToPython :: InferenceContext -> Graph -> Module -> Either Error (M.Map FilePath String)
+moduleToCpp    :: InferenceContext -> Graph -> Module -> Either Error (M.Map FilePath String)
 ```
 
 ### Coder framework
@@ -1023,8 +1022,8 @@ Located in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Co
 ```haskell
 -- Bidirectional transformation
 data Coder v1 v2 = Coder {
-  coderEncode :: Context -> v1 -> Either Error v2,
-  coderDecode :: Context -> v2 -> Either Error v1
+  coderEncode :: InferenceContext -> v1 -> Either Error v2,
+  coderDecode :: InferenceContext -> v2 -> Either Error v1
 }
 
 -- Adapter for language-specific transformations
@@ -1044,7 +1043,7 @@ Terms are recursively converted to target language expressions:
 
 ```haskell
 -- Java example
-encodeTerm :: Context -> Graph -> Aliases -> Term -> Either Error Java.Expression
+encodeTerm :: InferenceContext -> Graph -> Aliases -> Term -> Either Error Java.Expression
 
 -- Handles:
 -- - Literals (int, string, boolean, etc.)
@@ -1063,7 +1062,7 @@ Hydra types map to language types:
 
 ```haskell
 -- Java example
-encodeType :: Context -> Graph -> Aliases -> Type -> Either Error Java.Type
+encodeType :: InferenceContext -> Graph -> Aliases -> Type -> Either Error Java.Type
 
 -- Maps:
 -- TypeRecord → Java Class
@@ -1082,7 +1081,7 @@ Complete module transformation:
 
 ```haskell
 -- Java example from hydra-java's Coder.hs
-moduleToJava :: Context -> Graph -> Module -> Either Error (M.Map FilePath String)
+moduleToJava :: InferenceContext -> Graph -> Module -> Either Error (M.Map FilePath String)
 moduleToJava cx g mod = do
   -- Extract types from module
   types <- getTypes cx g mod
@@ -1105,13 +1104,13 @@ Adapters handle type compatibility between languages:
 
 ```haskell
 -- Core adapter functions
-languageAdapter    :: Context -> AdapterContext -> Language -> Type
+languageAdapter    :: InferenceContext -> AdapterContext -> Language -> Type
                    -> Either Error (Adapter Type Type Term Term)
 
-adaptTypeForLanguage :: Context -> AdapterContext -> Language -> Type
+adaptTypeForLanguage :: InferenceContext -> AdapterContext -> Language -> Type
                     -> Either Error Type
 
-termAdapter        :: Context -> AdapterContext -> Type
+termAdapter        :: InferenceContext -> AdapterContext -> Type
                    -> Either Error (Adapter FieldType FieldType Field Field)
 ```
 
@@ -1119,7 +1118,7 @@ termAdapter        :: Context -> AdapterContext -> Type
 ```haskell
 composeCoders  :: Coder v1 v2 -> Coder v2 v3 -> Coder v1 v3
 
-constructCoder :: Context -> AdapterContext -> Language -> Type
+constructCoder :: InferenceContext -> AdapterContext -> Language -> Type
                -> Either Error (Coder Term Term)
 ```
 
@@ -1470,14 +1469,14 @@ Hand-translate DSL definitions to Haskell in generated files:
 
 ```haskell
 -- Manually edit: dist/haskell/hydra-kernel/src/main/haskell/Hydra/Inference.hs
-inferTypeOfEither :: InferenceContext -> Either Term Term -> Context -> Graph -> Either Error InferenceResult
-inferTypeOfEither cx (Left left) context graph = do
-  leftResult <- inferType cx left context graph
+inferTypeOfEither :: InferenceContext -> Graph -> Either Term Term -> Either Error InferenceResult
+inferTypeOfEither cx graph (Left left) = do
+  leftResult <- inferType cx graph left
   let leftType = inferenceResultType leftResult
   let cx2 = inferenceResultContext leftResult
   return $ InferenceResult cx2 (TypeUnion [leftType, typeAny])
-inferTypeOfEither cx (Right right) = do
-  rightResult <- inferType cx right
+inferTypeOfEither cx graph (Right right) = do
+  rightResult <- inferType cx graph right
   let rightType = inferenceResultType rightResult
   let cx2 = inferenceResultContext rightResult
   return $ InferenceResult cx2 (TypeUnion [typeAny, rightType])
