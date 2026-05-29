@@ -1,5 +1,5 @@
 ---
-description: Run bin/sync-scheme.sh — Scheme-host Scheme sync. One of four Lisp-dialect entry points; shares the hydra-lisp coder.
+description: Run bin/sync-scheme.sh — Scheme-host Scheme sync. One of four Lisp-dialect entry points; shares the hydra-lisp coder. Does NOT run target tests — use /test scheme for that.
 allowed-tools:
   - Bash(bin/sync-scheme.sh*)
   - Read

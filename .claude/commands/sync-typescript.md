@@ -1,5 +1,5 @@
 ---
-description: Run bin/sync-typescript.sh — regenerates the TypeScript-only sync matrix (hosts × targets = typescript × typescript). Thin wrapper around bin/sync.sh.
+description: Run bin/sync-typescript.sh — regenerates the TypeScript-only sync matrix (hosts × targets = typescript × typescript). Thin wrapper around bin/sync.sh. Does NOT run target tests — use /test typescript for that.
 allowed-tools:
   - Bash(bin/sync-typescript.sh*)
   - Read

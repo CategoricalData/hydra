@@ -1,5 +1,5 @@
 ---
-description: Run bin/sync-go.sh — generates the kernel into dist/go/. Go is a "head bud" today; only hydra-kernel is targeted (no hydra-pg/hydra-rdf), and Phase 4 host=go rows are skipped.
+description: Run bin/sync-go.sh — generates the kernel into dist/go/. Go is a "head bud" today; only hydra-kernel is targeted (no hydra-pg/hydra-rdf), and Phase 4 host=go rows are skipped. Does NOT run target tests — use /test go for that.
 allowed-tools:
   - Bash(bin/sync-go.sh*)
   - Read

@@ -302,6 +302,8 @@ Current commands:
 - `/sync-clojure`, `/sync-common-lisp`, `/sync-emacs-lisp`,
   `/sync-scheme` — Lisp dialect sync wrappers
 - `/sync-bench` — regenerate hydra-bench (opt-in; not part of `/sync`)
+- `/test` — target-language test validation (default: triad; closes the
+  `/sync` ↔ CI gap where sync only runs Haskell `stack test`)
 
 ## Coding style (read the full guide!)
 
