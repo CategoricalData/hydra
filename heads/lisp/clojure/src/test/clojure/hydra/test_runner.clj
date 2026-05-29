@@ -2,7 +2,6 @@
   (:require [hydra.lib.libraries :as libraries]
             [hydra.lib.preload :as preload]
             [hydra.core :refer :all]
-            [hydra.context :refer :all]
             [hydra.errors :refer :all]
             [hydra.graph :refer :all]
             [hydra.packaging :refer :all]
@@ -132,7 +131,7 @@
   [name arity]
   (let [ts (make-type-scheme arity)
         sig (hydra_scoping_type_scheme_to_term_signature ts)]
-    (->hydra_packaging_primitive_definition name "" sig true true (list :nothing))))
+    (->hydra_packaging_primitive_definition name sig "" (list :nothing) (list) true true (list :nothing) (list :nothing) (list :nothing))))
 
 (defn- make-annotation-primitive
   "Create a Primitive that takes raw term arguments and returns a term result.
@@ -194,7 +193,7 @@
         maybe-val (if term-val (list :maybe term-val) (list :maybe (list :nothing)))]
     (prim-set-term-annotation _cx _g [desc-key maybe-val term])))
 
-;; getTermDescription :: Context -> Graph -> Term -> Either Error (Maybe String)
+;; getTermDescription :: InferenceContext -> Graph -> Term -> Either Error (Maybe String)
 (defn- prim-get-term-description [_cx _g args]
   (let [;; cx = first, g = second, term = third
         term (nth args 2)

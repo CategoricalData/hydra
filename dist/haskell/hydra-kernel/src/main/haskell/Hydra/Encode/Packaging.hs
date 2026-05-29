@@ -5,8 +5,8 @@ module Hydra.Encode.Packaging where
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Typing as Typing
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
 import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -126,17 +126,29 @@ primitiveDefinition x =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (Packaging.primitiveDefinitionName x))},
         Core.Field {
+          Core.fieldName = (Core.Name "signature"),
+          Core.fieldTerm = (Typing.termSignature (Packaging.primitiveDefinitionSignature x))},
+        Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Packaging.primitiveDefinitionDescription x))},
         Core.Field {
-          Core.fieldName = (Core.Name "signature"),
-          Core.fieldTerm = (Typing.termSignature (Packaging.primitiveDefinitionSignature x))},
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Packaging.primitiveDefinitionComments x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "seeAlso"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map EncodeCore.name xs)) (Packaging.primitiveDefinitionSeeAlso x))},
         Core.Field {
           Core.fieldName = (Core.Name "isPure"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (Packaging.primitiveDefinitionIsPure x))},
         Core.Field {
           Core.fieldName = (Core.Name "isTotal"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (Packaging.primitiveDefinitionIsTotal x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "availableSince"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map version opt)) (Packaging.primitiveDefinitionAvailableSince x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "deprecatedSince"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map version opt)) (Packaging.primitiveDefinitionDeprecatedSince x))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultImplementation"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map EncodeCore.term opt)) (Packaging.primitiveDefinitionDefaultImplementation x))}]})
@@ -179,3 +191,9 @@ typeDefinition x =
         Core.Field {
           Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = (EncodeCore.typeScheme (Packaging.typeDefinitionTypeScheme x))}]})
+-- | Encoder for hydra.packaging.Version
+version :: Packaging.Version -> Core.Term
+version x =
+    Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.packaging.Version"),
+      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Packaging.unVersion x))})

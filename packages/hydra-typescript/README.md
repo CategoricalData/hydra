@@ -7,14 +7,18 @@ system and kernel.
 suite (2570 of 2577 tests passing, 7 skipped as `disabled` upstream, 0 failing), the
 coder lives under `packages/hydra-typescript` and emits valid TypeScript with full
 type signatures, and the head participates in `bin/run-bootstrapping-demo.sh` as a
-target. **TypeScript-as-host** (writing Hydra DSL sources in TypeScript) is deferred
-— it would require TS analogues of the Hydra DSL meta-builders (Scala and Lisp heads
-also lack this today). See issue
-[#126](https://github.com/CategoricalData/hydra/issues/126) for the tracking effort.
+target.
+
+**TypeScript-as-host** can drive code generation for 7 of the 8 other heads from
+the language-neutral JSON kernel: TypeScript, Haskell, Python, Scala, Clojure, Scheme,
+Common Lisp, and Emacs Lisp. The Java target fails — see the "TS-as-host stack-limit
+caveat" below. **Writing Hydra DSL sources in TypeScript** (the other half of "host"
+status) is still deferred: it would require TS analogues of the Hydra DSL meta-builders,
+which Scala and Lisp heads also lack today.
 
 Hydra is a type-aware data transformation toolkit which aims to be highly flexible and
 portable. It has its roots in graph databases and type theory, and provides APIs in
-Haskell, Java, Python, Scala, and Lisp. See the main Hydra
+Haskell, Java, Python, Scala, TypeScript, and Lisp. See the main Hydra
 [README](https://github.com/CategoricalData/hydra) for more details.
 
 ## Layout
@@ -87,7 +91,7 @@ that re-enter the reducer call `reduceTerm(cx, g, true, term)` flat.
 Several Hydra term shapes can't be emitted as well-typed TypeScript
 without expensive type annotations the AST doesn't yet carry. Each is
 wrapped in an `as any` cast at emission time (`tsAsAny` helper, backed
-by the `Expression_asExpression` AST node added in #126):
+by the `Expression_asExpression` AST node):
 
 - **Term_pair** — `[a, b] as any` so TS infers tuple, not `(A|B)[]`.
 - **Term_inject / Term_maybe / Term_either** — discriminated-union
@@ -96,6 +100,52 @@ by the `Expression_asExpression` AST node added in #126):
   target (`Term`, `Type`, `Maybe<T>`, …).
 - **Term_cases** — the discriminator binds via `(u as any)` so `.value`
   access compiles on unit-shaped variants (`{tag: "lessThan"}`).
+
+### TS-as-host stack-limit caveat (TS → Java only)
+
+TypeScript-as-host generates clean output for all currently-supported
+targets except **Java**, where ~30% of kernel modules with deeply-
+polymorphic types overflow V8's stack mid-codegen. The shipped
+`bin/run-bootstrapping-demo.sh --hosts typescript --targets java` path
+reflects this: TS emits most files correctly but a handful of modules
+(e.g. `hydra.adapt`, `hydra.checking`, `hydra.inference`) come out
+missing — enough that the resulting Java source set won't compile.
+
+Root cause is the **V8 stack budget**, not the per-step frame overhead:
+- TS-emitted kernel uses ~10 JS frames per recursion step
+- Haskell-emitted Java uses ~6–16 JVM frames per step (comparable)
+- The Java host runs with `-Xss256m` (~16M raw frames available)
+- Node maxes out around ~611K raw frames (`ulimit -s 65520` plus V8
+  `--stack-size=57344`; pushing higher segfaults). That's ~26× less
+  headroom than Java.
+
+`demos/bootstrapping/bin/invoke-typescript-host.sh` already applies the
+full bump. Where Java host walks ~999K-forall types without trouble at
+`-Xss256m`, the TS host caps out around ~777-forall depth — fine for
+most real kernel terms but insufficient for the deepest polymorphic
+chains that arise during inference of certain kernel modules. Java is
+the only target whose codegen-time inference paths actually reach this
+depth in the current kernel.
+
+This is a runtime constraint, not a coder bug: the Java that TS does
+emit is byte-identical to Haskell-/Python-emitted Java for the modules
+that complete. Workarounds would be a kernel refactor toward
+accumulator-passing style for `rewriteType`/`typeOf`, or running TS-as-host
+on a runtime with a larger native stack.
+
+### TS-as-host Lisp-dialect slowness
+
+The four Lisp targets (Clojure, Scheme, Common Lisp, Emacs Lisp) emit
+correctly from TS-host but take ~19 minutes per dialect for kernel-only
+codegen (vs ~1–4 minutes for the non-Lisp targets). Profiling shows
+99.8% of the time is spent inside `moduleToLisp` itself, **not** in the
+post-processing chain (`programToExpr` / `parenthesize` / `printExpr`,
+which take <0.01% combined). The Lisp coder is structurally heavier
+than the other coders in ways that interact poorly with the
+PersistentMap operations underlying TS-host's runtime — same family of
+constant-factor issue tracked by [#362].
+
+The output is correct: this is purely a performance cliff.
 
 ### Function-type rendering
 

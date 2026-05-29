@@ -36,7 +36,8 @@ module_ = Module {
       primitiveDefinition,
       qualifiedName,
       termDefinition,
-      typeDefinition]
+      typeDefinition,
+      version]
 
 definition :: Binding
 definition = define "Definition" $
@@ -138,6 +139,41 @@ packageVersionSpecifier = define "PackageVersionSpecifier" $
       doc "Any version of the package satisfies the dependency" $
       T.unit]
 
+primitiveDefinition :: Binding
+primitiveDefinition = define "PrimitiveDefinition" $
+  doc "A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, signature, description, long-form specification, cross-references, totality and purity flags, version metadata, and an optional default implementation expressed as a Hydra term." $
+  T.record [
+    "name">:
+      doc "The name of the primitive"
+      Core.name,
+    "signature">:
+      doc "The signature of the primitive (always explicit, never inferred)"
+      Typing.termSignature,
+    "description">:
+      doc "A concise, one-sentence human-readable description of the primitive"
+      T.string,
+    "comments">:
+      doc "A detailed, host-independent specification of the primitive's behavior. Used to capture constraints, edge cases, and semantic choices (e.g. floating-point sentinel behavior, numeric narrowing arithmetic, complexity expectations) that are not yet promoted to structured fields." $
+      T.maybe T.string,
+    "seeAlso">:
+      doc "Names of related primitives, for navigation and documentation purposes." $
+      T.list Core.name,
+    "isPure">:
+      doc "Whether the primitive is pure (referentially transparent, no observable side effects). Defaults to true."
+      T.boolean,
+    "isTotal">:
+      doc "Whether the primitive is total (terminates on every input of its declared type). Defaults to true."
+      T.boolean,
+    "availableSince">:
+      doc "The version in which the primitive was introduced, if known." $
+      T.maybe version,
+    "deprecatedSince">:
+      doc "The version in which the primitive was deprecated, if applicable." $
+      T.maybe version,
+    "defaultImplementation">:
+      doc "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation." $
+      T.maybe Core.term]
+
 qualifiedName :: Binding
 qualifiedName = define "QualifiedName" $
   doc "A qualified name consisting of an optional module name together with a mandatory local name" $
@@ -148,29 +184,6 @@ qualifiedName = define "QualifiedName" $
     "local">:
       doc "The local name"
       T.string]
-
-primitiveDefinition :: Binding
-primitiveDefinition = define "PrimitiveDefinition" $
-  doc "A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, description, signature, totality and purity flags, and an optional default implementation expressed as a Hydra term." $
-  T.record [
-    "name">:
-      doc "The name of the primitive"
-      Core.name,
-    "description">:
-      doc "A human-readable description of the primitive"
-      T.string,
-    "signature">:
-      doc "The signature of the primitive (always explicit, never inferred)"
-      Typing.termSignature,
-    "isPure">:
-      doc "Whether the primitive is pure (referentially transparent, no observable side effects). Defaults to true."
-      T.boolean,
-    "isTotal">:
-      doc "Whether the primitive is total (terminates on every input of its declared type). Defaults to true."
-      T.boolean,
-    "defaultImplementation">:
-      doc "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation." $
-      T.maybe Core.term]
 
 termDefinition :: Binding
 termDefinition = define "TermDefinition" $
@@ -196,3 +209,8 @@ typeDefinition = define "TypeDefinition" $
     "typeScheme">:
       doc "The type scheme being defined"
       Core.typeScheme]
+
+version :: Binding
+version = define "Version" $
+  doc "A version string, e.g. \"0.15\" or \"1.0.0\"." $
+  T.wrap T.string

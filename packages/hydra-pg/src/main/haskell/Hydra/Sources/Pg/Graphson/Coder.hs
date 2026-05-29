@@ -115,12 +115,20 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
--- Type references
-gson :: String -> Type
-gson = Bootstrap.typeref GraphsonSyntax.ns
-
-jsonValue :: Type
-jsonValue = Bootstrap.typeref JsonModel.ns "Value"
+-- | Convert an AdjacentEdge to JSON
+adjacentEdgeToJson :: TTermDefinition (Bool -> G.AdjacentEdge -> JM.Value)
+adjacentEdgeToJson = define "adjacentEdgeToJson" $
+  doc "Convert a GraphSON AdjacentEdge to a JSON Value. The Bool indicates whether this is an outgoing edge." $
+  "out" ~> "ae" ~>
+    toJsonObject @@ list [
+      pair (string "id") (just $ valueToJson @@ (project G._AdjacentEdge G._AdjacentEdge_id @@ var "ae")),
+      pair (string "inV") (Logic.ifElse (var "out")
+        (just $ valueToJson @@ (project G._AdjacentEdge G._AdjacentEdge_vertexId @@ var "ae"))
+        nothing),
+      pair (string "outV") (Logic.ifElse (var "out")
+        nothing
+        (just $ valueToJson @@ (project G._AdjacentEdge G._AdjacentEdge_vertexId @@ var "ae"))),
+      pair (string "properties") (edgePropertyMapToJson @@ (project G._AdjacentEdge G._AdjacentEdge_properties @@ var "ae"))]
 
 -- | Convert a DoubleValue to JSON
 doubleValueToJson :: TTermDefinition (G.DoubleValue -> JM.Value)
@@ -132,6 +140,32 @@ doubleValueToJson = define "doubleValueToJson" $
     G._DoubleValue_negativeInfinity>>: constant $ Json.valueString (string "-Infinity"),
     G._DoubleValue_notANumber>>: constant $ Json.valueString (string "NaN")]
 
+-- | Convert edge map to JSON
+edgeMapToJson :: TTermDefinition (Bool -> M.Map G.EdgeLabel [G.AdjacentEdge] -> Maybe JM.Value)
+edgeMapToJson = define "edgeMapToJson" $
+  doc "Convert a map of edges by label to an optional JSON Value" $
+  "out" ~> "m" ~>
+    Logic.ifElse (Maps.null $ var "m")
+      nothing
+      (just $ Json.valueObject $ Maps.fromList $ Lists.map
+        ("p" ~> pair
+          (unwrap G._EdgeLabel @@ (Pairs.first $ var "p"))
+          (Json.valueArray $ Lists.map (adjacentEdgeToJson @@ var "out") (Pairs.second $ var "p")))
+        (Maps.toList $ var "m"))
+
+-- | Convert edge properties map to JSON
+edgePropertyMapToJson :: TTermDefinition (M.Map G.PropertyKey G.Value -> Maybe JM.Value)
+edgePropertyMapToJson = define "edgePropertyMapToJson" $
+  doc "Convert a map of edge properties to an optional JSON Value" $
+  "m" ~>
+    Logic.ifElse (Maps.null $ var "m")
+      nothing
+      (just $ Json.valueObject $ Maps.fromList $ Lists.map
+        ("p" ~> pair
+          (unwrap G._PropertyKey @@ (Pairs.first $ var "p"))
+          (valueToJson @@ (Pairs.second $ var "p")))
+        (Maps.toList $ var "m"))
+
 -- | Convert a FloatValue to JSON
 floatValueToJson :: TTermDefinition (G.FloatValue -> JM.Value)
 floatValueToJson = define "floatValueToJson" $
@@ -142,14 +176,23 @@ floatValueToJson = define "floatValueToJson" $
     G._FloatValue_negativeInfinity>>: constant $ Json.valueString (string "-Infinity"),
     G._FloatValue_notANumber>>: constant $ Json.valueString (string "NaN")]
 
--- | Create a typed JSON object with @type and @value fields
-typedValueToJson :: TTermDefinition (String -> JM.Value -> JM.Value)
-typedValueToJson = define "typedValueToJson" $
-  doc "Create a typed JSON object with @type and @value fields" $
-  "typeName" ~> "valueJson" ~>
-    toJsonObject @@ list [
-      pair (string "@type") (just $ Json.valueString $ var "typeName"),
-      pair (string "@value") (just $ var "valueJson")]
+-- Type references
+gson :: String -> Type
+gson = Bootstrap.typeref GraphsonSyntax.ns
+
+jsonValue :: Type
+jsonValue = Bootstrap.typeref JsonModel.ns "Value"
+
+-- | Convert a GraphSON Map to JSON
+mapToJson :: TTermDefinition (G.Map -> JM.Value)
+mapToJson = define "mapToJson" $
+  doc "Convert a GraphSON Map to a JSON array of alternating keys and values" $
+  "m" ~>
+    Json.valueArray $ Lists.concat $ Lists.map
+      ("vp" ~> list [
+        valueToJson @@ (project G._ValuePair G._ValuePair_first @@ var "vp"),
+        valueToJson @@ (project G._ValuePair G._ValuePair_second @@ var "vp")])
+      (unwrap G._Map @@ var "m")
 
 -- | Create a JSON object from a list of key-value pairs, filtering out Nothing values
 toJsonObject :: TTermDefinition ([(String, Maybe JM.Value)] -> JM.Value)
@@ -162,16 +205,14 @@ toJsonObject = define "toJsonObject" $
         (Pairs.second $ var "p"))
       (var "pairs")
 
--- | Convert a GraphSON Map to JSON
-mapToJson :: TTermDefinition (G.Map -> JM.Value)
-mapToJson = define "mapToJson" $
-  doc "Convert a GraphSON Map to a JSON array of alternating keys and values" $
-  "m" ~>
-    Json.valueArray $ Lists.concat $ Lists.map
-      ("vp" ~> list [
-        valueToJson @@ (project G._ValuePair G._ValuePair_first @@ var "vp"),
-        valueToJson @@ (project G._ValuePair G._ValuePair_second @@ var "vp")])
-      (unwrap G._Map @@ var "m")
+-- | Create a typed JSON object with @type and @value fields
+typedValueToJson :: TTermDefinition (String -> JM.Value -> JM.Value)
+typedValueToJson = define "typedValueToJson" $
+  doc "Create a typed JSON object with @type and @value fields" $
+  "typeName" ~> "valueJson" ~>
+    toJsonObject @@ list [
+      pair (string "@type") (just $ Json.valueString $ var "typeName"),
+      pair (string "@value") (just $ var "valueJson")]
 
 -- | Convert a GraphSON Value to JSON
 valueToJson :: TTermDefinition (G.Value -> JM.Value)
@@ -221,56 +262,6 @@ valueToJson = define "valueToJson" $
     G._Value_uuid>>: "u" ~>
       typedValueToJson @@ string "g:UUID" @@ (Json.valueString $ unwrap G._Uuid @@ var "u")]
 
--- | Convert a VertexPropertyValue to JSON
-vertexPropertyValueToJson :: TTermDefinition (G.VertexPropertyValue -> JM.Value)
-vertexPropertyValueToJson = define "vertexPropertyValueToJson" $
-  doc "Convert a GraphSON VertexPropertyValue to a JSON Value" $
-  "vpv" ~>
-    toJsonObject @@ list [
-      pair (string "id") (Maybes.map valueToJson $ project G._VertexPropertyValue G._VertexPropertyValue_id @@ var "vpv"),
-      pair (string "value") (just $ valueToJson @@ (project G._VertexPropertyValue G._VertexPropertyValue_value @@ var "vpv"))]
-
--- | Convert an AdjacentEdge to JSON
-adjacentEdgeToJson :: TTermDefinition (Bool -> G.AdjacentEdge -> JM.Value)
-adjacentEdgeToJson = define "adjacentEdgeToJson" $
-  doc "Convert a GraphSON AdjacentEdge to a JSON Value. The Bool indicates whether this is an outgoing edge." $
-  "out" ~> "ae" ~>
-    toJsonObject @@ list [
-      pair (string "id") (just $ valueToJson @@ (project G._AdjacentEdge G._AdjacentEdge_id @@ var "ae")),
-      pair (string "inV") (Logic.ifElse (var "out")
-        (just $ valueToJson @@ (project G._AdjacentEdge G._AdjacentEdge_vertexId @@ var "ae"))
-        nothing),
-      pair (string "outV") (Logic.ifElse (var "out")
-        nothing
-        (just $ valueToJson @@ (project G._AdjacentEdge G._AdjacentEdge_vertexId @@ var "ae"))),
-      pair (string "properties") (edgePropertyMapToJson @@ (project G._AdjacentEdge G._AdjacentEdge_properties @@ var "ae"))]
-
--- | Convert edge properties map to JSON
-edgePropertyMapToJson :: TTermDefinition (M.Map G.PropertyKey G.Value -> Maybe JM.Value)
-edgePropertyMapToJson = define "edgePropertyMapToJson" $
-  doc "Convert a map of edge properties to an optional JSON Value" $
-  "m" ~>
-    Logic.ifElse (Maps.null $ var "m")
-      nothing
-      (just $ Json.valueObject $ Maps.fromList $ Lists.map
-        ("p" ~> pair
-          (unwrap G._PropertyKey @@ (Pairs.first $ var "p"))
-          (valueToJson @@ (Pairs.second $ var "p")))
-        (Maps.toList $ var "m"))
-
--- | Convert edge map to JSON
-edgeMapToJson :: TTermDefinition (Bool -> M.Map G.EdgeLabel [G.AdjacentEdge] -> Maybe JM.Value)
-edgeMapToJson = define "edgeMapToJson" $
-  doc "Convert a map of edges by label to an optional JSON Value" $
-  "out" ~> "m" ~>
-    Logic.ifElse (Maps.null $ var "m")
-      nothing
-      (just $ Json.valueObject $ Maps.fromList $ Lists.map
-        ("p" ~> pair
-          (unwrap G._EdgeLabel @@ (Pairs.first $ var "p"))
-          (Json.valueArray $ Lists.map (adjacentEdgeToJson @@ var "out") (Pairs.second $ var "p")))
-        (Maps.toList $ var "m"))
-
 -- | Convert vertex properties map to JSON
 vertexPropertyMapToJson :: TTermDefinition (M.Map G.PropertyKey [G.VertexPropertyValue] -> Maybe JM.Value)
 vertexPropertyMapToJson = define "vertexPropertyMapToJson" $
@@ -283,6 +274,15 @@ vertexPropertyMapToJson = define "vertexPropertyMapToJson" $
           (unwrap G._PropertyKey @@ (Pairs.first $ var "p"))
           (Json.valueArray $ Lists.map vertexPropertyValueToJson (Pairs.second $ var "p")))
         (Maps.toList $ var "m"))
+
+-- | Convert a VertexPropertyValue to JSON
+vertexPropertyValueToJson :: TTermDefinition (G.VertexPropertyValue -> JM.Value)
+vertexPropertyValueToJson = define "vertexPropertyValueToJson" $
+  doc "Convert a GraphSON VertexPropertyValue to a JSON Value" $
+  "vpv" ~>
+    toJsonObject @@ list [
+      pair (string "id") (Maybes.map valueToJson $ project G._VertexPropertyValue G._VertexPropertyValue_id @@ var "vpv"),
+      pair (string "value") (just $ valueToJson @@ (project G._VertexPropertyValue G._VertexPropertyValue_value @@ var "vpv"))]
 
 -- | Convert a GraphSON Vertex to JSON
 vertexToJson :: TTermDefinition (G.Vertex -> JM.Value)

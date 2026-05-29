@@ -1469,7 +1469,7 @@
         "name": "hydra.demos.genpg.transform.evaluateEdge",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
             {
               "isLazy": false,
@@ -1809,14 +1809,14 @@
                         "parameter": "edgeSpec"}},
                     "domain": {"variable": "hydra.graph.Graph"},
                     "parameter": "g"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
         "name": "hydra.demos.genpg.transform.evaluateProperties",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
             {
               "isLazy": false,
@@ -2043,7 +2043,7 @@
                             "parameter": "specs"}},
                         "domain": {"variable": "hydra.graph.Graph"},
                         "parameter": "g"}},
-                    "domain": {"variable": "hydra.context.Context"},
+                    "domain": {"variable": "hydra.typing.InferenceContext"},
                     "parameter": "cx"}}}},
             "parameter": "t0"}}}},
     {
@@ -2051,7 +2051,7 @@
         "name": "hydra.demos.genpg.transform.evaluateVertex",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
             {
               "isLazy": false,
@@ -2254,7 +2254,7 @@
                         "parameter": "vertexSpec"}},
                     "domain": {"variable": "hydra.graph.Graph"},
                     "parameter": "g"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
@@ -3780,7 +3780,7 @@
         "name": "hydra.demos.genpg.transform.transformRecord",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
             {
               "isLazy": false,
@@ -3976,14 +3976,14 @@
                         "parameter": "vspecs"}},
                     "domain": {"variable": "hydra.graph.Graph"},
                     "parameter": "g"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}},
     {
       "term": {
         "name": "hydra.demos.genpg.transform.transformTableRows",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
             {
               "isLazy": false,
@@ -4169,7 +4169,7 @@
                         "parameter": "vspecs"}},
                     "domain": {"variable": "hydra.graph.Graph"},
                     "parameter": "g"}},
-                "domain": {"variable": "hydra.context.Context"},
+                "domain": {"variable": "hydra.typing.InferenceContext"},
                 "parameter": "cx"}}}}}}],
   "dependencies": [
     {"module": "hydra.reduction"},
@@ -4179,7 +4179,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

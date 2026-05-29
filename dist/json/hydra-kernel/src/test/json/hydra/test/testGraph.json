@@ -290,7 +290,7 @@
     {
       "term": {
         "name": "hydra.test.testGraph.testContext",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.context.Context"}}, "typeParameters": []},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.typing.InferenceContext"}}, "typeParameters": []},
         "term": {"variable": "hydra.test.testEnv.testContext"}}}],
   "dependencies": [
     {"module": "hydra.test.testTerms"},
@@ -300,7 +300,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

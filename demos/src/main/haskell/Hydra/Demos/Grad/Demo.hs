@@ -15,7 +15,7 @@ import qualified Hydra.Variables as Vars
 import qualified Hydra.Reduction as Reduction
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Sources.Libraries as Lib
-import qualified Hydra.Lib.Math as HMath
+import qualified Hydra.Haskell.Lib.Math as HMath
 
 import Control.Monad (when)
 import qualified Data.List as L
@@ -46,7 +46,7 @@ primGraph = let
 
 -- | Evaluate a Term to a reduced form, or return an error message.
 eval :: Term -> Either String Term
-eval term = case Reduction.reduceTerm emptyContext primGraph True term of
+eval term = case Reduction.reduceTerm emptyInferenceContext primGraph True term of
   Left err -> Left $ show err
   Right t -> Right t
 

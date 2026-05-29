@@ -57,7 +57,6 @@ import qualified Hydra.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
@@ -223,7 +222,7 @@ isNominalType = define "isNominalType" $
       _Type_forall>>: lambda "fa" $
         isNominalType @@ Core.forallTypeBody (var "fa")]
 
-isSerializable :: TTermDefinition (Context -> Graph -> Binding -> Either Error Bool)
+isSerializable :: TTermDefinition (InferenceContext -> Graph -> Binding -> Either Error Bool)
 isSerializable = define "isSerializable" $
   doc "Check if an element is serializable (no function types in dependencies) (Either version)" $
   "cx" ~> "graph" ~> "el" ~>
@@ -236,16 +235,7 @@ isSerializable = define "isSerializable" $
       Logic.not (Sets.member Variants.typeVariantFunction (var "allVariants")))
     (typeDependencies @@ var "cx" @@ var "graph" @@ false @@ (reify Equality.identity) @@ Core.bindingName (var "el"))
 
-isSerializableType :: TTermDefinition (Type -> Bool)
-isSerializableType = define "isSerializableType" $
-  doc "Check if a type is serializable (no function types in the type itself)" $
-  "typ" ~>
-  "allVariants" <~ Sets.fromList (Lists.map (Reflect.typeVariant)
-    (Rewriting.foldOverType @@ Coders.traversalOrderPre @@
-      ("m" ~> "t" ~> Lists.cons (var "t") (var "m")) @@ list ([] :: [TTerm Type]) @@ var "typ")) $
-  Logic.not (Sets.member Variants.typeVariantFunction (var "allVariants"))
-
-isSerializableByName :: TTermDefinition (Context -> Graph -> Name -> Either Error Bool)
+isSerializableByName :: TTermDefinition (InferenceContext -> Graph -> Name -> Either Error Bool)
 isSerializableByName = define "isSerializableByName" $
   doc "Check if a type (by name) is serializable, resolving all type dependencies (Either version)" $
   "cx" ~> "graph" ~> "name" ~>
@@ -258,16 +248,14 @@ isSerializableByName = define "isSerializableByName" $
       Logic.not (Sets.member Variants.typeVariantFunction (var "allVariants")))
     (typeDependencies @@ var "cx" @@ var "graph" @@ false @@ (reify Equality.identity) @@ var "name")
 
-isType :: TTermDefinition (Type -> Bool)
-isType = define "isType" $
-  doc "Check whether a type is a type (always true for non-encoded types)" $
-  "t" ~> cases _Type (Strip.deannotateType @@ var "t") (Just false) [
-    _Type_application>>: "a" ~>
-      isType @@ (Core.applicationTypeFunction (var "a")),
-    _Type_forall>>: "l" ~>
-      isType @@ (Core.forallTypeBody (var "l")),
-    _Type_union>>: "rt" ~> false,
-    _Type_variable>>: "v" ~> Equality.equal (var "v") (Core.nameLift _Type)]
+isSerializableType :: TTermDefinition (Type -> Bool)
+isSerializableType = define "isSerializableType" $
+  doc "Check if a type is serializable (no function types in the type itself)" $
+  "typ" ~>
+  "allVariants" <~ Sets.fromList (Lists.map (Reflect.typeVariant)
+    (Rewriting.foldOverType @@ Coders.traversalOrderPre @@
+      ("m" ~> "t" ~> Lists.cons (var "t") (var "m")) @@ list ([] :: [TTerm Type]) @@ var "typ")) $
+  Logic.not (Sets.member Variants.typeVariantFunction (var "allVariants"))
 
 isTrivialTerm :: TTermDefinition (Term -> Bool)
 isTrivialTerm = define "isTrivialTerm" $
@@ -305,6 +293,17 @@ isTrivialTerm = define "isTrivialTerm" $
     _Term_typeApplication>>: "ta" ~> isTrivialTerm @@ (Core.typeApplicationTermBody $ var "ta"),
     _Term_typeLambda>>: "tl" ~> isTrivialTerm @@ (Core.typeLambdaBody $ var "tl")]
 
+isType :: TTermDefinition (Type -> Bool)
+isType = define "isType" $
+  doc "Check whether a type is a type (always true for non-encoded types)" $
+  "t" ~> cases _Type (Strip.deannotateType @@ var "t") (Just false) [
+    _Type_application>>: "a" ~>
+      isType @@ (Core.applicationTypeFunction (var "a")),
+    _Type_forall>>: "l" ~>
+      isType @@ (Core.forallTypeBody (var "l")),
+    _Type_union>>: "rt" ~> false,
+    _Type_variable>>: "v" ~> Equality.equal (var "v") (Core.nameLift _Type)]
+
 isUnitTerm :: TTermDefinition (Term -> Bool)
 isUnitTerm = define "isUnitTerm" $
   doc "Check whether a term is the unit term" $
@@ -315,12 +314,12 @@ isUnitType = define "isUnitType" $
   doc "Check whether a type is the unit type" $
   match _Type (Just false) [_Type_unit>>: constant true]
 
-typeDependencies :: TTermDefinition (Context -> Graph -> Bool -> (Type -> Type) -> Name -> Either Error (M.Map Name Type))
+typeDependencies :: TTermDefinition (InferenceContext -> Graph -> Bool -> (Type -> Type) -> Name -> Either Error (M.Map Name Type))
 typeDependencies = define "typeDependencies" $
   doc "Get all type dependencies for a given type name (Either version)" $
   "cx" ~> "graph" ~> "withSchema" ~> "transform" ~> "name" ~>
   "requireType" <~ ("name" ~>
-    "cx1" <~ Ctx.pushTrace (Strings.cat2 (string "type dependencies of ") (Core.unName (var "name"))) (var "cx") $
+    "cx1" <~ (var "cx") $
     Eithers.bind (Lexical.requireBinding @@ var "graph" @@ var "name") (
       "el" ~> Eithers.bimap ("_e" ~> Error.errorDecoding $ var "_e") ("_a" ~> var "_a")
           (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el")))) $

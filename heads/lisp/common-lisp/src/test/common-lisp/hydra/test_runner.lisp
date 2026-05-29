@@ -295,7 +295,7 @@
   "Build a PrimitiveDefinition (#156 shape) for an annotation primitive."
   (let* ((ts (make-ann-type-scheme arity))
          (sig (funcall hydra_scoping_type_scheme_to_term_signature ts)))
-    (make-hydra_packaging_primitive_definition pname "" sig t t (list :nothing))))
+    (make-hydra_packaging_primitive_definition pname sig "" (list :nothing) (list) t t (list :nothing) (list :nothing) (list :nothing))))
 
 (defun make-annotation-primitive (pname arity impl-fn)
   "Create a Primitive for annotation operations."
@@ -414,7 +414,7 @@
          (maybe-val (if term-val (list :maybe term-val) (list :maybe (list :nothing)))))
     (prim-set-term-annotation cx g (list desc-key maybe-val term))))
 
-;; getTermDescription :: Context -> Graph -> Term -> Either Error (Maybe String)
+;; getTermDescription :: InferenceContext -> Graph -> Term -> Either Error (Maybe String)
 (defun prim-get-term-description (cx g args)
   (declare (ignore cx g))
   (let* ((term (third args))

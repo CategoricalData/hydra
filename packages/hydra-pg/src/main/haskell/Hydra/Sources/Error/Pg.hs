@@ -15,9 +15,6 @@ ns = ModuleName "hydra.error.pg"
 define :: String -> Type -> Binding
 define = defineType ns
 
-pg :: String -> Type
-pg = typeref PgModel.ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -162,6 +159,9 @@ noSuchVertexLabelError = define "NoSuchVertexLabelError" $
     "label">:
       doc "The vertex label that was not found" $
       pg "VertexLabel"]
+
+pg :: String -> Type
+pg = typeref PgModel.ns
 
 wrongVertexLabelError :: Binding
 wrongVertexLabelError = define "WrongVertexLabelError" $

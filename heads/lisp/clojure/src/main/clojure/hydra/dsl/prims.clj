@@ -1,7 +1,7 @@
 (ns hydra.dsl.prims
   (:require [hydra.core :refer :all]
             [hydra.graph :refer :all]
-            [hydra.context :refer :all]
+            [hydra.typing :refer :all]
             [hydra.errors :refer :all]
             [hydra.packaging :refer :all]
             [hydra.scoping :refer [hydra_scoping_type_scheme_to_term_signature]])
@@ -98,7 +98,7 @@
   [pname variables inputs output constraints]
   (let [ts (build-type-scheme variables inputs output constraints)
         sig (hydra_scoping_type_scheme_to_term_signature ts)]
-    (->hydra_packaging_primitive_definition pname "" sig true true (list :nothing))))
+    (->hydra_packaging_primitive_definition pname sig "" (list :nothing) (list) true true (list :nothing) (list :nothing) (list :nothing))))
 
 ;; Error helpers
 

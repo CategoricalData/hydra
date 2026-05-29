@@ -124,21 +124,6 @@ module_ = Module {
       toDefinition typeParamToExpr]
 
 
-dotOp :: TTermDefinition Op
-dotOp = define "dotOp" $
-  doc "The dot operator for member access" $
-  Ast.op (Ast.symbol (string ".")) (Ast.padding Ast.wsNone Ast.wsNone) (Ast.precedence (int32 0)) Ast.associativityLeft
-
-functionArrowOp :: TTermDefinition Op
-functionArrowOp = define "functionArrowOp" $
-  doc "The function arrow operator (=>)" $
-  Serialization.op @@ string "=>" @@ Math.negate (int32 1) @@ Ast.associativityRight
-
-matchOp :: TTermDefinition Op
-matchOp = define "matchOp" $
-  doc "The match operator" $
-  Ast.op (Ast.symbol (string "match")) (Ast.padding Ast.wsSpace (Ast.wsBreakAndIndent (string "  "))) (Ast.precedence (int32 0)) Ast.associativityNone
-
 caseToExpr :: TTermDefinition (Scala.Case -> Expr)
 caseToExpr = define "caseToExpr" $
   doc "Convert a case clause to an expression" $
@@ -336,6 +321,16 @@ defnToExpr = define "defnToExpr" $
           Serialization.noSep @@ list [dataNameToExpr @@ var "name", var "params"],
           var "extendsClause"]]
 
+dotOp :: TTermDefinition Op
+dotOp = define "dotOp" $
+  doc "The dot operator for member access" $
+  Ast.op (Ast.symbol (string ".")) (Ast.padding Ast.wsNone Ast.wsNone) (Ast.precedence (int32 0)) Ast.associativityLeft
+
+functionArrowOp :: TTermDefinition Op
+functionArrowOp = define "functionArrowOp" $
+  doc "The function arrow operator (=>)" $
+  Serialization.op @@ string "=>" @@ Math.negate (int32 1) @@ Ast.associativityRight
+
 importExportStatToExpr :: TTermDefinition (Scala.ImportExportStat -> Expr)
 importExportStatToExpr = define "importExportStatToExpr" $
   doc "Convert an import/export statement to an expression" $
@@ -386,20 +381,6 @@ initToExpr = define "initToExpr" $
   lambda "init" $
     typeToExpr @@ (project Scala._Init Scala._Init_tpe @@ var "init")
 
--- | Convert a showFloat32/showFloat64 result into valid Scala source syntax,
--- mapping NaN and ±Infinity to {Float,Double}.{NaN,PositiveInfinity,NegativeInfinity}.
--- The 'prefix' is "Float" or "Double"; 'suffix' is "f" (Float) or "" (Double).
-scalaFloatLiteralText :: TTermDefinition (String -> String -> String -> String)
-scalaFloatLiteralText = define "scalaFloatLiteralText" $
-  lambda "prefix" $ lambda "suffix" $ lambda "s" $
-    Logic.ifElse (Equality.equal (var "s") (string "NaN"))
-      (Strings.cat2 (var "prefix") (string ".NaN")) $
-    Logic.ifElse (Equality.equal (var "s") (string "Infinity"))
-      (Strings.cat2 (var "prefix") (string ".PositiveInfinity")) $
-    Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
-      (Strings.cat2 (var "prefix") (string ".NegativeInfinity"))
-      (Strings.cat2 (var "s") (var "suffix"))
-
 litToExpr :: TTermDefinition (Scala.Lit -> Expr)
 litToExpr = define "litToExpr" $
   doc "Convert a literal to an expression" $
@@ -421,6 +402,11 @@ litToExpr = define "litToExpr" $
           (Strings.cat2
             (Strings.intercalate (string ", ") (Lists.map (lambda "b" $ Strings.cat2 (Literals.showInt32 (var "b")) (string ".toByte")) (var "bs")))
             (string ")"))]
+
+matchOp :: TTermDefinition Op
+matchOp = define "matchOp" $
+  doc "The match operator" $
+  Ast.op (Ast.symbol (string "match")) (Ast.padding Ast.wsSpace (Ast.wsBreakAndIndent (string "  "))) (Ast.precedence (int32 0)) Ast.associativityNone
 
 modToExpr :: TTermDefinition (Scala.Mod -> Expr)
 modToExpr = define "modToExpr" $
@@ -473,6 +459,20 @@ pkgToExpr = define "pkgToExpr" $
       list [var "package"],
       Lists.map statToExpr (var "stats")])
 
+-- | Convert a showFloat32/showFloat64 result into valid Scala source syntax,
+-- mapping NaN and ±Infinity to {Float,Double}.{NaN,PositiveInfinity,NegativeInfinity}.
+-- The 'prefix' is "Float" or "Double"; 'suffix' is "f" (Float) or "" (Double).
+scalaFloatLiteralText :: TTermDefinition (String -> String -> String -> String)
+scalaFloatLiteralText = define "scalaFloatLiteralText" $
+  lambda "prefix" $ lambda "suffix" $ lambda "s" $
+    Logic.ifElse (Equality.equal (var "s") (string "NaN"))
+      (Strings.cat2 (var "prefix") (string ".NaN")) $
+    Logic.ifElse (Equality.equal (var "s") (string "Infinity"))
+      (Strings.cat2 (var "prefix") (string ".PositiveInfinity")) $
+    Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
+      (Strings.cat2 (var "prefix") (string ".NegativeInfinity"))
+      (Strings.cat2 (var "s") (var "suffix"))
+
 statToExpr :: TTermDefinition (Scala.Stat -> Expr)
 statToExpr = define "statToExpr" $
   doc "Convert a statement to an expression" $
@@ -511,6 +511,18 @@ termToExpr = define "termToExpr" $
         "stats">: project Scala._BlockData Scala._BlockData_stats @@ var "blk"] $
         Serialization.curlyBlock @@ Serialization.fullBlockStyle @@ (Serialization.newlineSep @@ (Lists.map statToExpr (var "stats")))]
 
+typeNameToExpr :: TTermDefinition (Scala.NameType -> Expr)
+typeNameToExpr = define "typeNameToExpr" $
+  doc "Convert a type name to an expression" $
+  lambda "tn" $
+    Serialization.cst @@ (project Scala._NameType Scala._NameType_value @@ var "tn")
+
+typeParamToExpr :: TTermDefinition (Scala.ParamType -> Expr)
+typeParamToExpr = define "typeParamToExpr" $
+  doc "Convert a type parameter to an expression" $
+  lambda "tp" $
+    nameToExpr @@ (project Scala._ParamType Scala._ParamType_name @@ var "tp")
+
 typeToExpr :: TTermDefinition (Scala.Type -> Expr)
 typeToExpr = define "typeToExpr" $
   doc "Convert a type to an expression" $
@@ -537,15 +549,3 @@ typeToExpr = define "typeToExpr" $
           Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeParamToExpr (var "params"))],
       Scala._Type_var>>: lambda "tv" $
         typeNameToExpr @@ (project Scala._VarType Scala._VarType_name @@ var "tv")]
-
-typeNameToExpr :: TTermDefinition (Scala.NameType -> Expr)
-typeNameToExpr = define "typeNameToExpr" $
-  doc "Convert a type name to an expression" $
-  lambda "tn" $
-    Serialization.cst @@ (project Scala._NameType Scala._NameType_value @@ var "tn")
-
-typeParamToExpr :: TTermDefinition (Scala.ParamType -> Expr)
-typeParamToExpr = define "typeParamToExpr" $
-  doc "Convert a type parameter to an expression" $
-  lambda "tp" $
-    nameToExpr @@ (project Scala._ParamType Scala._ParamType_name @@ var "tp")
