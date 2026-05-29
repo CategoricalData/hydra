@@ -221,7 +221,16 @@ invalidates the per-target test cache.
 
 There are four notable exceptions where the cause-and-effect chain is incomplete today.
 All four are tracked under [#347](https://github.com/CategoricalData/hydra/issues/347).
-See [Gaps and the path to #347](#gaps-and-the-path-to-347).
+See [Remaining gaps](#remaining-gaps).
+
+A distinct failure mode, worth separating from the four cascade gaps above, is an
+**incomplete input set**: a real input that feeds a package's generation is missing from
+the input digest *entirely*, so no edit to it can ever invalidate the cache — unlike a
+*stale* hash, which content-hashing catches on the next run. #400 was an instance: the
+self-hosted coders' input digest omitted the native `hydra.<lang>.*` modules, so a
+`Coder.java` edit produced a green sync with no effect (fixed — see above). The general
+guard: the input digest for a package must hash *every* source module that feeds its
+generation, including ones whose JSON output is written by a different producer.
 
 ### The per-target generator stamp
 
