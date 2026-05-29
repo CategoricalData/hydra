@@ -110,12 +110,20 @@ legacy Haskell-DSL copies retained as a fallback through 0.15.
 Because Phase 5 is last but its output (`dist/json/hydra-{java,python}/`) is an *input* to
 Phases 2–4, a change to a native coder would otherwise take two sync passes to fully land —
 Phases 2–4 in pass *n* still see the pre-Phase-5 JSON. To keep a single pass self-consistent,
-Phase 5 self-propagates: when the native output differs from the prior snapshot, it
-re-assembles `dist/haskell/hydra-<lang>/` from the new JSON and re-runs `stack build` so
-`bootstrap-from-json` embeds the updated coder
-([#400](https://github.com/CategoricalData/hydra/issues/400)). The downstream `dist/<target>/`
+when the native output differs from the prior snapshot Phase 5 re-assembles
+`dist/haskell/hydra-<lang>/` from the new JSON and re-runs `stack build` so
+`bootstrap-from-json` embeds the updated coder. This re-assemble flows through the normal
+freshness gate: Phase 1's input digest now folds in the native `hydra.<lang>.*` source
+hashes (see [the cache model](#the-cache-model) and
+[#400](https://github.com/CategoricalData/hydra/issues/400)), so the assembler correctly
+detects the change without any output-digest force-drop. The downstream `dist/<target>/`
 trees are gitignored and regenerated on the next run, so they are intentionally not
 re-emitted here.
+
+Once the legacy Haskell DSL copies for hydra-java/hydra-python are removed (post-0.16), the
+native generators become the sole writers of `dist/json/hydra-{java,python}/`. This native
+DSL→JSON step should then move ahead of Phase 2, eliminating the producer-ordering lag and
+the re-assemble block above.
 
 `bin/sync.sh` runs Phases 0–5 over the matrix the caller specifies via `--hosts` and
 `--targets`. `bin/sync.sh` does NOT run target-language tests; only Haskell `stack test`
@@ -193,13 +201,15 @@ A missing or stale digest is always a cache miss, never a correctness problem. T
 first build after a fresh clone or after a merge runs without cache hits and rebuilds
 the digests as it goes; subsequent runs hit the cache normally.
 
-One caveat for the self-hosted coders: the input digest for `dist/json/hydra-{java,python}/`
-hashes only the `hydra.dsl.<lang>.*` modules, not the native-generator-owned `hydra.<lang>.*`
-modules (including `hydra.<lang>.coder`). So a change confined to the native coder is *invisible*
-to that digest — an incomplete input set, not merely a stale one — which is why Phase 5's
-self-propagation force-drops `dist/haskell/hydra-<lang>/build/main/digest.json` before
-re-assembling rather than relying on the freshness gate
-([#400](https://github.com/CategoricalData/hydra/issues/400)).
+The self-hosted coders used to have an incomplete input digest: it hashed only the
+`hydra.dsl.<lang>.*` modules, not the native-generator-owned `hydra.<lang>.*` modules
+(including `hydra.<lang>.coder`), so a change confined to the native coder was *invisible*
+to the freshness gate ([#400](https://github.com/CategoricalData/hydra/issues/400)). Fixed:
+`Hydra.Digest.discoverNamespaceFiles` now also scans the native `.java`/`.py` sources, and
+the per-package input digest hashes the unfiltered universe, so
+`dist/json/hydra-{java,python}/build/main/digest.json` includes every native module. A
+native coder edit now invalidates that digest like any other source change — Phase 5's
+re-assemble relies on the honest gate instead of force-dropping the output digest.
 
 ### What invalidates what
 
