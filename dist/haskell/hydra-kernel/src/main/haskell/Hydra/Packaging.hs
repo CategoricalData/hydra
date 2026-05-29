@@ -100,28 +100,40 @@ data PackageVersionSpecifier =
   deriving (Eq, Ord, Read, Show)
 _PackageVersionSpecifier = Core.Name "hydra.packaging.PackageVersionSpecifier"
 _PackageVersionSpecifier_any = Core.Name "any"
--- | A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, description, signature, totality and purity flags, and an optional default implementation expressed as a Hydra term.
+-- | A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, signature, description, long-form specification, cross-references, totality and purity flags, version metadata, and an optional default implementation expressed as a Hydra term.
 data PrimitiveDefinition =
   PrimitiveDefinition {
     -- | The name of the primitive
     primitiveDefinitionName :: Core.Name,
-    -- | A human-readable description of the primitive
-    primitiveDefinitionDescription :: String,
     -- | The signature of the primitive (always explicit, never inferred)
     primitiveDefinitionSignature :: Typing.TermSignature,
+    -- | A concise, one-sentence human-readable description of the primitive
+    primitiveDefinitionDescription :: String,
+    -- | A detailed, host-independent specification of the primitive's behavior. Used to capture constraints, edge cases, and semantic choices (e.g. floating-point sentinel behavior, numeric narrowing arithmetic, complexity expectations) that are not yet promoted to structured fields.
+    primitiveDefinitionComments :: (Maybe String),
+    -- | Names of related primitives, for navigation and documentation purposes.
+    primitiveDefinitionSeeAlso :: [Core.Name],
     -- | Whether the primitive is pure (referentially transparent, no observable side effects). Defaults to true.
     primitiveDefinitionIsPure :: Bool,
     -- | Whether the primitive is total (terminates on every input of its declared type). Defaults to true.
     primitiveDefinitionIsTotal :: Bool,
+    -- | The version in which the primitive was introduced, if known.
+    primitiveDefinitionAvailableSince :: (Maybe Version),
+    -- | The version in which the primitive was deprecated, if applicable.
+    primitiveDefinitionDeprecatedSince :: (Maybe Version),
     -- | An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation.
     primitiveDefinitionDefaultImplementation :: (Maybe Core.Term)}
   deriving (Eq, Ord, Read, Show)
 _PrimitiveDefinition = Core.Name "hydra.packaging.PrimitiveDefinition"
 _PrimitiveDefinition_name = Core.Name "name"
-_PrimitiveDefinition_description = Core.Name "description"
 _PrimitiveDefinition_signature = Core.Name "signature"
+_PrimitiveDefinition_description = Core.Name "description"
+_PrimitiveDefinition_comments = Core.Name "comments"
+_PrimitiveDefinition_seeAlso = Core.Name "seeAlso"
 _PrimitiveDefinition_isPure = Core.Name "isPure"
 _PrimitiveDefinition_isTotal = Core.Name "isTotal"
+_PrimitiveDefinition_availableSince = Core.Name "availableSince"
+_PrimitiveDefinition_deprecatedSince = Core.Name "deprecatedSince"
 _PrimitiveDefinition_defaultImplementation = Core.Name "defaultImplementation"
 -- | A qualified name consisting of an optional module name together with a mandatory local name
 data QualifiedName =
@@ -159,3 +171,9 @@ data TypeDefinition =
 _TypeDefinition = Core.Name "hydra.packaging.TypeDefinition"
 _TypeDefinition_name = Core.Name "name"
 _TypeDefinition_typeScheme = Core.Name "typeScheme"
+-- | A version string, e.g. "0.15" or "1.0.0".
+newtype Version =
+  Version {
+    unVersion :: String}
+  deriving (Eq, Ord, Read, Show)
+_Version = Core.Name "hydra.packaging.Version"

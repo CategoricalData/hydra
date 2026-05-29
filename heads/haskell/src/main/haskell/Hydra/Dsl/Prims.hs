@@ -77,10 +77,14 @@ decimal = TermCoder Types.decimal encode decode
 defaultPrimitiveDefinition :: Name -> TypeScheme -> PrimitiveDefinition
 defaultPrimitiveDefinition name typ = PrimitiveDefinition {
   primitiveDefinitionName = name,
-  primitiveDefinitionDescription = "",
   primitiveDefinitionSignature = typeSchemeToTermSignature typ,
+  primitiveDefinitionDescription = "",
+  primitiveDefinitionComments = Nothing,
+  primitiveDefinitionSeeAlso = [],
   primitiveDefinitionIsPure = True,
   primitiveDefinitionIsTotal = True,
+  primitiveDefinitionAvailableSince = Nothing,
+  primitiveDefinitionDeprecatedSince = Nothing,
   primitiveDefinitionDefaultImplementation = Nothing}
 
 either_ :: TermCoder x -> TermCoder y -> TermCoder (Prelude.Either x y)

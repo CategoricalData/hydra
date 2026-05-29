@@ -140,11 +140,15 @@ primitiveDefinition cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "description" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+        in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "signature" Typing.termSignature fieldMap cx) (\field_signature -> Eithers.bind (ExtractCore.requireField "description" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_description -> Eithers.bind (ExtractCore.requireField "signature" Typing.termSignature fieldMap cx) (\field_signature -> Eithers.bind (ExtractCore.requireField "isPure" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_description -> Eithers.bind (ExtractCore.requireField "comments" (ExtractCore.decodeMaybe (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+          Core.TermLiteral v1 -> case v1 of
+            Core.LiteralString v2 -> Right v2
+            _ -> Left (Errors.DecodingError "expected string literal")
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2))) fieldMap cx) (\field_comments -> Eithers.bind (ExtractCore.requireField "seeAlso" (ExtractCore.decodeList DecodeCore.name) fieldMap cx) (\field_seeAlso -> Eithers.bind (ExtractCore.requireField "isPure" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralBoolean v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected boolean literal")
@@ -152,13 +156,17 @@ primitiveDefinition cx raw =
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralBoolean v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected boolean literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_isTotal -> Eithers.bind (ExtractCore.requireField "defaultImplementation" (ExtractCore.decodeMaybe DecodeCore.term) fieldMap cx) (\field_defaultImplementation -> Right (Packaging.PrimitiveDefinition {
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_isTotal -> Eithers.bind (ExtractCore.requireField "availableSince" (ExtractCore.decodeMaybe version) fieldMap cx) (\field_availableSince -> Eithers.bind (ExtractCore.requireField "deprecatedSince" (ExtractCore.decodeMaybe version) fieldMap cx) (\field_deprecatedSince -> Eithers.bind (ExtractCore.requireField "defaultImplementation" (ExtractCore.decodeMaybe DecodeCore.term) fieldMap cx) (\field_defaultImplementation -> Right (Packaging.PrimitiveDefinition {
           Packaging.primitiveDefinitionName = field_name,
-          Packaging.primitiveDefinitionDescription = field_description,
           Packaging.primitiveDefinitionSignature = field_signature,
+          Packaging.primitiveDefinitionDescription = field_description,
+          Packaging.primitiveDefinitionComments = field_comments,
+          Packaging.primitiveDefinitionSeeAlso = field_seeAlso,
           Packaging.primitiveDefinitionIsPure = field_isPure,
           Packaging.primitiveDefinitionIsTotal = field_isTotal,
-          Packaging.primitiveDefinitionDefaultImplementation = field_defaultImplementation}))))))))
+          Packaging.primitiveDefinitionAvailableSince = field_availableSince,
+          Packaging.primitiveDefinitionDeprecatedSince = field_deprecatedSince,
+          Packaging.primitiveDefinitionDefaultImplementation = field_defaultImplementation}))))))))))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.packaging.QualifiedName
 qualifiedName :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.QualifiedName
@@ -195,3 +203,13 @@ typeDefinition cx raw =
           Packaging.typeDefinitionName = field_name,
           Packaging.typeDefinitionTypeScheme = field_typeScheme}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.packaging.Version
+version :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.Version
+version cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Packaging.Version b) ((\raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+        Core.TermLiteral v1 -> case v1 of
+          Core.LiteralString v2 -> Right v2
+          _ -> Left (Errors.DecodingError "expected string literal")
+        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
+      _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
