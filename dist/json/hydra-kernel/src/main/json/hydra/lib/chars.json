@@ -6,6 +6,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.chars.isAlphaNum",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
           "result": {"type": {"literal": {"boolean": {}}}},
@@ -16,6 +17,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.chars.isLower",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
           "result": {"type": {"literal": {"boolean": {}}}},
@@ -26,6 +28,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.chars.isSpace",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
           "result": {"type": {"literal": {"boolean": {}}}},
@@ -36,6 +39,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.chars.isUpper",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
           "result": {"type": {"literal": {"boolean": {}}}},
@@ -46,6 +50,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.chars.toLower",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
           "result": {"type": {"literal": {"integer": {"int32": {}}}}},
@@ -56,6 +61,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.chars.toUpper",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
           "result": {"type": {"literal": {"integer": {"int32": {}}}}},

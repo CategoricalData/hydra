@@ -6,6 +6,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.sets.delete",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
@@ -58,6 +59,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.sets.difference",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"set": {"variable": "x"}}},
@@ -70,6 +72,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.sets.empty",
+        "seeAlso": [],
         "signature": {
           "parameters": [],
           "result": {"type": {"set": {"variable": "x"}}},
@@ -80,6 +83,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.sets.fromList",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
           "result": {"type": {"set": {"variable": "x"}}},
@@ -90,6 +94,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.sets.insert",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
@@ -142,6 +147,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.sets.intersection",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"set": {"variable": "x"}}},
@@ -173,6 +179,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.sets.map",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}},
@@ -185,6 +192,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.sets.member",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
@@ -197,6 +205,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.sets.null",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"set": {"variable": "x"}}}],
           "result": {"type": {"literal": {"boolean": {}}}},
@@ -207,6 +216,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.sets.singleton",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "x"}}],
           "result": {"type": {"set": {"variable": "x"}}},
@@ -217,6 +227,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.sets.size",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"set": {"variable": "x"}}}],
           "result": {"type": {"literal": {"integer": {"int32": {}}}}},
@@ -227,6 +238,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.sets.toList",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"set": {"variable": "x"}}}],
           "result": {"type": {"list": {"variable": "x"}}},
@@ -265,6 +277,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.sets.union",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"set": {"variable": "x"}}},
@@ -305,6 +318,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.sets.unions",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"set": {"variable": "x"}}}}],
           "result": {"type": {"set": {"variable": "x"}}},
