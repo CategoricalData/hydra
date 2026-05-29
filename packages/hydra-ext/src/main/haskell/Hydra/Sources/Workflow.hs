@@ -14,13 +14,13 @@ import qualified Hydra.Sources.Kernel.Types.Packaging as Module
 ns :: ModuleName
 ns = ModuleName "hydra.workflow"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Graph.ns, Module.ns, Core.ns],
             moduleDescription = Just "A model for Hydra transformation workflows"}
   where
@@ -29,7 +29,7 @@ module_ = Module {
       schemaSpec,
       transformWorkflow]
 
-hydraSchemaSpec :: Binding
+hydraSchemaSpec :: TypeDefinition
 hydraSchemaSpec = define "HydraSchemaSpec" $
   doc "The specification of a Hydra schema, provided as a set of modules and a distinguished type" $
   T.record [
@@ -40,7 +40,7 @@ hydraSchemaSpec = define "HydraSchemaSpec" $
       doc "The name of the top-level type; all data which passes through the workflow will be instances of this type"
       Core.name]
 
-schemaSpec :: Binding
+schemaSpec :: TypeDefinition
 schemaSpec = define "SchemaSpec" $
   doc "The specification of a schema at the source end of a workflow" $
   T.union [
@@ -54,7 +54,7 @@ schemaSpec = define "SchemaSpec" $
       doc "A schema which will be provided within the workflow" $
       T.unit]
 
-transformWorkflow :: Binding
+transformWorkflow :: TypeDefinition
 transformWorkflow = define "TransformWorkflow" $
   doc "The specification of a workflow which takes a schema specification, reads data from a directory, and writes data to another directory" $
   T.record [

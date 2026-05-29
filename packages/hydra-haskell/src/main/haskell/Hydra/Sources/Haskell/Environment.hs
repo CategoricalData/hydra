@@ -14,13 +14,13 @@ import qualified Hydra.Dsl.Types as T
 ns :: ModuleName
 ns = ModuleName "hydra.haskell.environment"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [],
             moduleDescription = Just "Environment types for Haskell code generation"}
   where
@@ -28,7 +28,7 @@ module_ = Module {
       haskellModuleMetadata]
 
 -- | Metadata for Haskell module generation.
-haskellModuleMetadata :: Binding
+haskellModuleMetadata :: TypeDefinition
 haskellModuleMetadata = define "HaskellModuleMetadata" $
   doc "Metadata used to determine which standard imports are needed in a generated Haskell module" $
   T.record [

@@ -16,14 +16,14 @@ import qualified Data.Maybe                      as Y
 ns :: ModuleName
 ns = ModuleName "hydra.parquet.format"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 -- Note: deprecated and trivial/empty type definitions are excluded from this model
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A model for the Parquet format. Based on the Thrift-based specification at:\n" ++
       "  https://github.com/apache/parquet-format/blob/master/src/main/thrift/parquet.thrift")}
@@ -71,7 +71,7 @@ module_ = Module {
       fileMetaData,
       fileCryptoMetaData]
 
-aesGcmCtrV1 :: Binding
+aesGcmCtrV1 :: TypeDefinition
 aesGcmCtrV1 = define "AesGcmCtrV1" $
   T.record [
     "aadPrefix">:
@@ -85,7 +85,7 @@ aesGcmCtrV1 = define "AesGcmCtrV1" $
            "readers must supply the prefix") $
       T.maybe T.boolean]
 
-aesGcmV1 :: Binding
+aesGcmV1 :: TypeDefinition
 aesGcmV1 = define "AesGcmV1" $
   T.record [
     "aadPrefix">:
@@ -99,20 +99,20 @@ aesGcmV1 = define "AesGcmV1" $
            "readers must supply the prefix") $
       T.maybe T.boolean]
 
-bloomFilterAlgorithm :: Binding
+bloomFilterAlgorithm :: TypeDefinition
 bloomFilterAlgorithm = define "BloomFilterAlgorithm" $
   doc "The algorithm used in Bloom filter." $
   T.union [
     "block">:
       doc "Block-based Bloom filter." T.unit]
 
-bloomFilterCompression :: Binding
+bloomFilterCompression :: TypeDefinition
 bloomFilterCompression = define "BloomFilterCompression" $
   doc "The compression used in the Bloom filter." $
   T.enum [
     "uncompressed"]
 
-bloomFilterHash :: Binding
+bloomFilterHash :: TypeDefinition
 bloomFilterHash = define "BloomFilterHash" $
   doc ("The hash function used in Bloom filter. This function takes the hash of a column value " ++
        "using plain encoding.") $
@@ -120,7 +120,7 @@ bloomFilterHash = define "BloomFilterHash" $
     "xxhash">:
       doc "xxHash Strategy." T.unit]
 
-bloomFilterHeader :: Binding
+bloomFilterHeader :: TypeDefinition
 bloomFilterHeader = define "BloomFilterHeader" $
   doc ("Bloom filter header is stored at beginning of Bloom filter data of each column " ++
        "and followed by its bitset.") $
@@ -138,7 +138,7 @@ bloomFilterHeader = define "BloomFilterHeader" $
       doc "The compression used in the Bloom filter" $
       parquet "BloomFilterCompression"]
 
-boundaryOrder :: Binding
+boundaryOrder :: TypeDefinition
 boundaryOrder = define "BoundaryOrder" $
   doc ("Enum to annotate whether lists of min/max elements inside ColumnIndex " ++
        "are ordered and if so, in which direction.") $
@@ -147,7 +147,7 @@ boundaryOrder = define "BoundaryOrder" $
     "ascending",
     "descending"]
 
-columnChunk :: Binding
+columnChunk :: TypeDefinition
 columnChunk = define "ColumnChunk" $
   T.record [
     "filePath">:
@@ -181,13 +181,13 @@ columnChunk = define "ColumnChunk" $
       doc "Encrypted column metadata for this chunk" $
       T.maybe T.binary]
 
-columnCryptoMetaData :: Binding
+columnCryptoMetaData :: TypeDefinition
 columnCryptoMetaData = define "ColumnCryptoMetaData" $
   T.union [
     "encryptionWithFooterKey">: parquet "EncryptionWithFooterKey",
     "encryptionWithColumnKey">: parquet "EncryptionWithColumnKey"]
 
-columnIndex :: Binding
+columnIndex :: TypeDefinition
 columnIndex = define "ColumnIndex" $
   doc ("Description for ColumnIndex. " ++
        "Each <array-field>[i] refers to the page at OffsetIndex.page_locations[i]") $
@@ -220,7 +220,7 @@ columnIndex = define "ColumnIndex" $
       doc "A list containing the number of null values for each page" $
       T.maybe $ T.list T.int64]
 
-columnMetaData :: Binding
+columnMetaData :: TypeDefinition
 columnMetaData = define "ColumnMetaData" $
   doc "Description for column metadata" $
   T.record [
@@ -271,7 +271,7 @@ columnMetaData = define "ColumnMetaData" $
       doc "Byte offset from beginning of file to Bloom filter data." $
       T.maybe T.int64]
 
-columnOrder :: Binding
+columnOrder :: TypeDefinition
 columnOrder = define "ColumnOrder" $
   doc ("Union to specify the order used for the min_value and max_value fields for a " ++
        "column. This union takes the role of an enhanced enum that allows rich " ++
@@ -323,7 +323,7 @@ columnOrder = define "ColumnOrder" $
            "    - If the max is -0, the row group may contain +0 values as well.\n" ++
            "    - When looking for NaN values, min and max should be ignored.") T.unit]
 
-compressionCodec :: Binding
+compressionCodec :: TypeDefinition
 compressionCodec = define "CompressionCodec" $
   doc ("Supported compression algorithms. " ++
        "Codecs added in format version X.Y can be read by readers based on X.Y and later. " ++
@@ -342,7 +342,7 @@ compressionCodec = define "CompressionCodec" $
     "lz4Raw">:
       doc "Added in 2.9" T.unit]
 
-dataPageHeader :: Binding
+dataPageHeader :: TypeDefinition
 dataPageHeader = define "DataPageHeader" $
   doc "Data page header" $
   T.record [
@@ -362,7 +362,7 @@ dataPageHeader = define "DataPageHeader" $
       doc "Optional statistics for the data in this page" $
       T.maybe $ parquet "Statistics"]
 
-dataPageHeaderV2 :: Binding
+dataPageHeaderV2 :: TypeDefinition
 dataPageHeaderV2 = define "DataPageHeaderV2" $
   doc ("New page format allowing reading levels without decompressing the data " ++
        "Repetition and definition levels are uncompressed " ++
@@ -398,7 +398,7 @@ dataPageHeaderV2 = define "DataPageHeaderV2" $
       doc "optional statistics for the data in this page" $
       T.maybe $ parquet "Statistics"]
 
-decimalType :: Binding
+decimalType :: TypeDefinition
 decimalType = define "DecimalType" $
   doc ("Decimal logical type annotation. " ++
        "To maintain forward-compatibility in v1, implementations using this logical " ++
@@ -408,7 +408,7 @@ decimalType = define "DecimalType" $
     "scale">: T.int32,
     "precision">: T.int32]
 
-dictionaryPageHeader :: Binding
+dictionaryPageHeader :: TypeDefinition
 dictionaryPageHeader = define "DictionaryPageHeader" $
   doc ("The dictionary page must be placed at the first position of the column chunk " ++
        "if it is partly or completely dictionary encoded. At most one dictionary page " ++
@@ -424,7 +424,7 @@ dictionaryPageHeader = define "DictionaryPageHeader" $
       doc "If true, the entries in the dictionary are sorted in ascending order" $
       T.maybe T.boolean]
 
-encoding :: Binding
+encoding :: TypeDefinition
 encoding = define "Encoding" $
   doc ("Encodings supported by Parquet.  Not all encodings are valid for all types.  These " ++
        "enums are also used to specify the encoding of definition and repetition levels. " ++
@@ -465,13 +465,13 @@ encoding = define "Encoding" $
            "This itself does not reduce the size of the data but can lead to better compression " ++
            "afterwards.") T.unit]
 
-encryptionAlgorithm :: Binding
+encryptionAlgorithm :: TypeDefinition
 encryptionAlgorithm = define "EncryptionAlgorithm" $
   T.union [
     "aesGcmV1">: parquet "AesGcmV1",
     "aesGcmCtrV1">: parquet "AesGcmCtrV1"]
 
-encryptionWithColumnKey :: Binding
+encryptionWithColumnKey :: TypeDefinition
 encryptionWithColumnKey = define "EncryptionWithColumnKey" $
   T.record [
     "pathInSchema">:
@@ -481,10 +481,10 @@ encryptionWithColumnKey = define "EncryptionWithColumnKey" $
       doc "Retrieval metadata of column encryption key" $
       T.maybe T.binary]
 
-encryptionWithFooterKey :: Binding
+encryptionWithFooterKey :: TypeDefinition
 encryptionWithFooterKey = define "EncryptionWithFooterKey" $ T.record []
 
-fieldRepetitionType :: Binding
+fieldRepetitionType :: TypeDefinition
 fieldRepetitionType = define "FieldRepetitionType" $
   doc "Representation of Schemas" $
   T.union [
@@ -492,7 +492,7 @@ fieldRepetitionType = define "FieldRepetitionType" $
     "optional">: doc "The field is optional (can be null) and each record has 0 or 1 values." T.unit,
     "repeated">: doc "The field is repeated and can contain 0 or more values" T.unit]
 
-fileCryptoMetaData :: Binding
+fileCryptoMetaData :: TypeDefinition
 fileCryptoMetaData = define "FileCryptoMetaData" $
   doc "Crypto metadata for files with encrypted footer" $
   T.record [
@@ -506,7 +506,7 @@ fileCryptoMetaData = define "FileCryptoMetaData" $
            "and (possibly) columns") $
       T.maybe T.binary]
 
-fileMetaData :: Binding
+fileMetaData :: TypeDefinition
 fileMetaData = define "FileMetaData" $
   doc "Description for file metadata" $
   T.record [
@@ -559,10 +559,10 @@ fileMetaData = define "FileMetaData" $
            "Used only in encrypted files with plaintext footer.") $
       T.maybe T.binary]
 
-indexPageHeader :: Binding
+indexPageHeader :: TypeDefinition
 indexPageHeader = define "IndexPageHeader" $ T.record []
 
-intType :: Binding
+intType :: TypeDefinition
 intType = define "IntType" $
   doc ("Integer logical type annotation. " ++
       "bitWidth must be 8, 16, 32, or 64. " ++
@@ -571,14 +571,14 @@ intType = define "IntType" $
     "bitWidth">: T.uint8,
     "isSigned">: T.boolean]
 
-keyValue :: Binding
+keyValue :: TypeDefinition
 keyValue = define "KeyValue" $
   doc "Wrapper struct to store key values" $
   T.record [
     "key">: T.string,
     "value">: T.maybe T.string]
 
-logicalType :: Binding
+logicalType :: TypeDefinition
 logicalType = define "LogicalType" $
   doc ("LogicalType annotations to replace ConvertedType. " ++
        "To maintain compatibility, implementations using LogicalType for a " ++
@@ -610,7 +610,7 @@ logicalType = define "LogicalType" $
     "bson">: doc "use ConvertedType BSON" T.unit,
     "uuid">: doc "no compatible ConvertedType" T.unit]
 
-offsetIndex :: Binding
+offsetIndex :: TypeDefinition
 offsetIndex = define "OffsetIndex" $
   T.record [
     "pageLocations">:
@@ -618,7 +618,7 @@ offsetIndex = define "OffsetIndex" $
            "that page_locations[i].first_row_index < page_locations[i+1].first_row_index.") $
       T.list $ parquet "PageLocation"]
 
-pageEncodingStats :: Binding
+pageEncodingStats :: TypeDefinition
 pageEncodingStats = define "PageEncodingStats" $
   doc "statistics of a given page type and encoding" $
   T.record [
@@ -632,7 +632,7 @@ pageEncodingStats = define "PageEncodingStats" $
       doc "number of pages of this type with this encoding"
       T.int32]
 
-pageHeader :: Binding
+pageHeader :: TypeDefinition
 pageHeader = define "PageHeader" $
   T.record [
     "type">:
@@ -680,7 +680,7 @@ pageHeader = define "PageHeader" $
     "dataPageHeaderV2">:
       T.maybe $ parquet "DataPageHeaderV2"]
 
-pageLocation :: Binding
+pageLocation :: TypeDefinition
 pageLocation = define "PageLocation" $
   T.record [
     "offset">:
@@ -695,7 +695,7 @@ pageLocation = define "PageLocation" $
            "change on record boundaries (r = 0).")
       T.int64]
 
-pageType :: Binding
+pageType :: TypeDefinition
 pageType = define "PageType" $
   T.enum [
     "dataPage",
@@ -706,7 +706,7 @@ pageType = define "PageType" $
 parquet :: String -> Type
 parquet = typeref ns
 
-rowGroup :: Binding
+rowGroup :: TypeDefinition
 rowGroup = define "RowGroup" $
   T.record [
     "columns">:
@@ -735,7 +735,7 @@ rowGroup = define "RowGroup" $
       doc "Row group ordinal in the file" $
       T.maybe T.int16]
 
-schemaElement :: Binding
+schemaElement :: TypeDefinition
 schemaElement = define "SchemaElement" $
   doc ("Represents a element inside a schema definition.\n" ++
        "- if it is a group (inner node) then type is undefined and num_children is defined\n" ++
@@ -774,7 +774,7 @@ schemaElement = define "SchemaElement" $
            "for some logical types to ensure forward-compatibility in format v1.") $
       T.maybe $ parquet "LogicalType"]
 
-sortingColumn :: Binding
+sortingColumn :: TypeDefinition
 sortingColumn = define "SortingColumn" $
   doc "Wrapper struct to specify sort order" $
   T.record [
@@ -789,7 +789,7 @@ sortingColumn = define "SortingColumn" $
            "nulls go at the end.")
       T.boolean]
 
-statistics :: Binding
+statistics :: TypeDefinition
 statistics = define "Statistics" $
   doc "Statistics per row group and per page. All fields are optional." $
   T.record [
@@ -806,7 +806,7 @@ statistics = define "Statistics" $
            "arrays do not include a length prefix.") $
       T.maybe T.binary]
 
-timeType :: Binding
+timeType :: TypeDefinition
 timeType = define "TimeType" $
   doc ("Time logical type annotation. " ++
        "Allowed for physical types: INT32 (millis), INT64 (micros, nanos)") $
@@ -814,14 +814,14 @@ timeType = define "TimeType" $
     "isAdjustedToUtc">: T.boolean,
     "unit">: parquet "TimeUnit"]
 
-timeUnit :: Binding
+timeUnit :: TypeDefinition
 timeUnit = define "TimeUnit" $
   T.enum [
     "millis",
     "micros",
     "nanos"]
 
-timestampType :: Binding
+timestampType :: TypeDefinition
 timestampType = define "TimestampType" $
   doc ("Timestamp logical type annotation. " ++
        "Allowed for physical types: INT64") $
@@ -829,7 +829,7 @@ timestampType = define "TimestampType" $
     "isAdjustedToUtc">: T.boolean,
     "unit">: parquet "TimeUnit"]
 
-type_ :: Binding
+type_ :: TypeDefinition
 type_ = define "Type" $
   doc ("Types supported by Parquet.  These types are intended to be used in combination " ++
        "with the encodings to control the on disk storage format. " ++

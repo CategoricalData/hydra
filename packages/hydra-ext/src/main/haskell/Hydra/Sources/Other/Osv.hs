@@ -16,14 +16,14 @@ import qualified Data.Maybe                      as Y
 ns :: ModuleName
 ns = ModuleName "hydra.osv.schema"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 -- Note: database_specific and ecosystem_specific fields are ignored, though they must be tolerated when reading entry JSON
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [],
             moduleDescription = Just "See https://ossf.github.io/osv-schema"}
   where
@@ -50,19 +50,19 @@ module_ = Module {
       versionRange,
       versionType]
 
-credited :: Binding
+credited :: TypeDefinition
 credited = define "Credited" $
   T.record [
     "name">: T.string,
     "contact">: T.maybe $ T.list $ osv "Url"]
 
-ecosystem :: Binding
+ecosystem :: TypeDefinition
 ecosystem = define "Ecosystem" $
   doc ("One of a limited set of defined ecosystems, currently "
     ++ "Go, npm, OSS-Fuzz, PyPI, RubyGems, crates.io, Packagist, Maven, NuGet, Linux, Debian, Hex, Android, GitHub Actions, or Pub") $
   T.wrap T.string
 
-entry :: Binding
+entry :: TypeDefinition
 entry = define "Entry" $
   T.record [
     "schemaVersion">:
@@ -81,7 +81,7 @@ entry = define "Entry" $
     "references">: T.maybe $ T.list $ osv "Reference",
     "credits">: T.maybe $ T.list $ osv "Credited"]
 
-event :: Binding
+event :: TypeDefinition
 event = define "Event" $
   T.union [
     "introduced">: osv "VersionOrZero",
@@ -89,13 +89,13 @@ event = define "Event" $
     "lastAffected">: osv "Version",
     "limit">: osv "VersionOrStar"]
 
-id_ :: Binding
+id_ :: TypeDefinition
 id_ = define "Id" $
   doc ("A string of the format <DB>-<ENTRYID>, where DB names the database and ENTRYID is in the format used "
     ++ "by the database. For example: OSV-2020-111, CVE-2021-3114, or GHSA-vp9c-fpxx-744v") $
   T.wrap T.string
 
-markdown :: Binding
+markdown :: TypeDefinition
 markdown = define "Markdown" $
   doc "CommonMark markdown text" $
   T.wrap T.string
@@ -103,81 +103,81 @@ markdown = define "Markdown" $
 osv :: String -> Type
 osv = typeref ns
 
-osvVersion :: Binding
+osvVersion :: TypeDefinition
 osvVersion = define "OsvVersion" $
   doc "A string which follows the SemVer 2.0.0 format, with no leading 'v' prefix" $
   T.wrap T.string
 
-packageVersions :: Binding
+packageVersions :: TypeDefinition
 packageVersions = define "PackageVersions" $
   T.record [
     "package">: osv "Package",
     "ranges">: T.maybe $ T.list $ osv "VersionRange",
     "versions">: T.maybe $ T.list $ osv "Version"]
 
-package_ :: Binding
+package_ :: TypeDefinition
 package_ = define "Package" $
   T.record [
     "ecosystem">: osv "Ecosystem",
     "name">: T.string,
     "purl">: T.maybe $ osv "Url"]
 
-reference :: Binding
+reference :: TypeDefinition
 reference = define "Reference" $
   T.record [
     "type">: osv "ReferenceType",
     "url">: osv "Url"]
 
-referenceType :: Binding
+referenceType :: TypeDefinition
 referenceType = define "ReferenceType" $
   doc "One of ADVISORY, ARTICLE, REPORT, FIX, GIT, PACKAGE, EVIDENCE, or WEB" $
   T.wrap T.string
 
-severity :: Binding
+severity :: TypeDefinition
 severity = define "Severity" $
   T.record [
     "type">: osv "SeverityType",
     "score">: osv "SeverityScore"]
 
-severityScore :: Binding
+severityScore :: TypeDefinition
 severityScore = define "SeverityScore" $ T.wrap T.string
 
-severityType :: Binding
+severityType :: TypeDefinition
 severityType = define "SeverityType" $
   doc "The value CVSS_V3, or future supported types" $
   T.wrap T.string
 
-timestamp :: Binding
+timestamp :: TypeDefinition
 timestamp = define "Timestamp" $
   doc "An RFC3339-formatted timestamp in UTC (ending in 'Z')" $
   T.wrap T.string
 
-url :: Binding
+url :: TypeDefinition
 url = define "Url" $ T.wrap T.string
 
-version :: Binding
+version :: TypeDefinition
 version = define "Version" $
   doc "A version number in an ecosystem-specific format" $
   T.wrap T.string
 
-versionOrStar :: Binding
+versionOrStar :: TypeDefinition
 versionOrStar = define "VersionOrStar" $
   doc "An ecosystem-specific version number, or the string '*' representing infinity" $
   T.wrap T.string
 
-versionOrZero :: Binding
+versionOrZero :: TypeDefinition
 versionOrZero = define "VersionOrZero" $
   doc "An ecosystem-specific version number, or the string '0' representing a version that sorts before any other version" $
   T.wrap T.string
 
-versionRange :: Binding
+versionRange :: TypeDefinition
 versionRange = define "VersionRange" $
   T.record [
     "type">: osv "VersionType",
     "repo">: T.maybe $ osv "Url",
     "events">: T.list $ osv "Event"]
 
-versionType :: Binding
+versionType :: TypeDefinition
 versionType = define "VersionType" $
   doc "One of the values 'SEMVER', 'ECOSYSTEM', or 'GIT" $
   T.wrap T.string

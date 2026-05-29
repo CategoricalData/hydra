@@ -13,13 +13,13 @@ import qualified Hydra.Sources.Kernel.Types.Coders as Coders
 ns :: ModuleName
 ns = ModuleName "hydra.avro.environment"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [CoreTypes.ns, Coders.ns, ModuleName "hydra.avro.schema", ModuleName "hydra.json.model"],
             moduleDescription = Just "Type definitions for the Avro code generation environment"}
   where
@@ -31,7 +31,7 @@ module_ = Module {
       encodeEnvironmentType]
 
 -- | The environment for Avro-to-Hydra code generation
-avroEnvironmentType :: Binding
+avroEnvironmentType :: TypeDefinition
 avroEnvironmentType = define "AvroEnvironment" $
   doc "Environment for Avro-to-Hydra code generation" $
   T.record [
@@ -46,7 +46,7 @@ avroEnvironmentType = define "AvroEnvironment" $
       T.map (coreType "Name") (coreType "Binding")]
 
 -- | An Avro foreign key annotation
-avroForeignKeyType :: Binding
+avroForeignKeyType :: TypeDefinition
 avroForeignKeyType = define "AvroForeignKey" $
   doc "An Avro foreign key annotation linking a field to another type" $
   T.record [
@@ -62,7 +62,7 @@ avroHydraAdapterType :: Type
 avroHydraAdapterType = T.apply (T.apply (T.apply (T.apply (computeType "Adapter") avroSchemaType) (coreType "Type")) jsonValueType) (coreType "Term")
 
 -- | An Avro primary key annotation
-avroPrimaryKeyType :: Binding
+avroPrimaryKeyType :: TypeDefinition
 avroPrimaryKeyType = define "AvroPrimaryKey" $
   doc "An Avro primary key annotation identifying the element name field" $
   T.record [
@@ -74,7 +74,7 @@ avroPrimaryKeyType = define "AvroPrimaryKey" $
       T.function T.string (coreType "Name")]
 
 -- | An Avro qualified name with optional namespace
-avroQualifiedNameType :: Binding
+avroQualifiedNameType :: TypeDefinition
 avroQualifiedNameType = define "AvroQualifiedName" $
   doc "An Avro qualified name with optional namespace" $
   T.record [
@@ -95,7 +95,7 @@ coreType :: String -> Type
 coreType = typeref CoreTypes.ns
 
 -- | Environment for encoding Hydra types to Avro schemas
-encodeEnvironmentType :: Binding
+encodeEnvironmentType :: TypeDefinition
 encodeEnvironmentType = define "EncodeEnvironment" $
   doc "Environment for Hydra-to-Avro encoding, tracking which named types have been emitted" $
   T.record [

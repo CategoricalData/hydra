@@ -13,13 +13,13 @@ import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 ns :: ModuleName
 ns = ModuleName "hydra.packaging"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, Typing.ns],
             moduleDescription = Just "A model for Hydra namespaces, modules, and packages"}
   where
@@ -39,7 +39,7 @@ module_ = Module {
       typeDefinition,
       version]
 
-definition :: Binding
+definition :: TypeDefinition
 definition = define "Definition" $
   doc "A definition, which may be either a term, type, or primitive definition" $
   T.union [
@@ -53,12 +53,12 @@ definition = define "Definition" $
       doc "A primitive definition"
       primitiveDefinition]
 
-fileExtension :: Binding
+fileExtension :: TypeDefinition
 fileExtension = define "FileExtension" $
   doc "A file extension (without the dot), e.g. \"json\" or \"py\"" $
   T.wrap T.string
 
-module' :: Binding
+module' :: TypeDefinition
 module' = define "Module" $
   doc "A logical collection of elements in the same namespace, having dependencies on zero or more other modules" $
   T.record [
@@ -75,7 +75,7 @@ module' = define "Module" $
       doc "The definitions in this module" $
       T.list definition]
 
-moduleDependency :: Binding
+moduleDependency :: TypeDefinition
 moduleDependency = define "ModuleDependency" $
   doc ("A dependency on another module, identified by its name and"
     ++ " (optionally) the package which provides it. When the package is omitted,"
@@ -90,12 +90,12 @@ moduleDependency = define "ModuleDependency" $
       doc "The package providing the depended-on module, if disambiguation is required" $
       T.maybe packageName]
 
-moduleNameDef :: Binding
+moduleNameDef :: TypeDefinition
 moduleNameDef = define "ModuleName" $
   doc "The unique name of a module; a prefix for the names of elements defined in the module." $
   T.wrap T.string
 
-package :: Binding
+package :: TypeDefinition
 package = define "Package" $
   doc "A package, which is a named collection of modules with metadata and dependencies" $
   T.record [
@@ -112,7 +112,7 @@ package = define "Package" $
       doc "An optional human-readable description of the package" $
       T.maybe T.string]
 
-packageDependency :: Binding
+packageDependency :: TypeDefinition
 packageDependency = define "PackageDependency" $
   doc "A dependency on another package, identified by name and constrained by an optional version specifier" $
   T.record [
@@ -123,12 +123,12 @@ packageDependency = define "PackageDependency" $
       doc "The version-range constraint on the depended-on package"
       packageVersionSpecifier]
 
-packageName :: Binding
+packageName :: TypeDefinition
 packageName = define "PackageName" $
   doc "The unique name of a package, e.g. \"hydra-kernel\" or \"hydra-python\"" $
   T.wrap T.string
 
-packageVersionSpecifier :: Binding
+packageVersionSpecifier :: TypeDefinition
 packageVersionSpecifier = define "PackageVersionSpecifier" $
   doc ("A specifier constraining acceptable versions of a depended-on package."
     ++ " Currently only the `any` (unit) specifier is defined; future variants"
@@ -139,7 +139,7 @@ packageVersionSpecifier = define "PackageVersionSpecifier" $
       doc "Any version of the package satisfies the dependency" $
       T.unit]
 
-primitiveDefinition :: Binding
+primitiveDefinition :: TypeDefinition
 primitiveDefinition = define "PrimitiveDefinition" $
   doc "A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, signature, description, long-form specification, cross-references, totality and purity flags, version metadata, and an optional default implementation expressed as a Hydra term." $
   T.record [
@@ -174,7 +174,7 @@ primitiveDefinition = define "PrimitiveDefinition" $
       doc "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation." $
       T.maybe Core.term]
 
-qualifiedName :: Binding
+qualifiedName :: TypeDefinition
 qualifiedName = define "QualifiedName" $
   doc "A qualified name consisting of an optional module name together with a mandatory local name" $
   T.record [
@@ -185,7 +185,7 @@ qualifiedName = define "QualifiedName" $
       doc "The local name"
       T.string]
 
-termDefinition :: Binding
+termDefinition :: TypeDefinition
 termDefinition = define "TermDefinition" $
   doc "A term-level definition, including a name, a term, and an optional signature" $
   T.record [
@@ -199,7 +199,7 @@ termDefinition = define "TermDefinition" $
       doc "The optional signature of the term. When absent, the signature is to be inferred." $
       T.maybe Typing.termSignature]
 
-typeDefinition :: Binding
+typeDefinition :: TypeDefinition
 typeDefinition = define "TypeDefinition" $
   doc "A type-level definition, including a name and the type scheme" $
   T.record [
@@ -210,7 +210,7 @@ typeDefinition = define "TypeDefinition" $
       doc "The type scheme being defined"
       Core.typeScheme]
 
-version :: Binding
+version :: TypeDefinition
 version = define "Version" $
   doc "A version string, e.g. \"0.15\" or \"1.0.0\"." $
   T.wrap T.string

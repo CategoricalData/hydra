@@ -19,13 +19,13 @@ import qualified Data.Maybe                      as Y
 ns :: ModuleName
 ns = ModuleName "hydra.rust.syntax"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = datatype ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A Rust syntax model, based on the Rust Reference grammar"
       ++ " (https://doc.rust-lang.org/reference/), retrieved 2025-01-29")}
@@ -192,7 +192,7 @@ module_ = Module {
 -- Crate-level / Module structure
 -- ================================================================================================
 
-angleBracketedArgs :: Binding
+angleBracketedArgs :: TypeDefinition
 angleBracketedArgs = define "AngleBracketedArgs" $
   doc "Angle-bracketed generic arguments" $
   T.record [
@@ -200,7 +200,7 @@ angleBracketedArgs = define "AngleBracketedArgs" $
       doc "The generic arguments" $
       T.list $ rust "GenericArg"]
 
-arrayExpr :: Binding
+arrayExpr :: TypeDefinition
 arrayExpr = define "ArrayExpr" $
   doc "An array expression" $
   T.union [
@@ -212,7 +212,7 @@ arrayExpr = define "ArrayExpr" $
       rust "ArrayRepeat"]
 
 -- | An array repeat expression
-arrayRepeat :: Binding
+arrayRepeat :: TypeDefinition
 arrayRepeat = define "ArrayRepeat" $
   doc "An array repeat expression (e.g., [0; 10])" $
   T.record [
@@ -223,7 +223,7 @@ arrayRepeat = define "ArrayRepeat" $
       doc "The length expression" $
       rust "Expression"]
 
-arrayType :: Binding
+arrayType :: TypeDefinition
 arrayType = define "ArrayType" $
   doc "An array type with a fixed size (e.g., [T; 3])" $
   T.record [
@@ -234,7 +234,7 @@ arrayType = define "ArrayType" $
       doc "The array length (as a constant expression)" $
       rust "Expression"]
 
-assignExpr :: Binding
+assignExpr :: TypeDefinition
 assignExpr = define "AssignExpr" $
   doc "An assignment expression" $
   T.record [
@@ -245,7 +245,7 @@ assignExpr = define "AssignExpr" $
       doc "The right-hand side (value)" $
       rust "Expression"]
 
-attribute :: Binding
+attribute :: TypeDefinition
 attribute = define "Attribute" $
   doc "An attribute (e.g., #[derive(Clone)], #[cfg(test)])" $
   T.record [
@@ -259,7 +259,7 @@ attribute = define "Attribute" $
       doc "The attribute arguments as a raw token string" $
       T.maybe T.string]
 
-binaryExpr :: Binding
+binaryExpr :: TypeDefinition
 binaryExpr = define "BinaryExpr" $
   doc "A binary operation" $
   T.record [
@@ -273,7 +273,7 @@ binaryExpr = define "BinaryExpr" $
       doc "The right-hand operand" $
       rust "Expression"]
 
-binaryOp :: Binding
+binaryOp :: TypeDefinition
 binaryOp = define "BinaryOp" $
   doc "A binary operator" $
   T.enum [
@@ -282,7 +282,7 @@ binaryOp = define "BinaryOp" $
     "bitAnd", "bitOr", "bitXor", "shl", "shr",
     "eq", "ne", "lt", "le", "gt", "ge"]
 
-block :: Binding
+block :: TypeDefinition
 block = define "Block" $
   doc "A block expression" $
   T.record [
@@ -298,7 +298,7 @@ block = define "Block" $
 -- Patterns
 -- ================================================================================================
 
-callExpr :: Binding
+callExpr :: TypeDefinition
 callExpr = define "CallExpr" $
   doc "A function call expression" $
   T.record [
@@ -309,7 +309,7 @@ callExpr = define "CallExpr" $
       doc "The arguments" $
       T.list $ rust "Expression"]
 
-castExpr :: Binding
+castExpr :: TypeDefinition
 castExpr = define "CastExpr" $
   doc "A type cast expression" $
   T.record [
@@ -320,7 +320,7 @@ castExpr = define "CastExpr" $
       doc "The target type" $
       rust "Type"]
 
-closureExpr :: Binding
+closureExpr :: TypeDefinition
 closureExpr = define "ClosureExpr" $
   doc "A closure expression" $
   T.record [
@@ -337,7 +337,7 @@ closureExpr = define "ClosureExpr" $
       doc "The closure body" $
       rust "Expression"]
 
-closureParam :: Binding
+closureParam :: TypeDefinition
 closureParam = define "ClosureParam" $
   doc "A closure parameter" $
   T.record [
@@ -348,7 +348,7 @@ closureParam = define "ClosureParam" $
       doc "Optional type annotation" $
       T.maybe $ rust "Type"]
 
-compoundAssignExpr :: Binding
+compoundAssignExpr :: TypeDefinition
 compoundAssignExpr = define "CompoundAssignExpr" $
   doc "A compound assignment expression" $
   T.record [
@@ -362,14 +362,14 @@ compoundAssignExpr = define "CompoundAssignExpr" $
       doc "The right-hand side (value)" $
       rust "Expression"]
 
-compoundAssignOp :: Binding
+compoundAssignOp :: TypeDefinition
 compoundAssignOp = define "CompoundAssignOp" $
   doc "A compound assignment operator" $
   T.enum [
     "addAssign", "subAssign", "mulAssign", "divAssign", "remAssign",
     "bitAndAssign", "bitOrAssign", "bitXorAssign", "shlAssign", "shrAssign"]
 
-constDef :: Binding
+constDef :: TypeDefinition
 constDef = define "ConstDef" $
   doc "A constant item (e.g., const FOO: u32 = 42;)" $
   T.record [
@@ -389,7 +389,7 @@ constDef = define "ConstDef" $
       doc "Optional doc comment" $
       T.maybe T.string]
 
-crate :: Binding
+crate :: TypeDefinition
 crate = define "Crate" $
   doc "A Rust crate, represented as a collection of top-level items" $
   T.record [
@@ -397,7 +397,7 @@ crate = define "Crate" $
       doc "The top-level items in the crate" $
       T.list itemWithComments]
 
-enumDef :: Binding
+enumDef :: TypeDefinition
 enumDef = define "EnumDef" $
   doc "An enum definition (e.g., enum Foo<T> { Bar(T), Baz { x: i32 } })" $
   T.record [
@@ -423,7 +423,7 @@ enumDef = define "EnumDef" $
       doc "Optional doc comment" $
       T.maybe T.string]
 
-enumVariant :: Binding
+enumVariant :: TypeDefinition
 enumVariant = define "EnumVariant" $
   doc "A variant of an enum definition" $
   T.record [
@@ -437,7 +437,7 @@ enumVariant = define "EnumVariant" $
       doc "Optional doc comment for the variant" $
       T.maybe T.string]
 
-enumVariantBody :: Binding
+enumVariantBody :: TypeDefinition
 enumVariantBody = define "EnumVariantBody" $
   doc "The body of an enum variant" $
   T.union [
@@ -456,7 +456,7 @@ enumVariantBody = define "EnumVariantBody" $
 -- Function definition
 -- ================================================================================================
 
-exprPath :: Binding
+exprPath :: TypeDefinition
 exprPath = define "ExprPath" $
   doc "A path used as an expression" $
   T.record [
@@ -467,7 +467,7 @@ exprPath = define "ExprPath" $
       doc "The path segments" $
       T.list $ rust "PathSegment"]
 
-expression :: Binding
+expression :: TypeDefinition
 expression = define "Expression" $
   doc "A Rust expression" $
   T.union [
@@ -571,7 +571,7 @@ expression = define "Expression" $
       doc "A parenthesized expression" $
       rust "Expression"]
 
-fieldAccessExpr :: Binding
+fieldAccessExpr :: TypeDefinition
 fieldAccessExpr = define "FieldAccessExpr" $
   doc "A field access expression" $
   T.record [
@@ -582,7 +582,7 @@ fieldAccessExpr = define "FieldAccessExpr" $
       doc "The field name" $
       T.string]
 
-fieldPattern :: Binding
+fieldPattern :: TypeDefinition
 fieldPattern = define "FieldPattern" $
   doc "A field pattern within a struct pattern" $
   T.record [
@@ -593,7 +593,7 @@ fieldPattern = define "FieldPattern" $
       doc "The field pattern (None for shorthand)" $
       T.maybe $ rust "Pattern"]
 
-fieldValue :: Binding
+fieldValue :: TypeDefinition
 fieldValue = define "FieldValue" $
   doc "A field-value pair in a struct literal" $
   T.record [
@@ -604,7 +604,7 @@ fieldValue = define "FieldValue" $
       doc "The field value (None for shorthand syntax)" $
       T.maybe $ rust "Expression"]
 
-floatLiteral :: Binding
+floatLiteral :: TypeDefinition
 floatLiteral = define "FloatLiteral" $
   doc "A floating-point literal with optional suffix" $
   T.record [
@@ -620,7 +620,7 @@ floatLiteral = define "FloatLiteral" $
 -- Attributes and visibility
 -- ================================================================================================
 
-fnDef :: Binding
+fnDef :: TypeDefinition
 fnDef = define "FnDef" $
   doc "A function definition (e.g., fn foo<T>(x: T) -> String { ... })" $
   T.record [
@@ -658,7 +658,7 @@ fnDef = define "FnDef" $
       doc "Optional doc comment" $
       T.maybe T.string]
 
-fnParam :: Binding
+fnParam :: TypeDefinition
 fnParam = define "FnParam" $
   doc "A function parameter" $
   T.record [
@@ -669,7 +669,7 @@ fnParam = define "FnParam" $
       doc "The parameter type" $
       rust "Type"]
 
-fnPointerType :: Binding
+fnPointerType :: TypeDefinition
 fnPointerType = define "FnPointerType" $
   doc "A function pointer type (e.g., fn(i32, i32) -> i32)" $
   T.record [
@@ -680,7 +680,7 @@ fnPointerType = define "FnPointerType" $
       doc "The return type" $
       rust "Type"]
 
-forExpr :: Binding
+forExpr :: TypeDefinition
 forExpr = define "ForExpr" $
   doc "A for expression" $
   T.record [
@@ -697,7 +697,7 @@ forExpr = define "ForExpr" $
       doc "The loop body" $
       rust "Block"]
 
-genericArg :: Binding
+genericArg :: TypeDefinition
 genericArg = define "GenericArg" $
   doc "A single generic argument" $
   T.union [
@@ -714,7 +714,7 @@ genericArg = define "GenericArg" $
       doc "An associated type binding" $
       rust "TypeBinding"]
 
-genericArguments :: Binding
+genericArguments :: TypeDefinition
 genericArguments = define "GenericArguments" $
   doc "Generic arguments to a path segment" $
   T.union [
@@ -728,7 +728,7 @@ genericArguments = define "GenericArguments" $
       doc "Parenthesized arguments for Fn traits" $
       rust "ParenthesizedArgs"]
 
-genericParam :: Binding
+genericParam :: TypeDefinition
 genericParam = define "GenericParam" $
   doc "A generic type parameter (e.g., T: Clone + Debug)" $
   T.record [
@@ -739,7 +739,7 @@ genericParam = define "GenericParam" $
       doc "Trait bounds on the parameter" $
       T.list $ rust "TypeParamBound"]
 
-identifierPattern :: Binding
+identifierPattern :: TypeDefinition
 identifierPattern = define "IdentifierPattern" $
   doc "An identifier pattern" $
   T.record [
@@ -753,7 +753,7 @@ identifierPattern = define "IdentifierPattern" $
       doc "Optional sub-pattern (e.g., x @ Some(_))" $
       T.maybe $ rust "Pattern"]
 
-ifCondition :: Binding
+ifCondition :: TypeDefinition
 ifCondition = define "IfCondition" $
   doc "The condition of an if expression" $
   T.union [
@@ -764,7 +764,7 @@ ifCondition = define "IfCondition" $
       doc "A let condition" $
       rust "LetCondition"]
 
-ifExpr :: Binding
+ifExpr :: TypeDefinition
 ifExpr = define "IfExpr" $
   doc "An if expression, optionally with if let" $
   T.record [
@@ -778,7 +778,7 @@ ifExpr = define "IfExpr" $
       doc "An optional else branch" $
       T.maybe $ rust "Expression"]
 
-implBlock :: Binding
+implBlock :: TypeDefinition
 implBlock = define "ImplBlock" $
   doc "An impl block (e.g., impl<T> Trait for Foo<T> { ... })" $
   T.record [
@@ -801,7 +801,7 @@ implBlock = define "ImplBlock" $
       doc "The items within the impl block" $
       T.list $ rust "ImplItem"]
 
-implItem :: Binding
+implItem :: TypeDefinition
 implItem = define "ImplItem" $
   doc "An item within an impl block" $
   T.union [
@@ -815,7 +815,7 @@ implItem = define "ImplItem" $
       doc "An associated constant" $
       rust "ConstDef"]
 
-implMethod :: Binding
+implMethod :: TypeDefinition
 implMethod = define "ImplMethod" $
   doc "A method within an impl block" $
   T.record [
@@ -852,7 +852,7 @@ implMethod = define "ImplMethod" $
 -- Trait definition
 -- ================================================================================================
 
-indexExpr :: Binding
+indexExpr :: TypeDefinition
 indexExpr = define "IndexExpr" $
   doc "An index expression" $
   T.record [
@@ -863,7 +863,7 @@ indexExpr = define "IndexExpr" $
       doc "The index expression" $
       rust "Expression"]
 
-integerLiteral :: Binding
+integerLiteral :: TypeDefinition
 integerLiteral = define "IntegerLiteral" $
   doc "An integer literal with optional suffix" $
   T.record [
@@ -874,7 +874,7 @@ integerLiteral = define "IntegerLiteral" $
       doc "Optional type suffix" $
       T.maybe T.string]
 
-item :: Binding
+item :: TypeDefinition
 item = define "Item" $
   doc "A top-level item in a Rust module or crate" $
   T.union [
@@ -912,7 +912,7 @@ item = define "Item" $
       doc "A macro invocation as an item" $
       rust "MacroInvocation"]
 
-itemWithComments :: Binding
+itemWithComments :: TypeDefinition
 itemWithComments = define "ItemWithComments" $
   doc "An item together with optional doc comments and visibility" $
   T.record [
@@ -932,7 +932,7 @@ itemWithComments = define "ItemWithComments" $
 -- ================================================================================================
 
 -- | A let condition in an if-let or while-let
-letCondition :: Binding
+letCondition :: TypeDefinition
 letCondition = define "LetCondition" $
   doc "A let condition (e.g., let Some(x) = opt)" $
   T.record [
@@ -943,7 +943,7 @@ letCondition = define "LetCondition" $
       doc "The expression being matched" $
       rust "Expression"]
 
-letStatement :: Binding
+letStatement :: TypeDefinition
 letStatement = define "LetStatement" $
   doc "A let statement" $
   T.record [
@@ -960,7 +960,7 @@ letStatement = define "LetStatement" $
       doc "Optional initializer expression" $
       T.maybe $ rust "Expression"]
 
-lifetime :: Binding
+lifetime :: TypeDefinition
 lifetime = define "Lifetime" $
   doc "A lifetime (e.g., 'a, 'static)" $
   T.record [
@@ -968,7 +968,7 @@ lifetime = define "Lifetime" $
       doc "The lifetime name (without the leading quote)" $
       T.string]
 
-literal :: Binding
+literal :: TypeDefinition
 literal = define "Literal" $
   doc "A literal value" $
   T.union [
@@ -997,7 +997,7 @@ literal = define "Literal" $
       doc "A boolean literal" $
       T.boolean]
 
-loopExpr :: Binding
+loopExpr :: TypeDefinition
 loopExpr = define "LoopExpr" $
   doc "A loop expression" $
   T.record [
@@ -1008,7 +1008,7 @@ loopExpr = define "LoopExpr" $
       doc "The loop body" $
       rust "Block"]
 
-macroDelimiter :: Binding
+macroDelimiter :: TypeDefinition
 macroDelimiter = define "MacroDelimiter" $
   doc "The delimiter style for a macro invocation" $
   T.enum ["paren", "bracket", "brace"]
@@ -1018,7 +1018,7 @@ macroDelimiter = define "MacroDelimiter" $
 -- Statements
 -- ================================================================================================
 
-macroInvocation :: Binding
+macroInvocation :: TypeDefinition
 macroInvocation = define "MacroInvocation" $
   doc "A macro invocation" $
   T.record [
@@ -1032,7 +1032,7 @@ macroInvocation = define "MacroInvocation" $
       doc "The token stream as a raw string" $
       T.string]
 
-matchArm :: Binding
+matchArm :: TypeDefinition
 matchArm = define "MatchArm" $
   doc "A single arm in a match expression" $
   T.record [
@@ -1046,7 +1046,7 @@ matchArm = define "MatchArm" $
       doc "The body expression" $
       rust "Expression"]
 
-matchExpr :: Binding
+matchExpr :: TypeDefinition
 matchExpr = define "MatchExpr" $
   doc "A match expression" $
   T.record [
@@ -1057,7 +1057,7 @@ matchExpr = define "MatchExpr" $
       doc "The match arms" $
       T.list $ rust "MatchArm"]
 
-methodCallExpr :: Binding
+methodCallExpr :: TypeDefinition
 methodCallExpr = define "MethodCallExpr" $
   doc "A method call expression" $
   T.record [
@@ -1074,7 +1074,7 @@ methodCallExpr = define "MethodCallExpr" $
       doc "The arguments (excluding the receiver)" $
       T.list $ rust "Expression"]
 
-methodParam :: Binding
+methodParam :: TypeDefinition
 methodParam = define "MethodParam" $
   doc "A method parameter, which may be self or a regular parameter" $
   T.union [
@@ -1090,7 +1090,7 @@ methodParam = define "MethodParam" $
 -- Type alias
 -- ================================================================================================
 
-modDef :: Binding
+modDef :: TypeDefinition
 modDef = define "ModDef" $
   doc "A module definition (either inline or external)" $
   T.record [
@@ -1112,7 +1112,7 @@ modDef = define "ModDef" $
 -- Impl block
 -- ================================================================================================
 
-parenthesizedArgs :: Binding
+parenthesizedArgs :: TypeDefinition
 parenthesizedArgs = define "ParenthesizedArgs" $
   doc "Parenthesized generic arguments for Fn traits" $
   T.record [
@@ -1123,7 +1123,7 @@ parenthesizedArgs = define "ParenthesizedArgs" $
       doc "The output type" $
       T.maybe $ rust "Type"]
 
-pathSegment :: Binding
+pathSegment :: TypeDefinition
 pathSegment = define "PathSegment" $
   doc "A segment within a type path" $
   T.record [
@@ -1134,7 +1134,7 @@ pathSegment = define "PathSegment" $
       doc "Generic arguments, if any" $
       rust "GenericArguments"]
 
-pattern :: Binding
+pattern :: TypeDefinition
 pattern = define "Pattern" $
   doc "A Rust pattern (used in let, match, function parameters, etc.)" $
   T.union [
@@ -1178,7 +1178,7 @@ pattern = define "Pattern" $
       doc "A parenthesized pattern" $
       rust "Pattern"]
 
-rangeExpr :: Binding
+rangeExpr :: TypeDefinition
 rangeExpr = define "RangeExpr" $
   doc "A range expression" $
   T.record [
@@ -1192,7 +1192,7 @@ rangeExpr = define "RangeExpr" $
       doc "Whether the range is inclusive" $
       T.boolean]
 
-rangePattern :: Binding
+rangePattern :: TypeDefinition
 rangePattern = define "RangePattern" $
   doc "A range pattern" $
   T.record [
@@ -1211,7 +1211,7 @@ rangePattern = define "RangePattern" $
 -- Literals
 -- ================================================================================================
 
-rawPointerType :: Binding
+rawPointerType :: TypeDefinition
 rawPointerType = define "RawPointerType" $
   doc "A raw pointer type (e.g., *const T, *mut T)" $
   T.record [
@@ -1227,7 +1227,7 @@ rawPointerType = define "RawPointerType" $
 -- Expressions
 -- ================================================================================================
 
-refExpr :: Binding
+refExpr :: TypeDefinition
 refExpr = define "RefExpr" $
   doc "A reference expression" $
   T.record [
@@ -1238,7 +1238,7 @@ refExpr = define "RefExpr" $
       doc "The expression being referenced" $
       rust "Expression"]
 
-refPattern :: Binding
+refPattern :: TypeDefinition
 refPattern = define "RefPattern" $
   doc "A reference pattern" $
   T.record [
@@ -1249,7 +1249,7 @@ refPattern = define "RefPattern" $
       doc "The inner pattern" $
       rust "Pattern"]
 
-referenceType :: Binding
+referenceType :: TypeDefinition
 referenceType = define "ReferenceType" $
   doc "A reference type (e.g., &T, &mut T, &'a T)" $
   T.record [
@@ -1266,12 +1266,12 @@ referenceType = define "ReferenceType" $
 rust :: String -> Type
 rust = typeref ns
 
-selfParam :: Binding
+selfParam :: TypeDefinition
 selfParam = define "SelfParam" $
   doc "A self parameter in a method" $
   T.enum ["owned", "ref", "refMut"]
 
-statement :: Binding
+statement :: TypeDefinition
 statement = define "Statement" $
   doc "A statement within a block" $
   T.union [
@@ -1288,7 +1288,7 @@ statement = define "Statement" $
       doc "An empty statement" $
       T.unit]
 
-staticDef :: Binding
+staticDef :: TypeDefinition
 staticDef = define "StaticDef" $
   doc "A static item (e.g., static FOO: u32 = 42;)" $
   T.record [
@@ -1311,7 +1311,7 @@ staticDef = define "StaticDef" $
       doc "Optional doc comment" $
       T.maybe T.string]
 
-structBody :: Binding
+structBody :: TypeDefinition
 structBody = define "StructBody" $
   doc "The body of a struct definition" $
   T.union [
@@ -1325,7 +1325,7 @@ structBody = define "StructBody" $
       doc "A unit struct" $
       T.unit]
 
-structDef :: Binding
+structDef :: TypeDefinition
 structDef = define "StructDef" $
   doc "A struct definition (e.g., struct Foo<T> { bar: T })" $
   T.record [
@@ -1351,7 +1351,7 @@ structDef = define "StructDef" $
       doc "Optional doc comment" $
       T.maybe T.string]
 
-structExpr :: Binding
+structExpr :: TypeDefinition
 structExpr = define "StructExpr" $
   doc "A struct literal expression" $
   T.record [
@@ -1365,7 +1365,7 @@ structExpr = define "StructExpr" $
       doc "Optional base expression for struct update syntax" $
       T.maybe $ rust "Expression"]
 
-structField :: Binding
+structField :: TypeDefinition
 structField = define "StructField" $
   doc "A named field within a struct definition" $
   T.record [
@@ -1382,7 +1382,7 @@ structField = define "StructField" $
       doc "Optional doc comment for the field" $
       T.maybe T.string]
 
-structPattern :: Binding
+structPattern :: TypeDefinition
 structPattern = define "StructPattern" $
   doc "A struct pattern" $
   T.record [
@@ -1396,7 +1396,7 @@ structPattern = define "StructPattern" $
       doc "Whether the pattern has a rest (..) at the end" $
       T.boolean]
 
-traitConst :: Binding
+traitConst :: TypeDefinition
 traitConst = define "TraitConst" $
   doc "An associated constant within a trait" $
   T.record [
@@ -1418,7 +1418,7 @@ traitConst = define "TraitConst" $
 -- Generics and where clauses
 -- ================================================================================================
 
-traitDef :: Binding
+traitDef :: TypeDefinition
 traitDef = define "TraitDef" $
   doc "A trait definition (e.g., trait Foo<T>: Bar + Baz { ... })" $
   T.record [
@@ -1447,7 +1447,7 @@ traitDef = define "TraitDef" $
       doc "Optional doc comment" $
       T.maybe T.string]
 
-traitItem :: Binding
+traitItem :: TypeDefinition
 traitItem = define "TraitItem" $
   doc "An item within a trait definition" $
   T.union [
@@ -1461,7 +1461,7 @@ traitItem = define "TraitItem" $
       doc "An associated constant" $
       rust "TraitConst"]
 
-traitMethod :: Binding
+traitMethod :: TypeDefinition
 traitMethod = define "TraitMethod" $
   doc "A method signature or default method within a trait" $
   T.record [
@@ -1487,7 +1487,7 @@ traitMethod = define "TraitMethod" $
       doc "Optional doc comment" $
       T.maybe T.string]
 
-traitType :: Binding
+traitType :: TypeDefinition
 traitType = define "TraitType" $
   doc "An associated type within a trait" $
   T.record [
@@ -1504,7 +1504,7 @@ traitType = define "TraitType" $
       doc "Optional doc comment" $
       T.maybe T.string]
 
-tupleField :: Binding
+tupleField :: TypeDefinition
 tupleField = define "TupleField" $
   doc "A positional field within a tuple struct" $
   T.record [
@@ -1520,7 +1520,7 @@ tupleField = define "TupleField" $
 -- Enum definition
 -- ================================================================================================
 
-tupleIndexExpr :: Binding
+tupleIndexExpr :: TypeDefinition
 tupleIndexExpr = define "TupleIndexExpr" $
   doc "A tuple index expression" $
   T.record [
@@ -1531,7 +1531,7 @@ tupleIndexExpr = define "TupleIndexExpr" $
       doc "The index (0-based)" $
       T.int32]
 
-tupleStructPattern :: Binding
+tupleStructPattern :: TypeDefinition
 tupleStructPattern = define "TupleStructPattern" $
   doc "A tuple struct pattern" $
   T.record [
@@ -1542,7 +1542,7 @@ tupleStructPattern = define "TupleStructPattern" $
       doc "The element patterns" $
       T.list $ rust "Pattern"]
 
-typeAlias :: Binding
+typeAlias :: TypeDefinition
 typeAlias = define "TypeAlias" $
   doc "A type alias definition (e.g., type Foo<T> = Bar<T>;)" $
   T.record [
@@ -1567,7 +1567,7 @@ typeAlias = define "TypeAlias" $
 -- Const, static, and module definitions
 -- ================================================================================================
 
-typeAscriptionExpr :: Binding
+typeAscriptionExpr :: TypeDefinition
 typeAscriptionExpr = define "TypeAscriptionExpr" $
   doc "A type ascription expression" $
   T.record [
@@ -1578,7 +1578,7 @@ typeAscriptionExpr = define "TypeAscriptionExpr" $
       doc "The ascribed type" $
       rust "Type"]
 
-typeBinding :: Binding
+typeBinding :: TypeDefinition
 typeBinding = define "TypeBinding" $
   doc "An associated type binding within generic arguments" $
   T.record [
@@ -1589,7 +1589,7 @@ typeBinding = define "TypeBinding" $
       doc "The bound type" $
       rust "Type"]
 
-typeParamBound :: Binding
+typeParamBound :: TypeDefinition
 typeParamBound = define "TypeParamBound" $
   doc "A bound on a type parameter" $
   T.union [
@@ -1600,7 +1600,7 @@ typeParamBound = define "TypeParamBound" $
       doc "A lifetime bound" $
       rust "Lifetime"]
 
-typePath :: Binding
+typePath :: TypeDefinition
 typePath = define "TypePath" $
   doc "A path-based type, possibly with generic arguments" $
   T.record [
@@ -1611,7 +1611,7 @@ typePath = define "TypePath" $
       doc "The segments of the path" $
       T.list $ rust "PathSegment"]
 
-type_ :: Binding
+type_ :: TypeDefinition
 type_ = define "Type" $
   doc "A Rust type expression" $
   T.union [
@@ -1655,7 +1655,7 @@ type_ = define "Type" $
       doc "A macro invocation in type position" $
       rust "MacroInvocation"]
 
-unaryExpr :: Binding
+unaryExpr :: TypeDefinition
 unaryExpr = define "UnaryExpr" $
   doc "A unary operation" $
   T.record [
@@ -1666,12 +1666,12 @@ unaryExpr = define "UnaryExpr" $
       doc "The operand" $
       rust "Expression"]
 
-unaryOp :: Binding
+unaryOp :: TypeDefinition
 unaryOp = define "UnaryOp" $
   doc "A unary operator" $
   T.enum ["neg", "not"]
 
-useDeclaration :: Binding
+useDeclaration :: TypeDefinition
 useDeclaration = define "UseDeclaration" $
   doc "A use declaration (e.g., use std::collections::BTreeMap;)" $
   T.record [
@@ -1682,7 +1682,7 @@ useDeclaration = define "UseDeclaration" $
       doc "The use tree describing what is imported" $
       rust "UseTree"]
 
-useGroup :: Binding
+useGroup :: TypeDefinition
 useGroup = define "UseGroup" $
   doc "A grouped import (e.g., std::collections::{BTreeMap, BTreeSet})" $
   T.record [
@@ -1698,7 +1698,7 @@ useGroup = define "UseGroup" $
 -- Struct definition
 -- ================================================================================================
 
-usePath :: Binding
+usePath :: TypeDefinition
 usePath = define "UsePath" $
   doc "A simple path import within a use tree" $
   T.record [
@@ -1706,7 +1706,7 @@ usePath = define "UsePath" $
       doc "The path segments" $
       T.list T.string]
 
-useRename :: Binding
+useRename :: TypeDefinition
 useRename = define "UseRename" $
   doc "A renamed import (e.g., BTreeMap as Map)" $
   T.record [
@@ -1717,7 +1717,7 @@ useRename = define "UseRename" $
       doc "The alias name" $
       T.string]
 
-useTree :: Binding
+useTree :: TypeDefinition
 useTree = define "UseTree" $
   doc "A use tree, representing the structure of a use path" $
   T.union [
@@ -1734,7 +1734,7 @@ useTree = define "UseTree" $
       doc "A grouped import (e.g., {BTreeMap, BTreeSet})" $
       rust "UseGroup"]
 
-visibility :: Binding
+visibility :: TypeDefinition
 visibility = define "Visibility" $
   doc "A visibility qualifier" $
   T.union [
@@ -1756,7 +1756,7 @@ visibility = define "Visibility" $
 -- Helper types (used in expressions)
 -- ================================================================================================
 
-whereClause :: Binding
+whereClause :: TypeDefinition
 whereClause = define "WhereClause" $
   doc "A where clause (e.g., where T: Clone, U: Debug)" $
   T.record [
@@ -1764,7 +1764,7 @@ whereClause = define "WhereClause" $
       doc "The predicates in the where clause" $
       T.list $ rust "WherePredicate"]
 
-wherePredicate :: Binding
+wherePredicate :: TypeDefinition
 wherePredicate = define "WherePredicate" $
   doc "A single predicate in a where clause" $
   T.record [
@@ -1780,7 +1780,7 @@ wherePredicate = define "WherePredicate" $
 -- Types
 -- ================================================================================================
 
-whileExpr :: Binding
+whileExpr :: TypeDefinition
 whileExpr = define "WhileExpr" $
   doc "A while expression, optionally with while let" $
   T.record [

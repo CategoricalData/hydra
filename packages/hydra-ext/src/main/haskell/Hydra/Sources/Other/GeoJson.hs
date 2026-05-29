@@ -19,13 +19,13 @@ import qualified Hydra.Sources.Json.Model        as JsonModel
 ns :: ModuleName
 ns = ModuleName "hydra.geojson.model"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [JsonModel.ns],
             moduleDescription = Just ("A GeoJSON model based on the specification at https://www.rfc-editor.org/rfc/rfc7946. " ++
           "This model provides some additional structure beyond the JSON encoding described in the specification; " ++
@@ -49,7 +49,7 @@ module_ = Module {
       polygon,
       position]
 
-boundingBox :: Binding
+boundingBox :: TypeDefinition
 boundingBox = define "BoundingBox" $
   doc ("A GeoJSON object MAY have a member named \"bbox\" to include " ++
        "information on the coordinate range for its Geometries, Features, or " ++
@@ -60,13 +60,13 @@ boundingBox = define "BoundingBox" $
        "of a bbox follows the axes order of geometries.") $
   T.wrap $ T.list $ geoj "CoordinateRange"
 
-coordinateRange :: Binding
+coordinateRange :: TypeDefinition
 coordinateRange = define "CoordinateRange" $
   T.record [
     "min">: T.float64,
     "max">: T.float64]
 
-feature :: Binding
+feature :: TypeDefinition
 feature = define "Feature" $
  doc ("A Feature object represents a spatially bounded thing.  Every Feature " ++
       "object is a GeoJSON object no matter where it occurs in a GeoJSON " ++
@@ -91,7 +91,7 @@ feature = define "Feature" $
     T.maybe $ geoj "Id",
   "bbox">: T.maybe $ geoj "BoundingBox"]
 
-featureCollection :: Binding
+featureCollection :: TypeDefinition
 featureCollection = define "FeatureCollection" $
   doc ("A GeoJSON object with the type \"FeatureCollection\" is a " ++
        "FeatureCollection object.  A FeatureCollection object has a member " ++
@@ -105,7 +105,7 @@ featureCollection = define "FeatureCollection" $
 geoj :: String -> Type
 geoj = typeref ns
 
-geometry :: Binding
+geometry :: TypeDefinition
 geometry = define "Geometry" $
   doc ("A Geometry object represents points, curves, and surfaces in " ++
        "coordinate space.  Every Geometry object is a GeoJSON object no " ++
@@ -119,7 +119,7 @@ geometry = define "Geometry" $
     "multiPolygon">: geoj "MultiPolygon",
     "geometryCollection">: geoj "GeometryCollection"]
 
-geometryCollection :: Binding
+geometryCollection :: TypeDefinition
 geometryCollection = define "GeometryCollection" $
   doc ("A GeoJSON object with type \"GeometryCollection\" is a Geometry object. " ++
        "A GeometryCollection has a member with the name \"geometries\".  The " ++
@@ -129,7 +129,7 @@ geometryCollection = define "GeometryCollection" $
     "geometries">: T.list $ geoj "Geometry",
     "bbox">: T.maybe $ geoj "BoundingBox"]
 
-id_ :: Binding
+id_ :: TypeDefinition
 id_ = define "Id" $
   T.union [
     "number">: T.float64,
@@ -138,7 +138,7 @@ id_ = define "Id" $
 json :: String -> Type
 json = typeref $ JsonModel.ns
 
-lineString :: Binding
+lineString :: TypeDefinition
 lineString = define "LineString" $
   doc ("For type \"LineString\", the \"coordinates\" member is an array of two or " ++
        "more positions.") $
@@ -146,7 +146,7 @@ lineString = define "LineString" $
     "coordinates">: T.list $ geoj "Position",
     "bbox">: T.maybe $ geoj "BoundingBox"]
 
-multiLineString :: Binding
+multiLineString :: TypeDefinition
 multiLineString = define "MultiLineString" $
   doc ("For type \"MultiLineString\", the \"coordinates\" member is an array of " ++
        "LineString coordinate arrays.") $
@@ -154,7 +154,7 @@ multiLineString = define "MultiLineString" $
     "coordinates">: T.list $ geoj "LineString",
     "bbox">: T.maybe $ geoj "BoundingBox"]
 
-multiPoint :: Binding
+multiPoint :: TypeDefinition
 multiPoint = define "MultiPoint" $
   doc ("For type \"MultiPoint\", the \"coordinates\" member is an array of " ++
        "positions.") $
@@ -162,7 +162,7 @@ multiPoint = define "MultiPoint" $
     "coordinates">: T.list $ geoj "Point",
     "bbox">: T.maybe $ geoj "BoundingBox"]
 
-multiPolygon :: Binding
+multiPolygon :: TypeDefinition
 multiPolygon = define "MultiPolygon" $
   doc ("For type \"MultiPolygon\", the \"coordinates\" member is an array of " ++
        "Polygon coordinate arrays.") $
@@ -170,7 +170,7 @@ multiPolygon = define "MultiPolygon" $
     "coordinates">: T.list $ geoj "Polygon",
     "bbox">: T.maybe $ geoj "BoundingBox"]
 
-object_ :: Binding
+object_ :: TypeDefinition
 object_ = define "Object" $
   doc ("A GeoJSON object represents a Geometry, Feature, or collection of " ++
        "Features.") $
@@ -179,14 +179,14 @@ object_ = define "Object" $
     "feature">: geoj "Feature",
     "featureCollection">: geoj "FeatureCollection"]
 
-point :: Binding
+point :: TypeDefinition
 point = define "Point" $
   doc ("For type \"Point\", the \"coordinates\" member is a single position.") $
   T.record [
     "coordinates">: geoj "Position",
     "bbox">: T.maybe $ geoj "BoundingBox"]
 
-polygon :: Binding
+polygon :: TypeDefinition
 polygon = define "Polygon" $
   doc ("For type \"Polygon\", the \"coordinates\" member MUST be an array of " ++
        "linear ring coordinate arrays.\n" ++
@@ -198,7 +198,7 @@ polygon = define "Polygon" $
     "coordinates">: T.list $ geoj "Position",
     "bbox">: T.maybe $ geoj "BoundingBox"]
 
-position :: Binding
+position :: TypeDefinition
 position = define "Position" $
   doc ("A position is an array of numbers.  There MUST be two or more " ++
        "elements.  The first two elements are longitude and latitude, or " ++

@@ -13,13 +13,13 @@ import qualified Hydra.Sources.Kernel.Types.Relational as Relational
 ns :: ModuleName
 ns = ModuleName "hydra.tabular"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, Relational.ns],
             moduleDescription = Just "A simple, untyped tabular data model, suitable for CSVs and TSVs"}
   where
@@ -30,24 +30,24 @@ module_ = Module {
       table,
       tableType]
 
-columnType :: Binding
+columnType :: TypeDefinition
 columnType = define "ColumnType" $
  doc "A column type, consisting of a name and a value type" $
   T.record [
     "name">: Relational.columnName,
     "type">: Core.type_]
 
-dataRow :: Binding
+dataRow :: TypeDefinition
 dataRow = define "DataRow" $
   doc "A data row, containing optional-valued cells; one per column" $
   T.forAll "v" $ T.wrap $ T.list $ T.maybe "v"
 
-headerRow :: Binding
+headerRow :: TypeDefinition
 headerRow = define "HeaderRow" $
   doc "A header row, containing column names (but no types or data)" $
   T.wrap $ T.list T.string
 
-table :: Binding
+table :: TypeDefinition
 table = define "Table" $
   doc "A simple table as in a CSV file, having an optional header row and any number of data rows" $
   T.forAll "v" $ T.record [
@@ -58,7 +58,7 @@ table = define "Table" $
       doc "The data rows of the table. Each row must have the same number of cells." $
       T.list (dataRow @@ "v")]
 
-tableType :: Binding
+tableType :: TypeDefinition
 tableType = define "TableType" $
   doc "A type definition for a table, including column names and types" $
   T.record [

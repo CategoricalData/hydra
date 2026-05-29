@@ -15,13 +15,13 @@ import qualified Hydra.Sources.Avro.Schema   as AvroSchema
 ns :: ModuleName
 ns = ModuleName "hydra.avro.testing"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, AvroSchema.ns, JsonModel.ns],
             moduleDescription = Just "Test case types for the bidirectional Avro coder"}
   where
@@ -44,7 +44,7 @@ avro :: String -> Type
 avro = typeref AvroSchema.ns
 
 -- | The union of all Avro test case types
-avroTestCase :: Binding
+avroTestCase :: TypeDefinition
 avroTestCase = define "AvroTestCase" $
   doc "A test case for the bidirectional Avro coder" $
   T.union [
@@ -92,7 +92,7 @@ local :: String -> Type
 local = typeref ns
 
 -- | Category 11: Lossiness and annotation tests
-lossinessTestCase :: Binding
+lossinessTestCase :: TypeDefinition
 lossinessTestCase = define "LossinessTestCase" $
   doc "A test case which verifies that lossy conversions stash original information in annotations" $
   T.record [
@@ -113,7 +113,7 @@ lossinessTestCase = define "LossinessTestCase" $
       T.boolean]
 
 -- | Category 10: Name mapping tests
-nameMappingTestCase :: Binding
+nameMappingTestCase :: TypeDefinition
 nameMappingTestCase = define "NameMappingTestCase" $
   doc "A test case for bidirectional name mapping between Hydra and Avro" $
   T.record [
@@ -131,7 +131,7 @@ nameMappingTestCase = define "NameMappingTestCase" $
       (T.optional T.string)]
 
 -- | Category 12: Schema serialization (Avro Schema <-> JSON)
-schemaSerializationTestCase :: Binding
+schemaSerializationTestCase :: TypeDefinition
 schemaSerializationTestCase = define "SchemaSerializationTestCase" $
   doc "A test case for Avro schema serialization to and from JSON" $
   T.record [
@@ -146,7 +146,7 @@ schemaSerializationTestCase = define "SchemaSerializationTestCase" $
       (json "Value")]
 
 -- | Category 5: Term-level forward (JSON -> Hydra Term)
-termLevelForwardTestCase :: Binding
+termLevelForwardTestCase :: TypeDefinition
 termLevelForwardTestCase = define "TermLevelForwardTestCase" $
   doc "A test case which encodes a JSON value as a Hydra term using an Avro schema" $
   T.record [
@@ -164,7 +164,7 @@ termLevelForwardTestCase = define "TermLevelForwardTestCase" $
       Core.term]
 
 -- | Category 6: Term-level reverse (Hydra Term -> JSON)
-termLevelReverseTestCase :: Binding
+termLevelReverseTestCase :: TypeDefinition
 termLevelReverseTestCase = define "TermLevelReverseTestCase" $
   doc "A test case which decodes a Hydra term to a JSON value using an Avro schema" $
   T.record [
@@ -182,7 +182,7 @@ termLevelReverseTestCase = define "TermLevelReverseTestCase" $
       (json "Value")]
 
 -- | Category 7: Term-level round-trip starting from JSON (JSON -> Term -> JSON)
-termLevelRoundTripJsonTestCase :: Binding
+termLevelRoundTripJsonTestCase :: TypeDefinition
 termLevelRoundTripJsonTestCase = define "TermLevelRoundTripJsonTestCase" $
   doc "A test case which encodes a JSON value as a Hydra term and decodes it back, verifying the result" $
   T.record [
@@ -200,7 +200,7 @@ termLevelRoundTripJsonTestCase = define "TermLevelRoundTripJsonTestCase" $
       (json "Value")]
 
 -- | Category 8: Term-level round-trip starting from a term (Term -> JSON -> Term)
-termLevelRoundTripTermTestCase :: Binding
+termLevelRoundTripTermTestCase :: TypeDefinition
 termLevelRoundTripTermTestCase = define "TermLevelRoundTripTermTestCase" $
   doc "A test case which decodes a Hydra term to JSON and encodes it back, verifying the result" $
   T.record [
@@ -218,7 +218,7 @@ termLevelRoundTripTermTestCase = define "TermLevelRoundTripTermTestCase" $
       Core.term]
 
 -- | Category 1: Type-level forward (Avro Schema -> Hydra Type)
-typeLevelForwardTestCase :: Binding
+typeLevelForwardTestCase :: TypeDefinition
 typeLevelForwardTestCase = define "TypeLevelForwardTestCase" $
   doc "A test case which maps an Avro schema to a Hydra type and compares the result" $
   T.record [
@@ -233,7 +233,7 @@ typeLevelForwardTestCase = define "TypeLevelForwardTestCase" $
       Core.type_]
 
 -- | Category 2: Type-level reverse (Hydra Type -> Avro Schema)
-typeLevelReverseTestCase :: Binding
+typeLevelReverseTestCase :: TypeDefinition
 typeLevelReverseTestCase = define "TypeLevelReverseTestCase" $
   doc "A test case which maps a Hydra type to an Avro schema and compares the result" $
   T.record [
@@ -248,7 +248,7 @@ typeLevelReverseTestCase = define "TypeLevelReverseTestCase" $
       (avro "Schema")]
 
 -- | Category 3: Type-level round-trip starting from Avro (Avro -> Hydra -> Avro)
-typeLevelRoundTripAvroTestCase :: Binding
+typeLevelRoundTripAvroTestCase :: TypeDefinition
 typeLevelRoundTripAvroTestCase = define "TypeLevelRoundTripAvroTestCase" $
   doc "A test case which maps an Avro schema to a Hydra type and back, verifying the result" $
   T.record [
@@ -263,7 +263,7 @@ typeLevelRoundTripAvroTestCase = define "TypeLevelRoundTripAvroTestCase" $
       (avro "Schema")]
 
 -- | Category 4: Type-level round-trip starting from Hydra (Hydra -> Avro -> Hydra)
-typeLevelRoundTripHydraTestCase :: Binding
+typeLevelRoundTripHydraTestCase :: TypeDefinition
 typeLevelRoundTripHydraTestCase = define "TypeLevelRoundTripHydraTestCase" $
   doc "A test case which maps a Hydra type to an Avro schema and back, verifying the result" $
   T.record [
@@ -278,7 +278,7 @@ typeLevelRoundTripHydraTestCase = define "TypeLevelRoundTripHydraTestCase" $
       Core.type_]
 
 -- | Category 9: Union-specific tests
-unionTestCase :: Binding
+unionTestCase :: TypeDefinition
 unionTestCase = define "UnionTestCase" $
   doc "A test case for union type encoding and decoding, covering the various strategies for representing unions in Avro" $
   T.record [

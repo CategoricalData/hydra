@@ -16,13 +16,13 @@ import qualified Data.Maybe                      as Y
 ns :: ModuleName
 ns = ModuleName "hydra.kusto.kql"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A partial KQL (Kusto Query Language) model, based on examples from the documentation. Not normative.")}
   where
@@ -69,7 +69,7 @@ module_ = Module {
       unionCommand,
       unionKind]
 
-betweenExpression :: Binding
+betweenExpression :: TypeDefinition
 betweenExpression = define "BetweenExpression" $
   T.record [
     "not">: T.boolean,
@@ -77,14 +77,14 @@ betweenExpression = define "BetweenExpression" $
     "lowerBound">: kql "Expression",
     "upperBound">: kql "Expression"]
 
-binaryExpression :: Binding
+binaryExpression :: TypeDefinition
 binaryExpression = define "BinaryExpression" $
   T.record [
     "left">: kql "Expression",
     "operator">: kql "BinaryOperator",
     "right">: kql "Expression"]
 
-binaryOperator :: Binding
+binaryOperator :: TypeDefinition
 binaryOperator = define "BinaryOperator" $
   T.enum [
     "caseInsensitiveEqual",
@@ -106,7 +106,7 @@ binaryOperator = define "BinaryOperator" $
     "startsWith",
     "times"]
 
-builtInFunction :: Binding
+builtInFunction :: TypeDefinition
 builtInFunction = define "BuiltInFunction" $
   T.enum [
     "ago",
@@ -123,28 +123,28 @@ builtInFunction = define "BuiltInFunction" $
     "strcat",
     "todynamic"]
 
-columnAlias :: Binding
+columnAlias :: TypeDefinition
 columnAlias = define "ColumnAlias" $
   T.record [
     "column">: kql "ColumnName",
     "alias">: kql "ColumnName"]
 
-columnAssignment :: Binding
+columnAssignment :: TypeDefinition
 columnAssignment = define "ColumnAssignment" $
   T.record [
     "column">: kql "ColumnName",
     "expression">: kql "Expression"]
 
-columnName :: Binding
+columnName :: TypeDefinition
 columnName = define "ColumnName" $ T.wrap T.string
 
-columns :: Binding
+columns :: TypeDefinition
 columns = define "Columns" $
   T.union [
     "all">: T.unit,
     "single">: kql "ColumnName"]
 
-command :: Binding
+command :: TypeDefinition
 command = define "Command" $
   T.union [
     "count">: T.unit,
@@ -172,20 +172,20 @@ command = define "Command" $
     "union">: kql "UnionCommand",
     "where">: kql "Expression"]
 
-datetime :: Binding
+datetime :: TypeDefinition
 datetime = define "Datetime" $ T.wrap T.string
 
-duration :: Binding
+duration :: TypeDefinition
 duration = define "Duration" $
   T.record [
     "value">: T.int32,
     "unit">: kql "DurationUnit"]
 
-durationUnit :: Binding
+durationUnit :: TypeDefinition
 durationUnit = define "DurationUnit" $
   T.enum ["second", "minute", "hour"]
 
-expression :: Binding
+expression :: TypeDefinition
 expression = define "Expression" $
   T.union [
     "and">: nonemptyList $ kql "Expression",
@@ -203,39 +203,39 @@ expression = define "Expression" $
     "property">: kql "PropertyExpression",
     "unary">: kql "UnaryExpression"]
 
-functionExpression :: Binding
+functionExpression :: TypeDefinition
 functionExpression = define "FunctionExpression" $
   T.record [
     "function">: kql "Function",
     "arguments">: T.list $ kql "Expression"]
 
-functionName :: Binding
+functionName :: TypeDefinition
 functionName = define "FunctionName" $ T.wrap T.string
 
-function_ :: Binding
+function_ :: TypeDefinition
 function_ = define "Function" $
   T.union [
     "builtIn">: kql "BuiltInFunction",
     "custom">: kql "FunctionName"]
 
-indexExpression :: Binding
+indexExpression :: TypeDefinition
 indexExpression = define "IndexExpression" $
   T.record [
     "expression">: kql "Expression",
     "index">: T.string]
 
-joinCommand :: Binding
+joinCommand :: TypeDefinition
 joinCommand = define "JoinCommand" $
   T.record [
     "kind">: kql "JoinKind",
     "expression">: kql "TableName",
     "on">: kql "Expression"]
 
-joinKind :: Binding
+joinKind :: TypeDefinition
 joinKind = define "JoinKind" $
   T.enum ["leftouter", "leftsemi", "leftanti", "fullouter", "inner", "innerunique", "rightouter", "rightsemi", "rightanti"]
 
-keyValuePair :: Binding
+keyValuePair :: TypeDefinition
 keyValuePair = define "KeyValuePair" $
   T.record [
     "key">: T.string,
@@ -244,19 +244,19 @@ keyValuePair = define "KeyValuePair" $
 kql :: String -> Type
 kql = typeref ns
 
-letBinding :: Binding
+letBinding :: TypeDefinition
 letBinding = define "LetBinding" $
   T.record [
     "name">: kql "ColumnName",
     "expression">: kql "Expression"]
 
-letExpression :: Binding
+letExpression :: TypeDefinition
 letExpression = define "LetExpression" $
   T.record [
     "bindings">: nonemptyList $ kql "LetBinding",
     "expression">: kql "TabularExpression"]
 
-literal_ :: Binding
+literal_ :: TypeDefinition
 literal_ = define "Literal" $
   T.union [
     "duration">: kql "Duration",
@@ -268,71 +268,71 @@ literal_ = define "Literal" $
     "double">: T.float64,
     "boolean">: T.boolean]
 
-order :: Binding
+order :: TypeDefinition
 order = define "Order" $
   T.enum ["ascending", "descending"]
 
-parameter :: Binding
+parameter :: TypeDefinition
 parameter = define "Parameter" $
   T.record [
     "key">: T.string,
     "value">: kql "Literal"]
 
-parseCommand :: Binding
+parseCommand :: TypeDefinition
 parseCommand = define "ParseCommand" $
   T.record [
     "column">: kql "ColumnName",
     "pairs">: nonemptyList $ kql "KeyValuePair"]
 
 -- TODO: what are these expressions actually called in KQL?
-pipelineExpression :: Binding
+pipelineExpression :: TypeDefinition
 pipelineExpression = define "PipelineExpression" $
   T.wrap $ nonemptyList $ kql "TabularExpression"
 
-printCommand :: Binding
+printCommand :: TypeDefinition
 printCommand = define "PrintCommand" $
   T.record [
     "column">: T.maybe $ kql "ColumnName",
     "expression">: kql "Expression"]
 
-projection :: Binding
+projection :: TypeDefinition
 projection = define "Projection" $
   T.record [
     "expression">: kql "Expression",
     "alias">: T.maybe $ kql "ColumnName"]
 
-propertyExpression :: Binding
+propertyExpression :: TypeDefinition
 propertyExpression = define "PropertyExpression" $
   T.record [
     "expression">: kql "Expression",
     "property">: T.string]
 
-query :: Binding
+query :: TypeDefinition
 query = define "Query" $ T.wrap $ kql "TabularExpression"
 
-searchCommand :: Binding
+searchCommand :: TypeDefinition
 searchCommand = define "SearchCommand" $
   doc "Search across all datasets and columns or, if provided, specific datasets and/or columns" $
   T.record [
     "datasets">: T.list $ kql "TableName",
     "pattern">: kql "Expression"]
 
-sortBy :: Binding
+sortBy :: TypeDefinition
 sortBy = define "SortBy" $
   T.record [
     "column">: kql "ColumnName",
     "order">: T.maybe $ kql "Order"]
 
-summarizeCommand :: Binding
+summarizeCommand :: TypeDefinition
 summarizeCommand = define "SummarizeCommand" $
   T.record [
      "columns">: nonemptyList $ kql "ColumnAssignment",
      "by">: T.list $ kql "ColumnName"]
 
-tableName :: Binding
+tableName :: TypeDefinition
 tableName = define "TableName" $ T.wrap T.string
 
-tabularExpression :: Binding
+tabularExpression :: TypeDefinition
 tabularExpression = define "TabularExpression" $
   T.union [
     "command">: kql "Command",
@@ -340,23 +340,23 @@ tabularExpression = define "TabularExpression" $
     "let">: kql "LetExpression",
     "table">: kql "TableName"]
 
-topCommand :: Binding
+topCommand :: TypeDefinition
 topCommand = define "TopCommand" $
   T.record [
     "count">: T.int32,
     "sort">: T.list $ kql "SortBy"]
 
-unaryExpression :: Binding
+unaryExpression :: TypeDefinition
 unaryExpression = define "UnaryExpression" $
   T.record [
     "operator">: kql "UnaryOperator",
     "expression">: kql "Expression"]
 
-unaryOperator :: Binding
+unaryOperator :: TypeDefinition
 unaryOperator = define "UnaryOperator" $
   T.enum ["not"]
 
-unionCommand :: Binding
+unionCommand :: TypeDefinition
 unionCommand = define "UnionCommand" $
   T.record [
     "parameters">: T.list $ kql "Parameter",
@@ -365,6 +365,6 @@ unionCommand = define "UnionCommand" $
     "isFuzzy">: T.maybe T.boolean,
     "tables">: nonemptyList $ kql "TableName"]
 
-unionKind :: Binding
+unionKind :: TypeDefinition
 unionKind = define "UnionKind" $
   T.enum ["inner", "outer"]

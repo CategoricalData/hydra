@@ -22,7 +22,7 @@ ns = ModuleName "hydra.cypher.features"
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A model for characterizing OpenCypher queries and implementations in terms of included features."
       ++ "Based on the OpenCypher grammar and the list of standard Cypher functions at "
@@ -241,7 +241,7 @@ openCypherFeaturesEnum = T.union $ gatherFields True "" openCypherFeatures
 openCypherFeaturesEnumModule :: Module
 openCypherFeaturesEnumModule = Module {
                                  moduleName = ns2,
-                                 moduleDefinitions = (map toTypeDef definitions),
+                                 moduleDefinitions = (DefinitionType <$> definitions),
                                  moduleDependencies = unqualifiedDep <$> [Core.ns],
                                  moduleDescription = Just ("A model with an enumeration of (Open)Cypher features.")}
   where

@@ -16,13 +16,13 @@ import qualified Data.Maybe                      as Y
 ns :: ModuleName
 ns = ModuleName "hydra.graphviz.dot"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A model from the Graphviz DOT graph description language."
       ++ " Based on the grammar at https://graphviz.org/doc/info/lang.html")}
@@ -44,25 +44,25 @@ module_ = Module {
       subgraphId,
       compassPt]
 
-attrList :: Binding
+attrList :: TypeDefinition
 attrList = define "AttrList" $
   T.wrap $ nonemptyList $ nonemptyList $ dot "EqualityPair"
 
 --attr_stmt	:	(graph | node | edge) attr_list
 --attr_list	:	'[' [ a_list ] ']' [ attr_list ]
 --a_list	:	ID '=' ID [ (';' | ',') ] [ a_list ]
-attrStmt :: Binding
+attrStmt :: TypeDefinition
 attrStmt = define "AttrStmt" $
   T.record [
     "type">: dot "AttrType",
     "attributes">: dot "AttrList"]
 
-attrType :: Binding
+attrType :: TypeDefinition
 attrType = define "AttrType" $
   T.enum ["graph", "node", "edge"]
 
 --compass_pt	:	(n | ne | e | se | s | sw | w | nw | c | _)
-compassPt :: Binding
+compassPt :: TypeDefinition
 compassPt = define "CompassPt" $
   T.enum ["n", "ne", "e", "se", "s", "sw", "w", "nw", "c", "none"]
 
@@ -71,21 +71,21 @@ dot = typeref ns
 
 --edge_stmt	:	(node_id | subgraph) edgeRHS [ attr_list ]
 --edgeRHS	:	edgeop (node_id | subgraph) [ edgeRHS ]
-edgeStmt :: Binding
+edgeStmt :: TypeDefinition
 edgeStmt = define "EdgeStmt" $
   T.record [
     "left">: dot "NodeOrSubgraph",
     "right">: nonemptyList $ dot "NodeOrSubgraph",
     "attributes">: T.maybe $ dot "AttrList"]
 
-equalityPair :: Binding
+equalityPair :: TypeDefinition
 equalityPair = define "EqualityPair" $
   T.record [
     "left">: dot "Id",
     "right">: dot "Id"]
 
 --graph	:	[ strict ] (graph | digraph) [ ID ] '{' stmt_list '}'
-graph_ :: Binding
+graph_ :: TypeDefinition
 graph_ = define "Graph" $
   T.record [
     "strict">: T.boolean,
@@ -93,24 +93,24 @@ graph_ = define "Graph" $
     "id">: T.maybe $ dot "Id",
     "statements">: T.list $ dot "Stmt"]
 
-id_ :: Binding
+id_ :: TypeDefinition
 id_ = define "Id" $ T.wrap T.string
 
 --node_id	:	ID [ port ]
-nodeId :: Binding
+nodeId :: TypeDefinition
 nodeId = define "NodeId" $
   T.record [
     "id">: dot "Id",
     "port">: T.maybe $ dot "Port"]
 
-nodeOrSubgraph :: Binding
+nodeOrSubgraph :: TypeDefinition
 nodeOrSubgraph = define "NodeOrSubgraph" $
   T.union [
     "node">: dot "NodeId",
     "subgraph">: dot "Subgraph"]
 
 --node_stmt	:	node_id [ attr_list ]
-nodeStmt :: Binding
+nodeStmt :: TypeDefinition
 nodeStmt = define "NodeStmt" $
   T.record [
     "id">: dot "NodeId",
@@ -118,7 +118,7 @@ nodeStmt = define "NodeStmt" $
 
 --port	:	':' ID [ ':' compass_pt ]
 --      |	':' compass_pt
-port :: Binding
+port :: TypeDefinition
 port = define "Port" $
   T.record [
     "id">: T.maybe $ dot "Id",
@@ -130,7 +130,7 @@ port = define "Port" $
 --      |	attr_stmt
 --      |	ID '=' ID
 --      |	subgraph
-stmt :: Binding
+stmt :: TypeDefinition
 stmt = define "Stmt" $
   T.union [
     "node">: dot "NodeStmt",
@@ -140,12 +140,12 @@ stmt = define "Stmt" $
     "subgraph">: dot "Subgraph"]
 
 --subgraph	:	[ subgraph [ ID ] ] '{' stmt_list '}'
-subgraph :: Binding
+subgraph :: TypeDefinition
 subgraph = define "Subgraph" $
   T.record [
     "subgraphId">: T.maybe $ dot "SubgraphId",
     "statements">: T.list $ dot "Stmt"]
 
-subgraphId :: Binding
+subgraphId :: TypeDefinition
 subgraphId = define "SubgraphId" $
   T.wrap $ T.maybe $ dot "Id"

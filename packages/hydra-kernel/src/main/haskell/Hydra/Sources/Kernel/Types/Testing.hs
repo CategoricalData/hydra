@@ -12,13 +12,13 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 ns :: ModuleName
 ns = ModuleName "hydra.testing"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "A model for unit testing"}
   where
@@ -29,12 +29,12 @@ module_ = Module {
       testGroup,
       universalTestCase]
 
-tag :: Binding
+tag :: TypeDefinition
 tag = define "Tag" $
   doc "A tag for test cases" $
   T.wrap T.string
 
-testCase :: Binding
+testCase :: TypeDefinition
 testCase = define "TestCase" $
   doc "A test case with an actual and expected string for comparison" $
   T.union [
@@ -42,7 +42,7 @@ testCase = define "TestCase" $
       doc "A universal test case (string comparison)"
       universalTestCase]
 
-testCaseWithMetadata :: Binding
+testCaseWithMetadata :: TypeDefinition
 testCaseWithMetadata = define "TestCaseWithMetadata" $
   doc "A test case together with metadata" $
   T.record [
@@ -59,7 +59,7 @@ testCaseWithMetadata = define "TestCaseWithMetadata" $
       doc "Zero or more tags for the test case" $
       T.list tag]
 
-testGroup :: Binding
+testGroup :: TypeDefinition
 testGroup = define "TestGroup" $
   doc "A collection of test cases with a name and optional description" $
   T.record [
@@ -76,7 +76,7 @@ testGroup = define "TestGroup" $
       doc "Zero or more test cases" $
       T.list testCaseWithMetadata]
 
-universalTestCase :: Binding
+universalTestCase :: TypeDefinition
 universalTestCase = define "UniversalTestCase" $
   doc "A universal test case: the actual and expected values are thunks producing strings." $
   T.record [

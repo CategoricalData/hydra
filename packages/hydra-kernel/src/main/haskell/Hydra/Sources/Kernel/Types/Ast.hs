@@ -12,13 +12,13 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 ns :: ModuleName
 ns = ModuleName "hydra.ast"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "A model which provides a common syntax tree for Hydra serializers"}
   where
@@ -38,12 +38,12 @@ module_ = Module {
       symbol,
       ws]
 
-associativity :: Binding
+associativity :: TypeDefinition
 associativity = define "Associativity" $
   doc "Operator associativity" $
   T.enum ["none", "left", "right", "both"]
 
-blockStyle :: Binding
+blockStyle :: TypeDefinition
 blockStyle = define "BlockStyle" $
   doc "Formatting option for code blocks" $
   T.record [
@@ -57,7 +57,7 @@ blockStyle = define "BlockStyle" $
       doc "Whether to place a newline after the content" $
       T.boolean]
 
-bracketExpr :: Binding
+bracketExpr :: TypeDefinition
 bracketExpr = define "BracketExpr" $
   doc "An expression enclosed by brackets" $
   T.record [
@@ -71,7 +71,7 @@ bracketExpr = define "BracketExpr" $
       doc "The formatting style for the bracketed block"
       blockStyle]
 
-brackets :: Binding
+brackets :: TypeDefinition
 brackets = define "Brackets" $
   doc "Matching open and close bracket symbols" $
   T.record [
@@ -82,7 +82,7 @@ brackets = define "Brackets" $
       doc "The closing bracket symbol"
       symbol]
 
-expr :: Binding
+expr :: TypeDefinition
 expr = define "Expr" $
   doc "An abstract expression" $
   T.union [
@@ -102,7 +102,7 @@ expr = define "Expr" $
       doc "A sequence of expressions joined by a separator, treated as structural layout (not subject to parenthesization)"
       seqExpr]
 
-indentStyle :: Binding
+indentStyle :: TypeDefinition
 indentStyle = define "IndentStyle" $
   doc "Any of several indentation styles" $
   T.union [
@@ -113,7 +113,7 @@ indentStyle = define "IndentStyle" $
       doc "Indent only lines after the first with the given string" $
       T.string]
 
-indentedExpression :: Binding
+indentedExpression :: TypeDefinition
 indentedExpression = define "IndentedExpression" $
   doc "An expression indented in a certain style" $
   T.record [
@@ -124,7 +124,7 @@ indentedExpression = define "IndentedExpression" $
       doc "The expression to be indented"
       expr]
 
-op :: Binding
+op :: TypeDefinition
 op = define "Op" $
   doc "An operator symbol" $
   T.record [
@@ -141,7 +141,7 @@ op = define "Op" $
       doc "The associativity of the operator"
       associativity]
 
-opExpr :: Binding
+opExpr :: TypeDefinition
 opExpr = define "OpExpr" $
   doc "An operator expression" $
   T.record [
@@ -155,7 +155,7 @@ opExpr = define "OpExpr" $
       doc "The right-hand side operand"
       expr]
 
-padding :: Binding
+padding :: TypeDefinition
 padding = define "Padding" $
   doc "Left and right padding for an operator" $
   T.record [
@@ -166,12 +166,12 @@ padding = define "Padding" $
       doc "Padding to the right of the operator"
       ws]
 
-precedence :: Binding
+precedence :: TypeDefinition
 precedence = define "Precedence" $
   doc "Operator precedence" $
   T.wrap T.int32
 
-seqExpr :: Binding
+seqExpr :: TypeDefinition
 seqExpr = define "SeqExpr" $
   doc "A sequence of expressions joined by a separator operator. Unlike OpExpr, parenthesize ignores SeqExpr boundaries." $
   T.record [
@@ -182,12 +182,12 @@ seqExpr = define "SeqExpr" $
       doc "The expressions to join" $
       T.list expr]
 
-symbol :: Binding
+symbol :: TypeDefinition
 symbol = define "Symbol" $
   doc "Any symbol" $
   T.wrap T.string
 
-ws :: Binding
+ws :: TypeDefinition
 ws = define "Ws" $
   doc "One of several classes of whitespace" $
   T.union [

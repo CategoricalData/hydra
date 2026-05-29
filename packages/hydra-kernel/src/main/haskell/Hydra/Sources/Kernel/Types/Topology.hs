@@ -12,13 +12,13 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 ns :: ModuleName
 ns = ModuleName "hydra.topology"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "A model for simple graphs as adjacency lists"}
   where
@@ -28,12 +28,12 @@ module_ = Module {
       tarjanState,
       vertex]
 
-graph :: Binding
+graph :: TypeDefinition
 graph = define "Graph" $
   doc "A directed graph represented as an adjacency list mapping vertices to their outgoing neighbors" $
   T.map vertex (T.list vertex)
 
-orderingIsomorphism :: Binding
+orderingIsomorphism :: TypeDefinition
 orderingIsomorphism = define "OrderingIsomorphism" $
   doc "A pair of inverse permutations on lists, used to relate two orderings of the same elements" $
   T.forAll "a" $ T.record [
@@ -44,7 +44,7 @@ orderingIsomorphism = define "OrderingIsomorphism" $
       doc "Mapping from target ordering to source ordering" $
       T.list "a" ~> T.list "a"]
 
-tarjanState :: Binding
+tarjanState :: TypeDefinition
 tarjanState = define "TarjanState" $
   doc "State carried by Tarjan's strongly connected components algorithm during a depth-first traversal" $
   T.record [
@@ -67,7 +67,7 @@ tarjanState = define "TarjanState" $
       doc "Accumulated strongly connected components, each a list of vertices" $
       T.list $ T.list vertex]
 
-vertex :: Binding
+vertex :: TypeDefinition
 vertex = define "Vertex" $
   doc "A graph vertex, represented as a 32-bit integer identifier" $
   T.int32

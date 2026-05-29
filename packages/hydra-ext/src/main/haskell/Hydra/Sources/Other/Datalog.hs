@@ -11,13 +11,13 @@ import qualified Hydra.Dsl.Types                 as T
 ns :: ModuleName
 ns = ModuleName "hydra.datalog.syntax"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [],
             moduleDescription = Just "A basic Datalog model"}
   where
@@ -38,34 +38,34 @@ module_ = Module {
       constantList,
       constantList_Multiple]
 
-atom :: Binding
+atom :: TypeDefinition
 atom = define "Atom" $
   T.record [
     "Relation">: dl "Relation",
     "TermList">: dl "TermList"]
 
-atomList :: Binding
+atomList :: TypeDefinition
 atomList = define "AtomList" $
   T.union [
     "single">: dl "Atom",
     "multiple">: dl "AtomList_Multiple"]
 
-atomList_Multiple :: Binding
+atomList_Multiple :: TypeDefinition
 atomList_Multiple = define "AtomList_Multiple" $
   T.record [
     "Atom">: dl "Atom",
     "AtomList">: dl "AtomList"]
 
-constant :: Binding
+constant :: TypeDefinition
 constant = define "Constant" $ T.wrap T.string
 
-constantList :: Binding
+constantList :: TypeDefinition
 constantList = define "ConstantList" $
   T.union [
     "single">: dl "Constant",
     "multiple">: dl "ConstantList_Multiple"]
 
-constantList_Multiple :: Binding
+constantList_Multiple :: TypeDefinition
 constantList_Multiple = define "ConstantList_Multiple" $
   T.record [
     "Constant">: dl "Constant",
@@ -74,47 +74,47 @@ constantList_Multiple = define "ConstantList_Multiple" $
 dl :: String -> Type
 dl = typeref ns
 
-fact :: Binding
+fact :: TypeDefinition
 fact = define "Fact" $
   T.record [
     "Relation">: dl "Relation",
     "ConstantList">: dl "ConstantList"]
 
-program :: Binding
+program :: TypeDefinition
 program = define "Program" $ T.wrap $ T.list $ dl "Program_Elmt"
 
-program_Elmt :: Binding
+program_Elmt :: TypeDefinition
 program_Elmt = define "Program_Elmt" $
   T.union [
     "Fact">: dl "Fact",
     "Rule">: dl "Rule"]
 
-relation :: Binding
+relation :: TypeDefinition
 relation = define "Relation" $ T.wrap T.string
 
-rule_ :: Binding
+rule_ :: TypeDefinition
 rule_ = define "Rule" $
   T.record [
     "Atom">: dl "Atom",
     "AtomList">: dl "AtomList"]
 
-term :: Binding
+term :: TypeDefinition
 term = define "Term" $
   T.union [
     "Constant">: dl "Constant",
     "Variable">: dl "Variable"]
 
-termList :: Binding
+termList :: TypeDefinition
 termList = define "TermList" $
   T.union [
     "single">: dl "Term",
     "multiple">: dl "TermList_Multiple"]
 
-termList_Multiple :: Binding
+termList_Multiple :: TypeDefinition
 termList_Multiple = define "TermList_Multiple" $
   T.record [
     "Term">: dl "Term",
     "TermList">: dl "TermList"]
 
-variable :: Binding
+variable :: TypeDefinition
 variable = define "Variable" $ T.wrap T.string

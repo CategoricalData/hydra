@@ -13,13 +13,13 @@ import qualified Hydra.Sources.Kernel.Types.Variants as Variants
 ns :: ModuleName
 ns = ModuleName "hydra.error.core"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Paths.ns, Core.ns, Variants.ns],
             moduleDescription = Just "Error types for core type and term validation"}
   where
@@ -73,7 +73,7 @@ module_ = Module {
 -- ============================================================================
 
 -- T13. ConstantConditionError (optional)
-constantConditionError :: Binding
+constantConditionError :: TypeDefinition
 constantConditionError = define "ConstantConditionError" $
   doc "An application of ifElse where the condition is a literal boolean, creating a dead branch (optional)" $
   T.record [
@@ -86,7 +86,7 @@ constantConditionError = define "ConstantConditionError" $
 
 -- T14. RedundantWrapUnwrapError (optional)
 
-duplicateBindingError :: Binding
+duplicateBindingError :: TypeDefinition
 duplicateBindingError = define "DuplicateBindingError" $
   doc "A duplicate binding name in a let expression" $
   T.record [
@@ -97,7 +97,7 @@ duplicateBindingError = define "DuplicateBindingError" $
       doc "The duplicated binding name" $
       Core.name]
 
-duplicateFieldError :: Binding
+duplicateFieldError :: TypeDefinition
 duplicateFieldError = define "DuplicateFieldError" $
   doc "A duplicate field name in a record or union type" $
   T.record [
@@ -109,7 +109,7 @@ duplicateFieldError = define "DuplicateFieldError" $
       Core.name]
 
 -- Y4. DuplicateRecordTypeFieldNamesError
-duplicateRecordTypeFieldNamesError :: Binding
+duplicateRecordTypeFieldNamesError :: TypeDefinition
 duplicateRecordTypeFieldNamesError = define "DuplicateRecordTypeFieldNamesError" $
   doc "A record type with duplicate field names" $
   T.record [
@@ -123,7 +123,7 @@ duplicateRecordTypeFieldNamesError = define "DuplicateRecordTypeFieldNamesError"
 -- Y5. DuplicateUnionTypeFieldNamesError
 
 -- Y5. DuplicateUnionTypeFieldNamesError
-duplicateUnionTypeFieldNamesError :: Binding
+duplicateUnionTypeFieldNamesError :: TypeDefinition
 duplicateUnionTypeFieldNamesError = define "DuplicateUnionTypeFieldNamesError" $
   doc "A union type with duplicate field names" $
   T.record [
@@ -136,7 +136,7 @@ duplicateUnionTypeFieldNamesError = define "DuplicateUnionTypeFieldNamesError" $
 
 -- Y6. UndefinedTypeVariableError
 -- T6. EmptyCaseStatementError (optional)
-emptyCaseStatementError :: Binding
+emptyCaseStatementError :: TypeDefinition
 emptyCaseStatementError = define "EmptyCaseStatementError" $
   doc "A case statement with no cases and no default (optional)" $
   T.record [
@@ -149,7 +149,7 @@ emptyCaseStatementError = define "EmptyCaseStatementError" $
 
 -- T7. UndefinedTermVariableError (replaces UndefinedTermError)
 -- T1. EmptyLetBindingsError (optional)
-emptyLetBindingsError :: Binding
+emptyLetBindingsError :: TypeDefinition
 emptyLetBindingsError = define "EmptyLetBindingsError" $
   doc "A let expression with an empty list of bindings (optional)" $
   T.record [
@@ -165,7 +165,7 @@ emptyLetBindingsError = define "EmptyLetBindingsError" $
 
 -- T5. EmptyTypeNameInTermError (optional)
 -- Y1. EmptyRecordTypeError (optional)
-emptyRecordTypeError :: Binding
+emptyRecordTypeError :: TypeDefinition
 emptyRecordTypeError = define "EmptyRecordTypeError" $
   doc "A record type with no fields; TypeUnit is preferred for the unit-like case (optional)" $
   T.record [
@@ -175,7 +175,7 @@ emptyRecordTypeError = define "EmptyRecordTypeError" $
 
 -- Y2. EmptyUnionTypeError (optional)
 -- T21. EmptyTermAnnotationError (optional)
-emptyTermAnnotationError :: Binding
+emptyTermAnnotationError :: TypeDefinition
 emptyTermAnnotationError = define "EmptyTermAnnotationError" $
   doc "A term annotation with an empty annotation map (optional)" $
   T.record [
@@ -185,7 +185,7 @@ emptyTermAnnotationError = define "EmptyTermAnnotationError" $
 
 -- T22. UnknownPrimitiveNameError
 -- Y9. EmptyTypeAnnotationError (optional)
-emptyTypeAnnotationError :: Binding
+emptyTypeAnnotationError :: TypeDefinition
 emptyTypeAnnotationError = define "EmptyTypeAnnotationError" $
   doc "A type annotation with an empty annotation map (optional)" $
   T.record [
@@ -195,7 +195,7 @@ emptyTypeAnnotationError = define "EmptyTypeAnnotationError" $
 
 -- Y10. VoidInNonBottomPositionError (optional)
 -- T5. EmptyTypeNameInTermError (optional)
-emptyTypeNameInTermError :: Binding
+emptyTypeNameInTermError :: TypeDefinition
 emptyTypeNameInTermError = define "EmptyTypeNameInTermError" $
   doc "A record, injection, projection, or case statement with an empty type name (optional)" $
   T.record [
@@ -205,7 +205,7 @@ emptyTypeNameInTermError = define "EmptyTypeNameInTermError" $
 
 -- T6. EmptyCaseStatementError (optional)
 -- Y2. EmptyUnionTypeError (optional)
-emptyUnionTypeError :: Binding
+emptyUnionTypeError :: TypeDefinition
 emptyUnionTypeError = define "EmptyUnionTypeError" $
   doc "A union type with no alternatives; TypeVoid is preferred (optional)" $
   T.record [
@@ -215,7 +215,7 @@ emptyUnionTypeError = define "EmptyUnionTypeError" $
 
 -- Y3. SingleVariantUnionError (optional)
 -- Y13. InvalidForallParameterNameError (optional)
-invalidForallParameterNameError :: Binding
+invalidForallParameterNameError :: TypeDefinition
 invalidForallParameterNameError = define "InvalidForallParameterNameError" $
   doc "A forall type parameter name that violates type variable naming conventions (optional)" $
   T.record [
@@ -228,7 +228,7 @@ invalidForallParameterNameError = define "InvalidForallParameterNameError" $
 
 -- Y14. InvalidTypeSchemeVariableNameError (optional)
 -- T17. InvalidLambdaParameterNameError (optional)
-invalidLambdaParameterNameError :: Binding
+invalidLambdaParameterNameError :: TypeDefinition
 invalidLambdaParameterNameError = define "InvalidLambdaParameterNameError" $
   doc "A lambda parameter name that violates naming conventions (optional)" $
   T.record [
@@ -241,7 +241,7 @@ invalidLambdaParameterNameError = define "InvalidLambdaParameterNameError" $
 
 -- T18. InvalidLetBindingNameError (optional)
 -- T18. InvalidLetBindingNameError (optional)
-invalidLetBindingNameError :: Binding
+invalidLetBindingNameError :: TypeDefinition
 invalidLetBindingNameError = define "InvalidLetBindingNameError" $
   doc "A let binding name that violates naming conventions (optional)" $
   T.record [
@@ -253,7 +253,7 @@ invalidLetBindingNameError = define "InvalidLetBindingNameError" $
       Core.name]
 
 -- InvalidLiteralError: the union of all literal validation errors
-invalidLiteralError :: Binding
+invalidLiteralError :: TypeDefinition
 invalidLiteralError = define "InvalidLiteralError" $
   doc "An error indicating that a literal value is invalid" $
   T.union [
@@ -263,7 +263,7 @@ invalidLiteralError = define "InvalidLiteralError" $
 
 -- T19. InvalidTypeLambdaParameterNameError (optional)
 -- InvalidTermError: the union of all term validation errors
-invalidTermError :: Binding
+invalidTermError :: TypeDefinition
 invalidTermError = define "InvalidTermError" $
   doc "An error indicating that a term is invalid" $
   T.union [
@@ -340,7 +340,7 @@ invalidTermError = define "InvalidTermError" $
 
 -- Y1. EmptyRecordTypeError (optional)
 -- InvalidTypeError: the union of all type validation errors
-invalidTypeError :: Binding
+invalidTypeError :: TypeDefinition
 invalidTypeError = define "InvalidTypeError" $
   doc "An error indicating that a type is invalid" $
   T.union [
@@ -416,7 +416,7 @@ invalidTypeError = define "InvalidTypeError" $
 --   Requires depth tracking across chains of function, application, or
 --   forall types.
 -- T19. InvalidTypeLambdaParameterNameError (optional)
-invalidTypeLambdaParameterNameError :: Binding
+invalidTypeLambdaParameterNameError :: TypeDefinition
 invalidTypeLambdaParameterNameError = define "InvalidTypeLambdaParameterNameError" $
   doc "A type lambda parameter name that violates naming conventions (optional)" $
   T.record [
@@ -429,7 +429,7 @@ invalidTypeLambdaParameterNameError = define "InvalidTypeLambdaParameterNameErro
 
 -- T20. NestedTermAnnotationError (optional)
 -- Y14. InvalidTypeSchemeVariableNameError (optional)
-invalidTypeSchemeVariableNameError :: Binding
+invalidTypeSchemeVariableNameError :: TypeDefinition
 invalidTypeSchemeVariableNameError = define "InvalidTypeSchemeVariableNameError" $
   doc "A type scheme variable name that violates type variable naming conventions (optional)" $
   T.record [
@@ -441,7 +441,7 @@ invalidTypeSchemeVariableNameError = define "InvalidTypeSchemeVariableNameError"
       Core.name]
 
 -- LiteralTypeMismatchError: a leaf used by InvalidLiteralError
-literalTypeMismatchError :: Binding
+literalTypeMismatchError :: TypeDefinition
 literalTypeMismatchError = define "LiteralTypeMismatchError" $
   doc "A mismatch between an expected literal type and the type of an actual literal value" $
   T.record [
@@ -454,7 +454,7 @@ literalTypeMismatchError = define "LiteralTypeMismatchError" $
 
 -- InvalidTypeError: the union of all type validation errors
 -- T20. NestedTermAnnotationError (optional)
-nestedTermAnnotationError :: Binding
+nestedTermAnnotationError :: TypeDefinition
 nestedTermAnnotationError = define "NestedTermAnnotationError" $
   doc "A term annotation directly wrapping another term annotation; annotations should be merged (optional)" $
   T.record [
@@ -464,7 +464,7 @@ nestedTermAnnotationError = define "NestedTermAnnotationError" $
 
 -- T21. EmptyTermAnnotationError (optional)
 -- Y8. NestedTypeAnnotationError (optional)
-nestedTypeAnnotationError :: Binding
+nestedTypeAnnotationError :: TypeDefinition
 nestedTypeAnnotationError = define "NestedTypeAnnotationError" $
   doc "A type annotation directly wrapping another type annotation; annotations should be merged (optional)" $
   T.record [
@@ -474,7 +474,7 @@ nestedTypeAnnotationError = define "NestedTypeAnnotationError" $
 
 -- Y9. EmptyTypeAnnotationError (optional)
 -- Y11. NonComparableMapKeyTypeError
-nonComparableMapKeyTypeError :: Binding
+nonComparableMapKeyTypeError :: TypeDefinition
 nonComparableMapKeyTypeError = define "NonComparableMapKeyTypeError" $
   doc "A map type whose key type is or directly contains a function type, which cannot be compared for equality" $
   T.record [
@@ -487,7 +487,7 @@ nonComparableMapKeyTypeError = define "NonComparableMapKeyTypeError" $
 
 -- Y12. NonComparableSetElementTypeError
 -- Y12. NonComparableSetElementTypeError
-nonComparableSetElementTypeError :: Binding
+nonComparableSetElementTypeError :: TypeDefinition
 nonComparableSetElementTypeError = define "NonComparableSetElementTypeError" $
   doc "A set type whose element type is or directly contains a function type, which cannot be compared for equality" $
   T.record [
@@ -500,7 +500,7 @@ nonComparableSetElementTypeError = define "NonComparableSetElementTypeError" $
 
 -- Y13. InvalidForallParameterNameError (optional)
 -- T14. RedundantWrapUnwrapError (optional)
-redundantWrapUnwrapError :: Binding
+redundantWrapUnwrapError :: TypeDefinition
 redundantWrapUnwrapError = define "RedundantWrapUnwrapError" $
   doc "An unwrap elimination applied to a wrap term of the same type, forming a no-op round-trip (optional)" $
   T.record [
@@ -513,7 +513,7 @@ redundantWrapUnwrapError = define "RedundantWrapUnwrapError" $
 
 -- T15. SelfApplicationError (optional)
 -- T15. SelfApplicationError (optional)
-selfApplicationError :: Binding
+selfApplicationError :: TypeDefinition
 selfApplicationError = define "SelfApplicationError" $
   doc "A variable applied to itself, which is almost always a mistake in Hydra's type system (optional)" $
   T.record [
@@ -526,7 +526,7 @@ selfApplicationError = define "SelfApplicationError" $
 
 -- T16. UnnecessaryIdentityApplicationError (optional)
 -- Y3. SingleVariantUnionError (optional)
-singleVariantUnionError :: Binding
+singleVariantUnionError :: TypeDefinition
 singleVariantUnionError = define "SingleVariantUnionError" $
   doc "A union type with exactly one field; could be a wrapped type or record instead (optional)" $
   T.record [
@@ -539,7 +539,7 @@ singleVariantUnionError = define "SingleVariantUnionError" $
 
 -- Y4. DuplicateRecordTypeFieldNamesError
 -- T11. TermVariableShadowingError (optional)
-termVariableShadowingError :: Binding
+termVariableShadowingError :: TypeDefinition
 termVariableShadowingError = define "TermVariableShadowingError" $
   doc "A lambda parameter or let binding name that shadows a variable already in scope (optional)" $
   T.record [
@@ -552,7 +552,7 @@ termVariableShadowingError = define "TermVariableShadowingError" $
 
 -- T12. TypeVariableShadowingInTypeLambdaError (optional)
 -- Y7. TypeVariableShadowingInForallError (optional)
-typeVariableShadowingInForallError :: Binding
+typeVariableShadowingInForallError :: TypeDefinition
 typeVariableShadowingInForallError = define "TypeVariableShadowingInForallError" $
   doc "A forall type parameter that shadows a type variable already in scope (optional)" $
   T.record [
@@ -565,7 +565,7 @@ typeVariableShadowingInForallError = define "TypeVariableShadowingInForallError"
 
 -- Y8. NestedTypeAnnotationError (optional)
 -- T12. TypeVariableShadowingInTypeLambdaError (optional)
-typeVariableShadowingInTypeLambdaError :: Binding
+typeVariableShadowingInTypeLambdaError :: TypeDefinition
 typeVariableShadowingInTypeLambdaError = define "TypeVariableShadowingInTypeLambdaError" $
   doc "A type lambda parameter that shadows a type variable already in scope (optional)" $
   T.record [
@@ -577,7 +577,7 @@ typeVariableShadowingInTypeLambdaError = define "TypeVariableShadowingInTypeLamb
       Core.name]
 
 -- T13. ConstantConditionError (optional)
-undefinedFieldError :: Binding
+undefinedFieldError :: TypeDefinition
 undefinedFieldError = define "UndefinedFieldError" $
   doc "A reference to a field that does not exist in the given type" $
   T.record [
@@ -588,7 +588,7 @@ undefinedFieldError = define "UndefinedFieldError" $
       doc "The name of the type in which the field was expected" $
       Core.name]
 -- T7. UndefinedTermVariableError (replaces UndefinedTermError)
-undefinedTermVariableError :: Binding
+undefinedTermVariableError :: TypeDefinition
 undefinedTermVariableError = define "UndefinedTermVariableError" $
   doc "A variable reference to a term name that is not bound in scope" $
   T.record [
@@ -601,7 +601,7 @@ undefinedTermVariableError = define "UndefinedTermVariableError" $
 
 -- T8. UndefinedTypeVariableInLambdaDomainError
 -- Y6. UndefinedTypeVariableError
-undefinedTypeVariableError :: Binding
+undefinedTypeVariableError :: TypeDefinition
 undefinedTypeVariableError = define "UndefinedTypeVariableError" $
   doc "A type variable reference to a name that is not bound in scope" $
   T.record [
@@ -614,7 +614,7 @@ undefinedTypeVariableError = define "UndefinedTypeVariableError" $
 
 -- Y7. TypeVariableShadowingInForallError (optional)
 -- T10. UndefinedTypeVariableInBindingTypeError
-undefinedTypeVariableInBindingTypeError :: Binding
+undefinedTypeVariableInBindingTypeError :: TypeDefinition
 undefinedTypeVariableInBindingTypeError = define "UndefinedTypeVariableInBindingTypeError" $
   doc "A type variable in a let binding's type scheme that is not bound by the scheme or enclosing scope" $
   T.record [
@@ -627,7 +627,7 @@ undefinedTypeVariableInBindingTypeError = define "UndefinedTypeVariableInBinding
 
 -- T11. TermVariableShadowingError (optional)
 -- T8. UndefinedTypeVariableInLambdaDomainError
-undefinedTypeVariableInLambdaDomainError :: Binding
+undefinedTypeVariableInLambdaDomainError :: TypeDefinition
 undefinedTypeVariableInLambdaDomainError = define "UndefinedTypeVariableInLambdaDomainError" $
   doc "A type variable in a lambda domain annotation that is not bound in scope" $
   T.record [
@@ -640,7 +640,7 @@ undefinedTypeVariableInLambdaDomainError = define "UndefinedTypeVariableInLambda
 
 -- T9. UndefinedTypeVariableInTypeApplicationError
 -- T9. UndefinedTypeVariableInTypeApplicationError
-undefinedTypeVariableInTypeApplicationError :: Binding
+undefinedTypeVariableInTypeApplicationError :: TypeDefinition
 undefinedTypeVariableInTypeApplicationError = define "UndefinedTypeVariableInTypeApplicationError" $
   doc "A type variable in a type application term that is not bound in scope" $
   T.record [
@@ -652,7 +652,7 @@ undefinedTypeVariableInTypeApplicationError = define "UndefinedTypeVariableInTyp
       Core.name]
 
 -- T10. UndefinedTypeVariableInBindingTypeError
-unexpectedTermVariantError :: Binding
+unexpectedTermVariantError :: TypeDefinition
 unexpectedTermVariantError = define "UnexpectedTermVariantError" $
   doc "An unexpected term variant was encountered" $
   T.record [
@@ -662,7 +662,7 @@ unexpectedTermVariantError = define "UnexpectedTermVariantError" $
     "actualTerm">:
       doc "The actual term that was encountered" $
       Core.term]
-unexpectedTypeVariantError :: Binding
+unexpectedTypeVariantError :: TypeDefinition
 unexpectedTypeVariantError = define "UnexpectedTypeVariantError" $
   doc "An unexpected type variant was encountered" $
   T.record [
@@ -679,7 +679,7 @@ unexpectedTypeVariantError = define "UnexpectedTypeVariantError" $
 
 -- T1. EmptyLetBindingsError (optional)
 -- T22. UnknownPrimitiveNameError
-unknownPrimitiveNameError :: Binding
+unknownPrimitiveNameError :: TypeDefinition
 unknownPrimitiveNameError = define "UnknownPrimitiveNameError" $
   doc "A primitive function reference to a name not in the known primitive registry" $
   T.record [
@@ -692,7 +692,7 @@ unknownPrimitiveNameError = define "UnknownPrimitiveNameError" $
 
 -- UntypedTermVariableError (replaces UndefinedTypeError)
 -- T16. UnnecessaryIdentityApplicationError (optional)
-unnecessaryIdentityApplicationError :: Binding
+unnecessaryIdentityApplicationError :: TypeDefinition
 unnecessaryIdentityApplicationError = define "UnnecessaryIdentityApplicationError" $
   doc "An application of an identity lambda to an argument, which simplifies to the argument (optional)" $
   T.record [
@@ -702,7 +702,7 @@ unnecessaryIdentityApplicationError = define "UnnecessaryIdentityApplicationErro
 
 -- T17. InvalidLambdaParameterNameError (optional)
 -- UntypedTermVariableError (replaces UndefinedTypeError)
-untypedTermVariableError :: Binding
+untypedTermVariableError :: TypeDefinition
 untypedTermVariableError = define "UntypedTermVariableError" $
   doc "A term variable whose type is not known in the current scope" $
   T.record [
@@ -715,7 +715,7 @@ untypedTermVariableError = define "UntypedTermVariableError" $
 
 -- InvalidTermError: the union of all term validation errors
 -- Y10. VoidInNonBottomPositionError (optional)
-voidInNonBottomPositionError :: Binding
+voidInNonBottomPositionError :: TypeDefinition
 voidInNonBottomPositionError = define "VoidInNonBottomPositionError" $
   doc "TypeVoid appearing in a position where no value can be constructed, such as a record field, list element, map key/value, set element, pair component, or function codomain (optional)" $
   T.record [

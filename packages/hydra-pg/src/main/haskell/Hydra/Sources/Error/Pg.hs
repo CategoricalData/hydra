@@ -12,13 +12,13 @@ import qualified Hydra.Sources.Pg.Model      as PgModel
 ns :: ModuleName
 ns = ModuleName "hydra.error.pg"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [PgModel.ns],
             moduleDescription = Just "Error types for property graph validation"}
   where
@@ -35,7 +35,7 @@ module_ = Module {
       noSuchVertexLabelError,
       wrongVertexLabelError]
 
-invalidEdgeError :: Binding
+invalidEdgeError :: TypeDefinition
 invalidEdgeError = define "InvalidEdgeError" $
   doc "An error indicating that an edge is invalid" $
   T.union [
@@ -61,7 +61,7 @@ invalidEdgeError = define "InvalidEdgeError" $
       doc "A property of the edge is invalid" $
       invalidElementPropertyError]
 
-invalidElementPropertyError :: Binding
+invalidElementPropertyError :: TypeDefinition
 invalidElementPropertyError = define "InvalidElementPropertyError" $
   doc "An invalid property on a vertex or edge, identified by its key" $
   T.record [
@@ -72,7 +72,7 @@ invalidElementPropertyError = define "InvalidElementPropertyError" $
       doc "The specific error" $
       invalidPropertyError]
 
-invalidGraphEdgeError :: Binding
+invalidGraphEdgeError :: TypeDefinition
 invalidGraphEdgeError = define "InvalidGraphEdgeError" $
   doc "An invalid edge within a graph, identified by its id" $
   T.forAll "v" $ T.record [
@@ -83,7 +83,7 @@ invalidGraphEdgeError = define "InvalidGraphEdgeError" $
       doc "The specific error" $
       invalidEdgeError]
 
-invalidGraphError :: Binding
+invalidGraphError :: TypeDefinition
 invalidGraphError = define "InvalidGraphError" $
   doc "An error indicating that a property graph is invalid" $
   T.forAll "v" $ T.union [
@@ -94,7 +94,7 @@ invalidGraphError = define "InvalidGraphError" $
       doc "A vertex in the graph is invalid" $
       T.apply invalidGraphVertexError "v"]
 
-invalidGraphVertexError :: Binding
+invalidGraphVertexError :: TypeDefinition
 invalidGraphVertexError = define "InvalidGraphVertexError" $
   doc "An invalid vertex within a graph, identified by its id" $
   T.forAll "v" $ T.record [
@@ -105,7 +105,7 @@ invalidGraphVertexError = define "InvalidGraphVertexError" $
       doc "The specific error" $
       invalidVertexError]
 
-invalidPropertyError :: Binding
+invalidPropertyError :: TypeDefinition
 invalidPropertyError = define "InvalidPropertyError" $
   doc "An error indicating that a property is invalid" $
   T.union [
@@ -119,7 +119,7 @@ invalidPropertyError = define "InvalidPropertyError" $
       doc "A property has an unexpected key not in the schema" $
       pg "PropertyKey"]
 
-invalidValueError :: Binding
+invalidValueError :: TypeDefinition
 invalidValueError = define "InvalidValueError" $
   doc "An error indicating that a value does not match the expected type" $
   T.record [
@@ -130,7 +130,7 @@ invalidValueError = define "InvalidValueError" $
       doc "The actual value, as a string" $
       T.string]
 
-invalidVertexError :: Binding
+invalidVertexError :: TypeDefinition
 invalidVertexError = define "InvalidVertexError" $
   doc "An error indicating that a vertex is invalid" $
   T.union [
@@ -144,7 +144,7 @@ invalidVertexError = define "InvalidVertexError" $
       doc "A property of the vertex is invalid" $
       invalidElementPropertyError]
 
-noSuchEdgeLabelError :: Binding
+noSuchEdgeLabelError :: TypeDefinition
 noSuchEdgeLabelError = define "NoSuchEdgeLabelError" $
   doc "An error indicating that an edge label does not exist in the schema" $
   T.record [
@@ -152,7 +152,7 @@ noSuchEdgeLabelError = define "NoSuchEdgeLabelError" $
       doc "The edge label that was not found" $
       pg "EdgeLabel"]
 
-noSuchVertexLabelError :: Binding
+noSuchVertexLabelError :: TypeDefinition
 noSuchVertexLabelError = define "NoSuchVertexLabelError" $
   doc "An error indicating that a vertex label does not exist in the schema" $
   T.record [
@@ -163,7 +163,7 @@ noSuchVertexLabelError = define "NoSuchVertexLabelError" $
 pg :: String -> Type
 pg = typeref PgModel.ns
 
-wrongVertexLabelError :: Binding
+wrongVertexLabelError :: TypeDefinition
 wrongVertexLabelError = define "WrongVertexLabelError" $
   doc "An error indicating that a vertex has the wrong label" $
   T.record [

@@ -19,13 +19,13 @@ import qualified Hydra.Sources.Rdf.Syntax    as RdfSyntax
 ns :: ModuleName
 ns = ModuleName "hydra.shacl.model"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [RdfSyntax.ns, Core.ns],
             moduleDescription = Just "A SHACL syntax model. See https://www.w3.org/TR/shacl"}
   where
@@ -45,14 +45,14 @@ module_ = Module {
       shape,
       shapesGraph]
 
-closed :: Binding
+closed :: TypeDefinition
 closed = define "Closed" $
   see "https://www.w3.org/TR/shacl/#ClosedPatterConstraintComponent" $
   T.record [
     "isClosed">: T.boolean,
     "ignoredProperties">: T.optional $ T.set $ rdf "Property"]
 
-commonConstraint :: Binding
+commonConstraint :: TypeDefinition
 commonConstraint = define "CommonConstraint" $
   doc "Any of a number of constraint parameters which can be applied either to node or property shapes" $
   T.union [
@@ -146,7 +146,7 @@ commonConstraint = define "CommonConstraint" $
       see "https://www.w3.org/TR/shacl/#XoneConstraintComponent" $
       T.set $ shacl "Reference" @@ shacl "Shape"]
 
-commonProperties :: Binding
+commonProperties :: TypeDefinition
 commonProperties = define "CommonProperties" $
   doc "Common constraint parameters and other properties for SHACL shapes" $
   T.record [
@@ -182,14 +182,14 @@ commonProperties = define "CommonProperties" $
       see "https://www.w3.org/TR/shacl/#targetSubjectsOf" $
       T.set $ rdf "Property"]
 
-definition :: Binding
+definition :: TypeDefinition
 definition = define "Definition" $
   doc "An instance of a type like sh:Shape or sh:NodeShape, together with a unique IRI for that instance" $
   T.forAll "a" $ T.record [
     "iri">: rdf "Iri",
     "target">: "a"]
 
-nodeKind :: Binding
+nodeKind :: TypeDefinition
 nodeKind = define "NodeKind" $ T.union [
   "blankNode">: doc "A blank node" T.unit,
   "iri">: doc "An IRI" T.unit,
@@ -198,20 +198,20 @@ nodeKind = define "NodeKind" $ T.union [
   "blankNodeOrLiteral">: doc "A blank node or a literal" T.unit,
   "iriOrLiteral">: doc "An IRI or a literal" T.unit]
 
-nodeShape :: Binding
+nodeShape :: TypeDefinition
 nodeShape = define "NodeShape" $
   doc "A SHACL node shape. See https://www.w3.org/TR/shacl/#node-shapes" $
   T.record [
     "common">: shacl "CommonProperties"]
 
-pattern_ :: Binding
+pattern_ :: TypeDefinition
 pattern_ = define "Pattern" $
   doc "A SHACL pattern. See https://www.w3.org/TR/shacl/#PatternConstraintComponent" $
   T.record [
     "regex">: T.string,
     "flags">: T.optional T.string]
 
-propertyShape :: Binding
+propertyShape :: TypeDefinition
 propertyShape = define "PropertyShape" $
   doc "A SHACL property shape. See https://www.w3.org/TR/shacl/#property-shapes" $
   T.record [
@@ -240,7 +240,7 @@ propertyShape = define "PropertyShape" $
     "path">: rdf "Iri"]
     -- Note: sh:group is omitted for now, for lack of a clear definition of PropertyGroup
 
-propertyShapeConstraint :: Binding
+propertyShapeConstraint :: TypeDefinition
 propertyShapeConstraint = define "PropertyShapeConstraint" $
   doc "A number of constraint parameters which are specific to property shapes, and cannot be applied to node shapes" $
   T.union [
@@ -271,7 +271,7 @@ propertyShapeConstraint = define "PropertyShapeConstraint" $
       see "https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent" $
       shacl "QualifiedValueShape"]
 
-qualifiedValueShape :: Binding
+qualifiedValueShape :: TypeDefinition
 qualifiedValueShape = define "QualifiedValueShape" $
   see "https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent" $
   T.record [
@@ -283,7 +283,7 @@ qualifiedValueShape = define "QualifiedValueShape" $
 rdf :: String -> Type
 rdf = typeref $ RdfSyntax.ns
 
-reference :: Binding
+reference :: TypeDefinition
 reference = define "Reference" $
   doc "Either an instance of a type like sh:Shape or sh:NodeShape, or an IRI which refers to an instance of that type" $
   T.forAll "a" $ T.union [
@@ -295,7 +295,7 @@ reference = define "Reference" $
       doc "An inline definition" $
       shacl "Definition" @@ "a"]
 
-severity :: Binding
+severity :: TypeDefinition
 severity = define "Severity" $ T.union [
   "info">: doc "A non-critical constraint violation indicating an informative message" T.unit,
   "warning">: doc "A non-critical constraint violation indicating a warning" T.unit,
@@ -304,14 +304,14 @@ severity = define "Severity" $ T.union [
 shacl :: String -> Type
 shacl = typeref ns
 
-shape :: Binding
+shape :: TypeDefinition
 shape = define "Shape" $
   doc "A SHACL node or property shape. See https://www.w3.org/TR/shacl/#shapes" $
   T.union [
     "node">: shacl "NodeShape",
     "property">: shacl "PropertyShape"]
 
-shapesGraph :: Binding
+shapesGraph :: TypeDefinition
 shapesGraph = define "ShapesGraph" $
   doc ("An RDF graph containing zero or more shapes that is passed into a SHACL validation process " ++
        "so that a data graph can be validated against the shapes") $

@@ -14,13 +14,13 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 ns :: ModuleName
 ns = ModuleName "hydra.yaml.model"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A basic YAML representation model. Based on:\n" ++
       "  https://yaml.org/spec/1.2/spec.html\n" ++
@@ -33,7 +33,7 @@ module_ = Module {
       scalar]
 
 -- Every YAML node has an optional scalar tag or non-specific tag (omitted from this model)
-node :: Binding
+node :: TypeDefinition
 node = define "Node" $
   doc "A YAML node (value)" $
   T.union [
@@ -47,7 +47,7 @@ node = define "Node" $
       doc "A sequence of nodes" $
       T.list node] -- Failsafe schema: tag:yaml.org,2002:seq
 
-scalar :: Binding
+scalar :: TypeDefinition
 scalar = define "Scalar" $
   doc "A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here" $
   T.union [

@@ -16,13 +16,13 @@ import qualified Data.Maybe                      as Y
 ns :: ModuleName
 ns = ModuleName "hydra.xml.schema"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A partial XML Schema model, focusing on datatypes. All simple datatypes (i.e. xsd:anySimpleType and below) are included.\n" ++
       "See: https://www.w3.org/TR/xmlschema-2\n" ++
@@ -80,30 +80,30 @@ module_ = Module {
       constrainingFacet,
       datatype_]
 
-anySimpleType :: Binding
+anySimpleType :: TypeDefinition
 anySimpleType = define "AnySimpleType" $ T.wrap T.string
 
-anyType :: Binding
+anyType :: TypeDefinition
 anyType = define "AnyType" $ T.wrap T.string
 
-anyURI :: Binding
+anyURI :: TypeDefinition
 anyURI = define "AnyURI" $ T.wrap T.string
 
-base64Binary :: Binding
+base64Binary :: TypeDefinition
 base64Binary = define "Base64Binary" $ T.wrap T.string
 
-boolean_ :: Binding
+boolean_ :: TypeDefinition
 boolean_ = define "Boolean" $ T.wrap T.boolean
 
-byte_ :: Binding
+byte_ :: TypeDefinition
 byte_ = define "Byte" $ T.wrap T.int8
 
-constrainingFacet :: Binding
+constrainingFacet :: TypeDefinition
 constrainingFacet = define "ConstrainingFacet" $
   see "https://www.w3.org/TR/xmlschema-2/#non-fundamental" $
   T.wrap T.unit -- TODO: concrete facets
 
-datatype_ :: Binding
+datatype_ :: TypeDefinition
 datatype_ = define "Datatype" $ T.enum [
   "anySimpleType",
   "anyType",
@@ -150,116 +150,116 @@ datatype_ = define "Datatype" $ T.enum [
   "unsignedLong",
   "unsignedShort"]
 
-date :: Binding
+date :: TypeDefinition
 date = define "Date" $ T.wrap T.string
 
-dateTime :: Binding
+dateTime :: TypeDefinition
 dateTime = define "DateTime" $ T.wrap T.string
 
-decimal :: Binding
+decimal :: TypeDefinition
 decimal = define "Decimal" $ T.wrap T.string
 
-double_ :: Binding
+double_ :: TypeDefinition
 double_ = define "Double" $ T.wrap T.float64
 
-duration :: Binding
+duration :: TypeDefinition
 duration = define "Duration" $ T.wrap T.string
 
-entities :: Binding
+entities :: TypeDefinition
 entities = define "ENTITIES" $ T.wrap T.string
 
-entity :: Binding
+entity :: TypeDefinition
 entity = define "ENTITY" $ T.wrap T.string
 
-float_ :: Binding
+float_ :: TypeDefinition
 float_ = define "Float" $ T.wrap T.float32
 
-gDay :: Binding
+gDay :: TypeDefinition
 gDay = define "GDay" $ T.wrap T.string
 
-gMonth :: Binding
+gMonth :: TypeDefinition
 gMonth = define "GMonth" $ T.wrap T.string
 
-gMonthDay :: Binding
+gMonthDay :: TypeDefinition
 gMonthDay = define "GMonthDay" $ T.wrap T.string
 
-gYear :: Binding
+gYear :: TypeDefinition
 gYear = define "GYear" $ T.wrap T.string
 
-gYearMonth :: Binding
+gYearMonth :: TypeDefinition
 gYearMonth = define "GYearMonth" $ T.wrap T.string
 
-hexBinary :: Binding
+hexBinary :: TypeDefinition
 hexBinary = define "HexBinary" $ T.wrap T.string
 
-id_ :: Binding
+id_ :: TypeDefinition
 id_ = define "ID" $ T.wrap T.string
 
-idref :: Binding
+idref :: TypeDefinition
 idref = define "IDREF" $ T.wrap T.string
 
-idrefs :: Binding
+idrefs :: TypeDefinition
 idrefs = define "IDREFS" $ T.wrap T.string
 
-int_ :: Binding
+int_ :: TypeDefinition
 int_ = define "Int" $ T.wrap T.int32
 
-integer_ :: Binding
+integer_ :: TypeDefinition
 integer_ = define "Integer" $ T.wrap T.bigint
 
-language_ :: Binding
+language_ :: TypeDefinition
 language_ = define "Language" $ T.wrap T.string
 
-long_ :: Binding
+long_ :: TypeDefinition
 long_ = define "Long" $ T.wrap T.int64
 
-name_ :: Binding
+name_ :: TypeDefinition
 name_ = define "Name" $ T.wrap T.string
 
-negativeInteger :: Binding
+negativeInteger :: TypeDefinition
 negativeInteger = define "NegativeInteger" $ T.wrap T.bigint
 
-nmtoken :: Binding
+nmtoken :: TypeDefinition
 nmtoken = define "NMTOKEN" $ T.wrap T.string
 
-nonNegativeInteger :: Binding
+nonNegativeInteger :: TypeDefinition
 nonNegativeInteger = define "NonNegativeInteger" $ T.wrap T.bigint
 
-nonPositiveInteger :: Binding
+nonPositiveInteger :: TypeDefinition
 nonPositiveInteger = define "NonPositiveInteger" $ T.wrap T.bigint
 
-normalizedString :: Binding
+normalizedString :: TypeDefinition
 normalizedString = define "NormalizedString" $ T.wrap T.string
 
-notation :: Binding
+notation :: TypeDefinition
 notation = define "NOTATION" $ T.wrap T.string
 
-positiveInteger :: Binding
+positiveInteger :: TypeDefinition
 positiveInteger = define "PositiveInteger" $ T.wrap T.bigint
 
-qName :: Binding
+qName :: TypeDefinition
 qName = define "QName" $ T.wrap T.string
 
-short_ :: Binding
+short_ :: TypeDefinition
 short_ = define "Short" $ T.wrap T.int16
 
-string_ :: Binding
+string_ :: TypeDefinition
 string_ = define "String" $ T.wrap T.string
 
-time :: Binding
+time :: TypeDefinition
 time = define "Time" $ T.wrap T.string
 
-token :: Binding
+token :: TypeDefinition
 token = define "Token" $ T.wrap T.string
 
-unsignedByte :: Binding
+unsignedByte :: TypeDefinition
 unsignedByte = define "UnsignedByte" $ T.wrap T.uint8
 
-unsignedInt :: Binding
+unsignedInt :: TypeDefinition
 unsignedInt = define "UnsignedInt" $ T.wrap T.uint32
 
-unsignedLong :: Binding
+unsignedLong :: TypeDefinition
 unsignedLong = define "UnsignedLong" $ T.wrap T.uint64
 
-unsignedShort :: Binding
+unsignedShort :: TypeDefinition
 unsignedShort = define "UnsignedShort" $ T.wrap T.uint16

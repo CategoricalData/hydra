@@ -13,13 +13,13 @@ import qualified Hydra.Sources.Kernel.Types.Paths as Paths
 ns :: ModuleName
 ns = ModuleName "hydra.typing"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, Paths.ns],
             moduleDescription = Just "Types supporting type inference and type reconstruction."}
   where
@@ -36,7 +36,7 @@ module_ = Module {
       typeParameter,
       typeSubst]
 
-functionStructure :: Binding
+functionStructure :: TypeDefinition
 functionStructure = define "FunctionStructure" $
   doc ("A structured representation of a function term's components, replacing ad-hoc tuples."
     ++ " This captures all the information extracted from peeling lambdas, type lambdas, lets, and"
@@ -65,7 +65,7 @@ functionStructure = define "FunctionStructure" $
       doc "Updated environment after processing all bindings" $
       T.variable "env"]
 
-inferenceContext :: Binding
+inferenceContext :: TypeDefinition
 inferenceContext = define "InferenceContext" $
   doc ("State threaded through type inference: the fresh type variable counter"
     ++ " and the current subterm-path trace.") $
@@ -80,7 +80,7 @@ inferenceContext = define "InferenceContext" $
         ++ " and stamped onto the error.") $
       T.list Paths.subtermStep]
 
-inferenceResult :: Binding
+inferenceResult :: TypeDefinition
 inferenceResult = define "InferenceResult" $
   doc "The result of applying inference rules to a term." $
   T.record [
@@ -100,7 +100,7 @@ inferenceResult = define "InferenceResult" $
       doc "The updated InferenceContext after inference (carries fresh-variable counter and trace)" $
       inferenceContext]
 
-parameter :: Binding
+parameter :: TypeDefinition
 parameter = define "Parameter" $
   doc "A named, typed parameter of a term, with optional human-readable description and a flag indicating whether the parameter requires lazy evaluation by hosts which support it." $
   T.record [
@@ -117,7 +117,7 @@ parameter = define "Parameter" $
       doc "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation"
       T.boolean]
 
-result :: Binding
+result :: TypeDefinition
 result = define "Result" $
   doc "The result of a term, consisting of a type and an optional human-readable description." $
   T.record [
@@ -128,7 +128,7 @@ result = define "Result" $
       doc "The type of the result"
       Core.type_]
 
-termSignature :: Binding
+termSignature :: TypeDefinition
 termSignature = define "TermSignature" $
   doc "A structured signature for a term: an ordered list of type parameters (with optional class constraints), an ordered list of value parameters, and a result. TermSignature is a richer view of TypeScheme: every TermSignature can be converted to a TypeScheme by erasing parameter names, descriptions, and laziness flags." $
   T.record [
@@ -142,12 +142,12 @@ termSignature = define "TermSignature" $
       doc "The result of the term"
       result]
 
-termSubst :: Binding
+termSubst :: TypeDefinition
 termSubst = define "TermSubst" $
   doc "A substitution of term variables for terms" $
   T.wrap $ T.map Core.name Core.term
 
-typeClass :: Binding
+typeClass :: TypeDefinition
 typeClass = define "TypeClass" $
   doc ("A type class identifier together with a human-readable description."
     ++ " Type classes are referenced as bare names (e.g. the local name \"equality\") in"
@@ -158,7 +158,7 @@ typeClass = define "TypeClass" $
       doc "A human-readable description of the type class"
       T.string]
 
-typeConstraint :: Binding
+typeConstraint :: TypeDefinition
 typeConstraint = define "TypeConstraint" $
   doc "An assertion that two types can be unified into a single type" $
   T.record [
@@ -172,7 +172,7 @@ typeConstraint = define "TypeConstraint" $
       doc "A description of the type constraint which may be used for tracing or debugging"
       T.string]
 
-typeParameter :: Binding
+typeParameter :: TypeDefinition
 typeParameter = define "TypeParameter" $
   doc "A type parameter of a term, with an optional list of type class constraints" $
   T.record [
@@ -183,7 +183,7 @@ typeParameter = define "TypeParameter" $
       doc "Any type class constraints on the type parameter" $
       T.list Core.typeClassConstraint]
 
-typeSubst :: Binding
+typeSubst :: TypeDefinition
 typeSubst = define "TypeSubst" $
   doc "A substitution of type variables for types" $
   T.wrap $ T.map Core.name Core.type_

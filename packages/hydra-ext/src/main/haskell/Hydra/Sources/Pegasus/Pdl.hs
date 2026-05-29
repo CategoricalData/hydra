@@ -19,13 +19,13 @@ import qualified Hydra.Sources.Json.Model        as JsonModel
 ns :: ModuleName
 ns = ModuleName "hydra.pegasus.pdl"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [JsonModel.ns, Core.ns],
             moduleDescription = Just ("A model for PDL (Pegasus Data Language) schemas. Based on the specification at:\n" ++
       "  https://linkedin.github.io/rest.li/pdl_schema")}
@@ -52,65 +52,65 @@ module_ = Module {
       unionMember,
       unionSchema]
 
-annotations :: Binding
+annotations :: TypeDefinition
 annotations = define "Annotations" $
   doc "Annotations which can be applied to record fields, aliased union members, enum symbols, or named schemas" $
   T.record [
     "doc">: T.maybe T.string,
     "deprecated">: T.boolean]
 
-enumField :: Binding
+enumField :: TypeDefinition
 enumField = define "EnumField" $
   T.record [
     "name">: pdl "EnumFieldName",
     "annotations">: pdl "Annotations"]
 
-enumFieldName :: Binding
+enumFieldName :: TypeDefinition
 enumFieldName = define "EnumFieldName" $
   T.wrap T.string
 
-enumSchema :: Binding
+enumSchema :: TypeDefinition
 enumSchema = define "EnumSchema" $
   T.record [
     "fields">: T.list $ pdl "EnumField"]
 
-fieldName_ :: Binding
+fieldName_ :: TypeDefinition
 fieldName_ = define "FieldName" $
   T.wrap T.string
 
 json :: String -> Type
 json = typeref $ JsonModel.ns
 
-name_ :: Binding
+name_ :: TypeDefinition
 name_ = define "Name" $
   T.wrap T.string
 
-namedSchema :: Binding
+namedSchema :: TypeDefinition
 namedSchema = define "NamedSchema" $
   T.record [
     "qualifiedName">: pdl "QualifiedName",
     "type">: pdl "NamedSchemaType",
     "annotations">: pdl "Annotations"]
 
-namedSchemaType :: Binding
+namedSchemaType :: TypeDefinition
 namedSchemaType = define "NamedSchemaType" $
   T.union [
     "record">: pdl "RecordSchema",
     "enum">: pdl "EnumSchema",
     "typeref">: pdl "Schema"]
 
-namespace_ :: Binding
+namespace_ :: TypeDefinition
 namespace_ = define "Namespace" $
   T.wrap T.string
 
-package_ :: Binding
+package_ :: TypeDefinition
 package_ = define "Package" $
   T.wrap T.string
 
 pdl :: String -> Type
 pdl = typeref ns
 
-primitiveType_ :: Binding
+primitiveType_ :: TypeDefinition
 primitiveType_ = define "PrimitiveType" $
   T.enum [
     "boolean",
@@ -121,23 +121,23 @@ primitiveType_ = define "PrimitiveType" $
     "long",
     "string"]
 
-propertyKey :: Binding
+propertyKey :: TypeDefinition
 propertyKey = define "PropertyKey" $
   T.wrap T.string
 
-property_ :: Binding
+property_ :: TypeDefinition
 property_ = define "Property" $
   T.record [
     "key">: pdl "PropertyKey",
     "value">: T.maybe $ json "Value"]
 
-qualifiedName :: Binding
+qualifiedName :: TypeDefinition
 qualifiedName = define "QualifiedName" $
   T.record [
     "name">: pdl "Name",
     "namespace">: T.maybe $ pdl "Namespace"]
 
-recordField :: Binding
+recordField :: TypeDefinition
 recordField = define "RecordField" $
   doc "Note: the default value for an enum-valued must be one of the enumerated string symbols" $
   T.record [
@@ -147,14 +147,14 @@ recordField = define "RecordField" $
     "default">: T.maybe $ json "Value",
     "annotations">: pdl "Annotations"]
 
-recordSchema :: Binding
+recordSchema :: TypeDefinition
 recordSchema = define "RecordSchema" $
   doc "Note: all included schemas must be record schemas" $
   T.record [
     "fields">: T.list $ pdl "RecordField",
     "includes">: T.list $ pdl "NamedSchema"]
 
-schema :: Binding
+schema :: TypeDefinition
 schema = define "Schema" $
   T.union [
     "array">: pdl "Schema",
@@ -166,7 +166,7 @@ schema = define "Schema" $
     "primitive">: pdl "PrimitiveType",
     "union">: pdl "UnionSchema"]
 
-schemaFile :: Binding
+schemaFile :: TypeDefinition
 schemaFile = define "SchemaFile" $
   T.record [
     "namespace">: pdl "Namespace",
@@ -174,7 +174,7 @@ schemaFile = define "SchemaFile" $
     "imports">: T.list $ pdl "QualifiedName",
     "schemas">: T.list $ pdl "NamedSchema"]
 
-unionMember :: Binding
+unionMember :: TypeDefinition
 unionMember = define "UnionMember" $
   doc "Note: annotations are only available for aliased members" $
   T.record [
@@ -182,7 +182,7 @@ unionMember = define "UnionMember" $
     "value">: pdl "Schema",
     "annotations">: pdl "Annotations"]
 
-unionSchema :: Binding
+unionSchema :: TypeDefinition
 unionSchema = define "UnionSchema" $
   doc "Note: unions are not allowed as member types of other unions" $
   T.wrap $ T.list $ pdl "UnionMember"

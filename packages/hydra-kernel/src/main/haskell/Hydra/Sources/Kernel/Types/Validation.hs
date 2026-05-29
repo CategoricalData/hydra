@@ -11,13 +11,13 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 ns :: ModuleName
 ns = ModuleName "hydra.validation"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, ModuleName "hydra.error.core"],
             moduleDescription = Just "Framework types for configurable validation: profiles classify checks as errors or warnings, and results accumulate findings up to caller-specified bounds."}
   where
@@ -25,7 +25,7 @@ module_ = Module {
       validationProfile,
       validationResult]
 
-validationProfile :: Binding
+validationProfile :: TypeDefinition
 validationProfile = define "ValidationProfile" $
   doc "Configuration for a validation pass: which check rules are active, how each is classified, and the upper bounds on collected findings. A check whose rule name appears in neither set is never evaluated. Errors hard-stop the traversal once maxErrors is reached; warnings only stop being collected once maxWarnings is reached, never causing termination." $
   T.record [
@@ -42,7 +42,7 @@ validationProfile = define "ValidationProfile" $
       doc "Soft upper bound on collected warnings. Once the warnings list reaches this length, further warning matches are silently dropped, but validation does not terminate; it continues until maxErrors is reached or the traversal completes." $
       T.int32]
 
-validationResult :: Binding
+validationResult :: TypeDefinition
 validationResult = define "ValidationResult" $
   doc "The outcome of a validation pass: an ordered list of error findings and an ordered list of warning findings, each parameterized by the finding payload type. The pass is considered successful when 'errors' is empty; warnings are informational and do not affect that judgement." $
   T.forAll "e" $ T.record [

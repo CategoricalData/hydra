@@ -16,13 +16,13 @@ import qualified Data.Maybe                      as Y
 ns :: ModuleName
 ns = ModuleName "hydra.delta.parquet"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A partial Delta Parquet model, based on DataType and its subclasses as specified in the 3.0.0 Java API:"
       ++ " https://docs.delta.io/3.0.0/api/java/kernel/io/delta/kernel/types/DataType.html")}
@@ -36,14 +36,14 @@ module_ = Module {
       structField,
       structType]
 
-arrayType :: Binding
+arrayType :: TypeDefinition
 arrayType = define "ArrayType" $
   doc "Represent array data type." $
   T.record [
     "elementType">: delta "DataType",
     "containsNull">: T.boolean]
 
-basePrimitiveType :: Binding
+basePrimitiveType :: TypeDefinition
 basePrimitiveType = define "BasePrimitiveType" $
   doc "Base class for all primitive types DataType." $
   T.union [
@@ -65,7 +65,7 @@ basePrimitiveType = define "BasePrimitiveType" $
       ++ " Internally, this is represented as the number of microseconds since the Unix epoch,"
       ++ " 1970-01-01 00:00:00 UTC.")]
 
-dataType :: Binding
+dataType :: TypeDefinition
 dataType = define "DataType" $
   T.union [
     "array">:
@@ -84,7 +84,7 @@ dataType = define "DataType" $
       doc "Struct type which contains one or more columns." $
       delta "StructType"]
 
-decimalType :: Binding
+decimalType :: TypeDefinition
 decimalType = define "DecimalType" $
   doc ("A decimal data type with fixed precision (the maximum number of digits)"
     ++ " and scale (the number of digits on right side of dot)."
@@ -99,7 +99,7 @@ delta = typeref ns
 enumVal :: String -> String -> FieldType
 enumVal name desc = name>: doc desc T.unit
 
-mapType :: Binding
+mapType :: TypeDefinition
 mapType = define "MapType" $
   doc "Data type representing a map type." $
   T.record [
@@ -107,7 +107,7 @@ mapType = define "MapType" $
     "valueType">: delta "DataType",
     "valueContainsNull">: T.boolean]
 
-structField :: Binding
+structField :: TypeDefinition
 structField = define "StructField" $
   doc "Represents a subfield of StructType with additional properties and metadata." $
   T.record [
@@ -115,7 +115,7 @@ structField = define "StructField" $
     "dataType">: delta "DataType",
     "nullable">: T.boolean]
 
-structType :: Binding
+structType :: TypeDefinition
 structType = define "StructType" $
   doc "Struct type which contains one or more columns." $
   T.record [

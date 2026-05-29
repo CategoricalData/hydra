@@ -15,13 +15,13 @@ import qualified Hydra.Sources.Cpp.Syntax as CppSyntax
 ns :: ModuleName
 ns = ModuleName "hydra.cpp.environment"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [CoreTypes.ns, ModuleTypes.ns, UtilTypes.ns],
             moduleDescription = Just "Type definitions for C++ code generation environment"}
   where
@@ -32,7 +32,7 @@ coreType :: String -> Type
 coreType = typeref CoreTypes.ns
 
 -- | The CppEnvironment type definition
-cppEnvironmentType :: Binding
+cppEnvironmentType :: TypeDefinition
 cppEnvironmentType = define "CppEnvironment" $
   doc "Environment for C++ code generation" $
   T.record [

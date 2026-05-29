@@ -12,13 +12,13 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 ns :: ModuleName
 ns = ModuleName "hydra.phantoms"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "Phantom types for use with Hydra DSLs"}
   where
@@ -27,7 +27,7 @@ module_ = Module {
       tTerm,
       tTermDefinition]
 
-tBinding :: Binding
+tBinding :: TypeDefinition
 tBinding = define "TBinding" $
   doc "An association of a named term (element) with a phantom type" $
   T.forAll "a" $ T.record [
@@ -38,12 +38,12 @@ tBinding = define "TBinding" $
       doc "The term with its phantom type" $
       tTerm @@ "a"]
 
-tTerm :: Binding
+tTerm :: TypeDefinition
 tTerm = define "TTerm" $
   doc "An association of a term with a phantom type" $
   T.forAll "a" $ T.wrap Core.term
 
-tTermDefinition :: Binding
+tTermDefinition :: TypeDefinition
 tTermDefinition = define "TTermDefinition" $
   doc "An association of a term definition with a phantom type" $
   T.forAll "a" $ T.record [

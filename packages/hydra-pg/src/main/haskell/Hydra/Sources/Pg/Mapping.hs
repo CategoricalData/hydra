@@ -21,13 +21,13 @@ import qualified Hydra.Sources.Pg.Model         as PgModel
 ns :: ModuleName
 ns = ModuleName "hydra.pg.mapping"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [PgModel.ns, Coders.ns, Core.ns],
             moduleDescription = Just "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs"}
   where
@@ -40,7 +40,7 @@ module_ = Module {
       valueSpec,
       vertexSpec]
 
-annotationSchema :: Binding
+annotationSchema :: TypeDefinition
 annotationSchema = define "AnnotationSchema" $
   doc "Configurable annotation keys for property graph mapping specifications" $
   T.record [
@@ -66,7 +66,7 @@ compute = typeref $ Coders.ns
 core :: String -> Type
 core = typeref $ Core.ns
 
-edgeSpec :: Binding
+edgeSpec :: TypeDefinition
 edgeSpec = define "EdgeSpec" $
   doc "A mapping specification producing edges of a specified label." $
   T.record [
@@ -86,7 +86,7 @@ edgeSpec = define "EdgeSpec" $
       doc "Zero or more property specifications for each target edge" $
       T.list $ mappings "PropertySpec"]
 
-elementSpec :: Binding
+elementSpec :: TypeDefinition
 elementSpec = define "ElementSpec" $
   doc "Either a vertex specification or an edge specification" $
   T.union [
@@ -96,7 +96,7 @@ elementSpec = define "ElementSpec" $
 mappings :: String -> Type
 mappings = typeref ns
 
-propertySpec :: Binding
+propertySpec :: TypeDefinition
 propertySpec = define "PropertySpec" $
   doc "A mapping specification producing properties of a specified key, and values of the appropriate type." $
   T.record [
@@ -107,7 +107,7 @@ propertySpec = define "PropertySpec" $
       doc "A specification of the value of each target property, which must conform to the type associated with the property key" $
       mappings "ValueSpec"]
 
-schema :: Binding
+schema :: TypeDefinition
 schema = define "Schema" $
   doc "A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types" $
   T.forAlls ["s", "t", "v"] $
@@ -125,7 +125,7 @@ schema = define "Schema" $
 v3 :: String -> Type
 v3 = typeref $ PgModel.ns
 
-valueSpec :: Binding
+valueSpec :: TypeDefinition
 valueSpec = define "ValueSpec" $
   doc "A mapping specification producing values (usually literal values) whose type is understood in context" $
   T.union [
@@ -136,7 +136,7 @@ valueSpec = define "ValueSpec" $
       doc "A compact path representing the function, e.g. engine-${engineInfo/model/name}"
       T.string]
 
-vertexSpec :: Binding
+vertexSpec :: TypeDefinition
 vertexSpec = define "VertexSpec" $
   doc "A mapping specification producing vertices of a specified label" $
   T.record [

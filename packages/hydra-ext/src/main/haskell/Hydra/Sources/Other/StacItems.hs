@@ -20,13 +20,13 @@ import qualified Hydra.Sources.Other.IanaRelations as IanaRelations
 ns :: ModuleName
 ns = ModuleName "hydra.stac.items"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [GeoJson.ns, IanaRelations.ns, Core.ns],
             moduleDescription = Just ("A model for SpatioTemporal Asset Catalog (STAC) Items. " ++
           "See https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md")}
@@ -43,7 +43,7 @@ module_ = Module {
       uri,
       url_]
 
-asset :: Binding
+asset :: TypeDefinition
 asset = define "Asset" $
   doc ("An Asset is an object that contains a URI to data associated with the Item that can be downloaded " ++
        "or streamed. It is allowed to add additional fields.") $
@@ -72,7 +72,7 @@ geoj = typeref $ GeoJson.ns
 ianarel :: String -> Type
 ianarel = typeref $ IanaRelations.ns
 
-item :: Binding
+item :: TypeDefinition
 item = define "Item" $
   doc ("This object describes a STAC Item. The fields id, type, bbox, geometry and properties are inherited " ++
        "from GeoJSON.") $
@@ -99,7 +99,7 @@ item = define "Item" $
            "non-empty string.") $
       T.maybe $ geoj "Id"]
 
-link :: Binding
+link :: TypeDefinition
 link = define "Link" $
   doc ("This object describes a relationship with another entity. Data providers are advised to be liberal " ++
        "with the links section, to describe things like the Catalog an Item is in, related Items, parent or " ++
@@ -120,10 +120,10 @@ link = define "Link" $
       doc "A human readable title to be used in rendered displays of the link." $
       T.maybe T.string]
 
-mediaType :: Binding
+mediaType :: TypeDefinition
 mediaType = define "MediaType" $ T.wrap T.string
 
-relationType :: Binding
+relationType :: TypeDefinition
 relationType = define "RelationType" $
   doc ("STAC Items use a variety of rel types in the link object, to describe the exact nature of the link " ++
        "between this Item and the entity it is linking to. It is recommended to use the official IANA Link " ++
@@ -135,7 +135,7 @@ relationType = define "RelationType" $
     "stac">: stac "StacRelationType",
     "other">: T.string]
 
-role :: Binding
+role :: TypeDefinition
 role = define "Role" $
   doc ("The roles field is used to describe the purpose of each asset. It is recommended to include one for " ++
        "every asset, to give users a sense of why they might want to make use of the asset. There are some " ++
@@ -164,7 +164,7 @@ role = define "Role" $
 stac :: String -> Type
 stac = typeref ns
 
-stacRelationType :: Binding
+stacRelationType :: TypeDefinition
 stacRelationType = define "StacRelationType" $
   T.union [
     "self">:
@@ -182,11 +182,11 @@ stacRelationType = define "StacRelationType" $
     "derivedFrom">:
       doc ("URL to a STAC Item that was used as input data in the creation of this Item.") T.unit]
 
-stacVersion :: Binding
+stacVersion :: TypeDefinition
 stacVersion = define "StacVersion" $ T.wrap T.string
 
-uri :: Binding
+uri :: TypeDefinition
 uri = define "Uri" $ T.wrap T.string
 
-url_ :: Binding
+url_ :: TypeDefinition
 url_ = define "Url" $ T.wrap T.string

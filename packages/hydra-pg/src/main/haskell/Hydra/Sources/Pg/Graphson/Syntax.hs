@@ -16,13 +16,13 @@ import qualified Data.Maybe                      as Y
 ns :: ModuleName
 ns = ModuleName "hydra.pg.graphson.syntax"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A syntax model for TinkerPop's GraphSON format."
       ++ " This model is designed to be as inclusive as possible, supporting GraphSON 4.0 as well as earlier versions."
@@ -48,28 +48,28 @@ module_ = Module {
       vertexLabel,
       vertexPropertyValue]
 
-adjacentEdge :: Binding
+adjacentEdge :: TypeDefinition
 adjacentEdge = define "AdjacentEdge" $
   T.record [
     "id">: gson "Value",
     "vertexId">: gson "Value",
     "properties">: T.map (gson "PropertyKey") (gson "Value")]
 
-bigDecimalValue :: Binding
+bigDecimalValue :: TypeDefinition
 bigDecimalValue = define "BigDecimalValue" $
   T.wrap T.string
 
-compositeTypedValue :: Binding
+compositeTypedValue :: TypeDefinition
 compositeTypedValue = define "CompositeTypedValue" $
   T.record [
     "type">: gson "TypeName",
     "fields">: gson "Map"]
 
-dateTime :: Binding
+dateTime :: TypeDefinition
 dateTime = define "DateTime" $
   T.wrap T.string
 
-doubleValue :: Binding
+doubleValue :: TypeDefinition
 doubleValue = define "DoubleValue" $
   T.union [
     "finite">: T.float64,
@@ -77,15 +77,15 @@ doubleValue = define "DoubleValue" $
     "negativeInfinity">: T.unit,
     "notANumber">: T.unit]
 
-duration :: Binding
+duration :: TypeDefinition
 duration = define "Duration" $
   T.wrap T.string
 
-edgeLabel :: Binding
+edgeLabel :: TypeDefinition
 edgeLabel = define "EdgeLabel" $
   T.wrap T.string
 
-floatValue :: Binding
+floatValue :: TypeDefinition
 floatValue = define "FloatValue" $
   T.union [
     "finite">: T.float32,
@@ -96,29 +96,29 @@ floatValue = define "FloatValue" $
 gson :: String -> Type
 gson = typeref ns
 
-map_ :: Binding
+map_ :: TypeDefinition
 map_ = define "Map" $
   T.wrap $ T.list $ gson "ValuePair"
 
-primitiveTypedValue :: Binding
+primitiveTypedValue :: TypeDefinition
 primitiveTypedValue = define "PrimitiveTypedValue" $
   T.record [
     "type">: gson "TypeName",
     "value">: T.string]
 
-propertyKey :: Binding
+propertyKey :: TypeDefinition
 propertyKey = define "PropertyKey" $
   T.wrap T.string
 
-typeName_ :: Binding
+typeName_ :: TypeDefinition
 typeName_ = define "TypeName" $
   T.wrap T.string
 
-uuid_ :: Binding
+uuid_ :: TypeDefinition
 uuid_ = define "Uuid" $
   T.wrap T.string
 
-valuePair :: Binding
+valuePair :: TypeDefinition
 valuePair = define "ValuePair" $
   T.record [
     "first">: gson "Value",
@@ -138,7 +138,7 @@ valuePair = define "ValuePair" $
 --   * Tree
 --   * Vertex
 --   * VertexProperty
-value_ :: Binding
+value_ :: TypeDefinition
 value_ = define "Value" $
   T.union [
     "bigDecimal">: gson "BigDecimalValue",
@@ -163,7 +163,7 @@ value_ = define "Value" $
     "string">: T.string,
     "uuid">: gson "Uuid"]
 
-vertex :: Binding
+vertex :: TypeDefinition
 vertex = define "Vertex" $
   T.record [
     "id">: gson "Value",
@@ -172,11 +172,11 @@ vertex = define "Vertex" $
     "outEdges">: T.map (gson "EdgeLabel") (nonemptyList $ gson "AdjacentEdge"),
     "properties">: T.map (gson "PropertyKey") (nonemptyList $ gson "VertexPropertyValue")]
 
-vertexLabel :: Binding
+vertexLabel :: TypeDefinition
 vertexLabel = define "VertexLabel" $
   T.wrap T.string
 
-vertexPropertyValue :: Binding
+vertexPropertyValue :: TypeDefinition
 vertexPropertyValue = define "VertexPropertyValue" $
   T.record [
     "id">: T.optional $ gson "Value",
