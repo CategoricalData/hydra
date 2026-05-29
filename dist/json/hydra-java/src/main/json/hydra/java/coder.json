@@ -20351,7 +20351,7 @@
                                                                                                   "application": {
                                                                                                     "argument": {"literal": {"string": "list"}},
                                                                                                     "function": {
-                                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.collectionTypeArgs"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}}}}}},
+                                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.collectionTypeArgs"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}}}}}},
                                                                         "function": {
                                                                           "typeApplication": {
                                                                             "body": {
@@ -20636,7 +20636,7 @@
                                                                                                               "application": {
                                                                                                                 "argument": {"literal": {"string": "map"}},
                                                                                                                 "function": {
-                                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.collectionTypeArgs"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}}}}}},
+                                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.collectionTypeArgs"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}}}}}},
                                                                                     "function": {
                                                                                       "typeApplication": {
                                                                                         "body": {
@@ -20881,7 +20881,7 @@
                                                                                                       "application": {
                                                                                                         "argument": {"literal": {"string": "maybe"}},
                                                                                                         "function": {
-                                                                                                          "typeApplication": {"body": {"variable": "hydra.java.coder.collectionTypeArgs"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}}}}}},
+                                                                                                          "typeApplication": {"body": {"variable": "hydra.java.coder.collectionTypeArgs"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}}}}}},
                                                                             "function": {
                                                                               "typeApplication": {
                                                                                 "body": {
@@ -22155,7 +22155,7 @@
                                                                                                       "application": {
                                                                                                         "argument": {"literal": {"string": "set"}},
                                                                                                         "function": {
-                                                                                                          "typeApplication": {"body": {"variable": "hydra.java.coder.collectionTypeArgs"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}}}}}},
+                                                                                                          "typeApplication": {"body": {"variable": "hydra.java.coder.collectionTypeArgs"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}}}}}},
                                                                             "function": {
                                                                               "typeApplication": {
                                                                                 "body": {
