@@ -9,7 +9,7 @@ Hydra currently has five complete implementations:
 Hydra-Lisp has four dialects (Clojure, Scheme, Common Lisp, and Emacs Lisp) sharing a coder and serializer
 but with distinct bootstrapping heads.
 All five implement the entire [Hydra Kernel](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Kernel.hs),
-support the full [Hydra standard library](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Lib),
+support the full [Hydra standard library](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Haskell/Lib),
 and pass the [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing).
 The five implementations are mutually self-hosting: each can load Hydra modules from a
 language-independent JSON representation and regenerate code for any of the target languages
@@ -327,7 +327,7 @@ trace the issue back to the inferred type annotations on the Hydra IR before ass
 ## Step 7: Implement standard primitives
 
 As noted above, Hydra has a
-[standard library](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Lib)
+[standard library](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Haskell/Lib)
 of primitive, or built-in functions.
 There are many calls to these functions (though not all of them)
 in the Hydra kernel code which will be mapped into your new implementation,
@@ -344,7 +344,7 @@ though their behavior must be the same across implementations.
 - Metadata:
   [Hydra/Sources/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs) (DSL)
 - Implementations:
-  [Hydra/Lib](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Lib) (native Haskell)
+  [Hydra/Haskell/Lib](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Haskell/Lib) (native Haskell)
 
 **Java**:
 - Metadata + implementations:

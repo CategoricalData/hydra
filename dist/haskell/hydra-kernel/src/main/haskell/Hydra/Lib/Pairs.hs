@@ -31,7 +31,6 @@ bimap :: Packaging.PrimitiveDefinition
 bimap =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.pairs.bimap"),
-      Packaging.primitiveDefinitionDescription = "Map over both elements of a pair.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -73,8 +72,13 @@ bimap =
           Typing.resultType = (Core.TypePair (Core.PairType {
             Core.pairTypeFirst = (Core.TypeVariable (Core.Name "c")),
             Core.pairTypeSecond = (Core.TypeVariable (Core.Name "d"))}))}},
+      Packaging.primitiveDefinitionDescription = "Map over both elements of a pair.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
           Core.lambdaParameter = (Core.Name "f"),
@@ -104,7 +108,6 @@ first :: Packaging.PrimitiveDefinition
 first =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.pairs.first"),
-      Packaging.primitiveDefinitionDescription = "Get the first element of a pair.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -124,14 +127,18 @@ first =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeVariable (Core.Name "a"))}},
+      Packaging.primitiveDefinitionDescription = "Get the first element of a pair.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 second :: Packaging.PrimitiveDefinition
 second =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.pairs.second"),
-      Packaging.primitiveDefinitionDescription = "Get the second element of a pair.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -151,6 +158,11 @@ second =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeVariable (Core.Name "b"))}},
+      Packaging.primitiveDefinitionDescription = "Get the second element of a pair.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}

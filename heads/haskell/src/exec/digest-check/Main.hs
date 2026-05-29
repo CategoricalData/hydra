@@ -17,6 +17,20 @@
 --     Callers use this with an `if !` shell idiom to skip work when
 --     fresh and run the work otherwise.
 --
+--     #393 orphan reconcile: inputs/generator/recorded-outputs can all
+--     match yet the output dir still hold *extra* files not in the
+--     recorded set — e.g. target output left behind when a DSL module is
+--     renamed across namespaces (hydra.eval.lib.* -> hydra.lib.defaults.*).
+--     Such an orphan is output drift, not an input change, so it would
+--     otherwise never trigger the gated regen+prune and would linger
+--     indefinitely. When 'fresh' finds the package is otherwise a hit but
+--     extra files are present, it deletes the orphans in place (the
+--     recorded output set is the authoritative keep-set), refreshes the
+--     output digest, and reports a hit. No coder run is needed: the
+--     recorded files are already correct on disk. This keeps the entire
+--     reconcile inside the freshness gate, so the per-head assemble
+--     callers need no change.
+--
 --   digest-check refresh --inputs <file> --output-dir <dir>
 --                        --output-digest <file>
 --     Recomputes the hash of every regular file under <dir> (recursive),
@@ -27,15 +41,18 @@
 --
 -- All paths are taken as-is (no implicit normalization).
 
+{-# LANGUAGE ScopedTypeVariables #-}
 module Main where
 
 import Hydra.Digest
 import Hydra.Packaging (ModuleName(..))
 
-import Control.Monad (when, forM)
+import Control.Exception (catch, IOException)
+import Control.Monad (when, forM, forM_)
 import Data.List (isPrefixOf)
 import qualified Data.Map as M
-import System.Directory (doesDirectoryExist, doesFileExist, listDirectory)
+import qualified Data.Set as S
+import System.Directory (doesDirectoryExist, doesFileExist, listDirectory, removeFile, removeDirectory)
 import System.Environment (getArgs)
 import System.Exit (exitFailure, exitSuccess)
 import qualified System.FilePath as FP
@@ -58,6 +75,9 @@ usage = unlines
   , ""
   , "  fresh:    exit 0 if cache hit (skip work), exit 1 if miss (do work)."
   , "            Resolves recorded (relative) output paths against <output-dir>."
+  , "            If the package is otherwise a hit but extra (orphan) files"
+  , "            are present in <output-dir>, deletes them, refreshes the"
+  , "            output digest, and reports a hit (#393 reconcile)."
   , "  refresh:  walk <output-dir>, hash every file, write a new"
   , "            <output-digest> with paths stored relative to <output-dir>."
   ]
@@ -179,8 +199,42 @@ doFresh opts = do
       putStrLn $ "  digest-check: output files missing or modified; cache miss"
       exitFailure
     else do
-      putStrLn $ "  digest-check: cache hit; skipping work"
-      exitSuccess
+      -- #393 orphan reconcile. Every recorded file is present and correct,
+      -- and all inputs match — but there may be *extra* files on disk that
+      -- the recorded output set doesn't account for (e.g. a renamed-away
+      -- namespace dir left behind by a cross-namespace module rename). The
+      -- recorded output set is the authoritative keep-set; anything on disk
+      -- not in it is an orphan. Delete orphans in place, then refresh the
+      -- output digest so the next run is a clean hit. No coder run needed.
+      let keepRel = S.fromList
+            [ FP.normalise rel | rel <- M.keys (digestOutputs outputDigest) ]
+          digestPath = FP.normalise (optOutputDigest opts)
+      onDiskAbs <- listFilesRecursive outputDir
+      let isDigestFile p = FP.normalise p == digestPath
+          orphans =
+            [ p
+            | p <- onDiskAbs
+            , not (isDigestFile p)
+            , let rel = FP.normalise (makeRelative' outputDir p)
+            , not (S.member rel keepRel)
+            ]
+      if null orphans
+        then do
+          putStrLn $ "  digest-check: cache hit; skipping work"
+          exitSuccess
+        else do
+          putStrLn $ "  digest-check: " ++ show (length orphans)
+            ++ " orphan output file(s) present; reconciling (#393)"
+          forM_ orphans $ \p -> do
+            putStrLn $ "    - " ++ p
+            removeFile p `catch` \(_ :: IOException) -> return ()
+          pruneEmptyDirs outputDir
+          -- Refresh the output digest from the now-clean dir so the orphan
+          -- doesn't reappear in the recorded set and the next 'fresh' is a
+          -- plain hit. Reuses the same recording path as 'refresh'.
+          doRefresh opts
+          putStrLn $ "  digest-check: cache hit after reconcile; skipping work"
+          exitSuccess
 
 doRefresh :: Options -> IO ()
 doRefresh opts = do
@@ -255,6 +309,23 @@ listFilesRecursive root = do
               else do
                 isFile <- doesFileExist p
                 return (if isFile then [p] else [])
+
+-- | Remove any empty subdirectories under 'dir' (depth-first). 'dir'
+-- itself is left alone; only its descendants are pruned. Used by the
+-- #393 orphan reconcile to clean up directories emptied by orphan
+-- deletion (e.g. a renamed-away namespace dir). Best-effort: failures
+-- (e.g. a directory that isn't actually empty due to a race) are ignored.
+pruneEmptyDirs :: FilePath -> IO ()
+pruneEmptyDirs dir = do
+  entries <- listDirectory dir `catch` \(_ :: IOException) -> return []
+  forM_ entries $ \e -> do
+    let p = dir FP.</> e
+    isDir <- doesDirectoryExist p
+    when isDir $ do
+      pruneEmptyDirs p
+      children <- listDirectory p `catch` \(_ :: IOException) -> return []
+      when (null children) $
+        removeDirectory p `catch` \(_ :: IOException) -> return ()
 
 -- | Compute 'path' relative to 'base'. If 'path' isn't under 'base',
 -- returns 'path' unchanged (callers should guard against that, but the
