@@ -26,15 +26,14 @@ module_ = Module {
             moduleDescription = Just "Primitives in the hydra.lib.logic namespace."}
   where
     definitions = [
-      toPrimitive "Compute the logical AND of two boolean values." andSig and_,
-      primNoDef "ifElse" "Compute a conditional expression." ifElseSig,
-      toPrimitive "Compute the logical NOT of a boolean value." notSig not_,
-      toPrimitive "Compute the logical OR of two boolean values." orSig or_]
-
+      toPrimitive "Compute the logical AND of two boolean values." andSig Nothing and_,
+      primNoDef "ifElse" "Compute a conditional expression." ifElseSig Nothing,
+      toPrimitive "Compute the logical NOT of a boolean value." notSig Nothing not_,
+      toPrimitive "Compute the logical OR of two boolean values." orSig Nothing or_]
 -- Local convenience: build a no-default primitive Definition from a local name.
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+primNoDef :: String -> String -> TermSignature -> Maybe String -> Definition
+primNoDef localName description s comments =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName)) comments
 
 -- Local convenience: build a TermSignature from a TypeScheme.
 sig :: TypeScheme -> TermSignature

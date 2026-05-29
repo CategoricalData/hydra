@@ -26,21 +26,21 @@ module_ = Module {
             moduleDescription = Just "Primitives in the hydra.lib.eithers namespace."}
   where
     definitions = [
-      toPrimitive "Map over both sides of an Either value." bimapSig bimap_,
-      toPrimitive "Bind (flatMap) for Either: if Right, apply the function; if Left, return unchanged." bindSig bind_,
-      primNoDef "either" "Eliminate an Either value by applying one of two functions." eitherSig,
-      primNoDef "foldl" "Left-fold over a list with an Either-returning function, short-circuiting on Left." foldlSig,
-      toPrimitive "Extract the Left value, or return a default." fromLeftSig fromLeft_,
-      toPrimitive "Extract the Right value, or return a default." fromRightSig fromRight_,
-      toPrimitive "Check whether an Either is a Left value." isLeftSig isLeft_,
-      toPrimitive "Check whether an Either is a Right value." isRightSig isRight_,
-      primNoDef "lefts" "Extract all Left values from a list of Eithers." leftsSig,
-      toPrimitive "Map a function over the Right side of an Either (standard functor map)." mapSig map_,
-      primNoDef "mapList" "Map a function returning Either over a list, collecting results or short-circuiting on Left." mapListSig,
-      primNoDef "mapMaybe" "Map a function returning Either over a Maybe, or return Right Nothing if Nothing." mapMaybeSig,
-      primNoDef "mapSet" "Map a function returning Either over a Set, collecting results or short-circuiting on Left." mapSetSig,
-      primNoDef "partitionEithers" "Partition a list of Eithers into lefts and rights." partitionEithersSig,
-      primNoDef "rights" "Extract all Right values from a list of Eithers." rightsSig]
+      toPrimitive "Map over both sides of an Either value." bimapSig Nothing bimap_,
+      toPrimitive "Bind (flatMap) for Either: if Right, apply the function; if Left, return unchanged." bindSig Nothing bind_,
+      primNoDef "either" "Eliminate an Either value by applying one of two functions." eitherSig Nothing,
+      primNoDef "foldl" "Left-fold over a list with an Either-returning function, short-circuiting on Left." foldlSig Nothing,
+      toPrimitive "Extract the Left value, or return a default." fromLeftSig Nothing fromLeft_,
+      toPrimitive "Extract the Right value, or return a default." fromRightSig Nothing fromRight_,
+      toPrimitive "Check whether an Either is a Left value." isLeftSig Nothing isLeft_,
+      toPrimitive "Check whether an Either is a Right value." isRightSig Nothing isRight_,
+      primNoDef "lefts" "Extract all Left values from a list of Eithers." leftsSig Nothing,
+      toPrimitive "Map a function over the Right side of an Either (standard functor map)." mapSig Nothing map_,
+      primNoDef "mapList" "Map a function returning Either over a list, collecting results or short-circuiting on Left." mapListSig Nothing,
+      primNoDef "mapMaybe" "Map a function returning Either over a Maybe, or return Right Nothing if Nothing." mapMaybeSig Nothing,
+      primNoDef "mapSet" "Map a function returning Either over a Set, collecting results or short-circuiting on Left." mapSetSig Nothing,
+      primNoDef "partitionEithers" "Partition a list of Eithers into lefts and rights." partitionEithersSig Nothing,
+      primNoDef "rights" "Extract all Right values from a list of Eithers." rightsSig Nothing]
 
 -- Shared type variables.
 tx, ty, tz, tw :: Type
@@ -52,9 +52,9 @@ tw = Types.var "w"
 ee :: Type -> Type -> Type
 ee = Types.either_
 
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+primNoDef :: String -> String -> TermSignature -> Maybe String -> Definition
+primNoDef localName description s comments =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName)) comments
 
 sig :: TypeScheme -> TermSignature
 sig = typeSchemeToTermSignature

@@ -21,16 +21,16 @@ module_ = Module {
             moduleDescription = Just "Primitives in the hydra.lib.chars namespace."}
   where
     definitions = [
-      primNoDef "isAlphaNum" "Check whether a character is alphanumeric." intToBoolSig,
-      primNoDef "isLower"    "Check whether a character is lowercase." intToBoolSig,
-      primNoDef "isSpace"    "Check whether a character is a whitespace character." intToBoolSig,
-      primNoDef "isUpper"    "Check whether a character is uppercase." intToBoolSig,
-      primNoDef "toLower"    "Convert a character to lowercase." intToIntSig,
-      primNoDef "toUpper"    "Convert a character to uppercase." intToIntSig]
+      primNoDef "isAlphaNum" "Check whether a character is alphanumeric." intToBoolSig Nothing,
+      primNoDef "isLower"    "Check whether a character is lowercase." intToBoolSig Nothing,
+      primNoDef "isSpace"    "Check whether a character is a whitespace character." intToBoolSig Nothing,
+      primNoDef "isUpper"    "Check whether a character is uppercase." intToBoolSig Nothing,
+      primNoDef "toLower"    "Convert a character to lowercase." intToIntSig Nothing,
+      primNoDef "toUpper"    "Convert a character to uppercase." intToIntSig Nothing]
 
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+primNoDef :: String -> String -> TermSignature -> Maybe String -> Definition
+primNoDef localName description s comments =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName)) comments
 
 sig :: TypeScheme -> TermSignature
 sig = typeSchemeToTermSignature

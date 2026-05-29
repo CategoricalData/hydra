@@ -23,47 +23,47 @@ module_ = Module {
     definitions = [
       primNoDef "cat"
         "Concatenate a list of strings into a single string."
-        (sigFn (Types.list Types.string) Types.string),
+        (sigFn (Types.list Types.string) Types.string) Nothing,
       primNoDef "cat2"
         "Concatenate two strings."
-        (sigFn2 Types.string Types.string Types.string),
+        (sigFn2 Types.string Types.string Types.string) Nothing,
       primNoDef "fromList"
         "Convert a list of Unicode code points to a string."
-        (sigFn (Types.list Types.int32) Types.string),
+        (sigFn (Types.list Types.int32) Types.string) Nothing,
       primNoDef "intercalate"
         "Join a list of strings with a separator between each element."
-        (sigFn2 Types.string (Types.list Types.string) Types.string),
+        (sigFn2 Types.string (Types.list Types.string) Types.string) Nothing,
       primNoDef "length"
         "Return the length of a string."
-        (sigFn Types.string Types.int32),
+        (sigFn Types.string Types.int32) Nothing,
       primNoDef "lines"
         "Split a string into lines."
-        (sigFn Types.string (Types.list Types.string)),
+        (sigFn Types.string (Types.list Types.string)) Nothing,
       primNoDef "maybeCharAt"
         "Get the Unicode code point of the character at a specific index, returning Nothing if out of bounds."
-        (sigFn2 Types.int32 Types.string (Types.optional Types.int32)),
+        (sigFn2 Types.int32 Types.string (Types.optional Types.int32)) Nothing,
       primNoDef "null"
         "Check whether a string is empty."
-        (sigFn Types.string Types.boolean),
+        (sigFn Types.string Types.boolean) Nothing,
       primNoDef "splitOn"
         "Split a string on a delimiter string."
-        (sigFn2 Types.string Types.string (Types.list Types.string)),
+        (sigFn2 Types.string Types.string (Types.list Types.string)) Nothing,
       primNoDef "toList"
         "Convert a string to a list of Unicode code points."
-        (sigFn Types.string (Types.list Types.int32)),
+        (sigFn Types.string (Types.list Types.int32)) Nothing,
       primNoDef "toLower"
         "Convert a string to lowercase."
-        (sigFn Types.string Types.string),
+        (sigFn Types.string Types.string) Nothing,
       primNoDef "toUpper"
         "Convert a string to uppercase."
-        (sigFn Types.string Types.string),
+        (sigFn Types.string Types.string) Nothing,
       primNoDef "unlines"
         "Join a list of strings with newlines, appending a trailing newline."
-        (sigFn (Types.list Types.string) Types.string)]
+        (sigFn (Types.list Types.string) Types.string) Nothing]
 
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+primNoDef :: String -> String -> TermSignature -> Maybe String -> Definition
+primNoDef localName description s comments =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName)) comments
 
 sig :: TypeScheme -> TermSignature
 sig = typeSchemeToTermSignature

@@ -26,19 +26,18 @@ module_ = Module {
             moduleDescription = Just "Primitives in the hydra.lib.equality namespace."}
   where
     definitions = [
-      primNoDef "compare" "Compare two values and return a Comparison." compareSig,
-      primNoDef "equal"   "Check whether two values are equal." equalSig,
-      primNoDef "gt"      "Check whether the first value is greater than the second." gtSig,
-      primNoDef "gte"     "Check whether the first value is greater than or equal to the second." gteSig,
-      toPrimitive "Return a value unchanged." identitySig identity_,
-      primNoDef "lt"      "Check whether the first value is less than the second." ltSig,
-      primNoDef "lte"     "Check whether the first value is less than or equal to the second." lteSig,
-      toPrimitive "Return the maximum of two values." maxSig max_,
-      toPrimitive "Return the minimum of two values." minSig min_]
-
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+      primNoDef "compare" "Compare two values and return a Comparison." compareSig Nothing,
+      primNoDef "equal"   "Check whether two values are equal." equalSig Nothing,
+      primNoDef "gt"      "Check whether the first value is greater than the second." gtSig Nothing,
+      primNoDef "gte"     "Check whether the first value is greater than or equal to the second." gteSig Nothing,
+      toPrimitive "Return a value unchanged." identitySig Nothing identity_,
+      primNoDef "lt"      "Check whether the first value is less than the second." ltSig Nothing,
+      primNoDef "lte"     "Check whether the first value is less than or equal to the second." lteSig Nothing,
+      toPrimitive "Return the maximum of two values." maxSig Nothing max_,
+      toPrimitive "Return the minimum of two values." minSig Nothing min_]
+primNoDef :: String -> String -> TermSignature -> Maybe String -> Definition
+primNoDef localName description s comments =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName)) comments
 
 sig :: TypeScheme -> TermSignature
 sig = typeSchemeToTermSignature
