@@ -464,6 +464,23 @@ native_generate_and_report() {
         # state is consistent.
         echo "  hydra-$lang: regenerating dist/$lang/hydra-$lang from native JSON..."
         "$HYDRA_ROOT/heads/$lang/bin/assemble-distribution.sh" "hydra-$lang"
+
+        # #400: Phase 5 runs last, so without this a native coder change
+        # (e.g. an edit to the Java/Python coder DSL) only reaches
+        # dist/haskell/hydra-<lang>/ — the Haskell coder that bootstrap-from-json
+        # actually compiles — on the NEXT sync. That one-pass lag also trips the
+        # CI consistency gate (git diff dist/json dist/haskell), since a single
+        # cold sync would otherwise leave dist/haskell behind the committed JSON.
+        # Re-assemble the Haskell coder from the just-written native JSON and
+        # rebuild the executables so this sync is self-consistent in one pass.
+        # The dist/haskell input-digest set omits hydra.<lang>.coder (#400), so
+        # the freshness gate would skip this re-assemble; drop the output digest
+        # to force it.
+        echo "  hydra-$lang: regenerating dist/haskell/hydra-$lang from native JSON (#400)..."
+        rm -f "$HYDRA_ROOT/dist/haskell/hydra-$lang/build/main/digest.json"
+        "$HYDRA_ROOT/heads/haskell/bin/assemble-distribution.sh" "hydra-$lang"
+        echo "  hydra-$lang: rebuilding Haskell executables so bootstrap-from-json embeds the new coder (#400)..."
+        ( cd "$HYDRA_ROOT/heads/haskell" && stack build )
     else
         echo "  hydra-$lang: native output matches snapshot on all $total JSON files."
     fi
