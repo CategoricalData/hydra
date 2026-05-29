@@ -35,6 +35,7 @@ for extending Hydra, implementing new features, and working with Hydra's archite
 ### Code Generation
 
 - **[Generating code with Hydra](code-generation.md)** - End-to-end guide to generating source code from Hydra modules: DSL vs JSON paths, the writeXxx functions, bootstrap CLI, sync scripts, and troubleshooting
+- **[Ingesting JSON data into a Hydra schema](ingesting-json.md)** - Loading external JSON into typed host values via the build-the-Term-directly path: generating decoders, Term-construction reference, fail-fast decoder roundtrip, and cycle-breaking patterns
 - For the build/sync/cache *model* (phases, what each cache keys on, the path to #347), see **[The Hydra build system](../build-system.md)** at the top level of `docs/`.
 
 ### Benchmarking
