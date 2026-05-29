@@ -31,7 +31,6 @@ apply :: Packaging.PrimitiveDefinition
 apply =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.apply"),
-      Packaging.primitiveDefinitionDescription = "Applicative apply for optionals: combine an optional function and an optional argument.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -56,8 +55,13 @@ apply =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "y")))}},
+      Packaging.primitiveDefinitionDescription = "Applicative apply for optionals: combine an optional function and an optional argument.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
           Core.lambdaParameter = (Core.Name "mf"),
@@ -90,7 +94,6 @@ bind :: Packaging.PrimitiveDefinition
 bind =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.bind"),
-      Packaging.primitiveDefinitionDescription = "Monadic bind for optionals.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -115,8 +118,13 @@ bind =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "y")))}},
+      Packaging.primitiveDefinitionDescription = "Monadic bind for optionals.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
           Core.lambdaParameter = (Core.Name "m"),
@@ -137,7 +145,6 @@ cases :: Packaging.PrimitiveDefinition
 cases =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.cases"),
-      Packaging.primitiveDefinitionDescription = "Case analysis on an optional, with cases-style argument order.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -167,14 +174,18 @@ cases =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeVariable (Core.Name "y"))}},
+      Packaging.primitiveDefinitionDescription = "Case analysis on an optional, with cases-style argument order.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 cat :: Packaging.PrimitiveDefinition
 cat =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.cat"),
-      Packaging.primitiveDefinitionDescription = "Concatenate optionals, keeping only the present values.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -189,8 +200,13 @@ cat =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeVariable (Core.Name "x")))}},
+      Packaging.primitiveDefinitionDescription = "Concatenate optionals, keeping only the present values.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
           Core.lambdaParameter = (Core.Name "xs"),
@@ -229,7 +245,6 @@ compose :: Packaging.PrimitiveDefinition
 compose =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.compose"),
-      Packaging.primitiveDefinitionDescription = "Kleisli composition for optionals.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -264,8 +279,13 @@ compose =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "z")))}},
+      Packaging.primitiveDefinitionDescription = "Kleisli composition for optionals.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
           Core.lambdaParameter = (Core.Name "f"),
@@ -291,7 +311,6 @@ fromMaybe :: Packaging.PrimitiveDefinition
 fromMaybe =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.fromMaybe"),
-      Packaging.primitiveDefinitionDescription = "Return the value contained in an optional, falling back to a default if absent.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -311,8 +330,13 @@ fromMaybe =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeVariable (Core.Name "x"))}},
+      Packaging.primitiveDefinitionDescription = "Return the value contained in an optional, falling back to a default if absent.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
           Core.lambdaParameter = (Core.Name "def"),
@@ -338,7 +362,6 @@ isJust :: Packaging.PrimitiveDefinition
 isJust =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.isJust"),
-      Packaging.primitiveDefinitionDescription = "Test whether an optional is present (Just).",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -353,8 +376,13 @@ isJust =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
+      Packaging.primitiveDefinitionDescription = "Test whether an optional is present (Just).",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
           Core.lambdaParameter = (Core.Name "m"),
@@ -375,7 +403,6 @@ isNothing :: Packaging.PrimitiveDefinition
 isNothing =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.isNothing"),
-      Packaging.primitiveDefinitionDescription = "Test whether an optional is absent (Nothing).",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -390,8 +417,13 @@ isNothing =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
+      Packaging.primitiveDefinitionDescription = "Test whether an optional is absent (Nothing).",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
           Core.lambdaParameter = (Core.Name "m"),
@@ -412,7 +444,6 @@ map :: Packaging.PrimitiveDefinition
 map =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.map"),
-      Packaging.primitiveDefinitionDescription = "Map a function over an optional.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -437,8 +468,13 @@ map =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "y")))}},
+      Packaging.primitiveDefinitionDescription = "Map a function over an optional.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
           Core.lambdaParameter = (Core.Name "f"),
@@ -466,7 +502,6 @@ mapMaybe :: Packaging.PrimitiveDefinition
 mapMaybe =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.mapMaybe"),
-      Packaging.primitiveDefinitionDescription = "Map a partial function over a list, keeping only the present results.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -491,8 +526,13 @@ mapMaybe =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeVariable (Core.Name "y")))}},
+      Packaging.primitiveDefinitionDescription = "Map a partial function over a list, keeping only the present results.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
           Core.lambdaParameter = (Core.Name "f"),
@@ -515,7 +555,6 @@ maybe :: Packaging.PrimitiveDefinition
 maybe =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.maybe"),
-      Packaging.primitiveDefinitionDescription = "Case analysis on an optional, applying a function if present or returning a default if absent.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -545,14 +584,18 @@ maybe =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeVariable (Core.Name "y"))}},
+      Packaging.primitiveDefinitionDescription = "Case analysis on an optional, applying a function if present or returning a default if absent.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 pure :: Packaging.PrimitiveDefinition
 pure =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.pure"),
-      Packaging.primitiveDefinitionDescription = "Wrap a value in Just.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -567,8 +610,13 @@ pure =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "x")))}},
+      Packaging.primitiveDefinitionDescription = "Wrap a value in Just.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
           Core.lambdaParameter = (Core.Name "x"),
@@ -580,7 +628,6 @@ toList :: Packaging.PrimitiveDefinition
 toList =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.toList"),
-      Packaging.primitiveDefinitionDescription = "Convert an optional to a list: Just x maps to [x], Nothing to [].",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -595,8 +642,13 @@ toList =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeVariable (Core.Name "x")))}},
+      Packaging.primitiveDefinitionDescription = "Convert an optional to a list: Just x maps to [x], Nothing to [].",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
           Core.lambdaParameter = (Core.Name "m"),
