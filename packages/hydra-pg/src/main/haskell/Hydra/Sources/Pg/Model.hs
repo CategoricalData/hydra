@@ -16,13 +16,13 @@ import qualified Data.Maybe                      as Y
 ns :: ModuleName
 ns = ModuleName "hydra.pg.model"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A typed property graph data model. " ++
       "Property graphs are parameterized a type for property and id values, " ++
@@ -51,7 +51,7 @@ module_ = Module {
       vertexType,
       vertexWithAdjacentEdges]
 
-adjacentEdge :: Binding
+adjacentEdge :: TypeDefinition
 adjacentEdge = define "AdjacentEdge" $
   doc "An edge which is adjacent to a given vertex. Only the other endpoint of the edge is provided." $
   T.forAll "v" $ T.record [
@@ -68,12 +68,12 @@ adjacentEdge = define "AdjacentEdge" $
       doc "A key/value map of edge properties" $
       T.map (pg "PropertyKey") "v"]
 
-direction :: Binding
+direction :: TypeDefinition
 direction = define "Direction" $
   doc "The direction of an edge or edge pattern" $
     T.enum ["out", "in", "both", "undirected"]
 
-edge :: Binding
+edge :: TypeDefinition
 edge = define "Edge" $
   doc "An edge" $
   T.forAll "v" $ T.record [
@@ -93,12 +93,12 @@ edge = define "Edge" $
       doc "A key/value map of edge properties" $
       T.map (pg "PropertyKey") "v"]
 
-edgeLabel :: Binding
+edgeLabel :: TypeDefinition
 edgeLabel = define "EdgeLabel" $
   doc "The label of an edge" $
   T.wrap T.string
 
-edgeType :: Binding
+edgeType :: TypeDefinition
 edgeType = define "EdgeType" $
   doc "The type of an edge" $
   T.forAll "t" $ T.record [
@@ -118,47 +118,47 @@ edgeType = define "EdgeType" $
       doc "A list of property types. The types are ordered for the sake of applications in which property order is significant." $
       T.list (pg "PropertyType" @@ "t")]
 
-element :: Binding
+element :: TypeDefinition
 element = define "Element" $
   doc "Either a vertex or an edge" $
   T.forAll "v" $ T.union [
     "vertex">: pg "Vertex" @@ "v",
     "edge">: pg "Edge" @@ "v"]
 
-elementKind :: Binding
+elementKind :: TypeDefinition
 elementKind = define "ElementKind" $
   doc "The kind of an element: vertex or edge" $
   T.enum ["vertex", "edge"]
 
-elementTree :: Binding
+elementTree :: TypeDefinition
 elementTree = define "ElementTree" $
   doc "An element together with its dependencies in some context" $
   T.forAll "v" $ T.record [
     "self">: pg "Element" @@ "v",
     "dependencies">: T.list $ pg "ElementTree" @@ "v"]
 
-elementType :: Binding
+elementType :: TypeDefinition
 elementType = define "ElementType" $
   doc "The type of a vertex or edge" $
   T.forAll "t" $ T.union [
     "vertex">: pg "VertexType" @@ "t",
     "edge">: pg "EdgeType" @@ "t"]
 
-elementTypeTree :: Binding
+elementTypeTree :: TypeDefinition
 elementTypeTree = define "ElementTypeTree" $
   doc "An element type together with its dependencies in some context" $
   T.forAll "t" $ T.record [
     "self">: pg "ElementType" @@ "t",
     "dependencies">: T.list $ pg "ElementTypeTree" @@ "t"]
 
-graph :: Binding
+graph :: TypeDefinition
 graph = define "Graph" $
   doc "A graph; a self-contained collection of vertices and edges" $
   T.forAll "v" $ T.record [
     "vertices">: T.map "v" $ pg "Vertex" @@ "v",
     "edges">: T.map "v" $ pg "Edge" @@ "v"]
 
-graphSchema :: Binding
+graphSchema :: TypeDefinition
 graphSchema = define "GraphSchema" $
   doc "A graph schema; a vertex and edge types for the vertices and edges of a graph conforming to the schema" $
   T.forAll "t" $ T.record [
@@ -169,14 +169,14 @@ graphSchema = define "GraphSchema" $
       doc "A unique edge type for each edge label which may occur in a graph" $
       T.map (pg "EdgeLabel") (pg "EdgeType" @@ "t")]
 
-label :: Binding
+label :: TypeDefinition
 label = define "Label" $
   doc "Either a vertex or edge label" $
   T.union [
     "vertex">: pg "VertexLabel",
     "edge">: pg "EdgeLabel"]
 
-lazyGraph :: Binding
+lazyGraph :: TypeDefinition
 lazyGraph = define "LazyGraph" $
   doc ("A graph which does not assume that vertex or edge ids are unique."
     <> " This is useful in mappings because the id specifications for vertices and/or edges may be non-unique.") $
@@ -187,12 +187,12 @@ lazyGraph = define "LazyGraph" $
 pg :: String -> Type
 pg = typeref ns
 
-propertyKey :: Binding
+propertyKey :: TypeDefinition
 propertyKey = define "PropertyKey" $
   doc "A property key" $
   T.wrap T.string
 
-propertyType :: Binding
+propertyType :: TypeDefinition
 propertyType = define "PropertyType" $
   doc "The type of a property" $
   T.forAll "t" $ T.record [
@@ -206,7 +206,7 @@ propertyType = define "PropertyType" $
       doc "Whether the property is required; values may be omitted from a property map otherwise"
       T.boolean]
 
-property_ :: Binding
+property_ :: TypeDefinition
 property_ = define "Property" $
   doc "A key/value property" $
   T.forAll "v" $ T.record [
@@ -217,7 +217,7 @@ property_ = define "Property" $
       doc "The value of the property"
       "v"]
 
-vertex :: Binding
+vertex :: TypeDefinition
 vertex = define "Vertex" $
   doc "A vertex" $
   T.forAll "v" $ T.record [
@@ -231,12 +231,12 @@ vertex = define "Vertex" $
       doc "A key/value map of vertex properties" $
       T.map (pg "PropertyKey") "v"]
 
-vertexLabel :: Binding
+vertexLabel :: TypeDefinition
 vertexLabel = define "VertexLabel" $
   doc "The label of a vertex. The default (null) vertex is represented by the empty string" $
   T.wrap $ T.string
 
-vertexType :: Binding
+vertexType :: TypeDefinition
 vertexType = define "VertexType" $
   doc "The type of a vertex" $
   T.forAll "t" $ T.record [
@@ -250,7 +250,7 @@ vertexType = define "VertexType" $
       doc "A list of property types. The types are ordered for the sake of applications in which property order is significant." $
       T.list (pg "PropertyType" @@ "t")]
 
-vertexWithAdjacentEdges :: Binding
+vertexWithAdjacentEdges :: TypeDefinition
 vertexWithAdjacentEdges = define "VertexWithAdjacentEdges" $
   doc "A vertex together with any outgoing and/or incoming edges; a vertex object" $
   T.forAll "v" $ T.record [

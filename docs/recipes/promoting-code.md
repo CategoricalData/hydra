@@ -1061,7 +1061,7 @@ extension types).
 ```haskell
 -- In Hydra.Sources.Kernel.Types.Testing
 
-universalTestCase :: Binding
+universalTestCase :: TypeDefinition
 universalTestCase = define "UniversalTestCase" $
   doc "A universal test case: the actual and expected values are both strings" $
   T.record [

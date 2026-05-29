@@ -20,7 +20,7 @@ ns = ModuleName "hydra.coq.environment"
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "Environment types for Coq code generation"}
   where
@@ -32,7 +32,7 @@ module_ = Module {
 -- each module is encoded; consulted by encodeUnionElim, encodeTerm, etc. to
 -- make output-level decisions (e.g., whether to emit a catch-all match arm or
 -- whether a reference needs to stay fully qualified).
-coqEnvironment :: Binding
+coqEnvironment :: TypeDefinition
 coqEnvironment = def "CoqEnvironment" $
   doc "Cross-module state threaded through the Coq encoder" $
   T.record [
@@ -52,7 +52,7 @@ coqEnvironment = def "CoqEnvironment" $
 core :: String -> Type
 core = typeref Core.ns
 
-def :: String -> Type -> Binding
+def :: String -> Type -> TypeDefinition
 def = datatype ns
 
 environment :: String -> Type

@@ -16,13 +16,13 @@ import qualified Data.Maybe                      as Y
 ns :: ModuleName
 ns = ModuleName "hydra.iana.linkrelations"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [],
             moduleDescription = Just ("All IANA Link Relation Types, as of 2022-10-11. " ++
           "See https://www.iana.org/assignments/link-relations/link-relations.xhtml")}
@@ -30,7 +30,7 @@ module_ = Module {
     definitions = [
       linkRelationType]
 
-linkRelationType :: Binding
+linkRelationType :: TypeDefinition
 linkRelationType = define "LinkRelationType" $
   doc "An IANA link relation type" $
   T.union [

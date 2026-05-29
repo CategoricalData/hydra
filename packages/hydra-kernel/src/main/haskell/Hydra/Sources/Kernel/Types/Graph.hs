@@ -15,13 +15,13 @@ import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 ns :: ModuleName
 ns = ModuleName "hydra.graph"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, Error.ns, Packaging.ns, Typing.ns],
             moduleDescription = Just "The extension to graphs of Hydra's core type system (hydra.core)"}
   where
@@ -31,7 +31,7 @@ module_ = Module {
       primitive,
       termCoder]
 
-graph :: Binding
+graph :: TypeDefinition
 graph = define "Graph" $
   doc "A graph, or lexical environment which binds names to terms, types, primitives, and metadata" $
   T.record [
@@ -61,7 +61,7 @@ graph = define "Graph" $
       doc "The set of type variables introduced specifically by type lambdas" $
       T.set Core.name]
 
-library :: Binding
+library :: TypeDefinition
 library = define "Library" $
   doc "A library of primitive functions" $
   T.record [
@@ -75,7 +75,7 @@ library = define "Library" $
       doc "The primitives defined in this library" $
       T.list primitive]
 
-primitive :: Binding
+primitive :: TypeDefinition
 primitive = define "Primitive" $
   doc "A built-in function or constant, consisting of the host-independent PrimitiveDefinition (name, signature, metadata) plus a host-specific implementation." $
   T.record [
@@ -90,7 +90,7 @@ primitive = define "Primitive" $
         ++ " while the InferenceContext supports subterm-path tracing for error reporting.") $
       Typing.inferenceContext ~> graph ~> T.list Core.term ~> T.either_ Error.error_ Core.term]
 
-termCoder :: Binding
+termCoder :: TypeDefinition
 termCoder = define "TermCoder" $
   doc "A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms." $
   T.forAll "a" $ T.record [

@@ -12,13 +12,13 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 ns :: ModuleName
 ns = ModuleName "hydra.variants"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "Variant types which describe the structure of Hydra core types and terms."}
   where
@@ -27,7 +27,7 @@ module_ = Module {
       termVariant,
       typeVariant]
 
-literalVariant :: Binding
+literalVariant :: TypeDefinition
 literalVariant = define "LiteralVariant" $
   doc "The identifier of a literal constructor" $
   T.enum [
@@ -38,7 +38,7 @@ literalVariant = define "LiteralVariant" $
     "integer",
     "string"]
 
-termVariant :: Binding
+termVariant :: TypeDefinition
 termVariant = define "TermVariant" $
   doc "The identifier of a term expression constructor" $
   T.enum [
@@ -64,7 +64,7 @@ termVariant = define "TermVariant" $
     "variable",
     "wrap"]
 
-typeVariant :: Binding
+typeVariant :: TypeDefinition
 typeVariant = define "TypeVariant" $
   doc "The identifier of a type constructor" $
   T.enum [

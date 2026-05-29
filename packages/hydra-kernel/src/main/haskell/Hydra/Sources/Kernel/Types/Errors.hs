@@ -16,13 +16,13 @@ import qualified Hydra.Sources.Kernel.Types.Variants as Variants
 ns :: ModuleName
 ns = ModuleName "hydra.errors"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, ErrorsChecking.ns, ErrorsCore.ns, Paths.ns, Typing.ns, Variants.ns],
             moduleDescription = Just "Top-level error types for the Hydra kernel"}
   where
@@ -46,17 +46,17 @@ module_ = Module {
       unificationError,
       unificationInferenceError]
 
-decodingError :: Binding
+decodingError :: TypeDefinition
 decodingError = define "DecodingError" $
   doc "An error that occurred during decoding of a term" $
   T.wrap T.string
 
-emptyListError :: Binding
+emptyListError :: TypeDefinition
 emptyListError = define "EmptyListError" $
   doc "An empty list was encountered where a non-empty list was required" $
   T.unit
 
-error_ :: Binding
+error_ :: TypeDefinition
 error_ = define "Error" $
   doc "An error of any kind, with kernel errors particularly differentiated" $
   T.union [
@@ -106,7 +106,7 @@ error_ = define "Error" $
       doc "A type unification error" $
       unificationError]
 
-extractionError :: Binding
+extractionError :: TypeDefinition
 extractionError = define "ExtractionError" $
   doc "An error that occurred while extracting a typed value from a term" $
   T.union [
@@ -132,7 +132,7 @@ extractionError = define "ExtractionError" $
       doc "A term, type, literal, or other value had an unexpected shape" $
       unexpectedShapeError]
 
-inferenceError :: Binding
+inferenceError :: TypeDefinition
 inferenceError = define "InferenceError" $
   doc "An error that occurred during type inference" $
   T.union [
@@ -147,7 +147,7 @@ inferenceError = define "InferenceError" $
       doc "A unification failure encountered while inferring types" $
       unificationInferenceError]
 
-multipleBindingsError :: Binding
+multipleBindingsError :: TypeDefinition
 multipleBindingsError = define "MultipleBindingsError" $
   doc "Multiple let bindings with the same name were found" $
   T.record [
@@ -155,7 +155,7 @@ multipleBindingsError = define "MultipleBindingsError" $
       doc "The binding name which was duplicated" $
       Core.name]
 
-multipleFieldsError :: Binding
+multipleFieldsError :: TypeDefinition
 multipleFieldsError = define "MultipleFieldsError" $
   doc "Multiple fields with the same name were found in a record" $
   T.record [
@@ -163,7 +163,7 @@ multipleFieldsError = define "MultipleFieldsError" $
       doc "The field name which appeared more than once" $
       Core.name]
 
-noMatchingFieldError :: Binding
+noMatchingFieldError :: TypeDefinition
 noMatchingFieldError = define "NoMatchingFieldError" $
   doc "No field with the expected name was present" $
   T.record [
@@ -171,7 +171,7 @@ noMatchingFieldError = define "NoMatchingFieldError" $
       doc "The field name which was not found" $
       Core.name]
 
-noSuchBindingError :: Binding
+noSuchBindingError :: TypeDefinition
 noSuchBindingError = define "NoSuchBindingError" $
   doc "No let binding with the expected name was present" $
   T.record [
@@ -179,7 +179,7 @@ noSuchBindingError = define "NoSuchBindingError" $
       doc "The binding name which was not found" $
       Core.name]
 
-noSuchPrimitiveError :: Binding
+noSuchPrimitiveError :: TypeDefinition
 noSuchPrimitiveError = define "NoSuchPrimitiveError" $
   doc "No primitive function with the expected name was registered in the graph" $
   T.record [
@@ -187,17 +187,17 @@ noSuchPrimitiveError = define "NoSuchPrimitiveError" $
       doc "The primitive name which was not found" $
       Core.name]
 
-notEnoughCasesError :: Binding
+notEnoughCasesError :: TypeDefinition
 notEnoughCasesError = define "NotEnoughCasesError" $
   doc "A case statement was missing a case for the requested variant" $
   T.unit
 
-otherError :: Binding
+otherError :: TypeDefinition
 otherError = define "OtherError" $
   doc "Any other error" $
   T.wrap T.string
 
-otherInferenceError :: Binding
+otherInferenceError :: TypeDefinition
 otherInferenceError = define "OtherInferenceError" $
   doc "A generic inference error: message + subterm path" $
   T.record [
@@ -208,12 +208,12 @@ otherInferenceError = define "OtherInferenceError" $
       doc "A human-readable error message" $
       T.string]
 
-otherResolutionError :: Binding
+otherResolutionError :: TypeDefinition
 otherResolutionError = define "OtherResolutionError" $
   doc "A generic resolution error: message" $
   T.wrap T.string
 
-resolutionError :: Binding
+resolutionError :: TypeDefinition
 resolutionError = define "ResolutionError" $
   doc "An error that occurred while resolving a name, primitive, or record/union shape in a graph" $
   T.union [
@@ -233,7 +233,7 @@ resolutionError = define "ResolutionError" $
       doc "A term had a shape other than the one expected (e.g. a record, an injection)" $
       unexpectedShapeError]
 
-unexpectedShapeError :: Binding
+unexpectedShapeError :: TypeDefinition
 unexpectedShapeError = define "UnexpectedShapeError" $
   doc "A term, type, literal, or related value had a shape other than the one expected" $
   T.record [
@@ -244,7 +244,7 @@ unexpectedShapeError = define "UnexpectedShapeError" $
       doc "A description of the shape actually encountered" $
       T.string]
 
-unificationError :: Binding
+unificationError :: TypeDefinition
 unificationError = define "UnificationError" $
   doc "An error that occurred during type unification" $
   T.record [
@@ -258,7 +258,7 @@ unificationError = define "UnificationError" $
       doc "A human-readable error message" $
       T.string]
 
-unificationInferenceError :: Binding
+unificationInferenceError :: TypeDefinition
 unificationInferenceError = define "UnificationInferenceError" $
   doc "A unification failure at a specific subterm locus during inference" $
   T.record [

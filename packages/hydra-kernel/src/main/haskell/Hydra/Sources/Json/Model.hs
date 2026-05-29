@@ -14,20 +14,20 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 ns :: ModuleName
 ns = ModuleName "hydra.json.model"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "A JSON syntax model. See the BNF at https://www.json.org"}
   where
     definitions = [
       value]
 
-value :: Binding
+value :: TypeDefinition
 value = define "Value" $
   doc "A JSON value" $
   T.union [

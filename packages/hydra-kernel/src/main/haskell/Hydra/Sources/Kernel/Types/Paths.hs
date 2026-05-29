@@ -12,13 +12,13 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 ns :: ModuleName
 ns = ModuleName "hydra.paths"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "A model for subterm and subtype access patterns"}
   where
@@ -36,7 +36,7 @@ module_ = Module {
 
 -- Subterm types
 
-subtermEdge :: Binding
+subtermEdge :: TypeDefinition
 subtermEdge = define "SubtermEdge" $
   doc "An edge in a subterm graph, connecting two nodes via a path" $
   T.record [
@@ -50,7 +50,7 @@ subtermEdge = define "SubtermEdge" $
       doc "The target node of the edge"
       subtermNode]
 
-subtermGraph :: Binding
+subtermGraph :: TypeDefinition
 subtermGraph = define "SubtermGraph" $
   doc "A graph of subterm nodes and edges, representing term access patterns" $
   T.record [
@@ -61,7 +61,7 @@ subtermGraph = define "SubtermGraph" $
       doc "All edges in the graph" $
       T.list subtermEdge]
 
-subtermNode :: Binding
+subtermNode :: TypeDefinition
 subtermNode = define "SubtermNode" $
   doc "A node in a subterm graph, representing a term or subterm" $
   T.record [
@@ -75,12 +75,12 @@ subtermNode = define "SubtermNode" $
       doc "A unique identifier for the node"
       T.string]
 
-subtermPath :: Binding
+subtermPath :: TypeDefinition
 subtermPath = define "SubtermPath" $
   doc "A sequence of subterm steps forming a path through a term" $
   T.wrap $ T.list subtermStep
 
-subtermStep :: Binding
+subtermStep :: TypeDefinition
 subtermStep = define "SubtermStep" $
   doc "A function which maps from a term to a particular immediate subterm" $
   T.union [
@@ -147,7 +147,7 @@ subtermStep = define "SubtermStep" $
 
 -- Subtype types
 
-subtypeEdge :: Binding
+subtypeEdge :: TypeDefinition
 subtypeEdge = define "SubtypeEdge" $
   doc "An edge in a subtype graph, connecting two nodes via a path" $
   T.record [
@@ -161,7 +161,7 @@ subtypeEdge = define "SubtypeEdge" $
       doc "The target node of the edge"
       subtypeNode]
 
-subtypeGraph :: Binding
+subtypeGraph :: TypeDefinition
 subtypeGraph = define "SubtypeGraph" $
   doc "A graph of subtype nodes and edges, representing type access patterns" $
   T.record [
@@ -172,7 +172,7 @@ subtypeGraph = define "SubtypeGraph" $
       doc "All edges in the graph" $
       T.list subtypeEdge]
 
-subtypeNode :: Binding
+subtypeNode :: TypeDefinition
 subtypeNode = define "SubtypeNode" $
   doc "A node in a subtype graph, representing a type or subtype" $
   T.record [
@@ -186,12 +186,12 @@ subtypeNode = define "SubtypeNode" $
       doc "A unique identifier for the node"
       T.string]
 
-subtypePath :: Binding
+subtypePath :: TypeDefinition
 subtypePath = define "SubtypePath" $
   doc "A sequence of subtype steps forming a path through a type" $
   T.wrap $ T.list subtypeStep
 
-subtypeStep :: Binding
+subtypeStep :: TypeDefinition
 subtypeStep = define "SubtypeStep" $
   doc "A function which maps from a type to a particular immediate subtype" $
   T.union [
