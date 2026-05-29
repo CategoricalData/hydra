@@ -1,7 +1,6 @@
 (define-library (hydra lib libraries)
   (import (scheme base)
           (hydra core)
-          (hydra context)
           (hydra graph)
           (hydra prims)
           (hydra reduction)

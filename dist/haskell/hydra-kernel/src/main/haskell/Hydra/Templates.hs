@@ -2,20 +2,41 @@
 -- | A utility which instantiates a nonrecursive type with default values
 
 module Hydra.Templates where
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
+import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Json.Model as Model
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
+import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-import qualified Hydra.Lib.Literals as Literals
+import qualified Hydra.Haskell.Lib.Literals as Literals
 -- | Decode a list of type-encoding bindings into a map of named types
 graphToSchema :: t0 -> Graph.Graph -> [Core.Binding] -> Either Errors.DecodingError (M.Map Core.Name Core.Type)
 graphToSchema cx graph els =

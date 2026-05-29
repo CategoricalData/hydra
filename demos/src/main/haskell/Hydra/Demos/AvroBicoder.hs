@@ -71,7 +71,7 @@ runForwardDemo :: IO ()
 runForwardDemo = do
   putStrLn "--- Demo 1: Forward pipeline (Avro -> Hydra) ---"
   pwd <- getCurrentDirectory
-  let cx = emptyContext
+  let cx = emptyInferenceContext
 
   -- Load the Review schema
   let schemaPath = combine pwd "src/test/avro/moviedemo/Review.avsc"
@@ -124,7 +124,7 @@ runForwardDemo = do
 runReverseDemo :: IO ()
 runReverseDemo = do
   putStrLn "--- Demo 2: Reverse pipeline (Hydra -> Avro schema) ---"
-  let cx = emptyContext
+  let cx = emptyInferenceContext
 
   -- Define a small type graph: Person with Address
   let addressName = Core.Name "com.example.Address"
@@ -186,7 +186,7 @@ runRoundTripDemo :: IO ()
 runRoundTripDemo = do
   putStrLn "--- Demo 3: Round-trip (Avro -> Hydra -> Avro) ---"
   pwd <- getCurrentDirectory
-  let cx = emptyContext
+  let cx = emptyInferenceContext
 
   -- Load the AirplaneInfo schema
   let schemaPath = combine pwd "src/test/avro/aviationdemo/AirplaneInfo.avsc"
@@ -252,7 +252,7 @@ runRoundTripDemo = do
 runSchemaCodecDemo :: IO ()
 runSchemaCodecDemo = do
   putStrLn "--- Demo 4: Schema string codec ---"
-  let cx = emptyContext
+  let cx = emptyInferenceContext
   let coder = SchemaJson.avroSchemaStringCoder cx
 
   -- Encode a schema to a JSON string

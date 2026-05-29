@@ -135,7 +135,11 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '11'
+          # Pinned to 11.0.19 because newer 11.x patches (verified 11.0.31) regressed
+          # generic varargs inference on the deeply-nested PersistentMap.ofEntries call
+          # in dist/java/.../hydra/json/Bootstrap.java after #156 expanded
+          # bootstrapTypeModules. Coder-level fix is the proper resolution.
+          java-version: '11.0.19'
       - uses: actions/cache@v4
         with:
           path: |

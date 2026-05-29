@@ -22,12 +22,6 @@ ns = ModuleName "hydra.pg.query"
 define :: String -> Type -> Binding
 define = defineType ns
 
-pg :: String -> Type
-pg = typeref $ PgModel.ns
-
-q :: String -> Type
-q = typeref ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -76,16 +70,16 @@ associativeExpression = define "AssociativeExpression" $
     "operator">: q "BinaryOperator",
     "operands">: nonemptyList $ q "Expression"]
 
+binaryBooleanOperator :: Binding
+binaryBooleanOperator = define "BinaryBooleanOperator" $
+  T.enum ["and", "or", "xor"]
+
 binaryExpression :: Binding
 binaryExpression = define "BinaryExpression" $
   T.record [
     "left">: q "Expression",
     "operator">: q "BinaryOperator",
     "right">: q "Expression"]
-
-binaryBooleanOperator :: Binding
-binaryBooleanOperator = define "BinaryBooleanOperator" $
-  T.enum ["and", "or", "xor"]
 
 binaryOperator :: Binding
 binaryOperator = define "BinaryOperator" $
@@ -135,6 +129,9 @@ matchQuery = define "MatchQuery" $
     "pattern">: T.list $ q "Projection",
     "where">: T.maybe $ q "Expression"]
 
+pg :: String -> Type
+pg = typeref $ PgModel.ns
+
 projection :: Binding
 projection = define "Projection" $
   T.record [
@@ -168,6 +165,9 @@ propertyValuePattern = define "PropertyValuePattern" $
   T.union [
     "variable">: pg "PropertyKey",
     "value">: T.string] -- TODO: re-use pg property value parameter
+
+q :: String -> Type
+q = typeref ns
 
 query :: Binding
 query = define "Query" $

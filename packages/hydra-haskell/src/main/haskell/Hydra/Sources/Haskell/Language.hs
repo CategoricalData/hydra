@@ -79,9 +79,6 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-haskellLanguageDefinition :: String -> TTerm a -> TTermDefinition a
-haskellLanguageDefinition = definitionInModule module_
-
 ns :: ModuleName
 ns = ModuleName "hydra.haskell.language"
 
@@ -160,6 +157,9 @@ haskellLanguage = haskellLanguageDefinition "haskellLanguage" $
       (var "termVariants")
       (var "typeVariants")
       (var "typePredicate"))
+
+haskellLanguageDefinition :: String -> TTerm a -> TTermDefinition a
+haskellLanguageDefinition = definitionInModule module_
 
 reservedWords :: TTermDefinition (S.Set String)
 reservedWords = haskellLanguageDefinition "reservedWords" $

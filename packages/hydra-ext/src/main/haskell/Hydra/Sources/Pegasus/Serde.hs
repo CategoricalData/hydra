@@ -202,28 +202,6 @@ recordFieldToExpr = define "recordFieldToExpr" $
           nothing,
         Maybes.pure (schemaToExpr @@ var "schema")]))
 
-schemaToExpr :: TTermDefinition (PDL.Schema -> Expr)
-schemaToExpr = define "schemaToExpr" $
-  doc "Convert a schema to an expression" $
-  lambda "schema" $
-    cases PDL._Schema (var "schema") Nothing [
-      PDL._Schema_array>>: lambda "s" $ Serialization.noSep @@ list [
-        Serialization.cst @@ string "array",
-        Serialization.bracketList @@ Serialization.inlineStyle @@ list [schemaToExpr @@ var "s"]],
-      PDL._Schema_map>>: lambda "s" $ Serialization.noSep @@ list [
-        Serialization.cst @@ string "map",
-        Serialization.bracketList @@ Serialization.inlineStyle @@ list [
-          Serialization.cst @@ string "string",
-          schemaToExpr @@ var "s"]],
-      PDL._Schema_named>>: lambda "qn" $ qualifiedNameToExpr @@ var "qn",
-      PDL._Schema_null>>: constant $ Serialization.cst @@ string "null",
-      PDL._Schema_primitive>>: lambda "pt" $ primitiveTypeToExpr @@ var "pt",
-      PDL._Schema_union>>: lambda "us" $
-        Serialization.noSep @@ list [
-          Serialization.cst @@ string "union",
-          Serialization.bracketList @@ Serialization.fullBlockStyle @@
-            (Lists.map unionMemberToExpr (unwrap PDL._UnionSchema @@ var "us"))]]
-
 schemaFileToExpr :: TTermDefinition (PDL.SchemaFile -> Expr)
 schemaFileToExpr = define "schemaFileToExpr" $
   doc "Convert a schema file to an expression" $
@@ -248,6 +226,28 @@ schemaFileToExpr = define "schemaFileToExpr" $
       Lists.concat $ list [
         list [var "namespaceSec", var "packageSec", var "importsSec"],
         var "schemaSecs"])
+
+schemaToExpr :: TTermDefinition (PDL.Schema -> Expr)
+schemaToExpr = define "schemaToExpr" $
+  doc "Convert a schema to an expression" $
+  lambda "schema" $
+    cases PDL._Schema (var "schema") Nothing [
+      PDL._Schema_array>>: lambda "s" $ Serialization.noSep @@ list [
+        Serialization.cst @@ string "array",
+        Serialization.bracketList @@ Serialization.inlineStyle @@ list [schemaToExpr @@ var "s"]],
+      PDL._Schema_map>>: lambda "s" $ Serialization.noSep @@ list [
+        Serialization.cst @@ string "map",
+        Serialization.bracketList @@ Serialization.inlineStyle @@ list [
+          Serialization.cst @@ string "string",
+          schemaToExpr @@ var "s"]],
+      PDL._Schema_named>>: lambda "qn" $ qualifiedNameToExpr @@ var "qn",
+      PDL._Schema_null>>: constant $ Serialization.cst @@ string "null",
+      PDL._Schema_primitive>>: lambda "pt" $ primitiveTypeToExpr @@ var "pt",
+      PDL._Schema_union>>: lambda "us" $
+        Serialization.noSep @@ list [
+          Serialization.cst @@ string "union",
+          Serialization.bracketList @@ Serialization.fullBlockStyle @@
+            (Lists.map unionMemberToExpr (unwrap PDL._UnionSchema @@ var "us"))]]
 
 unionMemberToExpr :: TTermDefinition (PDL.UnionMember -> Expr)
 unionMemberToExpr = define "unionMemberToExpr" $

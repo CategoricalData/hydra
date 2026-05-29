@@ -23,15 +23,6 @@ ns = ModuleName "hydra.stac.items"
 define :: String -> Type -> Binding
 define = defineType ns
 
-geoj :: String -> Type
-geoj = typeref $ GeoJson.ns
-
-ianarel :: String -> Type
-ianarel = typeref $ IanaRelations.ns
-
-stac :: String -> Type
-stac = typeref ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -74,6 +65,12 @@ asset = define "Asset" $
     "roles">:
       doc "The semantic roles of the asset, similar to the use of rel in links." $
       T.list $ stac "Role"]
+
+geoj :: String -> Type
+geoj = typeref $ GeoJson.ns
+
+ianarel :: String -> Type
+ianarel = typeref $ IanaRelations.ns
 
 item :: Binding
 item = define "Item" $
@@ -163,6 +160,9 @@ role = define "Role" $
       doc "A metadata sidecar file describing the data in this Item, for example the Landsat-8 MTL file." T.unit,
     "other">:
       T.string]
+
+stac :: String -> Type
+stac = typeref ns
 
 stacRelationType :: Binding
 stacRelationType = define "StacRelationType" $

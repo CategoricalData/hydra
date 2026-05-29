@@ -1,7 +1,7 @@
 package hydra;
 
 import hydra.coders.Coder;
-import hydra.context.Context;
+import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.ConsList;
 import hydra.util.Either;
@@ -78,10 +78,7 @@ public class Coders {
      * @return an Either containing the round-tripped value or an error
      */
     public static <V1, V2> Either<String, V1> roundTrip(Coder<V1, V2> coder, V1 initialValue) {
-        Context cx = new Context(
-            ConsList.empty(),
-            ConsList.empty(),
-            PersistentMap.empty());
+        InferenceContext cx = new InferenceContext(0, new java.util.ArrayList<>());
         Either<Error_, V2> encResult = coder.encode.apply(cx).apply(initialValue);
         if (encResult.isLeft()) {
             return Either.left(hydra.show.Errors.error(((Either.Left<Error_, V2>) encResult).value));
@@ -97,10 +94,10 @@ public class Coders {
     /**
      * Compose two Coder-style encode functions.
      */
-    private static <A, B, C> Function<Context, Function<A, Either<Error_, C>>>
+    private static <A, B, C> Function<InferenceContext, Function<A, Either<Error_, C>>>
             composeEncode(
-                Function<Context, Function<A, Either<Error_, B>>> first,
-                Function<Context, Function<B, Either<Error_, C>>> second) {
+                Function<InferenceContext, Function<A, Either<Error_, B>>> first,
+                Function<InferenceContext, Function<B, Either<Error_, C>>> second) {
         return cx -> a -> {
             Either<Error_, B> r1 = first.apply(cx).apply(a);
             return r1.accept(new Either.Visitor<Error_, B, Either<Error_, C>>() {

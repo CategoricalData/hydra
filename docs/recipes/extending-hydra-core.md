@@ -492,7 +492,7 @@ Add the inference function. Translate from the DSL source to plain Haskell:
 
 ```haskell
 -- Around line 570
-inferTypeOfEither :: (Context.Context -> Graph.Graph -> Either Core.Term Core.Term -> Either Errors.Error Typing_.InferenceResult)
+inferTypeOfEither :: (Typing_.InferenceContext -> Graph.Graph -> Either Core.Term Core.Term -> Either Errors.Error Typing_.InferenceResult)
 inferTypeOfEither cx e = ((\x -> case x of
     Left l -> (Eithers.bind (inferTypeOfTerm cx l "either left value") (\r1 ->
       let leftType = (Typing_.inferenceResultType r1)
@@ -526,7 +526,7 @@ Core.TermEither v1 -> (inferTypeOfEither cx v1)
 Similarly, add the type checking function. This requires exact type arguments:
 
 ```haskell
-typeOfEither :: (Context.Context -> Graph.Graph -> [Core.Type] -> Either Core.Term Core.Term -> Either Errors.Error (Core.Type, Context.Context))
+typeOfEither :: (Typing_.InferenceContext -> Graph.Graph -> [Core.Type] -> Either Core.Term Core.Term -> Either Errors.Error (Core.Type, Typing_.InferenceContext))
 typeOfEither tx typeArgs et = -- Implementation similar to Checking.hs source
 ```
 

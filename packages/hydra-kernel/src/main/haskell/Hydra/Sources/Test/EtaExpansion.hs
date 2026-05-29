@@ -395,7 +395,7 @@ allTests = define "allTests" $
         (tylams ["t0"] $
           lambdaTyped "dir" (T.var "hydra.coders.CoderDirection") $
             lambdaTyped "coder" (T.applys (T.var "hydra.coders.Coder") (T.var <$> ["t0", "t0"])) $
-              lambdaTyped "cx" (T.var "hydra.context.Context") $
+              lambdaTyped "cx" (T.var "hydra.typing.InferenceContext") $
                 lambdaTyped "v1" (T.var "t0") $
                   match (Core.nameLift _CoderDirection)
                     nothing [
@@ -416,19 +416,8 @@ allTests = define "allTests" $
 -- Helpers
 
 -- | Reference to hydra.reduction.etaExpandTypedTerm
-etaExpandRef :: TTerm (Context -> Graph -> Term -> Either Error Term)
+etaExpandRef :: TTerm (InferenceContext -> Graph -> Term -> Either Error Term)
 etaExpandRef = TTerm $ TermVariable $ Name "hydra.reduction.etaExpandTypedTerm"
-
-testCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-testCase name input output = universalCase name
-    (retype $ Eithers.either_
-      (Phantoms.lambda "e" (Strings.cat2 (Phantoms.string "ETA ERROR: ") (Phantoms.string "failed")))
-      (Phantoms.lambda "result" (showTermRef Phantoms.@@ Phantoms.var "result"))
-      (etaExpandRef Phantoms.@@ testContextRef Phantoms.@@ testGraphRef Phantoms.@@ input))
-    (retype $ showTermRef Phantoms.@@ output)
-  where
-    retype :: TTerm x -> TTerm String
-    retype (TTerm x) = TTerm x
 
 noChange :: String -> TTerm Term -> TTerm TestCaseWithMetadata
 noChange name term = testCase name term term
@@ -451,3 +440,14 @@ foldl = primitive $ _lists_foldl
 splitOn = primitive $ _strings_splitOn
 toLower = primitive $ _strings_toLower
 --toLower = Core.termFunction $ Core.functionPrimitive $ Core.name (Phantoms.string "hydra.lib.strings.toLower")
+
+testCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+testCase name input output = universalCase name
+    (retype $ Eithers.either_
+      (Phantoms.lambda "e" (Strings.cat2 (Phantoms.string "ETA ERROR: ") (Phantoms.string "failed")))
+      (Phantoms.lambda "result" (showTermRef Phantoms.@@ Phantoms.var "result"))
+      (etaExpandRef Phantoms.@@ testContextRef Phantoms.@@ testGraphRef Phantoms.@@ input))
+    (retype $ showTermRef Phantoms.@@ output)
+  where
+    retype :: TTerm x -> TTerm String
+    retype (TTerm x) = TTerm x

@@ -20,8 +20,8 @@
 (define-library (hydra test test_env)
   (import (scheme base)
           (hydra core)
-          (hydra context)
           (hydra graph)
+          (hydra typing)
           (hydra lib libraries)
           (hydra lib maps)
           (hydra json bootstrap)
@@ -214,7 +214,7 @@
     ;; Public API: testEnv exports
 
     (define hydra_test_test_env_test_context
-      (make-hydra_context_context (list) (list) hydra_lib_maps_empty))
+      (make-hydra_typing_inference_context 0 (list)))
 
     ;; Curried form to match the Scheme coder's emission for multi-arg
     ;; DSL functions: Map Name Type -> Map Name Term -> Graph becomes
