@@ -21,50 +21,50 @@ module_ = Module {
             moduleDescription = Just "Primitives in the hydra.lib.lists namespace."}
   where
     definitions = [
-      primNoDef "apply"       "Apply a list of functions to a list of values (applicative style)." applySig,
-      primNoDef "bind"        "Apply a function that returns lists to each element and flatten the results." bindSig,
-      primNoDef "concat"      "Concatenate a list of lists." concatSig,
-      primNoDef "concat2"     "Concatenate two lists." concat2Sig,
-      primNoDef "cons"        "Prepend a value to a list." consSig,
-      primNoDef "drop"        "Drop the first n elements from a list." dropSig,
-      primNoDef "dropWhile"   "Drop elements from the beginning of a list while the predicate is true." dropWhileSig,
-      primNoDef "elem"        "Test whether an element is in a list." elemSig,
-      primNoDef "filter"      "Filter a list by a predicate." filterSig,
-      primNoDef "find"        "Find the first element matching a predicate." findSig,
-      primNoDef "foldl"       "Left-fold a list with an accumulator." foldlSig,
-      primNoDef "foldr"       "Right-fold a list with an accumulator." foldrSig,
-      primNoDef "group"       "Group consecutive equal elements." groupSig,
-      primNoDef "intercalate" "Intercalate a list of lists with a separator list between each." intercalateSig,
-      primNoDef "intersperse" "Intersperse a value between consecutive elements of a list." intersperseSig,
-      primNoDef "length"      "Return the length of a list." lengthSig,
-      primNoDef "map"         "Map a function over a list." mapSig,
-      primNoDef "maybeAt"     "Return the element at the given index, or Nothing if out of bounds." maybeAtSig,
-      primNoDef "maybeHead"   "Return the first element, or Nothing if the list is empty." maybeHeadSig,
-      primNoDef "maybeInit"   "Return all elements except the last, or Nothing if the list is empty." maybeInitSig,
-      primNoDef "maybeLast"   "Return the last element, or Nothing if the list is empty." maybeLastSig,
-      primNoDef "maybeTail"   "Return all elements except the first, or Nothing if the list is empty." maybeTailSig,
-      primNoDef "nub"         "Remove duplicate elements from a list." nubSig,
-      primNoDef "null"        "Test whether a list is empty." nullSig,
-      primNoDef "partition"   "Partition a list into elements that satisfy a predicate and those that do not." partitionSig,
-      primNoDef "pure"        "Wrap a value in a single-element list." pureSig,
-      primNoDef "replicate"   "Build a list of n copies of a value." replicateSig,
-      primNoDef "reverse"     "Reverse a list." reverseSig,
-      primNoDef "singleton"   "Construct a single-element list." singletonSig,
-      primNoDef "sort"        "Sort a list." sortSig,
-      primNoDef "sortOn"      "Sort a list using a key-extraction function." sortOnSig,
-      primNoDef "span"        "Split a list at the first element where the predicate fails." spanSig,
-      primNoDef "take"        "Take the first n elements of a list." takeSig,
-      primNoDef "transpose"   "Transpose a list of lists." transposeSig,
-      primNoDef "uncons"      "Decompose a list into its head and tail, or Nothing if empty." unconsSig,
-      primNoDef "zip"         "Zip two lists element-wise into pairs." zipSig,
-      primNoDef "zipWith"     "Zip two lists with a combining function." zipWithSig]
+      primNoDef "apply"       "Apply a list of functions to a list of values (applicative style)." applySig Nothing,
+      primNoDef "bind"        "Apply a function that returns lists to each element and flatten the results." bindSig Nothing,
+      primNoDef "concat"      "Concatenate a list of lists." concatSig Nothing,
+      primNoDef "concat2"     "Concatenate two lists." concat2Sig Nothing,
+      primNoDef "cons"        "Prepend a value to a list." consSig Nothing,
+      primNoDef "drop"        "Drop the first n elements from a list." dropSig Nothing,
+      primNoDef "dropWhile"   "Drop elements from the beginning of a list while the predicate is true." dropWhileSig Nothing,
+      primNoDef "elem"        "Test whether an element is in a list." elemSig Nothing,
+      primNoDef "filter"      "Filter a list by a predicate." filterSig Nothing,
+      primNoDef "find"        "Find the first element matching a predicate." findSig Nothing,
+      primNoDef "foldl"       "Left-fold a list with an accumulator." foldlSig Nothing,
+      primNoDef "foldr"       "Right-fold a list with an accumulator." foldrSig Nothing,
+      primNoDef "group"       "Group consecutive equal elements." groupSig Nothing,
+      primNoDef "intercalate" "Intercalate a list of lists with a separator list between each." intercalateSig Nothing,
+      primNoDef "intersperse" "Intersperse a value between consecutive elements of a list." intersperseSig Nothing,
+      primNoDef "length"      "Return the length of a list." lengthSig Nothing,
+      primNoDef "map"         "Map a function over a list." mapSig Nothing,
+      primNoDef "maybeAt"     "Return the element at the given index, or Nothing if out of bounds." maybeAtSig Nothing,
+      primNoDef "maybeHead"   "Return the first element, or Nothing if the list is empty." maybeHeadSig Nothing,
+      primNoDef "maybeInit"   "Return all elements except the last, or Nothing if the list is empty." maybeInitSig Nothing,
+      primNoDef "maybeLast"   "Return the last element, or Nothing if the list is empty." maybeLastSig Nothing,
+      primNoDef "maybeTail"   "Return all elements except the first, or Nothing if the list is empty." maybeTailSig Nothing,
+      primNoDef "nub"         "Remove duplicate elements from a list." nubSig Nothing,
+      primNoDef "null"        "Test whether a list is empty." nullSig Nothing,
+      primNoDef "partition"   "Partition a list into elements that satisfy a predicate and those that do not." partitionSig Nothing,
+      primNoDef "pure"        "Wrap a value in a single-element list." pureSig Nothing,
+      primNoDef "replicate"   "Build a list of n copies of a value." replicateSig Nothing,
+      primNoDef "reverse"     "Reverse a list." reverseSig Nothing,
+      primNoDef "singleton"   "Construct a single-element list." singletonSig Nothing,
+      primNoDef "sort"        "Sort a list." sortSig Nothing,
+      primNoDef "sortOn"      "Sort a list using a key-extraction function." sortOnSig Nothing,
+      primNoDef "span"        "Split a list at the first element where the predicate fails." spanSig Nothing,
+      primNoDef "take"        "Take the first n elements of a list." takeSig Nothing,
+      primNoDef "transpose"   "Transpose a list of lists." transposeSig Nothing,
+      primNoDef "uncons"      "Decompose a list into its head and tail, or Nothing if empty." unconsSig Nothing,
+      primNoDef "zip"         "Zip two lists element-wise into pairs." zipSig Nothing,
+      primNoDef "zipWith"     "Zip two lists with a combining function." zipWithSig Nothing]
 
 l :: Type -> Type
 l = Types.list
 
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+primNoDef :: String -> String -> TermSignature -> Maybe String -> Definition
+primNoDef localName description s comments =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName)) comments
 
 -- Shared type variables.
 tx, ty, tz :: Type

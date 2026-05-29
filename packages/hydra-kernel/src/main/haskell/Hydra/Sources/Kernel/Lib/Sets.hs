@@ -30,20 +30,20 @@ module_ = Module {
     sx = Types.var "x"
     ssx = Types.set sx
     definitions = [
-      primNoDef "delete"   "Remove an element from a set." (setOpSig (sx Types.~> ssx Types.~> ssx)),
-      toPrimitive "Compute the difference of two sets: elements in the first that are not in the second." (setOpSig (ssx Types.~> ssx Types.~> ssx)) difference_,
-      primNoDef "empty"    "The empty set." (setOpSig ssx),
-      primNoDef "fromList" "Construct a set from a list of elements (duplicates removed)." (setOpSig (Types.list sx Types.~> ssx)),
-      primNoDef "insert"   "Add an element to a set." (setOpSig (sx Types.~> ssx Types.~> ssx)),
-      toPrimitive "Compute the intersection of two sets: elements present in both." (setOpSig (ssx Types.~> ssx Types.~> ssx)) intersection_,
-      toPrimitive "Map a function over a set." mapSig map_,
-      primNoDef "member"   "Test whether an element is in a set." (setOpSig (sx Types.~> ssx Types.~> Types.boolean)),
-      primNoDef "null"     "Test whether a set is empty." (setOpSig (ssx Types.~> Types.boolean)),
-      primNoDef "singleton" "Construct a set containing a single element." (setOpSig (sx Types.~> ssx)),
-      primNoDef "size"     "Return the number of elements in a set." (setOpSig (ssx Types.~> Types.int32)),
-      primNoDef "toList"   "Convert a set to a list (in unspecified order)." (setOpSig (ssx Types.~> Types.list sx)),
-      toPrimitive "Compute the union of two sets: elements in either." (setOpSig (ssx Types.~> ssx Types.~> ssx)) union_,
-      toPrimitive "Compute the union of a list of sets." (setOpSig (Types.list ssx Types.~> ssx)) unions_]
+      primNoDef "delete"   "Remove an element from a set." (setOpSig (sx Types.~> ssx Types.~> ssx)) Nothing,
+      toPrimitive "Compute the difference of two sets: elements in the first that are not in the second." (setOpSig (ssx Types.~> ssx Types.~> ssx)) Nothing difference_,
+      primNoDef "empty"    "The empty set." (setOpSig ssx) Nothing,
+      primNoDef "fromList" "Construct a set from a list of elements (duplicates removed)." (setOpSig (Types.list sx Types.~> ssx)) Nothing,
+      primNoDef "insert"   "Add an element to a set." (setOpSig (sx Types.~> ssx Types.~> ssx)) Nothing,
+      toPrimitive "Compute the intersection of two sets: elements present in both." (setOpSig (ssx Types.~> ssx Types.~> ssx)) Nothing intersection_,
+      toPrimitive "Map a function over a set." mapSig Nothing map_,
+      primNoDef "member"   "Test whether an element is in a set." (setOpSig (sx Types.~> ssx Types.~> Types.boolean)) Nothing,
+      primNoDef "null"     "Test whether a set is empty." (setOpSig (ssx Types.~> Types.boolean)) Nothing,
+      primNoDef "singleton" "Construct a set containing a single element." (setOpSig (sx Types.~> ssx)) Nothing,
+      primNoDef "size"     "Return the number of elements in a set." (setOpSig (ssx Types.~> Types.int32)) Nothing,
+      primNoDef "toList"   "Convert a set to a list (in unspecified order)." (setOpSig (ssx Types.~> Types.list sx)) Nothing,
+      toPrimitive "Compute the union of two sets: elements in either." (setOpSig (ssx Types.~> ssx Types.~> ssx)) Nothing union_,
+      toPrimitive "Compute the union of a list of sets." (setOpSig (Types.list ssx Types.~> ssx)) Nothing unions_]
 
 -- map needs two ord-constrained type vars: x and y
 mapSig :: TermSignature
@@ -52,9 +52,9 @@ mapSig = sig $ Types.polyConstrained [("x", [Name "ordering"]), ("y", [Name "ord
    Types.set (Types.var "x") Types.~>
    Types.set (Types.var "y"))
 
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+primNoDef :: String -> String -> TermSignature -> Maybe String -> Definition
+primNoDef localName description s comments =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName)) comments
 
 -- Helper: build a TermSignature for a one-ord-var-x signature.
 setOpSig :: Type -> TermSignature

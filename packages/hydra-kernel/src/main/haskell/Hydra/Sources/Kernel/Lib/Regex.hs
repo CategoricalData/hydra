@@ -23,26 +23,26 @@ module_ = Module {
     definitions = [
       primNoDef "find"
         "Find the first regex match within a string, returning the matched substring if any."
-        ssToOptStrSig,
+        ssToOptStrSig Nothing,
       primNoDef "findAll"
         "Find all non-overlapping regex matches within a string."
-        ssToListStrSig,
+        ssToListStrSig Nothing,
       primNoDef "matches"
         "Test whether a regex matches anywhere in a string."
-        ssToBoolSig,
+        ssToBoolSig Nothing,
       primNoDef "replace"
         "Replace the first regex match in a string with a replacement string."
-        sssToStrSig,
+        sssToStrSig Nothing,
       primNoDef "replaceAll"
         "Replace all non-overlapping regex matches in a string with a replacement string."
-        sssToStrSig,
+        sssToStrSig Nothing,
       primNoDef "split"
         "Split a string by occurrences of a regex pattern."
-        ssToListStrSig]
+        ssToListStrSig Nothing]
 
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+primNoDef :: String -> String -> TermSignature -> Maybe String -> Definition
+primNoDef localName description s comments =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName)) comments
 
 sig :: TypeScheme -> TermSignature
 sig = typeSchemeToTermSignature

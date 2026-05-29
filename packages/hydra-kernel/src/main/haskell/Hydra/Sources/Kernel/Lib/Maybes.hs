@@ -26,23 +26,22 @@ module_ = Module {
             moduleDescription = Just "Primitives in the hydra.lib.maybes namespace."}
   where
     definitions = [
-      toPrimitive "Applicative apply for optionals: combine an optional function and an optional argument." applySig apply_,
-      toPrimitive "Monadic bind for optionals." bindSig bind_,
-      primNoDef "cases" "Case analysis on an optional, with cases-style argument order." casesSig,
-      toPrimitive "Concatenate optionals, keeping only the present values." catSig cat_,
-      toPrimitive "Kleisli composition for optionals." composeSig compose_,
-      toPrimitive "Return the value contained in an optional, falling back to a default if absent." fromMaybeSig fromMaybe_,
-      toPrimitive "Test whether an optional is present (Just)." isJustSig isJust_,
-      toPrimitive "Test whether an optional is absent (Nothing)." isNothingSig isNothing_,
-      toPrimitive "Map a function over an optional." mapSig map_,
-      toPrimitive "Map a partial function over a list, keeping only the present results." mapMaybeSig mapMaybe_,
-      primNoDef "maybe" "Case analysis on an optional, applying a function if present or returning a default if absent." maybeSig,
-      toPrimitive "Wrap a value in Just." pureSig pure_,
-      toPrimitive "Convert an optional to a list: Just x maps to [x], Nothing to []." toListSig toList_]
-
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+      toPrimitive "Applicative apply for optionals: combine an optional function and an optional argument." applySig Nothing apply_,
+      toPrimitive "Monadic bind for optionals." bindSig Nothing bind_,
+      primNoDef "cases" "Case analysis on an optional, with cases-style argument order." casesSig Nothing,
+      toPrimitive "Concatenate optionals, keeping only the present values." catSig Nothing cat_,
+      toPrimitive "Kleisli composition for optionals." composeSig Nothing compose_,
+      toPrimitive "Return the value contained in an optional, falling back to a default if absent." fromMaybeSig Nothing fromMaybe_,
+      toPrimitive "Test whether an optional is present (Just)." isJustSig Nothing isJust_,
+      toPrimitive "Test whether an optional is absent (Nothing)." isNothingSig Nothing isNothing_,
+      toPrimitive "Map a function over an optional." mapSig Nothing map_,
+      toPrimitive "Map a partial function over a list, keeping only the present results." mapMaybeSig Nothing mapMaybe_,
+      primNoDef "maybe" "Case analysis on an optional, applying a function if present or returning a default if absent." maybeSig Nothing,
+      toPrimitive "Wrap a value in Just." pureSig Nothing pure_,
+      toPrimitive "Convert an optional to a list: Just x maps to [x], Nothing to []." toListSig Nothing toList_]
+primNoDef :: String -> String -> TermSignature -> Maybe String -> Definition
+primNoDef localName description s comments =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName)) comments
 
 sig :: TypeScheme -> TermSignature
 sig = typeSchemeToTermSignature
