@@ -5269,35 +5269,55 @@
                     "body": {
                       "lambda": {
                         "body": {
-                          "let": {
-                            "bindings": [
-                              {
-                                "name": "header",
-                                "term": {
-                                  "inject": {
-                                    "field": {
-                                      "name": "complex",
-                                      "term": {
-                                        "record": {
-                                          "fields": [
-                                            {
-                                              "name": "variant",
-                                              "term": {
-                                                "inject": {
-                                                  "field": {
-                                                    "name": "expression",
-                                                    "term": {
-                                                      "application": {"argument": {"variable": "self"}, "function": {"variable": "hydra.java.utils.javaIdentifierToJavaExpressionName"}}}},
-                                                  "typeName": "hydra.java.syntax.MethodInvocation_Variant"}}},
-                                            {"name": "typeArguments", "term": {"variable": "targs"}},
-                                            {"name": "identifier", "term": {"variable": "methodName"}}],
-                                          "typeName": "hydra.java.syntax.MethodInvocation_Complex"}}},
-                                    "typeName": "hydra.java.syntax.MethodInvocation_Header"}},
-                                "typeScheme": {"body": {"variable": "hydra.java.syntax.MethodInvocation_Header"}, "variables": []}}],
-                            "body": {
-                              "record": {
-                                "fields": [{"name": "header", "term": {"variable": "header"}}, {"name": "arguments", "term": {"variable": "args"}}],
-                                "typeName": "hydra.java.syntax.MethodInvocation"}}}},
+                          "application": {
+                            "argument": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "header",
+                                    "term": {
+                                      "inject": {
+                                        "field": {
+                                          "name": "complex",
+                                          "term": {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "variant",
+                                                  "term": {
+                                                    "inject": {
+                                                      "field": {
+                                                        "name": "expression",
+                                                        "term": {
+                                                          "application": {"argument": {"variable": "self"}, "function": {"variable": "hydra.java.utils.javaIdentifierToJavaExpressionName"}}}},
+                                                      "typeName": "hydra.java.syntax.MethodInvocation_Variant"}}},
+                                                {"name": "typeArguments", "term": {"variable": "targs"}},
+                                                {"name": "identifier", "term": {"variable": "methodName"}}],
+                                              "typeName": "hydra.java.syntax.MethodInvocation_Complex"}}},
+                                        "typeName": "hydra.java.syntax.MethodInvocation_Header"}},
+                                    "typeScheme": {"body": {"variable": "hydra.java.syntax.MethodInvocation_Header"}, "variables": []}}],
+                                "body": {
+                                  "record": {
+                                    "fields": [{"name": "header", "term": {"variable": "header"}}, {"name": "arguments", "term": {"variable": "args"}}],
+                                    "typeName": "hydra.java.syntax.MethodInvocation"}}}},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "args"},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "methodName"},
+                                        "function": {"application": {"argument": {"variable": "self"}, "function": {"variable": "hydra.java.utils.methodInvocationStatic"}}}}}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "targs"},
+                                        "function": {
+                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.java.syntax.TypeArgument"}}}}},
+                                    "function": {
+                                      "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.java.syntax.MethodInvocation"}}}}}}}}},
                         "domain": {"list": {"variable": "hydra.java.syntax.Expression"}},
                         "parameter": "args"}},
                     "domain": {"list": {"variable": "hydra.java.syntax.TypeArgument"}},
