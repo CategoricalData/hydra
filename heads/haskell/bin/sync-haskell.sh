@@ -22,7 +22,7 @@
 # Steps performed:
 #   1. Build required executables
 #   2. Export kernel + test modules to JSON (DSL → JSON)
-#   3. Verify JSON kernel + write manifest
+#   3. Verify JSON kernel (reconcile drift via update-json-kernel) + write manifest
 #   4. Generate Haskell from JSON (JSON → Haskell)
 #   5. Post-process generated files (no-op since #307)
 #   6. Run tests (unless --no-tests)
@@ -77,6 +77,7 @@ stack build \
     hydra:exe:update-json-main \
     hydra:exe:update-json-test \
     hydra:exe:update-json-manifest \
+    hydra:exe:update-json-kernel \
     hydra:exe:verify-json-kernel \
     hydra:exe:bootstrap-from-json \
     hydra:exe:digest-check
@@ -117,8 +118,47 @@ VERIFY_HASH=$(
 if step_cache_hit "$VERIFY_CACHE" "$VERIFY_HASH"; then
     echo "  JSON kernel inputs unchanged since last green verify; skipping."
 else
-    stack exec verify-json-kernel -- $RTS_FLAGS
-    step_cache_record "$VERIFY_CACHE" "$VERIFY_HASH"
+    # Verify-with-reconcile (#392). verify-json-kernel decodes each committed
+    # dist/json/hydra-kernel/.../<module>.json and compares it against what the
+    # source DSL (kernelModules) produces. On drift it exits 1 with e.g.
+    # "element count differs: N vs M". The recovery is purely mechanical: run
+    # update-json-kernel — the authoritative DSL→JSON writer for exactly this
+    # tree (kernelModules ++ defaultLibModules → dist/json/hydra-kernel/.../) —
+    # then re-verify. So do that automatically instead of forcing the human to.
+    #
+    # This is NOT a post-generation patch: it runs the generator to make
+    # dist/json match the source DSL, then re-verifies and still fails hard if
+    # drift persists (which would mean a real, non-deterministic generator bug).
+    # It mirrors the freshness-gate reconciliation pattern of #387 / f368f8220a.
+    if stack exec verify-json-kernel -- $RTS_FLAGS; then
+        step_cache_record "$VERIFY_CACHE" "$VERIFY_HASH"
+    else
+        echo ""
+        echo "  Verify reported JSON kernel drift; reconciling via update-json-kernel..."
+        echo ""
+        stack exec update-json-kernel -- $RTS_FLAGS
+        echo ""
+        echo "  Regenerated kernel JSON (drift reconciled). Changed files:"
+        git -C "$HYDRA_ROOT_DIR" diff --stat -- dist/json/hydra-kernel || true
+        echo ""
+        echo "  Re-verifying..."
+        echo ""
+        if stack exec verify-json-kernel -- $RTS_FLAGS; then
+            # Re-verify passed: recompute the cache hash over the now-regenerated
+            # JSON so the green verdict is recorded against the current inputs.
+            VERIFY_HASH=$(
+                {
+                    find "$HYDRA_ROOT_DIR/dist/json/hydra-kernel" -type f -name '*.json' 2>/dev/null
+                    find "$HYDRA_ROOT_DIR/heads/haskell/src/exec/verify-json-kernel" -type f 2>/dev/null
+                } | LC_ALL=C sort | xargs shasum -a 256 2>/dev/null | shasum -a 256 | awk '{print $1}'
+            )
+            step_cache_record "$VERIFY_CACHE" "$VERIFY_HASH"
+            echo "  Reconciled. The regenerated dist/json is left in your working"
+            echo "  tree for review/commit."
+        else
+            die "verify-json-kernel still reports drift after update-json-kernel regenerated the JSON. This is a real generator bug (non-deterministic DSL→JSON output), not reconcilable drift — investigate the kernel JSON generator before re-running."
+        fi
+    fi
 fi
 stack exec update-json-manifest
 
