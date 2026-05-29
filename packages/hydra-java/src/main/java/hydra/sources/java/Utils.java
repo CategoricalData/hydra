@@ -2608,26 +2608,37 @@ public class Utils {
                 "methodName",
                 "targs",
                 "args",
-                let("header",
-                    inject(MethodInvocation_Header.TYPE_,
-                        MethodInvocation_Header.COMPLEX,
-                        record(MethodInvocation_Complex.TYPE_,
-                            field(
-                                MethodInvocation_Complex.VARIANT,
-                                inject(MethodInvocation_Variant.TYPE_,
-                                    MethodInvocation_Variant.EXPRESSION,
-                                    apply(
-                                        ref(Utils.javaIdentifierToJavaExpressionName),
-                                        var("self")))),
-                            field(
-                                MethodInvocation_Complex.TYPE_ARGUMENTS,
-                                var("targs")),
-                            field(
-                                MethodInvocation_Complex.IDENTIFIER,
-                                var("methodName")))),
-                    record(MethodInvocation.TYPE_,
-                        field(MethodInvocation.HEADER, var("header")),
-                        field(MethodInvocation.ARGUMENTS, var("args"))))));
+                // An empty type-argument list would serialize to the illegal Java
+                // `Foo.<>method(...)`. Fall back to a plain (header-less) static
+                // invocation in that case, so callers can pass possibly-empty targs
+                // uniformly. See collectionTypeArgs (#394).
+                Logic.ifElse(
+                    Lists.null_(var("targs")),
+                    apply(
+                        ref(Utils.methodInvocationStatic),
+                        var("self"),
+                        var("methodName"),
+                        var("args")),
+                    let("header",
+                        inject(MethodInvocation_Header.TYPE_,
+                            MethodInvocation_Header.COMPLEX,
+                            record(MethodInvocation_Complex.TYPE_,
+                                field(
+                                    MethodInvocation_Complex.VARIANT,
+                                    inject(MethodInvocation_Variant.TYPE_,
+                                        MethodInvocation_Variant.EXPRESSION,
+                                        apply(
+                                            ref(Utils.javaIdentifierToJavaExpressionName),
+                                            var("self")))),
+                                field(
+                                    MethodInvocation_Complex.TYPE_ARGUMENTS,
+                                    var("targs")),
+                                field(
+                                    MethodInvocation_Complex.IDENTIFIER,
+                                    var("methodName")))),
+                        record(MethodInvocation.TYPE_,
+                            field(MethodInvocation.HEADER, var("header")),
+                            field(MethodInvocation.ARGUMENTS, var("args")))))));
 
     public static final Def nameToJavaClassType = def(
         "nameToJavaClassType",
