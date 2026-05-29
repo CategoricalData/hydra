@@ -87,6 +87,41 @@ edge cases, and noting when behavior is host-defined. The `comments` field flows
 through to the generated JSON kernel and is consumed by downstream documentation
 and host bindings.
 
+#### Writing the `comments` field
+
+Conventions established across the 13 `hydra.lib.*` namespaces (#319):
+
+- **Pick an authoritative source.** IEEE 754-2019 for floating-point operations
+  (§5 for arithmetic + rounding, §9.2 for trig / exp / log); Unicode (general
+  categories) for character predicates and case mappings; Haskell `Prelude` /
+  `Data.Char` / `Data.List` / `Data.Map.Strict` / `Data.Set` / `Data.Either` /
+  `Data.Maybe` for primitives without a normative external standard.
+- **Hydra type names are lowercase in prose** (`int32`, `float64`, `boolean`,
+  `maybe`, `set`). Use Haskell type names (`Int32`, `Double`, `Bool`, `Maybe`)
+  *only* inside `Corresponds to Haskell's <name> :: <Haskell-sig>` cross-references.
+- **Do not mention Haskell typeclasses** (`Num`, `Floating`, `Ord`, `Enum`).
+  Hydra does not have typeclasses. The closest Hydra concept is the per-type-var
+  constraint set (e.g. `'ordering'`, `'equality'`); name those explicitly when
+  relevant.
+- **Special-value notation.** IEEE 754 sentinels compact: `±0`, `±∞`, `NaN`.
+  Ranges in interval notation: `[0, π]`, `(-π/2, +π/2)`. Use unicode `±`, `∞`,
+  `π`, `√`; encode as Haskell escape sequences (`\xB1`, `\x221E`, `\x03C0`,
+  `\x221A`) to keep the source file ASCII-clean.
+- **Boundary-case discipline.** If a value behaves surprisingly (e.g.
+  `abs(minBound) = minBound`, `cos(±∞) = NaN`, `(−0) + (−0) = −0`), state it
+  explicitly with the surprising value worked out.
+- **Terminate every comment with the Haskell cross-reference**, in the form
+  `Corresponds to Haskell's <name> :: <Haskell-sig>.` No trailing prose after
+  the cross-reference. No class name (`from the Num class` and similar are
+  removed).
+- **Flag host-defined behavior** explicitly. Regex syntax, special-value
+  literal capitalization (`"NaN"` vs `"nan"`), UTF-8 replacement policy on
+  invalid bytes, etc. are typically host-defined; say so per primitive.
+- **Populate `comments` for every primitive, even trivial ones.** A one-sentence
+  comment for `negate` is still better than `Nothing` — it confirms the spec
+  is intentional rather than skipped. Modeled on the all-primitives-covered
+  pattern of `Math.hs` (45 primitives, all populated).
+
 Both helpers produce a `Definition.primitive PrimitiveDefinition` entry which is
 then enumerated alongside `Definition.term` and `Definition.type` in the module's
 `moduleDefinitions` list.
