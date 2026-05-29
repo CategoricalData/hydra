@@ -30,7 +30,6 @@ bigintToDecimal :: Packaging.PrimitiveDefinition
 bigintToDecimal =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.bigintToDecimal"),
-      Packaging.primitiveDefinitionDescription = "Convert a bigint to a decimal.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -42,14 +41,18 @@ bigintToDecimal =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeDecimal)}},
+      Packaging.primitiveDefinitionDescription = "Convert a bigint to a decimal.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 bigintToInt16 :: Packaging.PrimitiveDefinition
 bigintToInt16 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.bigintToInt16"),
-      Packaging.primitiveDefinitionDescription = "Convert a bigint to an int16 (truncating).",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -61,14 +64,18 @@ bigintToInt16 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt16))}},
+      Packaging.primitiveDefinitionDescription = "Convert a bigint to an int16 (truncating).",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 bigintToInt32 :: Packaging.PrimitiveDefinition
 bigintToInt32 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.bigintToInt32"),
-      Packaging.primitiveDefinitionDescription = "Convert a bigint to an int32 (truncating).",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -80,14 +87,18 @@ bigintToInt32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}},
+      Packaging.primitiveDefinitionDescription = "Convert a bigint to an int32 (truncating).",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 bigintToInt64 :: Packaging.PrimitiveDefinition
 bigintToInt64 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.bigintToInt64"),
-      Packaging.primitiveDefinitionDescription = "Convert a bigint to an int64 (truncating).",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -99,14 +110,18 @@ bigintToInt64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))}},
+      Packaging.primitiveDefinitionDescription = "Convert a bigint to an int64 (truncating).",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 bigintToInt8 :: Packaging.PrimitiveDefinition
 bigintToInt8 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.bigintToInt8"),
-      Packaging.primitiveDefinitionDescription = "Convert a bigint to an int8 (truncating).",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -118,14 +133,18 @@ bigintToInt8 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8))}},
+      Packaging.primitiveDefinitionDescription = "Convert a bigint to an int8 (truncating).",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 bigintToUint16 :: Packaging.PrimitiveDefinition
 bigintToUint16 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.bigintToUint16"),
-      Packaging.primitiveDefinitionDescription = "Convert a bigint to a uint16 (truncating).",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -137,14 +156,18 @@ bigintToUint16 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint16))}},
+      Packaging.primitiveDefinitionDescription = "Convert a bigint to a uint16 (truncating).",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 bigintToUint32 :: Packaging.PrimitiveDefinition
 bigintToUint32 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.bigintToUint32"),
-      Packaging.primitiveDefinitionDescription = "Convert a bigint to a uint32 (truncating).",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -156,14 +179,18 @@ bigintToUint32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint32))}},
+      Packaging.primitiveDefinitionDescription = "Convert a bigint to a uint32 (truncating).",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 bigintToUint64 :: Packaging.PrimitiveDefinition
 bigintToUint64 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.bigintToUint64"),
-      Packaging.primitiveDefinitionDescription = "Convert a bigint to a uint64 (truncating).",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -175,14 +202,18 @@ bigintToUint64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint64))}},
+      Packaging.primitiveDefinitionDescription = "Convert a bigint to a uint64 (truncating).",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 bigintToUint8 :: Packaging.PrimitiveDefinition
 bigintToUint8 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.bigintToUint8"),
-      Packaging.primitiveDefinitionDescription = "Convert a bigint to a uint8 (truncating).",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -194,14 +225,18 @@ bigintToUint8 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint8))}},
+      Packaging.primitiveDefinitionDescription = "Convert a bigint to a uint8 (truncating).",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 binaryToBytes :: Packaging.PrimitiveDefinition
 binaryToBytes =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.binaryToBytes"),
-      Packaging.primitiveDefinitionDescription = "Convert binary data to a list of byte values.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -213,14 +248,18 @@ binaryToBytes =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}},
+      Packaging.primitiveDefinitionDescription = "Convert binary data to a list of byte values.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 binaryToString :: Packaging.PrimitiveDefinition
 binaryToString =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.binaryToString"),
-      Packaging.primitiveDefinitionDescription = "Convert binary data to a UTF-8 string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -232,14 +271,18 @@ binaryToString =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Convert binary data to a UTF-8 string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 decimalToBigint :: Packaging.PrimitiveDefinition
 decimalToBigint =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.decimalToBigint"),
-      Packaging.primitiveDefinitionDescription = "Convert a decimal to a bigint (truncating).",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -251,14 +294,18 @@ decimalToBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))}},
+      Packaging.primitiveDefinitionDescription = "Convert a decimal to a bigint (truncating).",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 decimalToFloat32 :: Packaging.PrimitiveDefinition
 decimalToFloat32 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.decimalToFloat32"),
-      Packaging.primitiveDefinitionDescription = "Convert a decimal to a float32.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -270,14 +317,18 @@ decimalToFloat32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}},
+      Packaging.primitiveDefinitionDescription = "Convert a decimal to a float32.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 decimalToFloat64 :: Packaging.PrimitiveDefinition
 decimalToFloat64 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.decimalToFloat64"),
-      Packaging.primitiveDefinitionDescription = "Convert a decimal to a float64.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -289,14 +340,18 @@ decimalToFloat64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
+      Packaging.primitiveDefinitionDescription = "Convert a decimal to a float64.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 float32ToDecimal :: Packaging.PrimitiveDefinition
 float32ToDecimal =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.float32ToDecimal"),
-      Packaging.primitiveDefinitionDescription = "Convert a float32 to a decimal.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -308,14 +363,18 @@ float32ToDecimal =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeDecimal)}},
+      Packaging.primitiveDefinitionDescription = "Convert a float32 to a decimal.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 float32ToFloat64 :: Packaging.PrimitiveDefinition
 float32ToFloat64 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.float32ToFloat64"),
-      Packaging.primitiveDefinitionDescription = "Convert a float32 to a float64.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -327,14 +386,18 @@ float32ToFloat64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
+      Packaging.primitiveDefinitionDescription = "Convert a float32 to a float64.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 float64ToDecimal :: Packaging.PrimitiveDefinition
 float64ToDecimal =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.float64ToDecimal"),
-      Packaging.primitiveDefinitionDescription = "Convert a float64 to a decimal.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -346,14 +409,18 @@ float64ToDecimal =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeDecimal)}},
+      Packaging.primitiveDefinitionDescription = "Convert a float64 to a decimal.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 float64ToFloat32 :: Packaging.PrimitiveDefinition
 float64ToFloat32 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.float64ToFloat32"),
-      Packaging.primitiveDefinitionDescription = "Convert a float64 to a float32 (lossy).",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -365,14 +432,18 @@ float64ToFloat32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}},
+      Packaging.primitiveDefinitionDescription = "Convert a float64 to a float32 (lossy).",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 int16ToBigint :: Packaging.PrimitiveDefinition
 int16ToBigint =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.int16ToBigint"),
-      Packaging.primitiveDefinitionDescription = "Convert an int16 to a bigint.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -384,14 +455,18 @@ int16ToBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))}},
+      Packaging.primitiveDefinitionDescription = "Convert an int16 to a bigint.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 int32ToBigint :: Packaging.PrimitiveDefinition
 int32ToBigint =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.int32ToBigint"),
-      Packaging.primitiveDefinitionDescription = "Convert an int32 to a bigint.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -403,14 +478,18 @@ int32ToBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))}},
+      Packaging.primitiveDefinitionDescription = "Convert an int32 to a bigint.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 int64ToBigint :: Packaging.PrimitiveDefinition
 int64ToBigint =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.int64ToBigint"),
-      Packaging.primitiveDefinitionDescription = "Convert an int64 to a bigint.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -422,14 +501,18 @@ int64ToBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))}},
+      Packaging.primitiveDefinitionDescription = "Convert an int64 to a bigint.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 int8ToBigint :: Packaging.PrimitiveDefinition
 int8ToBigint =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.int8ToBigint"),
-      Packaging.primitiveDefinitionDescription = "Convert an int8 to a bigint.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -441,14 +524,18 @@ int8ToBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))}},
+      Packaging.primitiveDefinitionDescription = "Convert an int8 to a bigint.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readBigint :: Packaging.PrimitiveDefinition
 readBigint =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.readBigint"),
-      Packaging.primitiveDefinitionDescription = "Parse a string as a bigint.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -460,14 +547,18 @@ readBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint)))}},
+      Packaging.primitiveDefinitionDescription = "Parse a string as a bigint.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readBoolean :: Packaging.PrimitiveDefinition
 readBoolean =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.readBoolean"),
-      Packaging.primitiveDefinitionDescription = "Parse a string as a boolean.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -479,14 +570,18 @@ readBoolean =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeBoolean))}},
+      Packaging.primitiveDefinitionDescription = "Parse a string as a boolean.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readDecimal :: Packaging.PrimitiveDefinition
 readDecimal =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.readDecimal"),
-      Packaging.primitiveDefinitionDescription = "Parse a string as a decimal.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -498,14 +593,18 @@ readDecimal =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeDecimal))}},
+      Packaging.primitiveDefinitionDescription = "Parse a string as a decimal.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readFloat32 :: Packaging.PrimitiveDefinition
 readFloat32 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.readFloat32"),
-      Packaging.primitiveDefinitionDescription = "Parse a string as a float32.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -517,14 +616,18 @@ readFloat32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)))}},
+      Packaging.primitiveDefinitionDescription = "Parse a string as a float32.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readFloat64 :: Packaging.PrimitiveDefinition
 readFloat64 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.readFloat64"),
-      Packaging.primitiveDefinitionDescription = "Parse a string as a float64.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -536,14 +639,18 @@ readFloat64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)))}},
+      Packaging.primitiveDefinitionDescription = "Parse a string as a float64.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readInt16 :: Packaging.PrimitiveDefinition
 readInt16 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.readInt16"),
-      Packaging.primitiveDefinitionDescription = "Parse a string as an int16.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -555,14 +662,18 @@ readInt16 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt16)))}},
+      Packaging.primitiveDefinitionDescription = "Parse a string as an int16.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readInt32 :: Packaging.PrimitiveDefinition
 readInt32 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.readInt32"),
-      Packaging.primitiveDefinitionDescription = "Parse a string as an int32.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -574,14 +685,18 @@ readInt32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}},
+      Packaging.primitiveDefinitionDescription = "Parse a string as an int32.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readInt64 :: Packaging.PrimitiveDefinition
 readInt64 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.readInt64"),
-      Packaging.primitiveDefinitionDescription = "Parse a string as an int64.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -593,14 +708,18 @@ readInt64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)))}},
+      Packaging.primitiveDefinitionDescription = "Parse a string as an int64.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readInt8 :: Packaging.PrimitiveDefinition
 readInt8 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.readInt8"),
-      Packaging.primitiveDefinitionDescription = "Parse a string as an int8.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -612,14 +731,18 @@ readInt8 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8)))}},
+      Packaging.primitiveDefinitionDescription = "Parse a string as an int8.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readString :: Packaging.PrimitiveDefinition
 readString =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.readString"),
-      Packaging.primitiveDefinitionDescription = "Parse a string-literal token to a plain string (Just) or Nothing on parse failure.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -631,14 +754,18 @@ readString =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString))}},
+      Packaging.primitiveDefinitionDescription = "Parse a string-literal token to a plain string (Just) or Nothing on parse failure.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readUint16 :: Packaging.PrimitiveDefinition
 readUint16 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.readUint16"),
-      Packaging.primitiveDefinitionDescription = "Parse a string as a uint16.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -650,14 +777,18 @@ readUint16 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint16)))}},
+      Packaging.primitiveDefinitionDescription = "Parse a string as a uint16.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readUint32 :: Packaging.PrimitiveDefinition
 readUint32 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.readUint32"),
-      Packaging.primitiveDefinitionDescription = "Parse a string as a uint32.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -669,14 +800,18 @@ readUint32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint32)))}},
+      Packaging.primitiveDefinitionDescription = "Parse a string as a uint32.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readUint64 :: Packaging.PrimitiveDefinition
 readUint64 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.readUint64"),
-      Packaging.primitiveDefinitionDescription = "Parse a string as a uint64.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -688,14 +823,18 @@ readUint64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint64)))}},
+      Packaging.primitiveDefinitionDescription = "Parse a string as a uint64.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readUint8 :: Packaging.PrimitiveDefinition
 readUint8 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.readUint8"),
-      Packaging.primitiveDefinitionDescription = "Parse a string as a uint8.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -707,14 +846,18 @@ readUint8 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint8)))}},
+      Packaging.primitiveDefinitionDescription = "Parse a string as a uint8.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showBigint :: Packaging.PrimitiveDefinition
 showBigint =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.showBigint"),
-      Packaging.primitiveDefinitionDescription = "Render a bigint as a string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -726,14 +869,18 @@ showBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Render a bigint as a string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showBoolean :: Packaging.PrimitiveDefinition
 showBoolean =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.showBoolean"),
-      Packaging.primitiveDefinitionDescription = "Render a boolean as a string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -745,14 +892,18 @@ showBoolean =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Render a boolean as a string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showDecimal :: Packaging.PrimitiveDefinition
 showDecimal =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.showDecimal"),
-      Packaging.primitiveDefinitionDescription = "Render a decimal as a string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -764,14 +915,18 @@ showDecimal =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Render a decimal as a string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showFloat32 :: Packaging.PrimitiveDefinition
 showFloat32 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.showFloat32"),
-      Packaging.primitiveDefinitionDescription = "Render a float32 as a string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -783,14 +938,18 @@ showFloat32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Render a float32 as a string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showFloat64 :: Packaging.PrimitiveDefinition
 showFloat64 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.showFloat64"),
-      Packaging.primitiveDefinitionDescription = "Render a float64 as a string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -802,14 +961,18 @@ showFloat64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Render a float64 as a string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showInt16 :: Packaging.PrimitiveDefinition
 showInt16 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.showInt16"),
-      Packaging.primitiveDefinitionDescription = "Render an int16 as a string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -821,14 +984,18 @@ showInt16 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Render an int16 as a string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showInt32 :: Packaging.PrimitiveDefinition
 showInt32 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.showInt32"),
-      Packaging.primitiveDefinitionDescription = "Render an int32 as a string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -840,14 +1007,18 @@ showInt32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Render an int32 as a string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showInt64 :: Packaging.PrimitiveDefinition
 showInt64 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.showInt64"),
-      Packaging.primitiveDefinitionDescription = "Render an int64 as a string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -859,14 +1030,18 @@ showInt64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Render an int64 as a string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showInt8 :: Packaging.PrimitiveDefinition
 showInt8 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.showInt8"),
-      Packaging.primitiveDefinitionDescription = "Render an int8 as a string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -878,14 +1053,18 @@ showInt8 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Render an int8 as a string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showString :: Packaging.PrimitiveDefinition
 showString =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.showString"),
-      Packaging.primitiveDefinitionDescription = "Render a string as a string-literal token (escaped and quoted).",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -897,14 +1076,18 @@ showString =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Render a string as a string-literal token (escaped and quoted).",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showUint16 :: Packaging.PrimitiveDefinition
 showUint16 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.showUint16"),
-      Packaging.primitiveDefinitionDescription = "Render a uint16 as a string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -916,14 +1099,18 @@ showUint16 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Render a uint16 as a string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showUint32 :: Packaging.PrimitiveDefinition
 showUint32 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.showUint32"),
-      Packaging.primitiveDefinitionDescription = "Render a uint32 as a string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -935,14 +1122,18 @@ showUint32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Render a uint32 as a string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showUint64 :: Packaging.PrimitiveDefinition
 showUint64 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.showUint64"),
-      Packaging.primitiveDefinitionDescription = "Render a uint64 as a string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -954,14 +1145,18 @@ showUint64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Render a uint64 as a string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showUint8 :: Packaging.PrimitiveDefinition
 showUint8 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.showUint8"),
-      Packaging.primitiveDefinitionDescription = "Render a uint8 as a string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -973,14 +1168,18 @@ showUint8 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Render a uint8 as a string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 stringToBinary :: Packaging.PrimitiveDefinition
 stringToBinary =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.stringToBinary"),
-      Packaging.primitiveDefinitionDescription = "Convert a UTF-8 string to binary data.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -992,14 +1191,18 @@ stringToBinary =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBinary)}},
+      Packaging.primitiveDefinitionDescription = "Convert a UTF-8 string to binary data.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 uint16ToBigint :: Packaging.PrimitiveDefinition
 uint16ToBigint =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.uint16ToBigint"),
-      Packaging.primitiveDefinitionDescription = "Convert a uint16 to a bigint.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -1011,14 +1214,18 @@ uint16ToBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))}},
+      Packaging.primitiveDefinitionDescription = "Convert a uint16 to a bigint.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 uint32ToBigint :: Packaging.PrimitiveDefinition
 uint32ToBigint =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.uint32ToBigint"),
-      Packaging.primitiveDefinitionDescription = "Convert a uint32 to a bigint.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -1030,14 +1237,18 @@ uint32ToBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))}},
+      Packaging.primitiveDefinitionDescription = "Convert a uint32 to a bigint.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 uint64ToBigint :: Packaging.PrimitiveDefinition
 uint64ToBigint =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.uint64ToBigint"),
-      Packaging.primitiveDefinitionDescription = "Convert a uint64 to a bigint.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -1049,14 +1260,18 @@ uint64ToBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))}},
+      Packaging.primitiveDefinitionDescription = "Convert a uint64 to a bigint.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 uint8ToBigint :: Packaging.PrimitiveDefinition
 uint8ToBigint =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.literals.uint8ToBigint"),
-      Packaging.primitiveDefinitionDescription = "Convert a uint8 to a bigint.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -1068,6 +1283,11 @@ uint8ToBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))}},
+      Packaging.primitiveDefinitionDescription = "Convert a uint8 to a bigint.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
