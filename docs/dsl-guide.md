@@ -77,8 +77,8 @@ import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
 
--- Define a record type binding
-person :: Binding
+-- Define a record type definition
+person :: TypeDefinition
 person = define "Person" $
   doc "A person with a name and age" $
   T.record [
@@ -86,13 +86,13 @@ person = define "Person" $
     "age">: T.int32]
 
 -- Define a function type using the ~> operator
-greet :: Binding
+greet :: TypeDefinition
 greet = define "Greet" $
   person ~> T.string  -- Person -> String
 ```
 
-**Note**: Type modules define `Binding` values using `define`. The operators `>:`, `@@`, and `~>`
-are imported unqualified for cleaner syntax. Other type bindings can be referenced directly
+**Note**: Type modules define `TypeDefinition` values using `define`. The operators `>:`, `@@`, and `~>`
+are imported unqualified for cleaner syntax. Other type definitions can be referenced directly
 (like `person` above) thanks to the `AsType` type class.
 
 ### Example 2: Constructing terms
@@ -641,7 +641,7 @@ import qualified Hydra.Dsl.Meta.Types as T
 ### Defining types in modules
 
 When you define types in Hydra kernel modules, you use `defineType` (from `Hydra.Dsl.Bootstrap`)
-to create type bindings. These bindings can reference each other directly.
+to create type definitions. These definitions can reference each other directly.
 
 ```haskell
 import           Hydra.Kernel
@@ -654,23 +654,23 @@ import qualified Hydra.Dsl.Types as T
 ns :: ModuleName
 ns = ModuleName "myapp.types"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
--- Define type bindings
-person :: Binding
+-- Define type definitions
+person :: TypeDefinition
 person = define "Person" $
   doc "A person with a name and age" $
   T.record [
     "name">: T.string,
     "age">: T.int32]
 
--- Reference other bindings directly (no wrapper needed)
-company :: Binding
+-- Reference other definitions directly (no wrapper needed)
+company :: TypeDefinition
 company = define "Company" $
   T.record [
     "name">: T.string,
-    "employees">: T.list person]  -- Direct reference to 'person' binding
+    "employees">: T.list person]  -- Direct reference to 'person' definition
 ```
 
 When this module is code-generated (e.g., to Haskell), it produces:
@@ -1013,23 +1013,23 @@ T.forAlls ["a", "b"] $ "a" ~> "b" ~> T.pair "a" "b"
 
 ### Referencing other type bindings
 
-In kernel type modules, types are defined as `Binding` values. These can be referenced
+In kernel type modules, types are defined as `TypeDefinition` values. These can be referenced
 directly in type expressions without any wrapper function, thanks to the `AsType` type class:
 
 ```haskell
 -- Example from Hydra.Sources.Kernel.Types.Core
-name :: Binding
+name :: TypeDefinition
 name = define "Name" $ T.wrap T.string
 
-field :: Binding
+field :: TypeDefinition
 field = define "Field" $
   T.record [
-    "name">: name,      -- Reference to another Binding (no 'use' needed)
+    "name">: name,      -- Reference to another TypeDefinition (no wrapper needed)
     "term">: term]      -- Self-reference also works
 ```
 
-The `AsType` class provides implicit coercion from `Binding`, `Type`, and `String` to `Type`:
-- `Binding` → `TypeVariable` with the binding's name
+The `AsType` class provides implicit coercion from `TypeDefinition`, `Type`, and `String` to `Type`:
+- `TypeDefinition` → `TypeVariable` with the definition's name
 - `Type` → identity (no conversion)
 - `String` → `TypeVariable` with the string as name
 
