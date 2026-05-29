@@ -15,7 +15,6 @@ import Hydra.Testing (TestGroup(..))
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
 import Hydra.Sources.Libraries
-import qualified Hydra.Context as Context
 import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Digest as Digest
 import qualified Hydra.Dsls as Dsls
@@ -50,13 +49,16 @@ import Data.Char (isAlphaNum, toUpper)
 showError :: Error.Error -> String
 showError = ShowError.error
 
+-- | An initial InferenceContext (fresh-variable counter at 0, empty subterm-path trace).
+-- Note: emptyInferenceContext is now re-exported from Hydra.Kernel via Hydra.Lexical.
+
 -- | Generate source files and write them to disk.
 -- Returns the relative paths the run wrote (joinable with the basePath argument
 -- to get full paths). Callers that only care about the count can take 'length'
 -- of the result; callers driving stale-output pruning (#357) use the path set
 -- as the keep-set for their post-generation walk.
 generateSources
-  :: (Module -> [Definition] -> Context.Context -> Graph -> Either Error.Error (M.Map FilePath String))
+  :: (Module -> [Definition] -> InferenceContext -> Graph -> Either Error.Error (M.Map FilePath String))
   -> Language
   -> Bool  -- ^ doInfer
   -> Bool  -- ^ doExpand
@@ -76,7 +78,7 @@ generateSources = generateSourcesWithTransform id
 -- within scalac's stack-friendly threshold.
 generateSourcesWithTransform
   :: (String -> String)  -- ^ Per-file content transform (id for no-op)
-  -> (Module -> [Definition] -> Context.Context -> Graph -> Either Error.Error (M.Map FilePath String))
+  -> (Module -> [Definition] -> InferenceContext -> Graph -> Either Error.Error (M.Map FilePath String))
   -> Language
   -> Bool
   -> Bool
@@ -87,7 +89,7 @@ generateSourcesWithTransform
   -> [Module]
   -> IO [FilePath]
 generateSourcesWithTransform transform printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings basePath universeModules modulesToGenerate = do
-    let cx = Context.Context [] [] M.empty
+    let cx = emptyInferenceContext
     case CodeGeneration.generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bootstrapGraph universeModules modulesToGenerate cx of
       Left err -> fail $ "Failed to generate source files: " ++ showError err
       Right files -> do
@@ -159,7 +161,7 @@ moduleAsBindings = map definitionAsBinding . moduleDefinitions
 -- | Generate and write the lexicon file (IO wrapper).
 writeLexicon :: FilePath -> [Module] -> IO ()
 writeLexicon path kernelModules = do
-  case CodeGeneration.inferAndGenerateLexicon (Context [] [] M.empty) bootstrapGraph kernelModules of
+  case CodeGeneration.inferAndGenerateLexicon emptyInferenceContext bootstrapGraph kernelModules of
     Left err -> fail $ "Lexicon generation failed: " ++ showError err
     Right content -> do
       writeFile path content
@@ -168,9 +170,9 @@ writeLexicon path kernelModules = do
 ----------------------------------------
 
 -- | IO wrapper for generateCoderModules. Evaluates the Either and handles errors.
-generateCoderModulesIO :: (Context.Context -> Graph -> Module -> Either Error.Error (Maybe Module)) -> String -> [Module] -> [Module] -> IO [Module]
+generateCoderModulesIO :: (InferenceContext -> Graph -> Module -> Either Error.Error (Maybe Module)) -> String -> [Module] -> [Module] -> IO [Module]
 generateCoderModulesIO codec label universeModules typeModules = do
-    let cx = Context.Context [] [] M.empty
+    let cx = emptyInferenceContext
     case CodeGeneration.generateCoderModules codec bootstrapGraph universeModules typeModules cx of
       Left err -> fail $ "Failed to generate " ++ label ++ " modules: " ++ showError err
       Right results -> return results
@@ -210,7 +212,7 @@ generateDslModules = generateCoderModulesIO Dsls.dslModule "DSL"
 -- | IO wrapper for inferModules. Evaluates the Either and handles errors.
 inferModulesIO :: [Module] -> [Module] -> IO [Module]
 inferModulesIO universeMods targetMods = do
-  case CodeGeneration.inferModules (Context [] [] M.empty) bootstrapGraph universeMods targetMods of
+  case CodeGeneration.inferModules emptyInferenceContext bootstrapGraph universeMods targetMods of
     Left err -> fail $ "Type inference failed: " ++ showError err
     Right mods -> return mods
 
@@ -220,7 +222,7 @@ inferModulesIO universeMods targetMods = do
 -- using the typed universe as context.
 inferModulesGivenIO :: [Module] -> [Module] -> IO [Module]
 inferModulesGivenIO universeMods targetMods = do
-  case CodeGeneration.inferModulesGiven (Context [] [] M.empty) bootstrapGraph universeMods targetMods of
+  case CodeGeneration.inferModulesGiven emptyInferenceContext bootstrapGraph universeMods targetMods of
     Left err -> fail $ "Incremental type inference failed: " ++ showError err
     Right mods -> return mods
 
@@ -250,6 +252,21 @@ inferAndWriteByPackage :: FilePath -> [Module] -> [Module] -> IO ()
 inferAndWriteByPackage distJsonRoot universeMods mods =
   inferAndWriteByPackageSeeded distJsonRoot M.empty M.empty [] universeMods mods
 
+-- | Source-set-aware variant of 'inferAndWriteByPackageSeeded'. The main
+-- path writes into src/main/json (srcSet = "main"); the test-side writer
+-- passes srcSet = "test" so the same per-package driver routes inferred
+-- modules into src/test/json. Everything else (seed maps, topo iteration,
+-- bounded-memory accumulator) is identical.
+inferAndWriteByPackageSeeded
+  :: FilePath
+  -> M.Map Name TypeScheme
+  -> M.Map Name TypeScheme
+  -> [Module]
+  -> [Module]
+  -> [Module]
+  -> IO ()
+inferAndWriteByPackageSeeded = inferAndWriteByPackageSeededFor "main"
+
 -- | As 'inferAndWriteByPackage' but with a 'seedSchemes' map of
 -- 'Name -> TypeScheme' for bindings that are already typed (e.g. clean
 -- modules loaded from JSON with their TypeSchemes baked in). The seed
@@ -269,8 +286,9 @@ inferAndWriteByPackage distJsonRoot universeMods mods =
 -- floor so GC can reclaim their term bodies. Cf. the prior shape, which
 -- retained every prior package's full payload (term bodies, annotations,
 -- everything) — fine for ~10 modules dirty, OOM at -M6G for ~250.
-inferAndWriteByPackageSeeded
-  :: FilePath
+inferAndWriteByPackageSeededFor
+  :: String                 -- ^ source set ("main" | "test"); selects src/<set>/json
+  -> FilePath
   -> M.Map Name TypeScheme  -- ^ accumulated term-binding schemes from prior packages
   -> M.Map Name TypeScheme  -- ^ accumulated type-def schemes from prior packages
   -> [Module]               -- ^ schema-context-only modules (e.g. clean modules
@@ -281,8 +299,8 @@ inferAndWriteByPackageSeeded
                             --   incremental path; the full set in the cold path).
   -> [Module]               -- ^ target subset to re-infer + write
   -> IO ()
-inferAndWriteByPackageSeeded
-    distJsonRoot seedBindingSchemes seedSchemaSchemes schemaContextMods universeMods mods = do
+inferAndWriteByPackageSeededFor
+    srcSet distJsonRoot seedBindingSchemes seedSchemaSchemes schemaContextMods universeMods mods = do
   -- Build the JSON-write schemaMap ONCE, up front, from the full module
   -- universe (schemaContextMods + universeMods). The encoder needs every
   -- universe type reachable from this map — in particular
@@ -350,7 +368,7 @@ inferAndWriteByPackageSeeded
         inferred <- if null inferTargets
           then return []
           else case inferModulesGivenSchemes
-                    (Context [] [] M.empty) bootstrapGraph
+                    (InferenceContext 0 []) bootstrapGraph
                     accBindingSchemes accSchemaSchemes
                     pkgUniverse inferTargets of
                   Left err -> fail $ "Per-package inference failed for "
@@ -369,7 +387,7 @@ inferAndWriteByPackageSeeded
           -- other cross-package schema types resolve correctly. Without
           -- this, prior packages' types are absent from the per-iteration
           -- schemaMap and Maybe String fields mis-serialize as arrays.
-          let pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
+          let pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> srcSet FP.</> "json"
           putStrLn $ "  " ++ pkg ++ ": " ++ show (length toWrite)
             ++ " modules -> " ++ pkgDir
           mapM_ (writeModuleJson schemaMap pkgDir) toWrite
@@ -429,7 +447,7 @@ normalizeTypeScheme ts =
 -- graphSchemaTypes is augmented with the caller's accumulated type-def
 -- schemes, and (c) the universe is sized to the current package only.
 inferModulesGivenSchemes
-  :: Context
+  :: InferenceContext
   -> Graph
   -> M.Map Name TypeScheme  -- ^ accumulated term-binding schemes from prior packages
   -> M.Map Name TypeScheme  -- ^ accumulated type-def schemes (graphSchemaTypes)
@@ -614,6 +632,111 @@ writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
             refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
             refreshPerPackageDigests distJsonRoot universeMods mods
 
+-- | Test-side digest anchor. The test universe routes entirely to
+-- hydra-kernel today (every test namespace is hydra.test.*), so its
+-- freshness cache lives at the per-package test path
+-- dist/json/hydra-kernel/build/test/digest.json — the parallel of the
+-- main path's per-package build/main/digest.json. We use the package
+-- the targets actually route to (rather than hardcoding hydra-kernel)
+-- so the anchor follows the routing table if test namespaces ever split
+-- across packages.
+testDigestAnchor :: FilePath -> [Module] -> FilePath
+testDigestAnchor distJsonRoot testMods =
+  let pkg = case map fst (groupByPackage testMods) of
+              (p:_) -> p
+              []    -> "hydra-kernel"
+  in perPackageDigestPathFor "test" distJsonRoot pkg
+
+-- | Write test-suite modules to JSON via the per-package incremental
+-- inference driver (#395), the test-side analogue of
+-- 'writeModulesJsonPackageSplit'.
+--
+-- The flat-universe path this replaces ('writeModulesJson') ran one
+-- Algorithm-W pass over the entire main+test universe (~210 + 58
+-- modules) on every cache miss — ~17 min wall, ~8 GB RSS — because any
+-- change anywhere in the kernel-types or coder DSL universe invalidates
+-- the test digest. See #395.
+--
+-- Structurally the test path is simpler than the main path: a change to
+-- test sources never re-infers main modules, so there's no dirty/clean
+-- partitioning or transitive-closure step. The main universe is *always*
+-- typed context. We therefore:
+--
+--   1. Load the already-typed main modules from their src/main/json
+--      (they carry inferred TypeSchemes) and extract (Name, TypeScheme)
+--      seed maps — the same maps 'tryIncrementalInference' builds for the
+--      main path. Carrying Maps (not [Module]) lets GC reclaim the main
+--      term bodies once inference has consulted the schemes.
+--   2. Run the per-package driver over *only* the test modules, seeded
+--      with those maps, writing into src/test/json and refreshing the
+--      test digest.
+--
+-- On a cache hit (test universe hashes unchanged), skip entirely — the
+-- ~0.8s fast path. If the main-JSON seed load fails for any reason, fall
+-- back to the old flat 'writeModulesJson' so we never regress
+-- correctness, only performance.
+--
+-- @mainMods@ is the typed context universe (mainModules); @testMods@ is
+-- the set to infer + write. The cache key hashes the union, so a main
+-- source change still invalidates the test cache (a test module may
+-- reference the changed binding) — but the *re-inference* only runs over
+-- the test modules, against main schemes loaded from JSON.
+writeTestModulesJson :: FilePath -> [Module] -> [Module] -> IO ()
+writeTestModulesJson distJsonRoot mainMods testMods = do
+  let universeMods = mainMods ++ testMods
+      digestFile   = testDigestAnchor distJsonRoot testMods
+      testPaths    = [ distJsonRoot FP.</> pkg FP.</> "src" FP.</> "test" FP.</> "json"
+                                     FP.</> CodeGeneration.namespaceToPath (moduleName m) ++ ".json"
+                     | (pkg, pkgMods) <- groupByPackage testMods, m <- pkgMods ]
+  hit <- checkCacheHit digestFile universeMods testPaths
+  case hit of
+    Just _ ->
+      putStrLn $ "  Cache hit (" ++ show (length universeMods)
+        ++ " modules clean); skipping test inference and writes."
+    Nothing -> do
+      -- Load the typed main universe from its src/main/json. These carry
+      -- the inferred TypeSchemes that seed test-module inference.
+      let mainNs = map moduleName mainMods
+      loaded <- E.try (loadCleanFromJson distJsonRoot universeMods mainNs)
+                :: IO (Either E.SomeException [Module])
+      case loaded of
+        Left e -> do
+          putStrLn $ "  Test incremental seed-load failed (" ++ show e
+            ++ "); falling back to flat-universe inference."
+          flatFallback universeMods digestFile
+        Right mainLoaded -> do
+          let seedBindingSchemes = M.fromList
+                [ (termDefinitionName td, ts)
+                | m <- mainLoaded
+                , DefinitionTerm td <- moduleDefinitions m
+                , Just ts <- [termSignatureToTypeScheme <$> termDefinitionSignature td]
+                ]
+              seedSchemaSchemes = M.fromList
+                [ (typeDefinitionName td, normalizeTypeScheme (typeDefinitionTypeScheme td))
+                | m <- mainLoaded
+                , DefinitionType td <- moduleDefinitions m
+                ]
+          putStrLn $ "  Per-package test inference: "
+            ++ show (length testMods) ++ " test modules / "
+            ++ show (M.size seedBindingSchemes) ++ " seeded term schemes / "
+            ++ show (M.size seedSchemaSchemes) ++ " seeded type schemas"
+          -- Driver iteration universe = testMods only; the seed Maps carry
+          -- the main types so cross-package refs resolve. mainLoaded is the
+          -- schema-context-only set so the JSON-write schemaMap (built once)
+          -- covers main types like hydra.packaging.Module.
+          inferAndWriteByPackageSeededFor "test" distJsonRoot
+            seedBindingSchemes seedSchemaSchemes
+            mainLoaded testMods testMods
+          refreshDigestAt digestFile universeMods
+  where
+    -- Last-resort flat path: identical inference to the pre-#395 code,
+    -- writing into src/test/json per package and refreshing the test
+    -- digest. Only reached if the main-JSON seed load throws.
+    flatFallback universeMods digestFile = do
+      mods' <- inferModulesIO universeMods testMods
+      writePackageSplitJsonFor "test" distJsonRoot universeMods universeMods mods'
+      refreshDigestAt digestFile universeMods
+
 -- | Incremental inference result. 'IncrementalFull mods' means all
 -- modules need a fresh write; 'IncrementalPartial all dirty' means
 -- only the dirty subset needs writing (the clean modules' on-disk
@@ -642,7 +765,13 @@ data IncrementalResult
 -- 'toWrite' is the subset that actually needs its JSON rewritten
 -- (full set on a cache miss; dirty subset on an incremental hit).
 writePackageSplitJson :: FilePath -> [Module] -> [Module] -> [Module] -> IO ()
-writePackageSplitJson distJsonRoot universeMods universeForSchema toWrite = do
+writePackageSplitJson = writePackageSplitJsonFor "main"
+
+-- | As 'writePackageSplitJson' but writes into the given source set's
+-- tree (dist/json/<pkg>/src/<set>/json). Used by the test-side writer
+-- to route into src/test/json; the main path uses srcSet = "main".
+writePackageSplitJsonFor :: String -> FilePath -> [Module] -> [Module] -> [Module] -> IO ()
+writePackageSplitJsonFor srcSet distJsonRoot universeMods universeForSchema toWrite = do
   -- Seed the graph's schema with the broader of the two inputs so
   -- hydra.packaging.Module (and every other universe type) is always
   -- reachable from the schemaMap, even when 'toWrite' is a narrow set
@@ -651,7 +780,7 @@ writePackageSplitJson distJsonRoot universeMods universeForSchema toWrite = do
       schemaMap = buildSchemaMap graph
       groups = groupByPackage toWrite
   CM.forM_ groups $ \(pkg, pkgMods) -> do
-    let pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
+    let pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> srcSet FP.</> "json"
     putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules -> " ++ pkgDir
     mapM_ (writeModuleJson schemaMap pkgDir) pkgMods
 
@@ -662,14 +791,20 @@ writePackageSplitJson distJsonRoot universeMods universeForSchema toWrite = do
 packageSplitDigestAnchor :: FilePath -> FilePath
 packageSplitDigestAnchor distJsonRoot = distJsonRoot FP.</> "build" FP.</> "digest.json"
 
--- | Per-package main-source-set digest path:
--- dist/json/<pkg>/build/main/digest.json. The digest covers the DSL
--- sources whose namespaces route to <pkg> and live in the main source
--- set. The parallel test path is at <pkg>/build/test/digest.json.
--- See #379 for the build/ layout rationale.
+-- | Per-package digest path for a given source set:
+-- dist/json/<pkg>/build/<set>/digest.json. The digest covers the DSL
+-- sources whose namespaces route to <pkg> and live in that source set.
+-- The main path is build/main/digest.json; the parallel test path is
+-- build/test/digest.json. See #379 for the build/ layout rationale.
+perPackageDigestPathFor :: String -> FilePath -> String -> FilePath
+perPackageDigestPathFor srcSet distJsonRoot pkg =
+  distJsonRoot FP.</> pkg FP.</> "build" FP.</> srcSet FP.</> "digest.json"
+
+-- | Per-package main-source-set digest path. Thin wrapper over
+-- 'perPackageDigestPathFor' with srcSet = "main", preserving existing
+-- main-path call sites.
 perPackageDigestPath :: FilePath -> String -> FilePath
-perPackageDigestPath distJsonRoot pkg =
-  distJsonRoot FP.</> pkg FP.</> "build" FP.</> "main" FP.</> "digest.json"
+perPackageDigestPath = perPackageDigestPathFor "main"
 
 -- | Read a package's declared dependencies from packages/<pkg>/package.json.
 -- Returns the values of the top-level "dependencies" array, or [] if the

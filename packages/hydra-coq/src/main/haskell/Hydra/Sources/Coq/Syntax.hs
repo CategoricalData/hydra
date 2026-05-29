@@ -19,9 +19,6 @@ ns = ModuleName "hydra.coq.syntax"
 define :: String -> Type -> Binding
 define = defineType ns
 
-coq :: String -> Type
-coq = typeref ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -195,6 +192,38 @@ cofixWith = define "CofixWith" $ T.record [
   "with">: nonemptyList $ coq "CofixBody",
   "for">: T.maybe $ coq "Ident"]
 
+comment :: Binding
+comment = define "Comment" $
+  doc "A Coq comment (* ... *)" $
+  T.wrap T.string
+
+constructor :: Binding
+constructor = define "Constructor" $
+  doc "A constructor in an Inductive definition" $
+  T.record [
+    "name">: coq "Ident",
+    "binders">: T.list $ coq "Binder",
+    "type">: T.maybe $ coq "Type"]
+
+coq :: String -> Type
+coq = typeref ns
+
+definition :: Binding
+definition = define "Definition" $
+  doc "A Definition or Let command: Definition name binders : type := term." $
+  T.record [
+    "locality">: T.maybe $ coq "Locality",
+    "name">: coq "Ident",
+    "binders">: T.list $ coq "Binder",
+    "type">: T.maybe $ coq "Type",
+    "body">: coq "Term"]
+
+document :: Binding
+document = define "Document" $
+  doc "A complete Coq .v file" $
+  T.record [
+    "sentences">: T.list $ coq "Sentence"]
+
 equation :: Binding
 equation = define "Equation" $ T.record [
   "pattern">: nonemptyList $ nonemptyList $ coq "Pattern",
@@ -215,11 +244,6 @@ existentialVariableVariant = define "ExistentialVariableVariant" $ T.union [
 fieldIdent :: Binding
 fieldIdent = define "FieldIdent" $ T.wrap $ coq "Ident"
 
-fix_ :: Binding
-fix_ = define "Fix" $ T.union [
-  "decl">: coq "Fix_Decl",
-  "qual">: T.maybe $ coq "Fix_Qual"]
-
 fixAnnot :: Binding
 fixAnnot = define "FixAnnot" $ T.union [
   "struct">: coq "Ident",
@@ -237,6 +261,16 @@ fixAnnot_Wf = define "FixAnnot_Wf" $ T.record [
   "term">: coq "OneTerm",
   "ident">: coq "Ident"]
 
+fixWith :: Binding
+fixWith = define "FixWith" $ T.record [
+  "decls">: nonemptyList $ coq "Fix_Decl",
+  "for">: T.maybe $ coq "Ident"]
+
+fix_ :: Binding
+fix_ = define "Fix" $ T.union [
+  "decl">: coq "Fix_Decl",
+  "qual">: T.maybe $ coq "Fix_Qual"]
+
 fix_Decl :: Binding
 fix_Decl = define "Fix_Decl" $ T.record [
   "ident">: coq "Ident",
@@ -250,20 +284,27 @@ fix_Qual = define "Fix_Qual" $ T.union [
   "in">: coq "Term",
   "with">: coq "FixWith"]
 
-fixWith :: Binding
-fixWith = define "FixWith" $ T.record [
-  "decls">: nonemptyList $ coq "Fix_Decl",
-  "for">: T.maybe $ coq "Ident"]
-
-forall_ :: Binding
-forall_ = define "Forall" $ T.record [
-  "binders">: coq "OpenBinders",
-  "type">: coq "Type"]
+fixpointDefinition :: Binding
+fixpointDefinition = define "FixpointDefinition" $
+  doc "A Fixpoint command for recursive definitions" $
+  T.record [
+    "locality">: T.maybe $ coq "Locality",
+    "name">: coq "Ident",
+    "binders">: T.list $ coq "Binder",
+    "annot">: T.maybe $ coq "FixAnnot",
+    "type">: T.maybe $ coq "Type",
+    "body">: coq "Term",
+    "with">: T.list $ coq "Fix_Decl"]
 
 forallOrFun :: Binding
 forallOrFun = define "ForallOrFun" $ T.union [
   "forall">: coq "Forall",
   "fun">: coq "Fun"]
+
+forall_ :: Binding
+forall_ = define "Forall" $ T.record [
+  "binders">: coq "OpenBinders",
+  "type">: coq "Type"]
 
 fun :: Binding
 fun = define "Fun" $ T.record [
@@ -313,12 +354,29 @@ implicitBinders = define "ImplicitBinders" $
       doc "The second form, with square brackets, makes name a non-maximally inserted implicit argument." $
       coq "TypeBinders"]
 
-let_ :: Binding
-let_ = define "Let" $
-  doc "A let-in definition" $
+importQualification :: Binding
+importQualification = define "ImportQualification" $
+  doc "Qualification for Require/Import commands" $
+  T.union [
+    "import">: T.unit,
+    "export">: T.unit]
+
+inductiveBody :: Binding
+inductiveBody = define "InductiveBody" $
+  doc "A single body in an Inductive definition (supports mutual induction via 'with')" $
   T.record [
-    "bindings">: coq "LetBindings",
-    "in">: coq "Term"]
+    "name">: coq "Ident",
+    "binders">: T.list $ coq "Binder",
+    "type">: T.maybe $ coq "Type",
+    "constructors">: T.list $ coq "Constructor"]
+
+inductiveDefinition :: Binding
+inductiveDefinition = define "InductiveDefinition" $
+  doc "An Inductive or CoInductive definition with one or more mutually inductive bodies" $
+  T.record [
+    "locality">: T.maybe $ coq "Locality",
+    "coinductive">: T.boolean,
+    "bodies">: nonemptyList $ coq "InductiveBody"]
 
 letBinder :: Binding
 letBinder = define "LetBinder" $
@@ -332,11 +390,6 @@ letBindings :: Binding
 letBindings = define "LetBindings" $ T.union [
   "named">: coq "LetNamed",
   "destructuring">: coq "LetDestructuring"]
-
-letNamed :: Binding
-letNamed = define "LetNamed" $ T.record [
-  "binder">: coq "LetBinder",
-  "binders">: T.list $ coq "Binder"]
 
 letDestructuring :: Binding
 letDestructuring = define "LetDestructuring" $ T.union [
@@ -363,12 +416,38 @@ letDestructuring_Variant3 = define "LetDestructuring_Variant3" $ T.record [
   "term">: coq "Term",
   "return">: coq "Term100"]
 
+letNamed :: Binding
+letNamed = define "LetNamed" $ T.record [
+  "binder">: coq "LetBinder",
+  "binders">: T.list $ coq "Binder"]
+
+let_ :: Binding
+let_ = define "Let" $
+  doc "A let-in definition" $
+  T.record [
+    "bindings">: coq "LetBindings",
+    "in">: coq "Term"]
+
+locality :: Binding
+locality = define "Locality" $
+  doc "Local or Global qualifier for commands" $
+  T.union [
+    "local">: T.unit,
+    "global">: T.unit]
+
 match :: Binding
 match = define "Match" $ T.record [
   "caseItems">: nonemptyList $ coq "CaseItem",
   "return">: T.maybe $ coq "Term100",
   "pipe">: T.boolean,
   "equations">: T.list $ coq "Equation"]
+
+moduleDefinition :: Binding
+moduleDefinition = define "ModuleDefinition" $
+  doc "A Module ... End block" $
+  T.record [
+    "name">: coq "Ident",
+    "sentences">: T.list $ coq "Sentence"]
 
 name_ :: Binding
 name_ = define "Name" $ T.wrap $ T.maybe $ coq "Ident"
@@ -388,6 +467,15 @@ normalApplication = define "NormalApplication" $ T.record [
   "lhs">: coq "Term1",
   "rhs">: nonemptyList $ coq "Arg"]
 
+notationDeclaration :: Binding
+notationDeclaration = define "NotationDeclaration" $
+  doc "A Notation declaration" $
+  T.record [
+    "notation">: coq "String",
+    "definition">: coq "Term",
+    "level">: T.maybe $ coq "Natural",
+    "associativity">: T.maybe T.string]
+
 number :: Binding
 number = define "Number" $ T.wrap T.float64
 
@@ -400,11 +488,6 @@ openBinders :: Binding
 openBinders = define "OpenBinders" $ T.union [
   "type">: coq "TypeBinders",
   "binders">: T.list $ coq "Binder"]
-
-pattern_ :: Binding
-pattern_ = define "Pattern" $ T.union [
-  "pattern">: coq "Pattern10",
-  "term">: T.maybe $ coq "Term"]
 
 pattern0 :: Binding
 pattern0 = define "Pattern0" $ T.union [
@@ -441,6 +524,11 @@ pattern10_Qualid = define "Pattern10_Qualid" $ T.record [
   "qualid">: coq "Qualid",
   "patterns">: T.list $ coq "Pattern1"]
 
+pattern_ :: Binding
+pattern_ = define "Pattern" $ T.union [
+  "pattern">: coq "Pattern10",
+  "term">: T.maybe $ coq "Term"]
+
 primitiveNotations :: Binding
 primitiveNotations = define "PrimitiveNotations" $ T.union [
   "number">: coq "Number",
@@ -463,6 +551,39 @@ qualidAnnotated = define "QualidAnnotated" $ T.record [
   "qualid">: coq "Qualid",
   "univAnnot">: T.maybe $ coq "UnivAnnot"]
 
+recordBody :: Binding
+recordBody = define "RecordBody" $
+  doc "The body of a Record definition" $
+  T.record [
+    "constructor">: T.maybe $ coq "Ident",
+    "fields">: T.list $ coq "RecordField"]
+
+recordDefinition :: Binding
+recordDefinition = define "RecordDefinition" $
+  doc "A Record or Structure definition" $
+  T.record [
+    "locality">: T.maybe $ coq "Locality",
+    "name">: coq "Ident",
+    "binders">: T.list $ coq "Binder",
+    "sort">: T.maybe $ coq "Sort",
+    "body">: coq "RecordBody"]
+
+recordField :: Binding
+recordField = define "RecordField" $
+  doc "A field in a Record definition" $
+  T.record [
+    "name">: coq "Ident",
+    "type">: coq "Type"]
+
+requireImport :: Binding
+requireImport = define "RequireImport" $
+  doc "A Require Import/Export command" $
+  T.record [
+    "from">: T.maybe $ coq "Qualid",
+    "require">: T.boolean,
+    "qualification">: T.maybe $ coq "ImportQualification",
+    "modules">: nonemptyList $ coq "Qualid"]
+
 returnAs :: Binding
 returnAs = define "ReturnAs" $ T.record [
   "as">: T.maybe $ coq "Name",
@@ -470,6 +591,35 @@ returnAs = define "ReturnAs" $ T.record [
 
 scopeKey :: Binding
 scopeKey = define "ScopeKey" $ T.wrap $ coq "Ident"
+
+sectionDefinition :: Binding
+sectionDefinition = define "SectionDefinition" $
+  doc "A Section ... End block" $
+  T.record [
+    "name">: coq "Ident",
+    "sentences">: T.list $ coq "Sentence"]
+
+sentence :: Binding
+sentence = define "Sentence" $
+  doc "A top-level sentence in a Coq document, optionally preceded by a comment" $
+  T.record [
+    "comment">: T.maybe $ coq "Comment",
+    "content">: coq "SentenceContent"]
+
+sentenceContent :: Binding
+sentenceContent = define "SentenceContent" $
+  doc "The content of a top-level sentence" $
+  T.union [
+    "axiom">: coq "AxiomDeclaration",
+    "definition">: coq "Definition",
+    "fixpoint">: coq "FixpointDefinition",
+    "inductive">: coq "InductiveDefinition",
+    "module">: coq "ModuleDefinition",
+    "notation">: coq "NotationDeclaration",
+    "record">: coq "RecordDefinition",
+    "requireImport">: coq "RequireImport",
+    "section">: coq "SectionDefinition",
+    "theorem">: coq "TheoremBody"]
 
 sort :: Binding
 sort = define "Sort" $
@@ -526,218 +676,6 @@ term100 = define "Term100" $ T.union [
   "cast">: coq "TypeCast",
   "term10">: coq "Term10"]
 
-type_ :: Binding
-type_ = define "Type" $ T.wrap $ coq "Term"
-
-typeCast :: Binding
-typeCast = define "TypeCast" $ T.record [
-  "term">: coq "Term10",
-  "type">: coq "Type",
-  "operator">: coq "TypeCastOperator"]
-
-typeCastOperator :: Binding
-typeCastOperator = define "TypeCastOperator" $ T.union [
-  "normal">:
-    doc "The expression term10 : type is a type cast expression. It enforces the type of term10 to be type." T.unit,
-  "vmCompute">:
-    doc "term10 <: type specifies that the virtual machine will be used to type check that term10 has type type (see vm_compute)." T.unit,
-  "nativeCompute">:
-    doc "term10 <<: type specifies that compilation to OCaml will be used to type check that term10 has type type (see native_compute)." T.unit]
-
-typeBinders :: Binding
-typeBinders = define "TypeBinders" $ T.record [
-  "names">: nonemptyList $ coq "Name",
-  "type">: coq "Type"]
-
-typeclassConstraint :: Binding
-typeclassConstraint = define "TypeclassConstraint" $
-  T.record [
-    "name">: T.maybe $ coq "Name",
-    "generalizing">: T.boolean,
-    "term">: coq "Term"]
-
-univAnnot :: Binding
-univAnnot = define "UnivAnnot" $
-  T.wrap $ T.list $ coq "UniverseLevel"
-
-universe :: Binding
-universe = define "Universe" $ T.union [
-  "max">: nonemptyList $ coq "Universe_Expr",
-  "expr">: coq "Universe_Expr"]
-
-universe_Expr :: Binding
-universe_Expr = define "Universe_Expr" $ T.record [
-  "name">: coq "UniverseName",
-  "number">: T.maybe $ coq "Natural"]
-
-universeLevel :: Binding
-universeLevel = define "UniverseLevel" $ T.union [
-  "set">: T.unit,
-  "prop">: T.unit,
-  "type">: T.unit,
-  "ignored">: T.unit,
-  "qualid">: coq "Qualid"]
-
-universeName :: Binding
-universeName = define "UniverseName" $ T.union [
-  "qualid">: coq "Qualid",
-  "set">: T.unit,
-  "prop">: T.unit]
-
--- ===========================================================================
--- Vernacular commands (for generating complete .v files)
--- ===========================================================================
-
-comment :: Binding
-comment = define "Comment" $
-  doc "A Coq comment (* ... *)" $
-  T.wrap T.string
-
-constructor :: Binding
-constructor = define "Constructor" $
-  doc "A constructor in an Inductive definition" $
-  T.record [
-    "name">: coq "Ident",
-    "binders">: T.list $ coq "Binder",
-    "type">: T.maybe $ coq "Type"]
-
-definition :: Binding
-definition = define "Definition" $
-  doc "A Definition or Let command: Definition name binders : type := term." $
-  T.record [
-    "locality">: T.maybe $ coq "Locality",
-    "name">: coq "Ident",
-    "binders">: T.list $ coq "Binder",
-    "type">: T.maybe $ coq "Type",
-    "body">: coq "Term"]
-
-document :: Binding
-document = define "Document" $
-  doc "A complete Coq .v file" $
-  T.record [
-    "sentences">: T.list $ coq "Sentence"]
-
-fixpointDefinition :: Binding
-fixpointDefinition = define "FixpointDefinition" $
-  doc "A Fixpoint command for recursive definitions" $
-  T.record [
-    "locality">: T.maybe $ coq "Locality",
-    "name">: coq "Ident",
-    "binders">: T.list $ coq "Binder",
-    "annot">: T.maybe $ coq "FixAnnot",
-    "type">: T.maybe $ coq "Type",
-    "body">: coq "Term",
-    "with">: T.list $ coq "Fix_Decl"]
-
-importQualification :: Binding
-importQualification = define "ImportQualification" $
-  doc "Qualification for Require/Import commands" $
-  T.union [
-    "import">: T.unit,
-    "export">: T.unit]
-
-inductiveBody :: Binding
-inductiveBody = define "InductiveBody" $
-  doc "A single body in an Inductive definition (supports mutual induction via 'with')" $
-  T.record [
-    "name">: coq "Ident",
-    "binders">: T.list $ coq "Binder",
-    "type">: T.maybe $ coq "Type",
-    "constructors">: T.list $ coq "Constructor"]
-
-inductiveDefinition :: Binding
-inductiveDefinition = define "InductiveDefinition" $
-  doc "An Inductive or CoInductive definition with one or more mutually inductive bodies" $
-  T.record [
-    "locality">: T.maybe $ coq "Locality",
-    "coinductive">: T.boolean,
-    "bodies">: nonemptyList $ coq "InductiveBody"]
-
-locality :: Binding
-locality = define "Locality" $
-  doc "Local or Global qualifier for commands" $
-  T.union [
-    "local">: T.unit,
-    "global">: T.unit]
-
-moduleDefinition :: Binding
-moduleDefinition = define "ModuleDefinition" $
-  doc "A Module ... End block" $
-  T.record [
-    "name">: coq "Ident",
-    "sentences">: T.list $ coq "Sentence"]
-
-notationDeclaration :: Binding
-notationDeclaration = define "NotationDeclaration" $
-  doc "A Notation declaration" $
-  T.record [
-    "notation">: coq "String",
-    "definition">: coq "Term",
-    "level">: T.maybe $ coq "Natural",
-    "associativity">: T.maybe T.string]
-
-recordBody :: Binding
-recordBody = define "RecordBody" $
-  doc "The body of a Record definition" $
-  T.record [
-    "constructor">: T.maybe $ coq "Ident",
-    "fields">: T.list $ coq "RecordField"]
-
-recordDefinition :: Binding
-recordDefinition = define "RecordDefinition" $
-  doc "A Record or Structure definition" $
-  T.record [
-    "locality">: T.maybe $ coq "Locality",
-    "name">: coq "Ident",
-    "binders">: T.list $ coq "Binder",
-    "sort">: T.maybe $ coq "Sort",
-    "body">: coq "RecordBody"]
-
-recordField :: Binding
-recordField = define "RecordField" $
-  doc "A field in a Record definition" $
-  T.record [
-    "name">: coq "Ident",
-    "type">: coq "Type"]
-
-requireImport :: Binding
-requireImport = define "RequireImport" $
-  doc "A Require Import/Export command" $
-  T.record [
-    "from">: T.maybe $ coq "Qualid",
-    "require">: T.boolean,
-    "qualification">: T.maybe $ coq "ImportQualification",
-    "modules">: nonemptyList $ coq "Qualid"]
-
-sectionDefinition :: Binding
-sectionDefinition = define "SectionDefinition" $
-  doc "A Section ... End block" $
-  T.record [
-    "name">: coq "Ident",
-    "sentences">: T.list $ coq "Sentence"]
-
-sentence :: Binding
-sentence = define "Sentence" $
-  doc "A top-level sentence in a Coq document, optionally preceded by a comment" $
-  T.record [
-    "comment">: T.maybe $ coq "Comment",
-    "content">: coq "SentenceContent"]
-
-sentenceContent :: Binding
-sentenceContent = define "SentenceContent" $
-  doc "The content of a top-level sentence" $
-  T.union [
-    "axiom">: coq "AxiomDeclaration",
-    "definition">: coq "Definition",
-    "fixpoint">: coq "FixpointDefinition",
-    "inductive">: coq "InductiveDefinition",
-    "module">: coq "ModuleDefinition",
-    "notation">: coq "NotationDeclaration",
-    "record">: coq "RecordDefinition",
-    "requireImport">: coq "RequireImport",
-    "section">: coq "SectionDefinition",
-    "theorem">: coq "TheoremBody"]
-
 theoremBody :: Binding
 theoremBody = define "TheoremBody" $
   doc "A Theorem/Lemma/Proposition with a proof term" $
@@ -757,3 +695,65 @@ theoremKind = define "TheoremKind" $
     "proposition">: T.unit,
     "corollary">: T.unit,
     "example">: T.unit]
+
+typeBinders :: Binding
+typeBinders = define "TypeBinders" $ T.record [
+  "names">: nonemptyList $ coq "Name",
+  "type">: coq "Type"]
+
+typeCast :: Binding
+typeCast = define "TypeCast" $ T.record [
+  "term">: coq "Term10",
+  "type">: coq "Type",
+  "operator">: coq "TypeCastOperator"]
+
+typeCastOperator :: Binding
+typeCastOperator = define "TypeCastOperator" $ T.union [
+  "normal">:
+    doc "The expression term10 : type is a type cast expression. It enforces the type of term10 to be type." T.unit,
+  "vmCompute">:
+    doc "term10 <: type specifies that the virtual machine will be used to type check that term10 has type type (see vm_compute)." T.unit,
+  "nativeCompute">:
+    doc "term10 <<: type specifies that compilation to OCaml will be used to type check that term10 has type type (see native_compute)." T.unit]
+
+type_ :: Binding
+type_ = define "Type" $ T.wrap $ coq "Term"
+
+typeclassConstraint :: Binding
+typeclassConstraint = define "TypeclassConstraint" $
+  T.record [
+    "name">: T.maybe $ coq "Name",
+    "generalizing">: T.boolean,
+    "term">: coq "Term"]
+
+univAnnot :: Binding
+univAnnot = define "UnivAnnot" $
+  T.wrap $ T.list $ coq "UniverseLevel"
+
+universe :: Binding
+universe = define "Universe" $ T.union [
+  "max">: nonemptyList $ coq "Universe_Expr",
+  "expr">: coq "Universe_Expr"]
+
+universeLevel :: Binding
+universeLevel = define "UniverseLevel" $ T.union [
+  "set">: T.unit,
+  "prop">: T.unit,
+  "type">: T.unit,
+  "ignored">: T.unit,
+  "qualid">: coq "Qualid"]
+
+universeName :: Binding
+universeName = define "UniverseName" $ T.union [
+  "qualid">: coq "Qualid",
+  "set">: T.unit,
+  "prop">: T.unit]
+
+-- ===========================================================================
+-- Vernacular commands (for generating complete .v files)
+-- ===========================================================================
+
+universe_Expr :: Binding
+universe_Expr = define "Universe_Expr" $ T.record [
+  "name">: coq "UniverseName",
+  "number">: T.maybe $ coq "Natural"]

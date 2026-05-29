@@ -59,19 +59,82 @@ allTests = define "allTests" $
       nestedGroup,
       whitespaceGroup]
 
--- Show a ParseResult Value as a string for universal test comparison.
--- Uses Phantoms.cases to pattern-match the ParseResult union.
-showParseResult :: TTerm (ParseResult Value) -> TTerm String
-showParseResult pr = Phantoms.cases _ParseResult pr Nothing [
-    _ParseResult_success Phantoms.>>: Phantoms.lambda "ps" (Strings.cat2
-      (Phantoms.string "success(")
-      (Strings.cat2
-        (JsonWriter.printJson @@ Parsing.parseSuccessValue (Phantoms.var "ps"))
-        (Strings.cat2 (Phantoms.string ", ")
-          (Strings.cat2 (Parsing.parseSuccessRemainder (Phantoms.var "ps")) (Phantoms.string ")"))))),
-    _ParseResult_failure Phantoms.>>: Phantoms.lambda "pe" (Strings.cat2
-      (Phantoms.string "failure(")
-      (Strings.cat2 (Phantoms.string "parse error") (Phantoms.string ")")))]
+arraysGroup :: TTerm TestGroup
+arraysGroup = subgroup "arrays" [
+    -- Empty and single element
+    parserCase "empty array" "[]" (Json.valueArray $ Phantoms.list ([] :: [TTerm Value])),
+    parserCase "single element" "[1]" (Json.valueArray $ Phantoms.list [Json.valueNumber $ Phantoms.decimal 1.0]),
+
+    -- Multiple elements
+    parserCase "multiple numbers" "[1, 2, 3]" (Json.valueArray $ Phantoms.list [
+        Json.valueNumber $ Phantoms.decimal 1.0,
+        Json.valueNumber $ Phantoms.decimal 2.0,
+        Json.valueNumber $ Phantoms.decimal 3.0]),
+
+    parserCase "multiple strings" "[\"a\", \"b\"]" (Json.valueArray $ Phantoms.list [
+        Json.valueString $ Phantoms.string "a",
+        Json.valueString $ Phantoms.string "b"]),
+
+    -- Mixed types
+    parserCase "mixed types" "[1, \"two\", true, null]" (Json.valueArray $ Phantoms.list [
+        Json.valueNumber $ Phantoms.decimal 1.0,
+        Json.valueString $ Phantoms.string "two",
+        Json.valueBoolean $ Phantoms.boolean True,
+        Json.valueNull])]
+
+-- | Parser precision tests: inputs that exercise the writer's lexical output choices.
+-- We do not test "more digits than Double" cases here because several Hydra hosts emit
+-- decimal literals as host-native Double, losing precision before the test can exercise
+-- the parser. The decimal type coder (separate test) preserves full precision end-to-end.
+decimalPrecisionGroup :: TTerm TestGroup
+decimalPrecisionGroup = subgroup "decimal precision" [
+    parserCase "tiny exponent"
+      "1e-20"
+      (Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 (-20))),
+    parserCase "huge exponent"
+      "1e20"
+      (Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 20))]
+
+nestedGroup :: TTerm TestGroup
+nestedGroup = subgroup "nested structures" [
+    -- Array of arrays
+    parserCase "nested arrays" "[[1, 2], [3, 4]]" (Json.valueArray $ Phantoms.list [
+        Json.valueArray $ Phantoms.list [Json.valueNumber $ Phantoms.decimal 1.0, Json.valueNumber $ Phantoms.decimal 2.0],
+        Json.valueArray $ Phantoms.list [Json.valueNumber $ Phantoms.decimal 3.0, Json.valueNumber $ Phantoms.decimal 4.0]]),
+
+    -- Object with array
+    parserCase "object with array" "{\"items\": [1, 2]}" (Json.valueObject $ Phantoms.map $ M.fromList [
+        (Phantoms.string "items", Json.valueArray $ Phantoms.list [
+            Json.valueNumber $ Phantoms.decimal 1.0,
+            Json.valueNumber $ Phantoms.decimal 2.0])]),
+
+    -- Array of objects
+    parserCase "array of objects" "[{\"id\": 1}, {\"id\": 2}]" (Json.valueArray $ Phantoms.list [
+        Json.valueObject $ Phantoms.map $ M.singleton (Phantoms.string "id") (Json.valueNumber $ Phantoms.decimal 1.0),
+        Json.valueObject $ Phantoms.map $ M.singleton (Phantoms.string "id") (Json.valueNumber $ Phantoms.decimal 2.0)]),
+
+    -- Nested object
+    parserCase "nested object" "{\"user\": {\"name\": \"Bob\"}}" (Json.valueObject $ Phantoms.map $ M.fromList [
+        (Phantoms.string "user", Json.valueObject $ Phantoms.map $ M.fromList [
+            (Phantoms.string "name", Json.valueString $ Phantoms.string "Bob")])])]
+
+objectsGroup :: TTerm TestGroup
+objectsGroup = subgroup "objects" [
+    -- Empty and single key
+    parserCase "empty object" "{}" (Json.valueObject $ Phantoms.map M.empty),
+    parserCase "single key-value" "{\"name\": \"Alice\"}" (Json.valueObject $ Phantoms.map $ M.fromList [
+        (Phantoms.string "name", Json.valueString $ Phantoms.string "Alice")]),
+
+    -- Multiple keys
+    parserCase "multiple keys" "{\"a\": 1, \"b\": 2}" (Json.valueObject $ Phantoms.map $ M.fromList [
+        (Phantoms.string "a", Json.valueNumber $ Phantoms.decimal 1.0),
+        (Phantoms.string "b", Json.valueNumber $ Phantoms.decimal 2.0)]),
+
+    -- Mixed value types
+    parserCase "mixed value types" "{\"active\": true, \"count\": 42, \"name\": \"test\"}" (Json.valueObject $ Phantoms.map $ M.fromList [
+        (Phantoms.string "count", Json.valueNumber $ Phantoms.decimal 42.0),
+        (Phantoms.string "name", Json.valueString $ Phantoms.string "test"),
+        (Phantoms.string "active", Json.valueBoolean $ Phantoms.boolean True)])]
 
 -- Helper for creating successful JSON parser test cases as UniversalTestCase
 parserCase :: String -> String -> TTerm Value -> TTerm TestCaseWithMetadata
@@ -103,18 +166,19 @@ primitivesGroup = subgroup "primitives" [
     parserCase "scientific with decimal" "1.5e2" (Json.valueNumber $ Phantoms.decimal 150.0),
     parserCase "negative exponent" "1e-2" (Json.valueNumber $ Phantoms.decimal 0.01)]
 
--- | Parser precision tests: inputs that exercise the writer's lexical output choices.
--- We do not test "more digits than Double" cases here because several Hydra hosts emit
--- decimal literals as host-native Double, losing precision before the test can exercise
--- the parser. The decimal type coder (separate test) preserves full precision end-to-end.
-decimalPrecisionGroup :: TTerm TestGroup
-decimalPrecisionGroup = subgroup "decimal precision" [
-    parserCase "tiny exponent"
-      "1e-20"
-      (Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 (-20))),
-    parserCase "huge exponent"
-      "1e20"
-      (Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 20))]
+-- Show a ParseResult Value as a string for universal test comparison.
+-- Uses Phantoms.cases to pattern-match the ParseResult union.
+showParseResult :: TTerm (ParseResult Value) -> TTerm String
+showParseResult pr = Phantoms.cases _ParseResult pr Nothing [
+    _ParseResult_success Phantoms.>>: Phantoms.lambda "ps" (Strings.cat2
+      (Phantoms.string "success(")
+      (Strings.cat2
+        (JsonWriter.printJson @@ Parsing.parseSuccessValue (Phantoms.var "ps"))
+        (Strings.cat2 (Phantoms.string ", ")
+          (Strings.cat2 (Parsing.parseSuccessRemainder (Phantoms.var "ps")) (Phantoms.string ")"))))),
+    _ParseResult_failure Phantoms.>>: Phantoms.lambda "pe" (Strings.cat2
+      (Phantoms.string "failure(")
+      (Strings.cat2 (Phantoms.string "parse error") (Phantoms.string ")")))]
 
 stringsGroup :: TTerm TestGroup
 stringsGroup = subgroup "strings" [
@@ -130,70 +194,6 @@ stringsGroup = subgroup "strings" [
     parserCase "escaped carriage return" "\"line1\\rline2\"" (Json.valueString $ Phantoms.string "line1\rline2"),
     parserCase "escaped tab" "\"col1\\tcol2\"" (Json.valueString $ Phantoms.string "col1\tcol2"),
     parserCase "escaped forward slash" "\"a\\/b\"" (Json.valueString $ Phantoms.string "a/b")]
-
-arraysGroup :: TTerm TestGroup
-arraysGroup = subgroup "arrays" [
-    -- Empty and single element
-    parserCase "empty array" "[]" (Json.valueArray $ Phantoms.list ([] :: [TTerm Value])),
-    parserCase "single element" "[1]" (Json.valueArray $ Phantoms.list [Json.valueNumber $ Phantoms.decimal 1.0]),
-
-    -- Multiple elements
-    parserCase "multiple numbers" "[1, 2, 3]" (Json.valueArray $ Phantoms.list [
-        Json.valueNumber $ Phantoms.decimal 1.0,
-        Json.valueNumber $ Phantoms.decimal 2.0,
-        Json.valueNumber $ Phantoms.decimal 3.0]),
-
-    parserCase "multiple strings" "[\"a\", \"b\"]" (Json.valueArray $ Phantoms.list [
-        Json.valueString $ Phantoms.string "a",
-        Json.valueString $ Phantoms.string "b"]),
-
-    -- Mixed types
-    parserCase "mixed types" "[1, \"two\", true, null]" (Json.valueArray $ Phantoms.list [
-        Json.valueNumber $ Phantoms.decimal 1.0,
-        Json.valueString $ Phantoms.string "two",
-        Json.valueBoolean $ Phantoms.boolean True,
-        Json.valueNull])]
-
-objectsGroup :: TTerm TestGroup
-objectsGroup = subgroup "objects" [
-    -- Empty and single key
-    parserCase "empty object" "{}" (Json.valueObject $ Phantoms.map M.empty),
-    parserCase "single key-value" "{\"name\": \"Alice\"}" (Json.valueObject $ Phantoms.map $ M.fromList [
-        (Phantoms.string "name", Json.valueString $ Phantoms.string "Alice")]),
-
-    -- Multiple keys
-    parserCase "multiple keys" "{\"a\": 1, \"b\": 2}" (Json.valueObject $ Phantoms.map $ M.fromList [
-        (Phantoms.string "a", Json.valueNumber $ Phantoms.decimal 1.0),
-        (Phantoms.string "b", Json.valueNumber $ Phantoms.decimal 2.0)]),
-
-    -- Mixed value types
-    parserCase "mixed value types" "{\"active\": true, \"count\": 42, \"name\": \"test\"}" (Json.valueObject $ Phantoms.map $ M.fromList [
-        (Phantoms.string "count", Json.valueNumber $ Phantoms.decimal 42.0),
-        (Phantoms.string "name", Json.valueString $ Phantoms.string "test"),
-        (Phantoms.string "active", Json.valueBoolean $ Phantoms.boolean True)])]
-
-nestedGroup :: TTerm TestGroup
-nestedGroup = subgroup "nested structures" [
-    -- Array of arrays
-    parserCase "nested arrays" "[[1, 2], [3, 4]]" (Json.valueArray $ Phantoms.list [
-        Json.valueArray $ Phantoms.list [Json.valueNumber $ Phantoms.decimal 1.0, Json.valueNumber $ Phantoms.decimal 2.0],
-        Json.valueArray $ Phantoms.list [Json.valueNumber $ Phantoms.decimal 3.0, Json.valueNumber $ Phantoms.decimal 4.0]]),
-
-    -- Object with array
-    parserCase "object with array" "{\"items\": [1, 2]}" (Json.valueObject $ Phantoms.map $ M.fromList [
-        (Phantoms.string "items", Json.valueArray $ Phantoms.list [
-            Json.valueNumber $ Phantoms.decimal 1.0,
-            Json.valueNumber $ Phantoms.decimal 2.0])]),
-
-    -- Array of objects
-    parserCase "array of objects" "[{\"id\": 1}, {\"id\": 2}]" (Json.valueArray $ Phantoms.list [
-        Json.valueObject $ Phantoms.map $ M.singleton (Phantoms.string "id") (Json.valueNumber $ Phantoms.decimal 1.0),
-        Json.valueObject $ Phantoms.map $ M.singleton (Phantoms.string "id") (Json.valueNumber $ Phantoms.decimal 2.0)]),
-
-    -- Nested object
-    parserCase "nested object" "{\"user\": {\"name\": \"Bob\"}}" (Json.valueObject $ Phantoms.map $ M.fromList [
-        (Phantoms.string "user", Json.valueObject $ Phantoms.map $ M.fromList [
-            (Phantoms.string "name", Json.valueString $ Phantoms.string "Bob")])])]
 
 whitespaceGroup :: TTerm TestGroup
 whitespaceGroup = subgroup "whitespace handling" [

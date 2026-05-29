@@ -70,7 +70,7 @@
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.java.environment.JavaEnvironment"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Term"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "t0"}}],
           "result": {
             "type": {
@@ -117,7 +117,7 @@
                                                         "type": {"variable": "t1"}}}}}}}}}}}}},
                                 "domain": {"variable": "t0"},
                                 "parameter": "g"}},
-                            "domain": {"variable": "hydra.context.Context"},
+                            "domain": {"variable": "hydra.typing.InferenceContext"},
                             "parameter": "cx"}},
                         "domain": {"variable": "hydra.core.Term"},
                         "parameter": "term"}},
@@ -2176,7 +2176,7 @@
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.java.environment.JavaEnvironment"}},
             {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.core.Binding"}}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {
@@ -2921,7 +2921,7 @@
                                                     "second": {"variable": "hydra.java.environment.JavaEnvironment"}}}}}}}}}}}}}}},
                         "domain": {"variable": "hydra.graph.Graph"},
                         "parameter": "g0"}},
-                    "domain": {"variable": "hydra.context.Context"},
+                    "domain": {"variable": "hydra.typing.InferenceContext"},
                     "parameter": "cx"}},
                 "domain": {"list": {"variable": "hydra.core.Binding"}},
                 "parameter": "bindings"}},
@@ -6788,7 +6788,7 @@
             {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.java.environment.Aliases"}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Name"}},
-            {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg5", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {
@@ -6950,7 +6950,7 @@
                                                               "application": {
                                                                 "argument": {"variable": "aliases"},
                                                                 "function": {
-                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}},
+                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}},
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
@@ -6960,7 +6960,7 @@
                                                 "type": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}}}}}}},
                                 "domain": {"variable": "hydra.graph.Graph"},
                                 "parameter": "g"}},
-                            "domain": {"variable": "hydra.context.Context"},
+                            "domain": {"variable": "hydra.typing.InferenceContext"},
                             "parameter": "cx"}},
                         "domain": {"variable": "hydra.core.Name"},
                         "parameter": "name"}},
@@ -6978,7 +6978,7 @@
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.java.environment.Aliases"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.FieldType"}},
-            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {
@@ -7051,7 +7051,7 @@
                                                     "function": {"application": {"argument": {"variable": "comment"}, "function": {"variable": "hydra.java.coder.constantDecl"}}}}}}}}}}}}}}},
                             "domain": {"variable": "hydra.graph.Graph"},
                             "parameter": "g"}},
-                        "domain": {"variable": "hydra.context.Context"},
+                        "domain": {"variable": "hydra.typing.InferenceContext"},
                         "parameter": "cx"}},
                     "domain": {"variable": "hydra.core.FieldType"},
                     "parameter": "ftyp"}},
@@ -7066,7 +7066,7 @@
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.java.environment.Aliases"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {
@@ -7114,7 +7114,7 @@
                                                 "function": {"application": {"argument": {"variable": "comment"}, "function": {"variable": "hydra.java.coder.constantDecl"}}}}}}}}}}}}}}},
                         "domain": {"variable": "hydra.graph.Graph"},
                         "parameter": "g"}},
-                    "domain": {"variable": "hydra.context.Context"},
+                    "domain": {"variable": "hydra.typing.InferenceContext"},
                     "parameter": "cx"}},
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "name"}},
@@ -8184,7 +8184,7 @@
             {"isLazy": false, "name": "arg3", "type": {"list": {"variable": "hydra.java.syntax.TypeParameter"}}},
             {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.core.Name"}},
             {"isLazy": false, "name": "arg5", "type": {"list": {"variable": "hydra.core.FieldType"}}},
-            {"isLazy": false, "name": "arg6", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg6", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg7", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.java.syntax.ClassDeclaration"}}}},
@@ -8233,7 +8233,7 @@
                                                                           "application": {"argument": {"variable": "isInner"}, "function": {"variable": "hydra.java.coder.declarationForRecordType'"}}}}}}}}}}}}}}}}}}},
                                         "domain": {"variable": "hydra.graph.Graph"},
                                         "parameter": "g"}},
-                                    "domain": {"variable": "hydra.context.Context"},
+                                    "domain": {"variable": "hydra.typing.InferenceContext"},
                                     "parameter": "cx"}},
                                 "domain": {"list": {"variable": "hydra.core.FieldType"}},
                                 "parameter": "fields"}},
@@ -8259,7 +8259,7 @@
             {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.core.Name"}},
             {"isLazy": false, "name": "arg5", "type": {"maybe": {"variable": "hydra.core.Name"}}},
             {"isLazy": false, "name": "arg6", "type": {"list": {"variable": "hydra.core.FieldType"}}},
-            {"isLazy": false, "name": "arg7", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg7", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg8", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.java.syntax.ClassDeclaration"}}}},
@@ -8769,7 +8769,7 @@
                                                                                                                           "application": {
                                                                                                                             "argument": {"variable": "cx"},
                                                                                                                             "function": {
-                                                                                                                              "typeApplication": {"body": {"variable": "hydra.annotations.commentsFromFieldType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                                                              "typeApplication": {"body": {"variable": "hydra.annotations.commentsFromFieldType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                                                                 "function": {
                                                                                                                   "typeApplication": {
                                                                                                                     "body": {
@@ -8813,7 +8813,7 @@
                                                                                                   "application": {
                                                                                                     "argument": {"variable": "aliases"},
                                                                                                     "function": {
-                                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.recordConstructor"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}},
+                                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.recordConstructor"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}},
                                                                                 "function": {
                                                                                   "typeApplication": {
                                                                                     "body": {
@@ -8908,7 +8908,7 @@
                                                                                                                           "application": {
                                                                                                                             "argument": {"variable": "aliases"},
                                                                                                                             "function": {
-                                                                                                                              "typeApplication": {"body": {"variable": "hydra.java.coder.recordWithMethod"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}}}},
+                                                                                                                              "typeApplication": {"body": {"variable": "hydra.java.coder.recordWithMethod"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}}}},
                                                                                                     "function": {
                                                                                                       "typeApplication": {
                                                                                                         "body": {
@@ -8999,7 +8999,7 @@
                                                                                                   "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}}},
                                                                                                 "type": {"variable": "hydra.core.FieldType"}}}}},
                                                                                         "function": {
-                                                                                          "typeApplication": {"body": {"variable": "hydra.java.coder.addComment"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                          "typeApplication": {"body": {"variable": "hydra.java.coder.addComment"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                         "domain": {
                                                                           "pair": {"first": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}, "second": {"variable": "hydra.core.FieldType"}}},
                                                                         "parameter": "p"}},
@@ -9045,7 +9045,7 @@
                                                                               "application": {
                                                                                 "argument": {"variable": "aliases"},
                                                                                 "function": {
-                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.recordMemberVar"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.recordMemberVar"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                 "domain": {"variable": "hydra.core.FieldType"},
                                                                 "parameter": "f"}},
                                                             "function": {
@@ -9064,7 +9064,7 @@
                                                         "type": {"variable": "hydra.java.syntax.ClassDeclaration"}}}}}}},
                                             "domain": {"variable": "hydra.graph.Graph"},
                                             "parameter": "g"}},
-                                        "domain": {"variable": "hydra.context.Context"},
+                                        "domain": {"variable": "hydra.typing.InferenceContext"},
                                         "parameter": "cx"}},
                                     "domain": {"list": {"variable": "hydra.core.FieldType"}},
                                     "parameter": "fields"}},
@@ -9090,7 +9090,7 @@
             {"isLazy": false, "name": "arg2", "type": {"list": {"variable": "hydra.java.syntax.TypeParameter"}}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Name"}},
             {"isLazy": false, "name": "arg4", "type": {"list": {"variable": "hydra.core.FieldType"}}},
-            {"isLazy": false, "name": "arg5", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg5", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg6", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.java.syntax.ClassDeclaration"}}}},
@@ -10041,7 +10041,7 @@
                                                                                               "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}}},
                                                                                             "type": {"variable": "hydra.core.FieldType"}}}}},
                                                                                     "function": {
-                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.addComment"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.addComment"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                     "domain": {
                                                                       "pair": {"first": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}, "second": {"variable": "hydra.core.FieldType"}}},
                                                                     "parameter": "pair"}},
@@ -10211,7 +10211,7 @@
                                                 "type": {"variable": "hydra.java.syntax.ClassDeclaration"}}}}}}},
                                     "domain": {"variable": "hydra.graph.Graph"},
                                     "parameter": "g"}},
-                                "domain": {"variable": "hydra.context.Context"},
+                                "domain": {"variable": "hydra.typing.InferenceContext"},
                                 "parameter": "cx"}},
                             "domain": {"list": {"variable": "hydra.core.FieldType"}},
                             "parameter": "fields"}},
@@ -12037,7 +12037,7 @@
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.java.environment.JavaEnvironment"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Application"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.java.syntax.Expression"}}}},
@@ -12442,7 +12442,7 @@
                                                                                                                             "function": {
                                                                                                                               "typeApplication": {
                                                                                                                                 "body": {
-                                                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.filterPhantomTypeArgs"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.filterPhantomTypeArgs"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                                                 "type": {"variable": "hydra.errors.Error"}}}}}}}}}}},
                                                                                                             "function": {
                                                                                                               "typeApplication": {
@@ -12479,7 +12479,7 @@
                                                                                                                                   "typeApplication": {
                                                                                                                                     "body": {
                                                                                                                                       "typeApplication": {"body": {"variable": "hydra.java.coder.correctTypeApps"}, "type": {"variable": "hydra.graph.Graph"}}},
-                                                                                                                                    "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}}}},
+                                                                                                                                    "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}}}},
                                                                                                         "function": {
                                                                                                           "application": {
                                                                                                             "argument": {
@@ -12520,7 +12520,7 @@
                                                                                                   "application": {
                                                                                                     "argument": {"variable": "name"},
                                                                                                     "function": {
-                                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.classifyDataReference"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.classifyDataReference"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                                         "function": {
                                                                                           "typeApplication": {
                                                                                             "body": {
@@ -12782,7 +12782,7 @@
                                                                                     "function": {
                                                                                       "typeApplication": {
                                                                                         "body": {
-                                                                                          "typeApplication": {"body": {"variable": "hydra.java.coder.annotateLambdaArgs"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                          "typeApplication": {"body": {"variable": "hydra.java.coder.annotateLambdaArgs"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                         "type": {"variable": "hydra.errors.Error"}}}}}}}}}}}}},
                                                                 "domain": {"variable": "hydra.core.Name"},
                                                                 "parameter": "cname"}},
@@ -12891,7 +12891,7 @@
                                         "type": {"variable": "hydra.java.syntax.Expression"}}}}}}}}},
                         "domain": {"variable": "hydra.graph.Graph"},
                         "parameter": "g0"}},
-                    "domain": {"variable": "hydra.context.Context"},
+                    "domain": {"variable": "hydra.typing.InferenceContext"},
                     "parameter": "cx"}},
                 "domain": {"variable": "hydra.core.Application"},
                 "parameter": "app"}},
@@ -12908,7 +12908,7 @@
             {"isLazy": false, "name": "arg3", "type": {"list": {"variable": "hydra.core.Type"}}},
             {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.core.Term"}},
             {"isLazy": false, "name": "arg5", "type": {"variable": "hydra.core.Term"}},
-            {"isLazy": false, "name": "arg6", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg6", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg7", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.java.syntax.Expression"}}}},
@@ -13425,7 +13425,7 @@
                                                     "type": {"variable": "hydra.java.syntax.Expression"}}}}}}},
                                         "domain": {"variable": "hydra.graph.Graph"},
                                         "parameter": "g"}},
-                                    "domain": {"variable": "hydra.context.Context"},
+                                    "domain": {"variable": "hydra.typing.InferenceContext"},
                                     "parameter": "cx"}},
                                 "domain": {"variable": "hydra.core.Term"},
                                 "parameter": "rhs"}},
@@ -13446,7 +13446,7 @@
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}},
             {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.packaging.Definition"}}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {
@@ -13724,7 +13724,7 @@
                                         "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.java.syntax.CompilationUnit"}}}}}}}}}}},
                         "domain": {"variable": "hydra.graph.Graph"},
                         "parameter": "g"}},
-                    "domain": {"variable": "hydra.context.Context"},
+                    "domain": {"variable": "hydra.typing.InferenceContext"},
                     "parameter": "cx"}},
                 "domain": {"list": {"variable": "hydra.packaging.Definition"}},
                 "parameter": "defs"}},
@@ -13740,7 +13740,7 @@
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Type"}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Type"}},
             {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.core.Term"}},
-            {"isLazy": false, "name": "arg5", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg5", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg6", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.java.syntax.Expression"}}}},
@@ -13895,7 +13895,9 @@
                                                                                   "application": {
                                                                                     "argument": {"variable": "jdom0"},
                                                                                     "function": {
-                                                                                      "typeApplication": {"body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"}, "type": {"variable": "hydra.context.Context"}}}}}}},
+                                                                                      "typeApplication": {
+                                                                                        "body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"},
+                                                                                        "type": {"variable": "hydra.typing.InferenceContext"}}}}}}},
                                                                             "function": {
                                                                               "typeApplication": {
                                                                                 "body": {
@@ -13923,7 +13925,7 @@
                                                                                       "application": {
                                                                                         "argument": {"variable": "aliases"},
                                                                                         "function": {
-                                                                                          "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}},
+                                                                                          "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -14241,7 +14243,7 @@
                                                                                                               "application": {
                                                                                                                 "argument": {"variable": "aliases"},
                                                                                                                 "function": {
-                                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.domTypeArgs"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.domTypeArgs"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {
@@ -14260,7 +14262,9 @@
                                                                                               "application": {
                                                                                                 "argument": {"variable": "jcod"},
                                                                                                 "function": {
-                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"}, "type": {"variable": "hydra.context.Context"}}}}}}},
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"},
+                                                                                                    "type": {"variable": "hydra.typing.InferenceContext"}}}}}}},
                                                                                         "function": {
                                                                                           "typeApplication": {
                                                                                             "body": {
@@ -14288,7 +14292,7 @@
                                                                                                   "application": {
                                                                                                     "argument": {"variable": "aliases"},
                                                                                                     "function": {
-                                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}},
+                                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}},
                                                                                 "function": {
                                                                                   "typeApplication": {
                                                                                     "body": {
@@ -14565,7 +14569,7 @@
                                                 "typeName": "hydra.core.Term"}}}}}},
                                     "domain": {"variable": "hydra.graph.Graph"},
                                     "parameter": "g"}},
-                                "domain": {"variable": "hydra.context.Context"},
+                                "domain": {"variable": "hydra.typing.InferenceContext"},
                                 "parameter": "cx"}},
                             "domain": {"variable": "hydra.core.Term"},
                             "parameter": "elimTerm"}},
@@ -14586,7 +14590,7 @@
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Type"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Type"}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Term"}},
-            {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg5", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.java.syntax.Expression"}}}},
@@ -14776,7 +14780,7 @@
                                                                                                           "application": {
                                                                                                             "argument": {"variable": "aliases"},
                                                                                                             "function": {
-                                                                                                              "typeApplication": {"body": {"variable": "hydra.java.coder.applyCastIfSafe"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}}}},
+                                                                                                              "typeApplication": {"body": {"variable": "hydra.java.coder.applyCastIfSafe"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}}}},
                                                                                     "domain": {"variable": "hydra.java.syntax.Expression"},
                                                                                     "parameter": "jbody"}},
                                                                                 "function": {
@@ -15049,7 +15053,7 @@
                                                                                                                                   "application": {
                                                                                                                                     "argument": {"variable": "aliases"},
                                                                                                                                     "function": {
-                                                                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.applyCastIfSafe"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}}}},
+                                                                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.applyCastIfSafe"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}}}},
                                                                                                             "domain": {"variable": "hydra.java.syntax.Expression"},
                                                                                                             "parameter": "innerJavaLambda"}},
                                                                                                         "function": {
@@ -15150,7 +15154,7 @@
                                             "typeName": "hydra.core.Term"}}}}}},
                                 "domain": {"variable": "hydra.graph.Graph"},
                                 "parameter": "g"}},
-                            "domain": {"variable": "hydra.context.Context"},
+                            "domain": {"variable": "hydra.typing.InferenceContext"},
                             "parameter": "cx"}},
                         "domain": {"variable": "hydra.core.Term"},
                         "parameter": "funTerm"}},
@@ -15171,7 +15175,7 @@
               "name": "arg1",
               "type": {"list": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}},
-            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.java.syntax.Expression"}}}},
@@ -15298,7 +15302,7 @@
                                                                                                 "body": {"variable": "hydra.java.coder.encodeNullaryConstant"},
                                                                                                 "type": {"variable": "hydra.java.environment.JavaEnvironment"}}},
                                                                                             "type": {"variable": "hydra.core.Type"}}},
-                                                                                        "type": {"variable": "hydra.context.Context"}}},
+                                                                                        "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                     "type": {"variable": "hydra.graph.Graph"}}},
                                                                                 "type": {"variable": "hydra.java.syntax.Expression"}}}}}}}}}}}}},
                                                         "typeName": "hydra.core.Type"}}}},
@@ -15407,7 +15411,7 @@
                                             "type": {"variable": "hydra.java.syntax.Expression"}}}}}}}}},
                             "domain": {"variable": "hydra.graph.Graph"},
                             "parameter": "g"}},
-                        "domain": {"variable": "hydra.context.Context"},
+                        "domain": {"variable": "hydra.typing.InferenceContext"},
                         "parameter": "cx"}},
                     "domain": {"variable": "hydra.core.Term"},
                     "parameter": "term"}},
@@ -17674,7 +17678,7 @@
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.java.environment.JavaEnvironment"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Term"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.java.syntax.Expression"}}}},
@@ -17708,7 +17712,7 @@
                                             "function": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.java.coder.encodeTermInternal"}}}}}}}}}}}}},
                         "domain": {"variable": "hydra.graph.Graph"},
                         "parameter": "g"}},
-                    "domain": {"variable": "hydra.context.Context"},
+                    "domain": {"variable": "hydra.typing.InferenceContext"},
                     "parameter": "cx"}},
                 "domain": {"variable": "hydra.core.Term"},
                 "parameter": "term"}},
@@ -17721,7 +17725,7 @@
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.java.environment.JavaEnvironment"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.packaging.TermDefinition"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {
@@ -18839,7 +18843,7 @@
                                                                                                                           "application": {
                                                                                                                             "argument": {"variable": "aliases2"},
                                                                                                                             "function": {
-                                                                                                                              "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}},
+                                                                                                                              "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}},
                                                                                                         "function": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {
@@ -18916,7 +18920,7 @@
                                                                                                                                       "application": {
                                                                                                                                         "argument": {"variable": "aliases2"},
                                                                                                                                         "function": {
-                                                                                                                                          "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}},
+                                                                                                                                          "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}},
                                                                                                                     "function": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {
@@ -18966,7 +18970,7 @@
                                                                                                             "body": {
                                                                                                               "typeApplication": {
                                                                                                                 "body": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotations"},
-                                                                                                                "type": {"variable": "hydra.context.Context"}}},
+                                                                                                                "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                             "type": {"variable": "hydra.errors.Error"}}}}}}}}}}},
                                                                                         "function": {
                                                                                           "application": {
@@ -19043,7 +19047,9 @@
                                                                                 "function": {
                                                                                   "typeApplication": {
                                                                                     "body": {
-                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.buildSubstFromAnnotations"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                      "typeApplication": {
+                                                                                        "body": {"variable": "hydra.java.coder.buildSubstFromAnnotations"},
+                                                                                        "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                     "type": {"variable": "hydra.errors.Error"}}}}}}}}}}},
                                                                 "function": {
                                                                   "application": {
@@ -19127,7 +19133,7 @@
                                               "application": {
                                                 "argument": {"variable": "cx"},
                                                 "function": {
-                                                  "typeApplication": {"body": {"variable": "hydra.annotations.getTermDescription"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                  "typeApplication": {"body": {"variable": "hydra.annotations.getTermDescription"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                     "function": {
                                       "typeApplication": {
                                         "body": {
@@ -19137,7 +19143,7 @@
                                         "type": {"variable": "hydra.java.syntax.InterfaceMemberDeclarationWithComments"}}}}}}}}},
                         "domain": {"variable": "hydra.graph.Graph"},
                         "parameter": "g"}},
-                    "domain": {"variable": "hydra.context.Context"},
+                    "domain": {"variable": "hydra.typing.InferenceContext"},
                     "parameter": "cx"}},
                 "domain": {"variable": "hydra.packaging.TermDefinition"},
                 "parameter": "tdef"}},
@@ -19155,7 +19161,7 @@
               "type": {"list": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
             {"isLazy": false, "name": "arg2", "type": {"list": {"variable": "hydra.java.syntax.Type"}}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Term"}},
-            {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg5", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.java.syntax.Expression"}}}},
@@ -19707,7 +19713,7 @@
                                                                                             "function": {
                                                                                               "typeApplication": {
                                                                                                 "body": {
-                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.takeTypeArgs"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.takeTypeArgs"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}}}}}}}}}}}},
                                                                         "function": {
                                                                           "typeApplication": {
@@ -20076,7 +20082,9 @@
                                                                                                                           "application": {
                                                                                                                             "argument": {"variable": "jLetType"},
                                                                                                                             "function": {
-                                                                                                                              "typeApplication": {"body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"}, "type": {"variable": "hydra.context.Context"}}}}}}},
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"},
+                                                                                                                                "type": {"variable": "hydra.typing.InferenceContext"}}}}}}},
                                                                                                                     "function": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {
@@ -20104,7 +20112,7 @@
                                                                                                                               "application": {
                                                                                                                                 "argument": {"variable": "aliases2"},
                                                                                                                                 "function": {
-                                                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}},
+                                                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}},
                                                                                                             "function": {
                                                                                                               "typeApplication": {
                                                                                                                 "body": {
@@ -20429,7 +20437,7 @@
                                                                                             "function": {
                                                                                               "typeApplication": {
                                                                                                 "body": {
-                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.takeTypeArgs"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.takeTypeArgs"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}}}}}}}}}}}},
                                                                         "function": {
                                                                           "typeApplication": {
@@ -20750,7 +20758,7 @@
                                                                                             "function": {
                                                                                               "typeApplication": {
                                                                                                 "body": {
-                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.takeTypeArgs"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.takeTypeArgs"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}}}}}}}}}}}},
                                                                         "function": {
                                                                           "typeApplication": {
@@ -20949,7 +20957,7 @@
                                                                                             "function": {
                                                                                               "typeApplication": {
                                                                                                 "body": {
-                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.takeTypeArgs"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.takeTypeArgs"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}}}}}}}}}}}},
                                                                         "function": {
                                                                           "typeApplication": {
@@ -21097,7 +21105,9 @@
                                                                                                           "application": {
                                                                                                             "argument": {"variable": "jt"},
                                                                                                             "function": {
-                                                                                                              "typeApplication": {"body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"}, "type": {"variable": "hydra.context.Context"}}}}}}},
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"},
+                                                                                                                "type": {"variable": "hydra.typing.InferenceContext"}}}}}}},
                                                                                                     "domain": {"variable": "hydra.java.syntax.Type"},
                                                                                                     "parameter": "jt"}},
                                                                                                 "function": {
@@ -21215,7 +21225,7 @@
                                                                           "application": {
                                                                             "argument": {"variable": "cx"},
                                                                             "function": {
-                                                                              "typeApplication": {"body": {"variable": "hydra.resolution.requireType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                              "typeApplication": {"body": {"variable": "hydra.resolution.requireType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"lambda": {"body": {"maybe": {"variable": "t"}}, "domain": {"variable": "hydra.core.Type"}, "parameter": "t"}},
@@ -21763,7 +21773,9 @@
                                                                                                                                                           "application": {
                                                                                                                                                             "argument": {"variable": "jt"},
                                                                                                                                                             "function": {
-                                                                                                                                                              "typeApplication": {"body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"}, "type": {"variable": "hydra.context.Context"}}}}}}},
+                                                                                                                                                              "typeApplication": {
+                                                                                                                                                                "body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"},
+                                                                                                                                                                "type": {"variable": "hydra.typing.InferenceContext"}}}}}}},
                                                                                                                                                     "domain": {"variable": "hydra.java.syntax.Type"},
                                                                                                                                                     "parameter": "jt"}},
                                                                                                                                                 "function": {
@@ -21784,7 +21796,7 @@
                                                                                                                                                                       "application": {
                                                                                                                                                                         "argument": {"variable": "aliases"},
                                                                                                                                                                         "function": {
-                                                                                                                                                                          "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}},
+                                                                                                                                                                          "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}},
                                                                                                                                                     "function": {
                                                                                                                                                       "typeApplication": {
                                                                                                                                                         "body": {
@@ -21954,7 +21966,9 @@
                                                                                                                           "application": {
                                                                                                                             "argument": {"variable": "jt"},
                                                                                                                             "function": {
-                                                                                                                              "typeApplication": {"body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"}, "type": {"variable": "hydra.context.Context"}}}}}}},
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"},
+                                                                                                                                "type": {"variable": "hydra.typing.InferenceContext"}}}}}}},
                                                                                                                     "domain": {"variable": "hydra.java.syntax.Type"},
                                                                                                                     "parameter": "jt"}},
                                                                                                                 "function": {
@@ -22227,7 +22241,7 @@
                                                                                             "function": {
                                                                                               "typeApplication": {
                                                                                                 "body": {
-                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.takeTypeArgs"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.takeTypeArgs"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}}}}}}}}}}}},
                                                                         "function": {
                                                                           "typeApplication": {
@@ -22624,7 +22638,7 @@
                                                                                 "function": {
                                                                                   "typeApplication": {
                                                                                     "body": {
-                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.isFieldUnitType"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.isFieldUnitType"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                     "type": {"variable": "hydra.errors.Error"}}}}}}}}}}},
                                                                 "function": {
                                                                   "typeApplication": {
@@ -22728,7 +22742,9 @@
                                                                                                                       "application": {
                                                                                                                         "argument": {"variable": "env"},
                                                                                                                         "function": {
-                                                                                                                          "typeApplication": {"body": {"variable": "hydra.java.coder.encodeFunctionPrimitiveByName"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}}}},
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {"variable": "hydra.java.coder.encodeFunctionPrimitiveByName"},
+                                                                                                                            "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}}}},
                                                                                                 "domain": {"variable": "hydra.core.FunctionType"},
                                                                                                 "parameter": "ft"}}}],
                                                                                         "default": {
@@ -22747,7 +22763,9 @@
                                                                                                           "application": {
                                                                                                             "argument": {"variable": "env"},
                                                                                                             "function": {
-                                                                                                              "typeApplication": {"body": {"variable": "hydra.java.coder.encodeNullaryPrimitiveByName"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}},
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"variable": "hydra.java.coder.encodeNullaryPrimitiveByName"},
+                                                                                                                "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}},
                                                                                         "typeName": "hydra.core.Type"}}}},
                                                                                 "domain": {"variable": "hydra.core.Type"},
                                                                                 "parameter": "typ"}},
@@ -22849,7 +22867,7 @@
                                                                           "application": {
                                                                             "argument": {"variable": "env"},
                                                                             "function": {
-                                                                              "typeApplication": {"body": {"variable": "hydra.java.coder.encodeVariable"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                              "typeApplication": {"body": {"variable": "hydra.java.coder.encodeVariable"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {
@@ -23148,7 +23166,7 @@
                                                                                                                                       "application": {
                                                                                                                                         "argument": {"variable": "varName"},
                                                                                                                                         "function": {
-                                                                                                                                          "typeApplication": {"body": {"variable": "hydra.java.coder.classifyDataReference"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                                                                                                          "typeApplication": {"body": {"variable": "hydra.java.coder.classifyDataReference"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                                                                                             "function": {
                                                                                                                               "typeApplication": {
                                                                                                                                 "body": {
@@ -23455,7 +23473,9 @@
                                                                                                                                                                   "application": {
                                                                                                                                                                     "argument": {"variable": "jt"},
                                                                                                                                                                     "function": {
-                                                                                                                                                                      "typeApplication": {"body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"}, "type": {"variable": "hydra.context.Context"}}}}}}},
+                                                                                                                                                                      "typeApplication": {
+                                                                                                                                                                        "body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"},
+                                                                                                                                                                        "type": {"variable": "hydra.typing.InferenceContext"}}}}}}},
                                                                                                                                                             "domain": {"variable": "hydra.java.syntax.Type"},
                                                                                                                                                             "parameter": "jt"}},
                                                                                                                                                         "function": {
@@ -23476,7 +23496,7 @@
                                                                                                                                                                               "application": {
                                                                                                                                                                                 "argument": {"variable": "aliases"},
                                                                                                                                                                                 "function": {
-                                                                                                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}},
+                                                                                                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}},
                                                                                                                                                             "function": {
                                                                                                                                                               "typeApplication": {
                                                                                                                                                                 "body": {
@@ -23568,7 +23588,7 @@
                                                                                                                         "body": {
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {
-                                                                                                                              "typeApplication": {"body": {"variable": "hydra.java.coder.correctCastType"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                                                              "typeApplication": {"body": {"variable": "hydra.java.coder.correctCastType"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                                             "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                                         "type": {"variable": "hydra.errors.Error"}}}}}}}}}}}}},
                                                                                                 "function": {
@@ -23681,7 +23701,7 @@
                                                                                   "application": {
                                                                                     "argument": {"variable": "aliases"},
                                                                                     "function": {
-                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}},
+                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}},
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
@@ -23709,7 +23729,7 @@
                                             "typeName": "hydra.core.Term"}}}}}},
                                 "domain": {"variable": "hydra.graph.Graph"},
                                 "parameter": "g0"}},
-                            "domain": {"variable": "hydra.context.Context"},
+                            "domain": {"variable": "hydra.typing.InferenceContext"},
                             "parameter": "cx"}},
                         "domain": {"variable": "hydra.core.Term"},
                         "parameter": "term"}},
@@ -23733,7 +23753,7 @@
               "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Name"}}}},
             {"isLazy": false, "name": "arg4", "type": {"literal": {"integer": {"int32": {}}}}},
             {"isLazy": false, "name": "arg5", "type": {"variable": "hydra.core.Term"}},
-            {"isLazy": false, "name": "arg6", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg6", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg7", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {
@@ -24864,7 +24884,7 @@
                                                                                                                   "application": {
                                                                                                                     "argument": {"variable": "aliases"},
                                                                                                                     "function": {
-                                                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.domTypeArgs"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.domTypeArgs"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                                                     "function": {
                                                                                                       "typeApplication": {
                                                                                                         "body": {
@@ -25213,7 +25233,7 @@
                                                               "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"list": {"variable": "hydra.java.syntax.BlockStatement"}}}}}}}}}}}}}},
                                         "domain": {"variable": "hydra.graph.Graph"},
                                         "parameter": "g"}},
-                                    "domain": {"variable": "hydra.context.Context"},
+                                    "domain": {"variable": "hydra.typing.InferenceContext"},
                                     "parameter": "cx"}},
                                 "domain": {"variable": "hydra.core.Term"},
                                 "parameter": "term"}},
@@ -26615,7 +26635,7 @@
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.java.syntax.PackageDeclaration"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.java.environment.Aliases"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.packaging.TypeDefinition"}},
-            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {
@@ -26752,7 +26772,7 @@
                                                           "application": {
                                                             "argument": {"variable": "cx"},
                                                             "function": {
-                                                              "typeApplication": {"body": {"variable": "hydra.annotations.getTypeDescription"}, "type": {"variable": "hydra.context.Context"}}}}}}}}},
+                                                              "typeApplication": {"body": {"variable": "hydra.annotations.getTypeDescription"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}},
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {
@@ -26795,7 +26815,7 @@
                                             "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}}}}}}}},
                             "domain": {"variable": "hydra.graph.Graph"},
                             "parameter": "g"}},
-                        "domain": {"variable": "hydra.context.Context"},
+                        "domain": {"variable": "hydra.typing.InferenceContext"},
                         "parameter": "cx"}},
                     "domain": {"variable": "hydra.packaging.TypeDefinition"},
                     "parameter": "tdef"}},
@@ -29626,7 +29646,7 @@
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Name"}},
             {"isLazy": false, "name": "arg3", "type": {"list": {"variable": "hydra.core.Term"}}},
             {"isLazy": false, "name": "arg4", "type": {"list": {"variable": "hydra.core.Type"}}},
-            {"isLazy": false, "name": "arg5", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg5", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg6", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.java.syntax.Expression"}}}},
@@ -29918,7 +29938,9 @@
                                                                                                                           "application": {
                                                                                                                             "argument": {"variable": "jt"},
                                                                                                                             "function": {
-                                                                                                                              "typeApplication": {"body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"}, "type": {"variable": "hydra.context.Context"}}}}}}},
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"},
+                                                                                                                                "type": {"variable": "hydra.typing.InferenceContext"}}}}}}},
                                                                                                                     "function": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {
@@ -29946,7 +29968,7 @@
                                                                                                                               "application": {
                                                                                                                                 "argument": {"variable": "aliases"},
                                                                                                                                 "function": {
-                                                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}},
+                                                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}},
                                                                                                             "function": {
                                                                                                               "typeApplication": {
                                                                                                                 "body": {
@@ -30136,7 +30158,7 @@
                                                                                   "application": {
                                                                                     "argument": {"variable": "env"},
                                                                                     "function": {
-                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.encodeVariable"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.encodeVariable"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -30196,7 +30218,7 @@
                                                     "type": {"variable": "hydra.java.syntax.Expression"}}}}}}}}},
                                     "domain": {"variable": "hydra.graph.Graph"},
                                     "parameter": "g"}},
-                                "domain": {"variable": "hydra.context.Context"},
+                                "domain": {"variable": "hydra.typing.InferenceContext"},
                                 "parameter": "cx"}},
                             "domain": {"list": {"variable": "hydra.core.Type"}},
                             "parameter": "typeApps"}},
@@ -32063,7 +32085,7 @@
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}},
             {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.packaging.Definition"}}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {
@@ -32181,7 +32203,7 @@
                                     "type": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"string": {}}}}}}}}}}},
                         "domain": {"variable": "hydra.graph.Graph"},
                         "parameter": "g"}},
-                    "domain": {"variable": "hydra.context.Context"},
+                    "domain": {"variable": "hydra.typing.InferenceContext"},
                     "parameter": "cx"}},
                 "domain": {"list": {"variable": "hydra.packaging.Definition"}},
                 "parameter": "defs"}},
@@ -32376,7 +32398,7 @@
             {"isLazy": false, "name": "arg5", "type": {"variable": "hydra.java.syntax.Type"}},
             {"isLazy": false, "name": "arg6", "type": {"list": {"variable": "hydra.java.syntax.TypeArgument"}}},
             {"isLazy": false, "name": "arg7", "type": {"variable": "hydra.core.Term"}},
-            {"isLazy": false, "name": "arg8", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg8", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg9", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {
@@ -32668,7 +32690,7 @@
                                                                 "type": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}}}}}}},
                                                 "domain": {"variable": "hydra.graph.Graph"},
                                                 "parameter": "g"}},
-                                            "domain": {"variable": "hydra.context.Context"},
+                                            "domain": {"variable": "hydra.typing.InferenceContext"},
                                             "parameter": "cx"}},
                                         "domain": {"variable": "hydra.core.Term"},
                                         "parameter": "d"}},
@@ -36166,7 +36188,7 @@
             {"isLazy": false, "name": "arg3", "type": {"list": {"variable": "hydra.java.syntax.TypeParameter"}}},
             {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.core.Name"}},
             {"isLazy": false, "name": "arg5", "type": {"variable": "hydra.core.Type"}},
-            {"isLazy": false, "name": "arg6", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg6", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg7", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.java.syntax.ClassDeclaration"}}}},
@@ -36395,7 +36417,7 @@
                                                     "typeName": "hydra.core.Type"}}}}}},
                                         "domain": {"variable": "hydra.graph.Graph"},
                                         "parameter": "g"}},
-                                    "domain": {"variable": "hydra.context.Context"},
+                                    "domain": {"variable": "hydra.typing.InferenceContext"},
                                     "parameter": "cx"}},
                                 "domain": {"variable": "hydra.core.Type"},
                                 "parameter": "t"}},
@@ -36419,7 +36441,7 @@
             {"isLazy": false, "name": "arg2", "type": {"set": {"variable": "hydra.core.Name"}}},
             {"isLazy": false, "name": "arg3", "type": {"list": {"variable": "hydra.core.Binding"}}},
             {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.core.Name"}},
-            {"isLazy": false, "name": "arg5", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg5", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg6", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {
@@ -36623,7 +36645,9 @@
                                                                                   "application": {
                                                                                     "argument": {"variable": "jtype"},
                                                                                     "function": {
-                                                                                      "typeApplication": {"body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"}, "type": {"variable": "hydra.context.Context"}}}}}}},
+                                                                                      "typeApplication": {
+                                                                                        "body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"},
+                                                                                        "type": {"variable": "hydra.typing.InferenceContext"}}}}}}},
                                                                             "function": {
                                                                               "typeApplication": {
                                                                                 "body": {
@@ -36651,7 +36675,7 @@
                                                                                   "application": {
                                                                                     "argument": {"variable": "aliasesExt"},
                                                                                     "function": {
-                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}},
+                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}},
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
@@ -36721,7 +36745,7 @@
                                                       "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"maybe": {"variable": "hydra.java.syntax.BlockStatement"}}}}}}}}}}}},
                                     "domain": {"variable": "hydra.graph.Graph"},
                                     "parameter": "g"}},
-                                "domain": {"variable": "hydra.context.Context"},
+                                "domain": {"variable": "hydra.typing.InferenceContext"},
                                 "parameter": "cx"}},
                             "domain": {"variable": "hydra.core.Name"},
                             "parameter": "name"}},
@@ -36745,7 +36769,7 @@
             {"isLazy": false, "name": "arg4", "type": {"set": {"variable": "hydra.core.Name"}}},
             {"isLazy": false, "name": "arg5", "type": {"list": {"variable": "hydra.core.Binding"}}},
             {"isLazy": false, "name": "arg6", "type": {"variable": "hydra.core.Name"}},
-            {"isLazy": false, "name": "arg7", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg7", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg8", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.java.syntax.BlockStatement"}}}},
@@ -36979,7 +37003,9 @@
                                                                                                       "application": {
                                                                                                         "argument": {"variable": "jtype"},
                                                                                                         "function": {
-                                                                                                          "typeApplication": {"body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"}, "type": {"variable": "hydra.context.Context"}}}}}}},
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"},
+                                                                                                            "type": {"variable": "hydra.typing.InferenceContext"}}}}}}},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {
@@ -37098,7 +37124,7 @@
                                                                                   "application": {
                                                                                     "argument": {"variable": "aliasesExt"},
                                                                                     "function": {
-                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}},
+                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}},
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
@@ -37154,7 +37180,7 @@
                                                             "type": {"variable": "hydra.java.syntax.BlockStatement"}}}}}}}}},
                                             "domain": {"variable": "hydra.graph.Graph"},
                                             "parameter": "g"}},
-                                        "domain": {"variable": "hydra.context.Context"},
+                                        "domain": {"variable": "hydra.typing.InferenceContext"},
                                         "parameter": "cx"}},
                                     "domain": {"variable": "hydra.core.Name"},
                                     "parameter": "name"}},
@@ -37304,7 +37330,7 @@
             {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.java.syntax.Type"}},
             {"isLazy": false, "name": "arg5", "type": {"variable": "hydra.core.Term"}},
             {"isLazy": false, "name": "arg6", "type": {"variable": "hydra.core.Type"}},
-            {"isLazy": false, "name": "arg7", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg7", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg8", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.java.syntax.Expression"}}}},
@@ -37380,7 +37406,9 @@
                                                                               "application": {
                                                                                 "argument": {"variable": "jtype"},
                                                                                 "function": {
-                                                                                  "typeApplication": {"body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"}, "type": {"variable": "hydra.context.Context"}}}}}}},
+                                                                                  "typeApplication": {
+                                                                                    "body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"},
+                                                                                    "type": {"variable": "hydra.typing.InferenceContext"}}}}}}},
                                                                         "function": {
                                                                           "typeApplication": {
                                                                             "body": {
@@ -37408,7 +37436,7 @@
                                                                                   "application": {
                                                                                     "argument": {"variable": "aliases"},
                                                                                     "function": {
-                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}},
+                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}},
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
@@ -37451,7 +37479,7 @@
                                                             "type": {"variable": "hydra.java.syntax.Expression"}}}}}}}}},
                                             "domain": {"variable": "hydra.graph.Graph"},
                                             "parameter": "g"}},
-                                        "domain": {"variable": "hydra.context.Context"},
+                                        "domain": {"variable": "hydra.typing.InferenceContext"},
                                         "parameter": "cx"}},
                                     "domain": {"variable": "hydra.core.Type"},
                                     "parameter": "typ"}},
@@ -37485,7 +37513,7 @@
             {"isLazy": false, "name": "arg7", "type": {"variable": "hydra.core.Name"}},
             {"isLazy": false, "name": "arg8", "type": {"variable": "hydra.java.environment.JavaSymbolClass"}},
             {"isLazy": false, "name": "arg9", "type": {"list": {"variable": "hydra.core.Type"}}},
-            {"isLazy": false, "name": "arg10", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg10", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg11", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.java.syntax.Expression"}}}},
@@ -37635,7 +37663,9 @@
                                                                                                                                           "application": {
                                                                                                                                             "argument": {"variable": "jt"},
                                                                                                                                             "function": {
-                                                                                                                                              "typeApplication": {"body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"}, "type": {"variable": "hydra.context.Context"}}}}}}},
+                                                                                                                                              "typeApplication": {
+                                                                                                                                                "body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"},
+                                                                                                                                                "type": {"variable": "hydra.typing.InferenceContext"}}}}}}},
                                                                                                                                     "function": {
                                                                                                                                       "typeApplication": {
                                                                                                                                         "body": {
@@ -37663,7 +37693,7 @@
                                                                                                                                               "application": {
                                                                                                                                                 "argument": {"variable": "aliases"},
                                                                                                                                                 "function": {
-                                                                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}},
+                                                                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}},
                                                                                                                             "function": {
                                                                                                                               "typeApplication": {
                                                                                                                                 "body": {
@@ -37706,7 +37736,7 @@
                                                                                                                 "function": {
                                                                                                                   "typeApplication": {
                                                                                                                     "body": {
-                                                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.filterPhantomTypeArgs"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.filterPhantomTypeArgs"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                                     "type": {"variable": "hydra.errors.Error"}}}}}}}}}}},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
@@ -37908,7 +37938,9 @@
                                                                                                                                           "application": {
                                                                                                                                             "argument": {"variable": "jt"},
                                                                                                                                             "function": {
-                                                                                                                                              "typeApplication": {"body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"}, "type": {"variable": "hydra.context.Context"}}}}}}},
+                                                                                                                                              "typeApplication": {
+                                                                                                                                                "body": {"variable": "hydra.java.utils.javaTypeToJavaReferenceType"},
+                                                                                                                                                "type": {"variable": "hydra.typing.InferenceContext"}}}}}}},
                                                                                                                                     "function": {
                                                                                                                                       "typeApplication": {
                                                                                                                                         "body": {
@@ -37936,7 +37968,7 @@
                                                                                                                                               "application": {
                                                                                                                                                 "argument": {"variable": "aliases"},
                                                                                                                                                 "function": {
-                                                                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}},
+                                                                                                                                                  "typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "hydra.typing.InferenceContext"}}}}}}}}}}}}},
                                                                                                                             "function": {
                                                                                                                               "typeApplication": {
                                                                                                                                 "body": {
@@ -37979,7 +38011,7 @@
                                                                                                                 "function": {
                                                                                                                   "typeApplication": {
                                                                                                                     "body": {
-                                                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.filterPhantomTypeArgs"}, "type": {"variable": "hydra.context.Context"}}},
+                                                                                                                      "typeApplication": {"body": {"variable": "hydra.java.coder.filterPhantomTypeArgs"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                                     "type": {"variable": "hydra.errors.Error"}}}}}}}}}}},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
@@ -38055,7 +38087,7 @@
                                                                     "typeName": "hydra.java.environment.JavaSymbolClass"}}}}}},
                                                         "domain": {"variable": "hydra.graph.Graph"},
                                                         "parameter": "g"}},
-                                                    "domain": {"variable": "hydra.context.Context"},
+                                                    "domain": {"variable": "hydra.typing.InferenceContext"},
                                                     "parameter": "cx"}},
                                                 "domain": {"list": {"variable": "hydra.core.Type"}},
                                                 "parameter": "allTypeArgs"}},
@@ -38508,7 +38540,7 @@
             {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.java.syntax.Type"}},
             {"isLazy": false, "name": "arg5", "type": {"list": {"variable": "hydra.java.syntax.TypeArgument"}}},
             {"isLazy": false, "name": "arg6", "type": {"variable": "hydra.core.Field"}},
-            {"isLazy": false, "name": "arg7", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg7", "type": {"variable": "hydra.typing.InferenceContext"}},
             {"isLazy": false, "name": "arg8", "type": {"variable": "hydra.graph.Graph"}}],
           "result": {
             "type": {
@@ -38882,7 +38914,7 @@
                                                         "typeName": "hydra.core.Term"}}}}}},
                                             "domain": {"variable": "hydra.graph.Graph"},
                                             "parameter": "g"}},
-                                        "domain": {"variable": "hydra.context.Context"},
+                                        "domain": {"variable": "hydra.typing.InferenceContext"},
                                         "parameter": "cx"}},
                                     "domain": {"variable": "hydra.core.Field"},
                                     "parameter": "field"}},
@@ -39552,7 +39584,6 @@
     {"module": "hydra.ast"},
     {"module": "hydra.classes"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

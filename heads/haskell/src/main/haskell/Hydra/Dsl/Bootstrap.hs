@@ -57,17 +57,16 @@ datatype gname lname typ = Binding {
   where
     elName = qualify gname (Name lname)
 
-qualify :: ModuleName -> Name -> Name
-qualify (ModuleName gname) (Name lname) = Name $ gname ++ "." ++ lname
-
-typeref :: ModuleName -> String -> Type
-typeref ns = TypeVariable . qualify ns . Name
-
--- | New DSL helpers (Option 1 from dsl-redesign-options.md)
-
 -- | Define a type in a namespace
 defineType :: ModuleName -> String -> Type -> Binding
 defineType = datatype
+
+-- | A module dependency qualified by the providing package, for disambiguation
+qualifiedDep :: PackageName -> ModuleName -> ModuleDependency
+qualifiedDep pkg ns = ModuleDependency ns (Just pkg)
+
+qualify :: ModuleName -> Name -> Name
+qualify (ModuleName gname) (Name lname) = Name $ gname ++ "." ++ lname
 
 -- | Convert a type Binding (from defineType) to a type Definition.
 -- The Binding must have been created by defineType/datatype, which stores
@@ -81,6 +80,13 @@ toTypeDef b = case Decode.type_ bootstrapGraph (stripAnnotations $ bindingTerm b
     stripAnnotations (TermAnnotated (AnnotatedTerm body _)) = stripAnnotations body
     stripAnnotations t = t
 
+typeref :: ModuleName -> String -> Type
+typeref ns = TypeVariable . qualify ns . Name
+
+-- | An unqualified module dependency (package omitted; resolver searches all packages in scope)
+unqualifiedDep :: ModuleName -> ModuleDependency
+unqualifiedDep ns = ModuleDependency ns Nothing
+
 -- | Reference a type by its binding
 use :: Binding -> Type
 use b = TypeVariable (bindingName b)
@@ -88,11 +94,3 @@ use b = TypeVariable (bindingName b)
 -- | Reference a type in a namespace (old style, for migration)
 useType :: ModuleName -> String -> Type
 useType = typeref
-
--- | An unqualified module dependency (package omitted; resolver searches all packages in scope)
-unqualifiedDep :: ModuleName -> ModuleDependency
-unqualifiedDep ns = ModuleDependency ns Nothing
-
--- | A module dependency qualified by the providing package, for disambiguation
-qualifiedDep :: PackageName -> ModuleName -> ModuleDependency
-qualifiedDep pkg ns = ModuleDependency ns (Just pkg)

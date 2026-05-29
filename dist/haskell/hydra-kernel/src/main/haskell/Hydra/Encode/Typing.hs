@@ -3,11 +3,11 @@
 
 module Hydra.Encode.Typing where
 import qualified Hydra.Core as Core
-import qualified Hydra.Encode.Context as Context
 import qualified Hydra.Encode.Core as EncodeCore
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Encode.Paths as Paths
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -38,6 +38,18 @@ functionStructure env x =
         Core.Field {
           Core.fieldName = (Core.Name "environment"),
           Core.fieldTerm = (env (Typing.functionStructureEnvironment x))}]})
+-- | Encoder for hydra.typing.InferenceContext
+inferenceContext :: Typing.InferenceContext -> Core.Term
+inferenceContext x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.InferenceContext"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "freshTypeVariableCount"),
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x2))) (Typing.inferenceContextFreshTypeVariableCount x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "trace"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map Paths.subtermStep xs)) (Typing.inferenceContextTrace x))}]})
 -- | Encoder for hydra.typing.InferenceResult
 inferenceResult :: Typing.InferenceResult -> Core.Term
 inferenceResult x =
@@ -58,7 +70,7 @@ inferenceResult x =
           Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap EncodeCore.name EncodeCore.typeVariableMetadata m)) (Typing.inferenceResultClassConstraints x))},
         Core.Field {
           Core.fieldName = (Core.Name "context"),
-          Core.fieldTerm = (Context.context (Typing.inferenceResultContext x))}]})
+          Core.fieldTerm = (inferenceContext (Typing.inferenceResultContext x))}]})
 -- | Encoder for hydra.typing.Parameter
 parameter :: Typing.Parameter -> Core.Term
 parameter x =

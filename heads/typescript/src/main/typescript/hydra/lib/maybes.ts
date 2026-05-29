@@ -14,8 +14,9 @@
 import type { Maybe } from "../runtime.js";
 import { Just, Nothing } from "../runtime.js";
 
-const force = <A>(x: A | (() => A)): A =>
-  typeof x === "function" ? (x as () => A)() : x;
+// `force` is inlined into each consumer (`cases`, `fromMaybe`, `maybe`)
+// to save one JS frame per call. See lib/logic.ts ifElse for the same
+// rationale and feature_126_typescript-plan.md for measurements.
 
 export const apply = (f: any, m: any): Maybe<any> =>
   f.tag === "just" && m.tag === "just" ? Just(f.value(m.value)) : Nothing;
@@ -24,7 +25,7 @@ export const bind = (m: any, f: (a: any) => any): Maybe<any> =>
   m.tag === "just" ? f(m.value) : Nothing;
 
 export const cases = (m: any, n: any, j: (a: any) => any): any =>
-  m.tag === "just" ? j(m.value) : force(n);
+  m.tag === "just" ? j(m.value) : (typeof n === "function" ? n() : n);
 
 export const cat = (ms: any): readonly any[] => {
   const out: any[] = [];
@@ -38,7 +39,7 @@ export const compose = (f: (a: any) => any, g: (b: any) => any, x: any): Maybe<a
 };
 
 export const fromMaybe = (d: any, m: any): any =>
-  m.tag === "just" ? m.value : force(d);
+  m.tag === "just" ? m.value : (typeof d === "function" ? d() : d);
 
 export const isJust = (m: any): boolean => m.tag === "just";
 
@@ -54,7 +55,7 @@ export const mapMaybe = (f: (a: any) => any, xs: any): readonly any[] => {
 };
 
 export const maybe = (d: any, f: (a: any) => any, m: any): any =>
-  m.tag === "just" ? f(m.value) : force(d);
+  m.tag === "just" ? f(m.value) : (typeof d === "function" ? d() : d);
 
 export const pure = <A>(x: A): Maybe<A> => Just(x);
 

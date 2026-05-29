@@ -19,12 +19,6 @@ ns = ModuleName "hydra.delta.parquet"
 define :: String -> Type -> Binding
 define = defineType ns
 
-delta :: String -> Type
-delta = typeref ns
-
-enumVal :: String -> String -> FieldType
-enumVal name desc = name>: doc desc T.unit
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -98,6 +92,12 @@ decimalType = define "DecimalType" $
   T.record [
     "precision">: T.int32,
     "scale">: T.int32]
+
+delta :: String -> Type
+delta = typeref ns
+
+enumVal :: String -> String -> FieldType
+enumVal name desc = name>: doc desc T.unit
 
 mapType :: Binding
 mapType = define "MapType" $

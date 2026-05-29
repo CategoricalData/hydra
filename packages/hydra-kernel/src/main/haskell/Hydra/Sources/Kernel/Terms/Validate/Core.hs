@@ -99,61 +99,6 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
--- | A Nothing of type Maybe InvalidTermError
-noError :: TTerm (Maybe InvalidTermError)
-noError = TTerm $ TermMaybe Nothing
-
--- | A Just of type InvalidTermError -> Maybe InvalidTermError
-justError :: TTerm InvalidTermError -> TTerm (Maybe InvalidTermError)
-justError (TTerm t) = TTerm $ TermMaybe $ Just t
-
--- | Helper to make a just from a TTerm
-mkJust :: TTerm InvalidTermError -> TTerm (Maybe InvalidTermError)
-mkJust = just
-
--- | An empty ValidationResult (no errors, no warnings) parameterized by 'e'.
--- Used as the initial accumulator for the per-tree fold. The phantom type
--- variable 'e' is left polymorphic so the same constant works for both
--- InvalidTermError and InvalidTypeError walks.
-emptyResult :: TTerm (ValidationResult e)
-emptyResult = Validation.validationResult
-  (list ([] :: [TTerm e]))
-  (list ([] :: [TTerm e]))
-
--- | Wrap a leaf-shaped 'Maybe InvalidTermError' finding with the rule that
--- produced it, gated by the active profile. If the rule's qualified name is
--- not in either errorRules or warningRules, the inner finding expression
--- is never evaluated (Logic.ifElse short-circuits at DSL runtime). When the
--- rule is enabled and the inner finding is Just, returns 'Just (ruleName,
--- payload)'; otherwise 'Nothing'. Used to retrofit existing per-rule checks
--- in checkTerm without restructuring them.
-guardedTermRule
-  :: TTerm ValidationProfile
-  -> Name -- ^ Union-type qualified name (e.g. _InvalidTermError).
-  -> Name -- ^ Variant local name (e.g. _InvalidTermError_duplicateBinding).
-  -> TTerm (Maybe InvalidTermError) -- ^ The leaf-shaped finding term.
-  -> TTerm (Maybe (Name, InvalidTermError))
-guardedTermRule profile unionName variantName findingExpr =
-  Logic.ifElse (enabled @@ profile @@ ruleNameTerm)
-    (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
-    nothing
-  where
-    ruleNameTerm = nameLift (qualifiedRule unionName variantName)
-
--- | Type-side counterpart of 'guardedTermRule'.
-guardedTypeRule
-  :: TTerm ValidationProfile
-  -> Name
-  -> Name
-  -> TTerm (Maybe InvalidTypeError)
-  -> TTerm (Maybe (Name, InvalidTypeError))
-guardedTypeRule profile unionName variantName findingExpr =
-  Logic.ifElse (enabled @@ profile @@ ruleNameTerm)
-    (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
-    nothing
-  where
-    ruleNameTerm = nameLift (qualifiedRule unionName variantName)
-
 -- | Classify a rule-tagged 'Maybe (Name, InvalidTermError)' finding against
 -- the active profile and append the payload (without its rule tag) to the
 -- appropriate list in the accumulator. Findings whose rule appears in
@@ -644,6 +589,49 @@ checkVoid = define "checkVoid" $
         record _VoidInNonBottomPositionError [
           _VoidInNonBottomPositionError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep]))]]
 
+-- | An empty ValidationResult (no errors, no warnings) parameterized by 'e'.
+-- Used as the initial accumulator for the per-tree fold. The phantom type
+-- variable 'e' is left polymorphic so the same constant works for both
+-- InvalidTermError and InvalidTypeError walks.
+emptyResult :: TTerm (ValidationResult e)
+emptyResult = Validation.validationResult
+  (list ([] :: [TTerm e]))
+  (list ([] :: [TTerm e]))
+
+-- | Wrap a leaf-shaped 'Maybe InvalidTermError' finding with the rule that
+-- produced it, gated by the active profile. If the rule's qualified name is
+-- not in either errorRules or warningRules, the inner finding expression
+-- is never evaluated (Logic.ifElse short-circuits at DSL runtime). When the
+-- rule is enabled and the inner finding is Just, returns 'Just (ruleName,
+-- payload)'; otherwise 'Nothing'. Used to retrofit existing per-rule checks
+-- in checkTerm without restructuring them.
+guardedTermRule
+  :: TTerm ValidationProfile
+  -> Name -- ^ Union-type qualified name (e.g. _InvalidTermError).
+  -> Name -- ^ Variant local name (e.g. _InvalidTermError_duplicateBinding).
+  -> TTerm (Maybe InvalidTermError) -- ^ The leaf-shaped finding term.
+  -> TTerm (Maybe (Name, InvalidTermError))
+guardedTermRule profile unionName variantName findingExpr =
+  Logic.ifElse (enabled @@ profile @@ ruleNameTerm)
+    (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
+    nothing
+  where
+    ruleNameTerm = nameLift (qualifiedRule unionName variantName)
+
+-- | Type-side counterpart of 'guardedTermRule'.
+guardedTypeRule
+  :: TTerm ValidationProfile
+  -> Name
+  -> Name
+  -> TTerm (Maybe InvalidTypeError)
+  -> TTerm (Maybe (Name, InvalidTypeError))
+guardedTypeRule profile unionName variantName findingExpr =
+  Logic.ifElse (enabled @@ profile @@ ruleNameTerm)
+    (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
+    nothing
+  where
+    ruleNameTerm = nameLift (qualifiedRule unionName variantName)
+
 -- | Test whether a rule is active in a profile (in either errorRules or
 -- warningRules). A rule that is active is evaluated by validators; a rule
 -- that is inactive is skipped entirely.
@@ -695,13 +683,6 @@ findDuplicateFieldType = define "findDuplicateFieldType" $
     (pair Sets.empty nothing)
     (var "names") $
   Pairs.second (var "result")
-noTypeError :: TTerm (Maybe InvalidTypeError)
-noTypeError = TTerm $ TermMaybe Nothing
-
--- | A Just of type InvalidTypeError -> Maybe InvalidTypeError
-mkJustType :: TTerm InvalidTypeError -> TTerm (Maybe InvalidTypeError)
-mkJustType = just
-
 -- | Return the first Just from a list of Maybe values, or Nothing
 firstError :: TTermDefinition ([Maybe InvalidTermError] -> Maybe InvalidTermError)
 firstError = define "firstError" $
@@ -765,13 +746,9 @@ isValidName = define "isValidName" $
   "name" ~>
   Logic.not $ Equality.equal (Core.unName $ var "name") (string "")
 
--- | Compose a fully qualified rule identifier from a union-type qualified
--- name and a variant local name, joined with '.'. Used at profile-construction
--- time to derive rule IDs like 'hydra.error.core.InvalidTermError.duplicateBinding'
--- from the generated _InvalidTermError and _InvalidTermError_duplicateBinding
--- constants. Pure host-side helper; not exported as a kernel term.
-qualifiedRule :: Name -> Name -> Name
-qualifiedRule (Name u) (Name v) = Name (L.concat [u, ".", v])
+-- | A Just of type InvalidTermError -> Maybe InvalidTermError
+justError :: TTerm InvalidTermError -> TTerm (Maybe InvalidTermError)
+justError (TTerm t) = TTerm $ TermMaybe $ Just t
 
 -- | The default validation profile for hydra.validate.core (term and type
 -- validators). Every check currently wired up is in 'errorRules' except
@@ -830,6 +807,29 @@ kernelDefaultCoreProfile = define "kernelDefaultCoreProfile" $
     coreWarningRules :: [Name]
     coreWarningRules =
       [qualifiedRule _InvalidTypeError _InvalidTypeError_singleVariantUnion]
+
+-- | Helper to make a just from a TTerm
+mkJust :: TTerm InvalidTermError -> TTerm (Maybe InvalidTermError)
+mkJust = just
+
+-- | A Just of type InvalidTypeError -> Maybe InvalidTypeError
+mkJustType :: TTerm InvalidTypeError -> TTerm (Maybe InvalidTypeError)
+mkJustType = just
+
+-- | A Nothing of type Maybe InvalidTermError
+noError :: TTerm (Maybe InvalidTermError)
+noError = TTerm $ TermMaybe Nothing
+
+noTypeError :: TTerm (Maybe InvalidTypeError)
+noTypeError = TTerm $ TermMaybe Nothing
+
+-- | Compose a fully qualified rule identifier from a union-type qualified
+-- name and a variant local name, joined with '.'. Used at profile-construction
+-- time to derive rule IDs like 'hydra.error.core.InvalidTermError.duplicateBinding'
+-- from the generated _InvalidTermError and _InvalidTermError_duplicateBinding
+-- constants. Pure host-side helper; not exported as a kernel term.
+qualifiedRule :: Name -> Name -> Name
+qualifiedRule (Name u) (Name v) = Name (L.concat [u, ".", v])
 
 -- | Validate a term against a profile, accumulating findings into a
 -- 'ValidationResult InvalidTermError'. The profile classifies each rule as

@@ -120,6 +120,14 @@ module_ = Module {
       toDefinition valueToExpr]
 
 
+definitionToExpr :: TTermDefinition (P3.Definition -> Expr)
+definitionToExpr = define "definitionToExpr" $
+  doc "Convert a definition to an expression" $
+  lambda "def" $
+    cases P3._Definition (var "def") Nothing [
+      P3._Definition_enum>>: lambda "e" $ enumDefinitionToExpr @@ var "e",
+      P3._Definition_message>>: lambda "m" $ messageDefinitionToExpr @@ var "m"]
+
 deprecatedOptionName :: TTermDefinition String
 deprecatedOptionName = define "deprecatedOptionName" $
   doc "The name of the deprecated option" $
@@ -129,63 +137,6 @@ descriptionOptionName :: TTermDefinition String
 descriptionOptionName = define "descriptionOptionName" $
   doc "A special Protobuf option name for descriptions (documentation)" $
   string "_description"
-
-excludeInternalOptions :: TTermDefinition ([P3.Option] -> [P3.Option])
-excludeInternalOptions = define "excludeInternalOptions" $
-  doc "Filter out internal options (those whose names start with underscore)" $
-  lambda "opts" $
-    Lists.filter
-      (lambda "opt" $ Logic.not $
-        Equality.equal
-          (Maybes.fromMaybe (int32 0) (Strings.maybeCharAt (int32 0) (project P3._Option P3._Option_name @@ var "opt")))
-          (int32 95))  -- 95 = '_'
-      (var "opts")
-
-optDesc :: TTermDefinition (Bool -> [P3.Option] -> Expr -> Expr)
-optDesc = define "optDesc" $
-  doc "Prepend an optional description comment to an expression" $
-  lambda "doubleNewline" $ lambda "opts" $ lambda "expr" $ lets [
-    "descs">: Lists.filter
-      (lambda "opt" $ Equality.equal (project P3._Option P3._Option_name @@ var "opt") (string "_description"))
-      (var "opts")] $
-    Maybes.maybe
-      (var "expr")
-      (lambda "firstDesc" $ lets [
-        "descValue">: project P3._Option P3._Option_value @@ var "firstDesc",
-        "descStr">: cases P3._Value (var "descValue") Nothing [
-          P3._Value_boolean>>: lambda "b" $ Logic.ifElse (var "b") (string "true") (string "false"),
-          P3._Value_string>>: lambda "s" $ var "s"],
-        "commentLines">: Lists.map
-          (lambda "line" $ Logic.ifElse (Equality.equal (var "line") (string ""))
-            (string "//")
-            (Strings.cat2 (string "// ") (var "line")))
-          (Strings.lines (var "descStr")),
-        "comment">: Serialization.cst @@ (Strings.intercalate (string "\n") (var "commentLines")),
-        "sep">: Logic.ifElse (var "doubleNewline")
-          (Serialization.doubleNewlineSep @@ list [var "comment", var "expr"])
-          (Serialization.newlineSep @@ list [var "comment", var "expr"])] $
-        var "sep")
-      (Lists.maybeHead (var "descs"))
-
-protoBlock :: TTermDefinition ([Expr] -> Expr)
-protoBlock = define "protoBlock" $
-  doc "Wrap expressions in a curly-braced block with double-newline separation" $
-  lambda "exprs" $
-    Serialization.brackets @@ Serialization.curlyBraces @@ Serialization.fullBlockStyle @@
-      (Serialization.doubleNewlineSep @@ var "exprs")
-
-semi :: TTermDefinition (Expr -> Expr)
-semi = define "semi" $
-  doc "Append a semicolon to an expression" $
-  lambda "e" $ Serialization.noSep @@ list [var "e", Serialization.cst @@ string ";"]
-
-definitionToExpr :: TTermDefinition (P3.Definition -> Expr)
-definitionToExpr = define "definitionToExpr" $
-  doc "Convert a definition to an expression" $
-  lambda "def" $
-    cases P3._Definition (var "def") Nothing [
-      P3._Definition_enum>>: lambda "e" $ enumDefinitionToExpr @@ var "e",
-      P3._Definition_message>>: lambda "m" $ messageDefinitionToExpr @@ var "m"]
 
 enumDefinitionToExpr :: TTermDefinition (P3.EnumDefinition -> Expr)
 enumDefinitionToExpr = define "enumDefinitionToExpr" $
@@ -212,6 +163,38 @@ enumValueToExpr = define "enumValueToExpr" $
         Serialization.cst @@ (unwrap P3._EnumValueName @@ var "name"),
         Serialization.cst @@ string "=",
         Serialization.cst @@ (Literals.showInt32 (var "number"))]))
+
+excludeInternalOptions :: TTermDefinition ([P3.Option] -> [P3.Option])
+excludeInternalOptions = define "excludeInternalOptions" $
+  doc "Filter out internal options (those whose names start with underscore)" $
+  lambda "opts" $
+    Lists.filter
+      (lambda "opt" $ Logic.not $
+        Equality.equal
+          (Maybes.fromMaybe (int32 0) (Strings.maybeCharAt (int32 0) (project P3._Option P3._Option_name @@ var "opt")))
+          (int32 95))  -- 95 = '_'
+      (var "opts")
+
+fieldOptionToExpr :: TTermDefinition (P3.Option -> Expr)
+fieldOptionToExpr = define "fieldOptionToExpr" $
+  doc "Convert a field option to an expression" $
+  lambda "opt" $ lets [
+    "name">: project P3._Option P3._Option_name @@ var "opt",
+    "value">: project P3._Option P3._Option_value @@ var "opt"] $
+    Serialization.spaceSep @@ list [
+      Serialization.cst @@ var "name",
+      Serialization.cst @@ string "=",
+      valueToExpr @@ var "value"]
+
+fieldOptionsToExpr :: TTermDefinition ([P3.Option] -> Maybe Expr)
+fieldOptionsToExpr = define "fieldOptionsToExpr" $
+  doc "Convert field options to an optional bracket-enclosed expression" $
+  lambda "opts0" $ lets [
+    "opts">: excludeInternalOptions @@ var "opts0"] $
+    Logic.ifElse (Lists.null (var "opts"))
+      nothing
+      (Maybes.pure (Serialization.bracketList @@ Serialization.inlineStyle @@
+        (Lists.map fieldOptionToExpr (var "opts"))))
 
 fieldToExpr :: TTermDefinition (P3.Field -> Expr)
 fieldToExpr = define "fieldToExpr" $
@@ -251,27 +234,6 @@ fieldToExpr = define "fieldToExpr" $
             Maybes.pure (Serialization.cst @@ string "="),
             Maybes.pure (Serialization.cst @@ (Literals.showInt32 (var "num"))),
             fieldOptionsToExpr @@ var "options"]))])
-
-fieldOptionToExpr :: TTermDefinition (P3.Option -> Expr)
-fieldOptionToExpr = define "fieldOptionToExpr" $
-  doc "Convert a field option to an expression" $
-  lambda "opt" $ lets [
-    "name">: project P3._Option P3._Option_name @@ var "opt",
-    "value">: project P3._Option P3._Option_value @@ var "opt"] $
-    Serialization.spaceSep @@ list [
-      Serialization.cst @@ var "name",
-      Serialization.cst @@ string "=",
-      valueToExpr @@ var "value"]
-
-fieldOptionsToExpr :: TTermDefinition ([P3.Option] -> Maybe Expr)
-fieldOptionsToExpr = define "fieldOptionsToExpr" $
-  doc "Convert field options to an optional bracket-enclosed expression" $
-  lambda "opts0" $ lets [
-    "opts">: excludeInternalOptions @@ var "opts0"] $
-    Logic.ifElse (Lists.null (var "opts"))
-      nothing
-      (Maybes.pure (Serialization.bracketList @@ Serialization.inlineStyle @@
-        (Lists.map fieldOptionToExpr (var "opts"))))
 
 fieldTypeToExpr :: TTermDefinition (P3.FieldType -> Expr)
 fieldTypeToExpr = define "fieldTypeToExpr" $
@@ -336,6 +298,39 @@ messageDefinitionToExpr = define "messageDefinitionToExpr" $
         Serialization.cst @@ (unwrap P3._TypeName @@ var "name"),
         protoBlock @@ (Lists.map fieldToExpr (var "fields"))])
 
+optDesc :: TTermDefinition (Bool -> [P3.Option] -> Expr -> Expr)
+optDesc = define "optDesc" $
+  doc "Prepend an optional description comment to an expression" $
+  lambda "doubleNewline" $ lambda "opts" $ lambda "expr" $ lets [
+    "descs">: Lists.filter
+      (lambda "opt" $ Equality.equal (project P3._Option P3._Option_name @@ var "opt") (string "_description"))
+      (var "opts")] $
+    Maybes.maybe
+      (var "expr")
+      (lambda "firstDesc" $ lets [
+        "descValue">: project P3._Option P3._Option_value @@ var "firstDesc",
+        "descStr">: cases P3._Value (var "descValue") Nothing [
+          P3._Value_boolean>>: lambda "b" $ Logic.ifElse (var "b") (string "true") (string "false"),
+          P3._Value_string>>: lambda "s" $ var "s"],
+        "commentLines">: Lists.map
+          (lambda "line" $ Logic.ifElse (Equality.equal (var "line") (string ""))
+            (string "//")
+            (Strings.cat2 (string "// ") (var "line")))
+          (Strings.lines (var "descStr")),
+        "comment">: Serialization.cst @@ (Strings.intercalate (string "\n") (var "commentLines")),
+        "sep">: Logic.ifElse (var "doubleNewline")
+          (Serialization.doubleNewlineSep @@ list [var "comment", var "expr"])
+          (Serialization.newlineSep @@ list [var "comment", var "expr"])] $
+        var "sep")
+      (Lists.maybeHead (var "descs"))
+
+protoBlock :: TTermDefinition ([Expr] -> Expr)
+protoBlock = define "protoBlock" $
+  doc "Wrap expressions in a curly-braced block with double-newline separation" $
+  lambda "exprs" $
+    Serialization.brackets @@ Serialization.curlyBraces @@ Serialization.fullBlockStyle @@
+      (Serialization.doubleNewlineSep @@ var "exprs")
+
 protoFileToExpr :: TTermDefinition (P3.ProtoFile -> Expr)
 protoFileToExpr = define "protoFileToExpr" $
   doc "Convert a proto file to an expression" $
@@ -383,6 +378,11 @@ scalarTypeToExpr = define "scalarTypeToExpr" $
       P3._ScalarType_string>>: constant $ string "string",
       P3._ScalarType_uint32>>: constant $ string "uint32",
       P3._ScalarType_uint64>>: constant $ string "uint64"])
+
+semi :: TTermDefinition (Expr -> Expr)
+semi = define "semi" $
+  doc "Append a semicolon to an expression" $
+  lambda "e" $ Serialization.noSep @@ list [var "e", Serialization.cst @@ string ";"]
 
 simpleTypeToExpr :: TTermDefinition (P3.SimpleType -> Expr)
 simpleTypeToExpr = define "simpleTypeToExpr" $

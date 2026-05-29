@@ -123,54 +123,17 @@ module_ = Module {
 _PgRdfEnvironment :: Name
 _PgRdfEnvironment = Name "hydra.pg.rdf.environment.PgRdfEnvironment"
 
-envEncodeVertexId :: TTerm a -> TTerm b
-envEncodeVertexId env = project _PgRdfEnvironment (Name "encodeVertexId") @@ env
-
-envEncodeVertexLabel :: TTerm a -> TTerm b
-envEncodeVertexLabel env = project _PgRdfEnvironment (Name "encodeVertexLabel") @@ env
-
-envEncodeEdgeLabel :: TTerm a -> TTerm b
-envEncodeEdgeLabel env = project _PgRdfEnvironment (Name "encodeEdgeLabel") @@ env
-
-envEncodePropertyKey :: TTerm a -> TTerm b
-envEncodePropertyKey env = project _PgRdfEnvironment (Name "encodePropertyKey") @@ env
-
-envEncodePropertyValue :: TTerm a -> TTerm b
-envEncodePropertyValue env = project _PgRdfEnvironment (Name "encodePropertyValue") @@ env
-
-
--- | Convert a list of edge types into property shape constraints for a given vertex type.
--- For each edge type whose out-vertex label matches the vertex label, produces a
--- CommonConstraint.property entry with sh:path set to the edge label IRI and
--- sh:class set to the in-vertex's class IRI.
-edgeTypesToPropertyShapes
-  :: TTermDefinition ((PG.VertexLabel -> Rdf.Iri) -> (PG.EdgeLabel -> Rdf.Iri) -> PG.VertexLabel
-    -> [PG.EdgeType t] -> [Shacl.CommonConstraint])
-edgeTypesToPropertyShapes = define "edgeTypesToPropertyShapes" $
-  doc "Convert edge types into property shape constraints for a given vertex label" $
-  lambda "encodeVertexLabel" $ lambda "encodeEdgeLabel" $ lambda "vertexLabel" $ lambda "edgeTypes" $
-    Lists.concat (Lists.map
-      (lambda "et" $
-        lets [
-          "outLabel">: PgDsl.edgeTypeOut (var "et"),
-          "matchesVertex">: Equality.equal
-            (unwrap PG._VertexLabel @@ var "outLabel")
-            (unwrap PG._VertexLabel @@ var "vertexLabel")
-        ] $
-        lets [
-          "edgeShape">: ShaclDsl.commonConstraintProperty (Sets.singleton
-            (ShaclDsl.referenceAnonymous (simplePropertyShape
-              (emptyCommonWith
-                (Sets.singleton (ShaclDsl.commonConstraintClass
-                  (Sets.singleton (RdfDsl.rdfsClass unit))))
-                Sets.empty)
-              Sets.empty
-              (var "encodeEdgeLabel" @@ PgDsl.edgeTypeLabel (var "et")))))
-        ] $
-        Logic.ifElse (var "matchesVertex")
-          (list [var "edgeShape"])
-          (TTerm (TermList []) :: TTerm [Shacl.CommonConstraint]))
-      (var "edgeTypes"))
+-- | A helper for creating empty SHACL common properties with only constraints specified.
+emptyCommonWith :: TTerm (S.Set Shacl.CommonConstraint) -> TTerm (S.Set Rdf.RdfsClass) -> TTerm Shacl.CommonProperties
+emptyCommonWith constraints targetClasses = ShaclDsl.commonProperties
+  constraints                               -- constraints
+  nothing                                   -- deactivated
+  (asTerm RdfUtils.emptyLangStrings)        -- message
+  ShaclDsl.severityViolation                -- severity
+  targetClasses                             -- targetClass
+  Sets.empty                                -- targetNode
+  Sets.empty                                -- targetObjectsOf
+  Sets.empty                                -- targetSubjectsOf
 
 -- | Encode a property graph edge as an RDF description.
 -- The out-vertex becomes the subject, the edge label becomes the predicate,
@@ -274,17 +237,54 @@ graphSchemaToShapesGraph = define "graphSchemaToShapesGraph" $
     ] $
     ShaclDsl.shapesGraph (Sets.fromList (var "defs"))
 
--- | A helper for creating empty SHACL common properties with only constraints specified.
-emptyCommonWith :: TTerm (S.Set Shacl.CommonConstraint) -> TTerm (S.Set Rdf.RdfsClass) -> TTerm Shacl.CommonProperties
-emptyCommonWith constraints targetClasses = ShaclDsl.commonProperties
-  constraints                               -- constraints
-  nothing                                   -- deactivated
-  (asTerm RdfUtils.emptyLangStrings)        -- message
-  ShaclDsl.severityViolation                -- severity
-  targetClasses                             -- targetClass
-  Sets.empty                                -- targetNode
-  Sets.empty                                -- targetObjectsOf
-  Sets.empty                                -- targetSubjectsOf
+envEncodeEdgeLabel :: TTerm a -> TTerm b
+envEncodeEdgeLabel env = project _PgRdfEnvironment (Name "encodeEdgeLabel") @@ env
+
+envEncodePropertyKey :: TTerm a -> TTerm b
+envEncodePropertyKey env = project _PgRdfEnvironment (Name "encodePropertyKey") @@ env
+
+envEncodePropertyValue :: TTerm a -> TTerm b
+envEncodePropertyValue env = project _PgRdfEnvironment (Name "encodePropertyValue") @@ env
+
+
+-- | Convert a list of edge types into property shape constraints for a given vertex type.
+-- For each edge type whose out-vertex label matches the vertex label, produces a
+-- CommonConstraint.property entry with sh:path set to the edge label IRI and
+-- sh:class set to the in-vertex's class IRI.
+edgeTypesToPropertyShapes
+  :: TTermDefinition ((PG.VertexLabel -> Rdf.Iri) -> (PG.EdgeLabel -> Rdf.Iri) -> PG.VertexLabel
+    -> [PG.EdgeType t] -> [Shacl.CommonConstraint])
+edgeTypesToPropertyShapes = define "edgeTypesToPropertyShapes" $
+  doc "Convert edge types into property shape constraints for a given vertex label" $
+  lambda "encodeVertexLabel" $ lambda "encodeEdgeLabel" $ lambda "vertexLabel" $ lambda "edgeTypes" $
+    Lists.concat (Lists.map
+      (lambda "et" $
+        lets [
+          "outLabel">: PgDsl.edgeTypeOut (var "et"),
+          "matchesVertex">: Equality.equal
+            (unwrap PG._VertexLabel @@ var "outLabel")
+            (unwrap PG._VertexLabel @@ var "vertexLabel")
+        ] $
+        lets [
+          "edgeShape">: ShaclDsl.commonConstraintProperty (Sets.singleton
+            (ShaclDsl.referenceAnonymous (simplePropertyShape
+              (emptyCommonWith
+                (Sets.singleton (ShaclDsl.commonConstraintClass
+                  (Sets.singleton (RdfDsl.rdfsClass unit))))
+                Sets.empty)
+              Sets.empty
+              (var "encodeEdgeLabel" @@ PgDsl.edgeTypeLabel (var "et")))))
+        ] $
+        Logic.ifElse (var "matchesVertex")
+          (list [var "edgeShape"])
+          (TTerm (TermList []) :: TTerm [Shacl.CommonConstraint]))
+      (var "edgeTypes"))
+
+envEncodeVertexId :: TTerm a -> TTerm b
+envEncodeVertexId env = project _PgRdfEnvironment (Name "encodeVertexId") @@ env
+
+envEncodeVertexLabel :: TTerm a -> TTerm b
+envEncodeVertexLabel env = project _PgRdfEnvironment (Name "encodeVertexLabel") @@ env
 
 -- | A helper for creating a SHACL property shape with minimal fields.
 simplePropertyShape :: TTerm Shacl.CommonProperties -> TTerm (S.Set Shacl.PropertyShapeConstraint)

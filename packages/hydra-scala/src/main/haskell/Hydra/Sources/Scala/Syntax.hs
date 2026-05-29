@@ -12,12 +12,6 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 ns :: ModuleName
 ns = ModuleName "hydra.scala.syntax"
 
-def :: String -> Type -> Binding
-def = datatype ns
-
-meta :: String -> Type
-meta = typeref ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -166,73 +160,173 @@ module_ = Module {
       typeCase,
       source]
 
-predefString :: Binding
-predefString = def "PredefString" $
-  doc "A wrapper for strings used in scala.Predef contexts." $
-  T.wrap T.string
+self :: Binding
+self = def "Self" $
+  T.wrap T.unit
 
-scalaSymbol :: Binding
-scalaSymbol = def "ScalaSymbol" $
-  doc "A Scala 2 symbol literal (corresponds to scala.Symbol)." $
+alternativePat :: Binding
+alternativePat = def "AlternativePat" $
   T.record [
-    "name">: T.string]
+    "lhs">: meta "Pat",
+    "rhs">: meta "Pat"]
 
-tree :: Binding
-tree = def "Tree" $
-  doc "The root of the Scalameta tree hierarchy. Each arm names a major AST category." $
-  T.union [
-    "ref">: meta "Ref",
-    "stat">: meta "Stat",
-    "type">: meta "Type",
-    "bounds">: meta "TypeBounds",
-    "pat">: meta "Pat",
-    "member">: meta "Member",
-    "ctor">: meta "Ctor",
-    "template">: meta "Template",
-    "mod">: meta "Mod",
-    "enumerator">: meta "Enumerator",
-    "importer">: meta "Importer",
-    "importee">: meta "Importee",
-    "caseTree">: meta "CaseTree",
-    "source">: meta "Source"]
+andType :: Binding
+andType = def "AndType" $
+  T.record [
+    "lhs">: meta "Type",
+    "rhs">: meta "Type"]
 
-ref :: Binding
-ref = def "Ref" $
-  T.union [
-    "name">: meta "Name",
+annotMod :: Binding
+annotMod = def "AnnotMod" $
+  T.record [
     "init">: meta "Init"]
 
-stat :: Binding
-stat = def "Stat" $
-  T.union [
-    "term">: meta "Data",
-    "decl">: meta "Decl",
-    "defn">: meta "Defn",
-    "importExport">: meta "ImportExportStat"]
+annotateData :: Binding
+annotateData = def "AnnotateData" $
+  T.record [
+    "expr">: meta "Data",
+    "annots">: T.list $ meta "AnnotMod"]
 
-name :: Binding
-name = def "Name" $
-  T.union [
-    "value">: T.string,
-    "anonymous">: T.unit,
-    "indeterminate">: meta "PredefString"]
+annotateType :: Binding
+annotateType = def "AnnotateType" $
+  T.record [
+    "tpe">: meta "Type",
+    "annots">: T.list $ meta "AnnotMod"]
 
-lit :: Binding
-lit = def "Lit" $
+anonymousData :: Binding
+anonymousData = def "AnonymousData" $
+  T.wrap T.unit
+
+anonymousNameType :: Binding
+anonymousNameType = def "AnonymousNameType" $
+  T.wrap T.unit
+
+applyData :: Binding
+applyData = def "ApplyData" $
+  T.record [
+    "fun">: meta "Data",
+    "args">: T.list $ meta "Data"]
+
+applyInfixData :: Binding
+applyInfixData = def "ApplyInfixData" $
+  T.record [
+    "lhs">: meta "Data",
+    "op">: meta "NameData",
+    "targs">: T.list $ meta "Type",
+    "args">: T.list $ meta "Data"]
+
+applyInfixType :: Binding
+applyInfixType = def "ApplyInfixType" $
+  T.record [
+    "lhs">: meta "Type",
+    "op">: meta "NameType",
+    "rhs">: meta "Type"]
+
+applyType :: Binding
+applyType = def "ApplyType" $
+  T.record [
+    "tpe">: meta "Type",
+    "args">: T.list $ meta "Type"]
+
+applyTypeData :: Binding
+applyTypeData = def "ApplyTypeData" $
+  T.record [
+    "lhs">: meta "Data",
+    "op">: meta "NameData",
+    "targs">: T.list $ meta "Type",
+    "args">: T.list $ meta "Data"]
+
+applyUnaryData :: Binding
+applyUnaryData = def "ApplyUnaryData" $
+  T.record [
+    "op">: meta "NameData",
+    "arg">: meta "Data"]
+
+applyUsingData :: Binding
+applyUsingData = def "ApplyUsingData" $
+  T.record [
+    "fun">: meta "Data",
+    "targs">: T.list $ meta "Data"]
+
+ascribeData :: Binding
+ascribeData = def "AscribeData" $
+  T.record [
+    "expr">: meta "Data",
+    "tpe">: meta "Type"]
+
+assignData :: Binding
+assignData = def "AssignData" $
+  T.record [
+    "lhs">: meta "Data",
+    "rhs">: meta "Data"]
+
+bindPat :: Binding
+bindPat = def "BindPat" $
+  T.record [
+    "lhs">: meta "Pat",
+    "rhs">: meta "Pat"]
+
+blockData :: Binding
+blockData = def "BlockData" $
+  T.record [
+    "stats">: T.list $ meta "Stat"]
+
+byNameType :: Binding
+byNameType = def "ByNameType" $
+  T.record [
+    "tpe">: meta "Type"]
+
+caseGeneratorEnumerator :: Binding
+caseGeneratorEnumerator = def "CaseGeneratorEnumerator" $
+  T.record [
+    "pat">: meta "Pat",
+    "rhs">: meta "Data"]
+
+caseTree :: Binding
+caseTree = def "CaseTree" $
   T.union [
-    "null">: T.unit,
-    "int">: T.int32,
-    "double">: T.float64,
-    "float">: T.float32,
-    "byte">: T.int8,
-    "short">: T.int16,
-    "char">: T.uint16,
-    "long">: T.int64,
-    "boolean">: T.boolean,
-    "unit">: T.unit,
-    "string">: T.string,
-    "bytes">: T.list T.int32,
-    "symbol">: meta "ScalaSymbol"]
+    "case">: meta "Case",
+    "typeCase">: meta "TypeCase"]
+
+case_ :: Binding
+case_ = def "Case" $
+  T.record [
+    "pat">: meta "Pat",
+    "cond">: T.maybe $ meta "Data",
+    "body">: meta "Data"]
+
+classDefn :: Binding
+classDefn = def "ClassDefn" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "NameType",
+    "tparams">: T.list $ meta "ParamType",
+    "ctor">: meta "PrimaryCtor",
+    "template">: meta "Template"]
+
+contextFunctionData :: Binding
+contextFunctionData = def "ContextFunctionData" $
+  T.record [
+    "params">: T.list $ meta "ParamData",
+    "body">: meta "Data"]
+
+contextFunctionType :: Binding
+contextFunctionType = def "ContextFunctionType" $
+  T.record [
+    "params">: T.list $ meta "Type",
+    "res">: meta "Type"]
+
+ctor :: Binding
+ctor = def "Ctor" $
+  T.union [
+    "primary">: meta "PrimaryCtor",
+    "secondary">: meta "SecondaryCtor"]
+
+dataMember :: Binding
+dataMember = def "DataMember" $
+  T.union [
+    "pkg">: meta "Pkg",
+    "object">: meta "ObjectPkg"]
 
 data_ :: Binding
 data_ = def "Data" $
@@ -270,6 +364,483 @@ data_ = def "Data" $
     "repeated">: meta "RepeatedData",
     "param">: meta "ParamData"]
 
+decl :: Binding
+decl = def "Decl" $
+  T.union [
+    "val">: meta "ValDecl",
+    "var">: meta "VarDecl",
+    "def">: meta "DefDecl",
+    "type">: meta "TypeDecl",
+    "given">: meta "GivenDecl"]
+
+def :: String -> Type -> Binding
+def = datatype ns
+
+defDecl :: Binding
+defDecl = def "DefDecl" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "NameData",
+    "tparams">: T.list $ meta "ParamType",
+    "paramss">: T.list $ T.list $ meta "ParamData",
+    "decltpe">: meta "Type"]
+
+defDefn :: Binding
+defDefn = def "DefDefn" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "NameData",
+    "tparams">: T.list $ meta "ParamType",
+    "paramss">: T.list $ T.list $ meta "ParamData",
+    "decltpe">: T.maybe $ meta "Type",
+    "body">: meta "Data"]
+
+defn :: Binding
+defn = def "Defn" $
+  T.union [
+    "val">: meta "ValDefn",
+    "var">: meta "VarDefn",
+    "given">: meta "GivenDefn",
+    "enum">: meta "EnumDefn",
+    "enumCase">: meta "EnumCaseDefn",
+    "repeatedEnumCase">: meta "RepeatedEnumCaseDefn",
+    "givenAlias">: meta "GivenAliasDefn",
+    "extensionGroup">: meta "ExtensionGroupDefn",
+    "def">: meta "DefDefn",
+    "type">: meta "TypeDefn",
+    "class">: meta "ClassDefn",
+    "trait">: meta "TraitDefn",
+    "object">: meta "ObjectDefn"]
+
+doData :: Binding
+doData = def "DoData" $
+  T.record [
+    "body">: meta "Data",
+    "expr">: meta "Data"]
+
+endMarkerData :: Binding
+endMarkerData = def "EndMarkerData" $
+  T.record [
+    "name">: meta "NameData"]
+
+enumCaseDefn :: Binding
+enumCaseDefn = def "EnumCaseDefn" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "NameData",
+    "tparams">: T.list $ meta "ParamType",
+    "ctor">: meta "PrimaryCtor",
+    "inits">: T.list $ meta "Init"]
+
+enumDefn :: Binding
+enumDefn = def "EnumDefn" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "NameType",
+    "tparams">: T.list $ meta "ParamType",
+    "ctor">: meta "PrimaryCtor",
+    "template">: meta "Template"]
+
+enumerator :: Binding
+enumerator = def "Enumerator" $
+  T.union [
+    "generator">: meta "GeneratorEnumerator",
+    "caseGenerator">: meta "CaseGeneratorEnumerator",
+    "val">: meta "ValEnumerator",
+    "guard">: meta "GuardEnumerator"]
+
+etaData :: Binding
+etaData = def "EtaData" $
+  T.record [
+    "expr">: meta "Data"]
+
+existentialType :: Binding
+existentialType = def "ExistentialType" $
+  T.record [
+    "tpe">: meta "Type",
+    "stats">: T.list $ meta "Stat"]
+
+export_ :: Binding
+export_ = def "Export" $
+  T.record [
+    "importers">: T.list $ meta "Importer"]
+
+extensionGroupDefn :: Binding
+extensionGroupDefn = def "ExtensionGroupDefn" $
+  T.record [
+    "tparams">: T.list $ meta "ParamType",
+    "parmss">: T.list $ T.list $ meta "ParamData",
+    "body">: meta "Stat"]
+
+extractInfixPat :: Binding
+extractInfixPat = def "ExtractInfixPat" $
+  T.record [
+    "lhs">: meta "Pat",
+    "op">: meta "NameData",
+    "rhs">: T.list $ meta "Pat"]
+
+extractPat :: Binding
+extractPat = def "ExtractPat" $
+  T.record [
+    "fun">: meta "Data",
+    "args">: T.list $ meta "Pat"]
+
+forData :: Binding
+forData = def "ForData" $
+  T.record [
+    "enums">: T.list $ meta "Enumerator"]
+
+forYieldData :: Binding
+forYieldData = def "ForYieldData" $
+  T.record [
+    "enums">: T.list $ meta "Enumerator"]
+
+functionData :: Binding
+functionData = def "FunctionData" $
+  T.record [
+    "params">: T.list $ meta "ParamData",
+    "body">: meta "Data"]
+
+functionType :: Binding
+functionType = def "FunctionType" $
+  T.record [
+    "params">: T.list $ meta "Type",
+    "res">: meta "Type"]
+
+generatorEnumerator :: Binding
+generatorEnumerator = def "GeneratorEnumerator" $
+  T.record [
+    "pat">: meta "Pat",
+    "rhs">: meta "Data"]
+
+givenAliasDefn :: Binding
+givenAliasDefn = def "GivenAliasDefn" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Name",
+    "tparams">: T.list $ T.list $ meta "ParamType",
+    "sparams">: T.list $ T.list $ meta "ParamData",
+    "decltpe">: meta "Type",
+    "body">: meta "Data"]
+
+givenDecl :: Binding
+givenDecl = def "GivenDecl" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "NameData",
+    "tparams">: T.list $ meta "ParamType",
+    "sparams">: T.list $ T.list $ meta "ParamData",
+    "decltpe">: meta "Type"]
+
+givenDefn :: Binding
+givenDefn = def "GivenDefn" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Name",
+    "tparams">: T.list $ T.list $ meta "ParamType",
+    "sparams">: T.list $ T.list $ meta "ParamData",
+    "templ">: meta "Template"]
+
+givenImportee :: Binding
+givenImportee = def "GivenImportee" $
+  T.record [
+    "tpe">: meta "Type"]
+
+givenPat :: Binding
+givenPat = def "GivenPat" $
+  T.record [
+    "tpe">: meta "Type"]
+
+guardEnumerator :: Binding
+guardEnumerator = def "GuardEnumerator" $
+  T.record [
+    "cond">: meta "Data"]
+
+ifData :: Binding
+ifData = def "IfData" $
+  T.record [
+    "cond">: meta "Data",
+    "thenp">: meta "Data",
+    "elsep">: meta "Data"]
+
+implicitFunctionType :: Binding
+implicitFunctionType = def "ImplicitFunctionType" $
+  T.record [
+    "params">: T.list $ meta "Type",
+    "res">: meta "Type"]
+
+importExportStat :: Binding
+importExportStat = def "ImportExportStat" $
+  T.union [
+    "import">: meta "Import",
+    "export">: meta "Export"]
+
+import_ :: Binding
+import_ = def "Import" $
+  T.record [
+    "importers">: T.list $ meta "Importer"]
+
+importee :: Binding
+importee = def "Importee" $
+  T.union [
+    "wildcard">: T.unit,
+    "given">: meta "GivenImportee",
+    "givenAll">: T.unit,
+    "name">: meta "NameImportee",
+    "rename">: meta "RenameImportee",
+    "unimport">: meta "UnimportImportee"]
+
+importer :: Binding
+importer = def "Importer" $
+  T.record [
+    "ref">: meta "RefData",
+    "importees">: T.list $ meta "Importee"]
+
+init_ :: Binding
+init_ = def "Init" $
+  T.record [
+    "tpe">: meta "Type",
+    "name">: meta "Name",
+    "argss">: T.list $ T.list $ meta "Data"]
+
+interpolateData :: Binding
+interpolateData = def "InterpolateData" $
+  T.record [
+    "prefix">: meta "NameData",
+    "parts">: T.list $ meta "Lit",
+    "args">: T.list $ meta "Data"]
+
+interpolatePat :: Binding
+interpolatePat = def "InterpolatePat" $
+  T.record [
+    "prefix">: meta "NameData",
+    "parts">: T.list $ meta "Lit"]
+
+lambdaType :: Binding
+lambdaType = def "LambdaType" $
+  T.record [
+    "tparams">: T.list $ meta "ParamType",
+    "tpe">: meta "Type"]
+
+lit :: Binding
+lit = def "Lit" $
+  T.union [
+    "null">: T.unit,
+    "int">: T.int32,
+    "double">: T.float64,
+    "float">: T.float32,
+    "byte">: T.int8,
+    "short">: T.int16,
+    "char">: T.uint16,
+    "long">: T.int64,
+    "boolean">: T.boolean,
+    "unit">: T.unit,
+    "string">: T.string,
+    "bytes">: T.list T.int32,
+    "symbol">: meta "ScalaSymbol"]
+
+matchData :: Binding
+matchData = def "MatchData" $
+  T.record [
+    "expr">: meta "Data",
+    "cases">: T.list $ meta "Case"]
+
+matchType :: Binding
+matchType = def "MatchType" $
+  T.record [
+    "tpe">: meta "Type",
+    "cases">: T.list $ meta "TypeCase"]
+
+member :: Binding
+member = def "Member" $
+  T.union [
+    "term">: meta "DataMember",
+    "type">: meta "TypeMember",
+    "termParam">: meta "ParamData",
+    "typeParam">: meta "ParamType",
+    "self">: meta "Self"]
+
+meta :: String -> Type
+meta = typeref ns
+
+methodType :: Binding
+methodType = def "MethodType" $
+  T.record [
+    "paramss">: T.list $ T.list $ meta "ParamData",
+    "tpe">: meta "Type"]
+
+mod_ :: Binding
+mod_ = def "Mod" $
+  T.union [
+    "annot">: meta "AnnotMod",
+    "private">: meta "PrivateMod",
+    "protected">: meta "ProtectedMod",
+    "implicit">: T.unit,
+    "final">: T.unit,
+    "sealed">: T.unit,
+    "open">: T.unit,
+    "super">: T.unit,
+    "override">: T.unit,
+    "case">: T.unit,
+    "abstract">: T.unit,
+    "covariant">: T.unit,
+    "contravariant">: T.unit,
+    "lazy">: T.unit,
+    "valParam">: T.unit,
+    "varParam">: T.unit,
+    "infix">: T.unit,
+    "inline">: T.unit,
+    "using">: T.unit,
+    "opaque">: T.unit,
+    "transparent">: T.unit]
+
+name :: Binding
+name = def "Name" $
+  T.union [
+    "value">: T.string,
+    "anonymous">: T.unit,
+    "indeterminate">: meta "PredefString"]
+
+nameData :: Binding
+nameData = def "NameData" $
+  T.record [
+    "value">: meta "PredefString"]
+
+nameImportee :: Binding
+nameImportee = def "NameImportee" $
+  T.record [
+    "name">: meta "Name"]
+
+nameType :: Binding
+nameType = def "NameType" $
+  T.record [
+    "value">: T.string]
+
+newAnonymousData :: Binding
+newAnonymousData = def "NewAnonymousData" $
+  T.record [
+    "templ">: meta "Template"]
+
+newData :: Binding
+newData = def "NewData" $
+  T.record [
+    "init">: meta "Init"]
+
+objectDefn :: Binding
+objectDefn = def "ObjectDefn" $
+  T.record [
+    "name">: meta "NameData"]
+
+objectPkg :: Binding
+objectPkg = def "ObjectPkg" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "NameData",
+    "template">: meta "Template"]
+
+orType :: Binding
+orType = def "OrType" $
+  T.record [
+    "lhs">: meta "Type",
+    "rhs">: meta "Type"]
+
+paramData :: Binding
+paramData = def "ParamData" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Name",
+    "decltpe">: T.maybe $ meta "Type",
+    "default">: T.maybe $ meta "Data"]
+
+paramType :: Binding
+paramType = def "ParamType" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Name",
+    "tparams">: T.list $ meta "ParamType",
+    "tbounds">: T.list $ meta "TypeBounds",
+    "vbounds">: T.list $ meta "Type",
+    "cbounds">: T.list $ meta "Type"]
+
+partialFunctionData :: Binding
+partialFunctionData = def "PartialFunctionData" $
+  T.record [
+    "cases">: T.list $ meta "Case"]
+
+pat :: Binding
+pat = def "Pat" $
+  T.union [
+    "var">: meta "VarPat",
+    "wildcard">: T.unit,
+    "seqWildcard">: T.unit,
+    "bind">: meta "BindPat",
+    "alternative">: meta "AlternativePat",
+    "tuple">: meta "TuplePat",
+    "repeated">: meta "RepeatedPat",
+    "extract">: meta "ExtractPat",
+    "extractInfix">: meta "ExtractInfixPat",
+    "interpolate">: meta "InterpolatePat",
+    "typed">: meta "TypedPat",
+    "given">: meta "GivenPat"]
+
+pkg :: Binding
+pkg = def "Pkg" $
+  T.record [
+    "name">: meta "NameData",
+    "ref">: meta "RefData",
+    "stats">: T.list $ meta "Stat"]
+
+placeholderType :: Binding
+placeholderType = def "PlaceholderType" $
+  T.record [
+    "bounds">: meta "TypeBounds"]
+
+polyFunctionData :: Binding
+polyFunctionData = def "PolyFunctionData" $
+  T.record [
+    "tparams">: T.list $ meta "ParamType",
+    "body">: meta "Data"]
+
+polyFunctionType :: Binding
+polyFunctionType = def "PolyFunctionType" $
+  T.record [
+    "tparams">: T.list $ meta "ParamType",
+    "tpe">: meta "Type"]
+
+predefString :: Binding
+predefString = def "PredefString" $
+  doc "A wrapper for strings used in scala.Predef contexts." $
+  T.wrap T.string
+
+primaryCtor :: Binding
+primaryCtor = def "PrimaryCtor" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Name",
+    "paramss">: T.list $ T.list $ meta "ParamData"]
+
+privateMod :: Binding
+privateMod = def "PrivateMod" $
+  T.record [
+    "within">: meta "Ref"]
+
+projectType :: Binding
+projectType = def "ProjectType" $
+  T.record [
+    "qual">: meta "Type",
+    "name">: meta "NameType"]
+
+protectedMod :: Binding
+protectedMod = def "ProtectedMod" $
+  T.record [
+    "within">: meta "Ref"]
+
+ref :: Binding
+ref = def "Ref" $
+  T.union [
+    "name">: meta "Name",
+    "init">: meta "Init"]
+
 refData :: Binding
 refData = def "RefData" $
   T.union [
@@ -280,24 +851,66 @@ refData = def "RefData" $
     "select">: meta "SelectData",
     "applyUnary">: meta "ApplyUnaryData"]
 
-thisData :: Binding
-thisData = def "ThisData" $
-  T.wrap T.unit
+refType :: Binding
+refType = def "RefType" $
+  T.union [
+    "name">: meta "NameType",
+    "select">: meta "SelectType",
+    "project">: meta "ProjectType",
+    "singleton">: meta "SingletonType"]
 
-superData :: Binding
-superData = def "SuperData" $
+refineType :: Binding
+refineType = def "RefineType" $
   T.record [
-    "thisp">: meta "Name",
-    "superp">: meta "Name"]
+    "tpe">: T.maybe $ meta "Type",
+    "stats">: T.list $ meta "Stat"]
 
-nameData :: Binding
-nameData = def "NameData" $
+renameImportee :: Binding
+renameImportee = def "RenameImportee" $
   T.record [
-    "value">: meta "PredefString"]
+    "name">: meta "Name",
+    "rename">: meta "Name"]
 
-anonymousData :: Binding
-anonymousData = def "AnonymousData" $
-  T.wrap T.unit
+repeatedData :: Binding
+repeatedData = def "RepeatedData" $
+  T.record [
+    "expr">: meta "Data"]
+
+repeatedEnumCaseDefn :: Binding
+repeatedEnumCaseDefn = def "RepeatedEnumCaseDefn" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "cases">: T.list $ meta "NameData"]
+
+repeatedPat :: Binding
+repeatedPat = def "RepeatedPat" $
+  T.record [
+    "name">: meta "NameData"]
+
+repeatedType :: Binding
+repeatedType = def "RepeatedType" $
+  T.record [
+    "tpe">: meta "Type"]
+
+returnData :: Binding
+returnData = def "ReturnData" $
+  T.record [
+    "expr">: meta "Data"]
+
+scalaSymbol :: Binding
+scalaSymbol = def "ScalaSymbol" $
+  doc "A Scala 2 symbol literal (corresponds to scala.Symbol)." $
+  T.record [
+    "name">: T.string]
+
+secondaryCtor :: Binding
+secondaryCtor = def "SecondaryCtor" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Name",
+    "paramss">: T.list $ T.list $ meta "ParamData",
+    "init">: meta "Init",
+    "stats">: T.list $ meta "Stat"]
 
 selectData :: Binding
 selectData = def "SelectData" $
@@ -305,102 +918,80 @@ selectData = def "SelectData" $
     "qual">: meta "Data",
     "name">: meta "NameData"]
 
-interpolateData :: Binding
-interpolateData = def "InterpolateData" $
+selectType :: Binding
+selectType = def "SelectType" $
   T.record [
-    "prefix">: meta "NameData",
-    "parts">: T.list $ meta "Lit",
-    "args">: T.list $ meta "Data"]
+    "qual">: meta "RefData",
+    "name">: meta "NameType"]
 
-applyData :: Binding
-applyData = def "ApplyData" $
+singletonType :: Binding
+singletonType = def "SingletonType" $
   T.record [
-    "fun">: meta "Data",
-    "args">: T.list $ meta "Data"]
+    "ref">: meta "RefData"]
 
-applyUsingData :: Binding
-applyUsingData = def "ApplyUsingData" $
+source :: Binding
+source = def "Source" $
   T.record [
-    "fun">: meta "Data",
-    "targs">: T.list $ meta "Data"]
+    "stats">: T.list $ meta "Stat"]
 
-applyTypeData :: Binding
-applyTypeData = def "ApplyTypeData" $
-  T.record [
-    "lhs">: meta "Data",
-    "op">: meta "NameData",
-    "targs">: T.list $ meta "Type",
-    "args">: T.list $ meta "Data"]
+stat :: Binding
+stat = def "Stat" $
+  T.union [
+    "term">: meta "Data",
+    "decl">: meta "Decl",
+    "defn">: meta "Defn",
+    "importExport">: meta "ImportExportStat"]
 
-applyInfixData :: Binding
-applyInfixData = def "ApplyInfixData" $
+superData :: Binding
+superData = def "SuperData" $
   T.record [
-    "lhs">: meta "Data",
-    "op">: meta "NameData",
-    "targs">: T.list $ meta "Type",
-    "args">: T.list $ meta "Data"]
+    "thisp">: meta "Name",
+    "superp">: meta "Name"]
 
-applyUnaryData :: Binding
-applyUnaryData = def "ApplyUnaryData" $
+template :: Binding
+template = def "Template" $
   T.record [
-    "op">: meta "NameData",
-    "arg">: meta "Data"]
+    "early">: T.list $ meta "Stat",
+    "inits">: T.list $ meta "Init",
+    "self">: meta "Self",
+    "stats">: T.list $ meta "Stat"]
 
-assignData :: Binding
-assignData = def "AssignData" $
-  T.record [
-    "lhs">: meta "Data",
-    "rhs">: meta "Data"]
-
-returnData :: Binding
-returnData = def "ReturnData" $
-  T.record [
-    "expr">: meta "Data"]
+thisData :: Binding
+thisData = def "ThisData" $
+  T.wrap T.unit
 
 throwData :: Binding
 throwData = def "ThrowData" $
   T.record [
     "expr">: meta "Data"]
 
-ascribeData :: Binding
-ascribeData = def "AscribeData" $
+traitDefn :: Binding
+traitDefn = def "TraitDefn" $
   T.record [
-    "expr">: meta "Data",
-    "tpe">: meta "Type"]
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "NameType",
+    "tparams">: T.list $ meta "ParamType",
+    "ctor">: meta "PrimaryCtor",
+    "template">: meta "Template"]
 
-annotateData :: Binding
-annotateData = def "AnnotateData" $
-  T.record [
-    "expr">: meta "Data",
-    "annots">: T.list $ meta "AnnotMod"]
-
-tupleData :: Binding
-tupleData = def "TupleData" $
-  T.record [
-    "args">: T.list $ meta "Data"]
-
-blockData :: Binding
-blockData = def "BlockData" $
-  T.record [
-    "stats">: T.list $ meta "Stat"]
-
-endMarkerData :: Binding
-endMarkerData = def "EndMarkerData" $
-  T.record [
-    "name">: meta "NameData"]
-
-ifData :: Binding
-ifData = def "IfData" $
-  T.record [
-    "cond">: meta "Data",
-    "thenp">: meta "Data",
-    "elsep">: meta "Data"]
-
-matchData :: Binding
-matchData = def "MatchData" $
-  T.record [
-    "expr">: meta "Data",
-    "cases">: T.list $ meta "Case"]
+tree :: Binding
+tree = def "Tree" $
+  doc "The root of the Scalameta tree hierarchy. Each arm names a major AST category." $
+  T.union [
+    "ref">: meta "Ref",
+    "stat">: meta "Stat",
+    "type">: meta "Type",
+    "bounds">: meta "TypeBounds",
+    "pat">: meta "Pat",
+    "member">: meta "Member",
+    "ctor">: meta "Ctor",
+    "template">: meta "Template",
+    "mod">: meta "Mod",
+    "enumerator">: meta "Enumerator",
+    "importer">: meta "Importer",
+    "importee">: meta "Importee",
+    "caseTree">: meta "CaseTree",
+    "source">: meta "Source"]
 
 tryData :: Binding
 tryData = def "TryData" $
@@ -416,78 +1007,53 @@ tryWithHandlerData = def "TryWithHandlerData" $
     "catchp">: meta "Data",
     "finallyp">: T.maybe $ meta "Data"]
 
-contextFunctionData :: Binding
-contextFunctionData = def "ContextFunctionData" $
+tupleData :: Binding
+tupleData = def "TupleData" $
   T.record [
-    "params">: T.list $ meta "ParamData",
-    "body">: meta "Data"]
+    "args">: T.list $ meta "Data"]
 
-functionData :: Binding
-functionData = def "FunctionData" $
+tuplePat :: Binding
+tuplePat = def "TuplePat" $
   T.record [
-    "params">: T.list $ meta "ParamData",
-    "body">: meta "Data"]
+    "args">: T.list $ meta "Pat"]
 
-polyFunctionData :: Binding
-polyFunctionData = def "PolyFunctionData" $
+tupleType :: Binding
+tupleType = def "TupleType" $
   T.record [
-    "tparams">: T.list $ meta "ParamType",
-    "body">: meta "Data"]
+    "args">: T.list $ meta "Type"]
 
-partialFunctionData :: Binding
-partialFunctionData = def "PartialFunctionData" $
+typeBounds :: Binding
+typeBounds = def "TypeBounds" $
   T.record [
-    "cases">: T.list $ meta "Case"]
+    "lo">: T.maybe $ meta "Type",
+    "hi">: T.maybe $ meta "Type"]
 
-whileData :: Binding
-whileData = def "WhileData" $
+typeCase :: Binding
+typeCase = def "TypeCase" $
   T.record [
-    "expr">: meta "Data",
-    "body">: meta "Data"]
+    "pat">: meta "Type",
+    "body">: meta "Type"]
 
-doData :: Binding
-doData = def "DoData" $
-  T.record [
-    "body">: meta "Data",
-    "expr">: meta "Data"]
-
-forData :: Binding
-forData = def "ForData" $
-  T.record [
-    "enums">: T.list $ meta "Enumerator"]
-
-forYieldData :: Binding
-forYieldData = def "ForYieldData" $
-  T.record [
-    "enums">: T.list $ meta "Enumerator"]
-
-newData :: Binding
-newData = def "NewData" $
-  T.record [
-    "init">: meta "Init"]
-
-newAnonymousData :: Binding
-newAnonymousData = def "NewAnonymousData" $
-  T.record [
-    "templ">: meta "Template"]
-
-etaData :: Binding
-etaData = def "EtaData" $
-  T.record [
-    "expr">: meta "Data"]
-
-repeatedData :: Binding
-repeatedData = def "RepeatedData" $
-  T.record [
-    "expr">: meta "Data"]
-
-paramData :: Binding
-paramData = def "ParamData" $
+typeDecl :: Binding
+typeDecl = def "TypeDecl" $
   T.record [
     "mods">: T.list $ meta "Mod",
-    "name">: meta "Name",
-    "decltpe">: T.maybe $ meta "Type",
-    "default">: T.maybe $ meta "Data"]
+    "name">: meta "NameType",
+    "tparams">: T.list $ meta "ParamType",
+    "bounds">: meta "TypeBounds"]
+
+typeDefn :: Binding
+typeDefn = def "TypeDefn" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "NameType",
+    "tparams">: T.list $ meta "ParamType",
+    "body">: meta "Type"]
+
+typeMember :: Binding
+typeMember = def "TypeMember" $
+  T.record [
+    "name">: meta "NameType"]
 
 type_ :: Binding
 type_ = def "Type" $
@@ -516,239 +1082,11 @@ type_ = def "Type" $
     "typedParam">: meta "TypedParamType",
     "match">: meta "MatchType"]
 
-refType :: Binding
-refType = def "RefType" $
-  T.union [
-    "name">: meta "NameType",
-    "select">: meta "SelectType",
-    "project">: meta "ProjectType",
-    "singleton">: meta "SingletonType"]
-
-nameType :: Binding
-nameType = def "NameType" $
-  T.record [
-    "value">: T.string]
-
-anonymousNameType :: Binding
-anonymousNameType = def "AnonymousNameType" $
-  T.wrap T.unit
-
-selectType :: Binding
-selectType = def "SelectType" $
-  T.record [
-    "qual">: meta "RefData",
-    "name">: meta "NameType"]
-
-projectType :: Binding
-projectType = def "ProjectType" $
-  T.record [
-    "qual">: meta "Type",
-    "name">: meta "NameType"]
-
-singletonType :: Binding
-singletonType = def "SingletonType" $
-  T.record [
-    "ref">: meta "RefData"]
-
-applyType :: Binding
-applyType = def "ApplyType" $
-  T.record [
-    "tpe">: meta "Type",
-    "args">: T.list $ meta "Type"]
-
-applyInfixType :: Binding
-applyInfixType = def "ApplyInfixType" $
-  T.record [
-    "lhs">: meta "Type",
-    "op">: meta "NameType",
-    "rhs">: meta "Type"]
-
-functionType :: Binding
-functionType = def "FunctionType" $
-  T.record [
-    "params">: T.list $ meta "Type",
-    "res">: meta "Type"]
-
-polyFunctionType :: Binding
-polyFunctionType = def "PolyFunctionType" $
-  T.record [
-    "tparams">: T.list $ meta "ParamType",
-    "tpe">: meta "Type"]
-
-contextFunctionType :: Binding
-contextFunctionType = def "ContextFunctionType" $
-  T.record [
-    "params">: T.list $ meta "Type",
-    "res">: meta "Type"]
-
-implicitFunctionType :: Binding
-implicitFunctionType = def "ImplicitFunctionType" $
-  T.record [
-    "params">: T.list $ meta "Type",
-    "res">: meta "Type"]
-
-tupleType :: Binding
-tupleType = def "TupleType" $
-  T.record [
-    "args">: T.list $ meta "Type"]
-
-withType :: Binding
-withType = def "WithType" $
-  T.record [
-    "lhs">: meta "Type",
-    "rhs">: meta "Type"]
-
-andType :: Binding
-andType = def "AndType" $
-  T.record [
-    "lhs">: meta "Type",
-    "rhs">: meta "Type"]
-
-orType :: Binding
-orType = def "OrType" $
-  T.record [
-    "lhs">: meta "Type",
-    "rhs">: meta "Type"]
-
-refineType :: Binding
-refineType = def "RefineType" $
-  T.record [
-    "tpe">: T.maybe $ meta "Type",
-    "stats">: T.list $ meta "Stat"]
-
-existentialType :: Binding
-existentialType = def "ExistentialType" $
-  T.record [
-    "tpe">: meta "Type",
-    "stats">: T.list $ meta "Stat"]
-
-annotateType :: Binding
-annotateType = def "AnnotateType" $
-  T.record [
-    "tpe">: meta "Type",
-    "annots">: T.list $ meta "AnnotMod"]
-
-lambdaType :: Binding
-lambdaType = def "LambdaType" $
-  T.record [
-    "tparams">: T.list $ meta "ParamType",
-    "tpe">: meta "Type"]
-
-methodType :: Binding
-methodType = def "MethodType" $
-  T.record [
-    "paramss">: T.list $ T.list $ meta "ParamData",
-    "tpe">: meta "Type"]
-
-placeholderType :: Binding
-placeholderType = def "PlaceholderType" $
-  T.record [
-    "bounds">: meta "TypeBounds"]
-
-typeBounds :: Binding
-typeBounds = def "TypeBounds" $
-  T.record [
-    "lo">: T.maybe $ meta "Type",
-    "hi">: T.maybe $ meta "Type"]
-
-byNameType :: Binding
-byNameType = def "ByNameType" $
-  T.record [
-    "tpe">: meta "Type"]
-
-repeatedType :: Binding
-repeatedType = def "RepeatedType" $
-  T.record [
-    "tpe">: meta "Type"]
-
-varType :: Binding
-varType = def "VarType" $
-  T.record [
-    "name">: meta "NameType"]
-
 typedParamType :: Binding
 typedParamType = def "TypedParamType" $
   T.record [
     "name">: meta "Name",
     "typ">: meta "Type"]
-
-paramType :: Binding
-paramType = def "ParamType" $
-  T.record [
-    "mods">: T.list $ meta "Mod",
-    "name">: meta "Name",
-    "tparams">: T.list $ meta "ParamType",
-    "tbounds">: T.list $ meta "TypeBounds",
-    "vbounds">: T.list $ meta "Type",
-    "cbounds">: T.list $ meta "Type"]
-
-matchType :: Binding
-matchType = def "MatchType" $
-  T.record [
-    "tpe">: meta "Type",
-    "cases">: T.list $ meta "TypeCase"]
-
-pat :: Binding
-pat = def "Pat" $
-  T.union [
-    "var">: meta "VarPat",
-    "wildcard">: T.unit,
-    "seqWildcard">: T.unit,
-    "bind">: meta "BindPat",
-    "alternative">: meta "AlternativePat",
-    "tuple">: meta "TuplePat",
-    "repeated">: meta "RepeatedPat",
-    "extract">: meta "ExtractPat",
-    "extractInfix">: meta "ExtractInfixPat",
-    "interpolate">: meta "InterpolatePat",
-    "typed">: meta "TypedPat",
-    "given">: meta "GivenPat"]
-
-varPat :: Binding
-varPat = def "VarPat" $
-  T.record [
-    "name">: meta "NameData"]
-
-bindPat :: Binding
-bindPat = def "BindPat" $
-  T.record [
-    "lhs">: meta "Pat",
-    "rhs">: meta "Pat"]
-
-alternativePat :: Binding
-alternativePat = def "AlternativePat" $
-  T.record [
-    "lhs">: meta "Pat",
-    "rhs">: meta "Pat"]
-
-tuplePat :: Binding
-tuplePat = def "TuplePat" $
-  T.record [
-    "args">: T.list $ meta "Pat"]
-
-repeatedPat :: Binding
-repeatedPat = def "RepeatedPat" $
-  T.record [
-    "name">: meta "NameData"]
-
-extractPat :: Binding
-extractPat = def "ExtractPat" $
-  T.record [
-    "fun">: meta "Data",
-    "args">: T.list $ meta "Pat"]
-
-extractInfixPat :: Binding
-extractInfixPat = def "ExtractInfixPat" $
-  T.record [
-    "lhs">: meta "Pat",
-    "op">: meta "NameData",
-    "rhs">: T.list $ meta "Pat"]
-
-interpolatePat :: Binding
-interpolatePat = def "InterpolatePat" $
-  T.record [
-    "prefix">: meta "NameData",
-    "parts">: T.list $ meta "Lit"]
 
 typedPat :: Binding
 typedPat = def "TypedPat" $
@@ -756,39 +1094,10 @@ typedPat = def "TypedPat" $
     "lhs">: meta "Pat",
     "rhs">: meta "Type"]
 
-givenPat :: Binding
-givenPat = def "GivenPat" $
+unimportImportee :: Binding
+unimportImportee = def "UnimportImportee" $
   T.record [
-    "tpe">: meta "Type"]
-
-member :: Binding
-member = def "Member" $
-  T.union [
-    "term">: meta "DataMember",
-    "type">: meta "TypeMember",
-    "termParam">: meta "ParamData",
-    "typeParam">: meta "ParamType",
-    "self">: meta "Self"]
-
-dataMember :: Binding
-dataMember = def "DataMember" $
-  T.union [
-    "pkg">: meta "Pkg",
-    "object">: meta "ObjectPkg"]
-
-typeMember :: Binding
-typeMember = def "TypeMember" $
-  T.record [
-    "name">: meta "NameType"]
-
-decl :: Binding
-decl = def "Decl" $
-  T.union [
-    "val">: meta "ValDecl",
-    "var">: meta "VarDecl",
-    "def">: meta "DefDecl",
-    "type">: meta "TypeDecl",
-    "given">: meta "GivenDecl"]
+    "name">: meta "Name"]
 
 valDecl :: Binding
 valDecl = def "ValDecl" $
@@ -796,56 +1105,6 @@ valDecl = def "ValDecl" $
     "mods">: T.list $ meta "Mod",
     "pats">: T.list $ meta "Pat",
     "decltpe">: meta "Type"]
-
-varDecl :: Binding
-varDecl = def "VarDecl" $
-  T.record [
-    "mods">: T.list $ meta "Mod",
-    "pats">: T.list $ meta "Pat",
-    "decltpe">: meta "Type"]
-
-defDecl :: Binding
-defDecl = def "DefDecl" $
-  T.record [
-    "mods">: T.list $ meta "Mod",
-    "name">: meta "NameData",
-    "tparams">: T.list $ meta "ParamType",
-    "paramss">: T.list $ T.list $ meta "ParamData",
-    "decltpe">: meta "Type"]
-
-typeDecl :: Binding
-typeDecl = def "TypeDecl" $
-  T.record [
-    "mods">: T.list $ meta "Mod",
-    "name">: meta "NameType",
-    "tparams">: T.list $ meta "ParamType",
-    "bounds">: meta "TypeBounds"]
-
-givenDecl :: Binding
-givenDecl = def "GivenDecl" $
-  T.record [
-    "mods">: T.list $ meta "Mod",
-    "name">: meta "NameData",
-    "tparams">: T.list $ meta "ParamType",
-    "sparams">: T.list $ T.list $ meta "ParamData",
-    "decltpe">: meta "Type"]
-
-defn :: Binding
-defn = def "Defn" $
-  T.union [
-    "val">: meta "ValDefn",
-    "var">: meta "VarDefn",
-    "given">: meta "GivenDefn",
-    "enum">: meta "EnumDefn",
-    "enumCase">: meta "EnumCaseDefn",
-    "repeatedEnumCase">: meta "RepeatedEnumCaseDefn",
-    "givenAlias">: meta "GivenAliasDefn",
-    "extensionGroup">: meta "ExtensionGroupDefn",
-    "def">: meta "DefDefn",
-    "type">: meta "TypeDefn",
-    "class">: meta "ClassDefn",
-    "trait">: meta "TraitDefn",
-    "object">: meta "ObjectDefn"]
 
 valDefn :: Binding
 valDefn = def "ValDefn" $
@@ -855,6 +1114,19 @@ valDefn = def "ValDefn" $
     "decltpe">: T.maybe $ meta "Type",
     "rhs">: meta "Data"]
 
+valEnumerator :: Binding
+valEnumerator = def "ValEnumerator" $
+  T.record [
+    "pat">: meta "Pat",
+    "rhs">: meta "Data"]
+
+varDecl :: Binding
+varDecl = def "VarDecl" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "pats">: T.list $ meta "Pat",
+    "decltpe">: meta "Type"]
+
 varDefn :: Binding
 varDefn = def "VarDefn" $
   T.record [
@@ -863,296 +1135,24 @@ varDefn = def "VarDefn" $
     "decltpe">: meta "Type",
     "rhs">: T.maybe $ meta "Data"]
 
-givenDefn :: Binding
-givenDefn = def "GivenDefn" $
-  T.record [
-    "mods">: T.list $ meta "Mod",
-    "name">: meta "Name",
-    "tparams">: T.list $ T.list $ meta "ParamType",
-    "sparams">: T.list $ T.list $ meta "ParamData",
-    "templ">: meta "Template"]
-
-enumDefn :: Binding
-enumDefn = def "EnumDefn" $
-  T.record [
-    "mods">: T.list $ meta "Mod",
-    "name">: meta "NameType",
-    "tparams">: T.list $ meta "ParamType",
-    "ctor">: meta "PrimaryCtor",
-    "template">: meta "Template"]
-
-enumCaseDefn :: Binding
-enumCaseDefn = def "EnumCaseDefn" $
-  T.record [
-    "mods">: T.list $ meta "Mod",
-    "name">: meta "NameData",
-    "tparams">: T.list $ meta "ParamType",
-    "ctor">: meta "PrimaryCtor",
-    "inits">: T.list $ meta "Init"]
-
-repeatedEnumCaseDefn :: Binding
-repeatedEnumCaseDefn = def "RepeatedEnumCaseDefn" $
-  T.record [
-    "mods">: T.list $ meta "Mod",
-    "cases">: T.list $ meta "NameData"]
-
-givenAliasDefn :: Binding
-givenAliasDefn = def "GivenAliasDefn" $
-  T.record [
-    "mods">: T.list $ meta "Mod",
-    "name">: meta "Name",
-    "tparams">: T.list $ T.list $ meta "ParamType",
-    "sparams">: T.list $ T.list $ meta "ParamData",
-    "decltpe">: meta "Type",
-    "body">: meta "Data"]
-
-extensionGroupDefn :: Binding
-extensionGroupDefn = def "ExtensionGroupDefn" $
-  T.record [
-    "tparams">: T.list $ meta "ParamType",
-    "parmss">: T.list $ T.list $ meta "ParamData",
-    "body">: meta "Stat"]
-
-defDefn :: Binding
-defDefn = def "DefDefn" $
-  T.record [
-    "mods">: T.list $ meta "Mod",
-    "name">: meta "NameData",
-    "tparams">: T.list $ meta "ParamType",
-    "paramss">: T.list $ T.list $ meta "ParamData",
-    "decltpe">: T.maybe $ meta "Type",
-    "body">: meta "Data"]
-
-typeDefn :: Binding
-typeDefn = def "TypeDefn" $
-  T.record [
-    "mods">: T.list $ meta "Mod",
-    "name">: meta "NameType",
-    "tparams">: T.list $ meta "ParamType",
-    "body">: meta "Type"]
-
-classDefn :: Binding
-classDefn = def "ClassDefn" $
-  T.record [
-    "mods">: T.list $ meta "Mod",
-    "name">: meta "NameType",
-    "tparams">: T.list $ meta "ParamType",
-    "ctor">: meta "PrimaryCtor",
-    "template">: meta "Template"]
-
-traitDefn :: Binding
-traitDefn = def "TraitDefn" $
-  T.record [
-    "mods">: T.list $ meta "Mod",
-    "name">: meta "NameType",
-    "tparams">: T.list $ meta "ParamType",
-    "ctor">: meta "PrimaryCtor",
-    "template">: meta "Template"]
-
-objectDefn :: Binding
-objectDefn = def "ObjectDefn" $
+varPat :: Binding
+varPat = def "VarPat" $
   T.record [
     "name">: meta "NameData"]
 
-pkg :: Binding
-pkg = def "Pkg" $
+varType :: Binding
+varType = def "VarType" $
   T.record [
-    "name">: meta "NameData",
-    "ref">: meta "RefData",
-    "stats">: T.list $ meta "Stat"]
+    "name">: meta "NameType"]
 
-objectPkg :: Binding
-objectPkg = def "ObjectPkg" $
+whileData :: Binding
+whileData = def "WhileData" $
   T.record [
-    "mods">: T.list $ meta "Mod",
-    "name">: meta "NameData",
-    "template">: meta "Template"]
-
-ctor :: Binding
-ctor = def "Ctor" $
-  T.union [
-    "primary">: meta "PrimaryCtor",
-    "secondary">: meta "SecondaryCtor"]
-
-primaryCtor :: Binding
-primaryCtor = def "PrimaryCtor" $
-  T.record [
-    "mods">: T.list $ meta "Mod",
-    "name">: meta "Name",
-    "paramss">: T.list $ T.list $ meta "ParamData"]
-
-secondaryCtor :: Binding
-secondaryCtor = def "SecondaryCtor" $
-  T.record [
-    "mods">: T.list $ meta "Mod",
-    "name">: meta "Name",
-    "paramss">: T.list $ T.list $ meta "ParamData",
-    "init">: meta "Init",
-    "stats">: T.list $ meta "Stat"]
-
-init_ :: Binding
-init_ = def "Init" $
-  T.record [
-    "tpe">: meta "Type",
-    "name">: meta "Name",
-    "argss">: T.list $ T.list $ meta "Data"]
-
-self :: Binding
-self = def "Self" $
-  T.wrap T.unit
-
-template :: Binding
-template = def "Template" $
-  T.record [
-    "early">: T.list $ meta "Stat",
-    "inits">: T.list $ meta "Init",
-    "self">: meta "Self",
-    "stats">: T.list $ meta "Stat"]
-
-mod_ :: Binding
-mod_ = def "Mod" $
-  T.union [
-    "annot">: meta "AnnotMod",
-    "private">: meta "PrivateMod",
-    "protected">: meta "ProtectedMod",
-    "implicit">: T.unit,
-    "final">: T.unit,
-    "sealed">: T.unit,
-    "open">: T.unit,
-    "super">: T.unit,
-    "override">: T.unit,
-    "case">: T.unit,
-    "abstract">: T.unit,
-    "covariant">: T.unit,
-    "contravariant">: T.unit,
-    "lazy">: T.unit,
-    "valParam">: T.unit,
-    "varParam">: T.unit,
-    "infix">: T.unit,
-    "inline">: T.unit,
-    "using">: T.unit,
-    "opaque">: T.unit,
-    "transparent">: T.unit]
-
-annotMod :: Binding
-annotMod = def "AnnotMod" $
-  T.record [
-    "init">: meta "Init"]
-
-privateMod :: Binding
-privateMod = def "PrivateMod" $
-  T.record [
-    "within">: meta "Ref"]
-
-protectedMod :: Binding
-protectedMod = def "ProtectedMod" $
-  T.record [
-    "within">: meta "Ref"]
-
-enumerator :: Binding
-enumerator = def "Enumerator" $
-  T.union [
-    "generator">: meta "GeneratorEnumerator",
-    "caseGenerator">: meta "CaseGeneratorEnumerator",
-    "val">: meta "ValEnumerator",
-    "guard">: meta "GuardEnumerator"]
-
-generatorEnumerator :: Binding
-generatorEnumerator = def "GeneratorEnumerator" $
-  T.record [
-    "pat">: meta "Pat",
-    "rhs">: meta "Data"]
-
-caseGeneratorEnumerator :: Binding
-caseGeneratorEnumerator = def "CaseGeneratorEnumerator" $
-  T.record [
-    "pat">: meta "Pat",
-    "rhs">: meta "Data"]
-
-valEnumerator :: Binding
-valEnumerator = def "ValEnumerator" $
-  T.record [
-    "pat">: meta "Pat",
-    "rhs">: meta "Data"]
-
-guardEnumerator :: Binding
-guardEnumerator = def "GuardEnumerator" $
-  T.record [
-    "cond">: meta "Data"]
-
-importExportStat :: Binding
-importExportStat = def "ImportExportStat" $
-  T.union [
-    "import">: meta "Import",
-    "export">: meta "Export"]
-
-import_ :: Binding
-import_ = def "Import" $
-  T.record [
-    "importers">: T.list $ meta "Importer"]
-
-export_ :: Binding
-export_ = def "Export" $
-  T.record [
-    "importers">: T.list $ meta "Importer"]
-
-importer :: Binding
-importer = def "Importer" $
-  T.record [
-    "ref">: meta "RefData",
-    "importees">: T.list $ meta "Importee"]
-
-importee :: Binding
-importee = def "Importee" $
-  T.union [
-    "wildcard">: T.unit,
-    "given">: meta "GivenImportee",
-    "givenAll">: T.unit,
-    "name">: meta "NameImportee",
-    "rename">: meta "RenameImportee",
-    "unimport">: meta "UnimportImportee"]
-
-givenImportee :: Binding
-givenImportee = def "GivenImportee" $
-  T.record [
-    "tpe">: meta "Type"]
-
-nameImportee :: Binding
-nameImportee = def "NameImportee" $
-  T.record [
-    "name">: meta "Name"]
-
-renameImportee :: Binding
-renameImportee = def "RenameImportee" $
-  T.record [
-    "name">: meta "Name",
-    "rename">: meta "Name"]
-
-unimportImportee :: Binding
-unimportImportee = def "UnimportImportee" $
-  T.record [
-    "name">: meta "Name"]
-
-caseTree :: Binding
-caseTree = def "CaseTree" $
-  T.union [
-    "case">: meta "Case",
-    "typeCase">: meta "TypeCase"]
-
-case_ :: Binding
-case_ = def "Case" $
-  T.record [
-    "pat">: meta "Pat",
-    "cond">: T.maybe $ meta "Data",
+    "expr">: meta "Data",
     "body">: meta "Data"]
 
-typeCase :: Binding
-typeCase = def "TypeCase" $
+withType :: Binding
+withType = def "WithType" $
   T.record [
-    "pat">: meta "Type",
-    "body">: meta "Type"]
-
-source :: Binding
-source = def "Source" $
-  T.record [
-    "stats">: T.list $ meta "Stat"]
+    "lhs">: meta "Type",
+    "rhs">: meta "Type"]
