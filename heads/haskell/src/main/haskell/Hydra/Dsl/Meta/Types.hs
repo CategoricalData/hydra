@@ -34,6 +34,11 @@ import Prelude hiding (either, map, maybe, product, sum)
 (-->) = function
 
 
+-- | Attach an annotation to a term-encoded type
+-- Example: annot annotationMap myType
+annot :: TTerm (M.Map Name Term) -> TTerm Type -> TTerm Type
+annot ann typ = typeAnnotated $ annotatedType typ ann
+
 -- | Apply a term-encoded type to a type argument
 -- Example: apply (var "Maybe") int32
 apply :: TTerm Type -> TTerm Type -> TTerm Type
@@ -41,6 +46,11 @@ apply l r = typeApplication $ applicationType l r
 
 applys :: TTerm Type -> [TTerm Type] -> TTerm Type
 applys t ts = L.foldl apply t ts
+
+-- | Create a term-encoded arbitrary-precision integer type
+-- Example: bigint
+bigint :: TTerm Type
+bigint = typeLiteral $ literalTypeInteger integerTypeBigint
 
 -- | Create a term-encoded binary type
 -- Example: binary
@@ -51,6 +61,22 @@ binary = typeLiteral literalTypeBinary
 -- Example: boolean
 boolean :: TTerm Type
 boolean = typeLiteral literalTypeBoolean
+
+-- | Create a term-encoded arbitrary-precision decimal type
+-- Example: decimal
+decimal :: TTerm Type
+decimal = typeLiteral literalTypeDecimal
+
+-- | Create a term-encoded either type
+-- Example: either_ string int32
+either_ :: TTerm Type -> TTerm Type -> TTerm Type
+either_ l r = typeEither $ eitherType l r
+
+-- | Create a term-encoded enum type with the given variant names (conventionally in camelCase)
+-- Example: enum (name "Color") ["red", "green", "blue"]
+-- Accepts TTerm Name or TBinding Name (via AsTerm)
+enum :: AsTerm t Name => t -> [String] -> TTerm Type
+enum tname names = union tname $ (\n -> (name n, unit)) <$> names
 
 -- | Create a term-encoded field with the given name and type
 -- Example: field "age" int32
@@ -74,16 +100,6 @@ float32 = typeLiteral $ literalTypeFloat $ float FloatTypeFloat32
 float64 :: TTerm Type
 float64 = typeLiteral $ literalTypeFloat $ float FloatTypeFloat64
 
--- | Create a term-encoded arbitrary-precision decimal type
--- Example: decimal
-decimal :: TTerm Type
-decimal = typeLiteral literalTypeDecimal
-
--- | Create a term-encoded either type
--- Example: either_ string int32
-either_ :: TTerm Type -> TTerm Type -> TTerm Type
-either_ l r = typeEither $ eitherType l r
-
 -- | Create a term-encoded universal quantification (polymorphic type)
 -- Example: forAll "a" (var "a" --> var "a")
 forAll :: String -> TTerm Type -> TTerm Type
@@ -104,16 +120,6 @@ functionMany types = case types of
   [t] -> t
   t:ts -> function t $ functionMany ts
 
--- | Create a term-encoded arbitrary-precision integer type
--- Example: bigint
-bigint :: TTerm Type
-bigint = typeLiteral $ literalTypeInteger integerTypeBigint
-
--- | Create a term-encoded 8-bit signed integer type
--- Example: int8
-int8 :: TTerm Type
-int8 = typeLiteral $ literalTypeInteger integerTypeInt8
-
 -- | Create a term-encoded 16-bit signed integer type
 -- Example: int16
 int16 :: TTerm Type
@@ -128,6 +134,11 @@ int32 = typeLiteral $ literalTypeInteger integerTypeInt32
 -- Example: int64
 int64 :: TTerm Type
 int64 = typeLiteral $ literalTypeInteger integerTypeInt64
+
+-- | Create a term-encoded 8-bit signed integer type
+-- Example: int8
+int8 :: TTerm Type
+int8 = typeLiteral $ literalTypeInteger integerTypeInt8
 
 -- | Create a term-encoded IntegerType representation
 -- Example: integer IntegerTypeInt32
@@ -158,6 +169,11 @@ literal = typeLiteral
 map :: TTerm Type -> TTerm Type -> TTerm Type
 map k v = typeMap $ mapType k v
 
+-- | Create a term-encoded maybe (optional/nullable) type
+-- Example: maybe string
+maybe :: TTerm Type -> TTerm Type
+maybe = typeMaybe
+
 -- | Create a term-encoded monomorphic type scheme
 -- Example: mono int32
 mono :: TTerm Type -> TTerm TypeScheme
@@ -166,10 +182,12 @@ mono t = Phantoms.record _TypeScheme [
   Phantoms.field _TypeScheme_body t,
   Phantoms.field _TypeScheme_constraints Phantoms.nothing]
 
--- | Create a term-encoded maybe (optional/nullable) type
--- Example: maybe string
-maybe :: TTerm Type -> TTerm Type
-maybe = typeMaybe
+-- | Term-encoded non-negative 32-bit integer type
+-- Currently an alias for int32; intended for semantic annotation
+-- In future versions, this may include validation constraints
+-- Example: nonNegativeInt32
+nonNegativeInt32 :: TTerm Type
+nonNegativeInt32 = Hydra.Dsl.Meta.Types.int32
 
 -- | Create a term-encoded optional (nullable) type (alias for 'maybe')
 -- Example: optional string
@@ -227,11 +245,6 @@ set = typeSet
 string :: TTerm Type
 string = typeLiteral literalTypeString
 
--- | Create a term-encoded 8-bit unsigned integer type
--- Example: uint8
-uint8 :: TTerm Type
-uint8 = typeLiteral $ literalTypeInteger integerTypeUint8
-
 -- | Create a term-encoded 16-bit unsigned integer type
 -- Example: uint16
 uint16 :: TTerm Type
@@ -247,6 +260,11 @@ uint32 = typeLiteral $ literalTypeInteger integerTypeUint32
 uint64 :: TTerm Type
 uint64 = typeLiteral $ literalTypeInteger integerTypeUint64
 
+-- | Create a term-encoded 8-bit unsigned integer type
+-- Example: uint8
+uint8 :: TTerm Type
+uint8 = typeLiteral $ literalTypeInteger integerTypeUint8
+
 -- | Create a term-encoded union type with named variants
 -- Example: union (name "Result") ["success">: int32, "error">: string]
 -- Note: the name parameter is now ignored; union types no longer carry a type name
@@ -260,40 +278,22 @@ union _n pairs = typeUnion $ Phantoms.list (toField <$> pairs)
 unit :: TTerm Type
 unit = typeUnit
 
--- | Term-encoded void type (uninhabited / bottom type)
--- Example: void
-void :: TTerm Type
-void = typeVoid
+-- | Create a term-encoded type variable (alias for 'variable')
+-- Example: var "a"
+var :: String -> TTerm Type
+var = variable
 
 -- | Create a term-encoded type variable
 -- Example: variable "a"
 variable :: String -> TTerm Type
 variable = typeVariable . name
 
--- | Create a term-encoded type variable (alias for 'variable')
--- Example: var "a"
-var :: String -> TTerm Type
-var = variable
+-- | Term-encoded void type (uninhabited / bottom type)
+-- Example: void
+void :: TTerm Type
+void = typeVoid
 
 -- | Create a term-encoded wrapped type (newtype)
 -- Note: the name parameter is now ignored; wrapped types no longer carry a type name
 wrap :: AsTerm t Name => t -> TTerm Type -> TTerm Type
 wrap _n t = typeWrap t
-
--- | Create a term-encoded enum type with the given variant names (conventionally in camelCase)
--- Example: enum (name "Color") ["red", "green", "blue"]
--- Accepts TTerm Name or TBinding Name (via AsTerm)
-enum :: AsTerm t Name => t -> [String] -> TTerm Type
-enum tname names = union tname $ (\n -> (name n, unit)) <$> names
-
--- | Term-encoded non-negative 32-bit integer type
--- Currently an alias for int32; intended for semantic annotation
--- In future versions, this may include validation constraints
--- Example: nonNegativeInt32
-nonNegativeInt32 :: TTerm Type
-nonNegativeInt32 = Hydra.Dsl.Meta.Types.int32
-
--- | Attach an annotation to a term-encoded type
--- Example: annot annotationMap myType
-annot :: TTerm (M.Map Name Term) -> TTerm Type -> TTerm Type
-annot ann typ = typeAnnotated $ annotatedType typ ann

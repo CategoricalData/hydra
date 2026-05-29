@@ -36,14 +36,18 @@ defaultLibraries = [
 
 -- Helpers
 
-mkPrim :: Name -> Int -> (Context -> Graph -> [Term] -> Either Error Term) -> Primitive
+mkPrim :: Name -> Int -> (InferenceContext -> Graph -> [Term] -> Either Error Term) -> Primitive
 mkPrim name arity impl = Primitive {
   primitiveDefinition = PrimitiveDefinition {
     primitiveDefinitionName = name,
-    primitiveDefinitionDescription = "",
     primitiveDefinitionSignature = typeSchemeToTermSignature (dummyType arity),
+    primitiveDefinitionDescription = "",
+    primitiveDefinitionComments = Nothing,
+    primitiveDefinitionSeeAlso = [],
     primitiveDefinitionIsPure = True,
     primitiveDefinitionIsTotal = True,
+    primitiveDefinitionAvailableSince = Nothing,
+    primitiveDefinitionDeprecatedSince = Nothing,
     primitiveDefinitionDefaultImplementation = Nothing},
   primitiveImplementation = impl}
 
@@ -331,5 +335,5 @@ defaultLibSets = standardLibrary _hydra_lib_sets [
     _ -> unexpected cx "sets.unions" 1]
 
 -- | Error helper for wrong argument count
-unexpected :: Context -> String -> Int -> Either Error Term
+unexpected :: InferenceContext -> String -> Int -> Either Error Term
 unexpected _cx name arity = Left $ ErrorOther (OtherError (name ++ ": expected " ++ show arity ++ " args"))

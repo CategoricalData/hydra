@@ -20,9 +20,9 @@
             [hydra.json.bootstrap :refer :all]
             [hydra.annotation-bindings :refer [annotation-bindings]]))
 
-;; Empty context: alist-style map matching hydra_context_context shape.
+;; Empty context: alist-style map matching hydra_typing_inference_context shape.
 (def hydra_test_test_env_test_context
-  {:functions () :annotations () :variable_types {}})
+  {:fresh_type_variable_count 0 :trace ()})
 
 ;; Test graph builder. Curried to match the Clojure coder's emission
 ;; for multi-arg DSL functions: testGraph :: Map Name Type -> Map Name

@@ -1,6 +1,6 @@
 package hydra;
 
-import hydra.context.Context;
+import hydra.typing.InferenceContext;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.errors.Error_;
@@ -95,8 +95,7 @@ public class ProfileJavaCoder {
             }
         }
 
-        Context ctx = new Context(
-            Collections.emptyList(), Collections.emptyList(), Collections.emptyMap());
+        InferenceContext ctx = new InferenceContext(0, new java.util.ArrayList<>());
         Graph bsGraph = Generation.bootstrapGraph();
 
         System.err.println("Profiling prefix sizes ...");

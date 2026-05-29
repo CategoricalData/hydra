@@ -2,18 +2,37 @@
 -- | String representations of hydra.error types
 
 module Hydra.Show.Errors where
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Literals as Literals
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Literals as Literals
+import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Show.Core as ShowCore
-import qualified Hydra.Show.Error.Core as ErrorCore
-import qualified Hydra.Show.Typing as Typing
-import qualified Hydra.Show.Variants as Variants
+import qualified Hydra.Show.Error.Core as ShowErrorCore
+import qualified Hydra.Show.Typing as ShowTyping
+import qualified Hydra.Show.Variants as ShowVariants
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Show a checking error as a string
@@ -39,24 +58,24 @@ error e =
     case e of
       Errors.ErrorChecking v0 -> checkingError v0
       Errors.ErrorDecoding v0 -> decodingError v0
-      Errors.ErrorDuplicateBinding v0 -> ErrorCore.duplicateBindingError v0
-      Errors.ErrorDuplicateField v0 -> ErrorCore.duplicateFieldError v0
+      Errors.ErrorDuplicateBinding v0 -> ShowErrorCore.duplicateBindingError v0
+      Errors.ErrorDuplicateField v0 -> ShowErrorCore.duplicateFieldError v0
       Errors.ErrorExtraction _ -> "extraction error"
       Errors.ErrorInference _ -> "inference error"
       Errors.ErrorOther v0 -> otherError v0
       Errors.ErrorResolution v0 -> resolutionError v0
-      Errors.ErrorUndefinedField v0 -> ErrorCore.undefinedFieldError v0
-      Errors.ErrorUndefinedTermVariable v0 -> ErrorCore.undefinedTermVariableError v0
-      Errors.ErrorUntypedTermVariable v0 -> ErrorCore.untypedTermVariableError v0
-      Errors.ErrorUnexpectedTermVariant v0 -> ErrorCore.unexpectedTermVariantError v0
-      Errors.ErrorUnexpectedTypeVariant v0 -> ErrorCore.unexpectedTypeVariantError v0
+      Errors.ErrorUndefinedField v0 -> ShowErrorCore.undefinedFieldError v0
+      Errors.ErrorUndefinedTermVariable v0 -> ShowErrorCore.undefinedTermVariableError v0
+      Errors.ErrorUntypedTermVariable v0 -> ShowErrorCore.untypedTermVariableError v0
+      Errors.ErrorUnexpectedTermVariant v0 -> ShowErrorCore.unexpectedTermVariantError v0
+      Errors.ErrorUnexpectedTypeVariant v0 -> ShowErrorCore.unexpectedTypeVariantError v0
       Errors.ErrorUnification v0 -> unificationError v0
 -- | Show an incorrect unification error as a string
 incorrectUnificationError :: Checking.IncorrectUnificationError -> String
 incorrectUnificationError e =
 
       let subst = Checking.incorrectUnificationErrorSubstitution e
-      in (Strings.cat2 "incorrect unification: " (Typing.typeSubst subst))
+      in (Strings.cat2 "incorrect unification: " (ShowTyping.typeSubst subst))
 -- | Show a not-a-forall-type error as a string
 notAForallTypeError :: Checking.NotAForallTypeError -> String
 notAForallTypeError e =
@@ -159,7 +178,7 @@ unificationError e =
 -- | Show an unsupported term variant error as a string
 unsupportedTermVariantError :: Checking.UnsupportedTermVariantError -> String
 unsupportedTermVariantError e =
-    Strings.cat2 "unsupported term variant: " (Variants.termVariant (Checking.unsupportedTermVariantErrorTermVariant e))
+    Strings.cat2 "unsupported term variant: " (ShowVariants.termVariant (Checking.unsupportedTermVariantErrorTermVariant e))
 -- | Show an untyped lambda error as a string
 untypedLambdaError :: t0 -> String
 untypedLambdaError _ = "untyped lambda"

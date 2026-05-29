@@ -31,6 +31,11 @@ import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
 import qualified Data.Set                     as S
 
 
+-- Field constructor for cases/match (uses Phantoms.>>: to create Field, since the unqualified >>: from Testing creates tuples)
+(~>:) :: AsTerm t a => Name -> t -> Field
+(~>:) = (Phantoms.>>:)
+infixr 0 ~>:
+
 ns :: ModuleName
 ns = ModuleName "hydra.test.variables"
 
@@ -47,14 +52,17 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 
--- Field constructor for cases/match (uses Phantoms.>>: to create Field, since the unqualified >>: from Testing creates tuples)
-(~>:) :: AsTerm t a => Name -> t -> Field
-(~>:) = (Phantoms.>>:)
-infixr 0 ~>:
+-- Helper for single-binding let
+letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term
+letExpr varName value body = lets [(nm varName, value)] body
 
--- | Show a term as a string using ShowCore.term
-showTerm :: TTerm Term -> TTerm String
-showTerm t = ShowCore.term @@ t
+-- Helper to build a set of Names
+nameSet :: [String] -> TTerm (S.Set Name)
+nameSet names = Phantoms.set $ (nm <$> names)
+
+-- Helper to build names
+nm :: String -> TTerm Name
+nm s = Core.name $ Phantoms.string s
 
 -- | Show a set of names as a sorted, comma-separated string: "{name1, name2, ...}"
 showNameSet :: TTerm (S.Set Name) -> TTerm String
@@ -65,35 +73,15 @@ showNameSet s = Strings.cat $ plist [
   where
     plist = Phantoms.list; pstring = Phantoms.string; plambda = Phantoms.lambda; pvar = Phantoms.var
 
+-- | Show a term as a string using ShowCore.term
+showTerm :: TTerm Term -> TTerm String
+showTerm t = ShowCore.term @@ t
+
 -- | Helper for Term -> Term kernel function test cases
 termCase :: String -> TTermDefinition (Term -> Term) -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
 termCase cname func input output = universalCase cname (showTerm (func @@ input)) (showTerm output)
 
--- Helper to build names
-nm :: String -> TTerm Name
-nm s = Core.name $ Phantoms.string s
-
--- Helper to build a set of Names
-nameSet :: [String] -> TTerm (S.Set Name)
-nameSet names = Phantoms.set $ (nm <$> names)
-
--- Helper for single-binding let
-letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term
-letExpr varName value body = lets [(nm varName, value)] body
-
 -- Helper for multi-binding let
-
--- | Convenience helpers for specific kernel functions
-unshadowCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-unshadowCase cname = termCase cname Variables.unshadowVariables
-
-normalizeTypeVarsCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-normalizeTypeVarsCase cname = termCase cname Variables.normalizeTypeVariablesInTerm
-
-freeVarsCase :: String -> TTerm Term -> TTerm (S.Set Name) -> TTerm TestCaseWithMetadata
-freeVarsCase cname input expected = universalCase cname
-  (showNameSet (Variables.freeVariablesInTerm @@ input))
-  (showNameSet expected)
 
 -- | Test cases for free variables computation
 freeVariablesGroup :: TTerm TestGroup
@@ -125,6 +113,11 @@ freeVariablesGroup = subgroup "freeVariables" [
         var "x",
         apply (lambda "y" (var "y")) (var "y")])
       (nameSet ["x", "y"])]
+
+freeVarsCase :: String -> TTerm Term -> TTerm (S.Set Name) -> TTerm TestCaseWithMetadata
+freeVarsCase cname input expected = universalCase cname
+  (showNameSet (Variables.freeVariablesInTerm @@ input))
+  (showNameSet expected)
 
 -- | Test cases for normalizing type variables in terms
 -- The function normalizeTypeVariablesInTerm renames type variables to a canonical form (t0, t1, t2, etc.)
@@ -267,6 +260,13 @@ normalizeTypeVariablesGroup = subgroup "normalizeTypeVariables" [
             (apply (var "fun2") (var "x")))),
         T.poly ["t0", "t1"] (T.function (T.var "t0") (T.function (T.var "t1") (T.pair (T.var "t0") (T.var "t1")))))]
         (apply (apply (var "fun1") (string "foo")) (int32 42)))]
+
+normalizeTypeVarsCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+normalizeTypeVarsCase cname = termCase cname Variables.normalizeTypeVariablesInTerm
+
+-- | Convenience helpers for specific kernel functions
+unshadowCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+unshadowCase cname = termCase cname Variables.unshadowVariables
 
 -- | Test cases for unshadowVariables
 -- The function renames shadowed variables by appending a counter suffix.
@@ -477,10 +477,6 @@ unshadowVariablesGroup = subgroup "unshadowVariables" [
       (record (nm "Point") [(nm "x", int32 10), (nm "y", int32 20)])
       (record (nm "Point") [(nm "x", int32 10), (nm "y", int32 20)])]
 
--- Helper to build an empty annotation map
-emptyAnnMap :: TTerm (M.Map Name Term)
-emptyAnnMap = Phantoms.map M.empty
-
 allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for variable analysis and manipulation" $
@@ -488,3 +484,7 @@ allTests = define "allTests" $
       freeVariablesGroup,
       normalizeTypeVariablesGroup,
       unshadowVariablesGroup]
+
+-- Helper to build an empty annotation map
+emptyAnnMap :: TTerm (M.Map Name Term)
+emptyAnnMap = Phantoms.map M.empty

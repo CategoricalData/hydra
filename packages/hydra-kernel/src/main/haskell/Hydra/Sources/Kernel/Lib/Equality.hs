@@ -3,7 +3,6 @@
 module Hydra.Sources.Kernel.Lib.Equality where
 
 import Hydra.Kernel
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Bootstrap          as Bootstrap
 import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
@@ -18,13 +17,6 @@ ns = ModuleName "hydra.lib.equality"
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModuleName ns
-
-sig :: TypeScheme -> TermSignature
-sig = typeSchemeToTermSignature
-
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
 
 module_ :: Module
 module_ = Module {
@@ -43,6 +35,13 @@ module_ = Module {
       primNoDef "lte"     "Check whether the first value is less than or equal to the second." lteSig,
       toPrimitive "Return the maximum of two values." maxSig max_,
       toPrimitive "Return the minimum of two values." minSig min_]
+
+primNoDef :: String -> String -> TermSignature -> Definition
+primNoDef localName description s =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+
+sig :: TypeScheme -> TermSignature
+sig = typeSchemeToTermSignature
 
 -- Signatures (derived from Hydra.Sources.Libraries primN declarations).
 

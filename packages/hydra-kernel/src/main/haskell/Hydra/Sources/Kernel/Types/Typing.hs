@@ -7,7 +7,7 @@ import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
-import qualified Hydra.Sources.Kernel.Types.Context as Context
+import qualified Hydra.Sources.Kernel.Types.Paths as Paths
 
 
 ns :: ModuleName
@@ -20,11 +20,12 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = unqualifiedDep <$> [Core.ns, Context.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns, Paths.ns],
             moduleDescription = Just "Types supporting type inference and type reconstruction."}
   where
     definitions = [
       functionStructure,
+      inferenceContext,
       inferenceResult,
       parameter,
       result,
@@ -34,61 +35,6 @@ module_ = Module {
       typeConstraint,
       typeParameter,
       typeSubst]
-
-inferenceResult :: Binding
-inferenceResult = define "InferenceResult" $
-  doc "The result of applying inference rules to a term." $
-  T.record [
-    "term">:
-      doc "The term which was inferred"
-      Core.term,
-    "type">:
-      doc "The inferred type of the term"
-      Core.type_,
-    "subst">:
-      doc "The type substitution resulting from unification"
-      typeSubst,
-    "classConstraints">:
-      doc "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)" $
-      T.map Core.name Core.typeVariableMetadata,
-    "context">:
-      doc "The updated context after inference (carries fresh variable state)" $
-      Context.context]
-
-termSubst :: Binding
-termSubst = define "TermSubst" $
-  doc "A substitution of term variables for terms" $
-  T.wrap $ T.map Core.name Core.term
-
-typeClass :: Binding
-typeClass = define "TypeClass" $
-  doc ("A type class identifier together with a human-readable description."
-    ++ " Type classes are referenced as bare names (e.g. the local name \"equality\") in"
-    ++ " TypeVariableMetadata.classes; the canonical definitions live as term bindings"
-    ++ " under hydra.classes.") $
-  T.record [
-    "description">:
-      doc "A human-readable description of the type class"
-      T.string]
-
-typeConstraint :: Binding
-typeConstraint = define "TypeConstraint" $
-  doc "An assertion that two types can be unified into a single type" $
-  T.record [
-    "left">:
-      doc "The left-hand side of the constraint"
-      Core.type_,
-    "right">:
-      doc "The right-hand side of the constraint"
-      Core.type_,
-    "comment">:
-      doc "A description of the type constraint which may be used for tracing or debugging"
-      T.string]
-
-typeSubst :: Binding
-typeSubst = define "TypeSubst" $
-  doc "A substitution of type variables for types" $
-  T.wrap $ T.map Core.name Core.type_
 
 functionStructure :: Binding
 functionStructure = define "FunctionStructure" $
@@ -118,6 +64,41 @@ functionStructure = define "FunctionStructure" $
     "environment">:
       doc "Updated environment after processing all bindings" $
       T.variable "env"]
+
+inferenceContext :: Binding
+inferenceContext = define "InferenceContext" $
+  doc ("State threaded through type inference: the fresh type variable counter"
+    ++ " and the current subterm-path trace.") $
+  T.record [
+    "freshTypeVariableCount">:
+      doc "Counter used to generate distinct fresh type variables during inference"
+      T.int32,
+    "trace">:
+      doc ("The current subterm-path trace, accumulated backwards (head = most-recently-pushed step,"
+        ++ " corresponding to the deepest point in the descent). At the moment an inference error is"
+        ++ " constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order)"
+        ++ " and stamped onto the error.") $
+      T.list Paths.subtermStep]
+
+inferenceResult :: Binding
+inferenceResult = define "InferenceResult" $
+  doc "The result of applying inference rules to a term." $
+  T.record [
+    "term">:
+      doc "The term which was inferred"
+      Core.term,
+    "type">:
+      doc "The inferred type of the term"
+      Core.type_,
+    "subst">:
+      doc "The type substitution resulting from unification"
+      typeSubst,
+    "classConstraints">:
+      doc "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)" $
+      T.map Core.name Core.typeVariableMetadata,
+    "context">:
+      doc "The updated InferenceContext after inference (carries fresh-variable counter and trace)" $
+      inferenceContext]
 
 parameter :: Binding
 parameter = define "Parameter" $
@@ -161,6 +142,36 @@ termSignature = define "TermSignature" $
       doc "The result of the term"
       result]
 
+termSubst :: Binding
+termSubst = define "TermSubst" $
+  doc "A substitution of term variables for terms" $
+  T.wrap $ T.map Core.name Core.term
+
+typeClass :: Binding
+typeClass = define "TypeClass" $
+  doc ("A type class identifier together with a human-readable description."
+    ++ " Type classes are referenced as bare names (e.g. the local name \"equality\") in"
+    ++ " TypeVariableMetadata.classes; the canonical definitions live as term bindings"
+    ++ " under hydra.classes.") $
+  T.record [
+    "description">:
+      doc "A human-readable description of the type class"
+      T.string]
+
+typeConstraint :: Binding
+typeConstraint = define "TypeConstraint" $
+  doc "An assertion that two types can be unified into a single type" $
+  T.record [
+    "left">:
+      doc "The left-hand side of the constraint"
+      Core.type_,
+    "right">:
+      doc "The right-hand side of the constraint"
+      Core.type_,
+    "comment">:
+      doc "A description of the type constraint which may be used for tracing or debugging"
+      T.string]
+
 typeParameter :: Binding
 typeParameter = define "TypeParameter" $
   doc "A type parameter of a term, with an optional list of type class constraints" $
@@ -171,3 +182,8 @@ typeParameter = define "TypeParameter" $
     "constraints">:
       doc "Any type class constraints on the type parameter" $
       T.list Core.typeClassConstraint]
+
+typeSubst :: Binding
+typeSubst = define "TypeSubst" $
+  doc "A substitution of type variables for types" $
+  T.wrap $ T.map Core.name Core.type_

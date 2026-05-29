@@ -2,8 +2,8 @@
 -- | Types supporting type inference and type reconstruction.
 
 module Hydra.Typing where
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Paths as Paths
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -33,6 +33,17 @@ _FunctionStructure_body = Core.Name "body"
 _FunctionStructure_domains = Core.Name "domains"
 _FunctionStructure_codomain = Core.Name "codomain"
 _FunctionStructure_environment = Core.Name "environment"
+-- | State threaded through type inference: the fresh type variable counter and the current subterm-path trace.
+data InferenceContext =
+  InferenceContext {
+    -- | Counter used to generate distinct fresh type variables during inference
+    inferenceContextFreshTypeVariableCount :: Int,
+    -- | The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error.
+    inferenceContextTrace :: [Paths.SubtermStep]}
+  deriving (Eq, Ord, Read, Show)
+_InferenceContext = Core.Name "hydra.typing.InferenceContext"
+_InferenceContext_freshTypeVariableCount = Core.Name "freshTypeVariableCount"
+_InferenceContext_trace = Core.Name "trace"
 -- | The result of applying inference rules to a term.
 data InferenceResult =
   InferenceResult {
@@ -44,8 +55,8 @@ data InferenceResult =
     inferenceResultSubst :: TypeSubst,
     -- | Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)
     inferenceResultClassConstraints :: (M.Map Core.Name Core.TypeVariableMetadata),
-    -- | The updated context after inference (carries fresh variable state)
-    inferenceResultContext :: Context.Context}
+    -- | The updated InferenceContext after inference (carries fresh-variable counter and trace)
+    inferenceResultContext :: InferenceContext}
   deriving (Eq, Ord, Read, Show)
 _InferenceResult = Core.Name "hydra.typing.InferenceResult"
 _InferenceResult_term = Core.Name "term"

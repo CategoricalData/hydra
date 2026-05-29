@@ -310,13 +310,16 @@ if $NEED_EMACS; then
 fi
 
 # --- Node (for TypeScript target) ---
+# Minimum is Node 18 (ESM stable, native fetch); Node 19 is verified to work
+# end-to-end for TS-as-host on this branch (#126). Node 20+ is recommended for
+# the latest LTS stability but not required.
 if $NEED_NODE; then
     if ! command -v node > /dev/null 2>&1 || ! command -v npm > /dev/null 2>&1; then
-        ENV_ERRORS+=("node + npm are required for TypeScript target. Install Node.js 20+.")
+        ENV_ERRORS+=("node + npm are required for TypeScript target. Install Node.js 18+.")
     else
         NODE_VER=$(node --version 2>/dev/null | sed 's/^v//' | cut -d. -f1)
-        if [ -n "$NODE_VER" ] && [ "$NODE_VER" -lt 20 ] 2>/dev/null; then
-            ENV_ERRORS+=("node $NODE_VER detected; Hydra-TypeScript requires Node 20+.")
+        if [ -n "$NODE_VER" ] && [ "$NODE_VER" -lt 18 ] 2>/dev/null; then
+            ENV_ERRORS+=("node $NODE_VER detected; Hydra-TypeScript requires Node 18+.")
         fi
     fi
 fi

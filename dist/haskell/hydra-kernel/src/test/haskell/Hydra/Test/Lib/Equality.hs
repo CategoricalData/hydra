@@ -3,11 +3,13 @@
 
 module Hydra.Test.Lib.Equality where
 import qualified Hydra.Core as Core
-import qualified Hydra.Lib.Eithers as Eithers
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Reduction as Reduction
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Test cases for hydra.lib.equality primitives

@@ -24,18 +24,6 @@ ns = ModuleName "hydra.pg.mapping"
 define :: String -> Type -> Binding
 define = defineType ns
 
-mappings :: String -> Type
-mappings = typeref ns
-
-compute :: String -> Type
-compute = typeref $ Coders.ns
-
-core :: String -> Type
-core = typeref $ Core.ns
-
-v3 :: String -> Type
-v3 = typeref $ PgModel.ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -72,6 +60,12 @@ annotationSchema = define "AnnotationSchema" $
     "inEdgeLabel">: T.string,
     "ignore">: T.string]
 
+compute :: String -> Type
+compute = typeref $ Coders.ns
+
+core :: String -> Type
+core = typeref $ Core.ns
+
 edgeSpec :: Binding
 edgeSpec = define "EdgeSpec" $
   doc "A mapping specification producing edges of a specified label." $
@@ -99,6 +93,9 @@ elementSpec = define "ElementSpec" $
     "vertex">: mappings "VertexSpec",
     "edge">: mappings "EdgeSpec"]
 
+mappings :: String -> Type
+mappings = typeref ns
+
 propertySpec :: Binding
 propertySpec = define "PropertySpec" $
   doc "A mapping specification producing properties of a specified key, and values of the appropriate type." $
@@ -124,6 +121,9 @@ schema = define "Schema" $
       "annotations">: mappings "AnnotationSchema",
       "defaultVertexId">: "v",
       "defaultEdgeId">: "v"]
+
+v3 :: String -> Type
+v3 = typeref $ PgModel.ns
 
 valueSpec :: Binding
 valueSpec = define "ValueSpec" $
