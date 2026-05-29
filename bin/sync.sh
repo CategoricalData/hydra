@@ -466,21 +466,31 @@ native_generate_and_report() {
         echo "  hydra-$lang: regenerating dist/$lang/hydra-$lang from native JSON..."
         "$HYDRA_ROOT/heads/$lang/bin/assemble-distribution.sh" "hydra-$lang"
 
-        # #400: Phase 5 runs last, so without this a native coder change
-        # (e.g. an edit to the Java/Python coder DSL) only reaches
-        # dist/haskell/hydra-<lang>/ — the Haskell coder that bootstrap-from-json
-        # actually compiles — on the NEXT sync. That one-pass lag also trips the
-        # CI consistency gate (git diff dist/json dist/haskell), since a single
-        # cold sync would otherwise leave dist/haskell behind the committed JSON.
-        # Re-assemble the Haskell coder from the just-written native JSON and
-        # rebuild the executables so this sync is self-consistent in one pass.
-        # The dist/haskell input-digest set omits hydra.<lang>.coder (#400), so
-        # the freshness gate would skip this re-assemble; drop the output digest
-        # to force it.
-        echo "  hydra-$lang: regenerating dist/haskell/hydra-$lang from native JSON (#400)..."
-        rm -f "$HYDRA_ROOT/dist/haskell/hydra-$lang/build/main/digest.json"
+        # Phase 5 runs last, but its output (dist/json/hydra-<lang>/) is an
+        # input to the Phase 2 build of dist/haskell/hydra-<lang>/ — the Haskell
+        # coder that bootstrap-from-json compiles. So in this interim dual-write
+        # state (Phase 1 writes coder.json from the legacy Haskell DSL, Phase 5
+        # overwrites it from the native sources), a native coder change reaches
+        # dist/haskell only if we re-assemble it here from the just-written
+        # native JSON; otherwise it lags to the next sync and the CI consistency
+        # gate (git diff dist/json dist/haskell) fails.
+        #
+        # This re-assemble flows through the normal freshness gate: Phase 1's
+        # update-json-main now folds the native hydra.<lang>.* source hashes into
+        # dist/json/hydra-<lang>/build/main/digest.json (the assembler's input
+        # digest), so assemble_check_fresh correctly sees the change and rebuilds.
+        # No output-digest force-drop is needed (that was the #400 workaround,
+        # now removed — the input digest is honest).
+        #
+        # TODO(post-0.16): once the legacy Haskell DSL copies for hydra-java /
+        # hydra-python are deleted, the native generators become the sole writers
+        # of dist/json/hydra-<lang>/. At that point move this native DSL→JSON step
+        # ahead of Phase 2 (so dist/haskell builds from the native JSON in the
+        # same pass) and delete this re-assemble block entirely — there will be
+        # no remaining producer ordering to reconcile.
+        echo "  hydra-$lang: regenerating dist/haskell/hydra-$lang from native JSON..."
         "$HYDRA_ROOT/heads/haskell/bin/assemble-distribution.sh" "hydra-$lang"
-        echo "  hydra-$lang: rebuilding Haskell executables so bootstrap-from-json embeds the new coder (#400)..."
+        echo "  hydra-$lang: rebuilding Haskell executables so bootstrap-from-json embeds the new coder..."
         ( cd "$HYDRA_ROOT/heads/haskell" && stack build )
     else
         echo "  hydra-$lang: native output matches snapshot on all $total JSON files."

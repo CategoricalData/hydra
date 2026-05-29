@@ -20,9 +20,9 @@ capabilities for operations that may not be expressible in Hydra's term language
 
 Each primitive has two faces:
 
-1. **Universal metadata** (name, description, signature, isPure / isTotal flags,
-   and an optional cross-compilable reference implementation in Hydra terms),
-   declared once in the kernel as a `PrimitiveDefinition`.
+1. **Universal metadata** (name, description, host-independent `comments` prose,
+   signature, isPure / isTotal flags, and an optional cross-compilable reference
+   implementation in Hydra terms), declared once in the kernel as a `PrimitiveDefinition`.
 2. **Per-host implementation** — the actual native code that runs in each target language
    (Haskell, Java, Python, Scala, Lisp), paired with the universal metadata into a
    `Primitive` record at host-side registration time.
@@ -53,10 +53,12 @@ module_ = Module {
             moduleDescription = Just "Primitives in the hydra.lib.logic namespace."}
   where
     definitions = [
-      toPrimitive "Compute the logical AND of two boolean values." andSig and_,
-      primNoDef "ifElse" "Compute a conditional expression." ifElseSig,
-      toPrimitive "Compute the logical NOT of a boolean value." notSig not_,
-      toPrimitive "Compute the logical OR of two boolean values." orSig or_]
+      toPrimitive "Compute the logical AND of two boolean values." andSig (Just
+        "and(p, q) returns true iff both p and q are true. ...") and_,
+      primNoDef "ifElse" "Compute a conditional expression." ifElseSig (Just
+        "ifElse(p, t, f) returns t if p is true, or f if p is false. ..."),
+      toPrimitive "Compute the logical NOT of a boolean value." notSig Nothing not_,
+      toPrimitive "Compute the logical OR of two boolean values." orSig Nothing or_]
 
 andSig :: TermSignature
 andSig = sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) Nothing
@@ -69,13 +71,56 @@ and_ = define "and" $
 
 The two helpers used here:
 
-- **`toPrimitive description signature defaultBody`** — declares a primitive whose
-  `defaultImplementation` is a pure Hydra-term expression (the `TTermDefinition`
+- **`toPrimitive description signature comments defaultBody`** — declares a primitive
+  whose `defaultImplementation` is a pure Hydra-term expression (the `TTermDefinition`
   body). Used when the primitive can be defined in terms of other primitives.
-- **`primNoDef localName description signature`** — declares a primitive with no
-  default implementation, for primitives that are fundamental (e.g. `logic.ifElse`,
-  `pairs.first`) or whose meaning is host-native (e.g. arithmetic, char predicates,
-  regex matching).
+- **`primNoDef localName description signature comments`** — declares a primitive
+  with no default implementation, for primitives that are fundamental (e.g.
+  `logic.ifElse`, `pairs.first`) or whose meaning is host-native (e.g. arithmetic,
+  char predicates, regex matching).
+
+The `comments` argument is `Maybe String`. Pass `Nothing` for primitives whose
+short `description` is self-explanatory, or `(Just "...")` to attach a longer,
+host-independent specification — typically a paragraph citing the authoritative
+external source (IEEE 754, Unicode, Haskell `Data.*`, etc.), characterizing
+edge cases, and noting when behavior is host-defined. The `comments` field flows
+through to the generated JSON kernel and is consumed by downstream documentation
+and host bindings.
+
+#### Writing the `comments` field
+
+Conventions established across the 13 `hydra.lib.*` namespaces (#319):
+
+- **Pick an authoritative source.** IEEE 754-2019 for floating-point operations
+  (§5 for arithmetic + rounding, §9.2 for trig / exp / log); Unicode (general
+  categories) for character predicates and case mappings; Haskell `Prelude` /
+  `Data.Char` / `Data.List` / `Data.Map.Strict` / `Data.Set` / `Data.Either` /
+  `Data.Maybe` for primitives without a normative external standard.
+- **Hydra type names are lowercase in prose** (`int32`, `float64`, `boolean`,
+  `maybe`, `set`). Use Haskell type names (`Int32`, `Double`, `Bool`, `Maybe`)
+  *only* inside `Corresponds to Haskell's <name> :: <Haskell-sig>` cross-references.
+- **Do not mention Haskell typeclasses** (`Num`, `Floating`, `Ord`, `Enum`).
+  Hydra does not have typeclasses. The closest Hydra concept is the per-type-var
+  constraint set (e.g. `'ordering'`, `'equality'`); name those explicitly when
+  relevant.
+- **Special-value notation.** IEEE 754 sentinels compact: `±0`, `±∞`, `NaN`.
+  Ranges in interval notation: `[0, π]`, `(-π/2, +π/2)`. Use unicode `±`, `∞`,
+  `π`, `√`; encode as Haskell escape sequences (`\xB1`, `\x221E`, `\x03C0`,
+  `\x221A`) to keep the source file ASCII-clean.
+- **Boundary-case discipline.** If a value behaves surprisingly (e.g.
+  `abs(minBound) = minBound`, `cos(±∞) = NaN`, `(−0) + (−0) = −0`), state it
+  explicitly with the surprising value worked out.
+- **Terminate every comment with the Haskell cross-reference**, in the form
+  `Corresponds to Haskell's <name> :: <Haskell-sig>.` No trailing prose after
+  the cross-reference. No class name (`from the Num class` and similar are
+  removed).
+- **Flag host-defined behavior** explicitly. Regex syntax, special-value
+  literal capitalization (`"NaN"` vs `"nan"`), UTF-8 replacement policy on
+  invalid bytes, etc. are typically host-defined; say so per primitive.
+- **Populate `comments` for every primitive, even trivial ones.** A one-sentence
+  comment for `negate` is still better than `Nothing` — it confirms the spec
+  is intentional rather than skipped. Modeled on the all-primitives-covered
+  pattern of `Math.hs` (45 primitives, all populated).
 
 Both helpers produce a `Definition.primitive PrimitiveDefinition` entry which is
 then enumerated alongside `Definition.term` and `Definition.type` in the module's
@@ -89,7 +134,7 @@ primitives exist, their signatures, and their default implementations.
 
 | Concern | Location |
 |---------|----------|
-| Universal primitive metadata (name, type signature, description, purity flags, default implementation) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs` |
+| Universal primitive metadata (name, description, comments, type signature, purity flags, default implementation) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs` |
 | Interpreter-friendly term-level reference impls (for higher-order primitives) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Defaults/<Sub>.hs` |
 | Primitive-name `Name` constants (`charsIsAlphaNum`, `logicAnd`, ...) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Names.hs` |
 | Legacy `_<namespace>_<localName>` aliases (`_chars_isAlphaNum`, `_logic_and`, ...) used by host registrations | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` |
@@ -188,7 +233,8 @@ For a simple monomorphic primitive without a default:
 ```haskell
     definitions = [
       ...,
-      primNoDef "isAlphaNum" "Check whether a character is alphanumeric." intToBoolSig,
+      primNoDef "isAlphaNum" "Check whether a character is alphanumeric." intToBoolSig (Just
+        "True if the argument is a Unicode letter or digit, false otherwise. ..."),
       ...]
 
 intToBoolSig :: TermSignature
@@ -200,7 +246,8 @@ For a primitive with a default implementation expressed in terms of other primit
 ```haskell
     definitions = [
       ...,
-      toPrimitive "Map over both elements of a pair." bimapSig bimap_,
+      toPrimitive "Map over both elements of a pair." bimapSig (Just
+        "bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). ...") bimap_,
       ...]
 
 bimapSig :: TermSignature
@@ -234,7 +281,8 @@ For a constrained polymorphic primitive (e.g. requires `ordering`):
 ```haskell
     definitions = [
       ...,
-      primNoDef "compare" "Compare two values and return a Comparison." compareSig,
+      primNoDef "compare" "Compare two values and return a Comparison." compareSig (Just
+        "compare(x, y) returns the hydra.util.Comparison value classifying the relationship between x and y. ..."),
       ...]
 
 compareSig :: TermSignature

@@ -26,23 +26,57 @@ module_ = Module {
             moduleDescription = Just "Primitives in the hydra.lib.maybes namespace."}
   where
     definitions = [
-      toPrimitive "Applicative apply for optionals: combine an optional function and an optional argument." applySig apply_,
-      toPrimitive "Monadic bind for optionals." bindSig bind_,
-      primNoDef "cases" "Case analysis on an optional, with cases-style argument order." casesSig,
-      toPrimitive "Concatenate optionals, keeping only the present values." catSig cat_,
-      toPrimitive "Kleisli composition for optionals." composeSig compose_,
-      toPrimitive "Return the value contained in an optional, falling back to a default if absent." fromMaybeSig fromMaybe_,
-      toPrimitive "Test whether an optional is present (Just)." isJustSig isJust_,
-      toPrimitive "Test whether an optional is absent (Nothing)." isNothingSig isNothing_,
-      toPrimitive "Map a function over an optional." mapSig map_,
-      toPrimitive "Map a partial function over a list, keeping only the present results." mapMaybeSig mapMaybe_,
-      primNoDef "maybe" "Case analysis on an optional, applying a function if present or returning a default if absent." maybeSig,
-      toPrimitive "Wrap a value in Just." pureSig pure_,
-      toPrimitive "Convert an optional to a list: Just x maps to [x], Nothing to []." toListSig toList_]
-
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+      toPrimitive "Applicative apply for maybes: combine a maybe function and a maybe argument." applySig (Just
+        "apply(mf, mx) returns Just(f x) when mf is Just(f) and mx is Just(x), and Nothing if either is\
+        \ Nothing. The applicative apply for maybe; threads a function-in-context with a value-in-context.\
+        \ Total. Corresponds to Haskell's (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b.") apply_,
+      toPrimitive "Monadic bind for maybes." bindSig (Just
+        "bind(m, f) returns f(x) when m is Just(x), and Nothing when m is Nothing. The monadic bind for\
+        \ maybe; used to chain computations that may be absent. Total. Corresponds to Haskell's\
+        \ (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b.") bind_,
+      primNoDef "cases" "Case analysis on a maybe, with cases-style argument order." casesSig (Just
+        "cases(m, def, f) returns f(x) when m is Just(x), and def when m is Nothing. Identical in behavior\
+        \ to the maybe primitive but with the maybe value as the first argument (matching the convention\
+        \ for case-statement-like elimination). Total. Argument order is (m, def, f) rather than\
+        \ Haskell's (def, f, m)."),
+      toPrimitive "Concatenate maybes, keeping only the present values." catSig (Just
+        "cat(xs) returns the list of contained values from Just elements of xs, in original order;\
+        \ Nothing elements are discarded. Total. Corresponds to Haskell's\
+        \ Data.Maybe.catMaybes :: [Maybe a] -> [a].") cat_,
+      toPrimitive "Kleisli composition for maybes." composeSig (Just
+        "compose(f, g, x) returns the Kleisli composition of f and g applied to x: bind(f(x), g). If\
+        \ either f or the second stage produces Nothing, the result is Nothing. Total. Corresponds to\
+        \ Haskell's Kleisli composition for Maybe, (>=>) :: (a -> Maybe b) -> (b -> Maybe c) -> a ->\
+        \ Maybe c.") compose_,
+      toPrimitive "Return the value contained in a maybe, falling back to a default if absent." fromMaybeSig (Just
+        "fromMaybe(def, m) returns x when m is Just(x), and def when m is Nothing. Total. Corresponds to\
+        \ Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a.") fromMaybe_,
+      toPrimitive "Test whether a maybe is present (Just)." isJustSig (Just
+        "isJust(m) returns true iff m is a Just variant. Total. Corresponds to Haskell's\
+        \ Data.Maybe.isJust :: Maybe a -> Bool.") isJust_,
+      toPrimitive "Test whether a maybe is absent (Nothing)." isNothingSig (Just
+        "isNothing(m) returns true iff m is the Nothing variant. Total. Corresponds to Haskell's\
+        \ Data.Maybe.isNothing :: Maybe a -> Bool.") isNothing_,
+      toPrimitive "Map a function over a maybe." mapSig (Just
+        "map(f, m) returns Just(f x) when m is Just(x), and Nothing when m is Nothing. The functor\
+        \ instance for maybe. Total. Corresponds to Haskell's fmap :: (a -> b) -> Maybe a -> Maybe b.") map_,
+      toPrimitive "Map a partial function over a list, keeping only the present results." mapMaybeSig (Just
+        "mapMaybe(f, xs) applies f to each element of xs and returns the list of contained values from\
+        \ Just results in original order; Nothing results are discarded. Total. Corresponds to Haskell's\
+        \ Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b].") mapMaybe_,
+      primNoDef "maybe" "Case analysis on a maybe, applying a function if present or returning a default if absent." maybeSig (Just
+        "maybe(def, f, m) returns f(x) when m is Just(x), and def when m is Nothing. The fundamental\
+        \ eliminator for the maybe type; every other primitive in this namespace can be derived from it.\
+        \ Total. Corresponds to Haskell's maybe :: b -> (a -> b) -> Maybe a -> b."),
+      toPrimitive "Wrap a value in Just." pureSig (Just
+        "pure(x) = Just(x). The applicative pure for maybe. Total. Corresponds to Haskell's\
+        \ pure :: a -> Maybe a / Just.") pure_,
+      toPrimitive "Convert a maybe to a list: Just x maps to [x], Nothing to []." toListSig (Just
+        "toList(m) returns [x] when m is Just(x), and the empty list when m is Nothing. Total.\
+        \ Corresponds to Haskell's Data.Maybe.maybeToList :: Maybe a -> [a].") toList_]
+primNoDef :: String -> String -> TermSignature -> Maybe String -> Definition
+primNoDef localName description s comments =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName)) comments
 
 sig :: TypeScheme -> TermSignature
 sig = typeSchemeToTermSignature
