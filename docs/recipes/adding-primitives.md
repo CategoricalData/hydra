@@ -20,9 +20,9 @@ capabilities for operations that may not be expressible in Hydra's term language
 
 Each primitive has two faces:
 
-1. **Universal metadata** (name, description, signature, isPure / isTotal flags,
-   and an optional cross-compilable reference implementation in Hydra terms),
-   declared once in the kernel as a `PrimitiveDefinition`.
+1. **Universal metadata** (name, description, host-independent `comments` prose,
+   signature, isPure / isTotal flags, and an optional cross-compilable reference
+   implementation in Hydra terms), declared once in the kernel as a `PrimitiveDefinition`.
 2. **Per-host implementation** — the actual native code that runs in each target language
    (Haskell, Java, Python, Scala, Lisp), paired with the universal metadata into a
    `Primitive` record at host-side registration time.
@@ -53,10 +53,12 @@ module_ = Module {
             moduleDescription = Just "Primitives in the hydra.lib.logic namespace."}
   where
     definitions = [
-      toPrimitive "Compute the logical AND of two boolean values." andSig and_,
-      primNoDef "ifElse" "Compute a conditional expression." ifElseSig,
-      toPrimitive "Compute the logical NOT of a boolean value." notSig not_,
-      toPrimitive "Compute the logical OR of two boolean values." orSig or_]
+      toPrimitive "Compute the logical AND of two boolean values." andSig (Just
+        "and(p, q) returns true iff both p and q are true. ...") and_,
+      primNoDef "ifElse" "Compute a conditional expression." ifElseSig (Just
+        "ifElse(p, t, f) returns t if p is true, or f if p is false. ..."),
+      toPrimitive "Compute the logical NOT of a boolean value." notSig Nothing not_,
+      toPrimitive "Compute the logical OR of two boolean values." orSig Nothing or_]
 
 andSig :: TermSignature
 andSig = sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) Nothing
@@ -69,13 +71,21 @@ and_ = define "and" $
 
 The two helpers used here:
 
-- **`toPrimitive description signature defaultBody`** — declares a primitive whose
-  `defaultImplementation` is a pure Hydra-term expression (the `TTermDefinition`
+- **`toPrimitive description signature comments defaultBody`** — declares a primitive
+  whose `defaultImplementation` is a pure Hydra-term expression (the `TTermDefinition`
   body). Used when the primitive can be defined in terms of other primitives.
-- **`primNoDef localName description signature`** — declares a primitive with no
-  default implementation, for primitives that are fundamental (e.g. `logic.ifElse`,
-  `pairs.first`) or whose meaning is host-native (e.g. arithmetic, char predicates,
-  regex matching).
+- **`primNoDef localName description signature comments`** — declares a primitive
+  with no default implementation, for primitives that are fundamental (e.g.
+  `logic.ifElse`, `pairs.first`) or whose meaning is host-native (e.g. arithmetic,
+  char predicates, regex matching).
+
+The `comments` argument is `Maybe String`. Pass `Nothing` for primitives whose
+short `description` is self-explanatory, or `(Just "...")` to attach a longer,
+host-independent specification — typically a paragraph citing the authoritative
+external source (IEEE 754, Unicode, Haskell `Data.*`, etc.), characterizing
+edge cases, and noting when behavior is host-defined. The `comments` field flows
+through to the generated JSON kernel and is consumed by downstream documentation
+and host bindings.
 
 Both helpers produce a `Definition.primitive PrimitiveDefinition` entry which is
 then enumerated alongside `Definition.term` and `Definition.type` in the module's
@@ -89,7 +99,7 @@ primitives exist, their signatures, and their default implementations.
 
 | Concern | Location |
 |---------|----------|
-| Universal primitive metadata (name, description, signature, isPure, isTotal, defaultImplementation) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs` |
+| Universal primitive metadata (name, description, comments, signature, isPure, isTotal, defaultImplementation) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs` |
 | Primitive-name constants (`_logic_and`, `_chars_isAlphaNum`, ...) for use in source code | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Names.hs` |
 | Native Haskell implementation | `heads/haskell/src/main/haskell/Hydra/Lib/<Sub>.hs` |
 | Native Java implementation | `heads/java/src/main/java/hydra/lib/<sub>/<FunctionName>.java` |
@@ -169,7 +179,8 @@ For a simple monomorphic primitive without a default:
 ```haskell
     definitions = [
       ...,
-      primNoDef "isAlphaNum" "Check whether a character is alphanumeric." intToBoolSig,
+      primNoDef "isAlphaNum" "Check whether a character is alphanumeric." intToBoolSig (Just
+        "True if the argument is a Unicode letter or digit, false otherwise. ..."),
       ...]
 
 intToBoolSig :: TermSignature
@@ -181,7 +192,8 @@ For a primitive with a default implementation expressed in terms of other primit
 ```haskell
     definitions = [
       ...,
-      toPrimitive "Map over both elements of a pair." bimapSig bimap_,
+      toPrimitive "Map over both elements of a pair." bimapSig (Just
+        "bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). ...") bimap_,
       ...]
 
 bimapSig :: TermSignature
@@ -215,7 +227,8 @@ For a constrained polymorphic primitive (e.g. requires `ordering`):
 ```haskell
     definitions = [
       ...,
-      primNoDef "compare" "Compare two values and return a Comparison." compareSig,
+      primNoDef "compare" "Compare two values and return a Comparison." compareSig (Just
+        "compare(x, y) returns the hydra.util.Comparison value classifying the relationship between x and y. ..."),
       ...]
 
 compareSig :: TermSignature
