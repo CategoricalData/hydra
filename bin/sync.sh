@@ -218,6 +218,7 @@ echo ""
     hydra:exe:update-json-main \
     hydra:exe:update-json-test \
     hydra:exe:update-json-manifest \
+    hydra:exe:update-json-kernel \
     hydra:exe:verify-json-kernel \
     hydra:exe:bootstrap-from-json \
     hydra:exe:digest-check) || exit 1
