@@ -2,6 +2,7 @@
   "definitions": [
     {
       "primitive": {
+        "comments": "delete(x, s) returns s with x removed; if x is not in s, s is returned unchanged. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.delete :: Ord a => a -> Set a -> Set a.",
         "description": "Remove an element from a set.",
         "isPure": true,
         "isTotal": true,
@@ -15,6 +16,7 @@
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
     {
       "primitive": {
+        "comments": "difference(s1, s2) returns the set of elements that are in s1 but not in s2. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.difference :: Ord a => Set a -> Set a -> Set a.",
         "defaultImplementation": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Set difference, defined in terms of member and insert."}}}],
@@ -68,6 +70,7 @@
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
     {
       "primitive": {
+        "comments": "empty is the set with no elements. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.empty :: Set a.",
         "description": "The empty set.",
         "isPure": true,
         "isTotal": true,
@@ -79,6 +82,7 @@
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
     {
       "primitive": {
+        "comments": "fromList(xs) returns the set containing exactly the distinct elements of xs; duplicates are discarded. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.fromList :: Ord a => [a] -> Set a.",
         "description": "Construct a set from a list of elements (duplicates removed).",
         "isPure": true,
         "isTotal": true,
@@ -90,6 +94,7 @@
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
     {
       "primitive": {
+        "comments": "insert(x, s) returns s with x added; if x is already in s, s is returned unchanged. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.insert :: Ord a => a -> Set a -> Set a.",
         "description": "Add an element to a set.",
         "isPure": true,
         "isTotal": true,
@@ -103,6 +108,7 @@
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
     {
       "primitive": {
+        "comments": "intersection(s1, s2) returns the set of elements present in both s1 and s2. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.intersection :: Ord a => Set a -> Set a -> Set a.",
         "defaultImplementation": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Set intersection, defined in terms of member and insert."}}}],
@@ -156,6 +162,7 @@
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
     {
       "primitive": {
+        "comments": "map(f, s) returns the set of f(x) for each x in s. Elements that f maps to the same image are deduplicated by the result type's ordering. Requires 'ordering' constraints on both the input and output element types. Total. Corresponds to Haskell's Data.Set.map :: (Ord a, Ord b) => (a -> b) -> Set a -> Set b.",
         "defaultImplementation": {
           "annotated": {
             "annotation": [
@@ -188,6 +195,7 @@
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}, {"constraints": [{"simple": "ordering"}], "name": "y"}]}}},
     {
       "primitive": {
+        "comments": "member(x, s) returns true iff x is an element of s. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.member :: Ord a => a -> Set a -> Bool.",
         "description": "Test whether an element is in a set.",
         "isPure": true,
         "isTotal": true,
@@ -201,6 +209,7 @@
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
     {
       "primitive": {
+        "comments": "null(s) returns true iff s has no elements. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.null :: Set a -> Bool.",
         "description": "Test whether a set is empty.",
         "isPure": true,
         "isTotal": true,
@@ -212,6 +221,7 @@
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
     {
       "primitive": {
+        "comments": "singleton(x) returns the set containing exactly the element x. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.singleton :: a -> Set a.",
         "description": "Construct a set containing a single element.",
         "isPure": true,
         "isTotal": true,
@@ -223,6 +233,7 @@
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
     {
       "primitive": {
+        "comments": "size(s) returns the number of elements in s as an int32. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.size :: Set a -> Int (with narrowing to int32).",
         "description": "Return the number of elements in a set.",
         "isPure": true,
         "isTotal": true,
@@ -234,7 +245,8 @@
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
     {
       "primitive": {
-        "description": "Convert a set to a list (in unspecified order).",
+        "comments": "toList(s) returns the elements of s as a list, in ascending order under the element type's ordering. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.toAscList :: Set a -> [a].",
+        "description": "Convert a set to a list (in ascending order).",
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.sets.toList",
@@ -245,6 +257,7 @@
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
     {
       "primitive": {
+        "comments": "union(s1, s2) returns the set of elements that are in s1 or in s2 (or both). Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.union :: Ord a => Set a -> Set a -> Set a.",
         "defaultImplementation": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Set union, defined in terms of insert and toList."}}}],
@@ -286,6 +299,7 @@
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
     {
       "primitive": {
+        "comments": "unions(ss) returns the union of every set in ss. Equivalent to folding union over ss starting from empty. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.unions :: Ord a => [Set a] -> Set a.",
         "defaultImplementation": {
           "annotated": {
             "annotation": [
