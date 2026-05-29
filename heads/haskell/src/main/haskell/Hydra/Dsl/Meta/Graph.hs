@@ -16,14 +16,14 @@ import qualified Hydra.Dsl.Meta.Lib.Sets as Sets
 
 -- | Non-standard helpers
 
-comparisonLessThan :: TTerm Comparison
-comparisonLessThan = injectUnit _Comparison _Comparison_lessThan
-
 comparisonEqualTo :: TTerm Comparison
 comparisonEqualTo = injectUnit _Comparison _Comparison_equalTo
 
 comparisonGreaterThan :: TTerm Comparison
 comparisonGreaterThan = injectUnit _Comparison _Comparison_greaterThan
+
+comparisonLessThan :: TTerm Comparison
+comparisonLessThan = injectUnit _Comparison _Comparison_lessThan
 
 emptyGraph :: TTerm Graph
 emptyGraph = graph

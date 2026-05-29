@@ -17,7 +17,6 @@ import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
@@ -116,16 +115,6 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
--- Type references
-gson :: String -> Type
-gson = Bootstrap.typeref GraphsonSyntax.ns
-
-pg :: String -> Type
-pg = Bootstrap.typeref PgModel.ns
-
-jsonValue :: Type
-jsonValue = Bootstrap.typeref JsonModel.ns "Value"
-
 -- | Convert a PG adjacent edge to GraphSON format
 adjacentEdgeToGraphson :: TTermDefinition ((v -> Either Error G.Value) -> PG.AdjacentEdge v -> Either Error (G.EdgeLabel, G.AdjacentEdge))
 adjacentEdgeToGraphson = define "adjacentEdgeToGraphson" $
@@ -189,7 +178,17 @@ graphsonVertexToJsonCoder = define "graphsonVertexToJsonCoder" $
   doc "A coder that converts GraphSON vertices to JSON. Decoding is not supported." $
   Coders.coder
     ("_cx" ~> "v" ~> right (Coder.vertexToJson @@ var "v"))
-    ("_cx" ~> "_" ~> Ctx.failInContext (Error.errorOther $ Error.otherError $ string "decoding GraphSON JSON is currently unsupported") (var "_cx"))
+    ("_cx" ~> "_" ~> left (Error.errorOther $ Error.otherError $ string "decoding GraphSON JSON is currently unsupported"))
+
+-- Type references
+gson :: String -> Type
+gson = Bootstrap.typeref GraphsonSyntax.ns
+
+jsonValue :: Type
+jsonValue = Bootstrap.typeref JsonModel.ns "Value"
+
+pg :: String -> Type
+pg = Bootstrap.typeref PgModel.ns
 
 -- | Convert a PG vertex with adjacent edges to a GraphSON vertex
 pgVertexWithAdjacentEdgesToGraphsonVertex :: TTermDefinition ((v -> Either Error G.Value) -> PG.VertexWithAdjacentEdges v -> Either Error G.Vertex)

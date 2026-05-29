@@ -80,20 +80,6 @@ apply (TTerm lhs) (TTerm rhs) = TTerm $ Terms.apply lhs rhs
 
 
 
--- | Bind over Either: extracts the Right value into a variable, short-circuiting on Left
-eitherBind :: AsTerm t (Either e a) => String -> t -> TTerm (Either e b) -> TTerm (Either e b)
-eitherBind v def body = primitive2 _eithers_bind (asTerm def) $ lambda v $ body
-
--- | Reify a binary Haskell-level meta-function over phantom-typed terms into a
--- first-class term-level function. See also 'reify' for the unary form.
--- Example: @reify2 (\\x y -> Maths.add x (Maths.mul x y))@
-reify2 :: (TTerm a -> TTerm b -> TTerm c) -> TTerm (a -> b -> c)
-reify2 f = case (unTTerm $ f (var "x") (var "y")) of
-  TermApplication (Application (TermApplication (Application lhs _)) _) -> TTerm lhs
-  t -> TTerm $ Terms.string $ "unexpected term as binary function: " <> ShowCore.term t
-
-
-
 -- | Apply a named case match to an argument
 -- Example: cases resultTypeName myResult Nothing [onSuccess, onError]
 -- See also: 'match'
@@ -111,6 +97,11 @@ compose f g = TTerm $ Terms.compose (unTTerm $ asTerm f) (unTTerm $ asTerm g)
 -- Accepts TTerm or TBinding (via AsTerm)
 constant :: AsTerm t a => t -> TTerm (b -> a)
 constant t = TTerm $ Terms.constant (unTTerm $ asTerm t)
+
+-- | Get a reference to a decoder function in hydra.decode.core for a given type name
+-- The decoder takes a graph context and a term, returning either a decoding error or the decoded value
+decoderFor :: Name -> TTerm (Graph -> Term -> Prelude.Either DecodingError a)
+decoderFor typeName = var $ unName $ decodeBindingName typeName
 
 -- | Create a definition in a module
 -- Example: definitionInModule myModule "addInts" (lambda "x" (lambda "y" (add @@ var "x" @@ var "y")))
@@ -132,6 +123,15 @@ doc s t = TTerm $ setTermDescription (Just s) (unTTerm $ asTerm t)
 -- Example: docWrapped 80 "This is a long documentation string that will be wrapped..." myFunction
 docWrapped :: Int -> String -> TTerm a -> TTerm a
 docWrapped len = doc . wrapLine len
+
+-- | Bind over Either: extracts the Right value into a variable, short-circuiting on Left
+eitherBind :: AsTerm t (Either e a) => String -> t -> TTerm (Either e b) -> TTerm (Either e b)
+eitherBind v def body = primitive2 _eithers_bind (asTerm def) $ lambda v $ body
+
+-- | Convert a typed element to an untyped element (legacy name, prefer 'toBinding')
+-- Example: el (definitionInModule myModule "addInts" myFunction)
+el :: TBinding a -> Binding
+el = toBinding
 
 encodedBinary :: TTerm String -> TTerm Term
 encodedBinary = encodedLiteral . inject _Literal _Literal_binary
@@ -179,17 +179,6 @@ encodedMap = inject _Term _Term_map
 encodedName :: Name -> TTerm Name
 encodedName = wrap _Name . string . unName
 
-encodedUnit :: TTerm Term
-encodedUnit = injectUnit _Term _Term_unit
-
-encodedWrappedTerm :: Name -> TTerm Term -> TTerm Term
-encodedWrappedTerm name = encodedWrappedTermRaw (encodedName name)
-
-encodedWrappedTermRaw :: TTerm Name -> TTerm Term -> TTerm Term
-encodedWrappedTermRaw (TTerm name) (TTerm term) = TTerm $ Terms.inject _Term _Term_wrap $ Terms.record _WrappedTerm [
-  Field _WrappedTerm_typeName name,
-  Field _WrappedTerm_body term]
-
 encodedOptional :: TTerm (Maybe a) -> TTerm Term
 encodedOptional = inject _Term _Term_maybe
 
@@ -212,44 +201,23 @@ encodedString = encodedLiteral . inject _Literal _Literal_string
 encodedUnion :: TTerm Term -> TTerm Term
 encodedUnion = inject _Term _Term_inject
 
+encodedUnit :: TTerm Term
+encodedUnit = injectUnit _Term _Term_unit
+
 encodedVariant :: Name -> Name -> TTerm Term -> TTerm Term
 encodedVariant tname fname term = encodedUnion $ encodedInjection tname fname term
 
--- | Get a reference to a decoder function in hydra.decode.core for a given type name
--- The decoder takes a graph context and a term, returning either a decoding error or the decoded value
-decoderFor :: Name -> TTerm (Graph -> Term -> Prelude.Either DecodingError a)
-decoderFor typeName = var $ unName $ decodeBindingName typeName
+encodedWrappedTerm :: Name -> TTerm Term -> TTerm Term
+encodedWrappedTerm name = encodedWrappedTermRaw (encodedName name)
+
+encodedWrappedTermRaw :: TTerm Name -> TTerm Term -> TTerm Term
+encodedWrappedTermRaw (TTerm name) (TTerm term) = TTerm $ Terms.inject _Term _Term_wrap $ Terms.record _WrappedTerm [
+  Field _WrappedTerm_typeName name,
+  Field _WrappedTerm_body term]
 
 -- | Get a reference to an encoder function in hydra.encode.core for a given type name
 encoderFor :: Name -> TTerm (a -> Term)
 encoderFor typeName = var $ unName $ encodeBindingName typeName
-
--- | Convert a typed element to an untyped element (legacy name, prefer 'toBinding')
--- Example: el (definitionInModule myModule "addInts" myFunction)
-el :: TBinding a -> Binding
-el = toBinding
-
--- | Convert a phantom-typed term definition to a Definition for use in module definition lists
--- Example: toDefinition functionArity
-toDefinition :: TTermDefinition a -> Definition
-toDefinition (TTermDefinition name (TTerm term)) = DefinitionTerm $ TermDefinition name term Nothing
-
--- | Convert a phantom-typed term definition to a primitive Definition, using the term body as the
--- declarative default implementation. The TermSignature describes the primitive's logical type.
--- isPure / isTotal default to True; use withImpurity / withPartiality to flag exceptions.
--- Example: toPrimitive "logical AND" andSig and_
-toPrimitive :: String -> TermSignature -> TTermDefinition a -> Definition
-toPrimitive description sig (TTermDefinition name (TTerm term)) =
-  DefinitionPrimitive $ PrimitiveDefinition name description sig True True (Just term)
-
--- | Convert a Name to a primitive Definition with no default implementation. Used for primitives
--- whose meaning is host-native and not expressible as a Hydra term (e.g. currentUnixTimeSeconds).
--- Example: toPrimitiveNoDefault "Current UNIX time, in seconds" sig (Name "hydra.lib.math.currentUnixTimeSeconds")
-toPrimitiveNoDefault :: String -> TermSignature -> Name -> Definition
-toPrimitiveNoDefault description sig name =
-  DefinitionPrimitive $ PrimitiveDefinition name description sig True True Nothing
-
-
 
 -- | Create a field with the given name and value
 -- Example: field (Name "age") (int32 30)
@@ -281,6 +249,11 @@ inject n fn (TTerm term) = TTerm $ Terms.inject (asName n) (asName fn) term
 injectLambda :: Name -> Name -> TTerm (a -> b)
 injectLambda name fname = lambda "injected_" $ inject name fname $ var "injected_"
 
+-- | Create a unit variant of a union
+-- Example: injectUnit (Name "Result") (Name "success")
+injectUnit :: (AsName t, AsName f) => t -> f -> TTerm a
+injectUnit n fn = TTerm $ Terms.inject (asName n) (asName fn) Terms.unit
+
 -- | Create a 'Just' optional value
 -- Example: just (string "found")
 -- Accepts TTerm or TBinding (via AsTerm)
@@ -292,26 +265,6 @@ just t = TTerm $ Terms.just (unTTerm $ asTerm t)
 just_ :: TTerm (a -> Maybe a)
 just_ = TTerm $ Terms.lambda "just_" $ Terms.just $ Terms.var "just_"
 
--- | Create a 'Left' either value
--- Example: left (string "error")
-left :: TTerm a -> TTerm (Either a b)
-left (TTerm term) = TTerm $ Terms.left term
-
--- | Function that wraps a value in 'Left'
--- Example: left_ @@ myValue
-left_ :: TTerm (a -> Either a b)
-left_ = TTerm $ Terms.lambda "left_" $ Terms.left $ Terms.var "left_"
-
--- | Create a 'Right' either value
--- Example: right (int32 42)
-right :: TTerm b -> TTerm (Either a b)
-right (TTerm term) = TTerm $ Terms.right term
-
--- | Function that wraps a value in 'Right'
--- Example: right_ @@ myValue
-right_ :: TTerm (b -> Either a b)
-right_ = TTerm $ Terms.lambda "right_" $ Terms.right $ Terms.var "right_"
-
 -- | Create a lambda function with one parameter
 -- Example: lambda "x" (var "add" @@ var "x" @@ int32 1)
 lambda :: String -> TTerm x -> TTerm (a -> b)
@@ -321,6 +274,16 @@ lambda v (TTerm body) = TTerm $ Terms.lambda v body
 -- Example: lambdas ["x", "y"] (add @@ var "x" @@ var "y")
 lambdas :: [String] -> TTerm x -> TTerm (a -> b)
 lambdas params (TTerm body) = TTerm $ Terms.lambdas params body
+
+-- | Create a 'Left' either value
+-- Example: left (string "error")
+left :: TTerm a -> TTerm (Either a b)
+left (TTerm term) = TTerm $ Terms.left term
+
+-- | Function that wraps a value in 'Left'
+-- Example: left_ @@ myValue
+left_ :: TTerm (a -> Either a b)
+left_ = TTerm $ Terms.lambda "left_" $ Terms.left $ Terms.var "left_"
 
 let1 :: String -> TTerm a -> TTerm b -> TTerm b
 let1 name (TTerm value) (TTerm env) = TTerm $ TermLet $ Let [Binding (Name name) value Nothing] env
@@ -349,6 +312,10 @@ map = TTerm . Terms.map . M.fromList . fmap fromTTerm . M.toList
 -- Example: match (Name "Result") (Just $ string "what?") ["success">: string "yay", "error">: string "boo"]
 match :: AsName n => n -> Maybe (TTerm b) -> [Field] -> TTerm (a -> b)
 match n dflt fields = TTerm $ Terms.match (asName n) (unTTerm <$> dflt) fields
+
+-- | Lift a Haskell Name value to a phantom-typed TTerm Name
+nameLift :: Name -> TTerm Name
+nameLift (Name n) = wrap _Name $ string n
 
 -- | Create a 'Nothing' optional value
 -- Example: nothing
@@ -399,6 +366,38 @@ project n fn = TTerm $ Terms.project (asName n) (asName fn)
 record :: AsName n => n -> [Field] -> TTerm a
 record n fields = TTerm $ Terms.record (asName n) fields
 
+-- | Reify a Haskell-level meta-function over phantom-typed terms into a first-class
+-- term-level function. See also 'reify2' for the binary form.
+-- Example: @reify Literals.showInt32@ has type @TTerm (Int -> String)@
+reify :: (TTerm a -> TTerm b) -> TTerm (a -> b)
+reify f = case (unTTerm $ f $ var "x") of
+  TermApplication (Application lhs _) -> TTerm lhs
+  TermEither (Prelude.Left _) -> lambda "x" $ TTerm $ TermEither $ Prelude.Left $ Terms.var "x"
+  TermEither (Prelude.Right _) -> lambda "x" $ TTerm $ TermEither $ Prelude.Right $ Terms.var "x"
+  TermMaybe (Just _) -> primitive _maybes_pure
+  TermInject (Injection tname (Field fname _)) -> lambda "x" $ inject tname fname $ var "x"
+  TermWrap (WrappedTerm tname _) -> lambda "x" $ wrap tname $ var "x"
+
+-- | Reify a binary Haskell-level meta-function over phantom-typed terms into a
+-- first-class term-level function. See also 'reify' for the unary form.
+-- Example: @reify2 (\\x y -> Maths.add x (Maths.mul x y))@
+reify2 :: (TTerm a -> TTerm b -> TTerm c) -> TTerm (a -> b -> c)
+reify2 f = case (unTTerm $ f (var "x") (var "y")) of
+  TermApplication (Application (TermApplication (Application lhs _)) _) -> TTerm lhs
+  t -> TTerm $ Terms.string $ "unexpected term as binary function: " <> ShowCore.term t
+
+
+
+-- | Create a 'Right' either value
+-- Example: right (int32 42)
+right :: TTerm b -> TTerm (Either a b)
+right (TTerm term) = TTerm $ Terms.right term
+
+-- | Function that wraps a value in 'Right'
+-- Example: right_ @@ myValue
+right_ :: TTerm (b -> Either a b)
+right_ = TTerm $ Terms.lambda "right_" $ Terms.right $ Terms.var "right_"
+
 -- | Create a set of terms
 -- Example: set [string "a", string "b", string "c"]
 set :: [TTerm a] -> TTerm (S.Set a)
@@ -408,6 +407,28 @@ set = TTerm . Terms.set . S.fromList . fmap unTTerm
 -- Example: toBinding functionArity
 toBinding :: TBinding a -> Binding
 toBinding (TBinding name (TTerm term)) = Binding name term Nothing
+
+-- | Convert a phantom-typed term definition to a Definition for use in module definition lists
+-- Example: toDefinition functionArity
+toDefinition :: TTermDefinition a -> Definition
+toDefinition (TTermDefinition name (TTerm term)) = DefinitionTerm $ TermDefinition name term Nothing
+
+-- | Convert a phantom-typed term definition to a primitive Definition, using the term body as the
+-- declarative default implementation. The TermSignature describes the primitive's logical type.
+-- isPure / isTotal default to True; use withImpurity / withPartiality to flag exceptions.
+-- Example: toPrimitive "logical AND" andSig and_
+toPrimitive :: String -> TermSignature -> TTermDefinition a -> Definition
+toPrimitive description sig (TTermDefinition name (TTerm term)) =
+  DefinitionPrimitive $ PrimitiveDefinition name description sig True True (Just term)
+
+-- | Convert a Name to a primitive Definition with no default implementation. Used for primitives
+-- whose meaning is host-native and not expressible as a Hydra term (e.g. currentUnixTimeSeconds).
+-- Example: toPrimitiveNoDefault "Current UNIX time, in seconds" sig (Name "hydra.lib.math.currentUnixTimeSeconds")
+toPrimitiveNoDefault :: String -> TermSignature -> Name -> Definition
+toPrimitiveNoDefault description sig name =
+  DefinitionPrimitive $ PrimitiveDefinition name description sig True True Nothing
+
+
 
 -- | Convert a typed binding to a term Definition for use in module definition lists
 -- Example: toTermDefinition functionArity
@@ -424,30 +445,13 @@ tuple4 (TTerm a) (TTerm b) (TTerm c) (TTerm d) = TTerm $ Terms.tuple4 a b c d
 tuple5 :: TTerm a -> TTerm b -> TTerm c -> TTerm d -> TTerm e -> TTerm (a, b, c, d, e)
 tuple5 (TTerm a) (TTerm b) (TTerm c) (TTerm d) (TTerm e) = TTerm $ Terms.tuple5 a b c d e
 
--- | Reify a Haskell-level meta-function over phantom-typed terms into a first-class
--- term-level function. See also 'reify2' for the binary form.
--- Example: @reify Literals.showInt32@ has type @TTerm (Int -> String)@
-reify :: (TTerm a -> TTerm b) -> TTerm (a -> b)
-reify f = case (unTTerm $ f $ var "x") of
-  TermApplication (Application lhs _) -> TTerm lhs
-  TermEither (Prelude.Left _) -> lambda "x" $ TTerm $ TermEither $ Prelude.Left $ Terms.var "x"
-  TermEither (Prelude.Right _) -> lambda "x" $ TTerm $ TermEither $ Prelude.Right $ Terms.var "x"
-  TermMaybe (Just _) -> primitive _maybes_pure
-  TermInject (Injection tname (Field fname _)) -> lambda "x" $ inject tname fname $ var "x"
-  TermWrap (WrappedTerm tname _) -> lambda "x" $ wrap tname $ var "x"
-
--- | Unsafe phantom type cast. Used during bootstrap when changing Module field types.
-unsafeCast :: TTerm a -> TTerm b
-unsafeCast (TTerm t) = TTerm t
-
 -- | Unit value (empty record)
 unit :: TTerm a
 unit = TTerm Terms.unit
 
--- | Create a unit variant of a union
--- Example: injectUnit (Name "Result") (Name "success")
-injectUnit :: (AsName t, AsName f) => t -> f -> TTerm a
-injectUnit n fn = TTerm $ Terms.inject (asName n) (asName fn) Terms.unit
+-- | Unsafe phantom type cast. Used during bootstrap when changing Module field types.
+unsafeCast :: TTerm a -> TTerm b
+unsafeCast (TTerm t) = TTerm t
 
 -- | Create an unwrap function for a wrapped type
 -- Example: unwrap (Name "Email")
@@ -464,7 +468,3 @@ var v = TTerm $ Terms.var v
 -- Note: the phantom types provide no guarantee of type safety in this case
 wrap :: AsName n => n -> TTerm a -> TTerm b
 wrap n (TTerm term) = TTerm $ Terms.wrap (asName n) term
-
--- | Lift a Haskell Name value to a phantom-typed TTerm Name
-nameLift :: Name -> TTerm Name
-nameLift (Name n) = wrap _Name $ string n

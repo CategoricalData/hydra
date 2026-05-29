@@ -15,7 +15,7 @@ import Hydra.Demos.Genpg.Examples.Health.GraphSchema
 import Hydra.Demos.Genpg.Examples.Health.Mapping
 import Hydra.Demos.Genpg.Demo (transformTables)
 import Hydra.Demos.Shacl.ShaclRdf (shapesGraphToNtriples)
-import Hydra.Lib.Literals (showInt32)
+import Hydra.Haskell.Lib.Literals (showInt32)
 import qualified Hydra.Pg.Rdf.Environment as PgRdfEnv
 import qualified Hydra.Pg.Rdf.Mappings as PgRdfMappings
 

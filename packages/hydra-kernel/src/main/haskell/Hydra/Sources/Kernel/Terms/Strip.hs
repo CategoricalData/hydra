@@ -156,17 +156,6 @@ detypeTerm = define "detypeTerm" $
     _Term_typeApplication>>: "tt" ~> deannotateAndDetypeTerm @@ (Core.typeApplicationTermBody $ var "tt"),
     _Term_typeLambda>>: "ta" ~> deannotateAndDetypeTerm @@ (Core.typeLambdaBody $ var "ta")]
 
-stripTypeLambdas :: TTermDefinition (Term -> Term)
-stripTypeLambdas = define "stripTypeLambdas" $
-  doc "Strip outer type lambda wrappers from a term, preserving type application wrappers and annotations" $
-  "t" ~> cases _Term (var "t")
-    (Just $ var "t") [
-    _Term_annotated>>: "at" ~>
-       "subj" <~ Core.annotatedTermBody (var "at") $
-       "ann" <~ Core.annotatedTermAnnotation (var "at") $
-       Core.termAnnotated $ Core.annotatedTerm (stripTypeLambdas @@ var "subj") (var "ann"),
-    _Term_typeLambda>>: "ta" ~> stripTypeLambdas @@ (Core.typeLambdaBody $ var "ta")]
-
 removeTermAnnotations :: TTermDefinition (Term -> Term)
 removeTermAnnotations = define "removeTermAnnotations" $
   doc "Recursively remove term annotations, including within subterms" $
@@ -188,6 +177,25 @@ removeTypeAnnotations = define "removeTypeAnnotations" $
       (Just $ var "rewritten") [
       _Type_annotated>>: "at" ~> Core.annotatedTypeBody $ var "at"]) $
   Rewriting.rewriteType @@ var "remove" @@ var "typ"
+
+removeTypeAnnotationsFromTerm :: TTermDefinition (Term -> Term)
+removeTypeAnnotationsFromTerm = define "removeTypeAnnotationsFromTerm" $
+  doc "Strip type annotations (TypeLambda, TypeApplication, binding type schemes) from terms while preserving lambda domain types and other annotations" $
+  "term" ~>
+  "strip" <~ ("recurse" ~> "term" ~>
+    "rewritten" <~ var "recurse" @@ var "term" $
+    "stripBinding" <~ ("b" ~> Core.binding
+      (Core.bindingName $ var "b")
+      (Core.bindingTerm $ var "b")
+      nothing) $
+    cases _Term (var "rewritten")
+      (Just $ var "rewritten") [
+      _Term_let>>: "lt" ~> Core.termLet $ Core.let_
+        (Lists.map (var "stripBinding") (Core.letBindings $ var "lt"))
+        (Core.letBody $ var "lt"),
+      _Term_typeApplication>>: "tt" ~> Core.typeApplicationTermBody $ var "tt",
+      _Term_typeLambda>>: "ta" ~> Core.typeLambdaBody $ var "ta"]) $
+  Rewriting.rewriteTerm @@ var "strip" @@ var "term"
 
 removeTypesFromTerm :: TTermDefinition (Term -> Term)
 removeTypesFromTerm = define "removeTypesFromTerm" $
@@ -212,21 +220,13 @@ removeTypesFromTerm = define "removeTypesFromTerm" $
       _Term_typeLambda>>: "ta" ~> Core.typeLambdaBody $ var "ta"]) $
   Rewriting.rewriteTerm @@ var "strip" @@ var "term"
 
-removeTypeAnnotationsFromTerm :: TTermDefinition (Term -> Term)
-removeTypeAnnotationsFromTerm = define "removeTypeAnnotationsFromTerm" $
-  doc "Strip type annotations (TypeLambda, TypeApplication, binding type schemes) from terms while preserving lambda domain types and other annotations" $
-  "term" ~>
-  "strip" <~ ("recurse" ~> "term" ~>
-    "rewritten" <~ var "recurse" @@ var "term" $
-    "stripBinding" <~ ("b" ~> Core.binding
-      (Core.bindingName $ var "b")
-      (Core.bindingTerm $ var "b")
-      nothing) $
-    cases _Term (var "rewritten")
-      (Just $ var "rewritten") [
-      _Term_let>>: "lt" ~> Core.termLet $ Core.let_
-        (Lists.map (var "stripBinding") (Core.letBindings $ var "lt"))
-        (Core.letBody $ var "lt"),
-      _Term_typeApplication>>: "tt" ~> Core.typeApplicationTermBody $ var "tt",
-      _Term_typeLambda>>: "ta" ~> Core.typeLambdaBody $ var "ta"]) $
-  Rewriting.rewriteTerm @@ var "strip" @@ var "term"
+stripTypeLambdas :: TTermDefinition (Term -> Term)
+stripTypeLambdas = define "stripTypeLambdas" $
+  doc "Strip outer type lambda wrappers from a term, preserving type application wrappers and annotations" $
+  "t" ~> cases _Term (var "t")
+    (Just $ var "t") [
+    _Term_annotated>>: "at" ~>
+       "subj" <~ Core.annotatedTermBody (var "at") $
+       "ann" <~ Core.annotatedTermAnnotation (var "at") $
+       Core.termAnnotated $ Core.annotatedTerm (stripTypeLambdas @@ var "subj") (var "ann"),
+    _Term_typeLambda>>: "ta" ~> stripTypeLambdas @@ (Core.typeLambdaBody $ var "ta")]

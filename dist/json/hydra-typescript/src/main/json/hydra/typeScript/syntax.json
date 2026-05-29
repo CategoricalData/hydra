@@ -378,7 +378,16 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Whether the property is readonly"}}}],
-                        "body": {"literal": {"boolean": {}}}}}}]}}},
+                        "body": {"literal": {"boolean": {}}}}}},
+                  {
+                    "name": "comments",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional JSDoc documentation comment to emit above this property"}}}],
+                        "body": {"maybe": {"variable": "hydra.typeScript.syntax.DocumentationComment"}}}}}]}}},
           "variables": []}}},
     {
       "type": {

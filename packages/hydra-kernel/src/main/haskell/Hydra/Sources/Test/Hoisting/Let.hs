@@ -47,15 +47,6 @@ allTests = definitionInModule module_ "allTests" $
       hoistPolymorphicLetBindingsGroup,
       hoistPolymorphicTypeParametersGroup]
 
--- Helper to build names
-nm :: String -> TTerm Name
-nm s = Core.name $ Phantoms.string s
-
-
--- | Show a Let as a string using ShowCore.let_
-showLet :: TTerm Let -> TTerm String
-showLet l = ShowCore.let_ @@ l
-
 -- | Local universal version of hoistLetBindingsCase (hoistAll=True)
 hoistLetBindingsCase :: String -> TTerm Let -> TTerm Let -> TTerm TestCaseWithMetadata
 hoistLetBindingsCase cname input output = universalCase cname
@@ -72,33 +63,63 @@ hoistPolymorphicLetBindingsCase cname input output = universalCase cname
 letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term
 letExpr varName value body = lets [(nm varName, value)] body
 
+-- Helper to build names
+nm :: String -> TTerm Name
+nm s = Core.name $ Phantoms.string s
+
+
+-- | Show a Let as a string using ShowCore.let_
+showLet :: TTerm Let -> TTerm String
+showLet l = ShowCore.let_ @@ l
+
 -- Helper for multi-binding let
 
 -- | Convenience function for creating hoist let bindings test cases (hoistAll=True)
 hoistAllCase :: String -> TTerm Let -> TTerm Let -> TTerm TestCaseWithMetadata
 hoistAllCase cname input output = hoistLetBindingsCase cname input output
 
--- | Helper for creating a Let term with typed bindings
-mkLet :: [(TTerm Name, TTerm Term, TTerm (Maybe TypeScheme))] -> TTerm Term -> TTerm Let
-mkLet bindings body = Core.let_ (Phantoms.list $ mkBinding <$> bindings) body
-  where
-    mkBinding :: (TTerm Name, TTerm Term, TTerm (Maybe TypeScheme)) -> TTerm Binding
-    mkBinding (n, t, ts) = Core.binding n t ts
+-- | Test cases for hoistLetBindings with hoistAll=True
+-- This function hoists ALL let bindings (not just polymorphic ones) to the top level.
+-- This is used for Java which cannot have let expressions in arbitrary positions.
+-- Key behavior: type lambdas are boundaries - we don't hoist bindings OUT of type lambdas
+-- because doing so could move code that references type variables outside their scope.
+hoistLetBindingsGroup :: TTerm TestGroup
+hoistLetBindingsGroup = subgroup "hoistLetBindings" [
+    -- ============================================================
+    -- Test: Basic nested let hoisting (no type lambdas)
+    -- ============================================================
 
--- | Helper for creating a Let term with untyped bindings
-mkLetUntyped :: [(TTerm Name, TTerm Term)] -> TTerm Term -> TTerm Let
-mkLetUntyped bindings body = Core.let_ (Phantoms.list $ mkBinding <$> bindings) body
-  where
-    mkBinding :: (TTerm Name, TTerm Term) -> TTerm Binding
-    mkBinding (n, t) = Core.binding n t Phantoms.nothing
+    hoistAllCase "nested let inside lambda: binding hoisted with lambda capture"
+      -- Input: let f = \a -> (let g = a + 1 in g * 2) in f 10
+      (mkLetUntyped [(nm "f",
+        lambda "a" (Core.termLet $ mkLetUntyped [(nm "g", apply (apply (primitive _math_add) (var "a")) (int32 1))]
+          (apply (apply (primitive _math_mul) (var "g")) (int32 2))))]
+        (apply (var "f") (int32 10)))
+      -- Output: f comes first (original binding), then f_g is hoisted with lambda to capture 'a', reference becomes (f_g a)
+      (mkLetUntyped [
+        (nm "f",
+          lambda "a" (apply (apply (primitive _math_mul) (apply (var "f_g") (var "a"))) (int32 2))),
+        (nm "f_g", lambda "a" (apply (apply (primitive _math_add) (var "a")) (int32 1)))]
+        (apply (var "f") (int32 10))),
 
--- | Helper for creating a monomorphic type scheme
-monoType :: TTerm Type -> TTerm (Maybe TypeScheme)
-monoType typ = Phantoms.just $ Core.typeScheme (Phantoms.list ([] :: [TTerm Name])) typ Phantoms.nothing
+    -- ============================================================
+    -- Test: Type applications are processed normally (they don't introduce type variables)
+    -- But the inner lambda still has nested let that gets hoisted
+    -- ============================================================
 
--- | Helper for creating a polymorphic type scheme
-polyType :: [String] -> TTerm Type -> TTerm (Maybe TypeScheme)
-polyType vars typ = Phantoms.just $ Core.typeScheme (Phantoms.list $ nm <$> vars) typ Phantoms.nothing
+    hoistAllCase "type application: nested let outside lambda CAN be hoisted"
+      -- Input: let f = (let y = 1 in \x -> x + y) @Int32 in f 10
+      -- The let is OUTSIDE the lambda, so y can be hoisted without capture
+      (mkLetUntyped [(nm "f",
+        tyapp (Core.termLet $ mkLetUntyped [(nm "y", int32 1)]
+          (lambda "x" (apply (apply (primitive _math_add) (var "x")) (var "y")))) T.int32)]
+        (apply (var "f") (int32 10)))
+      -- Output: f comes first (original binding), then f_y is hoisted
+      (mkLetUntyped [
+        (nm "f",
+          tyapp (lambda "x" (apply (apply (primitive _math_add) (var "x")) (var "f_y"))) T.int32),
+        (nm "f_y", int32 1)]
+        (apply (var "f") (int32 10)))]
 
 -- | Convenience function for creating hoist polymorphic let bindings test cases
 hoistPolyCase :: String -> TTerm Let -> TTerm Let -> TTerm TestCaseWithMetadata
@@ -631,49 +652,6 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
           polyType ["a", "b"] (T.function (T.var "a") (T.var "b")))]
         (var "f"))]
 
--- | Test cases for hoistLetBindings with hoistAll=True
--- This function hoists ALL let bindings (not just polymorphic ones) to the top level.
--- This is used for Java which cannot have let expressions in arbitrary positions.
--- Key behavior: type lambdas are boundaries - we don't hoist bindings OUT of type lambdas
--- because doing so could move code that references type variables outside their scope.
-hoistLetBindingsGroup :: TTerm TestGroup
-hoistLetBindingsGroup = subgroup "hoistLetBindings" [
-    -- ============================================================
-    -- Test: Basic nested let hoisting (no type lambdas)
-    -- ============================================================
-
-    hoistAllCase "nested let inside lambda: binding hoisted with lambda capture"
-      -- Input: let f = \a -> (let g = a + 1 in g * 2) in f 10
-      (mkLetUntyped [(nm "f",
-        lambda "a" (Core.termLet $ mkLetUntyped [(nm "g", apply (apply (primitive _math_add) (var "a")) (int32 1))]
-          (apply (apply (primitive _math_mul) (var "g")) (int32 2))))]
-        (apply (var "f") (int32 10)))
-      -- Output: f comes first (original binding), then f_g is hoisted with lambda to capture 'a', reference becomes (f_g a)
-      (mkLetUntyped [
-        (nm "f",
-          lambda "a" (apply (apply (primitive _math_mul) (apply (var "f_g") (var "a"))) (int32 2))),
-        (nm "f_g", lambda "a" (apply (apply (primitive _math_add) (var "a")) (int32 1)))]
-        (apply (var "f") (int32 10))),
-
-    -- ============================================================
-    -- Test: Type applications are processed normally (they don't introduce type variables)
-    -- But the inner lambda still has nested let that gets hoisted
-    -- ============================================================
-
-    hoistAllCase "type application: nested let outside lambda CAN be hoisted"
-      -- Input: let f = (let y = 1 in \x -> x + y) @Int32 in f 10
-      -- The let is OUTSIDE the lambda, so y can be hoisted without capture
-      (mkLetUntyped [(nm "f",
-        tyapp (Core.termLet $ mkLetUntyped [(nm "y", int32 1)]
-          (lambda "x" (apply (apply (primitive _math_add) (var "x")) (var "y")))) T.int32)]
-        (apply (var "f") (int32 10)))
-      -- Output: f comes first (original binding), then f_y is hoisted
-      (mkLetUntyped [
-        (nm "f",
-          tyapp (lambda "x" (apply (apply (primitive _math_add) (var "x")) (var "f_y"))) T.int32),
-        (nm "f_y", int32 1)]
-        (apply (var "f") (int32 10)))]
-
 -- | Test cases for type parameter extraction when hoisting polymorphic let bindings
 -- This group specifically tests scenarios where Java code generation fails because
 -- type parameters (t0, t1, t2, etc.) are used in generated code but not declared
@@ -964,3 +942,25 @@ hoistPolymorphicTypeParametersGroup = subgroup "hoistPolymorphicTypeParameters" 
                 (T.function (T.var "t2") (T.var "t1"))
                 (T.function (T.var "t0") (T.var "t1")))))]
         (var "mutateTrace"))]
+
+-- | Helper for creating a Let term with typed bindings
+mkLet :: [(TTerm Name, TTerm Term, TTerm (Maybe TypeScheme))] -> TTerm Term -> TTerm Let
+mkLet bindings body = Core.let_ (Phantoms.list $ mkBinding <$> bindings) body
+  where
+    mkBinding :: (TTerm Name, TTerm Term, TTerm (Maybe TypeScheme)) -> TTerm Binding
+    mkBinding (n, t, ts) = Core.binding n t ts
+
+-- | Helper for creating a Let term with untyped bindings
+mkLetUntyped :: [(TTerm Name, TTerm Term)] -> TTerm Term -> TTerm Let
+mkLetUntyped bindings body = Core.let_ (Phantoms.list $ mkBinding <$> bindings) body
+  where
+    mkBinding :: (TTerm Name, TTerm Term) -> TTerm Binding
+    mkBinding (n, t) = Core.binding n t Phantoms.nothing
+
+-- | Helper for creating a monomorphic type scheme
+monoType :: TTerm Type -> TTerm (Maybe TypeScheme)
+monoType typ = Phantoms.just $ Core.typeScheme (Phantoms.list ([] :: [TTerm Name])) typ Phantoms.nothing
+
+-- | Helper for creating a polymorphic type scheme
+polyType :: [String] -> TTerm Type -> TTerm (Maybe TypeScheme)
+polyType vars typ = Phantoms.just $ Core.typeScheme (Phantoms.list $ nm <$> vars) typ Phantoms.nothing

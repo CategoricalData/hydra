@@ -14,9 +14,6 @@ ns = ModuleName "hydra.datalog.syntax"
 define :: String -> Type -> Binding
 define = defineType ns
 
-dl :: String -> Type
-dl = typeref ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -41,36 +38,6 @@ module_ = Module {
       constantList,
       constantList_Multiple]
 
-constant :: Binding
-constant = define "Constant" $ T.wrap T.string
-
-relation :: Binding
-relation = define "Relation" $ T.wrap T.string
-
-variable :: Binding
-variable = define "Variable" $ T.wrap T.string
-
-program :: Binding
-program = define "Program" $ T.wrap $ T.list $ dl "Program_Elmt"
-
-program_Elmt :: Binding
-program_Elmt = define "Program_Elmt" $
-  T.union [
-    "Fact">: dl "Fact",
-    "Rule">: dl "Rule"]
-
-fact :: Binding
-fact = define "Fact" $
-  T.record [
-    "Relation">: dl "Relation",
-    "ConstantList">: dl "ConstantList"]
-
-rule_ :: Binding
-rule_ = define "Rule" $
-  T.record [
-    "Atom">: dl "Atom",
-    "AtomList">: dl "AtomList"]
-
 atom :: Binding
 atom = define "Atom" $
   T.record [
@@ -85,6 +52,48 @@ atomList = define "AtomList" $
 
 atomList_Multiple :: Binding
 atomList_Multiple = define "AtomList_Multiple" $
+  T.record [
+    "Atom">: dl "Atom",
+    "AtomList">: dl "AtomList"]
+
+constant :: Binding
+constant = define "Constant" $ T.wrap T.string
+
+constantList :: Binding
+constantList = define "ConstantList" $
+  T.union [
+    "single">: dl "Constant",
+    "multiple">: dl "ConstantList_Multiple"]
+
+constantList_Multiple :: Binding
+constantList_Multiple = define "ConstantList_Multiple" $
+  T.record [
+    "Constant">: dl "Constant",
+    "ConstantList">: dl "ConstantList"]
+
+dl :: String -> Type
+dl = typeref ns
+
+fact :: Binding
+fact = define "Fact" $
+  T.record [
+    "Relation">: dl "Relation",
+    "ConstantList">: dl "ConstantList"]
+
+program :: Binding
+program = define "Program" $ T.wrap $ T.list $ dl "Program_Elmt"
+
+program_Elmt :: Binding
+program_Elmt = define "Program_Elmt" $
+  T.union [
+    "Fact">: dl "Fact",
+    "Rule">: dl "Rule"]
+
+relation :: Binding
+relation = define "Relation" $ T.wrap T.string
+
+rule_ :: Binding
+rule_ = define "Rule" $
   T.record [
     "Atom">: dl "Atom",
     "AtomList">: dl "AtomList"]
@@ -107,14 +116,5 @@ termList_Multiple = define "TermList_Multiple" $
     "Term">: dl "Term",
     "TermList">: dl "TermList"]
 
-constantList :: Binding
-constantList = define "ConstantList" $
-  T.union [
-    "single">: dl "Constant",
-    "multiple">: dl "ConstantList_Multiple"]
-
-constantList_Multiple :: Binding
-constantList_Multiple = define "ConstantList_Multiple" $
-  T.record [
-    "Constant">: dl "Constant",
-    "ConstantList">: dl "ConstantList"]
+variable :: Binding
+variable = define "Variable" $ T.wrap T.string
