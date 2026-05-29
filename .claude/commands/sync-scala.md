@@ -1,5 +1,5 @@
 ---
-description: Run bin/sync-scala.sh — Scala-host Scala sync.
+description: Run bin/sync-scala.sh — Scala-host Scala sync. Does NOT run target tests — use /test scala for that.
 allowed-tools:
   - Bash(bin/sync-scala.sh*)
   - Read

@@ -1,5 +1,5 @@
 ---
-description: Run bin/sync-common-lisp.sh — Common-Lisp-host Common-Lisp sync. One of four Lisp-dialect entry points; shares the hydra-lisp coder.
+description: Run bin/sync-common-lisp.sh — Common-Lisp-host Common-Lisp sync. One of four Lisp-dialect entry points; shares the hydra-lisp coder. Does NOT run target tests — use /test common-lisp for that.
 allowed-tools:
   - Bash(bin/sync-common-lisp.sh*)
   - Read
