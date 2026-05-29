@@ -15,7 +15,7 @@ ns = ModuleName "hydra.python.syntax"
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A Python syntax model, tracking the Python 3.14 PEG grammar:\n"
       ++ "  https://docs.python.org/3.14/reference/grammar.html")}
@@ -229,7 +229,7 @@ module_ = Module {
       typeExpression,
       funcTypeComment]
 
-def :: String -> Type -> Binding
+def :: String -> Type -> TypeDefinition
 def = datatype ns
 
 python :: String -> Type
@@ -237,17 +237,17 @@ python = typeref ns
 
 -- These definitions are not based on the grammar, but are convenient for working with Python sources in Hydra.
 
-annotatedStatement :: Binding
+annotatedStatement :: TypeDefinition
 annotatedStatement = def "AnnotatedStatement" $ T.record [ -- Note: added for Hydra-Python
   "comment">: T.string,
   "statement">: python "Statement"]
 
-pythonModule :: Binding
+pythonModule :: TypeDefinition
 pythonModule = def "Module" $
   -- Groups of statements are separated by a double newline; see also the "Block" production.
   T.wrap $ T.list $ nonemptyList $ python "Statement"
 
-quoteStyle :: Binding
+quoteStyle :: TypeDefinition
 quoteStyle = def "QuoteStyle" $ T.enum [
   "single",        -- '...'
   "double",        -- "..."
@@ -258,7 +258,7 @@ quoteStyle = def "QuoteStyle" $ T.enum [
 -- The empty prefix is encoded as Maybe<StringPrefix> = Nothing on the String.
 -- F-strings (f"") and t-strings (t"", 3.14+) have their own AST shapes and are
 -- not represented here; they appear as separate arms of the Strings concatenation.
-stringPrefix :: Binding
+stringPrefix :: TypeDefinition
 stringPrefix = def "StringPrefix" $ T.enum [
   "raw",       -- r"" / R""
   "bytes",     -- b"" / B""
@@ -267,25 +267,25 @@ stringPrefix = def "StringPrefix" $ T.enum [
 
 -- Terminals from the PEG grammar (see below)
 
-file :: Binding
+file :: TypeDefinition
 file = def "File" $ T.wrap $ T.list $ python "Statement"
 
-name :: Binding
+name :: TypeDefinition
 name = def "Name" $ T.wrap T.string -- NAME in the grammar
 
-number :: Binding
+number :: TypeDefinition
 number = def "Number" $ T.union [ -- NUMBER in the grammar
   "integer">: T.bigint,
   "float">: T.float64,
   "imaginary">: T.float64]
 
-string :: Binding
+string :: TypeDefinition
 string = def "String" $ T.record [ -- STRING in the grammar (non-f, non-t variants)
   "value">: T.string,
   "prefix">: T.maybe $ python "StringPrefix",
   "quoteStyle">: python "QuoteStyle"]
 
-typeComment :: Binding
+typeComment :: TypeDefinition
 typeComment = def "TypeComment" $ T.wrap T.string -- TYPE_COMMENT in the grammar
 
 -- Nonterminal productions from the PEG grammar (inline).
@@ -354,24 +354,24 @@ typeComment = def "TypeComment" $ T.wrap T.string -- TYPE_COMMENT in the grammar
 
 -- interactive: statement_newline
 
-interactive :: Binding
+interactive :: TypeDefinition
 interactive = def "Interactive" $ T.wrap $ python "Statement"
 
 -- eval: expressions NEWLINE* ENDMARKER
 
-assignment :: Binding
+assignment :: TypeDefinition
 assignment = def "Assignment" $ T.union [
   "typed">: python "TypedAssignment",
   "untyped">: python "UntypedAssignment",
   "aug">: python "AugAssignment"]
 
-augAssignment :: Binding
+augAssignment :: TypeDefinition
 augAssignment = def "AugAssignment" $ T.record [
   "lhs">: python "SingleTarget",
   "augassign">: python "AugAssign",
   "rhs">: python "AnnotatedRhs"]
 
-compoundStatement :: Binding
+compoundStatement :: TypeDefinition
 compoundStatement = def "CompoundStatement" $ T.union [
   "function">: python "FunctionDefinition",
   "if">: python "IfStatement",
@@ -393,7 +393,7 @@ compoundStatement = def "CompoundStatement" $ T.union [
 --     | (star_targets '=' )+ (yield_expr | star_expressions) !'=' [TYPE_COMMENT]
 --     | single_target augassign ~ (yield_expr | star_expressions)
 
-eval :: Binding
+eval :: TypeDefinition
 eval = def "Eval" $ T.wrap $ nonemptyList $ python "Expression"
 
 -- func_type: '(' [type_expressions] ')' '->' expression NEWLINE* ENDMARKER
@@ -409,7 +409,7 @@ eval = def "Eval" $ T.wrap $ nonemptyList $ python "Expression"
 --
 -- statement: compound_stmt  | simple_stmts
 
-simpleStatement :: Binding
+simpleStatement :: TypeDefinition
 simpleStatement = def "SimpleStatement" $ T.union [
   "assignment">: python "Assignment",
   "typeAlias">: python "TypeAlias",
@@ -436,7 +436,7 @@ simpleStatement = def "SimpleStatement" $ T.union [
 --     | while_stmt
 --     | match_stmt
 
-statement :: Binding
+statement :: TypeDefinition
 statement = def "Statement" $ T.union [
   "compound">: python "CompoundStatement",
   "simple">: nonemptyList $ python "SimpleStatement",
@@ -470,13 +470,13 @@ statement = def "Statement" $ T.union [
 --     | global_stmt
 --     | nonlocal_stmt
 
-typedAssignment :: Binding
+typedAssignment :: TypeDefinition
 typedAssignment = def "TypedAssignment" $ T.record [
   "lhs">: python "SingleTarget",
   "type">: python "Expression",
   "rhs">: T.maybe $ python "AnnotatedRhs"]
 
-untypedAssignment :: Binding
+untypedAssignment :: TypeDefinition
 untypedAssignment = def "UntypedAssignment" $ T.record [
   "targets">: nonemptyList $ python "StarTarget",
   "rhs">: python "AnnotatedRhs",
@@ -484,7 +484,7 @@ untypedAssignment = def "UntypedAssignment" $ T.record [
 
 -- annotated_rhs: yield_expr | star_expressions
 
-annotatedRhs :: Binding
+annotatedRhs :: TypeDefinition
 annotatedRhs = def "AnnotatedRhs" $ T.union [
   "yield">: python "YieldExpression",
   "star">: nonemptyList $ python "StarExpression"]
@@ -504,7 +504,7 @@ annotatedRhs = def "AnnotatedRhs" $ T.union [
 --     | '**='
 --     | '//='
 
-augAssign :: Binding
+augAssign :: TypeDefinition
 augAssign = def "AugAssign" $ T.enum [
   "plusEqual",
   "minusEqual",
@@ -523,10 +523,10 @@ augAssign = def "AugAssign" $ T.enum [
 -- return_stmt:
 --     | 'return' [star_expressions]
 
-delStatement :: Binding
+delStatement :: TypeDefinition
 delStatement = def "DelStatement" $ T.wrap $ python "DelTargets"
 
-raiseExpression :: Binding
+raiseExpression :: TypeDefinition
 raiseExpression = def "RaiseExpression" $ T.record [
   "expression">: python "Expression",
   "from">: T.maybe $ python "Expression"]
@@ -538,10 +538,10 @@ raiseExpression = def "RaiseExpression" $ T.record [
 -- del_stmt:
 --     | 'del' del_targets &(';' | NEWLINE)
 
-raiseStatement :: Binding
+raiseStatement :: TypeDefinition
 raiseStatement = def "RaiseStatement" $ T.wrap $ T.maybe $ python "RaiseExpression"
 
-returnStatement :: Binding
+returnStatement :: TypeDefinition
 returnStatement = def "ReturnStatement" $ T.wrap $ T.list $ python "StarExpression"
 
 -- raise_stmt:
@@ -550,12 +550,12 @@ returnStatement = def "ReturnStatement" $ T.wrap $ T.list $ python "StarExpressi
 
 -- yield_stmt: yield_expr
 
-yieldStatement :: Binding
+yieldStatement :: TypeDefinition
 yieldStatement = def "YieldStatement" $ T.wrap $ python "YieldExpression"
 
 -- assert_stmt: 'assert' expression [',' expression ]
 
-assertStatement :: Binding
+assertStatement :: TypeDefinition
 assertStatement = def "AssertStatement" $ T.record [
   "expression1">: python "Expression",
   "expression2">: T.maybe $ python "Expression"]
@@ -564,13 +564,13 @@ assertStatement = def "AssertStatement" $ T.record [
 --     | import_name
 --     | import_from
 
-block :: Binding
+block :: TypeDefinition
 block = def "Block" $ T.union [
   -- Statements in indented blocks are grouped in Hydra, so these groups can be separated by a double newline.
   "indented">: nonemptyList $ nonemptyList $ python "Statement",
   "simple">: nonemptyList $ python "SimpleStatement"]
 
-dottedAsName :: Binding
+dottedAsName :: TypeDefinition
 dottedAsName = def "DottedAsName" $ T.record [
   "name">: python "DottedName",
   "as">: T.maybe $ python "Name"]
@@ -579,7 +579,7 @@ dottedAsName = def "DottedAsName" $ T.record [
 --     | dotted_name '.' NAME
 --     | NAME
 
-dottedName :: Binding
+dottedName :: TypeDefinition
 dottedName = def "DottedName" $ T.wrap $ nonemptyList $ python "Name"
 
 --
@@ -593,13 +593,13 @@ dottedName = def "DottedName" $ T.wrap $ nonemptyList $ python "Name"
 --     | NEWLINE INDENT statements DEDENT
 --     | simple_stmts
 
-importFrom :: Binding
+importFrom :: TypeDefinition
 importFrom = def "ImportFrom" $ T.record [
   "prefixes">: T.list $ python "RelativeImportPrefix",
   "dottedName">: T.maybe $ python "DottedName",
   "targets">: python "ImportFromTargets"]
 
-importFromAsName :: Binding
+importFromAsName :: TypeDefinition
 importFromAsName = def "ImportFromAsName" $ T.record [
   "name">: python "Name",
   "as">: T.maybe $ python "Name"]
@@ -610,7 +610,7 @@ importFromAsName = def "ImportFromAsName" $ T.record [
 -- dotted_as_name:
 --     | dotted_name ['as' NAME ]
 
-importFromTargets :: Binding
+importFromTargets :: TypeDefinition
 importFromTargets = def "ImportFromTargets" $ T.union [
   "simple">: nonemptyList $ python "ImportFromAsName",
   "parens">: nonemptyList $ python "ImportFromAsName",
@@ -622,7 +622,7 @@ importFromTargets = def "ImportFromTargets" $ T.union [
 -- import_from_as_name:
 --     | NAME ['as' NAME ]
 
-importName :: Binding
+importName :: TypeDefinition
 importName = def "ImportName" $ T.wrap $ nonemptyList $ python "DottedAsName"
 
 -- # note below: the ('.' | '...') is necessary because '...' is tokenized as ELLIPSIS
@@ -630,7 +630,7 @@ importName = def "ImportName" $ T.wrap $ nonemptyList $ python "DottedAsName"
 --     | 'from' ('.' | '...')* dotted_name 'import' import_from_targets
 --     | 'from' ('.' | '...')+ 'import' import_from_targets
 
-importStatement :: Binding
+importStatement :: TypeDefinition
 importStatement = def "ImportStatement" $ T.union [
   "name">: python "ImportName",
   "from">: python "ImportFrom"]
@@ -640,7 +640,7 @@ importStatement = def "ImportStatement" $ T.union [
 --
 -- import_name: 'import' dotted_as_names
 
-relativeImportPrefix :: Binding
+relativeImportPrefix :: TypeDefinition
 relativeImportPrefix = def "RelativeImportPrefix" $ T.enum ["dot", "ellipsis"]
 
 -- import_from_targets:
@@ -650,7 +650,7 @@ relativeImportPrefix = def "RelativeImportPrefix" $ T.enum ["dot", "ellipsis"]
 
 -- decorators: ('@' named_expression NEWLINE )+
 
-classDefinition :: Binding
+classDefinition :: TypeDefinition
 classDefinition = def "ClassDefinition" $ T.record [
   "decorators">: T.maybe $ python "Decorators",
   "name">: python "Name",
@@ -668,7 +668,7 @@ classDefinition = def "ClassDefinition" $ T.record [
 --     | decorators function_def_raw
 --     | function_def_raw
 
-commaStarEtc :: Binding
+commaStarEtc :: TypeDefinition
 commaStarEtc = def "CommaStarEtc" $ T.record [
   "paramMaybeDefault">: nonemptyList $ python "ParamMaybeDefault",
   "keywords">: T.maybe $ python "Keywords"]
@@ -676,7 +676,7 @@ commaStarEtc = def "CommaStarEtc" $ T.record [
 -- kwds:
 --     | '**' param_no_default
 
-decorators :: Binding
+decorators :: TypeDefinition
 decorators = def "Decorators" $ T.wrap $ nonemptyList $ python "NamedExpression"
 
 -- # Class definitions
@@ -686,7 +686,7 @@ decorators = def "Decorators" $ T.wrap $ nonemptyList $ python "NamedExpression"
 --     | decorators class_def_raw
 --     | class_def_raw
 
-functionDefRaw :: Binding
+functionDefRaw :: TypeDefinition
 functionDefRaw = def "FunctionDefRaw" $ T.record [
   "async">: T.boolean,
   "name">: python "Name",
@@ -709,7 +709,7 @@ functionDefRaw = def "FunctionDefRaw" $ T.record [
 --     | param_with_default+ [star_etc]
 --     | star_etc
 
-functionDefinition :: Binding
+functionDefinition :: TypeDefinition
 functionDefinition = def "FunctionDefinition" $ T.record [
   "decorators">: T.maybe $ python "Decorators",
   "raw">: python "FunctionDefRaw"]
@@ -718,7 +718,7 @@ functionDefinition = def "FunctionDefinition" $ T.record [
 --     | 'def' NAME [type_params] '(' [params] ')' ['->' expression ] ':' [func_type_comment] block
 --     | 'async' 'def' NAME [type_params] '(' [params] ')' ['->' expression ] ':' [func_type_comment] block
 
-keywords :: Binding
+keywords :: TypeDefinition
 keywords = def "Keywords" $ T.wrap $ python "ParamNoDefault"
 
 -- # One parameter.  This *includes* a following comma and type comment.
@@ -738,25 +738,25 @@ keywords = def "Keywords" $ T.wrap $ python "ParamNoDefault"
 --     | param ',' TYPE_COMMENT?
 --     | param TYPE_COMMENT? &')'
 
-noDefaultStarAnnotationStarEtc :: Binding
+noDefaultStarAnnotationStarEtc :: TypeDefinition
 noDefaultStarAnnotationStarEtc = def "NoDefaultStarAnnotationStarEtc" $ T.record [
   "paramNoDefaultStarAnnotation">: python "ParamNoDefaultStarAnnotation",
   "paramMaybeDefault">: T.list $ python "ParamMaybeDefault",
   "keywords">: T.maybe $ python "Keywords"]
 
-noDefaultStarEtc :: Binding
+noDefaultStarEtc :: TypeDefinition
 noDefaultStarEtc = def "NoDefaultStarEtc" $ T.record [
   "paramNoDefault">: python "ParamNoDefault",
   "paramMaybeDefault">: T.list $ python "ParamMaybeDefault",
   "keywords">: T.maybe $ python "Keywords"]
 
-paramMaybeDefault :: Binding
+paramMaybeDefault :: TypeDefinition
 paramMaybeDefault = def "ParamMaybeDefault" $ T.record [
   "param">: python "Param",
   "default">: T.maybe $ python "Default",
   "typeComment">: T.maybe $ python "TypeComment"]
 
-paramNoDefault :: Binding
+paramNoDefault :: TypeDefinition
 paramNoDefault = def "ParamNoDefault" $ T.record [
   "param">: python "Param",
   "typeComment">: T.maybe $ python "TypeComment"]
@@ -765,13 +765,13 @@ paramNoDefault = def "ParamNoDefault" $ T.record [
 --     | param_star_annotation ',' TYPE_COMMENT?
 --     | param_star_annotation TYPE_COMMENT? &')'
 
-paramNoDefaultParameters :: Binding
+paramNoDefaultParameters :: TypeDefinition
 paramNoDefaultParameters = def "ParamNoDefaultParameters" $ T.record [
   "paramNoDefault">: nonemptyList $ python "ParamNoDefault",
   "paramWithDefault">: T.list $ python "ParamWithDefault",
   "starEtc">: T.maybe $ python "StarEtc"]
 
-paramNoDefaultStarAnnotation :: Binding
+paramNoDefaultStarAnnotation :: TypeDefinition
 paramNoDefaultStarAnnotation = def "ParamNoDefaultStarAnnotation" $ T.record [
   "paramStarAnnotation">: python "ParamStarAnnotation",
   "typeComment">: T.maybe $ python "TypeComment"]
@@ -780,7 +780,7 @@ paramNoDefaultStarAnnotation = def "ParamNoDefaultStarAnnotation" $ T.record [
 --     | param default ',' TYPE_COMMENT?
 --     | param default TYPE_COMMENT? &')'
 
-paramWithDefault :: Binding
+paramWithDefault :: TypeDefinition
 paramWithDefault = def "ParamWithDefault" $ T.record [
   "param">: python "Param",
   "default">: python "Default",
@@ -790,7 +790,7 @@ paramWithDefault = def "ParamWithDefault" $ T.record [
 --     | param default? ',' TYPE_COMMENT?
 --     | param default? TYPE_COMMENT? &')'
 
-paramWithDefaultParameters :: Binding
+paramWithDefaultParameters :: TypeDefinition
 paramWithDefaultParameters = def "ParamWithDefaultParameters" $ T.record [
   "paramWithDefault">: nonemptyList $ python "ParamWithDefault",
   "starEtc">: T.maybe $ python "StarEtc"]
@@ -802,7 +802,7 @@ paramWithDefaultParameters = def "ParamWithDefaultParameters" $ T.record [
 --     | param_no_default+ '/' ','
 --     | param_no_default+ '/' &')'
 
-parameters :: Binding
+parameters :: TypeDefinition
 parameters = def "Parameters" $ T.union [
   "slashNoDefault">: python "SlashNoDefaultParameters",
   "slashWithDefault">: python "SlashWithDefaultParameters",
@@ -810,21 +810,21 @@ parameters = def "Parameters" $ T.union [
   "paramWithDefault">: python "ParamWithDefaultParameters",
   "starEtc">: python "StarEtc"]
 
-slashNoDefault :: Binding
+slashNoDefault :: TypeDefinition
 slashNoDefault = def "SlashNoDefault" $ T.wrap $ nonemptyList $ python "ParamNoDefault"
 
 -- slash_with_default:
 --     | param_no_default* param_with_default+ '/' ','
 --     | param_no_default* param_with_default+ '/' &')'
 
-slashNoDefaultParameters :: Binding
+slashNoDefaultParameters :: TypeDefinition
 slashNoDefaultParameters = def "SlashNoDefaultParameters" $ T.record [
   "slash">: python "SlashNoDefault",
   "paramNoDefault">: T.list $ python "ParamNoDefault",
   "paramWithDefault">: T.list $ python "ParamWithDefault",
   "starEtc">: T.maybe $ python "StarEtc"]
 
-slashWithDefault :: Binding
+slashWithDefault :: TypeDefinition
 slashWithDefault = def "SlashWithDefault" $ T.record [
   "paramNoDefault">: T.list $ python "ParamNoDefault",
   "paramWithDefault">: nonemptyList $ python "ParamWithDefault"]
@@ -835,13 +835,13 @@ slashWithDefault = def "SlashWithDefault" $ T.record [
 --     | '*' ',' param_maybe_default+ [kwds]
 --     | kwds
 
-slashWithDefaultParameters :: Binding
+slashWithDefaultParameters :: TypeDefinition
 slashWithDefaultParameters = def "SlashWithDefaultParameters" $ T.record [
   "paramNoDefault">: T.list $ python "ParamNoDefault",
   "paramWithDefault">: T.list $ python "ParamWithDefault",
   "starEtc">: T.maybe $ python "StarEtc"]
 
-starEtc :: Binding
+starEtc :: TypeDefinition
 starEtc = def "StarEtc" $ T.union [
   "starNoDefault">: python "NoDefaultStarEtc",
   "starNoDefaultStarAnnotation">: python "NoDefaultStarAnnotationStarEtc",
@@ -850,37 +850,37 @@ starEtc = def "StarEtc" $ T.union [
 
 -- param: NAME annotation?
 
-param :: Binding
+param :: TypeDefinition
 param = def "Param" $ T.record [
   "name">: python "Name",
   "annotation">: T.maybe $ python "Annotation"]
 
 -- param_star_annotation: NAME star_annotation
 
-paramStarAnnotation :: Binding
+paramStarAnnotation :: TypeDefinition
 paramStarAnnotation = def "ParamStarAnnotation" $ T.record [
   "name">: python "Name",
   "annotation">: python "StarAnnotation"]
 
 -- annotation: ':' expression
 
-annotation :: Binding
+annotation :: TypeDefinition
 annotation = def "Annotation" $ T.wrap $ python "Expression"
 
 -- star_annotation: ':' star_expression
 
-starAnnotation :: Binding
+starAnnotation :: TypeDefinition
 starAnnotation = def "StarAnnotation" $ T.wrap $ python "StarExpression"
 
 -- default: '=' expression  | invalid_default
 
-caseBlock :: Binding
+caseBlock :: TypeDefinition
 caseBlock = def "CaseBlock" $ T.record [
   "patterns">: python "Patterns",
   "guard">: T.maybe $ python "Guard",
   "body">: python "Block"]
 
-default_ :: Binding
+default_ :: TypeDefinition
 default_ = def "Default" $ T.wrap $ python "Expression"
 
 -- # If statement
@@ -890,12 +890,12 @@ default_ = def "Default" $ T.wrap $ python "Expression"
 --     | 'if' named_expression ':' block elif_stmt
 --     | 'if' named_expression ':' block [else_block]
 
-exceptBlock :: Binding
+exceptBlock :: TypeDefinition
 exceptBlock = def "ExceptBlock" $ T.record [
   "expression">: T.maybe $ python "ExceptExpression",
   "body">: python "Block"]
 
-exceptExpression :: Binding
+exceptExpression :: TypeDefinition
 exceptExpression = def "ExceptExpression" $ T.record [
   "expression">: python "Expression",
   "as">: T.maybe $ python "Name"]
@@ -903,7 +903,7 @@ exceptExpression = def "ExceptExpression" $ T.record [
 -- except_star_block:
 --     | 'except' '*' expression ['as' NAME ] ':' block
 
-exceptStarBlock :: Binding
+exceptStarBlock :: TypeDefinition
 exceptStarBlock = def "ExceptStarBlock" $ T.record [
   "expression">: python "Expression",
   "as">: T.maybe $ python "Name",
@@ -918,7 +918,7 @@ exceptStarBlock = def "ExceptStarBlock" $ T.record [
 -- match_stmt:
 --     | "match" subject_expr ':' NEWLINE INDENT case_block+ DEDENT
 
-forStatement :: Binding
+forStatement :: TypeDefinition
 forStatement = def "ForStatement" $ T.record [
   "async">: T.boolean,
   "targets">: nonemptyList $ python "StarTarget",
@@ -936,13 +936,13 @@ forStatement = def "ForStatement" $ T.record [
 --     | 'async' 'with' '(' ','.with_item+ ','? ')' ':' block
 --     | 'async' 'with' ','.with_item+ ':' [TYPE_COMMENT] block
 
-ifStatement :: Binding
+ifStatement :: TypeDefinition
 ifStatement = def "IfStatement" $ T.record [
   "condition">: python "NamedExpression",
   "body">: python "Block",
   "continuation">: T.maybe $ python "IfTail"]
 
-ifTail :: Binding
+ifTail :: TypeDefinition
 ifTail = def "IfTail" $ T.union [
   "elif">: python "IfStatement",
   "else">: python "Block"]
@@ -960,7 +960,7 @@ ifTail = def "IfTail" $ T.union [
 -- while_stmt:
 --     | 'while' named_expression ':' block [else_block]
 
-matchStatement :: Binding
+matchStatement :: TypeDefinition
 matchStatement = def "MatchStatement" $ T.record [
   "subject">: python "SubjectExpression",
   "cases">: nonemptyList $ python "CaseBlock"]
@@ -969,7 +969,7 @@ matchStatement = def "MatchStatement" $ T.record [
 --     | star_named_expression ',' star_named_expressions?
 --     | named_expression
 
-subjectExpression :: Binding
+subjectExpression :: TypeDefinition
 subjectExpression = def "SubjectExpression" $ T.union [
   "tuple">: nonemptyList $ python "StarNamedExpression",
   "simple">: python "NamedExpression"]
@@ -977,7 +977,7 @@ subjectExpression = def "SubjectExpression" $ T.union [
 -- case_block:
 --     | "case" patterns guard? ':' block
 
-tryExceptStarStatement :: Binding
+tryExceptStarStatement :: TypeDefinition
 tryExceptStarStatement = def "TryExceptStarStatement" $ T.record [
   "body">: python "Block",
   "excepts">: nonemptyList $ python "ExceptStarBlock",
@@ -991,25 +991,25 @@ tryExceptStarStatement = def "TryExceptStarStatement" $ T.record [
 --     | 'except' expression ['as' NAME ] ':' block
 --     | 'except' ':' block
 
-tryExceptStatement :: Binding
+tryExceptStatement :: TypeDefinition
 tryExceptStatement = def "TryExceptStatement" $ T.record [
   "body">: python "Block",
   "excepts">: nonemptyList $ python "ExceptBlock",
   "else">: T.maybe $ python "Block",
   "finally">: T.maybe $ python "Block"]
 
-tryFinallyStatement :: Binding
+tryFinallyStatement :: TypeDefinition
 tryFinallyStatement = def "TryFinallyStatement" $ T.record [
   "body">: python "Block",
   "finally">: python "Block"]
 
-tryStatement :: Binding
+tryStatement :: TypeDefinition
 tryStatement = def "TryStatement" $ T.union [
   "finally">: python "TryFinallyStatement",
   "except">: python "TryExceptStatement",
   "exceptStar">: python "TryExceptStarStatement"]
 
-whileStatement :: Binding
+whileStatement :: TypeDefinition
 whileStatement = def "WhileStatement" $ T.record [
   "condition">: python "NamedExpression",
   "body">: python "Block",
@@ -1022,7 +1022,7 @@ whileStatement = def "WhileStatement" $ T.record [
 --     | 'for' star_targets 'in' ~ star_expressions ':' [TYPE_COMMENT] block [else_block]
 --     | 'async' 'for' star_targets 'in' ~ star_expressions ':' [TYPE_COMMENT] block [else_block]
 
-withItem :: Binding
+withItem :: TypeDefinition
 withItem = def "WithItem" $ T.record [
   "expression">: python "Expression",
   "as">: T.maybe $ python "StarTarget"]
@@ -1035,7 +1035,7 @@ withItem = def "WithItem" $ T.record [
 --     | 'try' ':' block except_block+ [else_block] [finally_block]
 --     | 'try' ':' block except_star_block+ [else_block] [finally_block]
 
-withStatement :: Binding
+withStatement :: TypeDefinition
 withStatement = def "WithStatement" $ T.record [
   "async">: T.boolean,
   "items">: nonemptyList $ python "WithItem",
@@ -1048,7 +1048,7 @@ withStatement = def "WithStatement" $ T.record [
 
 -- guard: 'if' named_expression
 
-asPattern :: Binding
+asPattern :: TypeDefinition
 asPattern = def "AsPattern" $ T.record [
   "pattern">: python "OrPattern",
   "as">: python "PatternCaptureTarget"]
@@ -1056,7 +1056,7 @@ asPattern = def "AsPattern" $ T.record [
 -- or_pattern:
 --     | '|'.closed_pattern+
 
-closedPattern :: Binding
+closedPattern :: TypeDefinition
 closedPattern = def "ClosedPattern" $ T.union [
   "literal">: python "LiteralExpression",
   "capture">: python "CapturePattern",
@@ -1076,14 +1076,14 @@ closedPattern = def "ClosedPattern" $ T.union [
 --     | 'True'
 --     | 'False'
 
-guard :: Binding
+guard :: TypeDefinition
 guard = def "Guard" $ T.wrap $ python "NamedExpression"
 
 -- patterns:
 --     | open_sequence_pattern
 --     | pattern
 
-orPattern :: Binding
+orPattern :: TypeDefinition
 orPattern = def "OrPattern" $ T.wrap $ nonemptyList $ python "ClosedPattern"
 
 -- closed_pattern:
@@ -1096,7 +1096,7 @@ orPattern = def "OrPattern" $ T.wrap $ nonemptyList $ python "ClosedPattern"
 --     | mapping_pattern
 --     | class_pattern
 
-pattern_ :: Binding
+pattern_ :: TypeDefinition
 pattern_ = def "Pattern" $ T.union [
   "as">: python "AsPattern",
   "or">: python "OrPattern"]
@@ -1104,7 +1104,7 @@ pattern_ = def "Pattern" $ T.union [
 -- as_pattern:
 --     | or_pattern 'as' pattern_capture_target
 
-patterns :: Binding
+patterns :: TypeDefinition
 patterns = def "Patterns" $ T.union [
   "sequence">: python "OpenSequencePattern",
   "pattern">: python "Pattern"]
@@ -1124,7 +1124,7 @@ patterns = def "Patterns" $ T.union [
 --     | 'True'
 --     | 'False'
 
-attribute :: Binding
+attribute :: TypeDefinition
 attribute = def "Attribute" $ T.wrap $ nonemptyList $ python "Name"
 -- Hydra: per the PEG, an `attr` is `name_or_attr '.' NAME` which expands to at least
 -- two NAMEs (head + dot-trailer). Hydra's kernel type system has nonemptyList but no
@@ -1135,13 +1135,13 @@ attribute = def "Attribute" $ T.wrap $ nonemptyList $ python "Name"
 --     | attr
 --     | NAME
 
-capturePattern :: Binding
+capturePattern :: TypeDefinition
 capturePattern = def "CapturePattern" $ T.wrap $ python "PatternCaptureTarget"
 
 -- pattern_capture_target:
 --     | !"_" NAME !('.' | '(' | '=')
 
-classPattern :: Binding
+classPattern :: TypeDefinition
 classPattern = def "ClassPattern" $ T.record [
   "nameOrAttribute">: python "NameOrAttribute",
   "positionalPatterns">: T.maybe $ python "PositionalPatterns",
@@ -1150,13 +1150,13 @@ classPattern = def "ClassPattern" $ T.record [
 -- positional_patterns:
 --     | ','.pattern+
 
-complexNumber :: Binding
+complexNumber :: TypeDefinition
 complexNumber = def "ComplexNumber" $ T.record [
   "real">: python "SignedRealNumber",
   "plusOrMinus">: python "PlusOrMinus",
   "imaginary">: python "ImaginaryNumber"]
 
-conditional :: Binding
+conditional :: TypeDefinition
 conditional = def "Conditional" $ T.record [
   "body">: python "Disjunction",
   "if">: python "Disjunction",
@@ -1166,7 +1166,7 @@ conditional = def "Conditional" $ T.record [
 --     | 'yield' 'from' expression
 --     | 'yield' [star_expressions]
 
-doubleStarPattern :: Binding
+doubleStarPattern :: TypeDefinition
 doubleStarPattern = def "DoubleStarPattern" $ T.wrap $ python "PatternCaptureTarget"
 
 -- class_pattern:
@@ -1175,7 +1175,7 @@ doubleStarPattern = def "DoubleStarPattern" $ T.wrap $ python "PatternCaptureTar
 --     | name_or_attr '(' keyword_patterns ','? ')'
 --     | name_or_attr '(' positional_patterns ',' keyword_patterns ','? ')'
 
-doubleStarTypeParameter :: Binding
+doubleStarTypeParameter :: TypeDefinition
 doubleStarTypeParameter = def "DoubleStarTypeParameter" $ T.record [
   "name">: python "Name",
   "default">: T.maybe $ python "Expression"]
@@ -1197,37 +1197,37 @@ doubleStarTypeParameter = def "DoubleStarTypeParameter" $ T.record [
 --     | disjunction
 --     | lambdef
 
-expression :: Binding
+expression :: TypeDefinition
 expression = def "Expression" $ T.union [
   "conditional">: python "Conditional",
   "simple">: python "Disjunction",
   "lambda">: python "Lambda"]
 
-groupPattern :: Binding
+groupPattern :: TypeDefinition
 groupPattern = def "GroupPattern" $ T.wrap $ python "Pattern"
 
 -- sequence_pattern:
 --     | '[' maybe_sequence_pattern? ']'
 --     | '(' open_sequence_pattern? ')'
 
-imaginaryNumber :: Binding
+imaginaryNumber :: TypeDefinition
 imaginaryNumber = def "ImaginaryNumber" $ T.wrap T.float64
 
 -- capture_pattern:
 --     | pattern_capture_target
 
-itemsPattern :: Binding
+itemsPattern :: TypeDefinition
 itemsPattern = def "ItemsPattern" $ T.wrap $ nonemptyList $ python "KeyValuePattern"
 
 -- key_value_pattern:
 --     | (literal_expr | attr) ':' pattern
 
-keyValuePattern :: Binding
+keyValuePattern :: TypeDefinition
 keyValuePattern = def "KeyValuePattern" $ T.record [
   "key">: python "LiteralExpressionOrAttribute",
   "value">: python "Pattern"]
 
-keywordPattern :: Binding
+keywordPattern :: TypeDefinition
 keywordPattern = def "KeywordPattern" $ T.record [
   "name">: python "Name",
   "pattern">: python "Pattern"]
@@ -1238,13 +1238,13 @@ keywordPattern = def "KeywordPattern" $ T.record [
 -- type_alias:
 --     | "type" NAME [type_params] '=' expression
 
-keywordPatterns :: Binding
+keywordPatterns :: TypeDefinition
 keywordPatterns = def "KeywordPatterns" $ T.wrap $ nonemptyList $ python "KeywordPattern"
 
 -- keyword_pattern:
 --     | NAME '=' pattern
 
-literalExpression :: Binding
+literalExpression :: TypeDefinition
 literalExpression = def "LiteralExpression" $ T.union [
   "number">: python "SignedNumber",
   "complex">: python "ComplexNumber",
@@ -1257,7 +1257,7 @@ literalExpression = def "LiteralExpression" $ T.union [
 --     | signed_real_number '+' imaginary_number
 --     | signed_real_number '-' imaginary_number
 
-literalExpressionOrAttribute :: Binding
+literalExpressionOrAttribute :: TypeDefinition
 literalExpressionOrAttribute = def "LiteralExpressionOrAttribute" $ T.union [
   "literal">: python "LiteralExpression",
   "attribute">: python "Attribute"]
@@ -1265,7 +1265,7 @@ literalExpressionOrAttribute = def "LiteralExpressionOrAttribute" $ T.union [
 -- double_star_pattern:
 --     | '**' pattern_capture_target
 
-mappingPattern :: Binding
+mappingPattern :: TypeDefinition
 mappingPattern = def "MappingPattern" $ T.record [
   "items">: T.maybe $ python "ItemsPattern",
   "doubleStar">: T.maybe $ python "DoubleStarPattern"]
@@ -1273,14 +1273,14 @@ mappingPattern = def "MappingPattern" $ T.record [
 -- items_pattern:
 --     | ','.key_value_pattern+
 
-maybeSequencePattern :: Binding
+maybeSequencePattern :: TypeDefinition
 maybeSequencePattern = def "MaybeSequencePattern" $ T.wrap $ nonemptyList $ python "MaybeStarPattern"
 
 -- maybe_star_pattern:
 --     | star_pattern
 --     | pattern
 
-maybeStarPattern :: Binding
+maybeStarPattern :: TypeDefinition
 maybeStarPattern = def "MaybeStarPattern" $ T.union [
   "star">: python "StarPattern",
   "pattern">: python "Pattern"]
@@ -1289,13 +1289,13 @@ maybeStarPattern = def "MaybeStarPattern" $ T.union [
 --     | '*' pattern_capture_target
 --     | '*' wildcard_pattern
 
-nameOrAttribute :: Binding
+nameOrAttribute :: TypeDefinition
 nameOrAttribute = def "NameOrAttribute" $ T.wrap $ nonemptyList $ python "Name"
 
 -- group_pattern:
 --     | '(' pattern ')'
 
-openSequencePattern :: Binding
+openSequencePattern :: TypeDefinition
 openSequencePattern = def "OpenSequencePattern" $ T.record [
   "head">: python "MaybeStarPattern",
   "tail">: T.maybe $ python "MaybeSequencePattern"]
@@ -1303,7 +1303,7 @@ openSequencePattern = def "OpenSequencePattern" $ T.record [
 -- maybe_sequence_pattern:
 --     | ','.maybe_star_pattern+ ','?
 
-patternCaptureTarget :: Binding
+patternCaptureTarget :: TypeDefinition
 patternCaptureTarget = def "PatternCaptureTarget" $ T.wrap $ python "Name"
 
 -- wildcard_pattern:
@@ -1312,20 +1312,20 @@ patternCaptureTarget = def "PatternCaptureTarget" $ T.wrap $ python "Name"
 -- value_pattern:
 --     | attr !('.' | '(' | '=')
 
-plusOrMinus :: Binding
+plusOrMinus :: TypeDefinition
 plusOrMinus = def "PlusOrMinus" $ T.enum ["plus", "minus"]
 
 -- signed_number:
 --     | NUMBER
 --     | '-' NUMBER
 
-positionalPatterns :: Binding
+positionalPatterns :: TypeDefinition
 positionalPatterns = def "PositionalPatterns" $ T.wrap $ nonemptyList $ python "Pattern"
 
 -- keyword_patterns:
 --     | ','.keyword_pattern+
 
-realNumber :: Binding
+realNumber :: TypeDefinition
 realNumber = def "RealNumber" $ T.union [ -- NUMBER token excluding imaginary literals
   "integer">: T.bigint,
   "float">: T.float64]
@@ -1333,7 +1333,7 @@ realNumber = def "RealNumber" $ T.union [ -- NUMBER token excluding imaginary li
 -- imaginary_number:
 --     | NUMBER
 
-sequencePattern :: Binding
+sequencePattern :: TypeDefinition
 sequencePattern = def "SequencePattern" $ T.union [
   "list">: T.maybe $ python "MaybeSequencePattern",
   "tuple">: T.maybe $ python "OpenSequencePattern"]
@@ -1341,7 +1341,7 @@ sequencePattern = def "SequencePattern" $ T.union [
 -- open_sequence_pattern:
 --     | maybe_star_pattern ',' maybe_sequence_pattern?
 
-signedNumber :: Binding
+signedNumber :: TypeDefinition
 signedNumber = def "SignedNumber" $ T.union [
   "sign">: python "PlusOrMinus",
   "number">: python "Number"]
@@ -1350,7 +1350,7 @@ signedNumber = def "SignedNumber" $ T.union [
 --     | real_number
 --     | '-' real_number
 
-signedRealNumber :: Binding
+signedRealNumber :: TypeDefinition
 signedRealNumber = def "SignedRealNumber" $ T.union [
   "sign">: python "PlusOrMinus",
   "number">: python "RealNumber"]
@@ -1358,18 +1358,18 @@ signedRealNumber = def "SignedRealNumber" $ T.union [
 -- real_number:
 --     | NUMBER
 
-simpleTypeParameter :: Binding
+simpleTypeParameter :: TypeDefinition
 simpleTypeParameter = def "SimpleTypeParameter" $ T.record [
   "name">: python "Name",
   "bound">: T.maybe $ python "Expression",
   "default">: T.maybe $ python "Expression"]
 
-starExpression :: Binding
+starExpression :: TypeDefinition
 starExpression = def "StarExpression" $ T.union [
   "star">: python "BitwiseOr",
   "simple">: python "Expression"]
 
-starPattern :: Binding
+starPattern :: TypeDefinition
 starPattern = def "StarPattern" $ T.union [
   "capture">: python "PatternCaptureTarget",
   "wildcard">: T.unit]
@@ -1380,12 +1380,12 @@ starPattern = def "StarPattern" $ T.union [
 --     | '{' items_pattern ',' double_star_pattern ','? '}'
 --     | '{' items_pattern ','? '}'
 
-starTypeParameter :: Binding
+starTypeParameter :: TypeDefinition
 starTypeParameter = def "StarTypeParameter" $ T.record [
   "name">: python "Name",
   "default">: T.maybe $ python "StarExpression"]
 
-typeAlias :: Binding
+typeAlias :: TypeDefinition
 typeAlias = def "TypeAlias" $ T.record [
   "name">: python "Name",
   "typeParams">: T.list $ python "TypeParameter",
@@ -1405,19 +1405,19 @@ typeAlias = def "TypeAlias" $ T.record [
 --     | '*' NAME [type_param_starred_default]
 --     | '**' NAME [type_param_default]
 
-typeParameter :: Binding
+typeParameter :: TypeDefinition
 typeParameter = def "TypeParameter" $ T.union [
   "simple">: python "SimpleTypeParameter",
   "star">: python "StarTypeParameter",
   "doubleStar">: python "DoubleStarTypeParameter"]
 
-valuePattern :: Binding
+valuePattern :: TypeDefinition
 valuePattern = def "ValuePattern" $ T.wrap $ python "Attribute"
 
 -- attr:
 --     | name_or_attr '.' NAME
 
-yieldExpression :: Binding
+yieldExpression :: TypeDefinition
 yieldExpression = def "YieldExpression" $ T.union [
   "from">: python "Expression",
   "simple">: T.list $ python "StarExpression"]
@@ -1433,7 +1433,7 @@ yieldExpression = def "YieldExpression" $ T.union [
 
 -- star_named_expressions: ','.star_named_expression+ [',']
 
-assignmentExpression :: Binding
+assignmentExpression :: TypeDefinition
 assignmentExpression = def "AssignmentExpression" $ T.record [
   "name">: python "Name",
   "expression">: python "Expression"]
@@ -1442,7 +1442,7 @@ assignmentExpression = def "AssignmentExpression" $ T.record [
 --     | assignment_expression
 --     | expression !':='
 
-atom :: Binding
+atom :: TypeDefinition
 atom = def "Atom" $ T.union [
   "name">: python "Name",
   "true">: T.unit,
@@ -1464,7 +1464,7 @@ atom = def "Atom" $ T.union [
 -- group:
 --     | '(' (yield_expr | named_expression) ')'
 
-awaitPrimary :: Binding
+awaitPrimary :: TypeDefinition
 awaitPrimary = def "AwaitPrimary" $ T.record [
   "await">: T.boolean,
   "primary">: python "Primary"]
@@ -1476,7 +1476,7 @@ awaitPrimary = def "AwaitPrimary" $ T.record [
 --     | primary '[' slices ']'
 --     | atom
 
-bitwiseAnd :: Binding
+bitwiseAnd :: TypeDefinition
 bitwiseAnd = def "BitwiseAnd" $ T.record [
   "lhs">: T.maybe $ python "BitwiseAnd",
   "rhs">: python "ShiftExpression"]
@@ -1486,7 +1486,7 @@ bitwiseAnd = def "BitwiseAnd" $ T.record [
 --     | shift_expr '>>' sum
 --     | sum
 
-bitwiseOr :: Binding
+bitwiseOr :: TypeDefinition
 bitwiseOr = def "BitwiseOr" $ T.record [
   "lhs">: T.maybe $ python "BitwiseOr",
   "rhs">: python "BitwiseXor"]
@@ -1495,7 +1495,7 @@ bitwiseOr = def "BitwiseOr" $ T.record [
 --     | bitwise_xor '^' bitwise_and
 --     | bitwise_and
 
-bitwiseXor :: Binding
+bitwiseXor :: TypeDefinition
 bitwiseXor = def "BitwiseXor" $ T.record [
   "lhs">: T.maybe $ python "BitwiseXor",
   "rhs">: python "BitwiseAnd"]
@@ -1504,7 +1504,7 @@ bitwiseXor = def "BitwiseXor" $ T.record [
 --     | bitwise_and '&' shift_expr
 --     | shift_expr
 
-compareOp :: Binding
+compareOp :: TypeDefinition
 compareOp = def "CompareOp" $ T.enum [
   "eq", "noteq", "lte", "lt", "gte", "gt", "notin", "in", "isnot", "is"]
 
@@ -1527,12 +1527,12 @@ compareOp = def "CompareOp" $ T.enum [
 --     | bitwise_or '|' bitwise_xor
 --     | bitwise_xor
 
-compareOpBitwiseOrPair :: Binding
+compareOpBitwiseOrPair :: TypeDefinition
 compareOpBitwiseOrPair = def "CompareOpBitwiseOrPair" $ T.record [
   "operator">: python "CompareOp",
   "rhs">: python "BitwiseOr"]
 
-comparison :: Binding
+comparison :: TypeDefinition
 comparison = def "Comparison" $ T.record [
   "lhs">: python "BitwiseOr",
   "rhs">: T.list $ python "CompareOpBitwiseOrPair"]
@@ -1549,21 +1549,21 @@ comparison = def "Comparison" $ T.record [
 --     | isnot_bitwise_or
 --     | is_bitwise_or
 
-conjunction :: Binding
+conjunction :: TypeDefinition
 conjunction = def "Conjunction" $ T.wrap $ nonemptyList $ python "Inversion"
 
 -- inversion:
 --     | 'not' inversion
 --     | comparison
 
-disjunction :: Binding
+disjunction :: TypeDefinition
 disjunction = def "Disjunction" $ T.wrap $ nonemptyList $ python "Conjunction"
 
 -- conjunction:
 --     | inversion ('and' inversion )+
 --     | inversion
 
-factor :: Binding
+factor :: TypeDefinition
 factor = def "Factor" $ T.union [
   "positive">: python "Factor",
   "negative">: python "Factor",
@@ -1574,7 +1574,7 @@ factor = def "Factor" $ T.union [
 --     | await_primary '**' factor
 --     | await_primary
 
-group :: Binding
+group :: TypeDefinition
 group = def "Group" $ T.union [
   "yield">: python "YieldExpression",
   "expression">: python "NamedExpression"]
@@ -1585,7 +1585,7 @@ group = def "Group" $ T.union [
 -- lambdef:
 --     | 'lambda' [lambda_params] ':' expression
 
-inversion :: Binding
+inversion :: TypeDefinition
 inversion = def "Inversion" $ T.union [
   "not">: python "Inversion",
   "simple">: python "Comparison"]
@@ -1597,14 +1597,14 @@ inversion = def "Inversion" $ T.union [
 --     | bitwise_or compare_op_bitwise_or_pair+
 --     | bitwise_or
 
-lambdaKwds :: Binding
+lambdaKwds :: TypeDefinition
 lambdaKwds = def "LambdaKwds" $ T.wrap $ python "LambdaParamNoDefault"
 
 -- lambda_param_no_default:
 --     | lambda_param ','
 --     | lambda_param &':'
 
-lambdaParamMaybeDefault :: Binding
+lambdaParamMaybeDefault :: TypeDefinition
 lambdaParamMaybeDefault = def "LambdaParamMaybeDefault" $ T.record [
   "param">: python "Name",
   "default">: T.maybe $ python "Default"]
@@ -1626,14 +1626,14 @@ lambdaParamMaybeDefault = def "LambdaParamMaybeDefault" $ T.record [
 -- list:
 --     | '[' [star_named_expressions] ']'
 
-lambdaParamNoDefault :: Binding
+lambdaParamNoDefault :: TypeDefinition
 lambdaParamNoDefault = def "LambdaParamNoDefault" $ T.wrap $ python "Name"
 
 -- lambda_param_with_default:
 --     | lambda_param default ','
 --     | lambda_param default &':'
 
-lambdaParamWithDefault :: Binding
+lambdaParamWithDefault :: TypeDefinition
 lambdaParamWithDefault = def "LambdaParamWithDefault" $ T.record [
   "param">: python "Name",
   "default">: T.maybe $ python "Default"]
@@ -1642,7 +1642,7 @@ lambdaParamWithDefault = def "LambdaParamWithDefault" $ T.record [
 --     | lambda_param default? ','
 --     | lambda_param default? &':'
 
-lambdaParameters :: Binding
+lambdaParameters :: TypeDefinition
 lambdaParameters = def "LambdaParameters" $ T.record [
   "slashNoDefault">: T.maybe $ python "LambdaSlashNoDefault",
   "paramNoDefault">: T.list $ python "LambdaParamNoDefault",
@@ -1653,7 +1653,7 @@ lambdaParameters = def "LambdaParameters" $ T.record [
 --     | lambda_param_no_default+ '/' ','
 --     | lambda_param_no_default+ '/' &':'
 
-lambdaSlashNoDefault :: Binding
+lambdaSlashNoDefault :: TypeDefinition
 lambdaSlashNoDefault = def "LambdaSlashNoDefault" $ T.record [
   "parameters">: T.list $ python "LambdaParamNoDefault"]
 
@@ -1661,7 +1661,7 @@ lambdaSlashNoDefault = def "LambdaSlashNoDefault" $ T.record [
 --     | lambda_param_no_default* lambda_param_with_default+ '/' ','
 --     | lambda_param_no_default* lambda_param_with_default+ '/' &':'
 
-lambdaSlashWithDefault :: Binding
+lambdaSlashWithDefault :: TypeDefinition
 lambdaSlashWithDefault = def "LambdaSlashWithDefault" $ T.record [
   "paramNoDefault">: T.list $ python "LambdaParamNoDefault",
   "paramWithDefault">: nonemptyList $ python "LambdaParamWithDefault"]
@@ -1671,7 +1671,7 @@ lambdaSlashWithDefault = def "LambdaSlashWithDefault" $ T.record [
 --     | '*' ',' lambda_param_maybe_default+ [lambda_kwds]
 --     | lambda_kwds
 
-lambdaStarEtc :: Binding
+lambdaStarEtc :: TypeDefinition
 lambdaStarEtc = def "LambdaStarEtc" $ T.union [
   "star">: T.boolean,
   "paramNoDefault">: python "LambdaParamNoDefault",
@@ -1681,7 +1681,7 @@ lambdaStarEtc = def "LambdaStarEtc" $ T.union [
 -- lambda_kwds:
 --     | '**' lambda_param_no_default
 
-lambda_ :: Binding
+lambda_ :: TypeDefinition
 lambda_ = def "Lambda" $ T.record [
   "params">: python "LambdaParameters",
   "body">: python "Expression"]
@@ -1700,13 +1700,13 @@ lambda_ = def "Lambda" $ T.record [
 --     | lambda_param_with_default+ [lambda_star_etc]
 --     | lambda_star_etc
 
-list :: Binding
+list :: TypeDefinition
 list = def "List" $ T.wrap $ T.list $ python "StarNamedExpression"
 
 -- tuple:
 --     | '(' [star_named_expression ',' [star_named_expressions]  ] ')'
 
-namedExpression :: Binding
+namedExpression :: TypeDefinition
 namedExpression = def "NamedExpression" $ T.union [
   "assignment">: python "AssignmentExpression",
   "simple">: python "Expression"]
@@ -1715,7 +1715,7 @@ namedExpression = def "NamedExpression" $ T.union [
 --     | conjunction ('or' conjunction )+
 --     | conjunction
 
-power :: Binding
+power :: TypeDefinition
 power = def "Power" $ T.record [
   "lhs">: python "AwaitPrimary",
   "rhs">: T.maybe $ python "Factor"]
@@ -1729,12 +1729,12 @@ power = def "Power" $ T.record [
 --     | 'await' primary
 --     | primary
 
-primary :: Binding
+primary :: TypeDefinition
 primary = def "Primary" $ T.union [
   "simple">: python "Atom",
   "compound">: python "PrimaryWithRhs"]
 
-primaryRhs :: Binding
+primaryRhs :: TypeDefinition
 primaryRhs = def "PrimaryRhs" $ T.union [
   "project">: python "Name",
   "genexp">: python "Genexp",
@@ -1745,22 +1745,22 @@ primaryRhs = def "PrimaryRhs" $ T.union [
 --     | slice !','
 --     | ','.(slice | starred_expression)+ [',']
 
-primaryWithRhs :: Binding
+primaryWithRhs :: TypeDefinition
 primaryWithRhs = def "PrimaryWithRhs" $ T.record [
   "primary">: python "Primary",
   "rhs">: python "PrimaryRhs"]
 
-shiftExpression :: Binding
+shiftExpression :: TypeDefinition
 shiftExpression = def "ShiftExpression" $ T.record [
   "lhs">: T.maybe $ python "ShiftLhs",
   "rhs">: python "Sum"]
 
-shiftLhs :: Binding
+shiftLhs :: TypeDefinition
 shiftLhs = def "ShiftLhs" $ T.record [
   "operand">: python "ShiftExpression",
   "operator">: python "ShiftOp"]
 
-shiftOp :: Binding
+shiftOp :: TypeDefinition
 shiftOp = def "ShiftOp" $ T.enum [
   "left", "right"]
 
@@ -1772,12 +1772,12 @@ shiftOp = def "ShiftOp" $ T.enum [
 --     | sum '-' term
 --     | term
 
-slice :: Binding
+slice :: TypeDefinition
 slice = def "Slice" $ T.union [
   "named">: python "NamedExpression",
   "slice_">: python "SliceExpression"]
 
-sliceExpression :: Binding
+sliceExpression :: TypeDefinition
 sliceExpression = def "SliceExpression" $ T.record [
   "start">: T.maybe $ python "Expression",
   "stop">: T.maybe $ python "Expression",
@@ -1795,7 +1795,7 @@ sliceExpression = def "SliceExpression" $ T.record [
 --     | (dict | set | dictcomp | setcomp)
 --     | '...'
 
-sliceOrStarredExpression :: Binding
+sliceOrStarredExpression :: TypeDefinition
 sliceOrStarredExpression = def "SliceOrStarredExpression" $ T.union [
   "slice">: python "Slice",
   "starred">: python "StarredExpression"]
@@ -1804,12 +1804,12 @@ sliceOrStarredExpression = def "SliceOrStarredExpression" $ T.union [
 --     | [expression] ':' [expression] [':' [expression] ]
 --     | named_expression
 
-slices :: Binding
+slices :: TypeDefinition
 slices = def "Slices" $ T.record [
   "head">: python "Slice",
   "tail">: T.list $ python "SliceOrStarredExpression"]
 
-starNamedExpression :: Binding
+starNamedExpression :: TypeDefinition
 starNamedExpression = def "StarNamedExpression" $ T.union [
   "star">: python "BitwiseOr",
   "simple">: python "NamedExpression"]
@@ -1817,19 +1817,19 @@ starNamedExpression = def "StarNamedExpression" $ T.union [
 -- assignment_expression:
 --     | NAME ':=' ~ expression
 
-starNamedExpressions :: Binding
+starNamedExpressions :: TypeDefinition
 starNamedExpressions = def "StarNamedExpressions" $ T.wrap $ nonemptyList $ python "StarNamedExpression"
 
 -- star_named_expression:
 --     | '*' bitwise_or
 --     | named_expression
 
-sumLhs :: Binding
+sumLhs :: TypeDefinition
 sumLhs = def "SumLhs" $ T.record [
   "operand">: python "Sum",
   "operator">: python "SumOp"]
 
-sumOp :: Binding
+sumOp :: TypeDefinition
 sumOp = def "SumOp" $ T.enum [
   "add", "sub"]
 
@@ -1841,22 +1841,22 @@ sumOp = def "SumOp" $ T.enum [
 --     | term '@' factor
 --     | factor
 
-sum_ :: Binding
+sum_ :: TypeDefinition
 sum_ = def "Sum" $ T.record [
   "lhs">: T.maybe $ python "SumLhs",
   "rhs">: python "Term"]
 
-term :: Binding
+term :: TypeDefinition
 term = def "Term" $ T.record [
   "lhs">: T.maybe $ python "TermLhs",
   "rhs">: python "Factor"]
 
-termLhs :: Binding
+termLhs :: TypeDefinition
 termLhs = def "TermLhs" $ T.record [
   "operand">: python "Term",
   "operator">: python "TermOp"]
 
-termOp :: Binding
+termOp :: TypeDefinition
 termOp = def "TermOp" $ T.enum [
   "mul", "div", "floordiv", "mod", "matmul"]
 
@@ -1866,12 +1866,12 @@ termOp = def "TermOp" $ T.enum [
 --     | '~' factor
 --     | power
 
-tuple :: Binding
+tuple :: TypeDefinition
 tuple = def "Tuple" $ T.wrap $ T.list $ python "StarNamedExpression"
 
 -- set: '{' star_named_expressions '}'
 
-dict :: Binding
+dict :: TypeDefinition
 dict = def "Dict" $ T.wrap $ T.list $ python "DoubleStarredKvpair"
 
 -- double_starred_kvpairs: ','.double_starred_kvpair+ [',']
@@ -1880,12 +1880,12 @@ dict = def "Dict" $ T.wrap $ T.list $ python "DoubleStarredKvpair"
 --     | '**' bitwise_or
 --     | kvpair
 
-doubleStarredKvpair :: Binding
+doubleStarredKvpair :: TypeDefinition
 doubleStarredKvpair = def "DoubleStarredKvpair" $ T.union [
   "starred">: python "BitwiseOr",
   "pair">: python "Kvpair"]
 
-set :: Binding
+set :: TypeDefinition
 set = def "Set" $ T.wrap $ nonemptyList $ python "StarNamedExpression"
 
 -- # Dicts
@@ -1896,13 +1896,13 @@ set = def "Set" $ T.wrap $ nonemptyList $ python "StarNamedExpression"
 
 -- kvpair: expression ':' expression
 
-args :: Binding
+args :: TypeDefinition
 args = def "Args" $ T.record [
   "positional">: T.list $ python "PosArg",
   "kwargOrStarred">: T.list $ python "KwargOrStarred",
   "kwargOrDoubleStarred">: T.list $ python "KwargOrDoubleStarred"]
 
-delTAtom :: Binding
+delTAtom :: TypeDefinition
 delTAtom = def "DelTAtom" $ T.union [
   "name">: python "Name",
   "target">: python "DelTarget",
@@ -1921,7 +1921,7 @@ delTAtom = def "DelTAtom" $ T.union [
 --     | '**' expression
 --     | ','.expression+
 
-delTarget :: Binding
+delTarget :: TypeDefinition
 delTarget = def "DelTarget" $ T.union [
   "primaryAndName">: python "TPrimaryAndName",
   "primaryAndSlices">: python "TPrimaryAndSlices",
@@ -1933,7 +1933,7 @@ delTarget = def "DelTarget" $ T.union [
 --     | '(' [del_targets] ')'
 --     | '[' [del_targets] ']'
 
-delTargets :: Binding
+delTargets :: TypeDefinition
 delTargets = def "DelTargets" $ T.wrap $ nonemptyList $ python "DelTarget"
 
 -- del_target:
@@ -1941,7 +1941,7 @@ delTargets = def "DelTargets" $ T.wrap $ nonemptyList $ python "DelTarget"
 --     | t_primary '[' slices ']' !t_lookahead
 --     | del_t_atom
 
-dictcomp :: Binding
+dictcomp :: TypeDefinition
 dictcomp = def "Dictcomp" $ T.record [
   "kvpair">: python "Kvpair",
   "forIfClauses">: python "ForIfClauses"]
@@ -1956,7 +1956,7 @@ dictcomp = def "Dictcomp" $ T.record [
 --     | ','.(starred_expression | ( assignment_expression | expression !':=') !'=')+ [',' kwargs ]
 --     | kwargs
 
-forIfClause :: Binding
+forIfClause :: TypeDefinition
 forIfClause = def "ForIfClause" $ T.record [
   "async">: T.boolean,
   "targets">: nonemptyList $ python "StarTarget",
@@ -1966,22 +1966,22 @@ forIfClause = def "ForIfClause" $ T.record [
 -- listcomp:
 --     | '[' named_expression for_if_clauses ']'
 
-forIfClauses :: Binding
+forIfClauses :: TypeDefinition
 forIfClauses = def "ForIfClauses" $ T.wrap $ nonemptyList $ python "ForIfClause"
 
 -- for_if_clause:
 --     | 'async' 'for' star_targets 'in' ~ disjunction ('if' disjunction )*
 --     | 'for' star_targets 'in' ~ disjunction ('if' disjunction )*
 
-funcTypeComment :: Binding
+funcTypeComment :: TypeDefinition
 funcTypeComment = def "FuncTypeComment" $ T.wrap $ python "TypeComment"
 
-genexp :: Binding
+genexp :: TypeDefinition
 genexp = def "Genexp" $ T.record [
   "head">: python "GenexpHead",
   "tail">: python "ForIfClauses"]
 
-genexpHead :: Binding
+genexpHead :: TypeDefinition
 genexpHead = def "GenexpHead" $ T.union [
   "assignment">: python "AssignmentExpression",
   "expression">: python "Expression"]
@@ -1989,7 +1989,7 @@ genexpHead = def "GenexpHead" $ T.union [
 -- dictcomp:
 --     | '{' kvpair for_if_clauses '}'
 
-kvpair :: Binding
+kvpair :: TypeDefinition
 kvpair = def "Kvpair" $ T.record [
   "key">: python "Expression",
   "value">: python "Expression"]
@@ -2000,7 +2000,7 @@ kvpair = def "Kvpair" $ T.record [
 -- for_if_clauses:
 --     | for_if_clause+
 
-kwarg :: Binding
+kwarg :: TypeDefinition
 kwarg = def "Kwarg" $ T.record [
   "name">: python "Name",
   "value">: python "Expression"]
@@ -2009,7 +2009,7 @@ kwarg = def "Kwarg" $ T.record [
 --     | NAME '=' expression
 --     | '**' expression
 
-kwargOrDoubleStarred :: Binding
+kwargOrDoubleStarred :: TypeDefinition
 kwargOrDoubleStarred = def "KwargOrDoubleStarred" $ T.union [
   "kwarg">: python "Kwarg",
   "doubleStarred">: python "Expression"]
@@ -2027,12 +2027,12 @@ kwargOrDoubleStarred = def "KwargOrDoubleStarred" $ T.union [
 --
 -- star_targets_list_seq: ','.star_target+ [',']
 
-kwargOrStarred :: Binding
+kwargOrStarred :: TypeDefinition
 kwargOrStarred = def "KwargOrStarred" $ T.union [
   "kwarg">: python "Kwarg",
   "starred">: python "StarredExpression"]
 
-listcomp :: Binding
+listcomp :: TypeDefinition
 listcomp = def "Listcomp" $ T.record [
   "expression">: python "NamedExpression",
   "forIfClauses">: python "ForIfClauses"]
@@ -2040,7 +2040,7 @@ listcomp = def "Listcomp" $ T.record [
 -- setcomp:
 --     | '{' named_expression for_if_clauses '}'
 
-posArg :: Binding
+posArg :: TypeDefinition
 posArg = def "PosArg" $ T.union [
   "starred">: python "StarredExpression",
   "assignment">: python "AssignmentExpression",
@@ -2054,7 +2054,7 @@ posArg = def "PosArg" $ T.union [
 -- starred_expression:
 --     | '*' expression
 
-setcomp :: Binding
+setcomp :: TypeDefinition
 setcomp = def "Setcomp" $ T.record [
   "expression">: python "NamedExpression",
   "forIfClauses">: python "ForIfClauses"]
@@ -2062,7 +2062,7 @@ setcomp = def "Setcomp" $ T.record [
 -- genexp:
 --     | '(' ( assignment_expression | expression !':=') for_if_clauses ')'
 
-singleSubscriptAttributeTarget :: Binding
+singleSubscriptAttributeTarget :: TypeDefinition
 singleSubscriptAttributeTarget = def "SingleSubscriptAttributeTarget" $ T.union [
   "primaryAndName">: python "TPrimaryAndName",
   "primaryAndSlices">: python "TPrimaryAndSlices"]
@@ -2074,7 +2074,7 @@ singleSubscriptAttributeTarget = def "SingleSubscriptAttributeTarget" $ T.union 
 --     | t_primary '(' [arguments] ')' &t_lookahead
 --     | atom &t_lookahead
 
-singleTarget :: Binding
+singleTarget :: TypeDefinition
 singleTarget = def "SingleTarget" $ T.union [
   "subscriptAttributeTarget">: python "SingleSubscriptAttributeTarget",
   "name">: python "Name",
@@ -2084,7 +2084,7 @@ singleTarget = def "SingleTarget" $ T.union [
 --     | t_primary '.' NAME !t_lookahead
 --     | t_primary '[' slices ']' !t_lookahead
 
-starAtom :: Binding
+starAtom :: TypeDefinition
 starAtom = def "StarAtom" $ T.union [
   "name">: python "Name",
   "targetWithStarAtom">: python "TargetWithStarAtom",
@@ -2096,7 +2096,7 @@ starAtom = def "StarAtom" $ T.union [
 --     | NAME
 --     | '(' single_target ')'
 
-starTarget :: Binding
+starTarget :: TypeDefinition
 starTarget = def "StarTarget" $ T.union [
   "starred">: python "StarTarget",
   "unstarred">: python "TargetWithStarAtom"]
@@ -2106,28 +2106,28 @@ starTarget = def "StarTarget" $ T.union [
 --     | t_primary '[' slices ']' !t_lookahead
 --     | star_atom
 
-starTargetsListSeq :: Binding
+starTargetsListSeq :: TypeDefinition
 starTargetsListSeq = def "StarTargetsListSeq" $ T.wrap $ nonemptyList $ python "StarTarget"
 
 -- star_targets_tuple_seq:
 --     | star_target (',' star_target )+ [',']
 --     | star_target ','
 
-starTargetsTupleSeq :: Binding
+starTargetsTupleSeq :: TypeDefinition
 starTargetsTupleSeq = def "StarTargetsTupleSeq" $ T.wrap $ nonemptyList $ python "StarTarget"
 
 -- star_target:
 --     | '*' (!'*' star_target)
 --     | target_with_star_atom
 
-starredExpression :: Binding
+starredExpression :: TypeDefinition
 starredExpression = def "StarredExpression" $ T.wrap $ python "Expression"
 
 -- kwarg_or_starred:
 --     | NAME '=' expression
 --     | starred_expression
 
-tPrimary :: Binding
+tPrimary :: TypeDefinition
 tPrimary = def "TPrimary" $ T.union [
   "primaryAndName">: python "TPrimaryAndName",
   "primaryAndSlices">: python "TPrimaryAndSlices",
@@ -2135,7 +2135,7 @@ tPrimary = def "TPrimary" $ T.union [
   "primaryAndArguments">: python "TPrimaryAndArguments",
   "atom">: python "Atom"]
 
-tPrimaryAndArguments :: Binding
+tPrimaryAndArguments :: TypeDefinition
 tPrimaryAndArguments = def "TPrimaryAndArguments" $ T.record [
   "primary">: python "TPrimary",
   "arguments">: T.maybe $ python "Args"]
@@ -2147,17 +2147,17 @@ tPrimaryAndArguments = def "TPrimaryAndArguments" $ T.record [
 --
 -- del_targets: ','.del_target+ [',']
 
-tPrimaryAndGenexp :: Binding
+tPrimaryAndGenexp :: TypeDefinition
 tPrimaryAndGenexp = def "TPrimaryAndGenexp" $ T.record [
   "primary">: python "TPrimary",
   "genexp">: python "Genexp"]
 
-tPrimaryAndName :: Binding
+tPrimaryAndName :: TypeDefinition
 tPrimaryAndName = def "TPrimaryAndName" $ T.record [
   "primary">: python "TPrimary",
   "name">: python "Name"]
 
-tPrimaryAndSlices :: Binding
+tPrimaryAndSlices :: TypeDefinition
 tPrimaryAndSlices = def "TPrimaryAndSlices" $ T.record [
   "primary">: python "TPrimary",
   "slices">: python "Slices"]
@@ -2168,13 +2168,13 @@ tPrimaryAndSlices = def "TPrimaryAndSlices" $ T.record [
 --     | '(' [star_targets_tuple_seq] ')'
 --     | '[' [star_targets_list_seq] ']'
 
-targetWithStarAtom :: Binding
+targetWithStarAtom :: TypeDefinition
 targetWithStarAtom = def "TargetWithStarAtom" $ T.union [
   "project">: python "TPrimaryAndName",
   "slices">: python "TPrimaryAndSlices",
   "atom">: python "StarAtom"]
 
-typeExpression :: Binding
+typeExpression :: TypeDefinition
 typeExpression = def "TypeExpression" $ T.union [
   "expression">: python "Expression",
   "starredExpression">: python "Expression",

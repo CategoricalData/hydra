@@ -14,13 +14,13 @@ import qualified Data.Map as M
 ns :: ModuleName
 ns = ModuleName "hydra.core"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [ns],
             moduleDescription = Just "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies."}
   where
@@ -59,7 +59,7 @@ module_ = Module {
       typeVariableMetadata,
       wrappedTerm]
 
-annotatedTerm :: Binding
+annotatedTerm :: TypeDefinition
 annotatedTerm = define "AnnotatedTerm" $
   doc "A term together with an annotation" $
   T.record [
@@ -70,7 +70,7 @@ annotatedTerm = define "AnnotatedTerm" $
       doc "The annotation as a map from keys to values" $
       T.map name term]
 
-annotatedType :: Binding
+annotatedType :: TypeDefinition
 annotatedType = define "AnnotatedType" $
   doc "A type together with an annotation" $
   T.record [
@@ -81,7 +81,7 @@ annotatedType = define "AnnotatedType" $
       doc "The annotation as a map from keys to values" $
       T.map name term]
 
-application :: Binding
+application :: TypeDefinition
 application = define "Application" $
   doc "A term which applies a function to an argument" $
   T.record [
@@ -92,7 +92,7 @@ application = define "Application" $
       doc "The right-hand side of the application"
       term]
 
-applicationType :: Binding
+applicationType :: TypeDefinition
 applicationType = define "ApplicationType" $
   doc "The type-level analog of an application term" $
   T.record [
@@ -103,7 +103,7 @@ applicationType = define "ApplicationType" $
       doc "The right-hand side of the application"
       type_]
 
-binding :: Binding
+binding :: TypeDefinition
 binding = define "Binding" $
   doc "A field with an optional type scheme, used to bind variables to terms in a 'let' expression" $
   T.record [
@@ -117,7 +117,7 @@ binding = define "Binding" $
       doc "The optional type scheme of the bound term" $
       T.maybe typeScheme]
 
-caseStatement :: Binding
+caseStatement :: TypeDefinition
 caseStatement = define "CaseStatement" $
   doc "A union elimination; a case statement" $
   T.record [
@@ -132,7 +132,7 @@ caseStatement = define "CaseStatement" $
         ++ " tag being matched and term is the handler applied to the variant's payload.") $
       T.list field]
 
-eitherType :: Binding
+eitherType :: TypeDefinition
 eitherType = define "EitherType" $
   doc "A type which provides a choice between a 'left' type and a 'right' type" $
   T.record [
@@ -143,7 +143,7 @@ eitherType = define "EitherType" $
       doc "The 'right' alternative"
       type_]
 
-field :: Binding
+field :: TypeDefinition
 field = define "Field" $
   doc "A name/term pair" $
   T.record [
@@ -154,7 +154,7 @@ field = define "Field" $
       doc "The term value of the field"
       term]
 
-fieldType :: Binding
+fieldType :: TypeDefinition
 fieldType = define "FieldType" $
   doc "A name/type pair" $
   T.record [
@@ -165,7 +165,7 @@ fieldType = define "FieldType" $
       doc "The type of the field"
       type_]
 
-floatType :: Binding
+floatType :: TypeDefinition
 floatType = define "FloatType" $
   doc "A floating-point type" $
   T.union [
@@ -176,7 +176,7 @@ floatType = define "FloatType" $
       doc "A 64-bit floating-point type" $
       T.unit]
 
-floatValue :: Binding
+floatValue :: TypeDefinition
 floatValue = define "FloatValue" $
   doc "A floating-point literal value" $
   T.union [
@@ -185,7 +185,7 @@ floatValue = define "FloatValue" $
     "float64">:
       doc "A 64-bit floating-point value" T.float64]
 
-forallType :: Binding
+forallType :: TypeDefinition
 forallType = define "ForallType" $
   doc "A universally quantified type; the System F equivalent of a type scheme, and the type-level equivalent of a lambda term." $
   T.record [
@@ -196,7 +196,7 @@ forallType = define "ForallType" $
       doc "The body of the lambda"
       type_]
 
-functionType :: Binding
+functionType :: TypeDefinition
 functionType = define "FunctionType" $
   doc "A function type, also known as an arrow type" $
   T.record [
@@ -220,7 +220,7 @@ hydraCoreGraph = elementsToGraph bootstrapGraph M.empty
             (Name "type", TermVariable (Name "hydra.core.Type"))]},
         bindingTypeScheme = Just (TypeScheme [] (TypeVariable (Name "hydra.core.Type")) Nothing)}
 
-injection :: Binding
+injection :: TypeDefinition
 injection = define "Injection" $
   doc "An instance of a union type; i.e. a string-indexed generalization of inl() or inr()" $
   T.record [
@@ -231,7 +231,7 @@ injection = define "Injection" $
       doc "The field being injected, including its name and value"
       field]
 
-integerType :: Binding
+integerType :: TypeDefinition
 integerType = define "IntegerType" $
   doc "An integer type" $
   T.union [
@@ -263,7 +263,7 @@ integerType = define "IntegerType" $
       doc "A 64-bit unsigned integer type" $
       T.unit]
 
-integerValue :: Binding
+integerValue :: TypeDefinition
 integerValue = define "IntegerValue" $
   doc "An integer literal value" $
   T.union [
@@ -286,7 +286,7 @@ integerValue = define "IntegerValue" $
     "uint64">:
       doc "A 64-bit unsigned integer value (unsigned long)" T.uint64]
 
-lambda :: Binding
+lambda :: TypeDefinition
 lambda = define "Lambda" $
   doc "A function abstraction (lambda)" $
   T.record [
@@ -300,7 +300,7 @@ lambda = define "Lambda" $
       doc "The body of the lambda"
       term]
 
-let_ :: Binding
+let_ :: TypeDefinition
 let_ = define "Let" $
   doc "A set of (possibly recursive) 'let' bindings together with a body in which they are bound" $
   T.record [
@@ -311,7 +311,7 @@ let_ = define "Let" $
       doc "The body term in which the variables are bound"
       term]
 
-literal :: Binding
+literal :: TypeDefinition
 literal = define "Literal" $
   doc "A term constant; an instance of a literal type" $
   T.union [
@@ -330,7 +330,7 @@ literal = define "Literal" $
     "string">:
       doc "A string literal" T.string]
 
-literalType :: Binding
+literalType :: TypeDefinition
 literalType = define "LiteralType" $
   doc "Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants" $
   T.union [
@@ -349,7 +349,7 @@ literalType = define "LiteralType" $
     "string">:
       doc "The type of a string value" T.unit]
 
-mapType :: Binding
+mapType :: TypeDefinition
 mapType = define "MapType" $
   doc "A map type" $
   T.record [
@@ -360,12 +360,12 @@ mapType = define "MapType" $
       doc "The type of values in the map"
       type_]
 
-name :: Binding
+name :: TypeDefinition
 name = define "Name" $
   doc "A unique identifier in some context; a string-valued key" $
   T.wrap T.string
 
-pairType :: Binding
+pairType :: TypeDefinition
 pairType = define "PairType" $
   doc "A type which pairs a 'first' type and a 'second' type" $
   T.record [
@@ -376,7 +376,7 @@ pairType = define "PairType" $
       doc "The second component of the pair"
       type_]
 
-projection :: Binding
+projection :: TypeDefinition
 projection = define "Projection" $
   doc "A record elimination; a projection" $
   T.record [
@@ -387,7 +387,7 @@ projection = define "Projection" $
       doc "The name of the projected field"
       name]
 
-record :: Binding
+record :: TypeDefinition
 record = define "Record" $
   doc "A record, or labeled tuple; a map of field names to terms" $
   T.record [
@@ -398,7 +398,7 @@ record = define "Record" $
       doc "The fields of the record, as a list of name/term pairs" $
       T.list field]
 
-term :: Binding
+term :: TypeDefinition
 term = define "Term" $
   doc "A data term" $
   T.union [
@@ -467,7 +467,7 @@ term = define "Term" $
       doc "A wrapped term; an instance of a wrapper type (newtype)"
       wrappedTerm]
 
-typeApplicationTerm :: Binding
+typeApplicationTerm :: TypeDefinition
 typeApplicationTerm = define "TypeApplicationTerm" $
   doc "A term applied to a type; a type application" $
   T.record [
@@ -478,7 +478,7 @@ typeApplicationTerm = define "TypeApplicationTerm" $
       doc "The type argument"
       type_]
 
-typeClassConstraint :: Binding
+typeClassConstraint :: TypeDefinition
 typeClassConstraint = define "TypeClassConstraint" $
   doc "A type class constraint on a type variable. Currently has only one variant, but designed to be forward-compatible with multi-parameter type classes and constraints on type expressions." $
   T.union [
@@ -486,7 +486,7 @@ typeClassConstraint = define "TypeClassConstraint" $
       doc "A simple type class constraint, naming a single type class"
       name]
 
-typeLambda :: Binding
+typeLambda :: TypeDefinition
 typeLambda = define "TypeLambda" $
   doc "A System F type abstraction term" $
   T.record [
@@ -497,7 +497,7 @@ typeLambda = define "TypeLambda" $
       doc "The body of the abstraction"
       term]
 
-typeScheme :: Binding
+typeScheme :: TypeDefinition
 typeScheme = define "TypeScheme" $
   doc "A type expression together with free type variables occurring in the expression" $
   T.record [
@@ -511,7 +511,7 @@ typeScheme = define "TypeScheme" $
       doc "Optional metadata for type variables, including typeclass constraints. The map keys are type variable names." $
       T.maybe $ T.map name typeVariableMetadata]
 
-typeVariableMetadata :: Binding
+typeVariableMetadata :: TypeDefinition
 typeVariableMetadata = define "TypeVariableMetadata" $
   doc "Metadata associated with a type variable, including typeclass constraints" $
   T.record [
@@ -519,7 +519,7 @@ typeVariableMetadata = define "TypeVariableMetadata" $
       doc "The typeclass constraints on this type variable" $
       T.list typeClassConstraint]
 
-type_ :: Binding
+type_ :: TypeDefinition
 type_ = define "Type" $
   doc "A data type" $
   T.union [
@@ -577,7 +577,7 @@ type_ = define "Type" $
         ++ " is given by the `wrap` variant's argument.")
       type_]
 
-wrappedTerm :: Binding
+wrappedTerm :: TypeDefinition
 wrappedTerm = define "WrappedTerm" $
   doc "A term wrapped in a type name" $
   T.record [

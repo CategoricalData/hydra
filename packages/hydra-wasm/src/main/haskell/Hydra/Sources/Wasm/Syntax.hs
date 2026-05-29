@@ -19,13 +19,13 @@ import qualified Data.Maybe                      as Y
 ns :: ModuleName
 ns = ModuleName "hydra.wasm.syntax"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = datatype ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A WebAssembly text format (WAT) syntax model, based on the WebAssembly spec"
       ++ " (https://webassembly.github.io/spec/core/), retrieved 2026-04-06")}
@@ -105,7 +105,7 @@ module_ = Module {
 -- Module-level constructs
 -- ================================================================================================
 
-blockInstruction :: Binding
+blockInstruction :: TypeDefinition
 blockInstruction = define "BlockInstruction" $
   doc "A block or loop instruction with a label and body" $
   T.record [
@@ -119,7 +119,7 @@ blockInstruction = define "BlockInstruction" $
       doc "The instructions in the block" $
       T.list (wasm "Instruction")]
 
-blockType :: Binding
+blockType :: TypeDefinition
 blockType = define "BlockType" $
   doc "The type of a block, loop, or if instruction" $
   T.union [
@@ -133,7 +133,7 @@ blockType = define "BlockType" $
       doc "Full function type signature" $
       wasm "TypeUse"]
 
-brTableArgs :: Binding
+brTableArgs :: TypeDefinition
 brTableArgs = define "BrTableArgs" $
   doc "Arguments for a branch table instruction" $
   T.record [
@@ -144,7 +144,7 @@ brTableArgs = define "BrTableArgs" $
       doc "Default branch target" $
       T.string]
 
-constValue :: Binding
+constValue :: TypeDefinition
 constValue = define "ConstValue" $
   doc "A constant value instruction" $
   T.union [
@@ -161,7 +161,7 @@ constValue = define "ConstValue" $
       doc "A 64-bit float constant" $
       T.float64]
 
-dataMode :: Binding
+dataMode :: TypeDefinition
 dataMode = define "DataMode" $
   doc "The mode of a data segment" $
   T.union [
@@ -172,7 +172,7 @@ dataMode = define "DataMode" $
       doc "Passive segment: must be explicitly loaded via memory.init" $
       T.unit]
 
-dataSegment :: Binding
+dataSegment :: TypeDefinition
 dataSegment = define "DataSegment" $
   doc "A data segment for initializing memory" $
   T.record [
@@ -186,7 +186,7 @@ dataSegment = define "DataSegment" $
       doc "The data bytes (as a string of escaped bytes)" $
       T.string]
 
-elemActive :: Binding
+elemActive :: TypeDefinition
 elemActive = define "ElemActive" $
   doc "Active element segment parameters" $
   T.record [
@@ -197,7 +197,7 @@ elemActive = define "ElemActive" $
       doc "Offset expression" $
       T.list (wasm "Instruction")]
 
-elemMode :: Binding
+elemMode :: TypeDefinition
 elemMode = define "ElemMode" $
   doc "The mode of an element segment" $
   T.union [
@@ -211,7 +211,7 @@ elemMode = define "ElemMode" $
       doc "Declarative segment: declares function references for ref.func" $
       T.unit]
 
-elemSegment :: Binding
+elemSegment :: TypeDefinition
 elemSegment = define "ElemSegment" $
   doc "An element segment for initializing tables" $
   T.record [
@@ -228,7 +228,7 @@ elemSegment = define "ElemSegment" $
       doc "Initialization expressions (one per element)" $
       T.list (T.list (wasm "Instruction"))]
 
-exportDef :: Binding
+exportDef :: TypeDefinition
 exportDef = define "ExportDef" $
   doc "An export declaration" $
   T.record [
@@ -239,7 +239,7 @@ exportDef = define "ExportDef" $
       doc "What is being exported" $
       wasm "ExportDesc"]
 
-exportDesc :: Binding
+exportDesc :: TypeDefinition
 exportDesc = define "ExportDesc" $
   doc "An export descriptor identifying what is being exported" $
   T.union [
@@ -261,7 +261,7 @@ exportDesc = define "ExportDesc" $
 -- Literal / constant values
 -- ================================================================================================
 
-func :: Binding
+func :: TypeDefinition
 func = define "Func" $
   doc "A function definition" $
   T.record [
@@ -278,7 +278,7 @@ func = define "Func" $
       doc "The function body (a sequence of instructions)" $
       T.list (wasm "Instruction")]
 
-funcLocal :: Binding
+funcLocal :: TypeDefinition
 funcLocal = define "FuncLocal" $
   doc "A local variable declaration within a function" $
   T.record [
@@ -289,7 +289,7 @@ funcLocal = define "FuncLocal" $
       doc "The local's value type" $
       wasm "ValType"]
 
-funcType :: Binding
+funcType :: TypeDefinition
 funcType = define "FuncType" $
   doc "A function type signature" $
   T.record [
@@ -300,7 +300,7 @@ funcType = define "FuncType" $
       doc "Result types" $
       T.list (wasm "ValType")]
 
-funcTypeRef :: Binding
+funcTypeRef :: TypeDefinition
 funcTypeRef = define "FuncTypeRef" $
   doc "A reference to a function type, either by index or inline" $
   T.union [
@@ -311,7 +311,7 @@ funcTypeRef = define "FuncTypeRef" $
       doc "Inline function type" $
       wasm "FuncType"]
 
-globalDef :: Binding
+globalDef :: TypeDefinition
 globalDef = define "GlobalDef" $
   doc "A global variable definition" $
   T.record [
@@ -325,7 +325,7 @@ globalDef = define "GlobalDef" $
       doc "Initialization expression" $
       T.list (wasm "Instruction")]
 
-globalType :: Binding
+globalType :: TypeDefinition
 globalType = define "GlobalType" $
   doc "A global variable type" $
   T.record [
@@ -341,7 +341,7 @@ globalType = define "GlobalType" $
 -- Tables
 -- ================================================================================================
 
-ifInstruction :: Binding
+ifInstruction :: TypeDefinition
 ifInstruction = define "IfInstruction" $
   doc "An if-then-else instruction" $
   T.record [
@@ -363,7 +363,7 @@ ifInstruction = define "IfInstruction" $
 -- Memory
 -- ================================================================================================
 
-importDef :: Binding
+importDef :: TypeDefinition
 importDef = define "ImportDef" $
   doc "An import declaration" $
   T.record [
@@ -377,7 +377,7 @@ importDef = define "ImportDef" $
       doc "The import descriptor (what kind of entity is imported)" $
       wasm "ImportDesc"]
 
-importDesc :: Binding
+importDesc :: TypeDefinition
 importDesc = define "ImportDesc" $
   doc "An import descriptor specifying the kind of imported entity" $
   T.union [
@@ -394,7 +394,7 @@ importDesc = define "ImportDesc" $
       doc "Import a global variable" $
       wasm "ImportGlobal"]
 
-importFunc :: Binding
+importFunc :: TypeDefinition
 importFunc = define "ImportFunc" $
   doc "A function import descriptor" $
   T.record [
@@ -405,7 +405,7 @@ importFunc = define "ImportFunc" $
       doc "The function's type" $
       wasm "TypeUse"]
 
-importGlobal :: Binding
+importGlobal :: TypeDefinition
 importGlobal = define "ImportGlobal" $
   doc "A global import descriptor" $
   T.record [
@@ -416,7 +416,7 @@ importGlobal = define "ImportGlobal" $
       doc "Global type" $
       wasm "GlobalType"]
 
-importMemory :: Binding
+importMemory :: TypeDefinition
 importMemory = define "ImportMemory" $
   doc "A memory import descriptor" $
   T.record [
@@ -427,7 +427,7 @@ importMemory = define "ImportMemory" $
       doc "Memory limits" $
       wasm "Limits"]
 
-importTable :: Binding
+importTable :: TypeDefinition
 importTable = define "ImportTable" $
   doc "A table import descriptor" $
   T.record [
@@ -441,7 +441,7 @@ importTable = define "ImportTable" $
       doc "Table limits" $
       wasm "Limits"]
 
-instruction :: Binding
+instruction :: TypeDefinition
 instruction = define "Instruction" $
   doc "A WebAssembly instruction" $
   T.union [
@@ -539,7 +539,7 @@ instruction = define "Instruction" $
       doc "A raw WAT instruction string (escape hatch)" $
       T.string]
 
-limits :: Binding
+limits :: TypeDefinition
 limits = define "Limits" $
   doc "Size limits for memories and tables" $
   T.record [
@@ -555,7 +555,7 @@ limits = define "Limits" $
 -- Globals
 -- ================================================================================================
 
-memArg :: Binding
+memArg :: TypeDefinition
 memArg = define "MemArg" $
   doc "Memory access arguments" $
   T.record [
@@ -566,7 +566,7 @@ memArg = define "MemArg" $
       doc "Alignment hint (power of 2)" $
       T.int32]
 
-memoryDef :: Binding
+memoryDef :: TypeDefinition
 memoryDef = define "MemoryDef" $
   doc "A memory definition" $
   T.record [
@@ -577,7 +577,7 @@ memoryDef = define "MemoryDef" $
       doc "Memory size limits (in pages of 64KB)" $
       wasm "Limits"]
 
-memoryInstruction :: Binding
+memoryInstruction :: TypeDefinition
 memoryInstruction = define "MemoryInstruction" $
   doc "A memory load or store instruction" $
   T.record [
@@ -588,7 +588,7 @@ memoryInstruction = define "MemoryInstruction" $
       doc "Memory argument (offset and alignment)" $
       wasm "MemArg"]
 
-moduleField :: Binding
+moduleField :: TypeDefinition
 moduleField = define "ModuleField" $
   doc "A field within a WebAssembly module" $
   T.union [
@@ -628,7 +628,7 @@ moduleField = define "ModuleField" $
 -- Type system
 -- ================================================================================================
 
-numericOp :: Binding
+numericOp :: TypeDefinition
 numericOp = define "NumericOp" $
   doc "A typed numeric operation (used for unop, binop, testop, relop)" $
   T.record [
@@ -639,7 +639,7 @@ numericOp = define "NumericOp" $
       doc "Operation name (e.g., add, sub, mul, eqz, lt_s)" $
       T.string]
 
-param :: Binding
+param :: TypeDefinition
 param = define "Param" $
   doc "A function parameter declaration" $
   T.record [
@@ -655,7 +655,7 @@ param = define "Param" $
 -- Instructions
 -- ================================================================================================
 
-refType :: Binding
+refType :: TypeDefinition
 refType = define "RefType" $
   doc "A reference type for tables and reference instructions" $
   T.union [
@@ -671,7 +671,7 @@ refType = define "RefType" $
 -- Imports and exports
 -- ================================================================================================
 
-tableDef :: Binding
+tableDef :: TypeDefinition
 tableDef = define "TableDef" $
   doc "A table definition" $
   T.record [
@@ -685,7 +685,7 @@ tableDef = define "TableDef" $
       doc "Table size limits" $
       wasm "Limits"]
 
-typeDef :: Binding
+typeDef :: TypeDefinition
 typeDef = define "TypeDef" $
   doc "A named type definition in the type section" $
   T.record [
@@ -701,7 +701,7 @@ typeDef = define "TypeDef" $
 -- Function definitions
 -- ================================================================================================
 
-typeUse :: Binding
+typeUse :: TypeDefinition
 typeUse = define "TypeUse" $
   doc "A type use clause, referencing a type definition" $
   T.record [
@@ -715,7 +715,7 @@ typeUse = define "TypeUse" $
       doc "Explicit result types" $
       T.list (wasm "ValType")]
 
-valType :: Binding
+valType :: TypeDefinition
 valType = define "ValType" $
   doc "A WebAssembly value type" $
   T.union [
@@ -741,7 +741,7 @@ valType = define "ValType" $
 wasm :: String -> Type
 wasm = typeref ns
 
-wasmModule :: Binding
+wasmModule :: TypeDefinition
 wasmModule = define "Module" $
   doc "A WebAssembly module, the top-level container" $
   T.record [

@@ -19,13 +19,13 @@ import qualified Hydra.Sources.Xml.Schema    as XmlSchema
 ns :: ModuleName
 ns = ModuleName "hydra.atlas"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [XmlSchema.ns],
             moduleDescription = Just ("The Apache Atlas meta-model\n" ++
       "Based on the the org.apache.atlas.model package in the master branch as of 2022-06-01\n" ++
@@ -45,7 +45,7 @@ module_ = Module {
 atlas :: String -> Type
 atlas = typeref ns
 
-atlasAttribute :: Binding
+atlasAttribute :: TypeDefinition
 atlasAttribute = define "AtlasAttributeDef" $
   doc "class that captures details of a struct-attribute." $
   T.record [
@@ -66,13 +66,13 @@ atlasAttribute = define "AtlasAttributeDef" $
     "options">: T.map T.string T.string,
     "displayName">: T.maybe T.string]
 
-atlasAttributeDef_Cardinality :: Binding
+atlasAttributeDef_Cardinality :: TypeDefinition
 atlasAttributeDef_Cardinality = define "AtlasAttributeDef_Cardinality" $ T.enum ["single", "list", "set"]
 
-atlasAttributeDef_IndexType :: Binding
+atlasAttributeDef_IndexType :: TypeDefinition
 atlasAttributeDef_IndexType = define "AtlasAttributeDef_IndexType" $ T.enum ["default", "string"]
 
-atlasBaseType :: Binding
+atlasBaseType :: TypeDefinition
 atlasBaseType = define "AtlasBaseTypeDef" $
   doc "Base class that captures common-attributes for all Atlas types." $
   T.record [
@@ -89,14 +89,14 @@ atlasBaseType = define "AtlasBaseTypeDef" $
     "serviceType">: T.maybe T.string,
     "options">: T.map T.string T.string]
 
-atlasConstraint :: Binding
+atlasConstraint :: TypeDefinition
 atlasConstraint = define "AtlasConstraintDef" $
   doc "class that captures details of a constraint." $
   T.record [
     "type">: T.maybe T.string,
     "params">: T.map T.string T.string] -- Map<String, Object>
 
-atlasEntity :: Binding
+atlasEntity :: TypeDefinition
 atlasEntity = define "AtlasEntityDef" $
   doc "class that captures details of a entity-type." $
   T.record [
@@ -117,7 +117,7 @@ atlasEntity = define "AtlasEntityDef" $
       doc "the value of this field is derived from all the businessMetadataDefs this entityType is referenced in" $
       T.map T.string (T.list $ atlas "AtlasAttributeDef")]
 
-atlasRelationshipAttribute :: Binding
+atlasRelationshipAttribute :: TypeDefinition
 atlasRelationshipAttribute = define "AtlasRelationshipAttributeDef" $
   doc "class that captures details of a struct-attribute." $
   T.record [
@@ -125,7 +125,7 @@ atlasRelationshipAttribute = define "AtlasRelationshipAttributeDef" $
     "relationshipTypeName">: T.maybe T.string,
     "isLegacyAttribute">: T.boolean]
 
-atlasStruct :: Binding
+atlasStruct :: TypeDefinition
 atlasStruct = define "AtlasStructDef" $
   doc "class that captures details of a struct-type." $
   T.record [
@@ -133,7 +133,7 @@ atlasStruct = define "AtlasStructDef" $
 
     "attributeDefs">: T.list $ atlas "AtlasAttributeDef"]
 
-typeCategory :: Binding
+typeCategory :: TypeDefinition
 typeCategory = define "TypeCategory" $ T.enum [
   "primitive", "objectIdType", "enum", "struct", "classification", "entity", "array", "map", "relationship", "businessMetadata"]
 
