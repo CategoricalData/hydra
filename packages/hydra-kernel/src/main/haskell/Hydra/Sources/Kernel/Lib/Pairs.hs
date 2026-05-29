@@ -25,14 +25,21 @@ module_ = Module {
             moduleDescription = Just "Primitives in the hydra.lib.pairs namespace."}
   where
     definitions = [
-      toPrimitive "Map over both elements of a pair." bimapSig bimap_,
-      primNoDef "first" "Get the first element of a pair." firstSig,
-      primNoDef "second" "Get the second element of a pair." secondSig]
+      toPrimitive "Map over both elements of a pair." bimapSig (Just
+        "bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). The bifunctor map for pairs.\
+        \ Total. Corresponds to Haskell's\
+        \ Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> (a, b) -> (c, d).") bimap_,
+      primNoDef "first" "Get the first element of a pair." firstSig (Just
+        "first(p) returns the first component of the pair p. Total. Corresponds to Haskell's\
+        \ fst :: (a, b) -> a."),
+      primNoDef "second" "Get the second element of a pair." secondSig (Just
+        "second(p) returns the second component of the pair p. Total. Corresponds to Haskell's\
+        \ snd :: (a, b) -> b.")]
 
 -- Local convenience: build a no-default primitive Definition from a local name.
-primNoDef :: String -> String -> TermSignature -> Definition
-primNoDef localName description s =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName))
+primNoDef :: String -> String -> TermSignature -> Maybe String -> Definition
+primNoDef localName description s comments =
+  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName)) comments
 
 -- Local convenience: build a TermSignature from a TypeScheme.
 sig :: TypeScheme -> TermSignature

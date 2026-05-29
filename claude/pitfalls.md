@@ -157,37 +157,41 @@ wiping it is always safe and never affects shared history.
 
 Then sync forward into whatever target language consumes the regenerated coder.
 
-### Native (Java/Python) coder edits need two sync passes — or the one-pass self-propagation (#400)
+### Native (Java/Python) coder edits and the Phase-5-runs-last ordering
 
 The above is about the *legacy Haskell* coder DSL. The **native** coders
-(`packages/hydra-{java,python}/src/main/{java,python}/.../Coder.{java,py}`) have a
-sharper version of the same trap, because they are regenerated in **Phase 5 — the
-last phase**. A single `bin/sync.sh` runs Phase 2 (build `dist/haskell/hydra-<lang>`
-from the *current* `coder.json`) and Phase 3/4 (emit `dist/<target>` via the binary
-compiled from it) *before* Phase 5 overwrites `dist/json/hydra-<lang>/coder.json` with
-the new native output. So an edit to `Coder.java`/`Coder.py` reaches `coder.json` this
-pass but does not reach `dist/haskell/hydra-<lang>/` (what `bootstrap-from-json` actually
-compiles) until the *next* pass. Worse, the input digest for `dist/json/hydra-<lang>/`
-only hashes the `hydra.dsl.<lang>.*` modules, **not** `hydra.<lang>.coder`, so the second
-pass's freshness gate silently skips the regen too.
+(`packages/hydra-{java,python}/src/main/{java,python}/.../Coder.{java,py}`) are
+regenerated in **Phase 5 — the last phase**. A single `bin/sync.sh` runs Phase 2 (build
+`dist/haskell/hydra-<lang>` from the *current* `coder.json`) and Phase 3/4 (emit
+`dist/<target>` via the binary compiled from it) *before* Phase 5 overwrites
+`dist/json/hydra-<lang>/coder.json` with the native output. So in the interim dual-write
+state (Phase 1 writes `coder.json` from the legacy Haskell DSL, Phase 5 overwrites it from
+the native sources), an edit to `Coder.java`/`Coder.py` would reach `coder.json` this pass
+but not `dist/haskell/hydra-<lang>/` (what `bootstrap-from-json` compiles) until the next
+pass.
 
-Symptom: you edit the native coder, sync reports success, but generated target code is
-unchanged; and the CI consistency gate (`git diff dist/json dist/haskell`) can fail
-because the committed `dist/haskell/hydra-<lang>/Coder.hs` lags the committed `coder.json`.
+Two separate things used to make this worse; both are fixed:
 
-`bin/sync.sh`'s Phase 5 now self-propagates in one pass (#400): when the native output
-differs, it re-assembles `dist/haskell/hydra-<lang>` from the new JSON (force-dropping the
-stale output digest) and re-runs `stack build` so the binary embeds the new coder. If that
-ever regresses, the manual recovery is the same shape:
-
-```sh
-rm -f dist/haskell/hydra-<lang>/build/main/digest.json
-heads/haskell/bin/assemble-distribution.sh hydra-<lang>
-(cd heads/haskell && stack build)
-```
+- **The input digest was incomplete (#400, now fixed).** It hashed only the
+  `hydra.dsl.<lang>.*` modules, not the native-owned `hydra.<lang>.*` ones (including
+  `hydra.<lang>.coder`), so the freshness gate couldn't even see a native coder change.
+  `Hydra.Digest.discoverNamespaceFiles` now also scans the native `.java`/`.py` sources,
+  and the per-package input digest hashes the unfiltered universe, so a native edit
+  correctly invalidates `dist/json/hydra-<lang>/build/main/digest.json`. (Regression test:
+  `heads/haskell/src/test/haskell/Hydra/DigestSpec.hs`.)
+- **The one-pass lag.** `bin/sync.sh`'s Phase 5 re-assembles `dist/haskell/hydra-<lang>`
+  from the just-written native JSON and re-runs `stack build`, so the binary embeds the new
+  coder in the same pass. This re-assemble now flows through the *normal* freshness gate
+  (the input digest is honest after the #400 fix) — no output-digest force-drop. The old
+  `rm -f dist/haskell/hydra-<lang>/build/main/digest.json` hack has been removed.
 
 `dist/<target>/` (e.g. `dist/java`) is gitignored and regenerated downstream, so it is not
 part of the consistency gate and lagging it one pass is harmless.
+
+**Post-0.16 cleanup:** once the legacy Haskell DSL copies for hydra-java/hydra-python are
+deleted, the native generators become the sole writers of `dist/json/hydra-<lang>/`. The
+native DSL→JSON step should then move *ahead* of Phase 2, and the Phase-5 re-assemble block
+can be deleted entirely — there will be no producer-ordering left to reconcile.
 
 ### Scoped `bin/sync.sh --hosts X --targets X` is narrow — cross-language dists are not populated
 
@@ -900,3 +904,51 @@ isn't yours, stop and ask. Recovery is straightforward via the
 reflog (`git reset --soft <sha-of-the-merge>`) provided you notice
 quickly — but the safer rule is "verify before reset," not "recover
 after reset."
+
+### `stack build` may relink stale executables even with fresh `.hi` files
+
+Editing a file in `dist/.../Hydra/<Mod>.hs` and running `stack build`
+sometimes recompiles the module (fresh `.hi` mtime) but does *not* relink
+downstream executables. The executable in
+`.stack-work/install/.../bin/<exe>` keeps its old behavior even though the
+.hi files have changed. Symptom seen on this branch: a patched
+`Hydra/Show/Errors.error` was not visible to `update-json-kernel` after a
+clean `stack build`; the old "inference error" message kept appearing.
+
+Fix: `find .stack-work -name <exe> -type f -delete && stack build`. The
+forced relink restores the expected behavior. Suspect this any time a
+binary's behavior contradicts source you know you edited.
+
+### Bash CWD drifts across foreground `cd` and into background tasks
+
+Documented in memory but worth surfacing here too:
+- Foreground `cd /path && cmd` does *not* change CWD for the next
+  foreground Bash call. The next call still runs in the worktree root
+  (or wherever the shell snapshot left it).
+- A foreground `cd` does *not* propagate to a `run_in_background: true`
+  Bash invocation either.
+- This bites `git`, `stack`, and any path-relative tool.
+
+Default to absolute paths in Bash invocations. If you must `cd`, do it
+inside the same single Bash invocation as the work it sets up for.
+
+### Schema-extending `hydra.packaging.Module` or `Package` ramifies into DSL term sources
+
+`dist/haskell/hydra-kernel/.../Sources/Decode/Packaging.hs` and
+`Sources/Encode/Packaging.hs` contain 1500–2000 line nested-AST Hydra
+*Term* representations of the per-type encoders and decoders, generated
+during a prior `bootstrap-from-json --synthesize-sources` run. They are
+imported by `Hydra.Sources.Kernel.Terms.All` as `DecodeModule`/
+`EncodeModule` and are part of `kernelTermsModules`, so `update-json-kernel`
+infers them every run.
+
+Adding a field to `Module` or `Package` (or reordering) is therefore
+*not* a localized change: the new field must be threaded through the
+DSL term AST in both files, with carefully-matched paren counts. Worse,
+`update-json-kernel` may report success while emitting JSON that doesn't
+match the on-disk source schema, because the term-DSL files encode their
+own (now-stale) view of the schema.
+
+Issue #402 tracks the proper sequencing: (1) reorder existing fields,
+(2) add `comments`, (3) populate. Do not attempt this as a sidecar to
+unrelated work; the regen pipeline needs investigation/fix in tandem.
