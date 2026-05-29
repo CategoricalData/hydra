@@ -30,7 +30,6 @@ find :: Packaging.PrimitiveDefinition
 find =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.regex.find"),
-      Packaging.primitiveDefinitionDescription = "Find the first regex match within a string, returning the matched substring if any.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -47,14 +46,18 @@ find =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString))}},
+      Packaging.primitiveDefinitionDescription = "Find the first regex match within a string, returning the matched substring if any.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 findAll :: Packaging.PrimitiveDefinition
 findAll =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.regex.findAll"),
-      Packaging.primitiveDefinitionDescription = "Find all non-overlapping regex matches within a string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -71,14 +74,18 @@ findAll =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))}},
+      Packaging.primitiveDefinitionDescription = "Find all non-overlapping regex matches within a string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 matches :: Packaging.PrimitiveDefinition
 matches =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.regex.matches"),
-      Packaging.primitiveDefinitionDescription = "Test whether a regex matches anywhere in a string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -95,14 +102,18 @@ matches =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
+      Packaging.primitiveDefinitionDescription = "Test whether a regex matches anywhere in a string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 replace :: Packaging.PrimitiveDefinition
 replace =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.regex.replace"),
-      Packaging.primitiveDefinitionDescription = "Replace the first regex match in a string with a replacement string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -124,14 +135,18 @@ replace =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Replace the first regex match in a string with a replacement string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 replaceAll :: Packaging.PrimitiveDefinition
 replaceAll =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.regex.replaceAll"),
-      Packaging.primitiveDefinitionDescription = "Replace all non-overlapping regex matches in a string with a replacement string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -153,14 +168,18 @@ replaceAll =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Replace all non-overlapping regex matches in a string with a replacement string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 split :: Packaging.PrimitiveDefinition
 split =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.regex.split"),
-      Packaging.primitiveDefinitionDescription = "Split a string by occurrences of a regex pattern.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -177,6 +196,11 @@ split =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))}},
+      Packaging.primitiveDefinitionDescription = "Split a string by occurrences of a regex pattern.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}

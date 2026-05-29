@@ -30,7 +30,6 @@ cat :: Packaging.PrimitiveDefinition
 cat =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.strings.cat"),
-      Packaging.primitiveDefinitionDescription = "Concatenate a list of strings into a single string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -42,14 +41,18 @@ cat =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Concatenate a list of strings into a single string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 cat2 :: Packaging.PrimitiveDefinition
 cat2 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.strings.cat2"),
-      Packaging.primitiveDefinitionDescription = "Concatenate two strings.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -66,14 +69,18 @@ cat2 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Concatenate two strings.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 fromList :: Packaging.PrimitiveDefinition
 fromList =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.strings.fromList"),
-      Packaging.primitiveDefinitionDescription = "Convert a list of Unicode code points to a string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -85,14 +92,18 @@ fromList =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Convert a list of Unicode code points to a string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 intercalate :: Packaging.PrimitiveDefinition
 intercalate =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.strings.intercalate"),
-      Packaging.primitiveDefinitionDescription = "Join a list of strings with a separator between each element.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -109,14 +120,18 @@ intercalate =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Join a list of strings with a separator between each element.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 length :: Packaging.PrimitiveDefinition
 length =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.strings.length"),
-      Packaging.primitiveDefinitionDescription = "Return the length of a string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -128,14 +143,18 @@ length =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}},
+      Packaging.primitiveDefinitionDescription = "Return the length of a string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 lines :: Packaging.PrimitiveDefinition
 lines =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.strings.lines"),
-      Packaging.primitiveDefinitionDescription = "Split a string into lines.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -147,14 +166,18 @@ lines =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))}},
+      Packaging.primitiveDefinitionDescription = "Split a string into lines.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 maybeCharAt :: Packaging.PrimitiveDefinition
 maybeCharAt =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.strings.maybeCharAt"),
-      Packaging.primitiveDefinitionDescription = "Get the Unicode code point of the character at a specific index, returning Nothing if out of bounds.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -171,14 +194,18 @@ maybeCharAt =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}},
+      Packaging.primitiveDefinitionDescription = "Get the Unicode code point of the character at a specific index, returning Nothing if out of bounds.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 null :: Packaging.PrimitiveDefinition
 null =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.strings.null"),
-      Packaging.primitiveDefinitionDescription = "Check whether a string is empty.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -190,14 +217,18 @@ null =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
+      Packaging.primitiveDefinitionDescription = "Check whether a string is empty.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 splitOn :: Packaging.PrimitiveDefinition
 splitOn =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.strings.splitOn"),
-      Packaging.primitiveDefinitionDescription = "Split a string on a delimiter string.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -214,14 +245,18 @@ splitOn =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))}},
+      Packaging.primitiveDefinitionDescription = "Split a string on a delimiter string.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 toList :: Packaging.PrimitiveDefinition
 toList =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.strings.toList"),
-      Packaging.primitiveDefinitionDescription = "Convert a string to a list of Unicode code points.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -233,14 +268,18 @@ toList =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}},
+      Packaging.primitiveDefinitionDescription = "Convert a string to a list of Unicode code points.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 toLower :: Packaging.PrimitiveDefinition
 toLower =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.strings.toLower"),
-      Packaging.primitiveDefinitionDescription = "Convert a string to lowercase.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -252,14 +291,18 @@ toLower =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Convert a string to lowercase.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 toUpper :: Packaging.PrimitiveDefinition
 toUpper =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.strings.toUpper"),
-      Packaging.primitiveDefinitionDescription = "Convert a string to uppercase.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -271,14 +314,18 @@ toUpper =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Convert a string to uppercase.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 unlines :: Packaging.PrimitiveDefinition
 unlines =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.strings.unlines"),
-      Packaging.primitiveDefinitionDescription = "Join a list of strings with newlines, appending a trailing newline.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -290,6 +337,11 @@ unlines =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
+      Packaging.primitiveDefinitionDescription = "Join a list of strings with newlines, appending a trailing newline.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
