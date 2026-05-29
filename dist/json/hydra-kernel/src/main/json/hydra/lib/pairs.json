@@ -31,6 +31,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.pairs.bimap",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "c"}, "domain": {"variable": "a"}}}},
@@ -48,6 +49,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.pairs.first",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"pair": {"first": {"variable": "a"}, "second": {"variable": "b"}}}}],
           "result": {"type": {"variable": "a"}},
@@ -58,6 +60,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.pairs.second",
+        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"pair": {"first": {"variable": "a"}, "second": {"variable": "b"}}}}],
           "result": {"type": {"variable": "b"}},

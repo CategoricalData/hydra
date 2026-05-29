@@ -6,6 +6,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.regex.find",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
@@ -18,6 +19,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.regex.findAll",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
@@ -30,6 +32,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.regex.matches",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
@@ -42,6 +45,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.regex.replace",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
@@ -55,6 +59,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.regex.replaceAll",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
@@ -68,6 +73,7 @@
         "isPure": true,
         "isTotal": true,
         "name": "hydra.lib.regex.split",
+        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
