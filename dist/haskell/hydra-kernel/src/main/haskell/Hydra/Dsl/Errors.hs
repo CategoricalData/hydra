@@ -3,11 +3,19 @@
 
 module Hydra.Dsl.Errors where
 import qualified Hydra.Core as Core
+import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Dsl.Error.Checking as ErrorChecking
+import qualified Hydra.Dsl.Error.Core as DslErrorCore
+import qualified Hydra.Dsl.Paths as DslPaths
+import qualified Hydra.Dsl.Typing as DslTyping
+import qualified Hydra.Dsl.Variants as DslVariants
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | DSL constructor for the hydra.errors.DecodingError wrapper

@@ -36,17 +36,18 @@ import           Prelude                     hiding ((++))
 ns :: ModuleName
 ns = ModuleName "hydra.bench.fanOut"
 
--- | Number of fanWalker definitions in the tree.
-numFanWalkers :: Int
-numFanWalkers = 400
+define :: String -> TTerm a -> TTermDefinition a
+define = definitionInModuleName ns
 
--- | Hydra-level fully-qualified name for the @k@th fanWalker.
-fanWalkerName :: Int -> Name
-fanWalkerName k = Name $ L.concat ["hydra.bench.fanOut.fanWalker", show k]
-
--- | Reference to the @k@th fanWalker.
-fanWalkerRef :: Int -> TTerm (Term -> Maybe Term)
-fanWalkerRef k = TTerm $ TermVariable (fanWalkerName k)
+module_ :: Module
+module_ = Module {
+  moduleName = ns,
+  moduleDefinitions = definitions,
+  moduleDependencies = unqualifiedDep <$> ([Strip.ns] `L.union` kernelTypesModuleNames),
+  moduleDescription = Just "Fan-out inference benchmark. Each fanWalker_K branches to three smaller fanWalkers via _Term cases — closer to real codegen DAG shape than LinearChain."
+  }
+  where
+    definitions = [toDefinition (mkFanWalker k) | k <- [0 .. numFanWalkers - 1]]
 
 -- | Indices of the three predecessors a level-k fanWalker recurses on.
 -- All three are clamped to @[0, k-1]@.
@@ -86,6 +87,14 @@ fanWalkerBody k =
          _Term_variable>>: constant $ just (var "stripped"),
          _Term_literal>>:  constant $ just (var "stripped")]
 
+-- | Hydra-level fully-qualified name for the @k@th fanWalker.
+fanWalkerName :: Int -> Name
+fanWalkerName k = Name $ L.concat ["hydra.bench.fanOut.fanWalker", show k]
+
+-- | Reference to the @k@th fanWalker.
+fanWalkerRef :: Int -> TTerm (Term -> Maybe Term)
+fanWalkerRef k = TTerm $ TermVariable (fanWalkerName k)
+
 mkFanWalker :: Int -> TTermDefinition (Term -> Maybe Term)
 mkFanWalker k =
   let (p1, p2, p3) = fanPredecessors k
@@ -97,15 +106,6 @@ mkFanWalker k =
            ", fanWalker", show p3, "."])
        $ fanWalkerBody k
 
-define :: String -> TTerm a -> TTermDefinition a
-define = definitionInModuleName ns
-
-module_ :: Module
-module_ = Module {
-  moduleName = ns,
-  moduleDefinitions = definitions,
-  moduleDependencies = unqualifiedDep <$> ([Strip.ns] `L.union` kernelTypesModuleNames),
-  moduleDescription = Just "Fan-out inference benchmark. Each fanWalker_K branches to three smaller fanWalkers via _Term cases — closer to real codegen DAG shape than LinearChain."
-  }
-  where
-    definitions = [toDefinition (mkFanWalker k) | k <- [0 .. numFanWalkers - 1]]
+-- | Number of fanWalker definitions in the tree.
+numFanWalkers :: Int
+numFanWalkers = 400

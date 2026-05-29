@@ -144,6 +144,23 @@ foldOverType = define "foldOverType" $
       @@ var "typ")]
 
 
+foldTermWithGraphAndPath :: TTermDefinition (
+  ((a -> Term -> a) -> [SubtermStep] -> Graph -> a -> Term -> a)
+  -> Graph -> a -> Term -> a)
+foldTermWithGraphAndPath = define "foldTermWithGraphAndPath" $
+  doc ("Fold over a term to produce a value, with both Graph and accessor path tracked."
+    <> " Like rewriteAndFoldTermWithGraphAndPath, but only folds without rewriting."
+    <> " The Graph is automatically updated when descending into lambdas, lets, and type lambdas.") $
+  "f" ~> "cx0" ~> "val0" ~> "term0" ~>
+  -- Wrap the user's fold function to also return the original term unchanged
+  "wrapper" <~ ("recurse" ~> "path" ~> "cx" ~> "val" ~> "term" ~>
+    "recurseForUser" <~ ("valIn" ~> "subterm" ~>
+      "r" <~ var "recurse" @@ var "valIn" @@ var "subterm" $
+      Pairs.first $ var "r") $
+    pair (var "f" @@ var "recurseForUser" @@ var "path" @@ var "cx" @@ var "val" @@ var "term") (var "term")) $
+  "result" <~ rewriteAndFoldTermWithGraphAndPath @@ var "wrapper" @@ var "cx0" @@ var "val0" @@ var "term0" $
+  Pairs.first $ var "result"
+
 mapBeneathTypeAnnotations :: TTermDefinition ((Type -> Type) -> Type -> Type)
 mapBeneathTypeAnnotations = define "mapBeneathTypeAnnotations" $
   doc "Apply a transformation to the first type beneath a chain of annotations" $
@@ -287,6 +304,53 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
 --  rewrite @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "term0"
+
+rewriteAndFoldTermWithGraph :: TTermDefinition (((a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term))
+rewriteAndFoldTermWithGraph = define "rewriteAndFoldTermWithGraph" $
+  doc ("Rewrite a term while folding to produce a value, with Graph updated as we descend into subterms."
+    <> " Combines the features of rewriteAndFoldTerm and rewriteTermWithGraph."
+    <> " The user function f receives a recurse function that handles subterm traversal and Graph management.") $
+  "f" ~> "cx0" ~> "val0" ~> "term0" ~>
+  "wrapper" <~ ("lowLevelRecurse" ~> "valAndCx" ~> "term" ~>
+    "val" <~ Pairs.first (var "valAndCx") $
+    "cx" <~ Pairs.second (var "valAndCx") $
+    "cx1" <~ (cases _Term (var "term")
+      (Just $ var "cx") [
+      _Term_lambda>>: "l" ~> Scoping.extendGraphForLambda @@ var "cx" @@ var "l",
+      _Term_let>>: "l" ~> Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
+      _Term_typeLambda>>: "tl" ~> Scoping.extendGraphForTypeLambda @@ var "cx" @@ var "tl"]) $
+    "recurseForUser" <~ ("newVal" ~> "subterm" ~>
+      "result" <~ var "lowLevelRecurse" @@ pair (var "newVal") (var "cx1") @@ var "subterm" $
+      pair (Pairs.first $ Pairs.first $ var "result") (Pairs.second $ var "result")) $
+    "fResult" <~ var "f" @@ var "recurseForUser" @@ var "cx1" @@ var "val" @@ var "term" $
+    pair (pair (Pairs.first $ var "fResult") (var "cx")) (Pairs.second $ var "fResult")) $
+  "result" <~ rewriteAndFoldTerm @@ var "wrapper" @@ pair (var "val0") (var "cx0") @@ var "term0" $
+  pair (Pairs.first $ Pairs.first $ var "result") (Pairs.second $ var "result")
+
+rewriteAndFoldTermWithGraphAndPath :: TTermDefinition (
+  ((a -> Term -> (a, Term)) -> [SubtermStep] -> Graph -> a -> Term -> (a, Term))
+  -> Graph -> a -> Term -> (a, Term))
+rewriteAndFoldTermWithGraphAndPath = define "rewriteAndFoldTermWithGraphAndPath" $
+  doc ("Rewrite a term while folding to produce a value, with both Graph and accessor path tracked."
+    <> " The path is a list of SubtermSteps representing the position from the root to the current term."
+    <> " Combines the features of rewriteAndFoldTermWithPath and Graph tracking."
+    <> " The Graph is automatically updated when descending into lambdas, lets, and type lambdas.") $
+  "f" ~> "cx0" ~> "val0" ~> "term0" ~>
+  "wrapper" <~ ("recurse" ~> "path" ~> "cxAndVal" ~> "term" ~>
+    "cx" <~ Pairs.first (var "cxAndVal") $
+    "val" <~ Pairs.second (var "cxAndVal") $
+    "cx1" <~ (cases _Term (var "term")
+      (Just $ var "cx") [
+      _Term_lambda>>: "l" ~> Scoping.extendGraphForLambda @@ var "cx" @@ var "l",
+      _Term_let>>: "l" ~> Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
+      _Term_typeLambda>>: "tl" ~> Scoping.extendGraphForTypeLambda @@ var "cx" @@ var "tl"]) $
+    "recurseForUser" <~ ("valIn" ~> "termIn" ~>
+      "result" <~ var "recurse" @@ var "path" @@ pair (var "cx1") (var "valIn") @@ var "termIn" $
+      pair (Pairs.second $ Pairs.first $ var "result") (Pairs.second $ var "result")) $
+    "fResult" <~ var "f" @@ var "recurseForUser" @@ var "path" @@ var "cx1" @@ var "val" @@ var "term" $
+    pair (pair (var "cx") (Pairs.first $ var "fResult")) (Pairs.second $ var "fResult")) $
+  "result" <~ rewriteAndFoldTermWithPath @@ var "wrapper" @@ pair (var "cx0") (var "val0") @@ var "term0" $
+  pair (Pairs.second $ Pairs.first $ var "result") (Pairs.second $ var "result")
 
 -- | Rewrite a term with path tracking, and fold a function over it.
 -- The path is the list of accessors from the root to the current term.
@@ -898,6 +962,28 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
   "rewrite" <~ ("cx" ~> "term" ~> var "f" @@ (var "forSubterms" @@ var "rewrite") @@ var "cx" @@ var "term") $
   var "rewrite" @@ var "cx0" @@ var "term0"
 
+rewriteTermWithGraph :: TTermDefinition (((Term -> Term) -> Graph -> Term -> Term) -> Graph -> Term -> Term)
+rewriteTermWithGraph = define "rewriteTermWithGraph" $
+  doc "Rewrite a term with the help of a Graph which is updated as we descend into subterms" $
+  "f" ~> "cx0" ~> "term0" ~>
+  "f2" <~ ("recurse" ~> "cx" ~> "term" ~>
+    "recurse1" <~ ("term" ~> var "recurse" @@ var "cx" @@ var "term") $
+    cases _Term (var "term") (Just $ var "f" @@ var "recurse1" @@ var "cx" @@ var "term") [
+      _Term_lambda>>: "l" ~>
+        "cx1" <~ Scoping.extendGraphForLambda @@ var "cx" @@ var "l" $
+        "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
+        var "f" @@ var "recurse2" @@ var "cx1" @@ var "term",
+      _Term_let>>: "l" ~>
+        "cx1" <~ Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l" $
+        "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
+        var "f" @@ var "recurse2" @@ var "cx1" @@ var "term",
+      _Term_typeLambda>>: "tl" ~>
+        "cx1" <~ Scoping.extendGraphForTypeLambda @@ var "cx" @@ var "tl" $
+        "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
+        var "f" @@ var "recurse2" @@ var "cx1" @@ var "term"]) $
+  "rewrite" <~ ("cx" ~> "term" ~> var "f2" @@ (var "rewrite") @@ var "cx" @@ var "term") $
+  var "rewrite" @@ var "cx0" @@ var "term0"
+
 rewriteType :: TTermDefinition (((Type -> Type) -> Type -> Type) -> Type -> Type)
 rewriteType = define "rewriteType" $
   doc "Rewrite a type with a custom transformation function. The function receives a recursive walker and the current type and decides whether to recurse, replace, or both." $
@@ -1137,89 +1223,3 @@ subtypes = define "subtypes" $
     _Type_variable>>: constant $ list ([] :: [TTerm Type]),
     _Type_void>>: constant $ list ([] :: [TTerm Type]),
     _Type_wrap>>: "nt" ~> list [var "nt"]]
-
-rewriteAndFoldTermWithGraph :: TTermDefinition (((a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term))
-rewriteAndFoldTermWithGraph = define "rewriteAndFoldTermWithGraph" $
-  doc ("Rewrite a term while folding to produce a value, with Graph updated as we descend into subterms."
-    <> " Combines the features of rewriteAndFoldTerm and rewriteTermWithGraph."
-    <> " The user function f receives a recurse function that handles subterm traversal and Graph management.") $
-  "f" ~> "cx0" ~> "val0" ~> "term0" ~>
-  "wrapper" <~ ("lowLevelRecurse" ~> "valAndCx" ~> "term" ~>
-    "val" <~ Pairs.first (var "valAndCx") $
-    "cx" <~ Pairs.second (var "valAndCx") $
-    "cx1" <~ (cases _Term (var "term")
-      (Just $ var "cx") [
-      _Term_lambda>>: "l" ~> Scoping.extendGraphForLambda @@ var "cx" @@ var "l",
-      _Term_let>>: "l" ~> Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
-      _Term_typeLambda>>: "tl" ~> Scoping.extendGraphForTypeLambda @@ var "cx" @@ var "tl"]) $
-    "recurseForUser" <~ ("newVal" ~> "subterm" ~>
-      "result" <~ var "lowLevelRecurse" @@ pair (var "newVal") (var "cx1") @@ var "subterm" $
-      pair (Pairs.first $ Pairs.first $ var "result") (Pairs.second $ var "result")) $
-    "fResult" <~ var "f" @@ var "recurseForUser" @@ var "cx1" @@ var "val" @@ var "term" $
-    pair (pair (Pairs.first $ var "fResult") (var "cx")) (Pairs.second $ var "fResult")) $
-  "result" <~ rewriteAndFoldTerm @@ var "wrapper" @@ pair (var "val0") (var "cx0") @@ var "term0" $
-  pair (Pairs.first $ Pairs.first $ var "result") (Pairs.second $ var "result")
-
-rewriteAndFoldTermWithGraphAndPath :: TTermDefinition (
-  ((a -> Term -> (a, Term)) -> [SubtermStep] -> Graph -> a -> Term -> (a, Term))
-  -> Graph -> a -> Term -> (a, Term))
-rewriteAndFoldTermWithGraphAndPath = define "rewriteAndFoldTermWithGraphAndPath" $
-  doc ("Rewrite a term while folding to produce a value, with both Graph and accessor path tracked."
-    <> " The path is a list of SubtermSteps representing the position from the root to the current term."
-    <> " Combines the features of rewriteAndFoldTermWithPath and Graph tracking."
-    <> " The Graph is automatically updated when descending into lambdas, lets, and type lambdas.") $
-  "f" ~> "cx0" ~> "val0" ~> "term0" ~>
-  "wrapper" <~ ("recurse" ~> "path" ~> "cxAndVal" ~> "term" ~>
-    "cx" <~ Pairs.first (var "cxAndVal") $
-    "val" <~ Pairs.second (var "cxAndVal") $
-    "cx1" <~ (cases _Term (var "term")
-      (Just $ var "cx") [
-      _Term_lambda>>: "l" ~> Scoping.extendGraphForLambda @@ var "cx" @@ var "l",
-      _Term_let>>: "l" ~> Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
-      _Term_typeLambda>>: "tl" ~> Scoping.extendGraphForTypeLambda @@ var "cx" @@ var "tl"]) $
-    "recurseForUser" <~ ("valIn" ~> "termIn" ~>
-      "result" <~ var "recurse" @@ var "path" @@ pair (var "cx1") (var "valIn") @@ var "termIn" $
-      pair (Pairs.second $ Pairs.first $ var "result") (Pairs.second $ var "result")) $
-    "fResult" <~ var "f" @@ var "recurseForUser" @@ var "path" @@ var "cx1" @@ var "val" @@ var "term" $
-    pair (pair (var "cx") (Pairs.first $ var "fResult")) (Pairs.second $ var "fResult")) $
-  "result" <~ rewriteAndFoldTermWithPath @@ var "wrapper" @@ pair (var "cx0") (var "val0") @@ var "term0" $
-  pair (Pairs.second $ Pairs.first $ var "result") (Pairs.second $ var "result")
-
-rewriteTermWithGraph :: TTermDefinition (((Term -> Term) -> Graph -> Term -> Term) -> Graph -> Term -> Term)
-rewriteTermWithGraph = define "rewriteTermWithGraph" $
-  doc "Rewrite a term with the help of a Graph which is updated as we descend into subterms" $
-  "f" ~> "cx0" ~> "term0" ~>
-  "f2" <~ ("recurse" ~> "cx" ~> "term" ~>
-    "recurse1" <~ ("term" ~> var "recurse" @@ var "cx" @@ var "term") $
-    cases _Term (var "term") (Just $ var "f" @@ var "recurse1" @@ var "cx" @@ var "term") [
-      _Term_lambda>>: "l" ~>
-        "cx1" <~ Scoping.extendGraphForLambda @@ var "cx" @@ var "l" $
-        "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
-        var "f" @@ var "recurse2" @@ var "cx1" @@ var "term",
-      _Term_let>>: "l" ~>
-        "cx1" <~ Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l" $
-        "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
-        var "f" @@ var "recurse2" @@ var "cx1" @@ var "term",
-      _Term_typeLambda>>: "tl" ~>
-        "cx1" <~ Scoping.extendGraphForTypeLambda @@ var "cx" @@ var "tl" $
-        "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
-        var "f" @@ var "recurse2" @@ var "cx1" @@ var "term"]) $
-  "rewrite" <~ ("cx" ~> "term" ~> var "f2" @@ (var "rewrite") @@ var "cx" @@ var "term") $
-  var "rewrite" @@ var "cx0" @@ var "term0"
-
-foldTermWithGraphAndPath :: TTermDefinition (
-  ((a -> Term -> a) -> [SubtermStep] -> Graph -> a -> Term -> a)
-  -> Graph -> a -> Term -> a)
-foldTermWithGraphAndPath = define "foldTermWithGraphAndPath" $
-  doc ("Fold over a term to produce a value, with both Graph and accessor path tracked."
-    <> " Like rewriteAndFoldTermWithGraphAndPath, but only folds without rewriting."
-    <> " The Graph is automatically updated when descending into lambdas, lets, and type lambdas.") $
-  "f" ~> "cx0" ~> "val0" ~> "term0" ~>
-  -- Wrap the user's fold function to also return the original term unchanged
-  "wrapper" <~ ("recurse" ~> "path" ~> "cx" ~> "val" ~> "term" ~>
-    "recurseForUser" <~ ("valIn" ~> "subterm" ~>
-      "r" <~ var "recurse" @@ var "valIn" @@ var "subterm" $
-      Pairs.first $ var "r") $
-    pair (var "f" @@ var "recurseForUser" @@ var "path" @@ var "cx" @@ var "val" @@ var "term") (var "term")) $
-  "result" <~ rewriteAndFoldTermWithGraphAndPath @@ var "wrapper" @@ var "cx0" @@ var "val0" @@ var "term0" $
-  Pairs.first $ var "result"

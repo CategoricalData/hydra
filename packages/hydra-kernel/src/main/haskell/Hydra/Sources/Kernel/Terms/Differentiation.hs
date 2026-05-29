@@ -78,10 +78,65 @@ module_ = Module {
       toDefinition gradient,
       toDefinition primitiveDerivative]
 
--- Helper: construct a float64 literal term from a Haskell Double
-f64 :: Double -> TTerm Term
-f64 = MetaTerms.float64
-
+-- | Differentiate a binary primitive application.
+--   bfname is the primitive name, a and b are the two arguments,
+--   da and db are their derivatives with respect to x.
+--   Returns d/dx(bfname(a, b)).
+differentiateBinary :: TTermDefinition (Name -> Term -> Term -> Term -> Term -> Term)
+differentiateBinary = define "differentiateBinary" $
+  doc "Differentiate a binary primitive application given both arguments and their derivatives" $
+  "bfname" ~> "a" ~> "b" ~> "da" ~> "db" ~>
+    -- d/dx(a + b) = da + db (both Int32 and Float64 names)
+    Logic.ifElse (Logic.or (Equality.equal (var "bfname") (encodedName _math_add))
+                           (Equality.equal (var "bfname") (encodedName _math_addFloat64)))
+        (DeepMath.addFloat64 (var "da") (var "db")) $
+      -- d/dx(a - b) = da - db
+      Logic.ifElse (Logic.or (Equality.equal (var "bfname") (encodedName _math_sub))
+                             (Equality.equal (var "bfname") (encodedName _math_subFloat64)))
+        (DeepMath.subFloat64 (var "da") (var "db")) $
+      -- d/dx(a * b) = a*db + b*da  (product rule)
+      Logic.ifElse (Logic.or (Equality.equal (var "bfname") (encodedName _math_mul))
+                             (Equality.equal (var "bfname") (encodedName _math_mulFloat64)))
+        (DeepMath.addFloat64
+          (DeepMath.mulFloat64 (var "a") (var "db"))
+          (DeepMath.mulFloat64 (var "b") (var "da"))) $
+      -- d/dx(a ^ b) = a^b * (b*da/a + db*ln(a))  (general power rule)
+      Logic.ifElse (Equality.equal (var "bfname") (encodedName _math_pow))
+        (DeepMath.mulFloat64
+          (DeepMath.pow (var "a") (var "b"))
+          (DeepMath.addFloat64
+            (DeepMath.mulFloat64 (var "db") (DeepMath.log (var "a")))
+            (DeepMath.mulFloat64
+              (DeepMath.mulFloat64 (var "b") (var "da"))
+              (DeepMath.pow (var "a") (f64 (-1.0)))))) $
+      -- d/dx(atan2(a, b)) = (b*da - a*db) / (a^2 + b^2)
+      Logic.ifElse (Equality.equal (var "bfname") (encodedName _math_atan2))
+        (DeepMath.mulFloat64
+          (DeepMath.subFloat64
+            (DeepMath.mulFloat64 (var "b") (var "da"))
+            (DeepMath.mulFloat64 (var "a") (var "db")))
+          (DeepMath.pow
+            (DeepMath.addFloat64
+              (DeepMath.mulFloat64 (var "a") (var "a"))
+              (DeepMath.mulFloat64 (var "b") (var "b")))
+            (f64 (-1.0)))) $
+      -- d/dx(logBase(a, b)) = d/dx(ln(b)/ln(a))
+      -- = (da*ln(b) is wrong)... use: logBase(a,b) = ln(b)/ln(a)
+      -- d/dx = (ln(a)*db/b - ln(b)*da/a) / (ln(a))^2
+      Logic.ifElse (Equality.equal (var "bfname") (encodedName _math_logBase))
+        (DeepMath.mulFloat64
+          (DeepMath.subFloat64
+            (DeepMath.mulFloat64
+              (DeepMath.log (var "a"))
+              (DeepMath.mulFloat64 (var "db") (DeepMath.pow (var "b") (f64 (-1.0)))))
+            (DeepMath.mulFloat64
+              (DeepMath.log (var "b"))
+              (DeepMath.mulFloat64 (var "da") (DeepMath.pow (var "a") (f64 (-1.0))))))
+          (DeepMath.pow
+            (DeepMath.mulFloat64 (DeepMath.log (var "a")) (DeepMath.log (var "a")))
+            (f64 (-1.0)))) $
+      -- Unknown binary primitive: return 0
+      f64 0.0
 
 -- | Differentiate a function term (Float64 -> Float64) with respect to its parameter.
 --   Given a lambda \x -> body, returns a lambda \x -> d(body)/dx.
@@ -226,65 +281,10 @@ differentiateTerm = define "differentiateTerm" $
     _Term_inject>>: constant $ f64 0.0,
     _Term_wrap>>: constant $ f64 0.0]
 
--- | Differentiate a binary primitive application.
---   bfname is the primitive name, a and b are the two arguments,
---   da and db are their derivatives with respect to x.
---   Returns d/dx(bfname(a, b)).
-differentiateBinary :: TTermDefinition (Name -> Term -> Term -> Term -> Term -> Term)
-differentiateBinary = define "differentiateBinary" $
-  doc "Differentiate a binary primitive application given both arguments and their derivatives" $
-  "bfname" ~> "a" ~> "b" ~> "da" ~> "db" ~>
-    -- d/dx(a + b) = da + db (both Int32 and Float64 names)
-    Logic.ifElse (Logic.or (Equality.equal (var "bfname") (encodedName _math_add))
-                           (Equality.equal (var "bfname") (encodedName _math_addFloat64)))
-        (DeepMath.addFloat64 (var "da") (var "db")) $
-      -- d/dx(a - b) = da - db
-      Logic.ifElse (Logic.or (Equality.equal (var "bfname") (encodedName _math_sub))
-                             (Equality.equal (var "bfname") (encodedName _math_subFloat64)))
-        (DeepMath.subFloat64 (var "da") (var "db")) $
-      -- d/dx(a * b) = a*db + b*da  (product rule)
-      Logic.ifElse (Logic.or (Equality.equal (var "bfname") (encodedName _math_mul))
-                             (Equality.equal (var "bfname") (encodedName _math_mulFloat64)))
-        (DeepMath.addFloat64
-          (DeepMath.mulFloat64 (var "a") (var "db"))
-          (DeepMath.mulFloat64 (var "b") (var "da"))) $
-      -- d/dx(a ^ b) = a^b * (b*da/a + db*ln(a))  (general power rule)
-      Logic.ifElse (Equality.equal (var "bfname") (encodedName _math_pow))
-        (DeepMath.mulFloat64
-          (DeepMath.pow (var "a") (var "b"))
-          (DeepMath.addFloat64
-            (DeepMath.mulFloat64 (var "db") (DeepMath.log (var "a")))
-            (DeepMath.mulFloat64
-              (DeepMath.mulFloat64 (var "b") (var "da"))
-              (DeepMath.pow (var "a") (f64 (-1.0)))))) $
-      -- d/dx(atan2(a, b)) = (b*da - a*db) / (a^2 + b^2)
-      Logic.ifElse (Equality.equal (var "bfname") (encodedName _math_atan2))
-        (DeepMath.mulFloat64
-          (DeepMath.subFloat64
-            (DeepMath.mulFloat64 (var "b") (var "da"))
-            (DeepMath.mulFloat64 (var "a") (var "db")))
-          (DeepMath.pow
-            (DeepMath.addFloat64
-              (DeepMath.mulFloat64 (var "a") (var "a"))
-              (DeepMath.mulFloat64 (var "b") (var "b")))
-            (f64 (-1.0)))) $
-      -- d/dx(logBase(a, b)) = d/dx(ln(b)/ln(a))
-      -- = (da*ln(b) is wrong)... use: logBase(a,b) = ln(b)/ln(a)
-      -- d/dx = (ln(a)*db/b - ln(b)*da/a) / (ln(a))^2
-      Logic.ifElse (Equality.equal (var "bfname") (encodedName _math_logBase))
-        (DeepMath.mulFloat64
-          (DeepMath.subFloat64
-            (DeepMath.mulFloat64
-              (DeepMath.log (var "a"))
-              (DeepMath.mulFloat64 (var "db") (DeepMath.pow (var "b") (f64 (-1.0)))))
-            (DeepMath.mulFloat64
-              (DeepMath.log (var "b"))
-              (DeepMath.mulFloat64 (var "da") (DeepMath.pow (var "a") (f64 (-1.0))))))
-          (DeepMath.pow
-            (DeepMath.mulFloat64 (DeepMath.log (var "a")) (DeepMath.log (var "a")))
-            (f64 (-1.0)))) $
-      -- Unknown binary primitive: return 0
-      f64 0.0
+-- Helper: construct a float64 literal term from a Haskell Double
+f64 :: Double -> TTerm Term
+f64 = MetaTerms.float64
+
 
 -- | Compute the gradient of a term with respect to a list of named variables.
 --   Returns a record term where each field is the partial derivative of the term

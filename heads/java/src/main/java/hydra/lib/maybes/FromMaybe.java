@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
-import hydra.context.Context;
+import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -45,7 +45,7 @@ public class FromMaybe extends PrimitiveFunction {
      * @return a function that extracts the value from an optional or returns a default
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(Either.right(args.get(0)), defaultTerm ->
             hydra.lib.eithers.Bind.apply(hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, args.get(1)), opt ->
                 Either.right(opt.isJust() ? opt.fromJust() : defaultTerm)));

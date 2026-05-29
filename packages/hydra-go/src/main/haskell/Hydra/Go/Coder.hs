@@ -13,7 +13,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Go.Language as GoLang
 import qualified Hydra.Go.Syntax as Go
 import Hydra.Go.Serde (moduleToExpr)
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Strings as Strings
 
 import qualified Data.Char as C
 import qualified Data.List as L
@@ -384,7 +384,7 @@ encodeIntegerType it st = case it of
   Core.IntegerTypeUint64 -> pure (goSimpleTypeName "uint64", st)
 
 -- | Encode a Hydra type as a Go type.
-encodeType :: Context -> Graph -> Core.Type -> GoState -> GoResult Go.Type
+encodeType :: InferenceContext -> Graph -> Core.Type -> GoState -> GoResult Go.Type
 encodeType cx g typ st = case deannotateType typ of
   Core.TypeAnnotated at -> encodeType cx g (Core.annotatedTypeBody at) st
   Core.TypeApplication at ->
@@ -500,7 +500,7 @@ encodeIntegerValue iv st = case iv of
 
 -- | Encode a Hydra term as a Go expression.
 -- If goStateExpectedType is set, use it to build local type substitutions.
-encodeTerm :: Context -> Graph -> Core.Term -> GoState -> GoResult Go.Expression
+encodeTerm :: InferenceContext -> Graph -> Core.Term -> GoState -> GoResult Go.Expression
 encodeTerm cx g term st0 = do
   -- Apply expected type to build local substitutions
   let st = case goStateExpectedType st0 of
@@ -525,7 +525,7 @@ encodeTerm cx g term st0 = do
   encodeTermInner cx g term st
 
 -- | Inner term encoding (after expected type processing).
-encodeTermInner :: Context -> Graph -> Core.Term -> GoState -> GoResult Go.Expression
+encodeTermInner :: InferenceContext -> Graph -> Core.Term -> GoState -> GoResult Go.Expression
 encodeTermInner cx g term st = case term of
   Core.TermAnnotated at -> encodeTerm cx g (Core.annotatedTermBody at) st
   Core.TermApplication app -> do
@@ -1000,7 +1000,7 @@ encodeTermInner cx g term st = case term of
 
 -- | Encode a Hydra lambda as a Go function literal.
 -- Post-#332: lambdas are a direct variant of Term (no longer wrapped in Function).
-encodeLambda :: Context -> Graph -> Core.Lambda -> GoState -> GoResult Go.Expression
+encodeLambda :: InferenceContext -> Graph -> Core.Lambda -> GoState -> GoResult Go.Expression
 encodeLambda cx g lam st = do
     let param = toGoUnexported (unName $ Core.lambdaParameter lam)
         mDomain = Core.lambdaDomain lam
@@ -1077,7 +1077,7 @@ resolvePrimRef (Core.Name name) st = case Strings.splitOn "." name of
 
 -- | Encode a Hydra record projection as a Go expression. Post-#332: takes a
 -- Projection directly (no longer wrapped in Elimination/Function).
-encodeProjection :: Context -> Graph -> Core.Projection -> Maybe Core.Term -> GoState
+encodeProjection :: InferenceContext -> Graph -> Core.Projection -> Maybe Core.Term -> GoState
   -> GoResult Go.Expression
 encodeProjection cx g proj marg st = do
     let fname = toGoExported (unName $ Core.projectionFieldName proj)
@@ -1106,7 +1106,7 @@ encodeProjection cx g proj marg st = do
 
 -- | Encode a Hydra case statement (union elimination) as a Go expression.
 -- Post-#332: takes a CaseStatement directly.
-encodeCases :: Context -> Graph -> Core.CaseStatement -> Maybe Core.Term -> GoState
+encodeCases :: InferenceContext -> Graph -> Core.CaseStatement -> Maybe Core.Term -> GoState
   -> GoResult Go.Expression
 encodeCases cx g cs marg st = do
     let csTypeName = Core.caseStatementTypeName cs
@@ -1163,7 +1163,7 @@ encodeCases cx g cs marg st = do
 
 -- | Encode a Hydra unwrap (newtype elimination) as a Go expression.
 -- Post-#332: takes a Name (the wrapped type name) directly.
-encodeUnwrap :: Context -> Graph -> Core.Name -> Maybe Core.Term -> GoState
+encodeUnwrap :: InferenceContext -> Graph -> Core.Name -> Maybe Core.Term -> GoState
   -> GoResult Go.Expression
 encodeUnwrap cx g _ marg st = case marg of
     Nothing ->
@@ -1178,7 +1178,7 @@ encodeUnwrap cx g _ marg st = case marg of
       pure (argExpr, st')
 
 -- | Encode case arms for a union type switch.
-encodeCaseArms :: Context -> Graph -> Core.Name -> [Core.Field] -> GoState
+encodeCaseArms :: InferenceContext -> Graph -> Core.Name -> [Core.Field] -> GoState
   -> GoResult [Go.TypeCaseClause]
 encodeCaseArms _ _ _ [] st = pure ([], st)
 encodeCaseArms cx g baseName (cf:cfs) st = do
@@ -1232,14 +1232,14 @@ encodeCaseArms cx g baseName (cf:cfs) st = do
 -- Helper: encode multiple items
 -- ============================================================================
 
-encodeTermList :: Context -> Graph -> [Core.Term] -> GoState -> GoResult [Go.Expression]
+encodeTermList :: InferenceContext -> Graph -> [Core.Term] -> GoState -> GoResult [Go.Expression]
 encodeTermList _ _ [] st = pure ([], st)
 encodeTermList cx g (t:ts) st = do
   (e, st1) <- encodeTerm cx g t st
   (es, st2) <- encodeTermList cx g ts st1
   pure (e:es, st2)
 
-encodeMapEntries :: Context -> Graph -> [(Core.Term, Core.Term)] -> GoState
+encodeMapEntries :: InferenceContext -> Graph -> [(Core.Term, Core.Term)] -> GoState
   -> GoResult [(Go.Expression, Go.Expression)]
 encodeMapEntries _ _ [] st = pure ([], st)
 encodeMapEntries cx g ((k,v):kvs) st = do
@@ -1248,7 +1248,7 @@ encodeMapEntries cx g ((k,v):kvs) st = do
   (rest, st3) <- encodeMapEntries cx g kvs st2
   pure ((ke, ve):rest, st3)
 
-encodeBindings :: Context -> Graph -> [Core.Binding] -> GoState -> GoResult [Go.Statement]
+encodeBindings :: InferenceContext -> Graph -> [Core.Binding] -> GoState -> GoResult [Go.Statement]
 encodeBindings _ _ [] st = pure ([], st)
 encodeBindings cx g (b:bs) st = do
   let bname = toGoUnexported (unName $ Core.bindingName b)
@@ -1343,7 +1343,7 @@ encodeBindings cx g (b:bs) st = do
                 [Go.VarSpec [goIdent bname] (Just goAnyType) [bval]]
           pure (varDecl : rest, st2')
 
-encodeFields :: Context -> Graph -> [Core.Field] -> GoState
+encodeFields :: InferenceContext -> Graph -> [Core.Field] -> GoState
   -> GoResult [(String, Go.Expression)]
 encodeFields _ _ [] st = pure ([], st)
 encodeFields cx g (f:fs) st = do
@@ -1354,7 +1354,7 @@ encodeFields cx g (f:fs) st = do
 
 -- | Encode record fields with type assertions based on declared field types.
 -- Each field value is wrapped in expr.(GoFieldType) to satisfy Go's type checker.
-encodeFieldsTyped :: Context -> Graph -> [Core.Field] -> M.Map Core.Name Core.Type -> GoState
+encodeFieldsTyped :: InferenceContext -> Graph -> [Core.Field] -> M.Map Core.Name Core.Type -> GoState
   -> GoResult [(String, Go.Expression)]
 encodeFieldsTyped _ _ [] _ st = pure ([], st)
 encodeFieldsTyped cx g (f:fs) fieldTypes st = do
@@ -1643,7 +1643,7 @@ stripTermWrappers t = case deannotateTerm t of
 -- | Coerce an expression to a target type. If the expression produces any
 -- (from any-typed encoding) and the target is a concrete type, wraps in
 -- a type assertion. For function type mismatches, wraps in an adapter.
-coerceToType :: Context -> Graph -> Go.Expression -> Core.Type -> Core.Term -> GoState
+coerceToType :: InferenceContext -> Graph -> Go.Expression -> Core.Type -> Core.Term -> GoState
   -> GoResult Go.Expression
 coerceToType cx g expr targetType sourceTerm st
   -- Function type coercion: generate an adapter wrapper
@@ -1854,7 +1854,7 @@ goTypeAssertFunc expr = Go.PrimaryExprTypeAssertion $ Go.TypeAssertionExpr
 -- ============================================================================
 
 -- | Encode a Hydra type definition as a Go top-level declaration.
-encodeTypeDefinition :: Context -> Graph -> TypeDefinition -> GoState
+encodeTypeDefinition :: InferenceContext -> Graph -> TypeDefinition -> GoState
   -> GoResult Go.TopLevelDecl
 encodeTypeDefinition cx g tdef st = do
   let name = typeDefinitionName tdef
@@ -1906,7 +1906,7 @@ goTypeAlias name typ = Go.TopLevelDeclDeclaration $ Go.DeclarationType $
   Go.TypeDecl [Go.TypeSpecAlias $ Go.AliasDecl (goIdent name) typ]
 
 -- | Encode record fields as Go struct fields.
-encodeStructFields :: Context -> Graph -> [Core.FieldType] -> GoState
+encodeStructFields :: InferenceContext -> Graph -> [Core.FieldType] -> GoState
   -> GoResult [Go.FieldDecl]
 encodeStructFields _ _ [] st = pure ([], st)
 encodeStructFields cx g (ft:fts) st = do
@@ -1917,7 +1917,7 @@ encodeStructFields cx g (ft:fts) st = do
 
 -- | Encode a union type as Go interface + variant structs.
 -- Returns a list of top-level declarations (interface + one struct per variant).
-encodeUnionType :: Context -> Graph -> String -> Maybe Go.TypeParameters
+encodeUnionType :: InferenceContext -> Graph -> String -> Maybe Go.TypeParameters
   -> [Core.FieldType] -> GoState -> GoResult [Go.TopLevelDecl]
 encodeUnionType cx g name tparams variants st = do
   -- Generate the interface with a sealed marker method
@@ -1929,7 +1929,7 @@ encodeUnionType cx g name tparams variants st = do
   (variantDecls, st') <- encodeVariantStructs cx g name tparams variants st
   pure (ifaceDecl : variantDecls, st')
 
-encodeVariantStructs :: Context -> Graph -> String -> Maybe Go.TypeParameters
+encodeVariantStructs :: InferenceContext -> Graph -> String -> Maybe Go.TypeParameters
   -> [Core.FieldType] -> GoState -> GoResult [Go.TopLevelDecl]
 encodeVariantStructs _ _ _ _ [] st = pure ([], st)
 encodeVariantStructs cx g baseName tparams (ft:fts) st = do
@@ -1967,7 +1967,7 @@ encodeVariantStructs cx g baseName tparams (ft:fts) st = do
 -- Uses any for non-scalar types to avoid the any-vs-concrete mismatch
 -- when struct literals are constructed from any-typed term expressions.
 -- Scalars (string, int*, float*, bool) keep their concrete types.
-encodeFieldType :: Context -> Graph -> Core.Type -> GoState -> GoResult Go.Type
+encodeFieldType :: InferenceContext -> Graph -> Core.Type -> GoState -> GoResult Go.Type
 encodeFieldType cx g typ st = case deannotateType typ of
   Core.TypeLiteral lt -> encodeLiteralType lt st  -- Keep scalar types
   Core.TypeUnit -> pure (goEmptyStructType, st)   -- Keep unit
@@ -1980,7 +1980,7 @@ isLocalVar (Core.Name n) = '.' `notElem` n
 -- | Encode a Hydra type for term-level usage.
 -- Unbound type variables (not in goStateTypeSubst) resolve to any.
 -- Bound type variables resolve to their substituted concrete types.
-encodeTypeForTerm :: Context -> Graph -> Core.Type -> GoState -> GoResult Go.Type
+encodeTypeForTerm :: InferenceContext -> Graph -> Core.Type -> GoState -> GoResult Go.Type
 encodeTypeForTerm = encodeType
 
 -- | Check if a Hydra type is a function type.
@@ -2138,13 +2138,13 @@ unpackForallType t = case deannotateType t of
 
 -- | Encode a Hydra term definition as a Go top-level declaration.
 -- Unpacks lambda chains into proper func declarations with typed parameters.
-encodeTermDefinition :: Context -> Graph -> TermDefinition -> GoState
+encodeTermDefinition :: InferenceContext -> Graph -> TermDefinition -> GoState
   -> GoResult Go.TopLevelDecl
 encodeTermDefinition cx g tdef st = case termDefinitionSignature tdef of
   Nothing -> failGo cx $ "Go coder requires inferred type schemes; missing on " ++ show (termDefinitionName tdef)
   Just sig -> encodeTermDefinitionWithScheme cx g tdef (termSignatureToTypeScheme sig) st
 
-encodeTermDefinitionWithScheme :: Context -> Graph -> TermDefinition -> Core.TypeScheme -> GoState
+encodeTermDefinitionWithScheme :: InferenceContext -> Graph -> TermDefinition -> Core.TypeScheme -> GoState
   -> GoResult Go.TopLevelDecl
 encodeTermDefinitionWithScheme cx g tdef tscheme st = do
   let name = termDefinitionName tdef
@@ -2349,7 +2349,7 @@ zipParams (n:ns) (t:ts) =
   Go.ParameterDecl [goIdent $ toGoUnexported (unName n)] False t : zipParams ns ts
 
 -- | Encode a list of types for term-level usage (erasing type variables).
-encodeTypesForTerm :: Context -> Graph -> [Core.Type] -> GoState -> GoResult [Go.Type]
+encodeTypesForTerm :: InferenceContext -> Graph -> [Core.Type] -> GoState -> GoResult [Go.Type]
 encodeTypesForTerm _ _ [] st = pure ([], st)
 encodeTypesForTerm cx g (t:ts) st = do
   (gt, st1) <- encodeTypeForTerm cx g t st
@@ -2584,7 +2584,7 @@ lookupCalledSchemeVars g term =
     _ -> []
 
 -- | Encode arguments with coercion to expected parameter types.
-encodeAndCoerceArgs :: Context -> Graph -> [Core.Term] -> [Core.Type] -> GoState
+encodeAndCoerceArgs :: InferenceContext -> Graph -> [Core.Term] -> [Core.Type] -> GoState
   -> GoResult [Go.Expression]
 encodeAndCoerceArgs _ _ [] _ st = pure ([], st)
 encodeAndCoerceArgs cx g (t:ts) paramTypes st = do
@@ -2601,7 +2601,7 @@ encodeAndCoerceArgs cx g (t:ts) paramTypes st = do
   pure (coerced:rest, st3)
 
 -- | Encode a list of types.
-encodeTypes :: Context -> Graph -> [Core.Type] -> GoState -> GoResult [Go.Type]
+encodeTypes :: InferenceContext -> Graph -> [Core.Type] -> GoState -> GoResult [Go.Type]
 encodeTypes _ _ [] st = pure ([], st)
 encodeTypes cx g (t:ts) st = do
   (gt, st1) <- encodeType cx g t st
@@ -2613,7 +2613,7 @@ encodeTypes cx g (t:ts) st = do
 -- ============================================================================
 
 -- | Convert a Hydra module to a map of file paths to Go source code strings.
-moduleToGo :: Module -> [Definition] -> Context -> Graph
+moduleToGo :: Module -> [Definition] -> InferenceContext -> Graph
   -> Either Error (M.Map FilePath String)
 moduleToGo mod_ defs cx g = do
   let (typeDefs, termDefs) = partitionDefinitions defs
@@ -2633,7 +2633,7 @@ moduleToGo mod_ defs cx g = do
       filePath = goNamespaceToFilePath (moduleName mod_)
   Right $ M.singleton filePath code
 
-encodeTypeDefs :: Context -> Graph -> [TypeDefinition] -> GoState
+encodeTypeDefs :: InferenceContext -> Graph -> [TypeDefinition] -> GoState
   -> GoResult [Go.TopLevelDecl]
 encodeTypeDefs _ _ [] st = pure ([], st)
 encodeTypeDefs cx g (td:tds) st = do
@@ -2657,7 +2657,7 @@ encodeTypeDefs cx g (td:tds) st = do
       (rest, st2) <- encodeTypeDefs cx g tds (st1 { goStateInTypeDef = False })
       pure (d : rest, st2)
 
-encodeTermDefs :: Context -> Graph -> [TermDefinition] -> GoState
+encodeTermDefs :: InferenceContext -> Graph -> [TermDefinition] -> GoState
   -> GoResult [Go.TopLevelDecl]
 encodeTermDefs _ _ [] st = pure ([], st)
 encodeTermDefs cx g (td:tds) st = do
@@ -2714,7 +2714,7 @@ goNamespaceToFilePath (ModuleName ns) =
 -- Error helpers
 -- ============================================================================
 
-failGo :: Context -> String -> GoResult a
+failGo :: InferenceContext -> String -> GoResult a
 failGo _ msg = Left $ ErrorOther (OtherError msg)
 
 failGoSimple :: String -> GoResult a

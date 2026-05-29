@@ -9,7 +9,7 @@ import Hydra.Demos.Genpg.Examples.Health.DatabaseSchema
 import Hydra.Demos.Genpg.Examples.Health.GraphSchema
 import Hydra.Demos.Genpg.Examples.Health.Mapping
 import Hydra.Dsl.Pg.Mappings
-import Hydra.Lib.Literals
+import Hydra.Haskell.Lib.Literals
 import Hydra.Pg.Graphson.Utils
 import qualified Hydra.Demos.Genpg.Transform as Transform
 import Hydra.Pg.Utils (lazyGraphToElements)
@@ -67,7 +67,7 @@ generateGraphSON sourceRoot tableSchemas graphMapping outputPath = do
 transformTable :: TableType -> FilePath -> [Pg.Vertex Term] -> [Pg.Edge Term] -> IO ([Pg.Vertex Term], [Pg.Edge Term])
 transformTable tableType@(TableType (RelationName tableName) _) path vspecs especs = do
     (Table _ rows) <- decodeTableIo tableType path
-    case Transform.transformTableRows emptyContext hydraCoreGraph vspecs especs tableType rows of
+    case Transform.transformTableRows emptyInferenceContext hydraCoreGraph vspecs especs tableType rows of
       Left ic -> fail $ "Error transforming " ++ tableName ++ ": " ++ ShowError.error ic
       Right v -> return v
 

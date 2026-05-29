@@ -79,15 +79,15 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-definition_ :: String -> TTerm a -> TTermDefinition a
-definition_ = definitionInModule module_
-
 module_ :: Module
 module_ = Module {
             moduleName = (ModuleName "hydra.protobuf.language"),
             moduleDefinitions = [toDefinition protobufLanguage, toDefinition protobufReservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, Strip.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints for Protobuf v3"}
+definition_ :: String -> TTerm a -> TTermDefinition a
+definition_ = definitionInModule module_
+
 protobufLanguage :: TTermDefinition Language
 protobufLanguage = definition_ "protobufLanguage" $
   doc "Language constraints for Protocol Buffers v3" $ lets [

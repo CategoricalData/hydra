@@ -19,9 +19,6 @@ ns = ModuleName "hydra.protobuf.proto3"
 define :: String -> Type -> Binding
 define = defineType ns
 
-proto3 :: String -> Type
-proto3 = typeref ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -164,6 +161,9 @@ option = define "Option" $
 packageName :: Binding
 packageName = define "PackageName" $
   T.wrap T.string
+
+proto3 :: String -> Type
+proto3 = typeref ns
 
 protoFile :: Binding
 protoFile = define "ProtoFile" $

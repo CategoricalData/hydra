@@ -94,7 +94,7 @@ timeInference :: [Module] -> Module -> IO (Double, Bool, String)
 timeInference universe target = do
     t0 <- Clock.getCurrentTime
     let result = CodeGeneration.inferModulesGiven
-                   (Context [] [] M.empty)
+                   (InferenceContext { inferenceContextFreshTypeVariableCount = 0, inferenceContextTrace = [] })
                    bootstrapGraph
                    (universe ++ [target])
                    [target]

@@ -58,10 +58,6 @@ applys t ts = L.foldl apply (asType t) ts
 bigint :: Type
 bigint = integer IntegerTypeBigint
 
--- | Arbitrary-precision decimal type
-decimal :: Type
-decimal = literal LiteralTypeDecimal
-
 -- | Binary data type
 binary :: Type
 binary = literal LiteralTypeBinary
@@ -69,6 +65,10 @@ binary = literal LiteralTypeBinary
 -- | Boolean type
 boolean :: Type
 boolean = literal LiteralTypeBoolean
+
+-- | Arbitrary-precision decimal type
+decimal :: Type
+decimal = literal LiteralTypeDecimal
 
 -- | Create an either type (a choice between two types)
 -- Example: either_ string int32
@@ -122,10 +122,6 @@ functionMany ts = L.foldl (\cod dom -> function dom cod) (L.head r) (L.tail r)
   where
     r = L.reverse ts
 
--- | 8-bit signed integer type
-int8 :: Type
-int8 = integer IntegerTypeInt8
-
 -- | 16-bit signed integer type
 int16 :: Type
 int16 = integer IntegerTypeInt16
@@ -137,6 +133,10 @@ int32 = integer IntegerTypeInt32
 -- | 64-bit signed integer type
 int64 :: Type
 int64 = integer IntegerTypeInt64
+
+-- | 8-bit signed integer type
+int8 :: Type
+int8 = integer IntegerTypeInt8
 
 -- | Create an integer type with the specified bit width
 -- Example: integer IntegerTypeInt32
@@ -158,6 +158,11 @@ literal = TypeLiteral
 map :: (AsType a, AsType b) => a -> b -> Type
 map keys vals = TypeMap $ MapType (asType keys) (asType vals)
 
+-- | Maybe (nullable) type
+-- Example: maybe string
+maybe :: AsType a => a -> Type
+maybe = TypeMaybe . asType
+
 -- | Create a monomorphic type scheme
 -- Example: mono int32
 mono :: AsType a => a -> TypeScheme
@@ -168,11 +173,6 @@ mono t = TypeScheme [] (asType t) Nothing
 -- In future versions, this may include validation constraints
 nonNegativeInt32 :: Type
 nonNegativeInt32 = int32
-
--- | Maybe (nullable) type
--- Example: maybe string
-maybe :: AsType a => a -> Type
-maybe = TypeMaybe . asType
 
 -- | Maybe (nullable) type (alias for 'maybe')
 -- Example: optional string
@@ -222,10 +222,6 @@ set = TypeSet . asType
 string :: Type
 string = literal LiteralTypeString
 
--- | 8-bit unsigned integer type
-uint8 :: Type
-uint8 = integer IntegerTypeUint8
-
 -- | 16-bit unsigned integer type
 uint16 :: Type
 uint16 = integer IntegerTypeUint16
@@ -238,13 +234,9 @@ uint32 = integer IntegerTypeUint32
 uint64 :: Type
 uint64 = integer IntegerTypeUint64
 
--- | Unit type (empty record type)
-unit :: Type
-unit = TypeUnit
-
--- | Void type (uninhabited / bottom type)
-void :: Type
-void = TypeVoid
+-- | 8-bit unsigned integer type
+uint8 :: Type
+uint8 = integer IntegerTypeUint8
 
 -- | Create a union type with the given variants
 -- Example: union ["success">: int32, "failure">: string]
@@ -253,15 +245,23 @@ void = TypeVoid
 union :: [FieldType] -> Type
 union = TypeUnion
 
--- | Create a type variable with the given name
--- Example: variable "a"
-variable :: String -> Type
-variable = TypeVariable . Name
+-- | Unit type (empty record type)
+unit :: Type
+unit = TypeUnit
 
 -- | Create a type variable with the given name (alias for 'variable')
 -- Example: var "a"
 var :: String -> Type
 var = variable
+
+-- | Create a type variable with the given name
+-- Example: variable "a"
+variable :: String -> Type
+variable = TypeVariable . Name
+
+-- | Void type (uninhabited / bottom type)
+void :: Type
+void = TypeVoid
 
 -- | Create a wrapped type (newtype) with a provided base type
 -- Example: wrap string

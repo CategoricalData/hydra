@@ -97,16 +97,6 @@ module_ = Module {
       toDefinition variableReferenceToExpr,
       toDefinition vectorLiteralToExpr]
 
--- | Square brackets: [expr1 expr2 ...]
-sqBrackets :: TTerm [Expr] -> TTerm Expr
-sqBrackets exprs = Serialization.brackets @@ (asTerm Serialization.squareBrackets) @@ (asTerm Serialization.inlineStyle) @@
-  (Serialization.spaceSep @@ exprs)
-
--- | Parenthesized space-separated list: (expr1 expr2 ...). Wraps onto multiple lines if the
---   inline form would exceed the canonical line width.
-parenList :: TTerm [Expr] -> TTerm Expr
-parenList exprs = Serialization.parens @@ (Serialization.spaceSepAdaptive @@ exprs)
-
 -- | Serialize an and expression: (and expr1 expr2 ...)
 andExpressionToExpr :: TTermDefinition (L.Dialect -> L.AndExpression -> Expr)
 andExpressionToExpr = define "andExpressionToExpr" $
@@ -428,6 +418,32 @@ fieldAccessToExpr = define "fieldAccessToExpr" $
         Serialization.noSep @@ list [rtype, Serialization.cst @@ string "-", field],
         target])
 
+-- | Format a float64 value as a dialect-specific literal string.
+-- Special values (NaN, ±Infinity) use dialect-specific syntax.
+formatLispFloat :: TTermDefinition (L.Dialect -> Double -> String)
+formatLispFloat = define "formatLispFloat" $
+  lambda "d" $ lambda "v" $
+    "s" <~ Literals.showFloat64 (var "v") $
+    Logic.ifElse (Equality.equal (var "s") (string "NaN"))
+      (cases L._Dialect (var "d") Nothing [
+        L._Dialect_clojure>>: constant $ string "Double/NaN",
+        L._Dialect_scheme>>: constant $ string "+nan.0",
+        L._Dialect_commonLisp>>: constant $ string "+hydra-nan+",
+        L._Dialect_emacsLisp>>: constant $ string "0.0e+NaN"]) $
+    Logic.ifElse (Equality.equal (var "s") (string "Infinity"))
+      (cases L._Dialect (var "d") Nothing [
+        L._Dialect_clojure>>: constant $ string "Double/POSITIVE_INFINITY",
+        L._Dialect_scheme>>: constant $ string "+inf.0",
+        L._Dialect_commonLisp>>: constant $ string "+hydra-pos-inf+",
+        L._Dialect_emacsLisp>>: constant $ string "1.0e+INF"]) $
+    Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
+      (cases L._Dialect (var "d") Nothing [
+        L._Dialect_clojure>>: constant $ string "Double/NEGATIVE_INFINITY",
+        L._Dialect_scheme>>: constant $ string "-inf.0",
+        L._Dialect_commonLisp>>: constant $ string "+hydra-neg-inf+",
+        L._Dialect_emacsLisp>>: constant $ string "-1.0e+INF"])
+      (var "s")
+
 -- | Serialize a function definition.
 -- Clojure: (defn name [params] body)
 -- Elisp/CL: (defun name (params) body)
@@ -682,32 +698,6 @@ listLiteralToExpr = define "listLiteralToExpr" $
         (list [Serialization.cst @@ (listKeyword @@ var "d")])
         (var "elems")))
 
--- | Format a float64 value as a dialect-specific literal string.
--- Special values (NaN, ±Infinity) use dialect-specific syntax.
-formatLispFloat :: TTermDefinition (L.Dialect -> Double -> String)
-formatLispFloat = define "formatLispFloat" $
-  lambda "d" $ lambda "v" $
-    "s" <~ Literals.showFloat64 (var "v") $
-    Logic.ifElse (Equality.equal (var "s") (string "NaN"))
-      (cases L._Dialect (var "d") Nothing [
-        L._Dialect_clojure>>: constant $ string "Double/NaN",
-        L._Dialect_scheme>>: constant $ string "+nan.0",
-        L._Dialect_commonLisp>>: constant $ string "+hydra-nan+",
-        L._Dialect_emacsLisp>>: constant $ string "0.0e+NaN"]) $
-    Logic.ifElse (Equality.equal (var "s") (string "Infinity"))
-      (cases L._Dialect (var "d") Nothing [
-        L._Dialect_clojure>>: constant $ string "Double/POSITIVE_INFINITY",
-        L._Dialect_scheme>>: constant $ string "+inf.0",
-        L._Dialect_commonLisp>>: constant $ string "+hydra-pos-inf+",
-        L._Dialect_emacsLisp>>: constant $ string "1.0e+INF"]) $
-    Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
-      (cases L._Dialect (var "d") Nothing [
-        L._Dialect_clojure>>: constant $ string "Double/NEGATIVE_INFINITY",
-        L._Dialect_scheme>>: constant $ string "-inf.0",
-        L._Dialect_commonLisp>>: constant $ string "+hydra-neg-inf+",
-        L._Dialect_emacsLisp>>: constant $ string "-1.0e+INF"])
-      (var "s")
-
 -- | Serialize a literal value
 literalToExpr :: TTermDefinition (L.Dialect -> L.Literal -> Expr)
 literalToExpr = define "literalToExpr" $
@@ -892,6 +882,11 @@ orExpressionToExpr = define "orExpressionToExpr" $
     Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
       (list [Serialization.cst @@ string "or"])
       (Lists.map (expressionToExpr @@ var "d") (project L._OrExpression L._OrExpression_expressions @@ var "orExpr")))
+
+-- | Parenthesized space-separated list: (expr1 expr2 ...). Wraps onto multiple lines if the
+--   inline form would exceed the canonical line width.
+parenList :: TTerm [Expr] -> TTerm Expr
+parenList exprs = Serialization.parens @@ (Serialization.spaceSepAdaptive @@ exprs)
 
 -- | Serialize a full Lisp program
 programToExpr :: TTermDefinition (L.Program -> Expr)
@@ -1146,6 +1141,11 @@ setLiteralToExpr = define "setLiteralToExpr" $
       Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
         (list [Serialization.cst @@ kw])
         elems)
+
+-- | Square brackets: [expr1 expr2 ...]
+sqBrackets :: TTerm [Expr] -> TTerm Expr
+sqBrackets exprs = Serialization.brackets @@ (asTerm Serialization.squareBrackets) @@ (asTerm Serialization.inlineStyle) @@
+  (Serialization.spaceSep @@ exprs)
 
 -- | Serialize a symbol
 symbolToExpr :: TTermDefinition (L.Symbol -> Expr)

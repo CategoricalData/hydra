@@ -24,9 +24,6 @@ ns = ModuleName "hydra.lisp.syntax"
 define :: String -> Type -> Binding
 define = datatype ns
 
-lisp :: String -> Type
-lisp = typeref ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -146,110 +143,126 @@ module_ = Module {
 -- Top-level constructs
 -- ================================================================================================
 
-program :: Binding
-program = define "Program" $
-  doc "A Lisp program, consisting of a sequence of top-level forms" $
+andExpression :: Binding
+andExpression = define "AndExpression" $
+  doc "Logical and: (and expr1 expr2 ...)" $
   T.record [
-    "dialect">:
-      doc "The target Lisp dialect" $
-      lisp "Dialect",
-    "module">:
-      doc "Optional module/namespace declaration" $
-      T.maybe (lisp "ModuleDeclaration"),
-    "imports">:
-      doc "Import/require declarations" $
-      T.list (lisp "ImportDeclaration"),
-    "exports">:
-      doc "Export/provide declarations" $
-      T.list (lisp "ExportDeclaration"),
-    "forms">:
-      doc "The top-level forms in the program" $
-      T.list (lisp "TopLevelFormWithComments")]
-
-topLevelForm :: Binding
-topLevelForm = define "TopLevelForm" $
-  doc "A top-level form in a Lisp program" $
-  T.union [
-    "function">:
-      doc "A named function definition" $
-      lisp "FunctionDefinition",
-    "variable">:
-      doc "A global variable definition" $
-      lisp "VariableDefinition",
-    "constant">:
-      doc "A constant definition" $
-      lisp "ConstantDefinition",
-    "recordType">:
-      doc "A record/struct type definition" $
-      lisp "RecordTypeDefinition",
-    "macro">:
-      doc "A macro definition" $
-      lisp "MacroDefinition",
-    "expression">:
-      doc "A bare expression at the top level" $
-      lisp "Expression"]
-
-topLevelFormWithComments :: Binding
-topLevelFormWithComments = define "TopLevelFormWithComments" $
-  doc "A top-level form together with optional documentation" $
-  T.record [
-    "doc">:
-      doc "Optional documentation string" $
-      T.maybe (lisp "Docstring"),
-    "comment">:
-      doc "Optional comment" $
-      T.maybe (lisp "Comment"),
-    "form">:
-      doc "The form itself" $
-      lisp "TopLevelForm"]
-
-
--- ================================================================================================
--- Definitions
--- ================================================================================================
-
-functionDefinition :: Binding
-functionDefinition = define "FunctionDefinition" $
-  doc ("A named function definition."
-    ++ " Serializes as (defn name [params] body) in Clojure,"
-    ++ " (defun name (params) body) in Emacs Lisp and Common Lisp,"
-    ++ " (define (name params) body) in Scheme") $
-  T.record [
-    "name">:
-      doc "The function name" $
-      lisp "Symbol",
-    "params">:
-      doc "The parameter list" $
-      T.list (lisp "Symbol"),
-    "restParam">:
-      doc "Optional rest/variadic parameter" $
-      T.maybe (lisp "Symbol"),
-    "doc">:
-      doc "Optional docstring" $
-      T.maybe (lisp "Docstring"),
-    "typeHints">:
-      doc "Optional type hints for parameters and return type" $
-      T.list (lisp "TypeHint"),
-    "body">:
-      doc "The function body (one or more expressions)" $
+    "expressions">:
+      doc "The operand expressions" $
       T.list (lisp "Expression")]
 
-variableDefinition :: Binding
-variableDefinition = define "VariableDefinition" $
-  doc ("A global variable definition."
-    ++ " Serializes as (def name value) in Clojure,"
-    ++ " (defvar name value) in Emacs Lisp and Common Lisp,"
-    ++ " (define name value) in Scheme") $
+application :: Binding
+application = define "Application" $
+  doc "Function application: (function arg1 arg2 ...)" $
   T.record [
-    "name">:
-      doc "The variable name" $
-      lisp "Symbol",
-    "value">:
-      doc "The initial value" $
+    "function">:
+      doc "The function being applied" $
       lisp "Expression",
-    "doc">:
-      doc "Optional docstring" $
-      T.maybe (lisp "Docstring")]
+    "arguments">:
+      doc "The arguments" $
+      T.list (lisp "Expression")]
+
+beginExpression :: Binding
+beginExpression = define "BeginExpression" $
+  doc "An explicit begin block (distinct from do for Scheme compatibility)" $
+  T.record [
+    "expressions">:
+      doc "The expressions to evaluate in sequence" $
+      T.list (lisp "Expression")]
+
+booleanStyle :: Binding
+booleanStyle = define "BooleanStyle" $
+  doc "The style of boolean literals in a dialect" $
+  T.enum ["trueFalse", "tNil", "hashTF"]
+
+caseClause :: Binding
+caseClause = define "CaseClause" $
+  doc "A clause in a case expression" $
+  T.record [
+    "keys">:
+      doc "The matching keys (one or more datum values)" $
+      T.list (lisp "Expression"),
+    "body">:
+      doc "The result expression" $
+      lisp "Expression"]
+
+caseExpression :: Binding
+caseExpression = define "CaseExpression" $
+  doc ("Case dispatch on a value."
+    ++ " Serializes as (case x key1 expr1 key2 expr2 default) in Clojure,"
+    ++ " (case x (key1 expr1) (key2 expr2) (otherwise default)) in Common Lisp,"
+    ++ " (case x ((key1) expr1) ((key2) expr2) (else default)) in Scheme") $
+  T.record [
+    "scrutinee">:
+      doc "The expression being dispatched on" $
+      lisp "Expression",
+    "clauses">:
+      doc "The case clauses" $
+      T.list (lisp "CaseClause"),
+    "default">:
+      doc "Optional default clause" $
+      T.maybe (lisp "Expression")]
+
+characterLiteral :: Binding
+characterLiteral = define "CharacterLiteral" $
+  doc ("A character literal."
+    ++ " Concrete syntax varies: \\a (Clojure), ?a (Emacs Lisp), #\\a (Common Lisp, Scheme)") $
+  T.record [
+    "value">:
+      doc "The character value" $
+      T.string]
+
+comment :: Binding
+comment = define "Comment" $
+  doc "A comment" $
+  T.record [
+    "style">:
+      doc "The comment style" $
+      lisp "CommentStyle",
+    "text">:
+      doc "The comment text" $
+      T.string]
+
+commentStyle :: Binding
+commentStyle = define "CommentStyle" $
+  doc "The style of a comment" $
+  T.enum ["line", "block", "datum"]
+
+condClause :: Binding
+condClause = define "CondClause" $
+  doc "A clause in a cond expression" $
+  T.record [
+    "condition">:
+      doc "The test condition" $
+      lisp "Expression",
+    "body">:
+      doc "The result expression" $
+      lisp "Expression"]
+
+condExpression :: Binding
+condExpression = define "CondExpression" $
+  doc ("Multi-branch conditional."
+    ++ " Serializes as (cond test1 expr1 test2 expr2 :else default) in Clojure,"
+    ++ " (cond (test1 expr1) (test2 expr2) (t default)) in Emacs Lisp and Common Lisp,"
+    ++ " (cond (test1 expr1) (test2 expr2) (else default)) in Scheme") $
+  T.record [
+    "clauses">:
+      doc "The condition-expression pairs" $
+      T.list (lisp "CondClause"),
+    "default">:
+      doc "Optional default expression" $
+      T.maybe (lisp "Expression")]
+
+consExpression :: Binding
+consExpression = define "ConsExpression" $
+  doc "A cons expression: (cons head tail)" $
+  T.record [
+    "head">:
+      doc "The head element" $
+      lisp "Expression",
+    "tail">:
+      doc "The tail (typically a list or another cons)" $
+      lisp "Expression"]
 
 constantDefinition :: Binding
 constantDefinition = define "ConstantDefinition" $
@@ -269,58 +282,99 @@ constantDefinition = define "ConstantDefinition" $
       doc "Optional docstring" $
       T.maybe (lisp "Docstring")]
 
-recordTypeDefinition :: Binding
-recordTypeDefinition = define "RecordTypeDefinition" $
-  doc ("A record/struct type definition."
-    ++ " Serializes as (defrecord Name [fields]) in Clojure,"
-    ++ " (cl-defstruct name fields) in Emacs Lisp,"
-    ++ " (defstruct name fields) in Common Lisp,"
-    ++ " (define-record-type <Name> ...) in Scheme") $
+constructorPattern :: Binding
+constructorPattern = define "ConstructorPattern" $
+  doc "A constructor pattern matching a tagged value" $
   T.record [
-    "name">:
-      doc "The record type name" $
+    "constructor">:
+      doc "The constructor/tag name" $
       lisp "Symbol",
-    "fields">:
-      doc "The field definitions" $
-      T.list (lisp "FieldDefinition"),
-    "doc">:
-      doc "Optional docstring" $
-      T.maybe (lisp "Docstring")]
+    "arguments">:
+      doc "The sub-patterns for constructor arguments" $
+      T.list (lisp "Pattern")]
 
-fieldDefinition :: Binding
-fieldDefinition = define "FieldDefinition" $
-  doc "A field in a record type definition" $
+destructuringBinding :: Binding
+destructuringBinding = define "DestructuringBinding" $
+  doc "A destructuring binding in a let expression" $
   T.record [
-    "name">:
-      doc "The field name" $
-      lisp "Symbol",
-    "defaultValue">:
-      doc "Optional default value" $
-      T.maybe (lisp "Expression")]
+    "pattern">:
+      doc "The destructuring pattern" $
+      lisp "DestructuringPattern",
+    "value">:
+      doc "The value to destructure" $
+      lisp "Expression"]
 
-macroDefinition :: Binding
-macroDefinition = define "MacroDefinition" $
-  doc ("A macro definition."
-    ++ " Serializes as (defmacro name [params] body) in Clojure,"
-    ++ " (defmacro name (params) body) in Emacs Lisp and Common Lisp,"
-    ++ " (define-syntax name ...) in Scheme") $
-  T.record [
-    "name">:
-      doc "The macro name" $
-      lisp "Symbol",
-    "params">:
-      doc "The parameter list" $
+destructuringPattern :: Binding
+destructuringPattern = define "DestructuringPattern" $
+  doc "A destructuring pattern" $
+  T.union [
+    "sequential">:
+      doc "Sequential destructuring: [a b c] in Clojure, (a b c) in others" $
       T.list (lisp "Symbol"),
-    "restParam">:
-      doc "Optional rest parameter" $
-      T.maybe (lisp "Symbol"),
-    "body">:
-      doc "The macro body" $
-      T.list (lisp "Expression")]
+    "associative">:
+      doc "Associative/map destructuring: {:keys [a b]} in Clojure" $
+      T.list (lisp "Symbol"),
+    "rest">:
+      doc "Destructuring with a rest element: [a b & rest] (leading symbols + rest symbol)" $
+      T.list (lisp "Symbol")]
 
 
 -- ================================================================================================
--- Expressions
+-- Patterns (for case/match)
+-- ================================================================================================
+
+dialect :: Binding
+dialect = define "Dialect" $
+  doc "A Lisp dialect" $
+  T.enum ["clojure", "emacsLisp", "commonLisp", "scheme"]
+
+doExpression :: Binding
+doExpression = define "DoExpression" $
+  doc ("Sequential evaluation of expressions, returning the last."
+    ++ " Serializes as (do expr1 expr2 ...) in Clojure,"
+    ++ " (progn expr1 expr2 ...) in Emacs Lisp and Common Lisp,"
+    ++ " (begin expr1 expr2 ...) in Scheme") $
+  T.record [
+    "expressions">:
+      doc "The expressions to evaluate in sequence" $
+      T.list (lisp "Expression")]
+
+docstring :: Binding
+docstring = define "Docstring" $
+  doc "A documentation string" $
+  T.wrap T.string
+
+dottedPair :: Binding
+dottedPair = define "DottedPair" $
+  doc "A dotted pair literal: '(a . b). Not available in Clojure." $
+  T.record [
+    "car">:
+      doc "The first element" $
+      lisp "Expression",
+    "cdr">:
+      doc "The second element" $
+      lisp "Expression"]
+
+
+-- ================================================================================================
+-- Type-related
+-- ================================================================================================
+
+exportDeclaration :: Binding
+exportDeclaration = define "ExportDeclaration" $
+  doc ("An export/provide declaration."
+    ++ " Serializes as (provide 'name) in Emacs Lisp,"
+    ++ " (:export :sym1 :sym2) in Common Lisp,"
+    ++ " (export sym1 sym2) in Scheme."
+    ++ " In Clojure, symbols are public by default.") $
+  T.record [
+    "symbols">:
+      doc "The symbols to export" $
+      T.list (lisp "Symbol")]
+
+
+-- ================================================================================================
+-- Miscellaneous
 -- ================================================================================================
 
 expression :: Binding
@@ -406,16 +460,138 @@ expression = define "Expression" $
       doc "An arbitrary S-expression (escape hatch for dialect-specific forms)" $
       lisp "SExpression"]
 
-application :: Binding
-application = define "Application" $
-  doc "Function application: (function arg1 arg2 ...)" $
+fieldAccess :: Binding
+fieldAccess = define "FieldAccess" $
+  doc ("Field access on a record/struct."
+    ++ " Serializes as (:field record) in Clojure,"
+    ++ " (struct-field record) in Emacs Lisp and Common Lisp,"
+    ++ " (record-field record) in Scheme") $
   T.record [
-    "function">:
-      doc "The function being applied" $
-      lisp "Expression",
-    "arguments">:
-      doc "The arguments" $
+    "recordType">:
+      doc "The record type name (used to form accessor name)" $
+      lisp "Symbol",
+    "field">:
+      doc "The field name" $
+      lisp "Symbol",
+    "target">:
+      doc "The expression being accessed" $
+      lisp "Expression"]
+
+fieldDefinition :: Binding
+fieldDefinition = define "FieldDefinition" $
+  doc "A field in a record type definition" $
+  T.record [
+    "name">:
+      doc "The field name" $
+      lisp "Symbol",
+    "defaultValue">:
+      doc "Optional default value" $
+      T.maybe (lisp "Expression")]
+
+floatLiteral :: Binding
+floatLiteral = define "FloatLiteral" $
+  doc "A floating-point literal" $
+  T.record [
+    "value">:
+      doc "The float value" $
+      T.float64,
+    "precision">:
+      doc "Optional precision hint (e.g. 3.14d0 vs 3.14f0 in Common Lisp)" $
+      T.maybe T.string]
+
+functionDefinition :: Binding
+functionDefinition = define "FunctionDefinition" $
+  doc ("A named function definition."
+    ++ " Serializes as (defn name [params] body) in Clojure,"
+    ++ " (defun name (params) body) in Emacs Lisp and Common Lisp,"
+    ++ " (define (name params) body) in Scheme") $
+  T.record [
+    "name">:
+      doc "The function name" $
+      lisp "Symbol",
+    "params">:
+      doc "The parameter list" $
+      T.list (lisp "Symbol"),
+    "restParam">:
+      doc "Optional rest/variadic parameter" $
+      T.maybe (lisp "Symbol"),
+    "doc">:
+      doc "Optional docstring" $
+      T.maybe (lisp "Docstring"),
+    "typeHints">:
+      doc "Optional type hints for parameters and return type" $
+      T.list (lisp "TypeHint"),
+    "body">:
+      doc "The function body (one or more expressions)" $
       T.list (lisp "Expression")]
+
+ifExpression :: Binding
+ifExpression = define "IfExpression" $
+  doc "Conditional: (if test then else)" $
+  T.record [
+    "condition">:
+      doc "The test expression" $
+      lisp "Expression",
+    "then">:
+      doc "The then branch" $
+      lisp "Expression",
+    "else">:
+      doc "Optional else branch" $
+      T.maybe (lisp "Expression")]
+
+importDeclaration :: Binding
+importDeclaration = define "ImportDeclaration" $
+  doc ("An import/require declaration."
+    ++ " Serializes as (:require [name ...]) in Clojure,"
+    ++ " (require 'name) in Emacs Lisp,"
+    ++ " (:use :name) or (:import-from :name ...) in Common Lisp,"
+    ++ " (import (name)) in Scheme") $
+  T.record [
+    "module">:
+      doc "The module being imported" $
+      lisp "NamespaceName",
+    "spec">:
+      doc "Import specification" $
+      lisp "ImportSpec"]
+
+importSpec :: Binding
+importSpec = define "ImportSpec" $
+  doc "An import specification describing how to import symbols" $
+  T.union [
+    "all">:
+      doc "Import everything" $
+      T.unit,
+    "alias">:
+      doc "Import with an alias: (:require [name :as alias]) in Clojure" $
+      lisp "Symbol",
+    "only">:
+      doc "Import specific symbols: (:require [name :refer [sym1 sym2]]) in Clojure" $
+      T.list (lisp "Symbol"),
+    "rename">:
+      doc "Import with renaming: list of (from, to) symbol pairs" $
+      T.list (T.list (lisp "Symbol"))]
+
+integerLiteral :: Binding
+integerLiteral = define "IntegerLiteral" $
+  doc "An integer literal" $
+  T.record [
+    "value">:
+      doc "The integer value" $
+      T.bigint,
+    "bigint">:
+      doc "Whether this is explicitly a big integer (e.g. 42N in Clojure)" $
+      T.boolean]
+
+keyword :: Binding
+keyword = define "Keyword" $
+  doc "A keyword (self-evaluating symbol). Serializes as :name in Clojure, Emacs Lisp, and Common Lisp" $
+  T.record [
+    "name">:
+      doc "The keyword name (without the leading colon)" $
+      T.string,
+    "namespace">:
+      doc "Optional namespace (e.g. my.ns/foo in Clojure)" $
+      T.maybe T.string]
 
 lambda :: Binding
 lambda = define "Lambda" $
@@ -437,198 +613,16 @@ lambda = define "Lambda" $
       doc "The lambda body" $
       T.list (lisp "Expression")]
 
-variableReference :: Binding
-variableReference = define "VariableReference" $
-  doc "A reference to a variable by name" $
-  T.record [
-    "name">:
-      doc "The variable name" $
-      lisp "Symbol",
-    "functionNamespace">:
-      doc ("Whether to reference from the function namespace."
-        ++ " In Lisp-2 dialects (Common Lisp), this emits #'name."
-        ++ " In Lisp-1 dialects, this has no effect.") $
-      T.boolean]
-
-fieldAccess :: Binding
-fieldAccess = define "FieldAccess" $
-  doc ("Field access on a record/struct."
-    ++ " Serializes as (:field record) in Clojure,"
-    ++ " (struct-field record) in Emacs Lisp and Common Lisp,"
-    ++ " (record-field record) in Scheme") $
-  T.record [
-    "recordType">:
-      doc "The record type name (used to form accessor name)" $
-      lisp "Symbol",
-    "field">:
-      doc "The field name" $
-      lisp "Symbol",
-    "target">:
-      doc "The expression being accessed" $
-      lisp "Expression"]
-
-typeAnnotation :: Binding
-typeAnnotation = define "TypeAnnotation" $
-  doc "An expression with a type annotation" $
-  T.record [
-    "expression">:
-      doc "The annotated expression" $
-      lisp "Expression",
-    "type">:
-      doc "The type specifier" $
-      lisp "TypeSpecifier"]
-
-
--- ================================================================================================
--- Special forms
--- ================================================================================================
-
-ifExpression :: Binding
-ifExpression = define "IfExpression" $
-  doc "Conditional: (if test then else)" $
-  T.record [
-    "condition">:
-      doc "The test expression" $
-      lisp "Expression",
-    "then">:
-      doc "The then branch" $
-      lisp "Expression",
-    "else">:
-      doc "Optional else branch" $
-      T.maybe (lisp "Expression")]
-
-condExpression :: Binding
-condExpression = define "CondExpression" $
-  doc ("Multi-branch conditional."
-    ++ " Serializes as (cond test1 expr1 test2 expr2 :else default) in Clojure,"
-    ++ " (cond (test1 expr1) (test2 expr2) (t default)) in Emacs Lisp and Common Lisp,"
-    ++ " (cond (test1 expr1) (test2 expr2) (else default)) in Scheme") $
-  T.record [
-    "clauses">:
-      doc "The condition-expression pairs" $
-      T.list (lisp "CondClause"),
-    "default">:
-      doc "Optional default expression" $
-      T.maybe (lisp "Expression")]
-
-condClause :: Binding
-condClause = define "CondClause" $
-  doc "A clause in a cond expression" $
-  T.record [
-    "condition">:
-      doc "The test condition" $
-      lisp "Expression",
-    "body">:
-      doc "The result expression" $
-      lisp "Expression"]
-
-caseExpression :: Binding
-caseExpression = define "CaseExpression" $
-  doc ("Case dispatch on a value."
-    ++ " Serializes as (case x key1 expr1 key2 expr2 default) in Clojure,"
-    ++ " (case x (key1 expr1) (key2 expr2) (otherwise default)) in Common Lisp,"
-    ++ " (case x ((key1) expr1) ((key2) expr2) (else default)) in Scheme") $
-  T.record [
-    "scrutinee">:
-      doc "The expression being dispatched on" $
-      lisp "Expression",
-    "clauses">:
-      doc "The case clauses" $
-      T.list (lisp "CaseClause"),
-    "default">:
-      doc "Optional default clause" $
-      T.maybe (lisp "Expression")]
-
-caseClause :: Binding
-caseClause = define "CaseClause" $
-  doc "A clause in a case expression" $
-  T.record [
-    "keys">:
-      doc "The matching keys (one or more datum values)" $
-      T.list (lisp "Expression"),
-    "body">:
-      doc "The result expression" $
-      lisp "Expression"]
-
-andExpression :: Binding
-andExpression = define "AndExpression" $
-  doc "Logical and: (and expr1 expr2 ...)" $
-  T.record [
-    "expressions">:
-      doc "The operand expressions" $
-      T.list (lisp "Expression")]
-
-orExpression :: Binding
-orExpression = define "OrExpression" $
-  doc "Logical or: (or expr1 expr2 ...)" $
-  T.record [
-    "expressions">:
-      doc "The operand expressions" $
-      T.list (lisp "Expression")]
-
-notExpression :: Binding
-notExpression = define "NotExpression" $
-  doc "Logical negation: (not expr)" $
-  T.record [
-    "expression">:
-      doc "The operand expression" $
-      lisp "Expression"]
-
-doExpression :: Binding
-doExpression = define "DoExpression" $
-  doc ("Sequential evaluation of expressions, returning the last."
-    ++ " Serializes as (do expr1 expr2 ...) in Clojure,"
-    ++ " (progn expr1 expr2 ...) in Emacs Lisp and Common Lisp,"
-    ++ " (begin expr1 expr2 ...) in Scheme") $
-  T.record [
-    "expressions">:
-      doc "The expressions to evaluate in sequence" $
-      T.list (lisp "Expression")]
-
-beginExpression :: Binding
-beginExpression = define "BeginExpression" $
-  doc "An explicit begin block (distinct from do for Scheme compatibility)" $
-  T.record [
-    "expressions">:
-      doc "The expressions to evaluate in sequence" $
-      T.list (lisp "Expression")]
-
-quoteExpression :: Binding
-quoteExpression = define "QuoteExpression" $
-  doc "A quoted form: 'expr or (quote expr)" $
-  T.record [
-    "body">:
-      doc "The quoted form" $
-      lisp "Expression"]
-
-quasiquoteExpression :: Binding
-quasiquoteExpression = define "QuasiquoteExpression" $
-  doc "A quasiquoted form: `expr" $
-  T.record [
-    "body">:
-      doc "The quasiquoted form" $
-      lisp "Expression"]
-
-unquoteExpression :: Binding
-unquoteExpression = define "UnquoteExpression" $
-  doc "An unquoted form within a quasiquote: ~expr or ,expr" $
-  T.record [
-    "body">:
-      doc "The unquoted form" $
-      lisp "Expression"]
-
-splicingUnquoteExpression :: Binding
-splicingUnquoteExpression = define "SplicingUnquoteExpression" $
-  doc "A splicing unquote within a quasiquote: ~@expr or ,@expr" $
-  T.record [
-    "body">:
-      doc "The spliced form" $
-      lisp "Expression"]
-
-
--- ================================================================================================
--- Let bindings
--- ================================================================================================
+letBinding :: Binding
+letBinding = define "LetBinding" $
+  doc "A single binding in a let expression" $
+  T.union [
+    "simple">:
+      doc "A simple name-value binding" $
+      lisp "SimpleBinding",
+    "destructuring">:
+      doc "A destructuring binding" $
+      lisp "DestructuringBinding"]
 
 letExpression :: Binding
 letExpression = define "LetExpression" $
@@ -651,103 +645,19 @@ letKind = define "LetKind" $
   doc "The kind of let binding" $
   T.enum ["parallel", "sequential", "recursive"]
 
-letBinding :: Binding
-letBinding = define "LetBinding" $
-  doc "A single binding in a let expression" $
-  T.union [
-    "simple">:
-      doc "A simple name-value binding" $
-      lisp "SimpleBinding",
-    "destructuring">:
-      doc "A destructuring binding" $
-      lisp "DestructuringBinding"]
+lisp :: String -> Type
+lisp = typeref ns
 
-simpleBinding :: Binding
-simpleBinding = define "SimpleBinding" $
-  doc "A simple name-value binding in a let expression" $
+listLiteral :: Binding
+listLiteral = define "ListLiteral" $
+  doc "A list literal: '(1 2 3) or (list 1 2 3)" $
   T.record [
-    "name">:
-      doc "The bound variable" $
-      lisp "Symbol",
-    "value">:
-      doc "The value expression" $
-      lisp "Expression"]
-
-destructuringBinding :: Binding
-destructuringBinding = define "DestructuringBinding" $
-  doc "A destructuring binding in a let expression" $
-  T.record [
-    "pattern">:
-      doc "The destructuring pattern" $
-      lisp "DestructuringPattern",
-    "value">:
-      doc "The value to destructure" $
-      lisp "Expression"]
-
-destructuringPattern :: Binding
-destructuringPattern = define "DestructuringPattern" $
-  doc "A destructuring pattern" $
-  T.union [
-    "sequential">:
-      doc "Sequential destructuring: [a b c] in Clojure, (a b c) in others" $
-      T.list (lisp "Symbol"),
-    "associative">:
-      doc "Associative/map destructuring: {:keys [a b]} in Clojure" $
-      T.list (lisp "Symbol"),
-    "rest">:
-      doc "Destructuring with a rest element: [a b & rest] (leading symbols + rest symbol)" $
-      T.list (lisp "Symbol")]
-
-
--- ================================================================================================
--- Patterns (for case/match)
--- ================================================================================================
-
-pattern :: Binding
-pattern = define "Pattern" $
-  doc "A pattern for use in case expressions or match forms" $
-  T.union [
-    "constructor">:
-      doc "A constructor pattern (for union/sum type matching)" $
-      lisp "ConstructorPattern",
-    "literal">:
-      doc "A literal pattern" $
-      lisp "LiteralPattern",
-    "wildcard">:
-      doc "A wildcard pattern matching anything" $
-      lisp "WildcardPattern",
-    "variable">:
-      doc "A variable pattern that binds the matched value" $
-      lisp "Symbol"]
-
-constructorPattern :: Binding
-constructorPattern = define "ConstructorPattern" $
-  doc "A constructor pattern matching a tagged value" $
-  T.record [
-    "constructor">:
-      doc "The constructor/tag name" $
-      lisp "Symbol",
-    "arguments">:
-      doc "The sub-patterns for constructor arguments" $
-      T.list (lisp "Pattern")]
-
-literalPattern :: Binding
-literalPattern = define "LiteralPattern" $
-  doc "A pattern matching a literal value" $
-  T.record [
-    "value">:
-      doc "The literal to match" $
-      lisp "Literal"]
-
-wildcardPattern :: Binding
-wildcardPattern = define "WildcardPattern" $
-  doc "A wildcard pattern that matches any value" $
-  T.record []
-
-
--- ================================================================================================
--- Literals
--- ================================================================================================
+    "elements">:
+      doc "The list elements" $
+      T.list (lisp "Expression"),
+    "quoted">:
+      doc "Whether to use quote syntax vs constructor syntax" $
+      T.boolean]
 
 literal :: Binding
 literal = define "Literal" $
@@ -778,41 +688,84 @@ literal = define "Literal" $
       doc "A quoted symbol literal" $
       lisp "Symbol"]
 
-integerLiteral :: Binding
-integerLiteral = define "IntegerLiteral" $
-  doc "An integer literal" $
+literalPattern :: Binding
+literalPattern = define "LiteralPattern" $
+  doc "A pattern matching a literal value" $
   T.record [
     "value">:
-      doc "The integer value" $
-      T.bigint,
-    "bigint">:
-      doc "Whether this is explicitly a big integer (e.g. 42N in Clojure)" $
-      T.boolean]
+      doc "The literal to match" $
+      lisp "Literal"]
 
-floatLiteral :: Binding
-floatLiteral = define "FloatLiteral" $
-  doc "A floating-point literal" $
+macroDefinition :: Binding
+macroDefinition = define "MacroDefinition" $
+  doc ("A macro definition."
+    ++ " Serializes as (defmacro name [params] body) in Clojure,"
+    ++ " (defmacro name (params) body) in Emacs Lisp and Common Lisp,"
+    ++ " (define-syntax name ...) in Scheme") $
   T.record [
-    "value">:
-      doc "The float value" $
-      T.float64,
-    "precision">:
-      doc "Optional precision hint (e.g. 3.14d0 vs 3.14f0 in Common Lisp)" $
-      T.maybe T.string]
+    "name">:
+      doc "The macro name" $
+      lisp "Symbol",
+    "params">:
+      doc "The parameter list" $
+      T.list (lisp "Symbol"),
+    "restParam">:
+      doc "Optional rest parameter" $
+      T.maybe (lisp "Symbol"),
+    "body">:
+      doc "The macro body" $
+      T.list (lisp "Expression")]
 
-characterLiteral :: Binding
-characterLiteral = define "CharacterLiteral" $
-  doc ("A character literal."
-    ++ " Concrete syntax varies: \\a (Clojure), ?a (Emacs Lisp), #\\a (Common Lisp, Scheme)") $
+
+-- ================================================================================================
+-- Expressions
+-- ================================================================================================
+
+mapEntry :: Binding
+mapEntry = define "MapEntry" $
+  doc "A key-value pair in a map literal" $
   T.record [
+    "key">:
+      doc "The key expression" $
+      lisp "Expression",
     "value">:
-      doc "The character value" $
-      T.string]
+      doc "The value expression" $
+      lisp "Expression"]
 
-booleanStyle :: Binding
-booleanStyle = define "BooleanStyle" $
-  doc "The style of boolean literals in a dialect" $
-  T.enum ["trueFalse", "tNil", "hashTF"]
+mapLiteral :: Binding
+mapLiteral = define "MapLiteral" $
+  doc ("A map/dictionary literal."
+    ++ " Serializes as {:a 1 :b 2} in Clojure,"
+    ++ " as an alist '((a . 1) (b . 2)) in other dialects") $
+  T.record [
+    "entries">:
+      doc "The key-value pairs" $
+      T.list (lisp "MapEntry")]
+
+moduleDeclaration :: Binding
+moduleDeclaration = define "ModuleDeclaration" $
+  doc ("A module/namespace declaration."
+    ++ " Serializes as (ns name ...) in Clojure,"
+    ++ " (provide 'name) in Emacs Lisp,"
+    ++ " (defpackage :name ... ) (in-package :name) in Common Lisp,"
+    ++ " (define-library (name) ...) in Scheme") $
+  T.record [
+    "name">:
+      doc "The module/namespace name" $
+      lisp "NamespaceName",
+    "doc">:
+      doc "Optional module documentation" $
+      T.maybe (lisp "Docstring")]
+
+namespaceName :: Binding
+namespaceName = define "NamespaceName" $
+  doc "A namespace or package name" $
+  T.wrap T.string
+
+
+-- ================================================================================================
+-- Collection literals
+-- ================================================================================================
 
 nilStyle :: Binding
 nilStyle = define "NilStyle" $
@@ -824,21 +777,58 @@ nilStyle = define "NilStyle" $
 -- Names and symbols
 -- ================================================================================================
 
-symbol :: Binding
-symbol = define "Symbol" $
-  doc "A Lisp symbol (identifier)" $
-  T.wrap T.string
-
-keyword :: Binding
-keyword = define "Keyword" $
-  doc "A keyword (self-evaluating symbol). Serializes as :name in Clojure, Emacs Lisp, and Common Lisp" $
+notExpression :: Binding
+notExpression = define "NotExpression" $
+  doc "Logical negation: (not expr)" $
   T.record [
-    "name">:
-      doc "The keyword name (without the leading colon)" $
-      T.string,
-    "namespace">:
-      doc "Optional namespace (e.g. my.ns/foo in Clojure)" $
-      T.maybe T.string]
+    "expression">:
+      doc "The operand expression" $
+      lisp "Expression"]
+
+orExpression :: Binding
+orExpression = define "OrExpression" $
+  doc "Logical or: (or expr1 expr2 ...)" $
+  T.record [
+    "expressions">:
+      doc "The operand expressions" $
+      T.list (lisp "Expression")]
+
+pattern :: Binding
+pattern = define "Pattern" $
+  doc "A pattern for use in case expressions or match forms" $
+  T.union [
+    "constructor">:
+      doc "A constructor pattern (for union/sum type matching)" $
+      lisp "ConstructorPattern",
+    "literal">:
+      doc "A literal pattern" $
+      lisp "LiteralPattern",
+    "wildcard">:
+      doc "A wildcard pattern matching anything" $
+      lisp "WildcardPattern",
+    "variable">:
+      doc "A variable pattern that binds the matched value" $
+      lisp "Symbol"]
+
+program :: Binding
+program = define "Program" $
+  doc "A Lisp program, consisting of a sequence of top-level forms" $
+  T.record [
+    "dialect">:
+      doc "The target Lisp dialect" $
+      lisp "Dialect",
+    "module">:
+      doc "Optional module/namespace declaration" $
+      T.maybe (lisp "ModuleDeclaration"),
+    "imports">:
+      doc "Import/require declarations" $
+      T.list (lisp "ImportDeclaration"),
+    "exports">:
+      doc "Export/provide declarations" $
+      T.list (lisp "ExportDeclaration"),
+    "forms">:
+      doc "The top-level forms in the program" $
+      T.list (lisp "TopLevelFormWithComments")]
 
 qualifiedSymbol :: Binding
 qualifiedSymbol = define "QualifiedSymbol" $
@@ -852,57 +842,51 @@ qualifiedSymbol = define "QualifiedSymbol" $
       doc "The local name" $
       T.string]
 
-namespaceName :: Binding
-namespaceName = define "NamespaceName" $
-  doc "A namespace or package name" $
-  T.wrap T.string
-
-
--- ================================================================================================
--- Collection literals
--- ================================================================================================
-
-listLiteral :: Binding
-listLiteral = define "ListLiteral" $
-  doc "A list literal: '(1 2 3) or (list 1 2 3)" $
+quasiquoteExpression :: Binding
+quasiquoteExpression = define "QuasiquoteExpression" $
+  doc "A quasiquoted form: `expr" $
   T.record [
-    "elements">:
-      doc "The list elements" $
-      T.list (lisp "Expression"),
-    "quoted">:
-      doc "Whether to use quote syntax vs constructor syntax" $
-      T.boolean]
-
-vectorLiteral :: Binding
-vectorLiteral = define "VectorLiteral" $
-  doc ("A vector literal."
-    ++ " Serializes as [1 2 3] in Clojure and Emacs Lisp,"
-    ++ " #(1 2 3) in Common Lisp and Scheme") $
-  T.record [
-    "elements">:
-      doc "The vector elements" $
-      T.list (lisp "Expression")]
-
-mapLiteral :: Binding
-mapLiteral = define "MapLiteral" $
-  doc ("A map/dictionary literal."
-    ++ " Serializes as {:a 1 :b 2} in Clojure,"
-    ++ " as an alist '((a . 1) (b . 2)) in other dialects") $
-  T.record [
-    "entries">:
-      doc "The key-value pairs" $
-      T.list (lisp "MapEntry")]
-
-mapEntry :: Binding
-mapEntry = define "MapEntry" $
-  doc "A key-value pair in a map literal" $
-  T.record [
-    "key">:
-      doc "The key expression" $
-      lisp "Expression",
-    "value">:
-      doc "The value expression" $
+    "body">:
+      doc "The quasiquoted form" $
       lisp "Expression"]
+
+quoteExpression :: Binding
+quoteExpression = define "QuoteExpression" $
+  doc "A quoted form: 'expr or (quote expr)" $
+  T.record [
+    "body">:
+      doc "The quoted form" $
+      lisp "Expression"]
+
+recordTypeDefinition :: Binding
+recordTypeDefinition = define "RecordTypeDefinition" $
+  doc ("A record/struct type definition."
+    ++ " Serializes as (defrecord Name [fields]) in Clojure,"
+    ++ " (cl-defstruct name fields) in Emacs Lisp,"
+    ++ " (defstruct name fields) in Common Lisp,"
+    ++ " (define-record-type <Name> ...) in Scheme") $
+  T.record [
+    "name">:
+      doc "The record type name" $
+      lisp "Symbol",
+    "fields">:
+      doc "The field definitions" $
+      T.list (lisp "FieldDefinition"),
+    "doc">:
+      doc "Optional docstring" $
+      T.maybe (lisp "Docstring")]
+
+sExpression :: Binding
+sExpression = define "SExpression" $
+  doc ("A raw S-expression. This is an escape hatch for expressing arbitrary Lisp forms"
+    ++ " that do not fit into the structured AST above.") $
+  T.union [
+    "atom">:
+      doc "An atomic value" $
+      T.string,
+    "list">:
+      doc "A list of S-expressions" $
+      T.list (lisp "SExpression")]
 
 setLiteral :: Binding
 setLiteral = define "SetLiteral" $
@@ -914,31 +898,91 @@ setLiteral = define "SetLiteral" $
       doc "The set elements" $
       T.list (lisp "Expression")]
 
-consExpression :: Binding
-consExpression = define "ConsExpression" $
-  doc "A cons expression: (cons head tail)" $
+simpleBinding :: Binding
+simpleBinding = define "SimpleBinding" $
+  doc "A simple name-value binding in a let expression" $
   T.record [
-    "head">:
-      doc "The head element" $
-      lisp "Expression",
-    "tail">:
-      doc "The tail (typically a list or another cons)" $
+    "name">:
+      doc "The bound variable" $
+      lisp "Symbol",
+    "value">:
+      doc "The value expression" $
       lisp "Expression"]
 
-dottedPair :: Binding
-dottedPair = define "DottedPair" $
-  doc "A dotted pair literal: '(a . b). Not available in Clojure." $
+splicingUnquoteExpression :: Binding
+splicingUnquoteExpression = define "SplicingUnquoteExpression" $
+  doc "A splicing unquote within a quasiquote: ~@expr or ,@expr" $
   T.record [
-    "car">:
-      doc "The first element" $
-      lisp "Expression",
-    "cdr">:
-      doc "The second element" $
+    "body">:
+      doc "The spliced form" $
       lisp "Expression"]
 
 
 -- ================================================================================================
--- Type-related
+-- Let bindings
+-- ================================================================================================
+
+symbol :: Binding
+symbol = define "Symbol" $
+  doc "A Lisp symbol (identifier)" $
+  T.wrap T.string
+
+topLevelForm :: Binding
+topLevelForm = define "TopLevelForm" $
+  doc "A top-level form in a Lisp program" $
+  T.union [
+    "function">:
+      doc "A named function definition" $
+      lisp "FunctionDefinition",
+    "variable">:
+      doc "A global variable definition" $
+      lisp "VariableDefinition",
+    "constant">:
+      doc "A constant definition" $
+      lisp "ConstantDefinition",
+    "recordType">:
+      doc "A record/struct type definition" $
+      lisp "RecordTypeDefinition",
+    "macro">:
+      doc "A macro definition" $
+      lisp "MacroDefinition",
+    "expression">:
+      doc "A bare expression at the top level" $
+      lisp "Expression"]
+
+topLevelFormWithComments :: Binding
+topLevelFormWithComments = define "TopLevelFormWithComments" $
+  doc "A top-level form together with optional documentation" $
+  T.record [
+    "doc">:
+      doc "Optional documentation string" $
+      T.maybe (lisp "Docstring"),
+    "comment">:
+      doc "Optional comment" $
+      T.maybe (lisp "Comment"),
+    "form">:
+      doc "The form itself" $
+      lisp "TopLevelForm"]
+
+
+-- ================================================================================================
+-- Definitions
+-- ================================================================================================
+
+typeAnnotation :: Binding
+typeAnnotation = define "TypeAnnotation" $
+  doc "An expression with a type annotation" $
+  T.record [
+    "expression">:
+      doc "The annotated expression" $
+      lisp "Expression",
+    "type">:
+      doc "The type specifier" $
+      lisp "TypeSpecifier"]
+
+
+-- ================================================================================================
+-- Special forms
 -- ================================================================================================
 
 typeHint :: Binding
@@ -991,104 +1035,60 @@ typeSpecifier = define "TypeSpecifier" $
 -- Module system
 -- ================================================================================================
 
-moduleDeclaration :: Binding
-moduleDeclaration = define "ModuleDeclaration" $
-  doc ("A module/namespace declaration."
-    ++ " Serializes as (ns name ...) in Clojure,"
-    ++ " (provide 'name) in Emacs Lisp,"
-    ++ " (defpackage :name ... ) (in-package :name) in Common Lisp,"
-    ++ " (define-library (name) ...) in Scheme") $
+unquoteExpression :: Binding
+unquoteExpression = define "UnquoteExpression" $
+  doc "An unquoted form within a quasiquote: ~expr or ,expr" $
+  T.record [
+    "body">:
+      doc "The unquoted form" $
+      lisp "Expression"]
+
+variableDefinition :: Binding
+variableDefinition = define "VariableDefinition" $
+  doc ("A global variable definition."
+    ++ " Serializes as (def name value) in Clojure,"
+    ++ " (defvar name value) in Emacs Lisp and Common Lisp,"
+    ++ " (define name value) in Scheme") $
   T.record [
     "name">:
-      doc "The module/namespace name" $
-      lisp "NamespaceName",
+      doc "The variable name" $
+      lisp "Symbol",
+    "value">:
+      doc "The initial value" $
+      lisp "Expression",
     "doc">:
-      doc "Optional module documentation" $
+      doc "Optional docstring" $
       T.maybe (lisp "Docstring")]
 
-importDeclaration :: Binding
-importDeclaration = define "ImportDeclaration" $
-  doc ("An import/require declaration."
-    ++ " Serializes as (:require [name ...]) in Clojure,"
-    ++ " (require 'name) in Emacs Lisp,"
-    ++ " (:use :name) or (:import-from :name ...) in Common Lisp,"
-    ++ " (import (name)) in Scheme") $
+variableReference :: Binding
+variableReference = define "VariableReference" $
+  doc "A reference to a variable by name" $
   T.record [
-    "module">:
-      doc "The module being imported" $
-      lisp "NamespaceName",
-    "spec">:
-      doc "Import specification" $
-      lisp "ImportSpec"]
-
-importSpec :: Binding
-importSpec = define "ImportSpec" $
-  doc "An import specification describing how to import symbols" $
-  T.union [
-    "all">:
-      doc "Import everything" $
-      T.unit,
-    "alias">:
-      doc "Import with an alias: (:require [name :as alias]) in Clojure" $
+    "name">:
+      doc "The variable name" $
       lisp "Symbol",
-    "only">:
-      doc "Import specific symbols: (:require [name :refer [sym1 sym2]]) in Clojure" $
-      T.list (lisp "Symbol"),
-    "rename">:
-      doc "Import with renaming: list of (from, to) symbol pairs" $
-      T.list (T.list (lisp "Symbol"))]
+    "functionNamespace">:
+      doc ("Whether to reference from the function namespace."
+        ++ " In Lisp-2 dialects (Common Lisp), this emits #'name."
+        ++ " In Lisp-1 dialects, this has no effect.") $
+      T.boolean]
 
-exportDeclaration :: Binding
-exportDeclaration = define "ExportDeclaration" $
-  doc ("An export/provide declaration."
-    ++ " Serializes as (provide 'name) in Emacs Lisp,"
-    ++ " (:export :sym1 :sym2) in Common Lisp,"
-    ++ " (export sym1 sym2) in Scheme."
-    ++ " In Clojure, symbols are public by default.") $
+vectorLiteral :: Binding
+vectorLiteral = define "VectorLiteral" $
+  doc ("A vector literal."
+    ++ " Serializes as [1 2 3] in Clojure and Emacs Lisp,"
+    ++ " #(1 2 3) in Common Lisp and Scheme") $
   T.record [
-    "symbols">:
-      doc "The symbols to export" $
-      T.list (lisp "Symbol")]
+    "elements">:
+      doc "The vector elements" $
+      T.list (lisp "Expression")]
+
+wildcardPattern :: Binding
+wildcardPattern = define "WildcardPattern" $
+  doc "A wildcard pattern that matches any value" $
+  T.record []
 
 
 -- ================================================================================================
--- Miscellaneous
+-- Literals
 -- ================================================================================================
-
-comment :: Binding
-comment = define "Comment" $
-  doc "A comment" $
-  T.record [
-    "style">:
-      doc "The comment style" $
-      lisp "CommentStyle",
-    "text">:
-      doc "The comment text" $
-      T.string]
-
-commentStyle :: Binding
-commentStyle = define "CommentStyle" $
-  doc "The style of a comment" $
-  T.enum ["line", "block", "datum"]
-
-docstring :: Binding
-docstring = define "Docstring" $
-  doc "A documentation string" $
-  T.wrap T.string
-
-dialect :: Binding
-dialect = define "Dialect" $
-  doc "A Lisp dialect" $
-  T.enum ["clojure", "emacsLisp", "commonLisp", "scheme"]
-
-sExpression :: Binding
-sExpression = define "SExpression" $
-  doc ("A raw S-expression. This is an escape hatch for expressing arbitrary Lisp forms"
-    ++ " that do not fit into the structured AST above.") $
-  T.union [
-    "atom">:
-      doc "An atomic value" $
-      T.string,
-    "list">:
-      doc "A list of S-expressions" $
-      T.list (lisp "SExpression")]

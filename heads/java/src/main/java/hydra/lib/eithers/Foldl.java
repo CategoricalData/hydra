@@ -16,7 +16,7 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.var;
-import hydra.context.Context;
+import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -42,7 +42,7 @@ public class Foldl extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(2)), items -> {
                 Term fn = args.get(0);
                 Term init = args.get(1);
@@ -50,7 +50,7 @@ public class Foldl extends PrimitiveFunction {
                 for (Term item : items) {
                     Term applied = Terms.apply(Terms.apply(fn, acc), item);
                     Either<Error_, Term> r = hydra.Reduction.reduceTerm(
-                        hydra.Lexical.emptyContext(), graph, true, applied);
+                        hydra.Lexical.emptyInferenceContext(), graph, true, applied);
                     if (r.isLeft()) return r;
                     Either<Error_, hydra.util.Either<Term, Term>> eitherResult =
                         hydra.extract.Core.eitherTerm(t -> Either.right(t), t -> Either.right(t), graph,
