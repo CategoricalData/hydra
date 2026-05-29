@@ -157,6 +157,38 @@ wiping it is always safe and never affects shared history.
 
 Then sync forward into whatever target language consumes the regenerated coder.
 
+### Native (Java/Python) coder edits need two sync passes — or the one-pass self-propagation (#400)
+
+The above is about the *legacy Haskell* coder DSL. The **native** coders
+(`packages/hydra-{java,python}/src/main/{java,python}/.../Coder.{java,py}`) have a
+sharper version of the same trap, because they are regenerated in **Phase 5 — the
+last phase**. A single `bin/sync.sh` runs Phase 2 (build `dist/haskell/hydra-<lang>`
+from the *current* `coder.json`) and Phase 3/4 (emit `dist/<target>` via the binary
+compiled from it) *before* Phase 5 overwrites `dist/json/hydra-<lang>/coder.json` with
+the new native output. So an edit to `Coder.java`/`Coder.py` reaches `coder.json` this
+pass but does not reach `dist/haskell/hydra-<lang>/` (what `bootstrap-from-json` actually
+compiles) until the *next* pass. Worse, the input digest for `dist/json/hydra-<lang>/`
+only hashes the `hydra.dsl.<lang>.*` modules, **not** `hydra.<lang>.coder`, so the second
+pass's freshness gate silently skips the regen too.
+
+Symptom: you edit the native coder, sync reports success, but generated target code is
+unchanged; and the CI consistency gate (`git diff dist/json dist/haskell`) can fail
+because the committed `dist/haskell/hydra-<lang>/Coder.hs` lags the committed `coder.json`.
+
+`bin/sync.sh`'s Phase 5 now self-propagates in one pass (#400): when the native output
+differs, it re-assembles `dist/haskell/hydra-<lang>` from the new JSON (force-dropping the
+stale output digest) and re-runs `stack build` so the binary embeds the new coder. If that
+ever regresses, the manual recovery is the same shape:
+
+```sh
+rm -f dist/haskell/hydra-<lang>/build/main/digest.json
+heads/haskell/bin/assemble-distribution.sh hydra-<lang>
+(cd heads/haskell && stack build)
+```
+
+`dist/<target>/` (e.g. `dist/java`) is gitignored and regenerated downstream, so it is not
+part of the consistency gate and lagging it one pass is harmless.
+
 ### Scoped `bin/sync.sh --hosts X --targets X` is narrow — cross-language dists are not populated
 
 Every per-host sync wrapper (`bin/sync-java.sh`, `bin/sync-python.sh`,
