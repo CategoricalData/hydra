@@ -13,13 +13,13 @@ import qualified Hydra.Sources.Kernel.Types.Typing  as TypingTypes
 ns :: ModuleName
 ns = ModuleName "hydra.protobuf.environment"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [CoreTypes.ns, TypingTypes.ns],
             moduleDescription = Just "Type definitions for the Protobuf code generation environment"}
   where
@@ -33,7 +33,7 @@ coreType = typeref CoreTypes.ns
 -- | State threaded through Protobuf encoding: the InferenceContext used by
 -- kernel helpers (annotation reads, dependency analysis) plus a per-message
 -- field-index counter.
-encoderStateType :: Binding
+encoderStateType :: TypeDefinition
 encoderStateType = define "EncoderState" $
   doc "State threaded through Protobuf encoding: inference context plus field-index counter" $
   T.record [
@@ -45,7 +45,7 @@ encoderStateType = define "EncoderState" $
       T.int32]
 
 -- | A reference to a structural type (Either or Pair) with its component types
-structuralTypeRefType :: Binding
+structuralTypeRefType :: TypeDefinition
 structuralTypeRefType = define "StructuralTypeRef" $
   doc "A reference to a structural type (Either or Pair) with its component types" $
   T.union [

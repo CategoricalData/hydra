@@ -12,13 +12,13 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 ns :: ModuleName
 ns = ModuleName "hydra.query"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "A model for language-agnostic graph pattern queries"}
   where
@@ -39,12 +39,12 @@ module_ = Module {
       triplePattern,
       variable]
 
-comparisonConstraint :: Binding
+comparisonConstraint :: TypeDefinition
 comparisonConstraint = define "ComparisonConstraint" $
   doc "One of several comparison operators" $
   T.enum ["equal", "notEqual", "lessThan", "greaterThan", "lessThanOrEqual", "greaterThanOrEqual"]
 
-edge :: Binding
+edge :: TypeDefinition
 edge = define "Edge" $
   doc "An abstract edge based on a record type" $
   T.record [
@@ -58,7 +58,7 @@ edge = define "Edge" $
       doc "The field representing the in-projection of the edge. Defaults to 'in'." $
       T.maybe Core.name]
 
-graphPattern :: Binding
+graphPattern :: TypeDefinition
 graphPattern = define "GraphPattern" $
   doc "A query pattern which matches within a designated component subgraph" $
   T.record [
@@ -69,7 +69,7 @@ graphPattern = define "GraphPattern" $
       doc "The patterns to match within the subgraph" $
       T.list pattern]
 
-node :: Binding
+node :: TypeDefinition
 node = define "Node" $
   doc "A node in a query expression; it may be a term, a variable, or a wildcard" $
   T.union [
@@ -82,7 +82,7 @@ node = define "Node" $
     "wildcard">:
       doc "An anonymous variable which we do not care to join across patterns" T.unit]
 
-path :: Binding
+path :: TypeDefinition
 path = define "Path" $
   doc "A query path" $
   T.union [
@@ -96,7 +96,7 @@ path = define "Path" $
       doc "A path given by the inverse of another path"
       path]
 
-pathEquation :: Binding
+pathEquation :: TypeDefinition
 pathEquation = define "PathEquation" $
   doc "A declared equivalence between two abstract paths in a graph" $
   T.record [
@@ -107,7 +107,7 @@ pathEquation = define "PathEquation" $
       doc "The right-hand side of the equation"
       path]
 
-pattern :: Binding
+pattern :: TypeDefinition
 pattern = define "Pattern" $
   doc "A query pattern" $
   T.union [
@@ -127,7 +127,7 @@ pattern = define "Pattern" $
       doc "A pattern which matches within a named subgraph"
       graphPattern]
 
-patternImplication :: Binding
+patternImplication :: TypeDefinition
 patternImplication = define "PatternImplication" $
   doc "A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns." $
   T.record [
@@ -138,7 +138,7 @@ patternImplication = define "PatternImplication" $
       doc "The pattern which must also match when the antecedent matches"
       pattern]
 
-query :: Binding
+query :: TypeDefinition
 query = define "Query" $
   doc "A SELECT-style graph pattern matching query" $
   T.record [
@@ -149,7 +149,7 @@ query = define "Query" $
       doc "The patterns to be matched" $
       T.list pattern]
 
-range :: Binding
+range :: TypeDefinition
 range = define "Range" $
   doc "A range from min to max, inclusive" $
   T.record [
@@ -160,7 +160,7 @@ range = define "Range" $
       doc "The maximum value (inclusive)" $
       T.int32]
 
-regexQuantifier :: Binding
+regexQuantifier :: TypeDefinition
 regexQuantifier = define "RegexQuantifier" $
   doc "A regular expression quantifier" $
   T.union [
@@ -172,7 +172,7 @@ regexQuantifier = define "RegexQuantifier" $
     "atLeast">: doc "The {n,} quantifier; matches at least n occurrences" T.int32,
     "range">: doc "The {n, m} quantifier; matches between n and m (inclusive) occurrences" range]
 
-regexSequence :: Binding
+regexSequence :: TypeDefinition
 regexSequence = define "RegexSequence" $
   doc "A path with a regex quantifier" $
   T.record [
@@ -183,7 +183,7 @@ regexSequence = define "RegexSequence" $
       doc "The quantifier"
       regexQuantifier]
 
-step :: Binding
+step :: TypeDefinition
 step = define "Step" $
   doc "An atomic function as part of a query. When applied to a graph, steps are typed by function types." $
   T.union [
@@ -197,7 +197,7 @@ step = define "Step" $
       doc "A comparison of two terms"
       comparisonConstraint]
 
-triplePattern :: Binding
+triplePattern :: TypeDefinition
 triplePattern = define "TriplePattern" $
   doc "A subject/predicate/object pattern" $
   T.record [
@@ -211,7 +211,7 @@ triplePattern = define "TriplePattern" $
       doc "The object of the pattern"
       node]
 
-variable :: Binding
+variable :: TypeDefinition
 variable = define "Variable" $
   doc "A query variable" $
   T.wrap T.string

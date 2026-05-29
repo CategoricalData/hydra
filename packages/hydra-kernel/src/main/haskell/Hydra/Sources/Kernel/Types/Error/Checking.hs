@@ -14,13 +14,13 @@ import qualified Hydra.Sources.Kernel.Types.Variants as Variants
 ns :: ModuleName
 ns = ModuleName "hydra.error.checking"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, Paths.ns, Typing.ns, Variants.ns],
             moduleDescription = Just "Error types for type checking"}
   where
@@ -40,7 +40,7 @@ module_ = Module {
       untypedLetBindingError,
       untypedTermVariableCheckingError]
 
-checkingError :: Binding
+checkingError :: TypeDefinition
 checkingError = define "CheckingError" $
   doc "An error that occurred during type checking" $
   T.union [
@@ -84,7 +84,7 @@ checkingError = define "CheckingError" $
       doc "A reference to a term variable whose type is not known, encountered during checking" $
       untypedTermVariableCheckingError]
 
-incorrectUnificationError :: Binding
+incorrectUnificationError :: TypeDefinition
 incorrectUnificationError = define "IncorrectUnificationError" $
   doc "A post-unification consistency check failure" $
   T.record [
@@ -92,7 +92,7 @@ incorrectUnificationError = define "IncorrectUnificationError" $
       doc "The substitution that failed the consistency check" $
       Typing.typeSubst]
 
-notAForallTypeError :: Binding
+notAForallTypeError :: TypeDefinition
 notAForallTypeError = define "NotAForallTypeError" $
   doc "A type that is not a forall type when type arguments are being applied" $
   T.record [
@@ -103,7 +103,7 @@ notAForallTypeError = define "NotAForallTypeError" $
       doc "The type arguments that were being applied" $
       T.list Core.type_]
 
-notAFunctionTypeError :: Binding
+notAFunctionTypeError :: TypeDefinition
 notAFunctionTypeError = define "NotAFunctionTypeError" $
   doc "A type that is not a function type when one was expected in an application" $
   T.record [
@@ -111,7 +111,7 @@ notAFunctionTypeError = define "NotAFunctionTypeError" $
       doc "The actual type encountered" $
       Core.type_]
 
-otherCheckingError :: Binding
+otherCheckingError :: TypeDefinition
 otherCheckingError = define "OtherCheckingError" $
   doc "A generic checking error: message + subterm path" $
   T.record [
@@ -122,7 +122,7 @@ otherCheckingError = define "OtherCheckingError" $
       doc "A human-readable error message" $
       T.string]
 
-typeArityMismatchError :: Binding
+typeArityMismatchError :: TypeDefinition
 typeArityMismatchError = define "TypeArityMismatchError" $
   doc "A type constructor applied to the wrong number of type arguments" $
   T.record [
@@ -139,7 +139,7 @@ typeArityMismatchError = define "TypeArityMismatchError" $
       doc "The type arguments that were provided" $
       T.list Core.type_]
 
-typeMismatchError :: Binding
+typeMismatchError :: TypeDefinition
 typeMismatchError = define "TypeMismatchError" $
   doc "A type mismatch between expected and actual types" $
   T.record [
@@ -150,7 +150,7 @@ typeMismatchError = define "TypeMismatchError" $
       doc "The actual type encountered" $
       Core.type_]
 
-unboundTypeVariablesError :: Binding
+unboundTypeVariablesError :: TypeDefinition
 unboundTypeVariablesError = define "UnboundTypeVariablesError" $
   doc "Type variables that appear free in a type but are not bound in scope" $
   T.record [
@@ -161,7 +161,7 @@ unboundTypeVariablesError = define "UnboundTypeVariablesError" $
       doc "The type containing the unbound variables" $
       Core.type_]
 
-undefinedTermVariableCheckingError :: Binding
+undefinedTermVariableCheckingError :: TypeDefinition
 undefinedTermVariableCheckingError = define "UndefinedTermVariableCheckingError" $
   doc "A reference to a term variable that is not bound in scope, encountered during checking" $
   T.record [
@@ -172,7 +172,7 @@ undefinedTermVariableCheckingError = define "UndefinedTermVariableCheckingError"
       doc "The name of the undefined variable" $
       Core.name]
 
-unequalTypesError :: Binding
+unequalTypesError :: TypeDefinition
 unequalTypesError = define "UnequalTypesError" $
   doc "Multiple types that should all be equal but are not" $
   T.record [
@@ -183,7 +183,7 @@ unequalTypesError = define "UnequalTypesError" $
       doc "A description of the context in which the types were expected to be equal" $
       T.string]
 
-unsupportedTermVariantError :: Binding
+unsupportedTermVariantError :: TypeDefinition
 unsupportedTermVariantError = define "UnsupportedTermVariantError" $
   doc "A term variant that the type checker does not support" $
   T.record [
@@ -191,7 +191,7 @@ unsupportedTermVariantError = define "UnsupportedTermVariantError" $
       doc "The unsupported term variant" $
       Variants.termVariant]
 
-untypedLambdaError :: Binding
+untypedLambdaError :: TypeDefinition
 untypedLambdaError = define "UntypedLambdaError" $
   doc "A lambda expression without a type annotation on its parameter" $
   -- TODO: this should be `T.wrap T.unit` (per the EmptyRecordType validator
@@ -199,7 +199,7 @@ untypedLambdaError = define "UntypedLambdaError" $
   -- host language and is sized as its own change; tracked separately.
   T.record []
 
-untypedLetBindingError :: Binding
+untypedLetBindingError :: TypeDefinition
 untypedLetBindingError = define "UntypedLetBindingError" $
   doc "A let binding without a type annotation" $
   T.record [
@@ -207,7 +207,7 @@ untypedLetBindingError = define "UntypedLetBindingError" $
       doc "The untyped binding" $
       Core.binding]
 
-untypedTermVariableCheckingError :: Binding
+untypedTermVariableCheckingError :: TypeDefinition
 untypedTermVariableCheckingError = define "UntypedTermVariableCheckingError" $
   doc "A reference to a term variable whose type is not known, encountered during checking" $
   T.record [

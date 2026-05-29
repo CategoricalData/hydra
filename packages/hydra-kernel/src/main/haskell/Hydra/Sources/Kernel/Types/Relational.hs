@@ -13,13 +13,13 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 ns :: ModuleName
 ns = ModuleName "hydra.relational"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("An interpretation of Codd's Relational Model, " ++
       "as described in 'A Relational Model of Data for Large Shared Data Banks' (1970). " ++
@@ -37,13 +37,13 @@ module_ = Module {
       relationship,
       row]
 
-columnName :: Binding
+columnName :: TypeDefinition
 columnName = define "ColumnName" $
   doc ("A name for a domain which serves to identify the role played by that domain in the given relation;"
     ++ " a 'role name' in Codd") $
   T.wrap T.string
 
-columnSchema :: Binding
+columnSchema :: TypeDefinition
 columnSchema = define "ColumnSchema" $
   doc "An abstract specification of the domain represented by a column in a relation; a role" $
   T.forAll "t" $ T.record [
@@ -54,7 +54,7 @@ columnSchema = define "ColumnSchema" $
       doc "The domain (type) of the column"
       "t"]
 
-foreignKey :: Binding
+foreignKey :: TypeDefinition
 foreignKey = define "ForeignKey" $
   doc "A mapping from certain columns of a source relation to primary key columns of a target relation" $
   T.record [
@@ -66,22 +66,22 @@ foreignKey = define "ForeignKey" $
          ++ " The target column names must together make up the primary key of the target relation.") $
       nonemptyMap columnName columnName]
 
-primaryKey :: Binding
+primaryKey :: TypeDefinition
 primaryKey = define "PrimaryKey" $
   doc "A primary key of a relation, specified either as a single column, or as a list of columns" $
   T.wrap $ nonemptyList columnName
 
-relation :: Binding
+relation :: TypeDefinition
 relation = define "Relation" $
   doc "A set of distinct n-tuples; a table" $
   T.forAll "v" $ T.wrap $ T.list (row @@ "v")
 
-relationName :: Binding
+relationName :: TypeDefinition
 relationName = define "RelationName" $
   doc "A unique relation (table) name" $
   T.wrap T.string
 
-relationSchema :: Binding
+relationSchema :: TypeDefinition
 relationSchema = define "RelationSchema" $
   doc "An abstract relation; the name and columns of a relation without its actual data" $
   T.forAll "t" $ T.record [
@@ -98,12 +98,12 @@ relationSchema = define "RelationSchema" $
       doc "Any number of foreign keys, each of which must be valid for both this relation and the target relation" $
       T.list foreignKey]
 
-relationship :: Binding
+relationship :: TypeDefinition
 relationship = define "Relationship" $
   doc "A domain-unordered (string-indexed, rather than position-indexed) relation" $
   T.forAll "v" $ T.wrap $ T.set $ T.map columnName "v"
 
-row :: Binding
+row :: TypeDefinition
 row = define "Row" $
   doc "An n-tuple which is an element of a given relation" $
   T.forAll "v" $ T.wrap $ nonemptyList "v"

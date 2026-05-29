@@ -16,13 +16,13 @@ import qualified Data.Maybe                      as Y
 ns :: ModuleName
 ns = ModuleName "hydra.tinkerpop.features"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A model derived from TinkerPop's Graph.Features. See\n" ++
       "  https://tinkerpop.apache.org/javadocs/current/core/org/apache/tinkerpop/gremlin/structure/Graph.Features.html\n" ++
@@ -48,7 +48,7 @@ module_ = Module {
 core :: String -> Type
 core = typeref $ Core.ns
 
-dataTypeFeatures :: Binding
+dataTypeFeatures :: TypeDefinition
 dataTypeFeatures = define "DataTypeFeatures" $
   doc "Base interface for features that relate to supporting different data types." $
   T.record [
@@ -71,7 +71,7 @@ dataTypeFeatures = define "DataTypeFeatures" $
     supports "stringValues" "Supports setting of a string value.",
     supports "uniformListValues" "Supports setting of a List value."]
 
-edgeFeatures :: Binding
+edgeFeatures :: TypeDefinition
 edgeFeatures = define "EdgeFeatures" $
   doc "Features that are related to Edge operations." $
   T.record [
@@ -82,13 +82,13 @@ edgeFeatures = define "EdgeFeatures" $
     supports "upsert" ("Determines if the Graph implementation uses upsert functionality as opposed to insert " ++
       "functionality for Vertex.addEdge(String, Vertex, Object...).")]
 
-edgePropertyFeatures :: Binding
+edgePropertyFeatures :: TypeDefinition
 edgePropertyFeatures = define "EdgePropertyFeatures" $
   doc "Features that are related to Edge Property objects." $
   T.record [
     "propertyFeatures">: features "PropertyFeatures"]
 
-elementFeatures :: Binding
+elementFeatures :: TypeDefinition
 elementFeatures = define "ElementFeatures" $
   doc "Features that are related to Element objects." $
   T.record [
@@ -101,7 +101,7 @@ elementFeatures = define "ElementFeatures" $
     supports "userSuppliedIds" "Determines if an Element can have a user defined identifier.",
     supports "uuidIds" "Determines if an Element has UUID identifiers as their internal representation."]
 
-extraFeatures :: Binding
+extraFeatures :: TypeDefinition
 extraFeatures = define "ExtraFeatures" $
   doc ("Additional features which are needed for the complete specification of language constraints in Hydra, "
     ++ "above and beyond TinkerPop Graph.Features") $
@@ -111,7 +111,7 @@ extraFeatures = define "ExtraFeatures" $
 features :: String -> Type
 features = typeref ns
 
-features_ :: Binding
+features_ :: TypeDefinition
 features_ = define "Features" $
   doc ("An interface that represents the capabilities of a Graph implementation. By default all methods of " ++
       "features return true and it is up to implementers to disable feature they don't support. Users should " ++
@@ -131,7 +131,7 @@ features_ = define "Features" $
     "vertex">: doc "Gets the features related to vertex operation." $
       features "VertexFeatures"]
 
-graphFeatures :: Binding
+graphFeatures :: TypeDefinition
 graphFeatures = define "GraphFeatures" $
   doc "Features specific to a operations of a graph." $
   T.record [
@@ -146,7 +146,7 @@ graphFeatures = define "GraphFeatures" $
       doc "Gets the features related to graph sideEffects operation." $
       features "VariableFeatures"]
 
-propertyFeatures :: Binding
+propertyFeatures :: TypeDefinition
 propertyFeatures = define "PropertyFeatures" $
   doc "A base interface for Edge or Vertex Property features." $
   T.record [
@@ -156,14 +156,14 @@ propertyFeatures = define "PropertyFeatures" $
 supports :: String -> String -> FieldType
 supports name comment = ("supports" ++ capitalize name)>: doc comment T.boolean
 
-variableFeatures :: Binding
+variableFeatures :: TypeDefinition
 variableFeatures = define "VariableFeatures" $
   doc "Features for Graph.Variables." $
   T.record [
     "dataTypeFeatures">: features "DataTypeFeatures",
     supports "variables" "If any of the features on Graph.Features.VariableFeatures is true then this value must be true."]
 
-vertexFeatures :: Binding
+vertexFeatures :: TypeDefinition
 vertexFeatures = define "VertexFeatures" $
   doc "Features that are related to Vertex operations." $
   T.record [
@@ -177,7 +177,7 @@ vertexFeatures = define "VertexFeatures" $
     supports "upsert" ("Determines if the Graph implementation uses upsert functionality as opposed to insert " ++
       "functionality for Graph.addVertex(String).")]
 
-vertexPropertyFeatures :: Binding
+vertexPropertyFeatures :: TypeDefinition
 vertexPropertyFeatures = define "VertexPropertyFeatures" $
   doc "Features that are related to Vertex Property objects." $
   T.record [

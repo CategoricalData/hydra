@@ -16,13 +16,13 @@ import qualified Data.Maybe                      as Y
 ns :: ModuleName
 ns = ModuleName "com.gdblab.pathAlgebra.syntax"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A syntax model for the path algebra grammar by Angles et al."
       ++ " See the paper \"Path-based Algebraic Foundations of Graph Query Languages\""
@@ -40,17 +40,17 @@ module_ = Module {
       rpqRestrictor, complexCondition, compoundComplexCondition, condition,
       compareSym, function_, simpleFunction, nestedFunction, complexFunction, boolOp]
 
-alternation :: Binding
+alternation :: TypeDefinition
 alternation = define "Alternation" $ T.record [
   "left">: pathAlg "Rpq",
   "right">: pathAlg "Rpq"]
 
-boolOp :: Binding
+boolOp :: TypeDefinition
 boolOp = define "BoolOp" $ T.enum [
   "and",
   "or"]
 
-compareSym :: Binding
+compareSym :: TypeDefinition
 compareSym = define "CompareSym" $ T.enum [
   "equal",
   "notEqual",
@@ -59,55 +59,55 @@ compareSym = define "CompareSym" $ T.enum [
   "lessThanOrEqual",
   "greaterThanOrEqual"]
 
-complexCondition :: Binding
+complexCondition :: TypeDefinition
 complexCondition = define "ComplexCondition" $ T.union [
   "simple">: pathAlg "Condition",
   "compound">: pathAlg "CompoundComplexCondition"]
 
-complexFunction :: Binding
+complexFunction :: TypeDefinition
 complexFunction = define "ComplexFunction" $ T.record [
   "name">: pathAlg "Text",
   "innerFunction">: pathAlg "Function",
   "additionalArg">: pathAlg "Text"]
 
-compoundComplexCondition :: Binding
+compoundComplexCondition :: TypeDefinition
 compoundComplexCondition = define "CompoundComplexCondition" $ T.record [
   "lhs">: pathAlg "Condition",
   "operator">: pathAlg "BoolOp",
   "rhs">: pathAlg "ComplexCondition"]
 
-concatenation :: Binding
+concatenation :: TypeDefinition
 concatenation = define "Concatenation" $ T.record [
   "left">: pathAlg "Rpq",
   "right">: pathAlg "Rpq"]
 
-condition :: Binding
+condition :: TypeDefinition
 condition = define "Condition" $ T.record [
   "function">: pathAlg "Function",
   "compareSym">: pathAlg "CompareSym",
   "value">: pathAlg "Text"]
 
-edgeDirection :: Binding
+edgeDirection :: TypeDefinition
 edgeDirection = define "EdgeDirection" $ T.enum [
   "outgoing",
   "incoming",
   "undirected"]
 
-edgePattern :: Binding
+edgePattern :: TypeDefinition
 edgePattern = define "EdgePattern" $ T.record [
   "direction">: pathAlg "EdgeDirection",
   "rpq">: T.optional $ pathAlg "Rpq"]
 
-function_ :: Binding
+function_ :: TypeDefinition
 function_ = define "Function" $ T.union [
   "simple">: pathAlg "SimpleFunction",
   "nested">: pathAlg "NestedFunction",
   "complex">: pathAlg "ComplexFunction"]
 
-groupBy :: Binding
+groupBy :: TypeDefinition
 groupBy = define "GroupBy" $ T.wrap $ pathAlg "GroupByOption"
 
-groupByOption :: Binding
+groupByOption :: TypeDefinition
 groupByOption = define "GroupByOption" $ T.enum [
   "source",
   "target",
@@ -117,31 +117,31 @@ groupByOption = define "GroupByOption" $ T.enum [
   "targetLength",
   "sourceTargetLength"]
 
-groupProj :: Binding
+groupProj :: TypeDefinition
 groupProj = define "GroupProj" $ T.union [
   "all">: T.unit,
   "limited">: pathAlg "Number"]
 
-label :: Binding
+label :: TypeDefinition
 label = define "Label" T.string
 
-nestedFunction :: Binding
+nestedFunction :: TypeDefinition
 nestedFunction = define "NestedFunction" $ T.record [
   "name">: pathAlg "Text",
   "innerFunction">: pathAlg "Function"]
 
-nodePattern :: Binding
+nodePattern :: TypeDefinition
 nodePattern = define "NodePattern" $ T.record [
   "variable">: T.optional $ pathAlg "Variable"]
 
 -- Terminals from the grammar
-number :: Binding
+number :: TypeDefinition
 number = define "Number" T.bigint
 
-orderBy :: Binding
+orderBy :: TypeDefinition
 orderBy = define "OrderBy" $ T.wrap $ pathAlg "OrderByOption"
 
-orderByOption :: Binding
+orderByOption :: TypeDefinition
 orderByOption = define "OrderByOption" $ T.enum [
   "partition",
   "group",
@@ -151,7 +151,7 @@ orderByOption = define "OrderByOption" $ T.enum [
   "groupPath",
   "partitionGroupPath"]
 
-partProj :: Binding
+partProj :: TypeDefinition
 partProj = define "PartProj" $ T.union [
   "all">: T.unit,
   "limited">: pathAlg "Number"]
@@ -159,10 +159,10 @@ partProj = define "PartProj" $ T.union [
 pathAlg :: String -> Type
 pathAlg = typeref ns
 
-pathName_ :: Binding
+pathName_ :: TypeDefinition
 pathName_ = define "PathName" T.string
 
-pathPattern :: Binding
+pathPattern :: TypeDefinition
 pathPattern = define "PathPattern" $ T.record [
   "pathName">: pathAlg "PathName",
   "startNode">: pathAlg "NodePattern",
@@ -170,13 +170,13 @@ pathPattern = define "PathPattern" $ T.record [
   "endNode">: pathAlg "NodePattern",
   "condition">: T.optional $ pathAlg "ComplexCondition"]
 
-pathProj :: Binding
+pathProj :: TypeDefinition
 pathProj = define "PathProj" $ T.union [
   "all">: T.unit,
   "limited">: pathAlg "Number"]
 
 -- Nonterminal productions from the grammar
-pathQuery :: Binding
+pathQuery :: TypeDefinition
 pathQuery = define "PathQuery" $ T.record [
   "projection">: pathAlg "Projection",
   "restrictorExt">: T.optional $ pathAlg "RestrictorExt",
@@ -184,18 +184,18 @@ pathQuery = define "PathQuery" $ T.record [
   "groupBy">: T.optional $ pathAlg "GroupBy",
   "orderBy">: T.optional $ pathAlg "OrderBy"]
 
-plus_ :: Binding
+plus_ :: TypeDefinition
 plus_ = define "Plus" $ T.record [
   "expression">: pathAlg "Rpq",
   "restrictor">: T.optional $ pathAlg "RpqRestrictor"]
 
-projection :: Binding
+projection :: TypeDefinition
 projection = define "Projection" $ T.record [
   "partProj">: pathAlg "PartProj",
   "groupProj">: pathAlg "GroupProj",
   "pathProj">: pathAlg "PathProj"]
 
-restrictorExt :: Binding
+restrictorExt :: TypeDefinition
 restrictorExt = define "RestrictorExt" $ T.enum [
   "walk",
   "trail",
@@ -203,7 +203,7 @@ restrictorExt = define "RestrictorExt" $ T.enum [
   "acyclic",
   "shortest"]
 
-rpq :: Binding
+rpq :: TypeDefinition
 rpq = define "Rpq" $ T.union [
   "parenthesis">: pathAlg "Rpq",
   "label">: pathAlg "Label",
@@ -215,21 +215,21 @@ rpq = define "Rpq" $ T.union [
   "concatenation">: pathAlg "Concatenation",
   "alternation">: pathAlg "Alternation"]
 
-rpqRestrictor :: Binding
+rpqRestrictor :: TypeDefinition
 rpqRestrictor = define "RpqRestrictor" $ T.wrap $ pathAlg "RestrictorExt"
 
-simpleFunction :: Binding
+simpleFunction :: TypeDefinition
 simpleFunction = define "SimpleFunction" $ T.record [
   "name">: pathAlg "Text",
   "argument">: pathAlg "Text"]
 
-star_ :: Binding
+star_ :: TypeDefinition
 star_ = define "Star" $ T.record [
   "expression">: pathAlg "Rpq",
   "restrictor">: T.optional $ pathAlg "RpqRestrictor"]
 
-text :: Binding
+text :: TypeDefinition
 text = define "Text" T.string
 
-variable :: Binding
+variable :: TypeDefinition
 variable = define "Variable" T.string

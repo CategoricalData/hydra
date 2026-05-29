@@ -13,13 +13,13 @@ import qualified Hydra.Sources.Kernel.Types.Packaging as Packaging
 ns :: ModuleName
 ns = ModuleName "hydra.util"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, Packaging.ns],
             moduleDescription = Just "General-purpose utility types used across Hydra."}
   where
@@ -33,12 +33,12 @@ module_ = Module {
       namespaces,
       precision]
 
-caseConvention :: Binding
+caseConvention :: TypeDefinition
 caseConvention = define "CaseConvention" $
   doc "A naming convention for symbols, such as camelCase or snake_case" $
   T.enum ["camel", "pascal", "lowerSnake", "upperSnake"]
 
-comparison :: Binding
+comparison :: TypeDefinition
 comparison = define "Comparison" $
   doc "An equality judgement: less than, equal to, or greater than" $
   T.enum [
@@ -46,7 +46,7 @@ comparison = define "Comparison" $
     "equalTo",
     "greaterThan"]
 
-either_ :: Binding
+either_ :: TypeDefinition
 either_ = define "Either" $
   doc "A named union type equivalent to the built-in Either type constructor, for use in languages that lack anonymous sum types" $
   T.forAlls ["a", "b"] $ T.union [
@@ -57,7 +57,7 @@ either_ = define "Either" $
       doc "The right alternative"
       (T.var "b")]
 
-namespaces :: Binding
+namespaces :: TypeDefinition
 namespaces = define "Namespaces" $
   doc "A mapping from namespaces to values of type n, with a focus on one namespace" $
   T.forAll "n" $ T.record [
@@ -68,7 +68,7 @@ namespaces = define "Namespaces" $
       doc "A mapping of namespaces to values" $
       T.map Packaging.moduleNameDef "n"]
 
-pair :: Binding
+pair :: TypeDefinition
 pair = define "Pair" $
   doc "A named record type equivalent to the built-in Pair type constructor, for use in languages that lack anonymous product types" $
   T.forAlls ["a", "b"] $ T.record [
@@ -79,7 +79,7 @@ pair = define "Pair" $
       doc "The second component"
       (T.var "b")]
 
-precision :: Binding
+precision :: TypeDefinition
 precision = define "Precision" $
   doc "Numeric precision: arbitrary precision, or precision to a specified number of bits" $
   T.union [
