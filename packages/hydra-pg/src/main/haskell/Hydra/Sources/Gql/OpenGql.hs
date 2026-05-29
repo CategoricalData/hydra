@@ -19,7 +19,7 @@ ns = ModuleName "openGql.grammar"
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A GQL model based on the OpenGQL ANTLR grammar, version 15b256b (2024-09-05), available at:"
     ++ " https://github.com/opengql/grammar/blob/main/GQL.g4")}
@@ -736,126 +736,126 @@ module_ = Module {
       booleanLiteral,
       byteStringLiteral]
 
-abbreviatedEdgePattern :: Binding
+abbreviatedEdgePattern :: TypeDefinition
 abbreviatedEdgePattern = def "AbbreviatedEdgePattern" $
   T.enum ["leftArrow", "tilde", "rightArrow", "leftArrowTilde", "tildeRightArrow", "leftMinusRight", "minusSign"]
 
-absoluteCatalogSchemaReference :: Binding
+absoluteCatalogSchemaReference :: TypeDefinition
 absoluteCatalogSchemaReference = def "AbsoluteCatalogSchemaReference" $
   T.union [
     "root">: T.unit,
     "directoryAndSchema">: gql "AbsoluteDirectoryAndSchema"]
 
-absoluteDirectoryAndSchema :: Binding
+absoluteDirectoryAndSchema :: TypeDefinition
 absoluteDirectoryAndSchema = def "AbsoluteDirectoryAndSchema" $
   T.record [
     "directoryPath">: gql "AbsoluteDirectoryPath",
     "schemaName">: gql "SchemaName"]
 
-absoluteDirectoryPath :: Binding
+absoluteDirectoryPath :: TypeDefinition
 absoluteDirectoryPath = def "AbsoluteDirectoryPath" $
   T.maybe $ gql "SimpleDirectoryPath"
 
-absoluteValueExpression :: Binding
+absoluteValueExpression :: TypeDefinition
 absoluteValueExpression = def "AbsoluteValueExpression" $
   gql "ValueExpression"
 
-addSubNumericValueExpression :: Binding
+addSubNumericValueExpression :: TypeDefinition
 addSubNumericValueExpression = def "AddSubNumericValueExpression" $
   T.record [
     "left">: gql "NumericValueExpression",
     "operator">: gql "AddSubtractOperator",
     "right">: gql "NumericValueExpression"]
 
-addSubtractExpr :: Binding
+addSubtractExpr :: TypeDefinition
 addSubtractExpr = def "AddSubtractExpr" $
   T.record [
     "left">: gql "ValueExpression",
     "operator">: gql "AddSubtractOperator",
     "right">: gql "ValueExpression"]
 
-addSubtractOperator :: Binding
+addSubtractOperator :: TypeDefinition
 addSubtractOperator = def "AddSubtractOperator" $
   T.enum ["add", "subtract"]
 
-aggregateFunction :: Binding
+aggregateFunction :: TypeDefinition
 aggregateFunction = def "AggregateFunction" $
   T.union [
     "countAll">: T.unit,
     "generalSetFunction">: gql "GeneralSetFunction",
     "binarySetFunction">: gql "BinarySetFunction"]
 
-aggregatingValueExpression :: Binding
+aggregatingValueExpression :: TypeDefinition
 aggregatingValueExpression = def "AggregatingValueExpression" $
   gql "ValueExpression"
 
-allDifferentPredicate :: Binding
+allDifferentPredicate :: TypeDefinition
 allDifferentPredicate = def "AllDifferentPredicate" $
   T.record [
     "references">: nonemptyList $ gql "ElementVariableReference"]
 
-allParametersOrCharacteristics :: Binding
+allParametersOrCharacteristics :: TypeDefinition
 allParametersOrCharacteristics = def "AllParametersOrCharacteristics" $
   T.record [
     "all">: T.boolean,
     "type">: gql "ParametersOrCharacteristics"]
 
-allPathSearch :: Binding
+allPathSearch :: TypeDefinition
 allPathSearch = def "AllPathSearch" $
   T.record [
     "mode">: T.maybe $ gql "PathMode",
     "orPaths">: T.maybe $ gql "PathOrPaths"]
 
-allShortestPathSearch :: Binding
+allShortestPathSearch :: TypeDefinition
 allShortestPathSearch = def "AllShortestPathSearch" $
   T.record [
     "mode">: T.maybe $ gql "PathMode",
     "orPaths">: T.maybe $ gql "PathOrPaths"]
 
-ambientLinearDataModifyingStatement :: Binding
+ambientLinearDataModifyingStatement :: TypeDefinition
 ambientLinearDataModifyingStatement = def "AmbientLinearDataModifyingStatement" $
   T.union [
     "simple">: gql "AmbientLinearDataModifyingStatementBody",
     "nested">: gql "NestedDataModifyingProcedureSpecification"]
 
-ambientLinearDataModifyingStatementBody :: Binding
+ambientLinearDataModifyingStatementBody :: TypeDefinition
 ambientLinearDataModifyingStatementBody = def "AmbientLinearDataModifyingStatementBody" $
   T.record [
     "simpleAccess">: gql "SimpleLinearDataAccessingStatement",
     "primitiveResult">: T.maybe $ gql "PrimitiveResultStatement"]
 
-ambientLinearQueryStatement :: Binding
+ambientLinearQueryStatement :: TypeDefinition
 ambientLinearQueryStatement = def "AmbientLinearQueryStatement" $
   T.union [
     "simple">: gql "AmbientLinearQueryStatementSimpleAndPrimitiveResult",
     "nested">: gql "NestedQuerySpecification"]
 
-ambientLinearQueryStatementSimpleAndPrimitiveResult :: Binding
+ambientLinearQueryStatementSimpleAndPrimitiveResult :: TypeDefinition
 ambientLinearQueryStatementSimpleAndPrimitiveResult = def "AmbientLinearQueryStatementSimpleAndPrimitiveResult" $
   T.record [
     "simple">: T.maybe $ gql "SimpleLinearQueryStatement",
     "primitiveResult">: gql "PrimitiveResultStatement"]
 
-anyPathSearch :: Binding
+anyPathSearch :: TypeDefinition
 anyPathSearch = def "AnyPathSearch" $
   T.record [
     "numberOfPaths">: T.maybe $ gql "NumberOfPaths",
     "mode">: T.maybe $ gql "PathMode",
     "orPaths">: T.maybe $ gql "PathOrPaths"]
 
-anyRecordType :: Binding
+anyRecordType :: TypeDefinition
 anyRecordType = def "AnyRecordType" $
   T.record [
     "any">: T.boolean,
     "notNull">: T.boolean]
 
-anyShortestPathSearch :: Binding
+anyShortestPathSearch :: TypeDefinition
 anyShortestPathSearch = def "AnyShortestPathSearch" $
   T.record [
     "mode">: T.maybe $ gql "PathMode",
     "orPaths">: T.maybe $ gql "PathOrPaths"]
 
-approximateNumericLiteral :: Binding
+approximateNumericLiteral :: TypeDefinition
 approximateNumericLiteral = def "ApproximateNumericLiteral" $
   T.union [
     "scientificWithSuffix">: T.string,
@@ -863,7 +863,7 @@ approximateNumericLiteral = def "ApproximateNumericLiteral" $
     "commonWithSuffix">: T.string,
     "integerWithSuffix">: T.string]
 
-approximateNumericType :: Binding
+approximateNumericType :: TypeDefinition
 approximateNumericType = def "ApproximateNumericType" $
   T.union [
     "float16">: gql "Float16Type",
@@ -875,60 +875,60 @@ approximateNumericType = def "ApproximateNumericType" $
     "real">: gql "RealType",
     "doubleWithPrecision">: gql "DoubleTypeWithPrecision"]
 
-arcTypePointingLeft :: Binding
+arcTypePointingLeft :: TypeDefinition
 arcTypePointingLeft = def "ArcTypePointingLeft" $
   gql "EdgeTypeFiller"
 
-arcTypePointingRight :: Binding
+arcTypePointingRight :: TypeDefinition
 arcTypePointingRight = def "ArcTypePointingRight" $
   gql "EdgeTypeFiller"
 
-arcTypeUndirected :: Binding
+arcTypeUndirected :: TypeDefinition
 arcTypeUndirected = def "ArcTypeUndirected" $
   gql "EdgeTypeFiller"
 
-atSchemaClause :: Binding
+atSchemaClause :: TypeDefinition
 atSchemaClause = def "AtSchemaClause" $
   gql "SchemaReference"
 
-bigIntType :: Binding
+bigIntType :: TypeDefinition
 bigIntType = def "BigIntType" $
   T.record ["notNull">: T.boolean]
 
-bigIntegerType :: Binding
+bigIntegerType :: TypeDefinition
 bigIntegerType = def "BigIntegerType" $
   T.record ["notNull">: T.boolean]
 
-binaryExactNumericType :: Binding
+binaryExactNumericType :: TypeDefinition
 binaryExactNumericType = def "BinaryExactNumericType" $
   T.union [
     "signed">: gql "SignedBinaryExactNumericType",
     "unsigned">: gql "UnsignedBinaryExactNumericType"]
 
-binarySetFunction :: Binding
+binarySetFunction :: TypeDefinition
 binarySetFunction = def "BinarySetFunction" $
   T.record [
     "functionType">: gql "BinarySetFunctionType",
     "dependentValue">: gql "DependentValueExpression",
     "independentValue">: gql "IndependentValueExpression"]
 
-binarySetFunctionType :: Binding
+binarySetFunctionType :: TypeDefinition
 binarySetFunctionType = def "BinarySetFunctionType" $
   T.enum ["percentileCont", "percentileDisc"]
 
-binaryType :: Binding
+binaryType :: TypeDefinition
 binaryType = def "BinaryType" $
   T.record [
     "fixedLength">: T.maybe $ gql "FixedLength",
     "notNull">: T.boolean]
 
-bindingEqualsValue :: Binding
+bindingEqualsValue :: TypeDefinition
 bindingEqualsValue = def "BindingEqualsValue" $
   T.record [
     "binding">: gql "BindingVariable",
     "value">: gql "ValueExpression"]
 
-bindingTableExpression :: Binding
+bindingTableExpression :: TypeDefinition
 bindingTableExpression = def "BindingTableExpression" $
   T.union [
     "nested">: gql "NestedBindingTableQuerySpecification",
@@ -936,82 +936,82 @@ bindingTableExpression = def "BindingTableExpression" $
     "table">: gql "BindingTableReference",
     "name">: gql "ObjectNameOrBindingVariable"]
 
-bindingTableInitializer :: Binding
+bindingTableInitializer :: TypeDefinition
 bindingTableInitializer = def "BindingTableInitializer" T.unit
 
-bindingTableName :: Binding
+bindingTableName :: TypeDefinition
 bindingTableName = def "BindingTableName" $
   T.union [
     "regularIdentifier">: T.string,
     "delimitedBindingTableName">: gql "DelimitedBindingTableName"]
 
-bindingTableReference :: Binding
+bindingTableReference :: TypeDefinition
 bindingTableReference = def "BindingTableReference" $
   T.union [
     "parentAndTableName">: gql "ParentAndTableName",
     "delimitedBindingTableName">: gql "DelimitedBindingTableName",
     "parameterSpecification">: gql "ReferenceParameterSpecification"]
 
-bindingTableReferenceValueType :: Binding
+bindingTableReferenceValueType :: TypeDefinition
 bindingTableReferenceValueType = def "BindingTableReferenceValueType" $
   T.record [
     "bindingTableType">: gql "BindingTableType",
     "notNull">: T.boolean]
 
-bindingTableType :: Binding
+bindingTableType :: TypeDefinition
 bindingTableType = def "BindingTableType" $
   T.record [
     "binding">: T.boolean,
     "fieldTypes">: gql "FieldTypesSpecification"]
 
-bindingTableVariableDefinition :: Binding
+bindingTableVariableDefinition :: TypeDefinition
 bindingTableVariableDefinition = def "BindingTableVariableDefinition" $
   T.record [
     "binding">: T.boolean,
     "variable">: gql "BindingVariable",
     "initializer">: gql "OptTypedBindingTableInitializer"]
 
-bindingVariable :: Binding
+bindingVariable :: TypeDefinition
 bindingVariable = def "BindingVariable" $
   T.string
 
-bindingVariableDefinition :: Binding
+bindingVariableDefinition :: TypeDefinition
 bindingVariableDefinition = def "BindingVariableDefinition" $
   T.union [
     "graph">: gql "GraphVariableDefinition",
     "table">: gql "BindingTableVariableDefinition",
     "value">: gql "ValueVariableDefinition"]
 
-bindingVariableDefinitionBlock :: Binding
+bindingVariableDefinitionBlock :: TypeDefinition
 bindingVariableDefinitionBlock = def "BindingVariableDefinitionBlock" $
   nonemptyList $ gql "BindingVariableDefinition"
 
-bindingVariableReference :: Binding
+bindingVariableReference :: TypeDefinition
 bindingVariableReference = def "BindingVariableReference" $
   gql "BindingVariable"
 
-bindingVariableReferenceList :: Binding
+bindingVariableReferenceList :: TypeDefinition
 bindingVariableReferenceList = def "BindingVariableReferenceList" $
   nonemptyList $ gql "BindingVariableReference"
 
-booleanLiteral :: Binding
+booleanLiteral :: TypeDefinition
 booleanLiteral = def "BooleanLiteral" $
   T.enum ["true", "false", "unknown"]
 
-booleanType :: Binding
+booleanType :: TypeDefinition
 booleanType = def "BooleanType" $
   T.record [
     "notNull">: T.boolean]
 
-booleanValueExpression :: Binding
+booleanValueExpression :: TypeDefinition
 booleanValueExpression = def "BooleanValueExpression" $
   gql "ValueExpression"
 
-byteLengthExpression :: Binding
+byteLengthExpression :: TypeDefinition
 byteLengthExpression = def "ByteLengthExpression" $
   gql "ByteStringValueExpression"
 
-byteStringLiteral :: Binding
+byteStringLiteral :: TypeDefinition
 byteStringLiteral = def "ByteStringLiteral" $
     T.string
 
@@ -1598,139 +1598,139 @@ byteStringLiteral = def "ByteStringLiteral" $
 --
 -- fragment RS: [\u001E];
 
-byteStringType :: Binding
+byteStringType :: TypeDefinition
 byteStringType = def "ByteStringType" $
   T.union [
     "bytesType">: gql "BytesType",
     "binaryType">: gql "BinaryType",
     "varbinaryType">: gql "VarbinaryType"]
 
-byteStringValueExpression :: Binding
+byteStringValueExpression :: TypeDefinition
 byteStringValueExpression = def "ByteStringValueExpression" $
   gql "ValueExpression"
 
-bytesType :: Binding
+bytesType :: TypeDefinition
 bytesType = def "BytesType" $
   T.record [
     "minLength">: T.maybe $ gql "MinLength",
     "maxLength">: T.maybe $ gql "MaxLength",
     "notNull">: T.boolean]
 
-callCatalogModifyingProcedureStatement :: Binding
+callCatalogModifyingProcedureStatement :: TypeDefinition
 callCatalogModifyingProcedureStatement = def "CallCatalogModifyingProcedureStatement" $
   gql "CallProcedureStatement"
 
-callDataModifyingProcedureStatement :: Binding
+callDataModifyingProcedureStatement :: TypeDefinition
 callDataModifyingProcedureStatement = def "CallDataModifyingProcedureStatement" $
   gql "CallProcedureStatement"
 
-callProcedureStatement :: Binding
+callProcedureStatement :: TypeDefinition
 callProcedureStatement = def "CallProcedureStatement" $
   T.record [
     "optional">: T.boolean,
     "call">: gql "ProcedureCall"]
 
-callQueryStatement :: Binding
+callQueryStatement :: TypeDefinition
 callQueryStatement = def "CallQueryStatement" $
   gql "CallProcedureStatement"
 
-cardinalityArgumentExpression :: Binding
+cardinalityArgumentExpression :: TypeDefinition
 cardinalityArgumentExpression = def "CardinalityArgumentExpression" $
   gql "ValueExpression"
 
-cardinalityExpression :: Binding
+cardinalityExpression :: TypeDefinition
 cardinalityExpression = def "CardinalityExpression" $
   T.union [
     "cardinality">: gql "CardinalityArgumentExpression",
     "size">: gql "ListValueExpression"]
 
-caseAbbreviation :: Binding
+caseAbbreviation :: TypeDefinition
 caseAbbreviation = def "CaseAbbreviation" $
   T.union [
     "nullIf">: gql "NullIfAbbreviation",
     "coalesce">: nonemptyList $ gql "ValueExpression"]
 
-caseExpression :: Binding
+caseExpression :: TypeDefinition
 caseExpression = def "CaseExpression" $
   T.union [
     "abbreviation">: gql "CaseAbbreviation",
     "specification">: gql "CaseSpecification"]
 
-caseOperand :: Binding
+caseOperand :: TypeDefinition
 caseOperand = def "CaseOperand" $
   T.union [
     "valueExpression">: gql "NonParenthesizedPrimaryValueExpression",
     "elementReference">: gql "ElementVariableReference"]
 
-caseSpecification :: Binding
+caseSpecification :: TypeDefinition
 caseSpecification = def "CaseSpecification" $
   T.union [
     "simple">: gql "SimpleCase",
     "searched">: gql "SearchedCase"]
 
-case_ :: Binding
+case_ :: TypeDefinition
 case_ = def "Case" $
   T.enum ["upper", "lower"]
 
-castOperand :: Binding
+castOperand :: TypeDefinition
 castOperand = def "CastOperand" $
   T.union [
     "valueExpression">: gql "ValueExpression",
     "nullLiteral">: T.unit]
 
-castSpecification :: Binding
+castSpecification :: TypeDefinition
 castSpecification = def "CastSpecification" $
   T.record [
     "operand">: gql "CastOperand",
     "target">: gql "CastTarget"]
 
-castTarget :: Binding
+castTarget :: TypeDefinition
 castTarget = def "CastTarget" $
   gql "ValueType"
 
-catalogGraphParentAndName :: Binding
+catalogGraphParentAndName :: TypeDefinition
 catalogGraphParentAndName = def "CatalogGraphParentAndName" $
   T.record [
     "parentReference">: T.maybe $ gql "CatalogObjectParentReference",
     "graphName">: gql "GraphName"]
 
-catalogGraphTypeParentAndName :: Binding
+catalogGraphTypeParentAndName :: TypeDefinition
 catalogGraphTypeParentAndName = def "CatalogGraphTypeParentAndName" $
   T.record [
     "parentReference">: T.maybe $ gql "CatalogObjectParentReference",
     "graphTypeName">: gql "GraphTypeName"]
 
-catalogObjectParentReference :: Binding
+catalogObjectParentReference :: TypeDefinition
 catalogObjectParentReference = def "CatalogObjectParentReference" $
   T.union [
     "schemaAndObjects">: gql "SchemaAndObjects",
     "objectsOnly">: nonemptyList $ gql "ObjectName"]
 
-catalogProcedureParentAndName :: Binding
+catalogProcedureParentAndName :: TypeDefinition
 catalogProcedureParentAndName = def "CatalogProcedureParentAndName" $
   T.record [
     "parentReference">: T.maybe $ gql "CatalogObjectParentReference",
     "procedureName">: gql "ProcedureName"]
 
-catalogSchemaParentAndName :: Binding
+catalogSchemaParentAndName :: TypeDefinition
 catalogSchemaParentAndName = def "CatalogSchemaParentAndName" $
   gql "AbsoluteDirectoryAndSchema"
 
-ceilingFunction :: Binding
+ceilingFunction :: TypeDefinition
 ceilingFunction = def "CeilingFunction" $
   gql "NumericValueExpression"
 
-charLengthExpression :: Binding
+charLengthExpression :: TypeDefinition
 charLengthExpression = def "CharLengthExpression" $
   gql "CharacterStringValueExpression"
 
-charType :: Binding
+charType :: TypeDefinition
 charType = def "CharType" $
   T.record [
     "fixedLength">: T.maybe $ gql "FixedLength",
     "notNull">: T.boolean]
 
-characterOrByteStringFunction :: Binding
+characterOrByteStringFunction :: TypeDefinition
 characterOrByteStringFunction = def "CharacterOrByteStringFunction" $
   T.union [
     "sub">: gql "SubCharacterOrByteString",
@@ -1739,60 +1739,60 @@ characterOrByteStringFunction = def "CharacterOrByteStringFunction" $
     "trimMultiCharacter">: gql "TrimMultiCharacterCharacterString",
     "normalize">: gql "NormalizeCharacterString"]
 
-characterStringLiteral :: Binding
+characterStringLiteral :: TypeDefinition
 characterStringLiteral = def "CharacterStringLiteral" $
   T.string
 
-characterStringType :: Binding
+characterStringType :: TypeDefinition
 characterStringType = def "CharacterStringType" $
   T.union [
     "stringType">: gql "StringType",
     "charType">: gql "CharType",
     "varcharType">: gql "VarcharType"]
 
-characterStringValueExpression :: Binding
+characterStringValueExpression :: TypeDefinition
 characterStringValueExpression = def "CharacterStringValueExpression" $
   gql "ValueExpression"
 
-closedDynamicUnionTypeAlt1 :: Binding
+closedDynamicUnionTypeAlt1 :: TypeDefinition
 closedDynamicUnionTypeAlt1 = def "ClosedDynamicUnionTypeAlt1" $
   T.record [
     "anyValue">: T.maybe T.boolean,
     "valueTypes">: nonemptyList $ gql "ValueType"]
 
-closedDynamicUnionTypeAlt2 :: Binding
+closedDynamicUnionTypeAlt2 :: TypeDefinition
 closedDynamicUnionTypeAlt2 = def "ClosedDynamicUnionTypeAlt2" $
   T.record [
     "valueTypes">: nonemptyList $ gql "ValueType"]
 
-closedEdgeReferenceValueType :: Binding
+closedEdgeReferenceValueType :: TypeDefinition
 closedEdgeReferenceValueType = def "ClosedEdgeReferenceValueType" $
   T.record [
     "edgeTypeSpec">: gql "EdgeTypeSpecification",
     "notNull">: T.boolean]
 
-closedGraphReferenceValueType :: Binding
+closedGraphReferenceValueType :: TypeDefinition
 closedGraphReferenceValueType = def "ClosedGraphReferenceValueType" $
   T.record [
     "property">: T.boolean,
     "nestedSpec">: gql "NestedGraphTypeSpecification",
     "notNull">: T.boolean]
 
-closedNodeReferenceValueType :: Binding
+closedNodeReferenceValueType :: TypeDefinition
 closedNodeReferenceValueType = def "ClosedNodeReferenceValueType" $
   T.record [
     "nodeTypeSpec">: gql "NodeTypeSpecification",
     "notNull">: T.boolean]
 
-commitCommand :: Binding
+commitCommand :: TypeDefinition
 commitCommand = def "CommitCommand" $
   T.unit
 
-commonLogarithm :: Binding
+commonLogarithm :: TypeDefinition
 commonLogarithm = def "CommonLogarithm" $
   gql "NumericValueExpression"
 
-compOp :: Binding
+compOp :: TypeDefinition
 compOp = def "CompOp" $
   T.enum [
     "equals",
@@ -1802,70 +1802,70 @@ compOp = def "CompOp" $
     "lessThanOrEquals",
     "greaterThanOrEquals"]
 
-comparisonExpr :: Binding
+comparisonExpr :: TypeDefinition
 comparisonExpr = def "ComparisonExpr" $
   T.record [
     "valueExpression">: gql "ValueExpression",
     "comparison">: gql "ComparisonPredicatePart2"]
 
-comparisonPredicatePart2 :: Binding
+comparisonPredicatePart2 :: TypeDefinition
 comparisonPredicatePart2 = def "ComparisonPredicatePart2" $
   T.record [
     "compOp">: gql "CompOp",
     "valueExpression">: gql "ValueExpression"]
 
-compositeQueryExpression :: Binding
+compositeQueryExpression :: TypeDefinition
 compositeQueryExpression = def "CompositeQueryExpression" $
   T.union [
     "simple">: gql "CompositeQueryExpressionConjunction",
     "primary">: gql "CompositeQueryPrimary"]
 
-compositeQueryExpressionConjunction :: Binding
+compositeQueryExpressionConjunction :: TypeDefinition
 compositeQueryExpressionConjunction = def "CompositeQueryExpressionConjunction" $
   T.record [
     "left">: gql "CompositeQueryExpression",
     "conjunction">: gql "QueryConjunction",
     "right">: gql "CompositeQueryPrimary"]
 
-compositeQueryPrimary :: Binding
+compositeQueryPrimary :: TypeDefinition
 compositeQueryPrimary = def "CompositeQueryPrimary" $
   gql "LinearQueryStatement"
 
-compositeQueryStatement :: Binding
+compositeQueryStatement :: TypeDefinition
 compositeQueryStatement = def "CompositeQueryStatement" $
   gql "CompositeQueryExpression"
 
-concatenationExpr :: Binding
+concatenationExpr :: TypeDefinition
 concatenationExpr = def "ConcatenationExpr" $
   T.record [
     "left">: gql "ValueExpression",
     "right">: gql "ValueExpression"]
 
-conjunctionLabelExpression :: Binding
+conjunctionLabelExpression :: TypeDefinition
 conjunctionLabelExpression = def "ConjunctionLabelExpression" $
   T.record [
     "left">: gql "LabelExpression",
     "right">: gql "LabelExpression"]
 
-conjunctiveExpr :: Binding
+conjunctiveExpr :: TypeDefinition
 conjunctiveExpr = def "ConjunctiveExpr" $
   T.record [
     "left">: gql "ValueExpression",
     "right">: gql "ValueExpression"]
 
-connectorPointingRight :: Binding
+connectorPointingRight :: TypeDefinition
 connectorPointingRight = def "ConnectorPointingRight" $
   T.enum ["to", "rightArrow"]
 
-connectorUndirected :: Binding
+connectorUndirected :: TypeDefinition
 connectorUndirected = def "ConnectorUndirected" $
   T.enum ["to", "tilde"]
 
-copyOfGraphType :: Binding
+copyOfGraphType :: TypeDefinition
 copyOfGraphType = def "CopyOfGraphType" $
   gql "GraphTypeReference"
 
-countedShortestGroupSearch :: Binding
+countedShortestGroupSearch :: TypeDefinition
 countedShortestGroupSearch = def "CountedShortestGroupSearch" $
   T.record [
     "numberOfGroups">: T.maybe $ gql "NumberOfGroups",
@@ -1873,20 +1873,20 @@ countedShortestGroupSearch = def "CountedShortestGroupSearch" $
     "orPaths">: T.maybe $ gql "PathOrPaths",
     "groups">: T.boolean]
 
-countedShortestPathSearch :: Binding
+countedShortestPathSearch :: TypeDefinition
 countedShortestPathSearch = def "CountedShortestPathSearch" $
   T.record [
     "numberOfPaths">: gql "NumberOfPaths",
     "mode">: T.maybe $ gql "PathMode",
     "orPaths">: T.maybe $ gql "PathOrPaths"]
 
-createGraphOption :: Binding
+createGraphOption :: TypeDefinition
 createGraphOption = def "CreateGraphOption" $
   T.union [
     "graphIfNotExists">: T.boolean,
     "orReplace">: T.unit]
 
-createGraphStatement :: Binding
+createGraphStatement :: TypeDefinition
 createGraphStatement = def "CreateGraphStatement" $
   T.record [
     "createOption">: gql "CreateGraphOption",
@@ -1894,105 +1894,105 @@ createGraphStatement = def "CreateGraphStatement" $
     "type">: gql "GraphTypeOption",
     "source">: T.maybe $ gql "GraphSource"]
 
-createGraphTypeOption :: Binding
+createGraphTypeOption :: TypeDefinition
 createGraphTypeOption = def "CreateGraphTypeOption" $
   T.union [
     "typeIfNotExists">: T.boolean,
     "orReplace">: T.unit]
 
-createGraphTypeStatement :: Binding
+createGraphTypeStatement :: TypeDefinition
 createGraphTypeStatement = def "CreateGraphTypeStatement" $
   T.record [
     "createOption">: gql "CreateGraphTypeOption",
     "parentAndName">: gql "CatalogGraphTypeParentAndName",
     "source">: gql "GraphTypeSource"]
 
-createSchemaStatement :: Binding
+createSchemaStatement :: TypeDefinition
 createSchemaStatement = def "CreateSchemaStatement" $
   T.record [
     "ifNotExists">: T.boolean,
     "parentAndName">: gql "CatalogSchemaParentAndName"]
 
-currentGraph :: Binding
+currentGraph :: TypeDefinition
 currentGraph = def "CurrentGraph" $
   T.enum ["graph", "propertyGraph"]
 
-dateFunction :: Binding
+dateFunction :: TypeDefinition
 dateFunction = def "DateFunction" $
   T.union [
     "currentDate">: T.unit,
     "dateWithParams">: T.maybe $ gql "DateFunctionParameters"]
 
-dateFunctionParameters :: Binding
+dateFunctionParameters :: TypeDefinition
 dateFunctionParameters = def "DateFunctionParameters" $
   T.union [
     "dateString">: gql "DateString",
     "recordConstructor">: gql "RecordConstructor"]
 
-dateLiteral :: Binding
+dateLiteral :: TypeDefinition
 dateLiteral = def "DateLiteral" $
   gql "DateString"
 
-dateString :: Binding
+dateString :: TypeDefinition
 dateString = def "DateString" $
   gql "CharacterStringLiteral"
 
-dateType :: Binding
+dateType :: TypeDefinition
 dateType = def "DateType" $
   T.record [
     "notNull">: T.boolean]
 
-datetimeFunction :: Binding
+datetimeFunction :: TypeDefinition
 datetimeFunction = def "DatetimeFunction" $
   T.union [
     "currentTimestamp">: T.unit,
     "zonedDatetimeWithParams">: T.maybe $ gql "DatetimeFunctionParameters"]
 
-datetimeFunctionParameters :: Binding
+datetimeFunctionParameters :: TypeDefinition
 datetimeFunctionParameters = def "DatetimeFunctionParameters" $
   T.union [
     "datetimeString">: gql "DatetimeString",
     "recordConstructor">: gql "RecordConstructor"]
 
-datetimeLiteral :: Binding
+datetimeLiteral :: TypeDefinition
 datetimeLiteral = def "DatetimeLiteral" $
   gql "DatetimeString"
 
-datetimeString :: Binding
+datetimeString :: TypeDefinition
 datetimeString = def "DatetimeString" $
   gql "CharacterStringLiteral"
 
-datetimeSubtraction :: Binding
+datetimeSubtraction :: TypeDefinition
 datetimeSubtraction = def "DatetimeSubtraction" $
   T.record [
     "parameters">: gql "DatetimeSubtractionParameters",
     "temporalDurationQualifier">: T.maybe $ gql "TemporalDurationQualifier"]
 
-datetimeSubtractionParameters :: Binding
+datetimeSubtractionParameters :: TypeDefinition
 datetimeSubtractionParameters = def "DatetimeSubtractionParameters" $
   T.record [
     "expression1">: gql "DatetimeValueExpression1",
     "expression2">: gql "DatetimeValueExpression2"]
 
-datetimeType :: Binding
+datetimeType :: TypeDefinition
 datetimeType = def "DatetimeType" $
   T.union [
     "zonedDatetime">: gql "ZonedDatetimeType",
     "timestampWithTimeZone">: gql "TimestampWithTimeZoneType"]
 
-datetimeValueExpression :: Binding
+datetimeValueExpression :: TypeDefinition
 datetimeValueExpression = def "DatetimeValueExpression" $
   gql "ValueExpression"
 
-datetimeValueExpression1 :: Binding
+datetimeValueExpression1 :: TypeDefinition
 datetimeValueExpression1 = def "DatetimeValueExpression1" $
   gql "DatetimeValueExpression"
 
-datetimeValueExpression2 :: Binding
+datetimeValueExpression2 :: TypeDefinition
 datetimeValueExpression2 = def "DatetimeValueExpression2" $
   gql "DatetimeValueExpression"
 
-datetimeValueFunction :: Binding
+datetimeValueFunction :: TypeDefinition
 datetimeValueFunction = def "DatetimeValueFunction" $
   T.union [
     "dateFunction">: gql "DateFunction",
@@ -2001,157 +2001,157 @@ datetimeValueFunction = def "DatetimeValueFunction" $
     "localtimeFunction">: gql "LocaltimeFunction",
     "localdatetimeFunction">: gql "LocaldatetimeFunction"]
 
-decimalExactNumericType :: Binding
+decimalExactNumericType :: TypeDefinition
 decimalExactNumericType = def "DecimalExactNumericType" $
   T.maybe $ gql "PrecisionAndScale"
 
-def :: String -> Type -> Binding
+def :: String -> Type -> TypeDefinition
 def = datatype ns
 
-deleteItem :: Binding
+deleteItem :: TypeDefinition
 deleteItem = def "DeleteItem" $
   gql "ValueExpression"
 
-deleteItemList :: Binding
+deleteItemList :: TypeDefinition
 deleteItemList = def "DeleteItemList" $
   nonemptyList $ gql "DeleteItem"
 
-deleteStatement :: Binding
+deleteStatement :: TypeDefinition
 deleteStatement = def "DeleteStatement" $
   T.record [
     "detach">: T.maybe $ gql "DetachOption",
     "items">: gql "DeleteItemList"]
 
-delimitedBindingTableName :: Binding
+delimitedBindingTableName :: TypeDefinition
 delimitedBindingTableName = def "DelimitedBindingTableName" $
   T.string
 
-delimitedGraphName :: Binding
+delimitedGraphName :: TypeDefinition
 delimitedGraphName = def "DelimitedGraphName" $
   T.string
 
-dependentValueExpression :: Binding
+dependentValueExpression :: TypeDefinition
 dependentValueExpression = def "DependentValueExpression" $
   T.record [
     "setQuantifier">: T.maybe $ gql "SetQuantifier",
     "numericValue">: gql "NumericValueExpression"]
 
-destinationNodeTypeAlias :: Binding
+destinationNodeTypeAlias :: TypeDefinition
 destinationNodeTypeAlias = def "DestinationNodeTypeAlias" $
   T.string
 
-destinationNodeTypeReference :: Binding
+destinationNodeTypeReference :: TypeDefinition
 destinationNodeTypeReference = def "DestinationNodeTypeReference" $
   T.union [
     "alias">: gql "DestinationNodeTypeAlias",
     "filler">: T.maybe $ gql "NodeTypeFiller"]
 
-destinationPredicate :: Binding
+destinationPredicate :: TypeDefinition
 destinationPredicate = def "DestinationPredicate" $
   T.record [
     "nodeReference">: gql "NodeReference",
     "not">: T.boolean,
     "destinationOf">: gql "EdgeReference"]
 
-detachOption :: Binding
+detachOption :: TypeDefinition
 detachOption = def "DetachOption" $
   T.enum [
     "detach",
     "noDetach"]
 
-differentEdgesMatchMode :: Binding
+differentEdgesMatchMode :: TypeDefinition
 differentEdgesMatchMode = def "DifferentEdgesMatchMode" $
   gql "EdgeBindingsOrEdges"
 
-directedPredicate :: Binding
+directedPredicate :: TypeDefinition
 directedPredicate = def "DirectedPredicate" $
   T.record [
     "elementVariableReference">: gql "ElementVariableReference",
     "directedPart">: gql "DirectedPredicatePart2"]
 
-directedPredicatePart2 :: Binding
+directedPredicatePart2 :: TypeDefinition
 directedPredicatePart2 = def "DirectedPredicatePart2" $
   T.record [
     "not">: T.boolean]
 
-directoryName :: Binding
+directoryName :: TypeDefinition
 directoryName = def "DirectoryName" $
   T.string
 
-disjunctionLabelExpression :: Binding
+disjunctionLabelExpression :: TypeDefinition
 disjunctionLabelExpression = def "DisjunctionLabelExpression" $
   T.record [
     "left">: gql "LabelExpression",
     "right">: gql "LabelExpression"]
 
-disjunctiveExpr :: Binding
+disjunctiveExpr :: TypeDefinition
 disjunctiveExpr = def "DisjunctiveExpr" $
   T.record [
     "left">: gql "ValueExpression",
     "operator">: gql "DisjunctiveOperator",
     "right">: gql "ValueExpression"]
 
-disjunctiveOperator :: Binding
+disjunctiveOperator :: TypeDefinition
 disjunctiveOperator = def "DisjunctiveOperator" $
   T.enum ["or", "xor"]
 
-doubleTypeWithPrecision :: Binding
+doubleTypeWithPrecision :: TypeDefinition
 doubleTypeWithPrecision = def "DoubleTypeWithPrecision" $
   T.record [
     "precision">: T.boolean,
     "notNull">: T.boolean]
 
-dropGraphStatement :: Binding
+dropGraphStatement :: TypeDefinition
 dropGraphStatement = def "DropGraphStatement" $
   T.record [
     "ifExists">: T.boolean,
     "parentAndName">: gql "CatalogGraphParentAndName"]
 
-dropGraphTypeStatement :: Binding
+dropGraphTypeStatement :: TypeDefinition
 dropGraphTypeStatement = def "DropGraphTypeStatement" $
   T.record [
     "ifExists">: T.boolean,
     "parentAndName">: gql "CatalogGraphTypeParentAndName"]
 
-dropSchemaStatement :: Binding
+dropSchemaStatement :: TypeDefinition
 dropSchemaStatement = def "DropSchemaStatement" $
   T.record [
     "ifExists">: T.boolean,
     "parentAndName">: gql "CatalogSchemaParentAndName"]
 
-durationFunction :: Binding
+durationFunction :: TypeDefinition
 durationFunction = def "DurationFunction" $
   gql "DurationFunctionParameters"
 
-durationFunctionParameters :: Binding
+durationFunctionParameters :: TypeDefinition
 durationFunctionParameters = def "DurationFunctionParameters" $
   T.union [
     "durationString">: gql "DurationString",
     "recordConstructor">: gql "RecordConstructor"]
 
-durationLiteral :: Binding
+durationLiteral :: TypeDefinition
 durationLiteral = def "DurationLiteral" $
   gql "DurationString"
 
-durationString :: Binding
+durationString :: TypeDefinition
 durationString = def "DurationString" $
   gql "CharacterStringLiteral"
 
-durationValueExpression :: Binding
+durationValueExpression :: TypeDefinition
 durationValueExpression = def "DurationValueExpression" $
   gql "ValueExpression"
 
-durationValueFunction :: Binding
+durationValueFunction :: TypeDefinition
 durationValueFunction = def "DurationValueFunction" $
   T.union [
     "durationFunction">: gql "DurationFunction",
     "absoluteValue">: gql "AbsoluteValueExpression"]
 
-dynamicParameterSpecification :: Binding
+dynamicParameterSpecification :: TypeDefinition
 dynamicParameterSpecification = def "DynamicParameterSpecification" $
   gql "ParameterName"
 
-dynamicPropertyValueType :: Binding
+dynamicPropertyValueType :: TypeDefinition
 dynamicPropertyValueType = def "DynamicPropertyValueType" $
   T.record [
     "any">: T.maybe T.boolean,
@@ -2159,130 +2159,130 @@ dynamicPropertyValueType = def "DynamicPropertyValueType" $
     "value">: T.unit,
     "notNull">: T.boolean]
 
-edgeBindingsOrEdges :: Binding
+edgeBindingsOrEdges :: TypeDefinition
 edgeBindingsOrEdges = def "EdgeBindingsOrEdges" $
   T.union [
     "edgeBindings">: T.boolean,
     "edges">: T.unit]
 
-edgeKeyLabelSetWithContent :: Binding
+edgeKeyLabelSetWithContent :: TypeDefinition
 edgeKeyLabelSetWithContent = def "EdgeKeyLabelSetWithContent" $
   T.record [
     "keyLabelSet">: gql "EdgeTypeKeyLabelSet",
     "impliedContent">: T.maybe $ gql "EdgeTypeImpliedContent"]
 
-edgeKind :: Binding
+edgeKind :: TypeDefinition
 edgeKind = def "EdgeKind" $
   T.enum ["directed", "undirected"]
 
-edgeKindAndSynonym :: Binding
+edgeKindAndSynonym :: TypeDefinition
 edgeKindAndSynonym = def "EdgeKindAndSynonym" $
   T.record [
     "kind">: T.maybe $ gql "EdgeKind",
     "synonym">: gql "EdgeSynonym",
     "typeName">: T.maybe $ gql "EdgeTypeName"]
 
-edgeLabelSetWithProperties :: Binding
+edgeLabelSetWithProperties :: TypeDefinition
 edgeLabelSetWithProperties = def "EdgeLabelSetWithProperties" $
   T.record [
     "labelSet">: gql "EdgeTypeLabelSet",
     "propertyTypes">: gql "EdgeTypePropertyTypes"]
 
-edgePattern :: Binding
+edgePattern :: TypeDefinition
 edgePattern = def "EdgePattern" $
   T.union [
     "fullEdge">: gql "FullEdgePattern",
     "abbreviatedEdge">: gql "AbbreviatedEdgePattern"]
 
-edgeReference :: Binding
+edgeReference :: TypeDefinition
 edgeReference = def "EdgeReference" $
   gql "ElementVariableReference"
 
-edgeReferenceValueExpression :: Binding
+edgeReferenceValueExpression :: TypeDefinition
 edgeReferenceValueExpression = def "EdgeReferenceValueExpression" $
   gql "PrimaryValueExpression"
 
-edgeReferenceValueType :: Binding
+edgeReferenceValueType :: TypeDefinition
 edgeReferenceValueType = def "EdgeReferenceValueType" $
   T.union [
     "open">: gql "OpenEdgeReferenceValueType",
     "closed">: gql "ClosedEdgeReferenceValueType"]
 
-edgeSynonym :: Binding
+edgeSynonym :: TypeDefinition
 edgeSynonym = def "EdgeSynonym" $
   T.enum ["edge", "relationship"]
 
-edgeTypeFiller :: Binding
+edgeTypeFiller :: TypeDefinition
 edgeTypeFiller = def "EdgeTypeFiller" $
   T.union [
     "keyLabelSetWithContent">: gql "EdgeKeyLabelSetWithContent",
     "impliedContent">: gql "EdgeTypeImpliedContent"]
 
-edgeTypeImpliedContent :: Binding
+edgeTypeImpliedContent :: TypeDefinition
 edgeTypeImpliedContent = def "EdgeTypeImpliedContent" $
   T.union [
     "labelSet">: gql "EdgeTypeLabelSet",
     "propertyTypes">: gql "EdgeTypePropertyTypes",
     "labelSetWithProperties">: gql "EdgeLabelSetWithProperties"]
 
-edgeTypeKeyLabelSet :: Binding
+edgeTypeKeyLabelSet :: TypeDefinition
 edgeTypeKeyLabelSet = def "EdgeTypeKeyLabelSet" $
   T.maybe $ gql "LabelSetPhrase"
 
-edgeTypeLabelSet :: Binding
+edgeTypeLabelSet :: TypeDefinition
 edgeTypeLabelSet = def "EdgeTypeLabelSet" $
   gql "LabelSetPhrase"
 
-edgeTypeName :: Binding
+edgeTypeName :: TypeDefinition
 edgeTypeName = def "EdgeTypeName" $
   T.string
 
-edgeTypeNameWithFiller :: Binding
+edgeTypeNameWithFiller :: TypeDefinition
 edgeTypeNameWithFiller = def "EdgeTypeNameWithFiller" $
   T.record [
     "typeName">: gql "EdgeTypeName",
     "filler">: T.maybe $ gql "EdgeTypeFiller"]
 
-edgeTypePattern :: Binding
+edgeTypePattern :: TypeDefinition
 edgeTypePattern = def "EdgeTypePattern" $
   T.record [
     "kindAndSynonym">: T.maybe $ gql "EdgeKindAndSynonym",
     "patternType">: gql "EdgeTypePatternType"]
 
-edgeTypePatternDirected :: Binding
+edgeTypePatternDirected :: TypeDefinition
 edgeTypePatternDirected = def "EdgeTypePatternDirected" $
   T.union [
     "pointingRight">: gql "EdgeTypePatternPointingRight",
     "pointingLeft">: gql "EdgeTypePatternPointingLeft"]
 
-edgeTypePatternPointingLeft :: Binding
+edgeTypePatternPointingLeft :: TypeDefinition
 edgeTypePatternPointingLeft = def "EdgeTypePatternPointingLeft" $
   T.record [
     "destination">: gql "DestinationNodeTypeReference",
     "arc">: gql "ArcTypePointingLeft",
     "source">: gql "SourceNodeTypeReference"]
 
-edgeTypePatternPointingRight :: Binding
+edgeTypePatternPointingRight :: TypeDefinition
 edgeTypePatternPointingRight = def "EdgeTypePatternPointingRight" $
   T.record [
     "source">: gql "SourceNodeTypeReference",
     "arc">: gql "ArcTypePointingRight",
     "destination">: gql "DestinationNodeTypeReference"]
 
-edgeTypePatternType :: Binding
+edgeTypePatternType :: TypeDefinition
 edgeTypePatternType = def "EdgeTypePatternType" $
   T.union [
     "directed">: gql "EdgeTypePatternDirected",
     "undirected">: gql "EdgeTypePatternUndirected"]
 
-edgeTypePatternUndirected :: Binding
+edgeTypePatternUndirected :: TypeDefinition
 edgeTypePatternUndirected = def "EdgeTypePatternUndirected" $
   T.record [
     "source">: gql "SourceNodeTypeReference",
     "arc">: gql "ArcTypeUndirected",
     "destination">: gql "DestinationNodeTypeReference"]
 
-edgeTypePhrase :: Binding
+edgeTypePhrase :: TypeDefinition
 edgeTypePhrase = def "EdgeTypePhrase" $
   T.record [
     "kind">: gql "EdgeKind",
@@ -2290,142 +2290,142 @@ edgeTypePhrase = def "EdgeTypePhrase" $
     "typeNameAndFiller">: gql "EdgeTypePhraseFiller",
     "endpointPair">: gql "EndpointPairPhrase"]
 
-edgeTypePhraseFiller :: Binding
+edgeTypePhraseFiller :: TypeDefinition
 edgeTypePhraseFiller = def "EdgeTypePhraseFiller" $
   T.union [
     "typeNameWithFiller">: gql "EdgeTypeNameWithFiller",
     "fillerOnly">: gql "EdgeTypeFiller"]
 
-edgeTypePropertyTypes :: Binding
+edgeTypePropertyTypes :: TypeDefinition
 edgeTypePropertyTypes = def "EdgeTypePropertyTypes" $
   gql "PropertyTypesSpecification"
 
-edgeTypeSpecification :: Binding
+edgeTypeSpecification :: TypeDefinition
 edgeTypeSpecification = def "EdgeTypeSpecification" $
   T.union [
     "pattern">: gql "EdgeTypePattern",
     "phrase">: gql "EdgeTypePhrase"]
 
-edgesSynonym :: Binding
+edgesSynonym :: TypeDefinition
 edgesSynonym = def "EdgesSynonym" $
   T.enum ["edges", "relationships"]
 
-elementBindingsOrElements :: Binding
+elementBindingsOrElements :: TypeDefinition
 elementBindingsOrElements = def "ElementBindingsOrElements" $
   T.union [
     "elementBindings">: T.boolean,
     "elements">: T.unit]
 
-elementIdFunction :: Binding
+elementIdFunction :: TypeDefinition
 elementIdFunction = def "ElementIdFunction" $
   gql "ElementVariableReference"
 
-elementPattern :: Binding
+elementPattern :: TypeDefinition
 elementPattern = def "ElementPattern" $
   T.union [
     "node">: gql "NodePattern",
     "edge">: gql "EdgePattern"]
 
-elementPatternFiller :: Binding
+elementPatternFiller :: TypeDefinition
 elementPatternFiller = def "ElementPatternFiller" $
   T.record [
     "variableDeclaration">: T.maybe $ gql "ElementVariableDeclaration",
     "isLabelExpression">: T.maybe $ gql "IsLabelExpression",
     "predicate">: T.maybe $ gql "ElementPatternPredicate"]
 
-elementPatternPredicate :: Binding
+elementPatternPredicate :: TypeDefinition
 elementPatternPredicate = def "ElementPatternPredicate" $
   T.union [
     "whereClause">: gql "ElementPatternWhereClause",
     "propertySpecification">: gql "ElementPropertySpecification"]
 
-elementPatternWhereClause :: Binding
+elementPatternWhereClause :: TypeDefinition
 elementPatternWhereClause = def "ElementPatternWhereClause" $
   gql "SearchCondition"
 
-elementPropertySpecification :: Binding
+elementPropertySpecification :: TypeDefinition
 elementPropertySpecification = def "ElementPropertySpecification" $
   gql "PropertyKeyValuePairList"
 
-elementTypeList :: Binding
+elementTypeList :: TypeDefinition
 elementTypeList = def "ElementTypeList" $
   nonemptyList $ gql "ElementTypeSpecification"
 
-elementTypeSpecification :: Binding
+elementTypeSpecification :: TypeDefinition
 elementTypeSpecification = def "ElementTypeSpecification" $
   T.union [
     "nodeType">: gql "NodeTypeSpecification",
     "edgeType">: gql "EdgeTypeSpecification"]
 
-elementVariable :: Binding
+elementVariable :: TypeDefinition
 elementVariable = def "ElementVariable" $
   gql "BindingVariable"
 
-elementVariableDeclaration :: Binding
+elementVariableDeclaration :: TypeDefinition
 elementVariableDeclaration = def "ElementVariableDeclaration" $
   T.record [
     "temp">: T.maybe T.boolean,
     "variable">: gql "ElementVariable"]
 
-elementVariableReference :: Binding
+elementVariableReference :: TypeDefinition
 elementVariableReference = def "ElementVariableReference" $
   gql "BindingVariableReference"
 
-elementsFunction :: Binding
+elementsFunction :: TypeDefinition
 elementsFunction = def "ElementsFunction" $
   gql "PathValueExpression"
 
-elseClause :: Binding
+elseClause :: TypeDefinition
 elseClause = def "ElseClause" $
   gql "Result"
 
-emptyType :: Binding
+emptyType :: TypeDefinition
 emptyType = def "EmptyType" $
   T.unit
 
-endTransactionCommand :: Binding
+endTransactionCommand :: TypeDefinition
 endTransactionCommand = def "EndTransactionCommand" $
   T.union [
     "rollback">: gql "RollbackCommand",
     "commit">: gql "CommitCommand"]
 
-endpointPair :: Binding
+endpointPair :: TypeDefinition
 endpointPair = def "EndpointPair" $
   T.union [
     "directedPair">: gql "EndpointPairDirected",
     "undirectedPair">: gql "EndpointPairUndirected"]
 
-endpointPairDirected :: Binding
+endpointPairDirected :: TypeDefinition
 endpointPairDirected = def "EndpointPairDirected" $
   T.union [
     "pointingRight">: gql "EndpointPairPointingRight",
     "pointingLeft">: gql "EndpointPairPointingLeft"]
 
-endpointPairPhrase :: Binding
+endpointPairPhrase :: TypeDefinition
 endpointPairPhrase = def "EndpointPairPhrase" $
   gql "EndpointPair"
 
-endpointPairPointingLeft :: Binding
+endpointPairPointingLeft :: TypeDefinition
 endpointPairPointingLeft = def "EndpointPairPointingLeft" $
   T.record [
     "destinationAlias">: gql "DestinationNodeTypeAlias",
     "sourceAlias">: gql "SourceNodeTypeAlias"]
 
-endpointPairPointingRight :: Binding
+endpointPairPointingRight :: TypeDefinition
 endpointPairPointingRight = def "EndpointPairPointingRight" $
   T.record [
     "sourceAlias">: gql "SourceNodeTypeAlias",
     "connector">: gql "ConnectorPointingRight",
     "destinationAlias">: gql "DestinationNodeTypeAlias"]
 
-endpointPairUndirected :: Binding
+endpointPairUndirected :: TypeDefinition
 endpointPairUndirected = def "EndpointPairUndirected" $
   T.record [
     "sourceAlias">: gql "SourceNodeTypeAlias",
     "connector">: gql "ConnectorUndirected",
     "destinationAlias">: gql "DestinationNodeTypeAlias"]
 
-exactNumericLiteral :: Binding
+exactNumericLiteral :: TypeDefinition
 exactNumericLiteral = def "ExactNumericLiteral" $
   T.union [
     "scientificWithSuffix">: T.string,
@@ -2434,13 +2434,13 @@ exactNumericLiteral = def "ExactNumericLiteral" $
     "integerWithSuffix">: T.string,
     "unsignedInteger">: gql "UnsignedInteger"]
 
-exactNumericType :: Binding
+exactNumericType :: TypeDefinition
 exactNumericType = def "ExactNumericType" $
   T.union [
     "binary">: gql "BinaryExactNumericType",
     "decimal">: gql "DecimalExactNumericType"]
 
-existsPredicate :: Binding
+existsPredicate :: TypeDefinition
 existsPredicate = def "ExistsPredicate" $
   T.union [
     "graphPatternBrace">: gql "GraphPattern",
@@ -2449,113 +2449,113 @@ existsPredicate = def "ExistsPredicate" $
     "matchBlockParen">: gql "MatchStatementBlock",
     "nestedQuery">: gql "NestedQuerySpecification"]
 
-exponentialFunction :: Binding
+exponentialFunction :: TypeDefinition
 exponentialFunction = def "ExponentialFunction" $
   gql "NumericValueExpression"
 
-field :: Binding
+field :: TypeDefinition
 field = def "Field" $
   T.record [
     "name">: gql "FieldName",
     "value">: gql "ValueExpression"]
 
-fieldList :: Binding
+fieldList :: TypeDefinition
 fieldList = def "FieldList" $
   nonemptyList $ gql "Field"
 
-fieldName_ :: Binding
+fieldName_ :: TypeDefinition
 fieldName_ = def "FieldName" $
   T.string
 
-fieldType :: Binding
+fieldType :: TypeDefinition
 fieldType = def "FieldType" $
   T.record [
     "fieldName">: gql "FieldName",
     "typed">: T.maybe $ gql "Typed",
     "valueType">: gql "ValueType"]
 
-fieldTypeList :: Binding
+fieldTypeList :: TypeDefinition
 fieldTypeList = def "FieldTypeList" $
   nonemptyList $ gql "FieldType"
 
-fieldTypesSpecification :: Binding
+fieldTypesSpecification :: TypeDefinition
 fieldTypesSpecification = def "FieldTypesSpecification" $
   T.maybe $ gql "FieldTypeList"
 
-fieldsSpecification :: Binding
+fieldsSpecification :: TypeDefinition
 fieldsSpecification = def "FieldsSpecification" $
   T.maybe $ gql "FieldList"
 
-filterStatement :: Binding
+filterStatement :: TypeDefinition
 filterStatement = def "FilterStatement" $
   T.union [
     "whereClause">: gql "WhereClause",
     "searchCondition">: gql "SearchCondition"]
 
-fixedLength :: Binding
+fixedLength :: TypeDefinition
 fixedLength = def "FixedLength" $
   gql "UnsignedInteger"
 
-fixedQuantifier :: Binding
+fixedQuantifier :: TypeDefinition
 fixedQuantifier = def "FixedQuantifier" $
   gql "UnsignedInteger"
 
-float128Type :: Binding
+float128Type :: TypeDefinition
 float128Type = def "Float128Type" $
   T.record [
     "notNull">: T.boolean]
 
-float16Type :: Binding
+float16Type :: TypeDefinition
 float16Type = def "Float16Type" $
   T.record [
     "notNull">: T.boolean]
 
-float256Type :: Binding
+float256Type :: TypeDefinition
 float256Type = def "Float256Type" $
   T.record [
     "notNull">: T.boolean]
 
-float32Type :: Binding
+float32Type :: TypeDefinition
 float32Type = def "Float32Type" $
   T.record [
     "notNull">: T.boolean]
 
-float64Type :: Binding
+float64Type :: TypeDefinition
 float64Type = def "Float64Type" $
   T.record [
     "notNull">: T.boolean]
 
-floatTypeWithPrecision :: Binding
+floatTypeWithPrecision :: TypeDefinition
 floatTypeWithPrecision = def "FloatTypeWithPrecision" $
   T.record [
     "precisionAndScale">: T.maybe $ gql "PrecisionAndScale",
     "notNull">: T.boolean]
 
-floorFunction :: Binding
+floorFunction :: TypeDefinition
 floorFunction = def "FloorFunction" $
   gql "NumericValueExpression"
 
-focusedLinearDataModifyingStatement :: Binding
+focusedLinearDataModifyingStatement :: TypeDefinition
 focusedLinearDataModifyingStatement = def "FocusedLinearDataModifyingStatement" $
   T.union [
     "simple">: gql "FocusedLinearDataModifyingStatementBody",
     "nested">: gql "FocusedNestedDataModifyingProcedureSpecification"]
 
-focusedLinearDataModifyingStatementBody :: Binding
+focusedLinearDataModifyingStatementBody :: TypeDefinition
 focusedLinearDataModifyingStatementBody = def "FocusedLinearDataModifyingStatementBody" $
   T.record [
     "useGraph">: gql "UseGraphClause",
     "simpleAccess">: gql "SimpleLinearDataAccessingStatement",
     "primitiveResult">: T.maybe $ gql "PrimitiveResultStatement"]
 
-focusedLinearQueryAndPrimitiveResultStatementPart :: Binding
+focusedLinearQueryAndPrimitiveResultStatementPart :: TypeDefinition
 focusedLinearQueryAndPrimitiveResultStatementPart = def "FocusedLinearQueryAndPrimitiveResultStatementPart" $
   T.record [
     "useGraph">: gql "UseGraphClause",
     "simple">: gql "SimpleLinearQueryStatement",
     "primitiveResult">: gql "PrimitiveResultStatement"]
 
-focusedLinearQueryStatement :: Binding
+focusedLinearQueryStatement :: TypeDefinition
 focusedLinearQueryStatement = def "FocusedLinearQueryStatement" $
   T.union [
     "parts">: gql "FocusedLinearQueryStatementPartsAndResult",
@@ -2563,81 +2563,81 @@ focusedLinearQueryStatement = def "FocusedLinearQueryStatement" $
     "nested">: gql "FocusedNestedQuerySpecification",
     "select">: gql "SelectStatement"]
 
-focusedLinearQueryStatementPart :: Binding
+focusedLinearQueryStatementPart :: TypeDefinition
 focusedLinearQueryStatementPart = def "FocusedLinearQueryStatementPart" $
   T.record [
     "useGraph">: gql "UseGraphClause",
     "simple">: gql "SimpleLinearQueryStatement"]
 
-focusedLinearQueryStatementPartsAndResult :: Binding
+focusedLinearQueryStatementPartsAndResult :: TypeDefinition
 focusedLinearQueryStatementPartsAndResult = def "FocusedLinearQueryStatementPartsAndResult" $
   T.record [
     "parts">: T.list $ gql "FocusedLinearQueryStatementPart",
     "result">: gql "FocusedLinearQueryAndPrimitiveResultStatementPart"]
 
-focusedNestedDataModifyingProcedureSpecification :: Binding
+focusedNestedDataModifyingProcedureSpecification :: TypeDefinition
 focusedNestedDataModifyingProcedureSpecification = def "FocusedNestedDataModifyingProcedureSpecification" $
   T.record [
     "useGraph">: gql "UseGraphClause",
     "nestedSpec">: gql "NestedDataModifyingProcedureSpecification"]
 
-focusedNestedQuerySpecification :: Binding
+focusedNestedQuerySpecification :: TypeDefinition
 focusedNestedQuerySpecification = def "FocusedNestedQuerySpecification" $
   T.record [
     "useGraph">: gql "UseGraphClause",
     "nested">: gql "NestedQuerySpecification"]
 
-focusedPrimitiveResultStatement :: Binding
+focusedPrimitiveResultStatement :: TypeDefinition
 focusedPrimitiveResultStatement = def "FocusedPrimitiveResultStatement" $
   T.record [
     "useGraph">: gql "UseGraphClause",
     "primitiveResult">: gql "PrimitiveResultStatement"]
 
-foldCharacterString :: Binding
+foldCharacterString :: TypeDefinition
 foldCharacterString = def "FoldCharacterString" $
   T.record [
     "case">: gql "Case",
     "valueExpression">: gql "ValueExpression"]
 
-forItem :: Binding
+forItem :: TypeDefinition
 forItem = def "ForItem" $
   T.record [
     "alias">: gql "ForItemAlias",
     "source">: gql "ForItemSource"]
 
-forItemAlias :: Binding
+forItemAlias :: TypeDefinition
 forItemAlias = def "ForItemAlias" $
   gql "BindingVariable"
 
-forItemSource :: Binding
+forItemSource :: TypeDefinition
 forItemSource = def "ForItemSource" $
   gql "ValueExpression"
 
-forOrdinalityOrOffset :: Binding
+forOrdinalityOrOffset :: TypeDefinition
 forOrdinalityOrOffset = def "ForOrdinalityOrOffset" $
   T.record [
     "type">: gql "OrdinalityOrOffsetType",
     "variable">: gql "BindingVariable"]
 
-forStatement :: Binding
+forStatement :: TypeDefinition
 forStatement = def "ForStatement" $
   T.record [
     "item">: gql "ForItem",
     "ordinalityOrOffset">: T.maybe $ gql "ForOrdinalityOrOffset"]
 
-fullEdgeAnyDirection :: Binding
+fullEdgeAnyDirection :: TypeDefinition
 fullEdgeAnyDirection = def "FullEdgeAnyDirection" $
   gql "ElementPatternFiller"
 
-fullEdgeLeftOrRight :: Binding
+fullEdgeLeftOrRight :: TypeDefinition
 fullEdgeLeftOrRight = def "FullEdgeLeftOrRight" $
   gql "ElementPatternFiller"
 
-fullEdgeLeftOrUndirected :: Binding
+fullEdgeLeftOrUndirected :: TypeDefinition
 fullEdgeLeftOrUndirected = def "FullEdgeLeftOrUndirected" $
   gql "ElementPatternFiller"
 
-fullEdgePattern :: Binding
+fullEdgePattern :: TypeDefinition
 fullEdgePattern = def "FullEdgePattern" $
   T.union [
     "pointingLeft">: gql "FullEdgePointingLeft",
@@ -2648,23 +2648,23 @@ fullEdgePattern = def "FullEdgePattern" $
     "leftOrRight">: gql "FullEdgeLeftOrRight",
     "anyDirection">: gql "FullEdgeAnyDirection"]
 
-fullEdgePointingLeft :: Binding
+fullEdgePointingLeft :: TypeDefinition
 fullEdgePointingLeft = def "FullEdgePointingLeft" $
   gql "ElementPatternFiller"
 
-fullEdgePointingRight :: Binding
+fullEdgePointingRight :: TypeDefinition
 fullEdgePointingRight = def "FullEdgePointingRight" $
   gql "ElementPatternFiller"
 
-fullEdgeUndirected :: Binding
+fullEdgeUndirected :: TypeDefinition
 fullEdgeUndirected = def "FullEdgeUndirected" $
   gql "ElementPatternFiller"
 
-fullEdgeUndirectedOrRight :: Binding
+fullEdgeUndirectedOrRight :: TypeDefinition
 fullEdgeUndirectedOrRight = def "FullEdgeUndirectedOrRight" $
   gql "ElementPatternFiller"
 
-generalLiteral :: Binding
+generalLiteral :: TypeDefinition
 generalLiteral = def "GeneralLiteral" $
   T.union [
     "boolean">: gql "BooleanLiteral",
@@ -2676,34 +2676,34 @@ generalLiteral = def "GeneralLiteral" $
     "list">: gql "ListLiteral",
     "record">: gql "RecordLiteral"]
 
-generalLogarithmArgument :: Binding
+generalLogarithmArgument :: TypeDefinition
 generalLogarithmArgument = def "GeneralLogarithmArgument" $
   gql "NumericValueExpression"
 
-generalLogarithmBase :: Binding
+generalLogarithmBase :: TypeDefinition
 generalLogarithmBase = def "GeneralLogarithmBase" $
   gql "NumericValueExpression"
 
-generalLogarithmFunction :: Binding
+generalLogarithmFunction :: TypeDefinition
 generalLogarithmFunction = def "GeneralLogarithmFunction" $
   T.record [
     "base">: gql "GeneralLogarithmBase",
     "argument">: gql "GeneralLogarithmArgument"]
 
-generalQuantifier :: Binding
+generalQuantifier :: TypeDefinition
 generalQuantifier = def "GeneralQuantifier" $
   T.record [
     "lowerBound">: T.maybe $ gql "LowerBound",
     "upperBound">: T.maybe $ gql "UpperBound"]
 
-generalSetFunction :: Binding
+generalSetFunction :: TypeDefinition
 generalSetFunction = def "GeneralSetFunction" $
   T.record [
     "functionType">: gql "GeneralSetFunctionType",
     "setQuantifier">: T.maybe $ gql "SetQuantifier",
     "valueExpression">: gql "ValueExpression"]
 
-generalSetFunctionType :: Binding
+generalSetFunctionType :: TypeDefinition
 generalSetFunctionType = def "GeneralSetFunctionType" $
   T.enum [
     "avg",
@@ -2715,7 +2715,7 @@ generalSetFunctionType = def "GeneralSetFunctionType" $
     "stddevSamp",
     "stddevPop"]
 
-generalValueSpecification :: Binding
+generalValueSpecification :: TypeDefinition
 generalValueSpecification = def "GeneralValueSpecification" $
   T.union [
     "dynamicParameterSpecification">: gql "DynamicParameterSpecification",
@@ -2725,19 +2725,19 @@ gql :: String -> Type
 gql = typeref ns
 
 
-gqlProgram :: Binding
+gqlProgram :: TypeDefinition
 gqlProgram = def "GqlProgram" $
   T.record [
     "activity">: T.maybe $ gql "ProgramActivity",
     "close">: T.maybe $ gql "SessionCloseCommand"]
 
-graphAndNestedQuerySpecification :: Binding
+graphAndNestedQuerySpecification :: TypeDefinition
 graphAndNestedQuerySpecification = def "GraphAndNestedQuerySpecification" $
   T.record [
     "graphExpression">: gql "GraphExpression",
     "nested">: gql "NestedQuerySpecification"]
 
-graphExpression :: Binding
+graphExpression :: TypeDefinition
 graphExpression = def "GraphExpression" $
   T.union [
     "object">: gql "ObjectExpressionPrimary",
@@ -2745,14 +2745,14 @@ graphExpression = def "GraphExpression" $
     "name">: gql "ObjectNameOrBindingVariable",
     "current">: gql "CurrentGraph"]
 
-graphInitializer :: Binding
+graphInitializer :: TypeDefinition
 graphInitializer = def "GraphInitializer" T.unit
 
-graphName :: Binding
+graphName :: TypeDefinition
 graphName = def "GraphName" $
   T.string
 
-graphPattern :: Binding
+graphPattern :: TypeDefinition
 graphPattern = def "GraphPattern" $
   T.record [
     "matchMode">: T.maybe $ gql "MatchMode",
@@ -2760,13 +2760,13 @@ graphPattern = def "GraphPattern" $
     "keepClause">: T.maybe $ gql "KeepClause",
     "whereClause">: T.maybe $ gql "GraphPatternWhereClause"]
 
-graphPatternBindingTable :: Binding
+graphPatternBindingTable :: TypeDefinition
 graphPatternBindingTable = def "GraphPatternBindingTable" $
   T.record [
     "pattern">: gql "GraphPattern",
     "yieldClause">: T.maybe $ gql "GraphPatternYieldClause"]
 
-graphPatternQuantifier :: Binding
+graphPatternQuantifier :: TypeDefinition
 graphPatternQuantifier = def "GraphPatternQuantifier" $
   T.union [
     "asterisk">: T.unit,
@@ -2774,25 +2774,25 @@ graphPatternQuantifier = def "GraphPatternQuantifier" $
     "fixed">: gql "FixedQuantifier",
     "general">: gql "GeneralQuantifier"]
 
-graphPatternWhereClause :: Binding
+graphPatternWhereClause :: TypeDefinition
 graphPatternWhereClause = def "GraphPatternWhereClause" $
   gql "SearchCondition"
 
-graphPatternYieldClause :: Binding
+graphPatternYieldClause :: TypeDefinition
 graphPatternYieldClause = def "GraphPatternYieldClause" $
   gql "GraphPatternYieldItemList"
 
-graphPatternYieldItem :: Binding
+graphPatternYieldItem :: TypeDefinition
 graphPatternYieldItem = def "GraphPatternYieldItem" $
   gql "BindingVariableReference"
 
-graphPatternYieldItemList :: Binding
+graphPatternYieldItemList :: TypeDefinition
 graphPatternYieldItemList = def "GraphPatternYieldItemList" $
   T.union [
     "items">: nonemptyList $ gql "GraphPatternYieldItem",
     "noBindings">: T.unit]
 
-graphReference :: Binding
+graphReference :: TypeDefinition
 graphReference = def "GraphReference" $
   T.union [
     "parentAndGraphName">: gql "ParentAndGraphName",
@@ -2800,253 +2800,253 @@ graphReference = def "GraphReference" $
     "homeGraph">: gql "HomeGraph",
     "parameterSpecification">: gql "ReferenceParameterSpecification"]
 
-graphReferenceValueType :: Binding
+graphReferenceValueType :: TypeDefinition
 graphReferenceValueType = def "GraphReferenceValueType" $
   T.union [
     "open">: gql "OpenGraphReferenceValueType",
     "closed">: gql "ClosedGraphReferenceValueType"]
 
-graphSource :: Binding
+graphSource :: TypeDefinition
 graphSource = def "GraphSource" $
   gql "GraphExpression"
 
-graphTypeLikeGraph :: Binding
+graphTypeLikeGraph :: TypeDefinition
 graphTypeLikeGraph = def "GraphTypeLikeGraph" $
   gql "GraphExpression"
 
-graphTypeName :: Binding
+graphTypeName :: TypeDefinition
 graphTypeName = def "GraphTypeName" $
   T.string
 
-graphTypeOption :: Binding
+graphTypeOption :: TypeDefinition
 graphTypeOption = def "GraphTypeOption" $
   T.union [
     "openGraphType">: gql "OpenGraphType",
     "ofGraphType">: gql "OfGraphType"]
 
-graphTypeReference :: Binding
+graphTypeReference :: TypeDefinition
 graphTypeReference = def "GraphTypeReference" $
   T.union [
     "parentAndTypeName">: gql "CatalogGraphTypeParentAndName",
     "parameterSpecification">: gql "ReferenceParameterSpecification"]
 
-graphTypeSource :: Binding
+graphTypeSource :: TypeDefinition
 graphTypeSource = def "GraphTypeSource" $
   T.union [
     "copyOf">: gql "CopyOfGraphType",
     "likeGraph">: gql "GraphTypeLikeGraph",
     "nestedSpecification">: gql "NestedGraphTypeSpecification"]
 
-graphTypeSpecificationBody :: Binding
+graphTypeSpecificationBody :: TypeDefinition
 graphTypeSpecificationBody = def "GraphTypeSpecificationBody" $
   gql "ElementTypeList"
 
-graphVariableDefinition :: Binding
+graphVariableDefinition :: TypeDefinition
 graphVariableDefinition = def "GraphVariableDefinition" $
   T.record [
     "variable">: gql "BindingVariable",
     "initializer">: gql "OptTypedGraphInitializer"]
 
-groupByClause :: Binding
+groupByClause :: TypeDefinition
 groupByClause = def "GroupByClause" $
   gql "GroupingElementList"
 
-groupingElement :: Binding
+groupingElement :: TypeDefinition
 groupingElement = def "GroupingElement" $
   gql "BindingVariableReference"
 
-groupingElementList :: Binding
+groupingElementList :: TypeDefinition
 groupingElementList = def "GroupingElementList" $
   T.union [
     "elements">: nonemptyList $ gql "GroupingElement",
     "emptySet">: T.unit]
 
-havingClause :: Binding
+havingClause :: TypeDefinition
 havingClause = def "HavingClause" $
   gql "SearchCondition"
 
-homeGraph :: Binding
+homeGraph :: TypeDefinition
 homeGraph = def "HomeGraph" $
   T.enum ["homePropertyGraph", "homeGraph"]
 
-identifier :: Binding
+identifier :: TypeDefinition
 identifier = def "Identifier" $
   T.string
 
-immaterialValueType :: Binding
+immaterialValueType :: TypeDefinition
 immaterialValueType = def "ImmaterialValueType" $
   T.union [
     "nullType">: gql "NullType",
     "emptyType">: gql "EmptyType"]
 
-implies :: Binding
+implies :: TypeDefinition
 implies = def "Implies" $
   T.enum ["rightDoubleArrow", "implies"]
 
-independentValueExpression :: Binding
+independentValueExpression :: TypeDefinition
 independentValueExpression = def "IndependentValueExpression" $
   gql "NumericValueExpression"
 
-inlineProcedureCall :: Binding
+inlineProcedureCall :: TypeDefinition
 inlineProcedureCall = def "InlineProcedureCall" $
   T.record [
     "scope">: T.maybe $ gql "VariableScopeClause",
     "nested">: gql "NestedProcedureSpecification"]
 
-insertEdgeAndNode :: Binding
+insertEdgeAndNode :: TypeDefinition
 insertEdgeAndNode = def "InsertEdgeAndNode" $
   T.record [
     "edge">: gql "InsertEdgePattern",
     "node">: gql "InsertNodePattern"]
 
-insertEdgePattern :: Binding
+insertEdgePattern :: TypeDefinition
 insertEdgePattern = def "InsertEdgePattern" $
   T.union [
     "pointingLeft">: gql "InsertEdgePointingLeft",
     "pointingRight">: gql "InsertEdgePointingRight",
     "undirected">: gql "InsertEdgeUndirected"]
 
-insertEdgePointingLeft :: Binding
+insertEdgePointingLeft :: TypeDefinition
 insertEdgePointingLeft = def "InsertEdgePointingLeft" $
   T.maybe $ gql "InsertElementPatternFiller"
 
-insertEdgePointingRight :: Binding
+insertEdgePointingRight :: TypeDefinition
 insertEdgePointingRight = def "InsertEdgePointingRight" $
   T.maybe $ gql "InsertElementPatternFiller"
 
-insertEdgeUndirected :: Binding
+insertEdgeUndirected :: TypeDefinition
 insertEdgeUndirected = def "InsertEdgeUndirected" $
   T.maybe $ gql "InsertElementPatternFiller"
 
-insertElementPatternFiller :: Binding
+insertElementPatternFiller :: TypeDefinition
 insertElementPatternFiller = def "InsertElementPatternFiller" $
   T.record [
     "variableDeclaration">: T.maybe $ gql "ElementVariableDeclaration",
     "labelAndProperties">: T.maybe $ gql "LabelAndPropertySetSpecification"]
 
-insertGraphPattern :: Binding
+insertGraphPattern :: TypeDefinition
 insertGraphPattern = def "InsertGraphPattern" $
   gql "InsertPathPatternList"
 
-insertNodePattern :: Binding
+insertNodePattern :: TypeDefinition
 insertNodePattern = def "InsertNodePattern" $
   T.maybe $ gql "InsertElementPatternFiller"
 
-insertPathPattern :: Binding
+insertPathPattern :: TypeDefinition
 insertPathPattern = def "InsertPathPattern" $
   T.record [
     "startNode">: gql "InsertNodePattern",
     "edgesAndNodes">: T.list $ gql "InsertEdgeAndNode"]
 
-insertPathPatternList :: Binding
+insertPathPatternList :: TypeDefinition
 insertPathPatternList = def "InsertPathPatternList" $
   nonemptyList $ gql "InsertPathPattern"
 
-insertStatement :: Binding
+insertStatement :: TypeDefinition
 insertStatement = def "InsertStatement" $
   gql "InsertGraphPattern"
 
-int128Type :: Binding
+int128Type :: TypeDefinition
 int128Type = def "Int128Type" $
   T.record ["notNull">: T.boolean]
 
-int16Type :: Binding
+int16Type :: TypeDefinition
 int16Type = def "Int16Type" $
   T.record ["notNull">: T.boolean]
 
-int256Type :: Binding
+int256Type :: TypeDefinition
 int256Type = def "Int256Type" $
   T.record ["notNull">: T.boolean]
 
-int32Type :: Binding
+int32Type :: TypeDefinition
 int32Type = def "Int32Type" $
   T.record ["notNull">: T.boolean]
 
-int64Type :: Binding
+int64Type :: TypeDefinition
 int64Type = def "Int64Type" $
   T.record ["notNull">: T.boolean]
 
-int8Type :: Binding
+int8Type :: TypeDefinition
 int8Type = def "Int8Type" $
   T.record ["notNull">: T.boolean]
 
-intWithPrecision :: Binding
+intWithPrecision :: TypeDefinition
 intWithPrecision = def "IntWithPrecision" $
   T.record [
     "precision">: T.maybe $ gql "Precision",
     "notNull">: T.boolean]
 
-integer128Type :: Binding
+integer128Type :: TypeDefinition
 integer128Type = def "Integer128Type" $
   T.record ["notNull">: T.boolean]
 
-integer16Type :: Binding
+integer16Type :: TypeDefinition
 integer16Type = def "Integer16Type" $
   T.record ["notNull">: T.boolean]
 
-integer256Type :: Binding
+integer256Type :: TypeDefinition
 integer256Type = def "Integer256Type" $
   T.record ["notNull">: T.boolean]
 
-integer32Type :: Binding
+integer32Type :: TypeDefinition
 integer32Type = def "Integer32Type" $
   T.record ["notNull">: T.boolean]
 
-integer64Type :: Binding
+integer64Type :: TypeDefinition
 integer64Type = def "Integer64Type" $
   T.record ["notNull">: T.boolean]
 
-integer8Type :: Binding
+integer8Type :: TypeDefinition
 integer8Type = def "Integer8Type" $
   T.record ["notNull">: T.boolean]
 
-integerWithPrecision :: Binding
+integerWithPrecision :: TypeDefinition
 integerWithPrecision = def "IntegerWithPrecision" $
   T.record [
     "precision">: T.maybe $ gql "Precision",
     "notNull">: T.boolean]
 
-isLabelExpression :: Binding
+isLabelExpression :: TypeDefinition
 isLabelExpression = def "IsLabelExpression" $
   T.record [
     "isOrColon">: gql "IsOrColon",
     "label">: gql "LabelExpression"]
 
-isLabeledOrColon :: Binding
+isLabeledOrColon :: TypeDefinition
 isLabeledOrColon = def "IsLabeledOrColon" $
   T.union [
     "not">: T.boolean,
     "colon">: T.unit]
 
-isNotExpr :: Binding
+isNotExpr :: TypeDefinition
 isNotExpr = def "IsNotExpr" $
   T.record [
     "valueExpression">: gql "ValueExpression",
     "not">: T.boolean,
     "truthValue">: gql "TruthValue"]
 
-isOrColon :: Binding
+isOrColon :: TypeDefinition
 isOrColon = def "IsOrColon" $
   T.enum ["is", "colon"]
 
-isOrColonWithLabels :: Binding
+isOrColonWithLabels :: TypeDefinition
 isOrColonWithLabels = def "IsOrColonWithLabels" $
   T.record [
     "isOrColon">: gql "IsOrColon",
     "labels">: gql "LabelSetSpecification"]
 
-keepClause :: Binding
+keepClause :: TypeDefinition
 keepClause = def "KeepClause" $
   gql "PathPatternPrefix"
 
-labelAndPropertySetSpecification :: Binding
+labelAndPropertySetSpecification :: TypeDefinition
 labelAndPropertySetSpecification = def "LabelAndPropertySetSpecification" $
   T.record [
     "isOrColon">: T.maybe $ gql "IsOrColon",
     "labelSet">: T.maybe $ gql "LabelSetSpecification",
     "propertySpecification">: T.maybe $ gql "ElementPropertySpecification"]
 
-labelExpression :: Binding
+labelExpression :: TypeDefinition
 labelExpression = def "LabelExpression" $
   T.union [
     "negation">: gql "LabelExpression",
@@ -3056,113 +3056,113 @@ labelExpression = def "LabelExpression" $
     "wildcard">: T.unit,
     "parenthesized">: gql "LabelExpression"]
 
-labelName :: Binding
+labelName :: TypeDefinition
 labelName = def "LabelName" $
   T.string
 
-labelSetPhrase :: Binding
+labelSetPhrase :: TypeDefinition
 labelSetPhrase = def "LabelSetPhrase" $
   T.union [
     "singleLabel">: gql "LabelName",
     "multipleLabels">: gql "LabelSetSpecification",
     "isOrColonWithLabels">: gql "IsOrColonWithLabels"]
 
-labelSetSpecification :: Binding
+labelSetSpecification :: TypeDefinition
 labelSetSpecification = def "LabelSetSpecification" $
   nonemptyList $ gql "LabelName"
 
-labeledPredicate :: Binding
+labeledPredicate :: TypeDefinition
 labeledPredicate = def "LabeledPredicate" $
   T.record [
     "elementVariableReference">: gql "ElementVariableReference",
     "labeledPart">: gql "LabeledPredicatePart2"]
 
-labeledPredicatePart2 :: Binding
+labeledPredicatePart2 :: TypeDefinition
 labeledPredicatePart2 = def "LabeledPredicatePart2" $
   T.record [
     "isLabeledOrColon">: gql "IsLabeledOrColon",
     "labelExpression">: gql "LabelExpression"]
 
-lengthExpression :: Binding
+lengthExpression :: TypeDefinition
 lengthExpression = def "LengthExpression" $
   T.union [
     "char">: gql "CharLengthExpression",
     "byte">: gql "ByteLengthExpression",
     "path">: gql "PathLengthExpression"]
 
-letStatement :: Binding
+letStatement :: TypeDefinition
 letStatement = def "LetStatement" $
   gql "LetVariableDefinitionList"
 
-letValueExpression :: Binding
+letValueExpression :: TypeDefinition
 letValueExpression = def "LetValueExpression" $
   T.record [
     "letVariables">: gql "LetVariableDefinitionList",
     "valueExpression">: gql "ValueExpression"]
 
-letVariableDefinition :: Binding
+letVariableDefinition :: TypeDefinition
 letVariableDefinition = def "LetVariableDefinition" $
   T.union [
     "valueVariable">: gql "ValueVariableDefinition",
     "bindingEqualsValue">: gql "BindingEqualsValue"]
 
-letVariableDefinitionList :: Binding
+letVariableDefinitionList :: TypeDefinition
 letVariableDefinitionList = def "LetVariableDefinitionList" $
   nonemptyList $ gql "LetVariableDefinition"
 
-limitClause :: Binding
+limitClause :: TypeDefinition
 limitClause = def "LimitClause" $
   gql "NonNegativeIntegerSpecification"
 
-linearCatalogModifyingStatement :: Binding
+linearCatalogModifyingStatement :: TypeDefinition
 linearCatalogModifyingStatement = def "LinearCatalogModifyingStatement" $
   nonemptyList $ gql "SimpleCatalogModifyingStatement"
 
-linearDataModifyingStatement :: Binding
+linearDataModifyingStatement :: TypeDefinition
 linearDataModifyingStatement = def "LinearDataModifyingStatement" $
   T.union [
     "focused">: gql "FocusedLinearDataModifyingStatement",
     "ambient">: gql "AmbientLinearDataModifyingStatement"]
 
-linearQueryStatement :: Binding
+linearQueryStatement :: TypeDefinition
 linearQueryStatement = def "LinearQueryStatement" $
   T.union [
     "focused">: gql "FocusedLinearQueryStatement",
     "ambient">: gql "AmbientLinearQueryStatement"]
 
-listElement :: Binding
+listElement :: TypeDefinition
 listElement = def "ListElement" $
   gql "ValueExpression"
 
-listElementList :: Binding
+listElementList :: TypeDefinition
 listElementList = def "ListElementList" $
   nonemptyList $ gql "ListElement"
 
-listLiteral :: Binding
+listLiteral :: TypeDefinition
 listLiteral = def "ListLiteral" $
   gql "ListValueConstructorByEnumeration"
 
-listValueConstructor :: Binding
+listValueConstructor :: TypeDefinition
 listValueConstructor = def "ListValueConstructor" $
   gql "ListValueConstructorByEnumeration"
 
-listValueConstructorByEnumeration :: Binding
+listValueConstructorByEnumeration :: TypeDefinition
 listValueConstructorByEnumeration = def "ListValueConstructorByEnumeration" $
   T.record [
     "listValueTypeName">: T.maybe $ gql "ListValueTypeName",
     "elements">: T.maybe $ gql "ListElementList"]
 
-listValueExpression :: Binding
+listValueExpression :: TypeDefinition
 listValueExpression = def "ListValueExpression" $
   gql "ValueExpression"
 
-listValueFunction :: Binding
+listValueFunction :: TypeDefinition
 listValueFunction = def "ListValueFunction" $
   T.union [
     "trim">: gql "TrimListFunction",
     "elements">: gql "ElementsFunction"]
 
-listValueTypeAlt1 :: Binding
+listValueTypeAlt1 :: TypeDefinition
 listValueTypeAlt1 = def "ListValueTypeAlt1" $
   T.record [
     "typeName">: gql "ListValueTypeName",
@@ -3170,7 +3170,7 @@ listValueTypeAlt1 = def "ListValueTypeAlt1" $
     "maxLength">: T.maybe $ gql "MaxLength",
     "notNull">: T.boolean]
 
-listValueTypeAlt2 :: Binding
+listValueTypeAlt2 :: TypeDefinition
 listValueTypeAlt2 = def "ListValueTypeAlt2" $
   T.record [
     "valueType">: gql "ValueType",
@@ -3178,261 +3178,261 @@ listValueTypeAlt2 = def "ListValueTypeAlt2" $
     "maxLength">: T.maybe $ gql "MaxLength",
     "notNull">: T.boolean]
 
-listValueTypeAlt3 :: Binding
+listValueTypeAlt3 :: TypeDefinition
 listValueTypeAlt3 = def "ListValueTypeAlt3" $
   T.record [
     "typeName">: gql "ListValueTypeName",
     "maxLength">: T.maybe $ gql "MaxLength",
     "notNull">: T.boolean]
 
-listValueTypeName :: Binding
+listValueTypeName :: TypeDefinition
 listValueTypeName = def "ListValueTypeName" $
   T.record [
     "group">: T.boolean,
     "synonym">: gql "ListValueTypeNameSynonym"]
 
-listValueTypeNameSynonym :: Binding
+listValueTypeNameSynonym :: TypeDefinition
 listValueTypeNameSynonym = def "ListValueTypeNameSynonym" $
   T.enum ["list", "array"]
 
-localDatetimeType :: Binding
+localDatetimeType :: TypeDefinition
 localDatetimeType = def "LocalDatetimeType" $
   T.record [
     "notNull">: T.boolean]
 
-localDatetimeTypeChoice :: Binding
+localDatetimeTypeChoice :: TypeDefinition
 localDatetimeTypeChoice = def "LocalDatetimeTypeChoice" $
   T.union [
     "localDatetime">: gql "LocalDatetimeType",
     "timestampWithoutTimeZone">: gql "TimestampWithoutTimeZoneType"]
 
-localNodeTypeAlias :: Binding
+localNodeTypeAlias :: TypeDefinition
 localNodeTypeAlias = def "LocalNodeTypeAlias" $
   T.string
 
-localTimeType :: Binding
+localTimeType :: TypeDefinition
 localTimeType = def "LocalTimeType" $
   T.record [
     "notNull">: T.boolean]
 
-localTimeTypeChoice :: Binding
+localTimeTypeChoice :: TypeDefinition
 localTimeTypeChoice = def "LocalTimeTypeChoice" $
   T.union [
     "localTime">: gql "LocalTimeType",
     "timeWithoutTimeZone">: gql "TimeWithoutTimeZoneType"]
 
-localdatetimeFunction :: Binding
+localdatetimeFunction :: TypeDefinition
 localdatetimeFunction = def "LocaldatetimeFunction" $
   T.union [
     "localTimestamp">: T.unit,
     "localDatetimeWithParams">: T.maybe $ gql "DatetimeFunctionParameters"]
 
-localtimeFunction :: Binding
+localtimeFunction :: TypeDefinition
 localtimeFunction = def "LocaltimeFunction" $
   T.maybe $ gql "TimeFunctionParameters"
 
-lowerBound :: Binding
+lowerBound :: TypeDefinition
 lowerBound = def "LowerBound" $
   gql "UnsignedInteger"
 
-matchMode :: Binding
+matchMode :: TypeDefinition
 matchMode = def "MatchMode" $
   T.union [
     "repeatableElements">: gql "RepeatableElementsMatchMode",
     "differentEdges">: gql "DifferentEdgesMatchMode"]
 
-matchStatement :: Binding
+matchStatement :: TypeDefinition
 matchStatement = def "MatchStatement" $
   T.union [
     "simple">: gql "SimpleMatchStatement",
     "optional">: gql "OptionalMatchStatement"]
 
-matchStatementBlock :: Binding
+matchStatementBlock :: TypeDefinition
 matchStatementBlock = def "MatchStatementBlock" $
   nonemptyList $ gql "MatchStatement"
 
-maxLength :: Binding
+maxLength :: TypeDefinition
 maxLength = def "MaxLength" $
   gql "UnsignedInteger"
 
-minLength :: Binding
+minLength :: TypeDefinition
 minLength = def "MinLength" $
   gql "UnsignedInteger"
 
-modulusExpression :: Binding
+modulusExpression :: TypeDefinition
 modulusExpression = def "ModulusExpression" $
   T.record [
     "dividend">: gql "NumericValueExpressionDividend",
     "divisor">: gql "NumericValueExpressionDivisor"]
 
-mulDivNumericValueExpression :: Binding
+mulDivNumericValueExpression :: TypeDefinition
 mulDivNumericValueExpression = def "MulDivNumericValueExpression" $
   T.record [
     "left">: gql "NumericValueExpression",
     "operator">: gql "MultDivOperator",
     "right">: gql "NumericValueExpression"]
 
-multDivExpr :: Binding
+multDivExpr :: TypeDefinition
 multDivExpr = def "MultDivExpr" $
   T.record [
     "left">: gql "ValueExpression",
     "operator">: gql "MultDivOperator",
     "right">: gql "ValueExpression"]
 
-multDivOperator :: Binding
+multDivOperator :: TypeDefinition
 multDivOperator = def "MultDivOperator" $
   T.enum ["multiply", "divide"]
 
-namedProcedureCall :: Binding
+namedProcedureCall :: TypeDefinition
 namedProcedureCall = def "NamedProcedureCall" $
   T.record [
     "reference">: gql "ProcedureReference",
     "arguments">: T.maybe $ gql "ProcedureArgumentList",
     "yield">: T.maybe $ gql "YieldClause"]
 
-naturalLogarithm :: Binding
+naturalLogarithm :: TypeDefinition
 naturalLogarithm = def "NaturalLogarithm" $
   gql "NumericValueExpression"
 
-nestedBindingTableQuerySpecification :: Binding
+nestedBindingTableQuerySpecification :: TypeDefinition
 nestedBindingTableQuerySpecification = def "NestedBindingTableQuerySpecification" T.unit
 
-nestedDataModifyingProcedureSpecification :: Binding
+nestedDataModifyingProcedureSpecification :: TypeDefinition
 nestedDataModifyingProcedureSpecification = def "NestedDataModifyingProcedureSpecification" $
   gql "ProcedureBody"
 
-nestedGraphTypeSpecification :: Binding
+nestedGraphTypeSpecification :: TypeDefinition
 nestedGraphTypeSpecification = def "NestedGraphTypeSpecification" $
   gql "GraphTypeSpecificationBody"
 
-nestedProcedureSpecification :: Binding
+nestedProcedureSpecification :: TypeDefinition
 nestedProcedureSpecification = def "NestedProcedureSpecification" $
   gql "ProcedureSpecification"
 
-nestedQuerySpecification :: Binding
+nestedQuerySpecification :: TypeDefinition
 nestedQuerySpecification = def "NestedQuerySpecification" $
   gql "ProcedureBody"
 
-nextStatement :: Binding
+nextStatement :: TypeDefinition
 nextStatement = def "NextStatement" $
   T.record [
     "yieldClause">: T.maybe $ gql "YieldClause",
     "statement">: gql "Statement"]
 
-nodeKeyLabelSetWithContent :: Binding
+nodeKeyLabelSetWithContent :: TypeDefinition
 nodeKeyLabelSetWithContent = def "NodeKeyLabelSetWithContent" $
   T.record [
     "keyLabelSet">: gql "NodeTypeKeyLabelSet",
     "impliedContent">: T.maybe $ gql "NodeTypeImpliedContent"]
 
-nodeLabelSetWithProperties :: Binding
+nodeLabelSetWithProperties :: TypeDefinition
 nodeLabelSetWithProperties = def "NodeLabelSetWithProperties" $
   T.record [
     "labelSet">: gql "NodeTypeLabelSet",
     "propertyTypes">: gql "NodeTypePropertyTypes"]
 
-nodePattern :: Binding
+nodePattern :: TypeDefinition
 nodePattern = def "NodePattern" $
   gql "ElementPatternFiller"
 
-nodeReference :: Binding
+nodeReference :: TypeDefinition
 nodeReference = def "NodeReference" $
   gql "ElementVariableReference"
 
-nodeReferenceValueExpression :: Binding
+nodeReferenceValueExpression :: TypeDefinition
 nodeReferenceValueExpression = def "NodeReferenceValueExpression" $
   gql "PrimaryValueExpression"
 
-nodeReferenceValueType :: Binding
+nodeReferenceValueType :: TypeDefinition
 nodeReferenceValueType = def "NodeReferenceValueType" $
   T.union [
     "open">: gql "OpenNodeReferenceValueType",
     "closed">: gql "ClosedNodeReferenceValueType"]
 
-nodeSynonym :: Binding
+nodeSynonym :: TypeDefinition
 nodeSynonym = def "NodeSynonym" $
   T.enum ["node", "vertex"]
 
-nodeSynonymAndTypeName :: Binding
+nodeSynonymAndTypeName :: TypeDefinition
 nodeSynonymAndTypeName = def "NodeSynonymAndTypeName" $
   T.record [
     "nodeSynonym">: gql "NodeSynonym",
     "typeName">: T.maybe $ gql "NodeTypeName"]
 
-nodeTypeFiller :: Binding
+nodeTypeFiller :: TypeDefinition
 nodeTypeFiller = def "NodeTypeFiller" $
   T.union [
     "keyLabelSet">: gql "NodeKeyLabelSetWithContent",
     "impliedContent">: gql "NodeTypeImpliedContent"]
 
-nodeTypeImpliedContent :: Binding
+nodeTypeImpliedContent :: TypeDefinition
 nodeTypeImpliedContent = def "NodeTypeImpliedContent" $
   T.union [
     "labelSet">: gql "NodeTypeLabelSet",
     "propertyTypes">: gql "NodeTypePropertyTypes",
     "labelSetWithProperties">: gql "NodeLabelSetWithProperties"]
 
-nodeTypeKeyLabelSet :: Binding
+nodeTypeKeyLabelSet :: TypeDefinition
 nodeTypeKeyLabelSet = def "NodeTypeKeyLabelSet" $
   T.maybe $ gql "LabelSetPhrase"
 
-nodeTypeLabelSet :: Binding
+nodeTypeLabelSet :: TypeDefinition
 nodeTypeLabelSet = def "NodeTypeLabelSet" $
   gql "LabelSetPhrase"
 
-nodeTypeName :: Binding
+nodeTypeName :: TypeDefinition
 nodeTypeName = def "NodeTypeName" $
   T.string
 
-nodeTypeNameWithFiller :: Binding
+nodeTypeNameWithFiller :: TypeDefinition
 nodeTypeNameWithFiller = def "NodeTypeNameWithFiller" $
   T.record [
     "typeName">: gql "NodeTypeName",
     "filler">: T.maybe $ gql "NodeTypeFiller"]
 
-nodeTypePattern :: Binding
+nodeTypePattern :: TypeDefinition
 nodeTypePattern = def "NodeTypePattern" $
   T.record [
     "synonymAndTypeName">: T.maybe $ gql "NodeSynonymAndTypeName",
     "alias">: T.maybe $ gql "LocalNodeTypeAlias",
     "filler">: T.maybe $ gql "NodeTypeFiller"]
 
-nodeTypePhrase :: Binding
+nodeTypePhrase :: TypeDefinition
 nodeTypePhrase = def "NodeTypePhrase" $
   T.record [
     "synonym">: gql "NodeSynonym",
     "typePhraseFiller">: gql "NodeTypePhraseFiller",
     "alias">: T.maybe $ gql "LocalNodeTypeAlias"]
 
-nodeTypePhraseFiller :: Binding
+nodeTypePhraseFiller :: TypeDefinition
 nodeTypePhraseFiller = def "NodeTypePhraseFiller" $
   T.union [
     "typeName">: gql "NodeTypeNameWithFiller",
     "fillerOnly">: gql "NodeTypeFiller"]
 
-nodeTypePropertyTypes :: Binding
+nodeTypePropertyTypes :: TypeDefinition
 nodeTypePropertyTypes = def "NodeTypePropertyTypes" $
   gql "PropertyTypesSpecification"
 
-nodeTypeSpecification :: Binding
+nodeTypeSpecification :: TypeDefinition
 nodeTypeSpecification = def "NodeTypeSpecification" $
   T.union [
     "pattern">: gql "NodeTypePattern",
     "phrase">: gql "NodeTypePhrase"]
 
-nonNegativeIntegerSpecification :: Binding
+nonNegativeIntegerSpecification :: TypeDefinition
 nonNegativeIntegerSpecification = def "NonNegativeIntegerSpecification" $
   T.union [
     "unsignedInteger">: gql "UnsignedInteger",
     "dynamicParameterSpecification">: gql "DynamicParameterSpecification"]
 
-nonParenthesizedPrimaryValueExpression :: Binding
+nonParenthesizedPrimaryValueExpression :: TypeDefinition
 nonParenthesizedPrimaryValueExpression = def "NonParenthesizedPrimaryValueExpression" $
   T.union [
     "special">: gql "NonParenthesizedPrimaryValueExpressionSpecialCase",
     "bindingVariable">: gql "BindingVariableReference"]
 
-nonParenthesizedPrimaryValueExpressionSpecialCase :: Binding
+nonParenthesizedPrimaryValueExpressionSpecialCase :: TypeDefinition
 nonParenthesizedPrimaryValueExpressionSpecialCase = def "NonParenthesizedPrimaryValueExpressionSpecialCase" $
   T.union [
     "aggregateFunction">: gql "AggregateFunction",
@@ -3445,80 +3445,80 @@ nonParenthesizedPrimaryValueExpressionSpecialCase = def "NonParenthesizedPrimary
     "elementIdFunction">: gql "ElementIdFunction",
     "letValueExpression">: gql "LetValueExpression"]
 
-normalForm :: Binding
+normalForm :: TypeDefinition
 normalForm = def "NormalForm" $
   T.enum ["nfc", "nfd", "nfkc", "nfkd"]
 
-normalizeCharacterString :: Binding
+normalizeCharacterString :: TypeDefinition
 normalizeCharacterString = def "NormalizeCharacterString" $
   T.record [
     "valueExpression">: gql "ValueExpression",
     "normalForm">: T.maybe $ gql "NormalForm"]
 
-normalizedPredicateExpr :: Binding
+normalizedPredicateExpr :: TypeDefinition
 normalizedPredicateExpr = def "NormalizedPredicateExpr" $
   T.record [
     "valueExpression">: gql "ValueExpression",
     "normalizedPredicate">: gql "NormalizedPredicatePart2"]
 
-normalizedPredicatePart2 :: Binding
+normalizedPredicatePart2 :: TypeDefinition
 normalizedPredicatePart2 = def "NormalizedPredicatePart2" $
   T.record [
     "not">: T.boolean,
     "normalForm">: T.maybe $ gql "NormalForm"]
 
-notExpr :: Binding
+notExpr :: TypeDefinition
 notExpr = def "NotExpr" $
   gql "ValueExpression"
 
-notNull :: Binding
+notNull :: TypeDefinition
 notNull = def "NotNull" $
   T.unit
 
-nullIfAbbreviation :: Binding
+nullIfAbbreviation :: TypeDefinition
 nullIfAbbreviation = def "NullIfAbbreviation" $
   T.record [
     "first">: gql "ValueExpression",
     "second">: gql "ValueExpression"]
 
-nullLiteral :: Binding
+nullLiteral :: TypeDefinition
 nullLiteral = def "NullLiteral" $
   T.unit
 
-nullOrdering :: Binding
+nullOrdering :: TypeDefinition
 nullOrdering = def "NullOrdering" $
   T.enum ["nullsFirst", "nullsLast"]
 
-nullPredicate :: Binding
+nullPredicate :: TypeDefinition
 nullPredicate = def "NullPredicate" $
   T.record [
     "valueExpression">: gql "PrimaryValueExpression",
     "nullPart">: gql "NullPredicatePart2"]
 
-nullPredicatePart2 :: Binding
+nullPredicatePart2 :: TypeDefinition
 nullPredicatePart2 = def "NullPredicatePart2" $
   T.record [
     "not">: T.boolean]
 
-nullType :: Binding
+nullType :: TypeDefinition
 nullType = def "NullType" $
   T.unit
 
-numberOfGroups :: Binding
+numberOfGroups :: TypeDefinition
 numberOfGroups = def "NumberOfGroups" $
   gql "NonNegativeIntegerSpecification"
 
-numberOfPaths :: Binding
+numberOfPaths :: TypeDefinition
 numberOfPaths = def "NumberOfPaths" $
   gql "NonNegativeIntegerSpecification"
 
-numericType :: Binding
+numericType :: TypeDefinition
 numericType = def "NumericType" $
   T.union [
     "exact">: gql "ExactNumericType",
     "approximate">: gql "ApproximateNumericType"]
 
-numericValueExpression :: Binding
+numericValueExpression :: TypeDefinition
 numericValueExpression = def "NumericValueExpression" $
   T.union [
     "signed">: gql "SignedNumericValueExpression",
@@ -3527,23 +3527,23 @@ numericValueExpression = def "NumericValueExpression" $
     "primary">: gql "PrimaryValueExpression",
     "function">: gql "NumericValueFunction"]
 
-numericValueExpressionBase :: Binding
+numericValueExpressionBase :: TypeDefinition
 numericValueExpressionBase = def "NumericValueExpressionBase" $
   gql "NumericValueExpression"
 
-numericValueExpressionDividend :: Binding
+numericValueExpressionDividend :: TypeDefinition
 numericValueExpressionDividend = def "NumericValueExpressionDividend" $
   gql "NumericValueExpression"
 
-numericValueExpressionDivisor :: Binding
+numericValueExpressionDivisor :: TypeDefinition
 numericValueExpressionDivisor = def "NumericValueExpressionDivisor" $
   gql "NumericValueExpression"
 
-numericValueExpressionExponent :: Binding
+numericValueExpressionExponent :: TypeDefinition
 numericValueExpressionExponent = def "NumericValueExpressionExponent" $
   gql "NumericValueExpression"
 
-numericValueFunction :: Binding
+numericValueFunction :: TypeDefinition
 numericValueFunction = def "NumericValueFunction" $
   T.union [
     "length">: gql "LengthExpression",
@@ -3560,159 +3560,159 @@ numericValueFunction = def "NumericValueFunction" $
     "floor">: gql "FloorFunction",
     "ceiling">: gql "CeilingFunction"]
 
-objectExpressionPrimary :: Binding
+objectExpressionPrimary :: TypeDefinition
 objectExpressionPrimary = def "ObjectExpressionPrimary" $
   T.union [
     "variable">: gql "PrimaryValueExpression",
     "parenthesized">: gql "ParenthesizedValueExpression",
     "nonParenthesized">: gql "NonParenthesizedPrimaryValueExpressionSpecialCase"]
 
-objectName :: Binding
+objectName :: TypeDefinition
 objectName = def "ObjectName" $
   T.string
 
-objectNameOrBindingVariable :: Binding
+objectNameOrBindingVariable :: TypeDefinition
 objectNameOrBindingVariable = def "ObjectNameOrBindingVariable" $
   T.string
 
-ofGraphType :: Binding
+ofGraphType :: TypeDefinition
 ofGraphType = def "OfGraphType" $
   T.union [
     "likeGraph">: gql "GraphTypeLikeGraph",
     "reference">: gql "TypedGraphTypeReference",
     "nested">: gql "TypedNestedGraphTypeSpecification"]
 
-offsetAndOptionalLimit :: Binding
+offsetAndOptionalLimit :: TypeDefinition
 offsetAndOptionalLimit = def "OffsetAndOptionalLimit" $
   T.record [
     "offset">: gql "OffsetClause",
     "limit">: T.maybe $ gql "LimitClause"]
 
-offsetClause :: Binding
+offsetClause :: TypeDefinition
 offsetClause = def "OffsetClause" $
   T.record [
     "synonym">: gql "OffsetSynonym",
     "value">: gql "NonNegativeIntegerSpecification"]
 
-offsetSynonym :: Binding
+offsetSynonym :: TypeDefinition
 offsetSynonym = def "OffsetSynonym" $
   T.enum ["offset", "skipReservedWord"]
 
-openDynamicUnionType :: Binding
+openDynamicUnionType :: TypeDefinition
 openDynamicUnionType = def "OpenDynamicUnionType" $
   T.record [
     "value">: T.boolean,
     "notNull">: T.boolean]
 
-openEdgeReferenceValueType :: Binding
+openEdgeReferenceValueType :: TypeDefinition
 openEdgeReferenceValueType = def "OpenEdgeReferenceValueType" $
   T.record [
     "any">: T.boolean,
     "edgeSynonym">: gql "EdgeSynonym",
     "notNull">: T.boolean]
 
-openGraphReferenceValueType :: Binding
+openGraphReferenceValueType :: TypeDefinition
 openGraphReferenceValueType = def "OpenGraphReferenceValueType" $
   T.record [
     "any">: T.maybe T.boolean,
     "property">: T.boolean,
     "notNull">: T.boolean]
 
-openGraphType :: Binding
+openGraphType :: TypeDefinition
 openGraphType = def "OpenGraphType" $
   T.record [
     "typed">: T.maybe $ gql "Typed",
     "graph">: T.boolean]
 
-openNodeReferenceValueType :: Binding
+openNodeReferenceValueType :: TypeDefinition
 openNodeReferenceValueType = def "OpenNodeReferenceValueType" $
   T.record [
     "any">: T.boolean,
     "nodeSynonym">: gql "NodeSynonym",
     "notNull">: T.boolean]
 
-optTypedBindingTableInitializer :: Binding
+optTypedBindingTableInitializer :: TypeDefinition
 optTypedBindingTableInitializer = def "OptTypedBindingTableInitializer" $
   T.record [
     "type">: T.maybe $ gql "TypedBindingTableReferenceValueType",
     "initializer">: gql "BindingTableInitializer"]
 
-optTypedGraphInitializer :: Binding
+optTypedGraphInitializer :: TypeDefinition
 optTypedGraphInitializer = def "OptTypedGraphInitializer" $
   T.record [
     "type">: T.maybe $ gql "TypedGraphReferenceValueType",
     "initializer">: gql "GraphInitializer"]
 
-optTypedValueInitializer :: Binding
+optTypedValueInitializer :: TypeDefinition
 optTypedValueInitializer = def "OptTypedValueInitializer" $
   T.record [
     "type">: T.maybe $ gql "TypedValueType",
     "initializer">: gql "ValueInitializer"]
 
-optionalMatchStatement :: Binding
+optionalMatchStatement :: TypeDefinition
 optionalMatchStatement = def "OptionalMatchStatement" $
   gql "OptionalOperand"
 
-optionalOperand :: Binding
+optionalOperand :: TypeDefinition
 optionalOperand = def "OptionalOperand" $
   T.union [
     "simple">: gql "SimpleMatchStatement",
     "braceBlock">: gql "MatchStatementBlock",
     "parenBlock">: gql "MatchStatementBlock"]
 
-orderByAndOptionalOffsetAndLimit :: Binding
+orderByAndOptionalOffsetAndLimit :: TypeDefinition
 orderByAndOptionalOffsetAndLimit = def "OrderByAndOptionalOffsetAndLimit" $
   T.record [
     "orderBy">: gql "OrderByClause",
     "offset">: T.maybe $ gql "OffsetClause",
     "limit">: T.maybe $ gql "LimitClause"]
 
-orderByAndPageStatement :: Binding
+orderByAndPageStatement :: TypeDefinition
 orderByAndPageStatement = def "OrderByAndPageStatement" $
   T.union [
     "orderByAndOptionalOffsetAndLimit">: gql "OrderByAndOptionalOffsetAndLimit",
     "offsetAndOptionalLimit">: gql "OffsetAndOptionalLimit",
     "limitOnly">: gql "LimitClause"]
 
-orderByClause :: Binding
+orderByClause :: TypeDefinition
 orderByClause = def "OrderByClause" $
   gql "SortSpecificationList"
 
-orderingSpecification :: Binding
+orderingSpecification :: TypeDefinition
 orderingSpecification = def "OrderingSpecification" $
   T.enum ["ascending", "descending"]
 
-ordinalityOrOffsetType :: Binding
+ordinalityOrOffsetType :: TypeDefinition
 ordinalityOrOffsetType = def "OrdinalityOrOffsetType" $
   T.enum ["ordinality", "offset"]
 
-parameterName :: Binding
+parameterName :: TypeDefinition
 parameterName = def "ParameterName" $
   T.string
 
-parameterSessionSpecification :: Binding
+parameterSessionSpecification :: TypeDefinition
 parameterSessionSpecification = def "ParameterSessionSpecification" $
   T.record [
     "parameter">: T.boolean,
     "sessionParameterSpecification">: gql "SessionParameterSpecification"]
 
-parametersOrCharacteristics :: Binding
+parametersOrCharacteristics :: TypeDefinition
 parametersOrCharacteristics = def "ParametersOrCharacteristics" $
   T.enum ["parameters", "characteristics"]
 
-parentAndGraphName :: Binding
+parentAndGraphName :: TypeDefinition
 parentAndGraphName = def "ParentAndGraphName" $
   T.record [
     "parentReference">: gql "CatalogObjectParentReference",
     "graphName">: gql "GraphName"]
 
-parentAndTableName :: Binding
+parentAndTableName :: TypeDefinition
 parentAndTableName = def "ParentAndTableName" $
   T.record [
     "parentReference">: gql "CatalogObjectParentReference",
     "tableName">: gql "BindingTableName"]
 
-parenthesizedPathPatternExpression :: Binding
+parenthesizedPathPatternExpression :: TypeDefinition
 parenthesizedPathPatternExpression = def "ParenthesizedPathPatternExpression" $
   T.record [
     "subpathDeclaration">: T.maybe $ gql "SubpathVariableDeclaration",
@@ -3720,148 +3720,148 @@ parenthesizedPathPatternExpression = def "ParenthesizedPathPatternExpression" $
     "expression">: gql "PathPatternExpression",
     "whereClause">: T.maybe $ gql "ParenthesizedPathPatternWhereClause"]
 
-parenthesizedPathPatternWhereClause :: Binding
+parenthesizedPathPatternWhereClause :: TypeDefinition
 parenthesizedPathPatternWhereClause = def "ParenthesizedPathPatternWhereClause" $
   gql "SearchCondition"
 
-parenthesizedValueExpression :: Binding
+parenthesizedValueExpression :: TypeDefinition
 parenthesizedValueExpression = def "ParenthesizedValueExpression" $
   gql "ValueExpression"
 
-pathElementList :: Binding
+pathElementList :: TypeDefinition
 pathElementList = def "PathElementList" $
   T.record [
     "start">: gql "PathElementListStart",
     "steps">: T.list $ gql "PathElementListStep"]
 
-pathElementListStart :: Binding
+pathElementListStart :: TypeDefinition
 pathElementListStart = def "PathElementListStart" $
   gql "NodeReferenceValueExpression"
 
-pathElementListStep :: Binding
+pathElementListStep :: TypeDefinition
 pathElementListStep = def "PathElementListStep" $
   T.record [
     "edgeReference">: gql "EdgeReferenceValueExpression",
     "nodeReference">: gql "NodeReferenceValueExpression"]
 
-pathFactor :: Binding
+pathFactor :: TypeDefinition
 pathFactor = def "PathFactor" $
   T.union [
     "primary">: gql "PathPrimary",
     "quantifiedPrimary">: gql "QuantifiedPathPrimary",
     "questionedPrimary">: gql "QuestionedPathPrimary"]
 
-pathLengthExpression :: Binding
+pathLengthExpression :: TypeDefinition
 pathLengthExpression = def "PathLengthExpression" $
   gql "PathValueExpression"
 
-pathMode :: Binding
+pathMode :: TypeDefinition
 pathMode = def "PathMode" $
   T.enum ["walk", "trail", "simple", "acyclic"]
 
-pathModePrefix :: Binding
+pathModePrefix :: TypeDefinition
 pathModePrefix = def "PathModePrefix" $
   T.record [
     "mode">: gql "PathMode",
     "orPaths">: T.maybe $ gql "PathOrPaths"]
 
-pathOrPaths :: Binding
+pathOrPaths :: TypeDefinition
 pathOrPaths = def "PathOrPaths" $
   T.enum ["path", "paths"]
 
-pathPattern :: Binding
+pathPattern :: TypeDefinition
 pathPattern = def "PathPattern" $
   T.record [
     "variableDeclaration">: T.maybe $ gql "PathVariableDeclaration",
     "prefix">: T.maybe $ gql "PathPatternPrefix",
     "expression">: gql "PathPatternExpression"]
 
-pathPatternExpression :: Binding
+pathPatternExpression :: TypeDefinition
 pathPatternExpression = def "PathPatternExpression" $
   T.union [
     "term">: gql "PathTerm",
     "multisetAlternation">: nonemptyList $ gql "PathTerm",
     "patternUnion">: nonemptyList $ gql "PathTerm"]
 
-pathPatternList :: Binding
+pathPatternList :: TypeDefinition
 pathPatternList = def "PathPatternList" $
   nonemptyList $ gql "PathPattern"
 
-pathPatternPrefix :: Binding
+pathPatternPrefix :: TypeDefinition
 pathPatternPrefix = def "PathPatternPrefix" $
   T.union [
     "modePrefix">: gql "PathModePrefix",
     "searchPrefix">: gql "PathSearchPrefix"]
 
-pathPrimary :: Binding
+pathPrimary :: TypeDefinition
 pathPrimary = def "PathPrimary" $
   T.union [
     "elementPattern">: gql "ElementPattern",
     "parenthesizedExpression">: gql "ParenthesizedPathPatternExpression",
     "simplifiedExpression">: gql "SimplifiedPathPatternExpression"]
 
-pathSearchPrefix :: Binding
+pathSearchPrefix :: TypeDefinition
 pathSearchPrefix = def "PathSearchPrefix" $
   T.union [
     "all">: gql "AllPathSearch",
     "any">: gql "AnyPathSearch",
     "shortest">: gql "ShortestPathSearch"]
 
-pathTerm :: Binding
+pathTerm :: TypeDefinition
 pathTerm = def "PathTerm" $
   nonemptyList $ gql "PathFactor"
 
-pathValueConstructor :: Binding
+pathValueConstructor :: TypeDefinition
 pathValueConstructor = def "PathValueConstructor" $
   gql "PathValueConstructorByEnumeration"
 
-pathValueConstructorByEnumeration :: Binding
+pathValueConstructorByEnumeration :: TypeDefinition
 pathValueConstructorByEnumeration = def "PathValueConstructorByEnumeration" $
   gql "PathElementList"
 
-pathValueExpression :: Binding
+pathValueExpression :: TypeDefinition
 pathValueExpression = def "PathValueExpression" $
   gql "ValueExpression"
 
-pathValueType :: Binding
+pathValueType :: TypeDefinition
 pathValueType = def "PathValueType" $
   T.record [
     "notNull">: T.boolean]
 
-pathVariable :: Binding
+pathVariable :: TypeDefinition
 pathVariable = def "PathVariable" $
   gql "BindingVariable"
 
-pathVariableDeclaration :: Binding
+pathVariableDeclaration :: TypeDefinition
 pathVariableDeclaration = def "PathVariableDeclaration" $
   gql "PathVariable"
 
-pathVariableReference :: Binding
+pathVariableReference :: TypeDefinition
 pathVariableReference = def "PathVariableReference" $
   gql "BindingVariableReference"
 
-powerFunction :: Binding
+powerFunction :: TypeDefinition
 powerFunction = def "PowerFunction" $
   T.record [
     "base">: gql "NumericValueExpressionBase",
     "exponent">: gql "NumericValueExpressionExponent"]
 
-precision :: Binding
+precision :: TypeDefinition
 precision = def "Precision" $
   gql "UnsignedDecimalInteger"
 
-precisionAndScale :: Binding
+precisionAndScale :: TypeDefinition
 precisionAndScale = def "PrecisionAndScale" $
   T.record [
     "precision">: gql "Precision",
     "scale">: T.maybe $ gql "Scale",
     "notNull">: T.boolean]
 
-predefinedSchemaReference :: Binding
+predefinedSchemaReference :: TypeDefinition
 predefinedSchemaReference = def "PredefinedSchemaReference" $
   T.enum ["homeSchema", "currentSchema", "period"]
 
-predefinedType :: Binding
+predefinedType :: TypeDefinition
 predefinedType = def "PredefinedType" $
   T.union [
     "booleanType">: gql "BooleanType",
@@ -3872,7 +3872,7 @@ predefinedType = def "PredefinedType" $
     "referenceValueType">: gql "ReferenceValueType",
     "immaterialValueType">: gql "ImmaterialValueType"]
 
-predicate :: Binding
+predicate :: TypeDefinition
 predicate = def "Predicate" $
   T.union [
     "existsPredicate">: gql "ExistsPredicate",
@@ -3885,7 +3885,7 @@ predicate = def "Predicate" $
     "samePredicate">: gql "SamePredicate",
     "propertyExistsPredicate">: gql "PropertyExistsPredicate"]
 
-primaryValueExpression :: Binding
+primaryValueExpression :: TypeDefinition
 primaryValueExpression = def "PrimaryValueExpression" $
   T.union [
     "parenthesized">: gql "ParenthesizedValueExpression",
@@ -3900,7 +3900,7 @@ primaryValueExpression = def "PrimaryValueExpression" $
     "letValueExpression">: gql "LetValueExpression",
     "bindingVariableReference">: gql "BindingVariableReference"]
 
-primitiveCatalogModifyingStatement :: Binding
+primitiveCatalogModifyingStatement :: TypeDefinition
 primitiveCatalogModifyingStatement = def "PrimitiveCatalogModifyingStatement" $
   T.union [
     "createSchema">: gql "CreateSchemaStatement",
@@ -3910,7 +3910,7 @@ primitiveCatalogModifyingStatement = def "PrimitiveCatalogModifyingStatement" $
     "createGraphType">: gql "CreateGraphTypeStatement",
     "dropGraphType">: gql "DropGraphTypeStatement"]
 
-primitiveDataModifyingStatement :: Binding
+primitiveDataModifyingStatement :: TypeDefinition
 primitiveDataModifyingStatement = def "PrimitiveDataModifyingStatement" $
   T.union [
     "insert">: gql "InsertStatement",
@@ -3918,7 +3918,7 @@ primitiveDataModifyingStatement = def "PrimitiveDataModifyingStatement" $
     "remove">: gql "RemoveStatement",
     "delete">: gql "DeleteStatement"]
 
-primitiveQueryStatement :: Binding
+primitiveQueryStatement :: TypeDefinition
 primitiveQueryStatement = def "PrimitiveQueryStatement" $
   T.union [
     "match">: gql "MatchStatement",
@@ -3927,144 +3927,144 @@ primitiveQueryStatement = def "PrimitiveQueryStatement" $
     "filter">: gql "FilterStatement",
     "orderByAndPage">: gql "OrderByAndPageStatement"]
 
-primitiveResultStatement :: Binding
+primitiveResultStatement :: TypeDefinition
 primitiveResultStatement = def "PrimitiveResultStatement" $
   T.union [
     "returnAndOptionalOrderBy">: gql "ReturnAndOptionalOrderByAndPage",
     "finish">: T.unit]
 
-procedureAndMaybeEnd :: Binding
+procedureAndMaybeEnd :: TypeDefinition
 procedureAndMaybeEnd = def "ProcedureAndMaybeEnd" $
   T.record [
     "procedure">: gql "ProcedureSpecification",
     "end">: T.maybe $ gql "EndTransactionCommand"]
 
-procedureArgument :: Binding
+procedureArgument :: TypeDefinition
 procedureArgument = def "ProcedureArgument" $
   gql "ValueExpression"
 
-procedureArgumentList :: Binding
+procedureArgumentList :: TypeDefinition
 procedureArgumentList = def "ProcedureArgumentList" $
   nonemptyList $ gql "ProcedureArgument"
 
-procedureBody :: Binding
+procedureBody :: TypeDefinition
 procedureBody = def "ProcedureBody" $
   T.record [
     "atSchema">: T.maybe $ gql "AtSchemaClause",
     "bindings">: T.maybe $ gql "BindingVariableDefinitionBlock",
     "statements">: gql "StatementBlock"]
 
-procedureCall :: Binding
+procedureCall :: TypeDefinition
 procedureCall = def "ProcedureCall" $
   T.union [
     "inline">: gql "InlineProcedureCall",
     "named">: gql "NamedProcedureCall"]
 
-procedureName :: Binding
+procedureName :: TypeDefinition
 procedureName = def "ProcedureName" $
   T.string
 
-procedureReference :: Binding
+procedureReference :: TypeDefinition
 procedureReference = def "ProcedureReference" $
   T.union [
     "parentAndProcedureName">: gql "CatalogProcedureParentAndName",
     "parameterSpecification">: gql "ReferenceParameterSpecification"]
 
-procedureSpecification :: Binding
+procedureSpecification :: TypeDefinition
 procedureSpecification = def "ProcedureSpecification" $
   gql "ProcedureBody"
 
-programActivity :: Binding
+programActivity :: TypeDefinition
 programActivity = def "ProgramActivity" $
   T.union [
     "session">: gql "SessionActivity",
     "transaction">: gql "TransactionActivity"]
 
-propertyExistsPredicate :: Binding
+propertyExistsPredicate :: TypeDefinition
 propertyExistsPredicate = def "PropertyExistsPredicate" $
   T.record [
     "elementVariableReference">: gql "ElementVariableReference",
     "propertyName">: gql "PropertyName"]
 
-propertyKeyValuePair :: Binding
+propertyKeyValuePair :: TypeDefinition
 propertyKeyValuePair = def "PropertyKeyValuePair" $
   T.record [
     "name">: gql "PropertyName",
     "value">: gql "ValueExpression"]
 
-propertyKeyValuePairList :: Binding
+propertyKeyValuePairList :: TypeDefinition
 propertyKeyValuePairList = def "PropertyKeyValuePairList" $
   nonemptyList $ gql "PropertyKeyValuePair"
 
-propertyName :: Binding
+propertyName :: TypeDefinition
 propertyName = def "PropertyName" $
   T.string
 
-propertyReference :: Binding
+propertyReference :: TypeDefinition
 propertyReference = def "PropertyReference" $
   T.record [
     "valueExpression">: gql "PrimaryValueExpression",
     "propertyName">: gql "PropertyName"]
 
-propertyType :: Binding
+propertyType :: TypeDefinition
 propertyType = def "PropertyType" $
   T.record [
     "name">: gql "PropertyName",
     "typed">: T.maybe $ gql "Typed",
     "valueType">: gql "PropertyValueType"]
 
-propertyTypeList :: Binding
+propertyTypeList :: TypeDefinition
 propertyTypeList = def "PropertyTypeList" $
   nonemptyList $ gql "PropertyType"
 
-propertyTypesSpecification :: Binding
+propertyTypesSpecification :: TypeDefinition
 propertyTypesSpecification = def "PropertyTypesSpecification" $
   T.maybe $ gql "PropertyTypeList"
 
-propertyValueType :: Binding
+propertyValueType :: TypeDefinition
 propertyValueType = def "PropertyValueType" $
   gql "ValueType"
 
-quantifiedPathPrimary :: Binding
+quantifiedPathPrimary :: TypeDefinition
 quantifiedPathPrimary = def "QuantifiedPathPrimary" $
   T.record [
     "primary">: gql "PathPrimary",
     "quantifier">: gql "GraphPatternQuantifier"]
 
-queryConjunction :: Binding
+queryConjunction :: TypeDefinition
 queryConjunction = def "QueryConjunction" $
   T.union [
     "setOperator">: gql "SetOperator",
     "otherwise">: T.unit]
 
-questionedPathPrimary :: Binding
+questionedPathPrimary :: TypeDefinition
 questionedPathPrimary = def "QuestionedPathPrimary" $
   gql "PathPrimary"
 
-realType :: Binding
+realType :: TypeDefinition
 realType = def "RealType" $
   T.record [
     "notNull">: T.boolean]
 
-recordConstructor :: Binding
+recordConstructor :: TypeDefinition
 recordConstructor = def "RecordConstructor" $
   gql "FieldsSpecification"
 
-recordLiteral :: Binding
+recordLiteral :: TypeDefinition
 recordLiteral = def "RecordLiteral" $
   gql "RecordConstructor"
 
-recordType :: Binding
+recordType :: TypeDefinition
 recordType = def "RecordType" $
   T.union [
     "anyRecord">: gql "AnyRecordType",
     "specifiedRecord">: gql "SpecifiedRecordType"]
 
-referenceParameterSpecification :: Binding
+referenceParameterSpecification :: TypeDefinition
 referenceParameterSpecification = def "ReferenceParameterSpecification" $
   T.unit
 
-referenceValueType :: Binding
+referenceValueType :: TypeDefinition
 referenceValueType = def "ReferenceValueType" $
   T.union [
     "graph">: gql "GraphReferenceValueType",
@@ -4072,208 +4072,208 @@ referenceValueType = def "ReferenceValueType" $
     "node">: gql "NodeReferenceValueType",
     "edge">: gql "EdgeReferenceValueType"]
 
-regularIdentifier :: Binding
+regularIdentifier :: TypeDefinition
 regularIdentifier = def "RegularIdentifier" $
   T.string
 
-relativeCatalogSchemaReference :: Binding
+relativeCatalogSchemaReference :: TypeDefinition
 relativeCatalogSchemaReference = def "RelativeCatalogSchemaReference" $
   T.union [
     "predefinedReference">: gql "PredefinedSchemaReference",
     "directoryAndSchema">: gql "RelativeDirectoryAndSchema"]
 
-relativeDirectoryAndSchema :: Binding
+relativeDirectoryAndSchema :: TypeDefinition
 relativeDirectoryAndSchema = def "RelativeDirectoryAndSchema" $
   T.record [
     "directoryPath">: gql "RelativeDirectoryPath",
     "schemaName">: gql "SchemaName"]
 
-relativeDirectoryPath :: Binding
+relativeDirectoryPath :: TypeDefinition
 relativeDirectoryPath = def "RelativeDirectoryPath" $
   T.record [
     "parentDirectories">: T.nonNegativeInt32,
     "simplePath">: T.maybe $ gql "SimpleDirectoryPath"]
 
-removeItem :: Binding
+removeItem :: TypeDefinition
 removeItem = def "RemoveItem" $
   T.union [
     "property">: gql "RemovePropertyItem",
     "label">: gql "RemoveLabelItem"]
 
-removeItemList :: Binding
+removeItemList :: TypeDefinition
 removeItemList = def "RemoveItemList" $
   nonemptyList $ gql "RemoveItem"
 
-removeLabelItem :: Binding
+removeLabelItem :: TypeDefinition
 removeLabelItem = def "RemoveLabelItem" $
   T.record [
     "variable">: gql "BindingVariableReference",
     "isOrColon">: gql "IsOrColon",
     "label">: gql "LabelName"]
 
-removePropertyItem :: Binding
+removePropertyItem :: TypeDefinition
 removePropertyItem = def "RemovePropertyItem" $
   T.record [
     "variable">: gql "BindingVariableReference",
     "propertyName">: gql "PropertyName"]
 
-removeStatement :: Binding
+removeStatement :: TypeDefinition
 removeStatement = def "RemoveStatement" $
   gql "RemoveItemList"
 
-repeatableElementsMatchMode :: Binding
+repeatableElementsMatchMode :: TypeDefinition
 repeatableElementsMatchMode = def "RepeatableElementsMatchMode" $
   gql "ElementBindingsOrElements"
 
-result :: Binding
+result :: TypeDefinition
 result = def "Result" $
   T.union [
     "simple">: gql "ResultExpression",
     "nullLiteral">: T.unit]
 
-resultExpression :: Binding
+resultExpression :: TypeDefinition
 resultExpression = def "ResultExpression" $
   gql "ValueExpression"
 
-returnAndOptionalOrderByAndPage :: Binding
+returnAndOptionalOrderByAndPage :: TypeDefinition
 returnAndOptionalOrderByAndPage = def "ReturnAndOptionalOrderByAndPage" $
   T.record [
     "return">: gql "ReturnStatement",
     "orderByAndPage">: T.maybe $ gql "OrderByAndPageStatement"]
 
-returnItem :: Binding
+returnItem :: TypeDefinition
 returnItem = def "ReturnItem" $
   T.record [
     "expression">: gql "AggregatingValueExpression",
     "alias">: T.maybe $ gql "ReturnItemAlias"]
 
-returnItemAlias :: Binding
+returnItemAlias :: TypeDefinition
 returnItemAlias = def "ReturnItemAlias" $
   T.string
 
-returnItemList :: Binding
+returnItemList :: TypeDefinition
 returnItemList = def "ReturnItemList" $
   nonemptyList $ gql "ReturnItem"
 
-returnItems :: Binding
+returnItems :: TypeDefinition
 returnItems = def "ReturnItems" $
   T.union [
     "asterisk">: T.unit,
     "itemList">: gql "ReturnItemList"]
 
-returnItemsAndGroupBy :: Binding
+returnItemsAndGroupBy :: TypeDefinition
 returnItemsAndGroupBy = def "ReturnItemsAndGroupBy" $
   T.record [
     "quantifier">: T.maybe $ gql "SetQuantifier",
     "items">: gql "ReturnItems",
     "groupBy">: T.maybe $ gql "GroupByClause"]
 
-returnStatement :: Binding
+returnStatement :: TypeDefinition
 returnStatement = def "ReturnStatement" $
   gql "ReturnStatementBody"
 
-returnStatementBody :: Binding
+returnStatementBody :: TypeDefinition
 returnStatementBody = def "ReturnStatementBody" $
   T.union [
     "items">: gql "ReturnItemsAndGroupBy",
     "noBindings">: T.unit]
 
-rollbackCommand :: Binding
+rollbackCommand :: TypeDefinition
 rollbackCommand = def "RollbackCommand" $
   T.unit
 
-samePredicate :: Binding
+samePredicate :: TypeDefinition
 samePredicate = def "SamePredicate" $
   T.record [
     "references">: nonemptyList $ gql "ElementVariableReference"]
 
-scale :: Binding
+scale :: TypeDefinition
 scale = def "Scale" $
   gql "UnsignedDecimalInteger"
 
-schemaAndObjects :: Binding
+schemaAndObjects :: TypeDefinition
 schemaAndObjects = def "SchemaAndObjects" $
   T.record [
     "schemaReference">: gql "SchemaReference",
     "objects">: T.list $ gql "ObjectName"]
 
-schemaName :: Binding
+schemaName :: TypeDefinition
 schemaName = def "SchemaName" $
   T.string
 
-schemaReference :: Binding
+schemaReference :: TypeDefinition
 schemaReference = def "SchemaReference" $
   T.union [
     "absoluteReference">: gql "AbsoluteCatalogSchemaReference",
     "relativeReference">: gql "RelativeCatalogSchemaReference",
     "parameterSpecification">: gql "ReferenceParameterSpecification"]
 
-searchCondition :: Binding
+searchCondition :: TypeDefinition
 searchCondition = def "SearchCondition" $
   gql "BooleanValueExpression"
 
-searchedCase :: Binding
+searchedCase :: TypeDefinition
 searchedCase = def "SearchedCase" $
   T.record [
     "whenClauses">: nonemptyList $ gql "SearchedWhenClause",
     "elseClause">: T.maybe $ gql "ElseClause"]
 
-searchedWhenClause :: Binding
+searchedWhenClause :: TypeDefinition
 searchedWhenClause = def "SearchedWhenClause" $
   T.record [
     "searchCondition">: gql "SearchCondition",
     "result">: gql "Result"]
 
-selectGraphMatch :: Binding
+selectGraphMatch :: TypeDefinition
 selectGraphMatch = def "SelectGraphMatch" $
   T.record [
     "graphExpression">: gql "GraphExpression",
     "matchStatement">: gql "MatchStatement"]
 
-selectGraphMatchList :: Binding
+selectGraphMatchList :: TypeDefinition
 selectGraphMatchList = def "SelectGraphMatchList" $
   nonemptyList $ gql "SelectGraphMatch"
 
-selectItem :: Binding
+selectItem :: TypeDefinition
 selectItem = def "SelectItem" $
   T.record [
     "expression">: gql "AggregatingValueExpression",
     "alias">: T.maybe $ gql "SelectItemAlias"]
 
-selectItemAlias :: Binding
+selectItemAlias :: TypeDefinition
 selectItemAlias = def "SelectItemAlias" $
   T.string
 
-selectItemList :: Binding
+selectItemList :: TypeDefinition
 selectItemList = def "SelectItemList" $
   nonemptyList $ gql "SelectItem"
 
-selectItems :: Binding
+selectItems :: TypeDefinition
 selectItems = def "SelectItems" $
   T.union [
     "asterisk">: T.unit,
     "itemList">: gql "SelectItemList"]
 
-selectQuerySpecification :: Binding
+selectQuerySpecification :: TypeDefinition
 selectQuerySpecification = def "SelectQuerySpecification" $
   T.union [
     "nested">: gql "NestedQuerySpecification",
     "graphAndNested">: gql "GraphAndNestedQuerySpecification"]
 
-selectStatement :: Binding
+selectStatement :: TypeDefinition
 selectStatement = def "SelectStatement" $
   T.record [
     "quantifier">: T.maybe $ gql "SetQuantifier",
     "items">: gql "SelectItems",
     "body">: T.maybe $ gql "SelectStatementBodyAndClauses"]
 
-selectStatementBody :: Binding
+selectStatementBody :: TypeDefinition
 selectStatementBody = def "SelectStatementBody" $
   T.union [
     "graphMatchList">: gql "SelectGraphMatchList",
     "querySpecification">: gql "SelectQuerySpecification"]
 
-selectStatementBodyAndClauses :: Binding
+selectStatementBodyAndClauses :: TypeDefinition
 selectStatementBodyAndClauses = def "SelectStatementBodyAndClauses" $
   T.record [
     "body">: gql "SelectStatementBody",
@@ -4284,21 +4284,21 @@ selectStatementBodyAndClauses = def "SelectStatementBodyAndClauses" $
     "offset">: T.maybe $ gql "OffsetClause",
     "limit">: T.maybe $ gql "LimitClause"]
 
-sessionActivity :: Binding
+sessionActivity :: TypeDefinition
 sessionActivity = def "SessionActivity" $
   T.union [
     "reset">: nonemptyList $ gql "SessionResetCommand",
     "setAndResetCommands">: gql "SessionSetAndResetCommands"]
 
-sessionCloseCommand :: Binding
+sessionCloseCommand :: TypeDefinition
 sessionCloseCommand = def "SessionCloseCommand" $
   T.unit
 
-sessionParameterSpecification :: Binding
+sessionParameterSpecification :: TypeDefinition
 sessionParameterSpecification = def "SessionParameterSpecification" $
   gql "ParameterName"
 
-sessionResetArguments :: Binding
+sessionResetArguments :: TypeDefinition
 sessionResetArguments = def "SessionResetArguments" $
   T.union [
     "parametersOrCharacteristics">: gql "AllParametersOrCharacteristics",
@@ -4307,24 +4307,24 @@ sessionResetArguments = def "SessionResetArguments" $
     "timeZone">: T.unit,
     "parameterSessionSpecification">: gql "ParameterSessionSpecification"]
 
-sessionResetCommand :: Binding
+sessionResetCommand :: TypeDefinition
 sessionResetCommand = def "SessionResetCommand" $
   T.maybe $ gql "SessionResetArguments"
 
-sessionSetAndResetCommands :: Binding
+sessionSetAndResetCommands :: TypeDefinition
 sessionSetAndResetCommands = def "SessionSetAndResetCommands" $
   T.record [
     "set">: nonemptyList $ gql "SessionSetCommand",
     "reset">: T.list $ gql "SessionResetCommand"]
 
-sessionSetBindingTableParameterClause :: Binding
+sessionSetBindingTableParameterClause :: TypeDefinition
 sessionSetBindingTableParameterClause = def "SessionSetBindingTableParameterClause" $
   T.record [
     "binding">: T.boolean,
     "param">: gql "SessionSetParameterName",
     "init">: gql "OptTypedBindingTableInitializer"]
 
-sessionSetCommand :: Binding
+sessionSetCommand :: TypeDefinition
 sessionSetCommand = def "SessionSetCommand" $
   T.union [
     "schema">: gql "SessionSetSchemaClause",
@@ -4332,97 +4332,97 @@ sessionSetCommand = def "SessionSetCommand" $
     "timeZone">: gql "SessionSetTimeZoneClause",
     "parameter">: gql "SessionSetParameterClause"]
 
-sessionSetGraphClause :: Binding
+sessionSetGraphClause :: TypeDefinition
 sessionSetGraphClause = def "SessionSetGraphClause" $
   gql "GraphExpression"
 
-sessionSetGraphParameterClause :: Binding
+sessionSetGraphParameterClause :: TypeDefinition
 sessionSetGraphParameterClause = def "SessionSetGraphParameterClause" $
   T.record [
     "graph">: gql "SessionSetParameterName",
     "initializer">: gql "OptTypedGraphInitializer"]
 
-sessionSetParameterClause :: Binding
+sessionSetParameterClause :: TypeDefinition
 sessionSetParameterClause = def "SessionSetParameterClause" $
   T.union [
     "graph">: gql "SessionSetGraphParameterClause",
     "bindings">: gql "SessionSetBindingTableParameterClause",
     "value">: gql "SessionSetValueParameterClause"]
 
-sessionSetParameterName :: Binding
+sessionSetParameterName :: TypeDefinition
 sessionSetParameterName = def "SessionSetParameterName" $
   T.record [
     "ifNotExists">: T.boolean,
     "parameter">: gql "SessionParameterSpecification"]
 
-sessionSetSchemaClause :: Binding
+sessionSetSchemaClause :: TypeDefinition
 sessionSetSchemaClause = def "SessionSetSchemaClause" $
   gql "SchemaReference"
 
-sessionSetTimeZoneClause :: Binding
+sessionSetTimeZoneClause :: TypeDefinition
 sessionSetTimeZoneClause = def "SessionSetTimeZoneClause" $
   gql "SetTimeZoneValue"
 
-sessionSetValueParameterClause :: Binding
+sessionSetValueParameterClause :: TypeDefinition
 sessionSetValueParameterClause = def "SessionSetValueParameterClause" $
   T.record [
     "value">: gql "SessionSetParameterName",
     "initializer">: gql "OptTypedValueInitializer"]
 
-setAllPropertiesItem :: Binding
+setAllPropertiesItem :: TypeDefinition
 setAllPropertiesItem = def "SetAllPropertiesItem" $
   T.record [
     "variable">: gql "BindingVariableReference",
     "properties">: T.maybe $ gql "PropertyKeyValuePairList"]
 
-setItem :: Binding
+setItem :: TypeDefinition
 setItem = def "SetItem" $
   T.union [
     "property">: gql "SetPropertyItem",
     "allProperties">: gql "SetAllPropertiesItem",
     "label">: gql "SetLabelItem"]
 
-setItemList :: Binding
+setItemList :: TypeDefinition
 setItemList = def "SetItemList" $
   nonemptyList $ gql "SetItem"
 
-setLabelItem :: Binding
+setLabelItem :: TypeDefinition
 setLabelItem = def "SetLabelItem" $
   T.record [
     "variable">: gql "BindingVariableReference",
     "isOrColon">: gql "IsOrColon",
     "label">: gql "LabelName"]
 
-setOperator :: Binding
+setOperator :: TypeDefinition
 setOperator = def "SetOperator" $
   T.record [
     "operatorType">: gql "SetOperatorType",
     "quantifier">: T.maybe $ gql "SetQuantifier"]
 
-setOperatorType :: Binding
+setOperatorType :: TypeDefinition
 setOperatorType = def "SetOperatorType" $
   T.enum ["union", "except", "intersect"]
 
-setPropertyItem :: Binding
+setPropertyItem :: TypeDefinition
 setPropertyItem = def "SetPropertyItem" $
   T.record [
     "variable">: gql "BindingVariableReference",
     "propertyName">: gql "PropertyName",
     "value">: gql "ValueExpression"]
 
-setQuantifier :: Binding
+setQuantifier :: TypeDefinition
 setQuantifier = def "SetQuantifier" $
   T.enum ["distinct", "all"]
 
-setStatement :: Binding
+setStatement :: TypeDefinition
 setStatement = def "SetStatement" $
   gql "SetItemList"
 
-setTimeZoneValue :: Binding
+setTimeZoneValue :: TypeDefinition
 setTimeZoneValue = def "SetTimeZoneValue" $
   gql "TimeZoneString"
 
-shortestPathSearch :: Binding
+shortestPathSearch :: TypeDefinition
 shortestPathSearch = def "ShortestPathSearch" $
   T.union [
     "allShortest">: gql "AllShortestPathSearch",
@@ -4430,15 +4430,15 @@ shortestPathSearch = def "ShortestPathSearch" $
     "countedShortest">: gql "CountedShortestPathSearch",
     "countedShortestGroup">: gql "CountedShortestGroupSearch"]
 
-side :: Binding
+side :: TypeDefinition
 side = def "Side" $
   T.enum ["left", "right"]
 
-sign :: Binding
+sign :: TypeDefinition
 sign = def "Sign" $
   T.enum ["plus", "minus"]
 
-signedBinaryExactNumericType :: Binding
+signedBinaryExactNumericType :: TypeDefinition
 signedBinaryExactNumericType = def "SignedBinaryExactNumericType" $
   T.union [
     "int8">: gql "Int8Type",
@@ -4452,125 +4452,125 @@ signedBinaryExactNumericType = def "SignedBinaryExactNumericType" $
     "bigInt">: gql "BigIntType",
     "signedVerboseType">: gql "SignedVerboseBinaryExactNumericType"]
 
-signedExpr :: Binding
+signedExpr :: TypeDefinition
 signedExpr = def "SignedExpr" $
   T.record [
     "sign">: gql "Sign",
     "valueExpression">: gql "ValueExpression"]
 
-signedNumericValueExpression :: Binding
+signedNumericValueExpression :: TypeDefinition
 signedNumericValueExpression = def "SignedNumericValueExpression" $
   T.record [
     "sign">: gql "Sign",
     "expression">: gql "NumericValueExpression"]
 
-signedVerboseBinaryExactNumericType :: Binding
+signedVerboseBinaryExactNumericType :: TypeDefinition
 signedVerboseBinaryExactNumericType = def "SignedVerboseBinaryExactNumericType" $
   T.record [
     "signed">: T.boolean,
     "verboseType">: gql "VerboseBinaryExactNumericType"]
 
-simpleCase :: Binding
+simpleCase :: TypeDefinition
 simpleCase = def "SimpleCase" $
   T.record [
     "caseOperand">: gql "CaseOperand",
     "whenClauses">: nonemptyList $ gql "SimpleWhenClause",
     "elseClause">: T.maybe $ gql "ElseClause"]
 
-simpleCatalogModifyingStatement :: Binding
+simpleCatalogModifyingStatement :: TypeDefinition
 simpleCatalogModifyingStatement = def "SimpleCatalogModifyingStatement" $
   T.union [
     "primitive">: gql "PrimitiveCatalogModifyingStatement",
     "callProcedure">: gql "CallCatalogModifyingProcedureStatement"]
 
-simpleDataAccessingStatement :: Binding
+simpleDataAccessingStatement :: TypeDefinition
 simpleDataAccessingStatement = def "SimpleDataAccessingStatement" $
   T.union [
     "query">: gql "SimpleQueryStatement",
     "modifying">: gql "SimpleDataModifyingStatement"]
 
-simpleDataModifyingStatement :: Binding
+simpleDataModifyingStatement :: TypeDefinition
 simpleDataModifyingStatement = def "SimpleDataModifyingStatement" $
   T.union [
     "primitive">: gql "PrimitiveDataModifyingStatement",
     "callProcedure">: gql "CallDataModifyingProcedureStatement"]
 
-simpleDirectoryPath :: Binding
+simpleDirectoryPath :: TypeDefinition
 simpleDirectoryPath = def "SimpleDirectoryPath" $
   nonemptyList $ gql "DirectoryName"
 
-simpleLinearDataAccessingStatement :: Binding
+simpleLinearDataAccessingStatement :: TypeDefinition
 simpleLinearDataAccessingStatement = def "SimpleLinearDataAccessingStatement" $
   nonemptyList $ gql "SimpleDataAccessingStatement"
 
-simpleLinearQueryStatement :: Binding
+simpleLinearQueryStatement :: TypeDefinition
 simpleLinearQueryStatement = def "SimpleLinearQueryStatement" $
   nonemptyList $ gql "SimpleQueryStatement"
 
-simpleMatchStatement :: Binding
+simpleMatchStatement :: TypeDefinition
 simpleMatchStatement = def "SimpleMatchStatement" $
   gql "GraphPatternBindingTable"
 
-simpleQueryStatement :: Binding
+simpleQueryStatement :: TypeDefinition
 simpleQueryStatement = def "SimpleQueryStatement" $
   T.union [
     "primitive">: gql "PrimitiveQueryStatement",
     "call">: gql "CallQueryStatement"]
 
-simpleWhenClause :: Binding
+simpleWhenClause :: TypeDefinition
 simpleWhenClause = def "SimpleWhenClause" $
   T.record [
     "whenOperands">: gql "WhenOperandList",
     "result">: gql "Result"]
 
-simplifiedConcatenation :: Binding
+simplifiedConcatenation :: TypeDefinition
 simplifiedConcatenation = def "SimplifiedConcatenation" $
   T.record [
     "initialTerm">: gql "SimplifiedTerm",
     "nextFactor">: gql "SimplifiedFactorLow"]
 
-simplifiedConjunction :: Binding
+simplifiedConjunction :: TypeDefinition
 simplifiedConjunction = def "SimplifiedConjunction" $
   T.record [
     "left">: gql "SimplifiedFactorLow",
     "right">: gql "SimplifiedFactorHigh"]
 
-simplifiedContents :: Binding
+simplifiedContents :: TypeDefinition
 simplifiedContents = def "SimplifiedContents" $
   T.union [
     "term">: gql "SimplifiedTerm",
     "pathUnion">: gql "SimplifiedPathUnion",
     "multisetAlternation">: gql "SimplifiedMultisetAlternation"]
 
-simplifiedDefaultingAnyDirection :: Binding
+simplifiedDefaultingAnyDirection :: TypeDefinition
 simplifiedDefaultingAnyDirection = def "SimplifiedDefaultingAnyDirection" $
   gql "SimplifiedContents"
 
-simplifiedDefaultingLeft :: Binding
+simplifiedDefaultingLeft :: TypeDefinition
 simplifiedDefaultingLeft = def "SimplifiedDefaultingLeft" $
   gql "SimplifiedContents"
 
-simplifiedDefaultingLeftOrRight :: Binding
+simplifiedDefaultingLeftOrRight :: TypeDefinition
 simplifiedDefaultingLeftOrRight = def "SimplifiedDefaultingLeftOrRight" $
   gql "SimplifiedContents"
 
-simplifiedDefaultingLeftOrUndirected :: Binding
+simplifiedDefaultingLeftOrUndirected :: TypeDefinition
 simplifiedDefaultingLeftOrUndirected = def "SimplifiedDefaultingLeftOrUndirected" $
   gql "SimplifiedContents"
 
-simplifiedDefaultingRight :: Binding
+simplifiedDefaultingRight :: TypeDefinition
 simplifiedDefaultingRight = def "SimplifiedDefaultingRight" $
   gql "SimplifiedContents"
 
-simplifiedDefaultingUndirected :: Binding
+simplifiedDefaultingUndirected :: TypeDefinition
 simplifiedDefaultingUndirected = def "SimplifiedDefaultingUndirected" $
   gql "SimplifiedContents"
 
-simplifiedDefaultingUndirectedOrRight :: Binding
+simplifiedDefaultingUndirectedOrRight :: TypeDefinition
 simplifiedDefaultingUndirectedOrRight = def "SimplifiedDefaultingUndirectedOrRight" $
   gql "SimplifiedContents"
 
-simplifiedDirectionOverride :: Binding
+simplifiedDirectionOverride :: TypeDefinition
 simplifiedDirectionOverride = def "SimplifiedDirectionOverride" $
   T.union [
     "overrideLeft">: gql "SimplifiedOverrideLeft",
@@ -4581,56 +4581,56 @@ simplifiedDirectionOverride = def "SimplifiedDirectionOverride" $
     "overrideLeftOrRight">: gql "SimplifiedOverrideLeftOrRight",
     "overrideAnyDirection">: gql "SimplifiedOverrideAnyDirection"]
 
-simplifiedFactorHigh :: Binding
+simplifiedFactorHigh :: TypeDefinition
 simplifiedFactorHigh = def "SimplifiedFactorHigh" $
   T.union [
     "tertiary">: gql "SimplifiedTertiary",
     "quantified">: gql "SimplifiedQuantified",
     "questioned">: gql "SimplifiedQuestioned"]
 
-simplifiedFactorLow :: Binding
+simplifiedFactorLow :: TypeDefinition
 simplifiedFactorLow = def "SimplifiedFactorLow" $
   T.union [
     "factorHigh">: gql "SimplifiedFactorHigh",
     "conjunction">: gql "SimplifiedConjunction"]
 
-simplifiedMultisetAlternation :: Binding
+simplifiedMultisetAlternation :: TypeDefinition
 simplifiedMultisetAlternation = def "SimplifiedMultisetAlternation" $
   nonemptyList $ gql "SimplifiedTerm"
 
-simplifiedNegation :: Binding
+simplifiedNegation :: TypeDefinition
 simplifiedNegation = def "SimplifiedNegation" $
   gql "SimplifiedPrimary"
 
-simplifiedOverrideAnyDirection :: Binding
+simplifiedOverrideAnyDirection :: TypeDefinition
 simplifiedOverrideAnyDirection = def "SimplifiedOverrideAnyDirection" $
   gql "SimplifiedSecondary"
 
-simplifiedOverrideLeft :: Binding
+simplifiedOverrideLeft :: TypeDefinition
 simplifiedOverrideLeft = def "SimplifiedOverrideLeft" $
   gql "SimplifiedSecondary"
 
-simplifiedOverrideLeftOrRight :: Binding
+simplifiedOverrideLeftOrRight :: TypeDefinition
 simplifiedOverrideLeftOrRight = def "SimplifiedOverrideLeftOrRight" $
   gql "SimplifiedSecondary"
 
-simplifiedOverrideLeftOrUndirected :: Binding
+simplifiedOverrideLeftOrUndirected :: TypeDefinition
 simplifiedOverrideLeftOrUndirected = def "SimplifiedOverrideLeftOrUndirected" $
   gql "SimplifiedSecondary"
 
-simplifiedOverrideRight :: Binding
+simplifiedOverrideRight :: TypeDefinition
 simplifiedOverrideRight = def "SimplifiedOverrideRight" $
   gql "SimplifiedSecondary"
 
-simplifiedOverrideUndirected :: Binding
+simplifiedOverrideUndirected :: TypeDefinition
 simplifiedOverrideUndirected = def "SimplifiedOverrideUndirected" $
   gql "SimplifiedSecondary"
 
-simplifiedOverrideUndirectedOrRight :: Binding
+simplifiedOverrideUndirectedOrRight :: TypeDefinition
 simplifiedOverrideUndirectedOrRight = def "SimplifiedOverrideUndirectedOrRight" $
   gql "SimplifiedSecondary"
 
-simplifiedPathPatternExpression :: Binding
+simplifiedPathPatternExpression :: TypeDefinition
 simplifiedPathPatternExpression = def "SimplifiedPathPatternExpression" $
   T.union [
     "left">: gql "SimplifiedDefaultingLeft",
@@ -4641,160 +4641,160 @@ simplifiedPathPatternExpression = def "SimplifiedPathPatternExpression" $
     "leftOrRight">: gql "SimplifiedDefaultingLeftOrRight",
     "anyDirection">: gql "SimplifiedDefaultingAnyDirection"]
 
-simplifiedPathUnion :: Binding
+simplifiedPathUnion :: TypeDefinition
 simplifiedPathUnion = def "SimplifiedPathUnion" $
   nonemptyList $ gql "SimplifiedTerm"
 
-simplifiedPrimary :: Binding
+simplifiedPrimary :: TypeDefinition
 simplifiedPrimary = def "SimplifiedPrimary" $
   T.union [
     "labelName">: gql "LabelName",
     "parenthesizedContents">: gql "SimplifiedContents"]
 
-simplifiedQuantified :: Binding
+simplifiedQuantified :: TypeDefinition
 simplifiedQuantified = def "SimplifiedQuantified" $
   T.record [
     "tertiary">: gql "SimplifiedTertiary",
     "quantifier">: gql "GraphPatternQuantifier"]
 
-simplifiedQuestioned :: Binding
+simplifiedQuestioned :: TypeDefinition
 simplifiedQuestioned = def "SimplifiedQuestioned" $
   gql "SimplifiedTertiary"
 
-simplifiedSecondary :: Binding
+simplifiedSecondary :: TypeDefinition
 simplifiedSecondary = def "SimplifiedSecondary" $
   T.union [
     "primary">: gql "SimplifiedPrimary",
     "negation">: gql "SimplifiedNegation"]
 
-simplifiedTerm :: Binding
+simplifiedTerm :: TypeDefinition
 simplifiedTerm = def "SimplifiedTerm" $
   T.union [
     "factorLow">: gql "SimplifiedFactorLow",
     "concatenation">: gql "SimplifiedConcatenation"]
 
-simplifiedTertiary :: Binding
+simplifiedTertiary :: TypeDefinition
 simplifiedTertiary = def "SimplifiedTertiary" $
   T.union [
     "directionOverride">: gql "SimplifiedDirectionOverride",
     "secondary">: gql "SimplifiedSecondary"]
 
-smallIntType :: Binding
+smallIntType :: TypeDefinition
 smallIntType = def "SmallIntType" $
   T.record ["notNull">: T.boolean]
 
-smallIntegerType :: Binding
+smallIntegerType :: TypeDefinition
 smallIntegerType = def "SmallIntegerType" $
   T.record ["notNull">: T.boolean]
 
-sortKey :: Binding
+sortKey :: TypeDefinition
 sortKey = def "SortKey" $
   gql "AggregatingValueExpression"
 
-sortSpecification :: Binding
+sortSpecification :: TypeDefinition
 sortSpecification = def "SortSpecification" $
   T.record [
     "sortKey">: gql "SortKey",
     "ordering">: T.maybe $ gql "OrderingSpecification",
     "nullOrdering">: T.maybe $ gql "NullOrdering"]
 
-sortSpecificationList :: Binding
+sortSpecificationList :: TypeDefinition
 sortSpecificationList = def "SortSpecificationList" $
   nonemptyList $ gql "SortSpecification"
 
-sourceDestinationPredicate :: Binding
+sourceDestinationPredicate :: TypeDefinition
 sourceDestinationPredicate = def "SourceDestinationPredicate" $
   T.union [
     "sourcePredicate">: gql "SourcePredicate",
     "destinationPredicate">: gql "DestinationPredicate"]
 
-sourceNodeTypeAlias :: Binding
+sourceNodeTypeAlias :: TypeDefinition
 sourceNodeTypeAlias = def "SourceNodeTypeAlias" $
   T.string
 
-sourceNodeTypeReference :: Binding
+sourceNodeTypeReference :: TypeDefinition
 sourceNodeTypeReference = def "SourceNodeTypeReference" $
   T.union [
     "alias">: gql "SourceNodeTypeAlias",
     "filler">: T.maybe $ gql "NodeTypeFiller"]
 
-sourcePredicate :: Binding
+sourcePredicate :: TypeDefinition
 sourcePredicate = def "SourcePredicate" $
   T.record [
     "not">: T.boolean,
     "sourceOf">: gql "EdgeReference"]
 
-specifiedRecordType :: Binding
+specifiedRecordType :: TypeDefinition
 specifiedRecordType = def "SpecifiedRecordType" $
   T.record [
     "record">: T.boolean,
     "fieldTypes">: gql "FieldTypesSpecification",
     "notNull">: T.boolean]
 
-squareRoot :: Binding
+squareRoot :: TypeDefinition
 squareRoot = def "SquareRoot" $
   gql "NumericValueExpression"
 
-startAndMaybeProcedureAndMaybeEnd :: Binding
+startAndMaybeProcedureAndMaybeEnd :: TypeDefinition
 startAndMaybeProcedureAndMaybeEnd = def "StartAndMaybeProcedureAndMaybeEnd" $
   T.record [
     "start">: gql "StartTransactionCommand",
     "procedureAndEnd">: T.maybe $ gql "ProcedureAndMaybeEnd"]
 
-startTransactionCommand :: Binding
+startTransactionCommand :: TypeDefinition
 startTransactionCommand = def "StartTransactionCommand" $
   T.maybe $ gql "TransactionCharacteristics"
 
-statement :: Binding
+statement :: TypeDefinition
 statement = def "Statement" $
   T.union [
     "linearCatalogModifying">: gql "LinearCatalogModifyingStatement",
     "linearDataModifying">: gql "LinearDataModifyingStatement",
     "compositeQuery">: gql "CompositeQueryStatement"]
 
-statementBlock :: Binding
+statementBlock :: TypeDefinition
 statementBlock = def "StatementBlock" $
   T.record [
     "statement">: gql "Statement",
     "nextStatements">: T.list $ gql "NextStatement"]
 
-stringLength :: Binding
+stringLength :: TypeDefinition
 stringLength = def "StringLength" $
   gql "NumericValueExpression"
 
-stringType :: Binding
+stringType :: TypeDefinition
 stringType = def "StringType" $
   T.record [
     "minLength">: T.maybe $ gql "MinLength",
     "maxLength">: T.maybe $ gql "MaxLength",
     "notNull">: T.boolean]
 
-subCharacterOrByteString :: Binding
+subCharacterOrByteString :: TypeDefinition
 subCharacterOrByteString = def "SubCharacterOrByteString" $
   T.record [
     "side">: gql "Side",
     "valueExpression">: gql "ValueExpression",
     "stringLength">: gql "StringLength"]
 
-subpathVariable :: Binding
+subpathVariable :: TypeDefinition
 subpathVariable = def "SubpathVariable" $
   T.string
 
-subpathVariableDeclaration :: Binding
+subpathVariableDeclaration :: TypeDefinition
 subpathVariableDeclaration = def "SubpathVariableDeclaration" $
   gql "SubpathVariable"
 
-temporalDurationQualifier :: Binding
+temporalDurationQualifier :: TypeDefinition
 temporalDurationQualifier = def "TemporalDurationQualifier" $
   T.enum ["yearToMonth", "dayToSecond"]
 
-temporalDurationType :: Binding
+temporalDurationType :: TypeDefinition
 temporalDurationType = def "TemporalDurationType" $
   T.record [
     "qualifier">: gql "TemporalDurationQualifier",
     "notNull">: T.boolean]
 
-temporalInstantType :: Binding
+temporalInstantType :: TypeDefinition
 temporalInstantType = def "TemporalInstantType" $
   T.union [
     "datetimeType">: gql "DatetimeType",
@@ -4803,218 +4803,218 @@ temporalInstantType = def "TemporalInstantType" $
     "timeType">: gql "TimeType",
     "localTimeTypeChoice">: gql "LocalTimeTypeChoice"]
 
-temporalLiteral :: Binding
+temporalLiteral :: TypeDefinition
 temporalLiteral = def "TemporalLiteral" $
   T.union [
     "date">: gql "DateLiteral",
     "time">: gql "TimeLiteral",
     "datetime">: gql "DatetimeLiteral"]
 
-temporalType :: Binding
+temporalType :: TypeDefinition
 temporalType = def "TemporalType" $
   T.union [
     "instantType">: gql "TemporalInstantType",
     "durationType">: gql "TemporalDurationType"]
 
-timeFunction :: Binding
+timeFunction :: TypeDefinition
 timeFunction = def "TimeFunction" $
   T.union [
     "currentTime">: T.unit,
     "zonedTimeWithParams">: T.maybe $ gql "TimeFunctionParameters"]
 
-timeFunctionParameters :: Binding
+timeFunctionParameters :: TypeDefinition
 timeFunctionParameters = def "TimeFunctionParameters" $
   T.union [
     "timeString">: gql "TimeString",
     "recordConstructor">: gql "RecordConstructor"]
 
-timeLiteral :: Binding
+timeLiteral :: TypeDefinition
 timeLiteral = def "TimeLiteral" $
   gql "TimeString"
 
-timeString :: Binding
+timeString :: TypeDefinition
 timeString = def "TimeString" $
   gql "CharacterStringLiteral"
 
-timeType :: Binding
+timeType :: TypeDefinition
 timeType = def "TimeType" $
   T.union [
     "zonedTime">: gql "ZonedTimeType",
     "timeWithTimeZone">: gql "TimeWithTimeZoneType"]
 
-timeWithTimeZoneType :: Binding
+timeWithTimeZoneType :: TypeDefinition
 timeWithTimeZoneType = def "TimeWithTimeZoneType" $
   T.record [
     "notNull">: T.boolean]
 
-timeWithoutTimeZoneType :: Binding
+timeWithoutTimeZoneType :: TypeDefinition
 timeWithoutTimeZoneType = def "TimeWithoutTimeZoneType" $
   T.record [
     "notNull">: T.boolean]
 
-timeZoneString :: Binding
+timeZoneString :: TypeDefinition
 timeZoneString = def "TimeZoneString" $
   gql "CharacterStringLiteral"
 
-timestampWithTimeZoneType :: Binding
+timestampWithTimeZoneType :: TypeDefinition
 timestampWithTimeZoneType = def "TimestampWithTimeZoneType" $
   T.record [
     "notNull">: T.boolean]
 
-timestampWithoutTimeZoneType :: Binding
+timestampWithoutTimeZoneType :: TypeDefinition
 timestampWithoutTimeZoneType = def "TimestampWithoutTimeZoneType" $
   T.record [
     "notNull">: T.boolean]
 
-transactionAccessMode :: Binding
+transactionAccessMode :: TypeDefinition
 transactionAccessMode = def "TransactionAccessMode" $
   T.enum [
     "readOnly",
     "readWrite"]
 
-transactionActivity :: Binding
+transactionActivity :: TypeDefinition
 transactionActivity = def "TransactionActivity" $
   T.union [
     "start">: gql "StartAndMaybeProcedureAndMaybeEnd",
     "procedure">: gql "ProcedureAndMaybeEnd",
     "end">: gql "EndTransactionCommand"]
 
-transactionCharacteristics :: Binding
+transactionCharacteristics :: TypeDefinition
 transactionCharacteristics = def "TransactionCharacteristics" $
   nonemptyList $ gql "TransactionMode"
 
-transactionMode :: Binding
+transactionMode :: TypeDefinition
 transactionMode = def "TransactionMode" $
   gql "TransactionAccessMode"
 
-trigonometricFunction :: Binding
+trigonometricFunction :: TypeDefinition
 trigonometricFunction = def "TrigonometricFunction" $
   T.record [
     "name">: gql "TrigonometricFunctionName",
     "value">: gql "NumericValueExpression"]
 
-trigonometricFunctionName :: Binding
+trigonometricFunctionName :: TypeDefinition
 trigonometricFunctionName = def "TrigonometricFunctionName" $
   T.enum ["sin", "cos", "tan", "cot", "sinh", "cosh", "tanh", "asin", "acos", "atan", "degrees", "radians"]
 
-trimCharacterOrByteString :: Binding
+trimCharacterOrByteString :: TypeDefinition
 trimCharacterOrByteString = def "TrimCharacterOrByteString" $
   gql "ValueExpression"
 
-trimCharacterOrByteStringSource :: Binding
+trimCharacterOrByteStringSource :: TypeDefinition
 trimCharacterOrByteStringSource = def "TrimCharacterOrByteStringSource" $
   gql "ValueExpression"
 
-trimListFunction :: Binding
+trimListFunction :: TypeDefinition
 trimListFunction = def "TrimListFunction" $
   T.record [
     "listValue">: gql "ListValueExpression",
     "numericValue">: gql "NumericValueExpression"]
 
-trimMultiCharacterCharacterString :: Binding
+trimMultiCharacterCharacterString :: TypeDefinition
 trimMultiCharacterCharacterString = def "TrimMultiCharacterCharacterString" $
   T.record [
     "trimType">: gql "TrimType",
     "valueExpression">: gql "ValueExpression",
     "optionalValueExpression">: T.maybe $ gql "ValueExpression"]
 
-trimOperands :: Binding
+trimOperands :: TypeDefinition
 trimOperands = def "TrimOperands" $
   T.record [
     "specification">: T.maybe $ gql "TrimSpecification",
     "characterOrByteString">: T.maybe $ gql "TrimCharacterOrByteString",
     "source">: gql "TrimCharacterOrByteStringSource"]
 
-trimSingleCharacterOrByteString :: Binding
+trimSingleCharacterOrByteString :: TypeDefinition
 trimSingleCharacterOrByteString = def "TrimSingleCharacterOrByteString" $
   gql "TrimOperands"
 
-trimSpecification :: Binding
+trimSpecification :: TypeDefinition
 trimSpecification = def "TrimSpecification" $
   T.enum ["leading", "trailing", "both"]
 
-trimType :: Binding
+trimType :: TypeDefinition
 trimType = def "TrimType" $
   T.enum ["btrim", "ltrim", "rtrim"]
 
-truthValue :: Binding
+truthValue :: TypeDefinition
 truthValue = def "TruthValue" $
   gql "BooleanLiteral"
 
-typed :: Binding
+typed :: TypeDefinition
 typed = def "Typed" $
   T.unit
 
-typedBindingTableReferenceValueType :: Binding
+typedBindingTableReferenceValueType :: TypeDefinition
 typedBindingTableReferenceValueType = def "TypedBindingTableReferenceValueType" $
   T.record [
     "typed">: T.maybe $ gql "Typed",
     "valueType">: gql "BindingTableReferenceValueType"]
 
-typedGraphReferenceValueType :: Binding
+typedGraphReferenceValueType :: TypeDefinition
 typedGraphReferenceValueType = def "TypedGraphReferenceValueType" $
   T.record [
     "typed">: T.maybe $ gql "Typed",
     "valueType">: gql "GraphReferenceValueType"]
 
-typedGraphTypeReference :: Binding
+typedGraphTypeReference :: TypeDefinition
 typedGraphTypeReference = def "TypedGraphTypeReference" $
   T.record [
     "typed">: T.maybe $ gql "Typed",
     "reference">: gql "GraphTypeReference"]
 
-typedNestedGraphTypeSpecification :: Binding
+typedNestedGraphTypeSpecification :: TypeDefinition
 typedNestedGraphTypeSpecification = def "TypedNestedGraphTypeSpecification" $
   T.record [
     "typed">: T.maybe $ gql "Typed",
     "graph">: T.boolean,
     "specification">: gql "NestedGraphTypeSpecification"]
 
-typedValueType :: Binding
+typedValueType :: TypeDefinition
 typedValueType = def "TypedValueType" $
   T.record [
     "typed">: T.maybe $ gql "Typed",
     "valueType">: gql "ValueType"]
 
-uBigIntType :: Binding
+uBigIntType :: TypeDefinition
 uBigIntType = def "UBigIntType" $
   T.record ["notNull">: T.boolean]
 
-uSmallIntType :: Binding
+uSmallIntType :: TypeDefinition
 uSmallIntType = def "USmallIntType" $
   T.record ["notNull">: T.boolean]
 
-uint128Type :: Binding
+uint128Type :: TypeDefinition
 uint128Type = def "Uint128Type" $
   T.record ["notNull">: T.boolean]
 
-uint16Type :: Binding
+uint16Type :: TypeDefinition
 uint16Type = def "Uint16Type" $
   T.record ["notNull">: T.boolean]
 
-uint256Type :: Binding
+uint256Type :: TypeDefinition
 uint256Type = def "Uint256Type" $
   T.record ["notNull">: T.boolean]
 
-uint32Type :: Binding
+uint32Type :: TypeDefinition
 uint32Type = def "Uint32Type" $
   T.record ["notNull">: T.boolean]
 
-uint64Type :: Binding
+uint64Type :: TypeDefinition
 uint64Type = def "Uint64Type" $
   T.record ["notNull">: T.boolean]
 
-uint8Type :: Binding
+uint8Type :: TypeDefinition
 uint8Type = def "Uint8Type" $
   T.record ["notNull">: T.boolean]
 
-uintWithPrecision :: Binding
+uintWithPrecision :: TypeDefinition
 uintWithPrecision = def "UintWithPrecision" $
   T.record [
     "precision">: T.maybe $ gql "Precision",
     "notNull">: T.boolean]
 
-unsignedBinaryExactNumericType :: Binding
+unsignedBinaryExactNumericType :: TypeDefinition
 unsignedBinaryExactNumericType = def "UnsignedBinaryExactNumericType" $
   T.union [
     "uint8">: gql "Uint8Type",
@@ -5028,11 +5028,11 @@ unsignedBinaryExactNumericType = def "UnsignedBinaryExactNumericType" $
     "uBigInt">: gql "UBigIntType",
     "unsigned">: gql "VerboseBinaryExactNumericType"]
 
-unsignedDecimalInteger :: Binding
+unsignedDecimalInteger :: TypeDefinition
 unsignedDecimalInteger = def "UnsignedDecimalInteger" $
   T.string
 
-unsignedInteger :: Binding
+unsignedInteger :: TypeDefinition
 unsignedInteger = def "UnsignedInteger" $
   T.union [
     "decimal">: T.string,
@@ -5040,33 +5040,33 @@ unsignedInteger = def "UnsignedInteger" $
     "octal">: T.string,
     "binary">: T.string]
 
-unsignedLiteral :: Binding
+unsignedLiteral :: TypeDefinition
 unsignedLiteral = def "UnsignedLiteral" $
   T.union [
     "numeric">: gql "UnsignedNumericLiteral",
     "general">: gql "GeneralLiteral"]
 
-unsignedNumericLiteral :: Binding
+unsignedNumericLiteral :: TypeDefinition
 unsignedNumericLiteral = def "UnsignedNumericLiteral" $
   T.union [
     "exact">: gql "ExactNumericLiteral",
     "approximate">: gql "ApproximateNumericLiteral"]
 
-unsignedValueSpecification :: Binding
+unsignedValueSpecification :: TypeDefinition
 unsignedValueSpecification = def "UnsignedValueSpecification" $
   T.union [
     "unsignedLiteral">: gql "UnsignedLiteral",
     "generalValueSpecification">: gql "GeneralValueSpecification"]
 
-upperBound :: Binding
+upperBound :: TypeDefinition
 upperBound = def "UpperBound" $
   gql "UnsignedInteger"
 
-useGraphClause :: Binding
+useGraphClause :: TypeDefinition
 useGraphClause = def "UseGraphClause" $
   gql "GraphExpression"
 
-valueExpression :: Binding
+valueExpression :: TypeDefinition
 valueExpression = def "ValueExpression" $
   T.union [
     "signed">: gql "SignedExpr",
@@ -5085,7 +5085,7 @@ valueExpression = def "ValueExpression" $
     "valueFunction">: gql "ValueFunction",
     "primary">: gql "PrimaryValueExpression"]
 
-valueFunction :: Binding
+valueFunction :: TypeDefinition
 valueFunction = def "ValueFunction" $
   T.union [
     "numeric">: gql "NumericValueFunction",
@@ -5095,14 +5095,14 @@ valueFunction = def "ValueFunction" $
     "characterOrByteString">: gql "CharacterOrByteStringFunction",
     "list">: gql "ListValueFunction"]
 
-valueInitializer :: Binding
+valueInitializer :: TypeDefinition
 valueInitializer = def "ValueInitializer" T.unit
 
-valueQueryExpression :: Binding
+valueQueryExpression :: TypeDefinition
 valueQueryExpression = def "ValueQueryExpression" $
   gql "NestedQuerySpecification"
 
-valueType :: Binding
+valueType :: TypeDefinition
 valueType = def "ValueType" $
   T.union [
     "predefinedType">: gql "PredefinedType",
@@ -5116,42 +5116,42 @@ valueType = def "ValueType" $
     "closedDynamicUnionTypeAlt1">: gql "ClosedDynamicUnionTypeAlt1",
     "closedDynamicUnionTypeAlt2">: gql "ClosedDynamicUnionTypeAlt2"]
 
-valueTypePredicate :: Binding
+valueTypePredicate :: TypeDefinition
 valueTypePredicate = def "ValueTypePredicate" $
   T.record [
     "valueExpression">: gql "PrimaryValueExpression",
     "valueTypePart">: gql "ValueTypePredicatePart2"]
 
-valueTypePredicatePart2 :: Binding
+valueTypePredicatePart2 :: TypeDefinition
 valueTypePredicatePart2 = def "ValueTypePredicatePart2" $
   T.record [
     "not">: T.boolean,
     "typed">: gql "Typed",
     "valueType">: gql "ValueType"]
 
-valueVariableDefinition :: Binding
+valueVariableDefinition :: TypeDefinition
 valueVariableDefinition = def "ValueVariableDefinition" $
   T.record [
     "variable">: gql "BindingVariable",
     "initializer">: gql "OptTypedValueInitializer"]
 
-varbinaryType :: Binding
+varbinaryType :: TypeDefinition
 varbinaryType = def "VarbinaryType" $
   T.record [
     "maxLength">: T.maybe $ gql "MaxLength",
     "notNull">: T.boolean]
 
-varcharType :: Binding
+varcharType :: TypeDefinition
 varcharType = def "VarcharType" $
   T.record [
     "maxLength">: T.maybe $ gql "MaxLength",
     "notNull">: T.boolean]
 
-variableScopeClause :: Binding
+variableScopeClause :: TypeDefinition
 variableScopeClause = def "VariableScopeClause" $
   T.maybe $ gql "BindingVariableReferenceList"
 
-verboseBinaryExactNumericType :: Binding
+verboseBinaryExactNumericType :: TypeDefinition
 verboseBinaryExactNumericType = def "VerboseBinaryExactNumericType" $
   T.union [
     "integer8">: gql "Integer8Type",
@@ -5164,7 +5164,7 @@ verboseBinaryExactNumericType = def "VerboseBinaryExactNumericType" $
     "integerWithPrecision">: gql "IntegerWithPrecision",
     "bigInteger">: gql "BigIntegerType"]
 
-whenOperand :: Binding
+whenOperand :: TypeDefinition
 whenOperand = def "WhenOperand" $
   T.union [
     "valueExpression">: gql "NonParenthesizedPrimaryValueExpression",
@@ -5177,42 +5177,42 @@ whenOperand = def "WhenOperand" $
     "sourcePredicate">: gql "SourcePredicate",
     "destinationPredicate">: gql "DestinationPredicate"]
 
-whenOperandList :: Binding
+whenOperandList :: TypeDefinition
 whenOperandList = def "WhenOperandList" $
   nonemptyList $ gql "WhenOperand"
 
-whereClause :: Binding
+whereClause :: TypeDefinition
 whereClause = def "WhereClause" $
   gql "SearchCondition"
 
-yieldClause :: Binding
+yieldClause :: TypeDefinition
 yieldClause = def "YieldClause" $
   gql "YieldItemList"
 
-yieldItem :: Binding
+yieldItem :: TypeDefinition
 yieldItem = def "YieldItem" $
   T.record [
     "name">: gql "YieldItemName",
     "alias">: T.maybe $ gql "YieldItemAlias"]
 
-yieldItemAlias :: Binding
+yieldItemAlias :: TypeDefinition
 yieldItemAlias = def "YieldItemAlias" $
   gql "BindingVariable"
 
-yieldItemList :: Binding
+yieldItemList :: TypeDefinition
 yieldItemList = def "YieldItemList" $
   nonemptyList $ gql "YieldItem"
 
-yieldItemName :: Binding
+yieldItemName :: TypeDefinition
 yieldItemName = def "YieldItemName" $
   gql "FieldName"
 
-zonedDatetimeType :: Binding
+zonedDatetimeType :: TypeDefinition
 zonedDatetimeType = def "ZonedDatetimeType" $
   T.record [
     "notNull">: T.boolean]
 
-zonedTimeType :: Binding
+zonedTimeType :: TypeDefinition
 zonedTimeType = def "ZonedTimeType" $
   T.record [
     "notNull">: T.boolean]

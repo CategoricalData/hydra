@@ -24,7 +24,7 @@ ns = ModuleName "hydra.python.environment"
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Syntax.ns, Util.ns, Core.ns, Graph.ns, Module.ns, Typing.ns],
             moduleDescription = Just "Environment types for Python code generation"}
   where
@@ -37,7 +37,7 @@ module_ = Module {
 core :: String -> Type
 core = typeref Core.ns
 
-def :: String -> Type -> Binding
+def :: String -> Type -> TypeDefinition
 def = datatype ns
 
 environment :: String -> Type
@@ -50,7 +50,7 @@ modul :: String -> Type
 modul = typeref Module.ns
 
 -- | Combined graph and metadata state for Python code generation.
-pyGraph :: Binding
+pyGraph :: TypeDefinition
 pyGraph = def "PyGraph" $
   doc "Combined graph and metadata state for Python code generation" $
   T.record [
@@ -62,7 +62,7 @@ pyGraph = def "PyGraph" $
       environment "PythonModuleMetadata"]
 
 -- | Environment for Python code generation.
-pythonEnvironment :: Binding
+pythonEnvironment :: TypeDefinition
 pythonEnvironment = def "PythonEnvironment" $
   doc "Environment for Python code generation" $
   T.record [
@@ -89,7 +89,7 @@ pythonEnvironment = def "PythonEnvironment" $
       T.set (core "Name")]
 
 -- | Metadata for Python module generation.
-pythonModuleMetadata :: Binding
+pythonModuleMetadata :: TypeDefinition
 pythonModuleMetadata = def "PythonModuleMetadata" $
   doc "Temporary metadata used to create the header section of a Python file" $
   T.record [
@@ -122,7 +122,7 @@ pythonModuleMetadata = def "PythonModuleMetadata" $
     "usesTypeVar">: T.boolean]
 
 -- | Target Python version for code generation.
-pythonVersion :: Binding
+pythonVersion :: TypeDefinition
 pythonVersion = def "PythonVersion" $
   doc "Target Python version for code generation" $
   T.enum [

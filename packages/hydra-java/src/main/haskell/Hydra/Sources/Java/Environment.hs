@@ -23,7 +23,7 @@ ns = ModuleName "hydra.java.environment"
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [JavaSyntax.ns, Core.ns, Graph.ns, Module.ns, Typing.ns],
             moduleDescription = Just "Environment types for Java code generation"}
   where
@@ -36,7 +36,7 @@ module_ = Module {
 -- | Aliases and context for Java code generation.
 -- Tracks namespace mapping, variable scoping, type parameters, and other state
 -- needed during the encoding of Hydra terms to Java syntax.
-aliases :: Binding
+aliases :: TypeDefinition
 aliases = def "Aliases" $
   doc "Aliases and context for Java code generation" $
   T.record [
@@ -83,7 +83,7 @@ aliases = def "Aliases" $
 core :: String -> Type
 core = typeref Core.ns
 
-def :: String -> Type -> Binding
+def :: String -> Type -> TypeDefinition
 def = datatype ns
 
 environment :: String -> Type
@@ -93,7 +93,7 @@ graph :: String -> Type
 graph = typeref Graph.ns
 
 -- | Environment for Java code generation.
-javaEnvironment :: Binding
+javaEnvironment :: TypeDefinition
 javaEnvironment = def "JavaEnvironment" $
   doc "Environment for Java code generation" $
   T.record [
@@ -105,7 +105,7 @@ javaEnvironment = def "JavaEnvironment" $
       graph "Graph"]
 
 -- | Feature flags for the target Java version.
-javaFeatures :: Binding
+javaFeatures :: TypeDefinition
 javaFeatures = def "JavaFeatures" $
   doc "Feature flags for the target Java version" $
   T.record [
@@ -114,7 +114,7 @@ javaFeatures = def "JavaFeatures" $
       T.boolean]
 
 -- | Classification of a Java symbol for code generation.
-javaSymbolClass :: Binding
+javaSymbolClass :: TypeDefinition
 javaSymbolClass = def "JavaSymbolClass" $
   doc "Classification of a Java symbol for code generation" $
   T.union [

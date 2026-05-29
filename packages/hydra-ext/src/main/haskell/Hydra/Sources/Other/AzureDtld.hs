@@ -16,13 +16,13 @@ import qualified Data.Maybe                      as Y
 ns :: ModuleName
 ns = ModuleName "hydra.azure.dtld"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("An Azure Digital Twin Definition Language (DTLD) model. Based on:\n" ++
       "  https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#digital-twins-definition-language\n" ++
@@ -59,7 +59,7 @@ module_ = Module {
       telemetry,
       unit_]
 
-command :: Binding
+command :: TypeDefinition
 command = define "Command" $
   doc "A Command describes a function or operation that can be performed on any digital twin." $
   T.record [
@@ -82,7 +82,7 @@ command = define "Command" $
       doc "A description of the output of the Command" $
       T.maybe $ dtld "CommandPayload"]
 
-commandPayload :: Binding
+commandPayload :: TypeDefinition
 commandPayload = define "CommandPayload" $
   doc "A CommandPayload describes the inputs to or the outputs from a Command." $
   T.record [
@@ -93,7 +93,7 @@ commandPayload = define "CommandPayload" $
     descriptionField,
     displayNameField]
 
-commandType :: Binding
+commandType :: TypeDefinition
 commandType = define "CommandType" $
   doc (
     "CommandType is deprecated. Either value, synchronous or asynchronous, has the same meaning: " ++
@@ -106,7 +106,7 @@ commandType = define "CommandType" $
 commentField :: FieldType
 commentField = "comment">: doc "A comment for model authors" $ T.maybe nonemptyString512
 
-component :: Binding
+component :: TypeDefinition
 component = define "Component" $
   doc (
     "Components enable interfaces to be composed of other interfaces. Components are different from " ++
@@ -130,7 +130,7 @@ displayNameField = "displayName">: doc "A localizable name for display" $ T.mayb
 dtld :: String -> Type
 dtld = typeref ns
 
-dtmi :: Binding
+dtmi :: TypeDefinition
 dtmi = define "Dtmi" $
   doc "A digital twin model identifier" $ T.wrap T.string
 
@@ -141,7 +141,7 @@ dtmi128 = bounded Nothing (Just 128) $ dtld "Dtmi"
 dtmi2048 :: Type
 dtmi2048 = bounded Nothing (Just 2048) $ dtld "Dtmi"
 
-enumValue :: Binding
+enumValue :: TypeDefinition
 enumValue = define "EnumValue" $
   doc "An EnumValue describes an element of an Enum." $
   T.record [
@@ -156,7 +156,7 @@ enumValue = define "EnumValue" $
     descriptionField,
     displayNameField]
 
-field :: Binding
+field :: TypeDefinition
 field = define "Field" $
   doc "A Field describes a field in an Object." $
   T.record [
@@ -177,12 +177,12 @@ idOptionalField :: [Char] -> FieldType
 idOptionalField cat = idField False 2048 $
   "The ID of the " ++ cat ++ ". If no @id is provided, the digital twin interface processor will assign one."
 
-integerOrString :: Binding
+integerOrString :: TypeDefinition
 integerOrString = define "IntegerOrString" $ T.union [
   "integer">: T.int32,
   "string">: T.string]
 
-interface_ :: Binding
+interface_ :: TypeDefinition
 interface_ = define "Interface" $ T.record [
   idField True 128 "A digital twin model identifier for the interface",
   typeField "This must be 'Interface'",
@@ -208,7 +208,7 @@ interface_ = define "Interface" $ T.record [
     doc "A set of IRIs or objects that refer to the reusable schemas within this interface." $
     T.maybe $ T.set $ dtld "Schema_Interface"]
 
-interface_Contents :: Binding
+interface_Contents :: TypeDefinition
 interface_Contents = define "Interface_Contents" $ T.union [
   "command">: dtld "Command",
   "component">: dtld "Component",
@@ -216,10 +216,10 @@ interface_Contents = define "Interface_Contents" $ T.union [
   "relationship">: dtld "Relationship",
   "telemetry">: dtld "Telemetry"]
 
-iri :: Binding
+iri :: TypeDefinition
 iri = define "Iri" $ T.wrap T.string
 
-mapKey :: Binding
+mapKey :: TypeDefinition
 mapKey = define "MapKey" $
   doc "A MapKey describes the key in a Map. The schema of a MapKey must be string." $
   T.record [
@@ -230,7 +230,7 @@ mapKey = define "MapKey" $
     descriptionField,
     displayNameField]
 
-mapValue :: Binding
+mapValue :: TypeDefinition
 mapValue = define "MapValue" $
   doc "A MapValue describes the values in a Map." $
   T.record [
@@ -253,7 +253,7 @@ nonemptyString512 = boundedString (Just 1) (Just 512)
 nonemptyString64 :: Type
 nonemptyString64 = boundedString (Just 1) (Just 64)
 
-property_ :: Binding
+property_ :: TypeDefinition
 property_ = define "Property" $
   doc (
     "A Property describes the read-only and read/write state of any digital twin. " ++
@@ -271,7 +271,7 @@ property_ = define "Property" $
     unitField "property",
     writableField "property"]
 
-relationship :: Binding
+relationship :: TypeDefinition
 relationship = define "Relationship" $
   doc (
     "A Relationship describes a link to another digital twin and enables graphs of digital twins " ++
@@ -304,7 +304,7 @@ relationship = define "Relationship" $
       T.maybe $ dtld "Interface",
       writableField "relationship"]
 
-schema :: Binding
+schema :: TypeDefinition
 schema = define "Schema" $
   doc (
     "Schemas are used to describe the on-the-wire or serialized format of the data in a digital twin interface. " ++
@@ -321,7 +321,7 @@ schemaField cat = "schema">: doc ("The data type of the " ++ cat) $ dtld "Schema
 schemaInterfaceField :: String -> FieldType
 schemaInterfaceField cat = "schema">: doc ("The data type of the " ++ cat) $ dtld "Interface"
 
-schema_Array :: Binding
+schema_Array :: TypeDefinition
 schema_Array = define "Schema_Array" $
   doc (
     "An Array describes an indexable data type where each element is of the same schema. " ++
@@ -336,7 +336,7 @@ schema_Array = define "Schema_Array" $
     descriptionField,
     displayNameField]
 
-schema_Complex :: Binding
+schema_Complex :: TypeDefinition
 schema_Complex = define "Schema_Complex" $
   doc ("Complex schemas are designed for supporting complex data types made up of primitive data types. " ++
        "Currently the following complex schemas are provided: Array, Enum, Map, and Object. " ++
@@ -349,7 +349,7 @@ schema_Complex = define "Schema_Complex" $
     "map">: dtld "Schema_Map",
     "object">: dtld "Schema_Object"]
 
-schema_Enum :: Binding
+schema_Enum :: TypeDefinition
 schema_Enum = define "Schema_Enum" $
   doc (
     "An Enum describes a data type with a set of named labels that map to values. The values in an Enum " ++
@@ -367,7 +367,7 @@ schema_Enum = define "Schema_Enum" $
     descriptionField,
     displayNameField]
 
-schema_Interface :: Binding
+schema_Interface :: TypeDefinition
 schema_Interface = define "Schema_Interface" $
   doc (
     "Within an interface definition, complex schemas may be defined for reusability across " ++
@@ -383,14 +383,14 @@ schema_Interface = define "Schema_Interface" $
     descriptionField,
     displayNameField]
 
-schema_Interface_Type :: Binding
+schema_Interface_Type :: TypeDefinition
 schema_Interface_Type = define "Schema_Interface_Type" $ T.union [
   "array">: dtld "Schema_Array",
   "enum">: dtld "Schema_Enum",
   "map">: dtld "Schema_Map",
   "object">: dtld "Schema_Object"]
 
-schema_Map :: Binding
+schema_Map :: TypeDefinition
 schema_Map = define "Schema_Map" $
   doc ("A Map describes a data type of key-value pairs where the values share the same schema. " ++
        "The key in a Map must be a string. The values in a Map can be any schema.") $
@@ -407,7 +407,7 @@ schema_Map = define "Schema_Map" $
     descriptionField,
     displayNameField]
 
-schema_Object :: Binding
+schema_Object :: TypeDefinition
 schema_Object = define "Schema_Object" $
   doc (
     "An Object describes a data type made up of named fields (like a struct in C). " ++
@@ -422,7 +422,7 @@ schema_Object = define "Schema_Object" $
     descriptionField,
     displayNameField]
 
-schema_Primitive :: Binding
+schema_Primitive :: TypeDefinition
 schema_Primitive = define "Schema_Primitive" $
   doc (
     "A full set of primitive data types are provided and can be specified directly as the value " ++
@@ -442,7 +442,7 @@ schema_Primitive = define "Schema_Primitive" $
 string128 :: Type
 string128 = boundedString Nothing (Just 128)
 
-telemetry :: Binding
+telemetry :: TypeDefinition
 telemetry = define "Telemetry" $
   doc (
     "Telemetry describes the data emitted by any digital twin, whether the data is a regular stream " ++
@@ -467,7 +467,7 @@ unitField cat = "unit">:
   doc ("The unit type of the " ++ cat ++ ". A semantic type is required for the unit property to be available.") $
   T.maybe $ dtld "Unit"
 
-unit_ :: Binding
+unit_ :: TypeDefinition
 unit_ = define "Unit" $ T.wrap T.unit
 
 writableField :: String -> FieldType

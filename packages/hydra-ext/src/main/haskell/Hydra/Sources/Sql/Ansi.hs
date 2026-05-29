@@ -11,13 +11,13 @@ import qualified Hydra.Dsl.Types                 as T
 ns :: ModuleName
 ns = ModuleName "hydra.sql.syntax"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [],
             moduleDescription = Just ("A subset of ANSI SQL:2003, capturing selected productions of the BNF grammar provided at "
       ++ "https://ronsavage.github.io/SQL/sql-2003-2.bnf.html, which is based on "
@@ -171,180 +171,180 @@ sql = typeref ns
 
 -- Token definitions
 
-approximateNumericLiteral :: Binding
+approximateNumericLiteral :: TypeDefinition
 approximateNumericLiteral = define "ApproximateNumericLiteral" $ T.wrap T.string
 
-binaryStringLiteral :: Binding
+binaryStringLiteral :: TypeDefinition
 binaryStringLiteral = define "BinaryStringLiteral" $ T.wrap T.unit
 
-characterStringLiteral :: Binding
+characterStringLiteral :: TypeDefinition
 characterStringLiteral = define "CharacterStringLiteral" $ T.wrap T.string
 
-columnName :: Binding
+columnName :: TypeDefinition
 columnName = define "ColumnName" $ T.wrap T.string
 
-dateString :: Binding
+dateString :: TypeDefinition
 dateString = define "DateString" $ T.wrap T.unit
 
-domainName :: Binding
+domainName :: TypeDefinition
 domainName = define "DomainName" $ T.wrap T.string
 
-exactNumericLiteral :: Binding
+exactNumericLiteral :: TypeDefinition
 exactNumericLiteral = define "ExactNumericLiteral" $ T.wrap T.string
 
-leftBracketOrTrigraph :: Binding
+leftBracketOrTrigraph :: TypeDefinition
 leftBracketOrTrigraph = define "LeftBracketOrTrigraph" $ T.wrap T.string
 
-nationalCharacterStringLiteral :: Binding
+nationalCharacterStringLiteral :: TypeDefinition
 nationalCharacterStringLiteral = define "NationalCharacterStringLiteral" $ T.wrap T.unit
 
-pathResolvedUserDefinedTypeName :: Binding
+pathResolvedUserDefinedTypeName :: TypeDefinition
 pathResolvedUserDefinedTypeName = define "PathResolvedUserDefinedTypeName" $ T.wrap T.string
 
-rightBracketOrTrigraph :: Binding
+rightBracketOrTrigraph :: TypeDefinition
 rightBracketOrTrigraph = define "RightBracketOrTrigraph" $ T.wrap T.string
 
-tableName :: Binding
+tableName :: TypeDefinition
 tableName = define "TableName" $ T.wrap T.string
 
-timeString :: Binding
+timeString :: TypeDefinition
 timeString = define "TimeString" $ T.wrap T.unit
 
-timestampLiteral :: Binding
+timestampLiteral :: TypeDefinition
 timestampLiteral = define "TimestampLiteral" $ T.wrap T.unit
 
-unicodeCharacterStringLiteral :: Binding
+unicodeCharacterStringLiteral :: TypeDefinition
 unicodeCharacterStringLiteral = define "UnicodeCharacterStringLiteral" $ T.wrap T.unit
 
-unsignedInteger :: Binding
+unsignedInteger :: TypeDefinition
 unsignedInteger = define "UnsignedInteger" $ T.wrap T.string
 
 -- Type definitions
 
-approximateNumericType :: Binding
+approximateNumericType :: TypeDefinition
 approximateNumericType = define "ApproximateNumericType" $
   T.union [
     "float">: T.maybe (sql "Precision"),
     "real">: T.unit,
     "double">: T.unit]
 
-arrayElement :: Binding
+arrayElement :: TypeDefinition
 arrayElement = define "ArrayElement" $ T.wrap $ sql "ValueExpression"
 
-arrayElementList :: Binding
+arrayElementList :: TypeDefinition
 arrayElementList = define "ArrayElementList" $
   T.record [
     "first">: sql "ArrayElement",
     "rest">: T.list (sql "ArrayElement")]
 
-arrayElementReference :: Binding
+arrayElementReference :: TypeDefinition
 arrayElementReference = define "ArrayElementReference" $ T.wrap T.unit
 
-arrayType :: Binding
+arrayType :: TypeDefinition
 arrayType = define "ArrayType" $ T.wrap T.unit
 
-arrayValueConstructor :: Binding
+arrayValueConstructor :: TypeDefinition
 arrayValueConstructor = define "ArrayValueConstructor" $
   T.union [
     "enumeration">: sql "ArrayValueConstructorByEnumeration",
     "query">: sql "ArrayValueConstructorByQuery"]
 
-arrayValueConstructorByEnumeration :: Binding
+arrayValueConstructorByEnumeration :: TypeDefinition
 arrayValueConstructorByEnumeration = define "ArrayValueConstructorByEnumeration" $
   T.record [
     "LeftBracketOrTrigraph">: sql "LeftBracketOrTrigraph",
     "ArrayElementList">: sql "ArrayElementList",
     "RightBracketOrTrigraph">: sql "RightBracketOrTrigraph"]
 
-arrayValueConstructorByQuery :: Binding
+arrayValueConstructorByQuery :: TypeDefinition
 arrayValueConstructorByQuery = define "ArrayValueConstructorByQuery" $ T.wrap T.unit
 
-arrayValueExpression :: Binding
+arrayValueExpression :: TypeDefinition
 arrayValueExpression = define "ArrayValueExpression" $ T.wrap T.unit
 
-asSubqueryClause :: Binding
+asSubqueryClause :: TypeDefinition
 asSubqueryClause = define "AsSubqueryClause" $ T.wrap T.unit
 
-attributeOrMethodReference :: Binding
+attributeOrMethodReference :: TypeDefinition
 attributeOrMethodReference = define "AttributeOrMethodReference" $ T.wrap T.unit
 
-binaryLargeObjectStringType :: Binding
+binaryLargeObjectStringType :: TypeDefinition
 binaryLargeObjectStringType = define "BinaryLargeObjectStringType" $
   T.union [
     "binary">: T.maybe (sql "LargeObjectLength"),
     "blob">: T.maybe (sql "LargeObjectLength")]
 
-booleanFactor :: Binding
+booleanFactor :: TypeDefinition
 booleanFactor = define "BooleanFactor" $
   T.record [
     "NOT">: T.maybe T.unit,
     "BooleanTest">: sql "BooleanTest"]
 
-booleanLiteral :: Binding
+booleanLiteral :: TypeDefinition
 booleanLiteral = define "BooleanLiteral" $
   T.union [
     "TRUE">: T.unit,
     "FALSE">: T.unit,
     "UNKNOWN">: T.unit]
 
-booleanPredicand :: Binding
+booleanPredicand :: TypeDefinition
 booleanPredicand = define "BooleanPredicand" $ T.wrap T.unit
 
-booleanPrimary :: Binding
+booleanPrimary :: TypeDefinition
 booleanPrimary = define "BooleanPrimary" $
   T.union [
     "predicate">: sql "Predicate",
     "predicand">: sql "BooleanPredicand"]
 
-booleanTerm :: Binding
+booleanTerm :: TypeDefinition
 booleanTerm = define "BooleanTerm" $
   T.union [
     "factor">: sql "BooleanFactor",
     "and">: sql "BooleanTerm_And"]
 
-booleanTerm_And :: Binding
+booleanTerm_And :: TypeDefinition
 booleanTerm_And = define "BooleanTerm_And" $
   T.record [
     "lhs">: sql "BooleanTerm",
     "rhs">: sql "BooleanFactor"]
 
-booleanTest :: Binding
+booleanTest :: TypeDefinition
 booleanTest = define "BooleanTest" $
   T.record [
     "BooleanPrimary">: sql "BooleanPrimary",
     "Sequence">: T.maybe (sql "BooleanTest_Sequence_Option")]
 
-booleanTest_Sequence_Option :: Binding
+booleanTest_Sequence_Option :: TypeDefinition
 booleanTest_Sequence_Option = define "BooleanTest_Sequence_Option" $
   T.record [
     "NOT">: T.maybe T.unit,
     "TruthValue">: sql "TruthValue"]
 
-booleanType :: Binding
+booleanType :: TypeDefinition
 booleanType = define "BooleanType" $ T.wrap T.unit
 
-booleanValueExpression :: Binding
+booleanValueExpression :: TypeDefinition
 booleanValueExpression = define "BooleanValueExpression" $
   T.union [
     "term">: sql "BooleanTerm",
     "or">: sql "BooleanValueExpression_Or"]
 
-booleanValueExpression_Or :: Binding
+booleanValueExpression_Or :: TypeDefinition
 booleanValueExpression_Or = define "BooleanValueExpression_Or" $
   T.record [
     "lhs">: sql "BooleanValueExpression",
     "rhs">: sql "BooleanTerm"]
 
-caseExpression :: Binding
+caseExpression :: TypeDefinition
 caseExpression = define "CaseExpression" $ T.wrap T.unit
 
-castSpecification :: Binding
+castSpecification :: TypeDefinition
 castSpecification = define "CastSpecification" $ T.wrap T.unit
 
-characterSetSpecification :: Binding
+characterSetSpecification :: TypeDefinition
 characterSetSpecification = define "CharacterSetSpecification" $ T.wrap T.unit
 
-characterStringType :: Binding
+characterStringType :: TypeDefinition
 characterStringType = define "CharacterStringType" $
   T.union [
     "character">: T.maybe (sql "Length"),
@@ -356,31 +356,31 @@ characterStringType = define "CharacterStringType" $
     "charLargeObject">: T.maybe (sql "LargeObjectLength"),
     "clob">: T.maybe (sql "LargeObjectLength")]
 
-collateClause :: Binding
+collateClause :: TypeDefinition
 collateClause = define "CollateClause" $ T.wrap T.unit
 
-collectionType :: Binding
+collectionType :: TypeDefinition
 collectionType = define "CollectionType" $
   T.union [
     "array">: sql "ArrayType",
     "multiset">: sql "MultisetType"]
 
-collectionValueConstructor :: Binding
+collectionValueConstructor :: TypeDefinition
 collectionValueConstructor = define "CollectionValueConstructor" $
   T.union [
     "array">: sql "ArrayValueConstructor",
     "multiset">: sql "MultisetValueConstructor"]
 
-collectionValueExpression :: Binding
+collectionValueExpression :: TypeDefinition
 collectionValueExpression = define "CollectionValueExpression" $
   T.union [
     "array">: sql "ArrayValueExpression",
     "multiset">: sql "MultisetValueExpression"]
 
-columnConstraintDefinition :: Binding
+columnConstraintDefinition :: TypeDefinition
 columnConstraintDefinition = define "ColumnConstraintDefinition" $ T.wrap T.unit
 
-columnDefinition :: Binding
+columnDefinition :: TypeDefinition
 columnDefinition = define "ColumnDefinition" $
   T.record [
     "name">: sql "ColumnName",
@@ -390,32 +390,32 @@ columnDefinition = define "ColumnDefinition" $
     "constraints">: T.list (sql "ColumnConstraintDefinition"),
     "collate">: T.maybe (sql "CollateClause")]
 
-columnDefinition_DefaultOrIdentityOrGeneration_Option :: Binding
+columnDefinition_DefaultOrIdentityOrGeneration_Option :: TypeDefinition
 columnDefinition_DefaultOrIdentityOrGeneration_Option = define "ColumnDefinition_DefaultOrIdentityOrGeneration_Option" $
   T.union [
     "DefaultClause">: sql "DefaultClause",
     "IdentityColumnSpecification">: sql "IdentityColumnSpecification",
     "GenerationClause">: sql "GenerationClause"]
 
-columnDefinition_TypeOrDomain_Option :: Binding
+columnDefinition_TypeOrDomain_Option :: TypeDefinition
 columnDefinition_TypeOrDomain_Option = define "ColumnDefinition_TypeOrDomain_Option" $
   T.union [
     "DataType">: sql "DataType",
     "DomainName">: sql "DomainName"]
 
-columnNameList :: Binding
+columnNameList :: TypeDefinition
 columnNameList = define "ColumnNameList" $
   T.record [
     "first">: sql "ColumnName",
     "rest">: T.list (sql "ColumnName")]
 
-columnOptions :: Binding
+columnOptions :: TypeDefinition
 columnOptions = define "ColumnOptions" $ T.wrap T.unit
 
-columnReference :: Binding
+columnReference :: TypeDefinition
 columnReference = define "ColumnReference" $ T.wrap T.unit
 
-commonValueExpression :: Binding
+commonValueExpression :: TypeDefinition
 commonValueExpression = define "CommonValueExpression" $
   T.union [
     "numeric">: sql "NumericValueExpression",
@@ -426,26 +426,26 @@ commonValueExpression = define "CommonValueExpression" $
     "reference">: sql "ReferenceValueExpression",
     "collection">: sql "CollectionValueExpression"]
 
-contextuallyTypedRowValueConstructor :: Binding
+contextuallyTypedRowValueConstructor :: TypeDefinition
 contextuallyTypedRowValueConstructor = define "ContextuallyTypedRowValueConstructor" $ T.wrap T.unit
 
-contextuallyTypedRowValueExpression :: Binding
+contextuallyTypedRowValueExpression :: TypeDefinition
 contextuallyTypedRowValueExpression = define "ContextuallyTypedRowValueExpression" $
   T.union [
     "specialCase">: sql "RowValueSpecialCase",
     "constructor">: sql "ContextuallyTypedRowValueConstructor"]
 
-contextuallyTypedRowValueExpressionList :: Binding
+contextuallyTypedRowValueExpressionList :: TypeDefinition
 contextuallyTypedRowValueExpressionList = define "ContextuallyTypedRowValueExpressionList" $
   T.record [
     "first">: sql "ContextuallyTypedRowValueExpression",
     "rest">: T.list (sql "ContextuallyTypedRowValueExpression")]
 
-contextuallyTypedTableValueConstructor :: Binding
+contextuallyTypedTableValueConstructor :: TypeDefinition
 contextuallyTypedTableValueConstructor = define "ContextuallyTypedTableValueConstructor" $
   T.wrap $ sql "ContextuallyTypedRowValueExpressionList"
 
-dataType :: Binding
+dataType :: TypeDefinition
 dataType = define "DataType" $
   T.union [
     "predefined">: sql "PredefinedType",
@@ -454,26 +454,26 @@ dataType = define "DataType" $
     "reference">: sql "ReferenceType",
     "collection">: sql "CollectionType"]
 
-dateLiteral :: Binding
+dateLiteral :: TypeDefinition
 dateLiteral = define "DateLiteral" $ T.wrap $ sql "DateString"
 
-datetimeLiteral :: Binding
+datetimeLiteral :: TypeDefinition
 datetimeLiteral = define "DatetimeLiteral" $
   T.union [
     "date">: sql "DateLiteral",
     "time">: sql "TimeLiteral",
     "timestamp">: sql "TimestampLiteral"]
 
-datetimeType :: Binding
+datetimeType :: TypeDefinition
 datetimeType = define "DatetimeType" $ T.wrap T.unit
 
-datetimeValueExpression :: Binding
+datetimeValueExpression :: TypeDefinition
 datetimeValueExpression = define "DatetimeValueExpression" $ T.wrap T.unit
 
-defaultClause :: Binding
+defaultClause :: TypeDefinition
 defaultClause = define "DefaultClause" $ T.wrap T.unit
 
-exactNumericType :: Binding
+exactNumericType :: TypeDefinition
 exactNumericType = define "ExactNumericType" $
   T.union [
     "numeric">: T.maybe (sql "ExactNumericType_Numeric_Option"),
@@ -484,41 +484,41 @@ exactNumericType = define "ExactNumericType" $
     "int">: T.unit,
     "bigint">: T.unit]
 
-exactNumericType_Dec_Option :: Binding
+exactNumericType_Dec_Option :: TypeDefinition
 exactNumericType_Dec_Option = define "ExactNumericType_Dec_Option" $
   T.record [
     "Precision">: sql "Precision",
     "Sequence">: T.maybe (sql "Scale")]
 
-exactNumericType_Decimal_Option :: Binding
+exactNumericType_Decimal_Option :: TypeDefinition
 exactNumericType_Decimal_Option = define "ExactNumericType_Decimal_Option" $
   T.record [
     "Precision">: sql "Precision",
     "Sequence">: T.maybe (sql "Scale")]
 
-exactNumericType_Numeric_Option :: Binding
+exactNumericType_Numeric_Option :: TypeDefinition
 exactNumericType_Numeric_Option = define "ExactNumericType_Numeric_Option" $
   T.record [
     "Precision">: sql "Precision",
     "Sequence">: T.maybe (sql "Scale")]
 
-fieldReference :: Binding
+fieldReference :: TypeDefinition
 fieldReference = define "FieldReference" $ T.wrap T.unit
 
-fromConstructor :: Binding
+fromConstructor :: TypeDefinition
 fromConstructor = define "FromConstructor" $
   T.record [
     "columns">: T.maybe (sql "InsertColumnList"),
     "override">: T.maybe (sql "OverrideClause"),
     "values">: sql "ContextuallyTypedTableValueConstructor"]
 
-fromDefault :: Binding
+fromDefault :: TypeDefinition
 fromDefault = define "FromDefault" $ T.wrap T.unit
 
-fromSubquery :: Binding
+fromSubquery :: TypeDefinition
 fromSubquery = define "FromSubquery" $ T.wrap T.unit
 
-generalLiteral :: Binding
+generalLiteral :: TypeDefinition
 generalLiteral = define "GeneralLiteral" $
   T.union [
     "string">: sql "CharacterStringLiteral",
@@ -529,83 +529,83 @@ generalLiteral = define "GeneralLiteral" $
     "interval">: sql "IntervalLiteral",
     "boolean">: sql "BooleanLiteral"]
 
-generalValueSpecification :: Binding
+generalValueSpecification :: TypeDefinition
 generalValueSpecification = define "GeneralValueSpecification" $ T.wrap T.unit
 
-generationClause :: Binding
+generationClause :: TypeDefinition
 generationClause = define "GenerationClause" $ T.wrap T.unit
 
-globalOrLocal :: Binding
+globalOrLocal :: TypeDefinition
 globalOrLocal = define "GlobalOrLocal" $
   T.union [
     "global">: T.unit,
     "local">: T.unit]
 
-identityColumnSpecification :: Binding
+identityColumnSpecification :: TypeDefinition
 identityColumnSpecification = define "IdentityColumnSpecification" $ T.wrap T.unit
 
-insertColumnList :: Binding
+insertColumnList :: TypeDefinition
 insertColumnList = define "InsertColumnList" $ T.wrap $ sql "ColumnNameList"
 
-insertColumnsAndSource :: Binding
+insertColumnsAndSource :: TypeDefinition
 insertColumnsAndSource = define "InsertColumnsAndSource" $
   T.union [
     "subquery">: sql "FromSubquery",
     "constructor">: sql "FromConstructor",
     "default">: sql "FromDefault"]
 
-insertStatement :: Binding
+insertStatement :: TypeDefinition
 insertStatement = define "InsertStatement" $
   T.record [
     "target">: sql "InsertionTarget",
     "columnsAndSource">: sql "InsertColumnsAndSource"]
 
-insertionTarget :: Binding
+insertionTarget :: TypeDefinition
 insertionTarget = define "InsertionTarget" $ T.wrap $ sql "TableName"
 
-intervalLiteral :: Binding
+intervalLiteral :: TypeDefinition
 intervalLiteral = define "IntervalLiteral" $ T.wrap T.unit
 
-intervalType :: Binding
+intervalType :: TypeDefinition
 intervalType = define "IntervalType" $ T.wrap T.unit
 
-intervalValueExpression :: Binding
+intervalValueExpression :: TypeDefinition
 intervalValueExpression = define "IntervalValueExpression" $ T.wrap T.unit
 
-largeObjectLength :: Binding
+largeObjectLength :: TypeDefinition
 largeObjectLength = define "LargeObjectLength" $ T.wrap T.unit
 
-length_ :: Binding
+length_ :: TypeDefinition
 length_ = define "Length" $ T.wrap $ sql "UnsignedInteger"
 
-likeClause :: Binding
+likeClause :: TypeDefinition
 likeClause = define "LikeClause" $ T.wrap T.unit
 
-methodInvocation :: Binding
+methodInvocation :: TypeDefinition
 methodInvocation = define "MethodInvocation" $ T.wrap T.unit
 
-multisetElementReference :: Binding
+multisetElementReference :: TypeDefinition
 multisetElementReference = define "MultisetElementReference" $ T.wrap T.unit
 
-multisetType :: Binding
+multisetType :: TypeDefinition
 multisetType = define "MultisetType" $ T.wrap $ sql "DataType"
 
-multisetValueConstructor :: Binding
+multisetValueConstructor :: TypeDefinition
 multisetValueConstructor = define "MultisetValueConstructor" $ T.wrap T.unit
 
-multisetValueExpression :: Binding
+multisetValueExpression :: TypeDefinition
 multisetValueExpression = define "MultisetValueExpression" $ T.wrap T.unit
 
-nationalCharacterStringType_ :: Binding
+nationalCharacterStringType_ :: TypeDefinition
 nationalCharacterStringType_ = define "NationalCharacterStringType" $ T.wrap T.unit
 
-newSpecification :: Binding
+newSpecification :: TypeDefinition
 newSpecification = define "NewSpecification" $ T.wrap T.unit
 
-nextValueExpression :: Binding
+nextValueExpression :: TypeDefinition
 nextValueExpression = define "NextValueExpression" $ T.wrap T.unit
 
-nonparenthesizedValueExpressionPrimary :: Binding
+nonparenthesizedValueExpressionPrimary :: TypeDefinition
 nonparenthesizedValueExpressionPrimary = define "NonparenthesizedValueExpressionPrimary" $
   T.union [
     "unsigned">: sql "UnsignedValueSpecification",
@@ -628,29 +628,29 @@ nonparenthesizedValueExpressionPrimary = define "NonparenthesizedValueExpression
     "routine">: sql "RoutineInvocation",
     "next">: sql "NextValueExpression"]
 
-numericType :: Binding
+numericType :: TypeDefinition
 numericType = define "NumericType" $
   T.union [
     "exact">: sql "ExactNumericType",
     "approximate">: sql "ApproximateNumericType"]
 
-numericValueExpression :: Binding
+numericValueExpression :: TypeDefinition
 numericValueExpression = define "NumericValueExpression" $ T.wrap T.unit
 
-overrideClause :: Binding
+overrideClause :: TypeDefinition
 overrideClause = define "OverrideClause" $
   T.union [
     "OVERRIDINGspUSERspVALUE">: T.unit,
     "OVERRIDINGspSYSTEMspVALUE">: T.unit]
 
-parenthesizedValueExpression :: Binding
+parenthesizedValueExpression :: TypeDefinition
 parenthesizedValueExpression = define "ParenthesizedValueExpression" $
   T.wrap $ sql "ValueExpression"
 
-precision :: Binding
+precision :: TypeDefinition
 precision = define "Precision" $ T.wrap $ sql "UnsignedInteger"
 
-predefinedType :: Binding
+predefinedType :: TypeDefinition
 predefinedType = define "PredefinedType" $
   T.union [
     "string">: sql "PredefinedType_String",
@@ -661,102 +661,102 @@ predefinedType = define "PredefinedType" $
     "datetime">: sql "DatetimeType",
     "interval">: sql "IntervalType"]
 
-predefinedType_NationalString :: Binding
+predefinedType_NationalString :: TypeDefinition
 predefinedType_NationalString = define "PredefinedType_NationalString" $
   T.record [
     "type">: sql "NationalCharacterStringType",
     "collate">: T.maybe (sql "CollateClause")]
 
-predefinedType_String :: Binding
+predefinedType_String :: TypeDefinition
 predefinedType_String = define "PredefinedType_String" $
   T.record [
     "type">: sql "CharacterStringType",
     "characters">: T.maybe (sql "CharacterSetSpecification"),
     "collate">: T.maybe (sql "CollateClause")]
 
-predicate :: Binding
+predicate :: TypeDefinition
 predicate = define "Predicate" $ T.wrap T.unit
 
-queryExpression :: Binding
+queryExpression :: TypeDefinition
 queryExpression = define "QueryExpression" $ T.wrap T.unit
 
-referenceResolution :: Binding
+referenceResolution :: TypeDefinition
 referenceResolution = define "ReferenceResolution" $ T.wrap T.unit
 
-referenceScopeCheck :: Binding
+referenceScopeCheck :: TypeDefinition
 referenceScopeCheck = define "ReferenceScopeCheck" $ T.wrap T.unit
 
-referenceType :: Binding
+referenceType :: TypeDefinition
 referenceType = define "ReferenceType" $ T.wrap T.unit
 
-referenceValueExpression :: Binding
+referenceValueExpression :: TypeDefinition
 referenceValueExpression = define "ReferenceValueExpression" $
   T.wrap $ sql "ValueExpressionPrimary"
 
-routineInvocation :: Binding
+routineInvocation :: TypeDefinition
 routineInvocation = define "RoutineInvocation" $ T.wrap T.unit
 
-rowType :: Binding
+rowType :: TypeDefinition
 rowType = define "RowType" $ T.wrap T.unit
 
-rowValueExpression :: Binding
+rowValueExpression :: TypeDefinition
 rowValueExpression = define "RowValueExpression" $ T.wrap T.unit
 
-rowValueSpecialCase :: Binding
+rowValueSpecialCase :: TypeDefinition
 rowValueSpecialCase = define "RowValueSpecialCase" $
   T.wrap $ sql "NonparenthesizedValueExpressionPrimary"
 
-scalarSubquery :: Binding
+scalarSubquery :: TypeDefinition
 scalarSubquery = define "ScalarSubquery" $ T.wrap $ sql "Subquery"
 
-scale :: Binding
+scale :: TypeDefinition
 scale = define "Scale" $ T.wrap $ sql "UnsignedInteger"
 
-selfReferencingColumnSpecification :: Binding
+selfReferencingColumnSpecification :: TypeDefinition
 selfReferencingColumnSpecification = define "SelfReferencingColumnSpecification" $ T.wrap T.unit
 
-setFunctionSpecification :: Binding
+setFunctionSpecification :: TypeDefinition
 setFunctionSpecification = define "SetFunctionSpecification" $ T.wrap T.unit
 
-staticMethodInvocation :: Binding
+staticMethodInvocation :: TypeDefinition
 staticMethodInvocation = define "StaticMethodInvocation" $ T.wrap T.unit
 
-stringValueExpression :: Binding
+stringValueExpression :: TypeDefinition
 stringValueExpression = define "StringValueExpression" $ T.wrap T.unit
 
-subquery :: Binding
+subquery :: TypeDefinition
 subquery = define "Subquery" $ T.wrap $ sql "QueryExpression"
 
-subtableClause :: Binding
+subtableClause :: TypeDefinition
 subtableClause = define "SubtableClause" $ T.wrap T.unit
 
-subtypeTreatment :: Binding
+subtypeTreatment :: TypeDefinition
 subtypeTreatment = define "SubtypeTreatment" $ T.wrap T.unit
 
-tableCommitAction :: Binding
+tableCommitAction :: TypeDefinition
 tableCommitAction = define "TableCommitAction" $
   T.union [
     "preserve">: T.unit,
     "delete">: T.unit]
 
-tableConstraintDefinition :: Binding
+tableConstraintDefinition :: TypeDefinition
 tableConstraintDefinition = define "TableConstraintDefinition" $ T.wrap T.unit
 
-tableContentsSource :: Binding
+tableContentsSource :: TypeDefinition
 tableContentsSource = define "TableContentsSource" $
   T.union [
     "list">: sql "TableElementList",
     "subtable">: sql "TableContentsSource_Subtable",
     "subquery">: sql "AsSubqueryClause"]
 
-tableContentsSource_Subtable :: Binding
+tableContentsSource_Subtable :: TypeDefinition
 tableContentsSource_Subtable = define "TableContentsSource_Subtable" $
   T.record [
     "type">: sql "PathResolvedUserDefinedTypeName",
     "subtable">: T.maybe (sql "SubtableClause"),
     "elements">: T.maybe (sql "TableElementList")]
 
-tableDefinition :: Binding
+tableDefinition :: TypeDefinition
 tableDefinition = define "TableDefinition" $
   T.record [
     "scope">: T.maybe (sql "TableScope"),
@@ -764,7 +764,7 @@ tableDefinition = define "TableDefinition" $
     "source">: sql "TableContentsSource",
     "commitActions">: T.maybe (sql "TableCommitAction")]
 
-tableElement :: Binding
+tableElement :: TypeDefinition
 tableElement = define "TableElement" $
   T.union [
     "column">: sql "ColumnDefinition",
@@ -773,59 +773,59 @@ tableElement = define "TableElement" $
     "selfReferencingColumn">: sql "SelfReferencingColumnSpecification",
     "columOptions">: sql "ColumnOptions"]
 
-tableElementList :: Binding
+tableElementList :: TypeDefinition
 tableElementList = define "TableElementList" $
   T.record [
     "first">: sql "TableElement",
     "rest">: T.list (sql "TableElement")]
 
-tableScope :: Binding
+tableScope :: TypeDefinition
 tableScope = define "TableScope" $ T.wrap $ sql "GlobalOrLocal"
 
-timeLiteral :: Binding
+timeLiteral :: TypeDefinition
 timeLiteral = define "TimeLiteral" $ T.wrap $ sql "TimeString"
 
-truthValue :: Binding
+truthValue :: TypeDefinition
 truthValue = define "TruthValue" $
   T.union [
     "TRUE">: T.unit,
     "FALSE">: T.unit,
     "UNKNOWN">: T.unit]
 
-unsignedLiteral :: Binding
+unsignedLiteral :: TypeDefinition
 unsignedLiteral = define "UnsignedLiteral" $
   T.union [
     "numeric">: sql "UnsignedNumericLiteral",
     "general">: sql "GeneralLiteral"]
 
-unsignedNumericLiteral :: Binding
+unsignedNumericLiteral :: TypeDefinition
 unsignedNumericLiteral = define "UnsignedNumericLiteral" $
   T.union [
     "exact">: sql "ExactNumericLiteral",
     "approximate">: sql "ApproximateNumericLiteral"]
 
-unsignedValueSpecification :: Binding
+unsignedValueSpecification :: TypeDefinition
 unsignedValueSpecification = define "UnsignedValueSpecification" $
   T.union [
     "literal">: sql "UnsignedLiteral",
     "general">: sql "GeneralValueSpecification"]
 
-userDefinedTypeValueExpression :: Binding
+userDefinedTypeValueExpression :: TypeDefinition
 userDefinedTypeValueExpression = define "UserDefinedTypeValueExpression" $
   T.wrap $ sql "ValueExpressionPrimary"
 
-valueExpression :: Binding
+valueExpression :: TypeDefinition
 valueExpression = define "ValueExpression" $
   T.union [
     "common">: sql "CommonValueExpression",
     "boolean">: sql "BooleanValueExpression",
     "row">: sql "RowValueExpression"]
 
-valueExpressionPrimary :: Binding
+valueExpressionPrimary :: TypeDefinition
 valueExpressionPrimary = define "ValueExpressionPrimary" $
   T.union [
     "parens">: sql "ParenthesizedValueExpression",
     "noparens">: sql "NonparenthesizedValueExpressionPrimary"]
 
-windowFunction :: Binding
+windowFunction :: TypeDefinition
 windowFunction = define "WindowFunction" $ T.wrap T.unit

@@ -19,13 +19,13 @@ import qualified Hydra.Sources.Json.Model        as JsonModel
 ns :: ModuleName
 ns = ModuleName "hydra.avro.schema"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [JsonModel.ns, Core.ns],
             moduleDescription = Just ("A model for Avro schemas. Based on the Avro 1.11.1 specification:\n" ++
       "  https://avro.apache.org/docs/1.11.1/specification")}
@@ -44,7 +44,7 @@ module_ = Module {
       schema,
       union_]
 
-array_ :: Binding
+array_ :: TypeDefinition
 array_ = define "Array" $
   T.record [
     "items">: avro "Schema"]
@@ -52,7 +52,7 @@ array_ = define "Array" $
 avro :: String -> Type
 avro = typeref ns
 
-enum_ :: Binding
+enum_ :: TypeDefinition
 enum_ = define "Enum" $
   T.record [
     "symbols">:
@@ -66,7 +66,7 @@ enum_ = define "Enum" $
         "The value provided here must be a JSON string that's a member of the symbols array") $
       T.maybe T.string]
 
-field_ :: Binding
+field_ :: TypeDefinition
 field_ = define "Field" $
   T.record [
     "name">:
@@ -91,7 +91,7 @@ field_ = define "Field" $
       doc "Any additional key/value pairs attached to the field" $
       T.map T.string $ json "Value"]
 
-fixed_ :: Binding
+fixed_ :: TypeDefinition
 fixed_ = define "Fixed" $
   T.record [
     "size">:
@@ -101,12 +101,12 @@ fixed_ = define "Fixed" $
 json :: String -> Type
 json = typeref $ JsonModel.ns
 
-map_ :: Binding
+map_ :: TypeDefinition
 map_ = define "Map" $
   T.record [
     "values">: avro "Schema"]
 
-named :: Binding
+named :: TypeDefinition
 named = define "Named" $
   T.record [
     "name">:
@@ -126,18 +126,18 @@ named = define "Named" $
       doc "Any additional key/value pairs attached to the type" $
       T.map T.string $ json "Value"]
 
-namedType :: Binding
+namedType :: TypeDefinition
 namedType = define "NamedType" $
   T.union [
     "enum">: avro "Enum",
     "fixed">: avro "Fixed",
     "record">: avro "Record"]
 
-order :: Binding
+order :: TypeDefinition
 order = define "Order" $
   T.enum ["ascending", "descending", "ignore"]
 
-primitive :: Binding
+primitive :: TypeDefinition
 primitive = define "Primitive" $
   T.union [
     "null">:
@@ -157,14 +157,14 @@ primitive = define "Primitive" $
     "string">:
       doc "unicode character sequence" T.unit]
 
-record_ :: Binding
+record_ :: TypeDefinition
 record_ = define "Record" $
   T.record [
     "fields">:
       doc "a JSON array, listing fields" $
       T.list $ avro "Field"]
 
-schema :: Binding
+schema :: TypeDefinition
 schema = define "Schema" $
   T.union [
     "array">: avro "Array",
@@ -176,6 +176,6 @@ schema = define "Schema" $
     "union">: avro "Union"
   ]
 
-union_ :: Binding
+union_ :: TypeDefinition
 union_ = define "Union" $
   T.wrap $ T.list $ avro "Schema"

@@ -16,13 +16,13 @@ import qualified Data.Maybe                      as Y
 ns :: ModuleName
 ns = ModuleName "hydra.rdf.syntax"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "An RDF 1.1 syntax model"}
   where
@@ -43,28 +43,28 @@ module_ = Module {
       resource_,
       triple]
 
-blankNode :: Binding
+blankNode :: TypeDefinition
 blankNode = define "BlankNode" $ T.wrap T.string
 
-dataset :: Binding
+dataset :: TypeDefinition
 dataset = define "Dataset" $ T.wrap $ T.set $ rdf "Quad"
 
-description :: Binding
+description :: TypeDefinition
 description = define "Description" $
   doc "A graph of RDF statements together with a distinguished subject and/or object node" $
   T.record [
     "subject">: rdf "Node",
     "graph">: rdf "Graph"]
 
-graph_ :: Binding
+graph_ :: TypeDefinition
 graph_ = define "Graph" $ T.wrap $ T.set $ rdf "Triple"
 
-iri :: Binding
+iri :: TypeDefinition
 iri = define "Iri" $
   doc "An Internationalized Resource Identifier" $
   T.wrap T.string
 
-iriOrLiteral :: Binding
+iriOrLiteral :: TypeDefinition
 iriOrLiteral = define "IriOrLiteral" $
   doc ("An IRI or a literal; " ++
        "this type is a convenience for downstream models like SHACL which may exclude blank nodes") $
@@ -72,17 +72,17 @@ iriOrLiteral = define "IriOrLiteral" $
     "iri">: rdf "Iri",
     "literal">: rdf "Literal"]
 
-langStrings :: Binding
+langStrings :: TypeDefinition
 langStrings = define "LangStrings" $
   doc "A convenience type which provides at most one string value per language, and optionally a value without a language" $
   T.wrap $ T.map (T.maybe $ rdf "LanguageTag") T.string
 
-languageTag :: Binding
+languageTag :: TypeDefinition
 languageTag = define "LanguageTag" $
   doc "A BCP47 language tag" $
   T.wrap T.string
 
-literal_ :: Binding
+literal_ :: TypeDefinition
 literal_ = define "Literal" $
   doc "A value such as a string, number, or date" $
   T.record [
@@ -96,14 +96,14 @@ literal_ = define "Literal" $
       doc "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString" $
       T.maybe $ rdf "LanguageTag"]
 
-node_ :: Binding
+node_ :: TypeDefinition
 node_ = define "Node" $
   T.union [
     "iri">: rdf "Iri",
     "bnode">: rdf "BlankNode",
     "literal">: rdf "Literal"]
 
-property_ :: Binding
+property_ :: TypeDefinition
 property_ = define "Property" $
   doc "A type representing an RDF property, and encapsulating its domain, range, and subclass relationships" $
   T.record [
@@ -116,7 +116,7 @@ property_ = define "Property" $
     "subPropertyOf">:
       T.set $ rdf "Property"]
 
-quad :: Binding
+quad :: TypeDefinition
 quad = define "Quad" $
   doc "An RDF triple with an optional named graph component" $
   T.record [
@@ -128,17 +128,17 @@ quad = define "Quad" $
 rdf :: String -> Type
 rdf = typeref ns
 
-rdfsClass :: Binding
+rdfsClass :: TypeDefinition
 rdfsClass = define "RdfsClass" $
   doc "Stand-in for rdfs:Class" $ T.wrap T.unit
 
-resource_ :: Binding
+resource_ :: TypeDefinition
 resource_ = define "Resource" $
   T.union [
     "iri">: rdf "Iri",
     "bnode">: rdf "BlankNode"]
 
-triple :: Binding
+triple :: TypeDefinition
 triple = define "Triple" $
   doc "An RDF triple defined by a subject, predicate, and object" $
   T.record [
