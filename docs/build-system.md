@@ -96,7 +96,7 @@ strictly in order, but any phase can short-circuit independently.
 
 | Phase | Driver | Output |
 |-------|--------|--------|
-| 0. Stack build | `stack build` of every Haskell exec | Bootstraps `update-json-main`, `update-json-test`, `update-json-manifest`, `verify-json-kernel`, `bootstrap-from-json`, `digest-check` |
+| 0. Stack build | `stack build` of every Haskell exec | Bootstraps `update-json-main`, `update-json-test`, `update-json-manifest`, `update-json-kernel`, `verify-json-kernel`, `bootstrap-from-json`, `digest-check` |
 | 1. DSL → JSON + Haskell kernel | `heads/haskell/bin/sync-haskell.sh` | `dist/json/**` and `dist/haskell/{hydra-kernel,hydra-haskell}/` |
 | 2. Coder Haskell dists | per-language assemblers | `dist/haskell/hydra-<lang>/` for every L in (hosts ∪ targets) |
 | 3. Kernel/pg/rdf into each target | per-target assemblers | `dist/<lang>/{hydra-kernel,hydra-pg,hydra-rdf}/` |
