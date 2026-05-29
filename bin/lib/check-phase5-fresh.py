@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Shell-level freshness check for sync.sh Phase 5 (Native DSL→JSON).
 
-Mirror of bin/lib/check-phase1-fresh.py for the self-hosted coder demos
-(JavaSelfHostDemo / python-self-host-demo.py). Phase 5 was previously
-unconditional — every sync re-ran the ~30-minute JavaSelfHostDemo even
-when no input could affect its output. This check lets sync.sh skip the
-demo when every input is byte-identical to the last successful run.
+Mirror of bin/lib/check-phase1-fresh.py for the native DSL → JSON drivers
+(hydra.UpdateJavaJson / bin/update-python-json.py). Phase 5 was previously
+unconditional — every sync re-ran the ~30-minute Java driver even when no
+input could affect its output. This check lets sync.sh skip Phase 5 when
+every input is byte-identical to the last successful run.
 
 Usage:
   check-phase5-fresh.py <hydra-root> <kind>            # check
@@ -13,7 +13,7 @@ Usage:
 
   kind ∈ {java, python}
 
-Exit 0 if the recorded hash matches the current input hash; the demo can
+Exit 0 if the recorded hash matches the current input hash; Phase 5 can
 be skipped. Exit 1 otherwise (no record, or input changed).
 
 Inputs hashed per kind:
@@ -21,10 +21,11 @@ Inputs hashed per kind:
   java:
     packages/hydra-java/src/main/java/**/*.java
     heads/java/src/main/java/hydra/{BenchInference,Bootstrap,Generation,
-        HydraTestBase,JavaSelfHostDemo,ProfileJavaCoder}.java
+        HydraTestBase,UpdateJavaJson,ProfileJavaCoder}.java
     heads/java/src/main/java/hydra/json/*.java
     dist/json/hydra-kernel/src/main/json/**/*.json
     bin/generate-hydra-java-from-java.sh
+    bin/update-java-json.sh
     packages/hydra-java/build.gradle
 
   python:
@@ -32,7 +33,7 @@ Inputs hashed per kind:
     heads/python/src/main/python/**/*.py
     dist/json/hydra-kernel/src/main/json/**/*.json
     bin/generate-hydra-python-from-python.sh
-    bin/python-self-host-demo.py
+    bin/update-python-json.py
 
 Cache file per kind: dist/json/hydra-<kind>/build/phase5-input-cache.txt
 """
@@ -48,7 +49,7 @@ JAVA_HEADS_EXTRAS = (
     "hydra/Bootstrap.java",
     "hydra/Generation.java",
     "hydra/HydraTestBase.java",
-    "hydra/JavaSelfHostDemo.java",
+    "hydra/UpdateJavaJson.java",
     "hydra/ProfileJavaCoder.java",
     "hydra/json/JsonIoCoder.java",
     "hydra/json/JsonSerde.java",
@@ -83,6 +84,7 @@ def collect_java_inputs(hydra_root: Path) -> set:
             paths.add(f)
     for extra in (
         hydra_root / "bin" / "generate-hydra-java-from-java.sh",
+        hydra_root / "bin" / "update-java-json.sh",
         hydra_root / "packages" / "hydra-java" / "build.gradle",
     ):
         if extra.is_file():
@@ -106,7 +108,7 @@ def collect_python_inputs(hydra_root: Path) -> set:
             paths.add(f)
     for extra in (
         hydra_root / "bin" / "generate-hydra-python-from-python.sh",
-        hydra_root / "bin" / "python-self-host-demo.py",
+        hydra_root / "bin" / "update-python-json.py",
     ):
         if extra.is_file():
             paths.add(extra)

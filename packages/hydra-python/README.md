@@ -172,15 +172,15 @@ bin/generate-hydra-python-from-python.sh --force-rebuild
 The script:
 1. Runs `bin/sync-python.sh` to ensure `dist/python/hydra-kernel/` and
    `dist/python/hydra-python/` are current (these are the only trees the
-   Python self-host driver reads). Gated by `HYDRA_IN_SYNC=1` so that
+   Python DSL → JSON driver reads). Gated by `HYDRA_IN_SYNC=1` so that
    `sync.sh` Phase 5 invoking us doesn't recurse.
-2. Runs `bin/python-self-host-demo.py`, which loads the kernel universe from
+2. Runs `bin/update-python-json.py`, which loads the kernel universe from
    `dist/json/hydra-kernel/`, imports the Python DSL source modules, infers types,
    and writes the resulting JSON.
 
 End-to-end is ~110 seconds under PyPy (faster than the Haskell incremental pipeline)
 and ~500 seconds under CPython, once `dist/` is current. See
-[bin/python-self-host-demo.md](../../bin/python-self-host-demo.md) for background.
+[bin/update-python-json.md](../../bin/update-python-json.md) for background.
 
 > **Note:** `bin/sync.sh` Phase 5 invokes `generate-hydra-python-from-python.sh`
 > automatically — the native Python DSL path is authoritative. The legacy

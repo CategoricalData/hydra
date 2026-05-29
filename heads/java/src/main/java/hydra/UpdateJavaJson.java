@@ -12,9 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Generate {@code dist/json/hydra-java/} from the Java DSL sources in
+ * Update {@code dist/json/hydra-java/} from the Java DSL sources in
  * {@code packages/hydra-java/src/main/java/hydra/sources/java/}, mirroring the
- * Python self-host demo for issue #344.
+ * Python {@code update-python-json.py} driver. Originally introduced for issue
+ * #344 as a "self-host demo"; now the canonical Java DSL → JSON step in the
+ * regular sync pipeline (Phase 5).
  *
  * <p>The driver:</p>
  * <ol>
@@ -28,14 +30,14 @@ import java.util.Map;
  *       {@code dist/json/hydra-java/src/main/json/hydra/java/&lt;module&gt;.json}.</li>
  * </ol>
  *
- * <p>Usage (run via {@code bin/generate-hydra-java-from-java.sh}):</p>
+ * <p>Usage (run via {@code bin/update-java-json.sh}):</p>
  * <pre>
- *   java -cp ... hydra.JavaSelfHostDemo \
+ *   java -cp ... hydra.UpdateJavaJson \
  *     --out-root dist/json/hydra-java/src/main/json \
  *     --hydra-root /path/to/worktree
  * </pre>
  */
-public class JavaSelfHostDemo {
+public class UpdateJavaJson {
 
     /** Static-field name on each source class that returns the source module. */
     private static final String MODULE_FIELD = "module_";
@@ -67,7 +69,7 @@ public class JavaSelfHostDemo {
             } else if ("--out-root".equals(a) && i + 1 < args.length) {
                 outRoot = args[++i];
             } else if ("--help".equals(a) || "-h".equals(a)) {
-                System.out.println("Usage: java hydra.JavaSelfHostDemo "
+                System.out.println("Usage: java hydra.UpdateJavaJson "
                     + "--hydra-root DIR --out-root DIR");
                 System.exit(0);
             }
@@ -152,7 +154,7 @@ public class JavaSelfHostDemo {
             System.err.println("packages/hydra-java/src/main/java/hydra/sources/java/.");
             System.err.println("Until those are ported from the Haskell DSL sources at");
             System.err.println("packages/hydra-java/src/main/haskell/Hydra/Sources/Java/,");
-            System.err.println("this self-host demo cannot generate any output.");
+            System.err.println("this driver cannot generate any output.");
             System.exit(3);
         }
         System.err.println("  imported " + sources.size() + " java source modules ("
@@ -160,9 +162,9 @@ public class JavaSelfHostDemo {
 
         // 3. Per-package iterative inference + JSON write (mirrors the
         // Haskell-side inferAndWriteByPackage). For today's single-package
-        // demo (hydra-java sources only) this is effectively a one-iteration
+        // run (hydra-java sources only) this is effectively a one-iteration
         // loop, but the driver shape is in place for future multi-package
-        // self-hosts.
+        // native-coder updates.
         t0 = System.nanoTime();
         System.err.println("Per-package inference + write ...");
         List<Module> universePlusSources = new ArrayList<>(universe);

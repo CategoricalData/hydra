@@ -1,16 +1,17 @@
-# Python self-hosting demo (issue #344)
+# Update Python JSON (originally issue #344 "Python self-hosting demo")
 
-This directory contains a standalone driver that generates
+This directory contains the standalone driver that updates
 `dist/json/hydra-python` from the **Python** DSL sources rather than the
-Haskell ones, demonstrating that the Python head can self-host its own
-coder.
+Haskell ones. Originally introduced for issue #344 as a "self-host demo";
+now the canonical Python DSL → JSON step in the regular sync pipeline
+(Phase 5).
 
 ## Components
 
 | Script | Purpose |
 |---|---|
-| `bin/python-self-host-demo.py` | Driver: load Python sources → infer → emit JSON |
-| `bin/compare-self-host.py`      | Byte-compare two `hydra-python` JSON trees |
+| `bin/update-python-json.py`     | Driver: load Python sources → infer → emit JSON |
+| `bin/compare-dsl-json-output.py` | Byte-compare two `hydra-python` JSON trees |
 
 The driver mirrors what `stack exec update-json-main` does for the Haskell
 side, but starting from the parallel Python DSL sources at
@@ -20,12 +21,12 @@ side, but starting from the parallel Python DSL sources at
 ## Quick start
 
 ```bash
-# Run the Python self-host pipeline, write output to /tmp/hp-from-python:
-uv --directory heads/python run python ../../bin/python-self-host-demo.py \
+# Run the Python DSL → JSON pipeline, write output to /tmp/hp-from-python:
+uv --directory heads/python run python ../../bin/update-python-json.py \
     --out-root /tmp/hp-from-python
 
 # Byte-compare against the Haskell-generated canonical:
-bin/compare-self-host.py
+bin/compare-dsl-json-output.py
 ```
 
 ## What the driver does
@@ -129,8 +130,8 @@ full pass since there is no per-module cache yet.
 | Pipeline | Total | Inference | Universe load | JSON write |
 |---|---:|---:|---:|---:|
 | Haskell `update-json-main`, 8 dirty / 277 clean | **183s** | ~110s | (in-memory) | <5s |
-| CPython `python-self-host-demo.py`, 8 modules full | **494s** | 429s | 35s | 30s |
-| PyPy `python-self-host-demo.py`, 8 modules full    | **113s** | 85s  | 14s | 12s |
+| CPython `update-python-json.py`, 8 modules full | **494s** | 429s | 35s | 30s |
+| PyPy `update-python-json.py`, 8 modules full    | **113s** | 85s  | 14s | 12s |
 
 PyPy is about **~4.4× faster** than CPython and about **1.6× faster** than
 Haskell incremental on this workload. CPython is about ~2.7× slower than

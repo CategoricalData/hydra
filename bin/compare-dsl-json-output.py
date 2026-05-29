@@ -4,7 +4,7 @@ generated canonical, file by file. Reports BYTE-EQ / DIFFER per module with
 per-file size deltas.
 
 Usage:
-  compare-self-host.py [--ours DIR] [--canon DIR]
+  compare-dsl-json-output.py [--ours DIR] [--canon DIR]
 
 Defaults:
   --ours  /tmp/hp-from-python

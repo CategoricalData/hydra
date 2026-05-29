@@ -1,16 +1,20 @@
-# Java self-host demo (issue #344)
+# Update Java JSON (originally issue #344 "self-host demo")
 
 User-facing entry point: `bin/generate-hydra-java-from-java.sh`.
 
-Driver class: `heads/java/src/main/java/hydra/JavaSelfHostDemo.java`.
+Thin wrapper: `bin/update-java-json.sh`.
+
+Driver class: `heads/java/src/main/java/hydra/UpdateJavaJson.java`.
 
 ## What this is
 
-The Java analogue of `bin/python-self-host-demo.py`. Generates
+The Java analogue of `bin/update-python-json.py`. Updates
 `dist/json/hydra-java/` from Java-language DSL sources under
 `packages/hydra-java/src/main/java/hydra/sources/java/`, instead of the
-default Haskell-driven pipeline (which generates from
-`packages/hydra-java/src/main/haskell/Hydra/Sources/Java/`).
+legacy Haskell-driven pipeline (which generated from
+`packages/hydra-java/src/main/haskell/Hydra/Sources/Java/`). Originally
+introduced for issue #344 as a "self-host demo"; now the canonical
+Java DSL → JSON step in the regular sync pipeline (Phase 5).
 
 The workflow:
 
@@ -117,8 +121,9 @@ similarly mechanise the term-level port.
 ## Files
 
 - `bin/generate-hydra-java-from-java.sh` — user-callable wrapper
-- `bin/java-self-host-demo.md` — this README
-- `heads/java/src/main/java/hydra/JavaSelfHostDemo.java` — driver class
+- `bin/update-java-json.sh` — thin wrapper (compile + run driver)
+- `bin/update-java-json.md` — this README
+- `heads/java/src/main/java/hydra/UpdateJavaJson.java` — driver class
 - `packages/hydra-java/src/main/java/hydra/sources/java/SourceDsl.java` — small
   DSL helpers (`doc`, `typeref`, `typeDef`, `termDef`, `docTerm`)
 - `packages/hydra-java/src/main/java/hydra/sources/java/{Coder,Environment,

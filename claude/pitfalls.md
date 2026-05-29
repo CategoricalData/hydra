@@ -231,9 +231,9 @@ Downstream consumers that trip on this:
   any language whose build references cross-target dists, e.g.
   `heads/scala/bin/test-distribution.sh hydra-kernel` triggers the
   Scala sbt issue above.
-- **Java/Python Phase 5 self-host** (`bin/generate-hydra-{java,python}-from-{java,python}.sh`).
+- **Java/Python Phase 5 native DSL → JSON** (`bin/generate-hydra-{java,python}-from-{java,python}.sh`).
   The Phase 5 driver compiles the gradle rollup before running
-  JavaSelfHostDemo, so it hits the Java rollup issue.
+  UpdateJavaJson, so it hits the Java rollup issue.
 
 User-callable wrapper scripts that compile cross-language code
 (`bin/generate-hydra-java-from-java.sh`,
@@ -414,7 +414,7 @@ dashboard rollup.
 ### Sibling-worktree builds skew bench numbers
 
 A heavy `stack`, `ghc`, `update-json`, `bootstrap-from-json`,
-`JavaSelfHostDemo`, or `pypy3 -m hydra.bootstrap` running in any
+`UpdateJavaJson`, or `pypy3 -m hydra.bootstrap` running in any
 other worktree easily takes load average from ~3 to 10+ on a
 10-core machine. Haskell numbers in particular are very sensitive
 because the bench step does its own `stack test` build. Before

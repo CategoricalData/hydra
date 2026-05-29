@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Generate dist/json/hydra-python from the Python DSL sources.
+"""Update dist/json/hydra-python from the Python DSL sources.
 
-This is the self-hosting demo for issue #344: the same dist/json output
-that's normally produced by the Haskell pipeline (update-json-main reading
+Originally introduced for issue #344 as the "Python self-host demo"; now
+the canonical Python DSL → JSON step in the regular sync pipeline
+(Phase 5). The same dist/json output that's normally produced by the
+Haskell pipeline (update-json-main reading
 packages/hydra-python/src/main/haskell/Hydra/Sources/Python/*.hs) is
-instead produced by the Python pipeline reading the parallel
+instead produced by this driver, reading the parallel
 packages/hydra-python/src/main/python/hydra/sources/python/*.py.
 
 The driver:
@@ -164,9 +166,9 @@ def main():
     else:
         # Per-package iterative inference + JSON write (mirrors the
         # Haskell-side inferAndWriteByPackage). For today's single-package
-        # demo (hydra-python sources only) this is effectively a one-iteration
+        # run (hydra-python sources only) this is effectively a one-iteration
         # loop, but the driver shape is in place for future multi-package
-        # self-hosts.
+        # native-coder updates.
         print(f"Per-package inference + write...", flush=True)
         t0 = time.perf_counter()
         universe_all = tuple(universe) + tuple(py_sources)

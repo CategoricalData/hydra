@@ -1417,10 +1417,10 @@ otherwise downstream consumers that pattern-match on the body shape
 (e.g. expecting `record{...}`) hit `UnexpectedShape` errors against
 the raw `∀.∀.…record{...}` form.
 
-The Java and Python self-host pipelines (`heads/java/.../Generation.java`
+The Java and Python native DSL → JSON pipelines (`heads/java/.../Generation.java`
 and `heads/python/.../generation.py`) mirror the same driver shape in
-their host language so the native generators (`JavaSelfHostDemo`,
-`python-self-host-demo.py`) hit the same per-package memory envelope —
+their host language so the native generators (`UpdateJavaJson`,
+`update-python-json.py`) hit the same per-package memory envelope —
 relevant when those pipelines grow to cover more than their own one
 package.
 

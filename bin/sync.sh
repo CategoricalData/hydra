@@ -407,7 +407,7 @@ done
 # that language is a host).
 
 # Sentinels indicating each native host is fully built (i.e. has the host's
-# hydra-<lang> dist with the DSL meta-modules a self-host run needs).
+# hydra-<lang> dist with the DSL meta-modules a native DSL→JSON run needs).
 JAVA_HOST_SENTINEL="$HYDRA_ROOT/dist/java/hydra-java/src/main/java/hydra/dsl/java/Syntax.java"
 PYTHON_HOST_SENTINEL="$HYDRA_ROOT/dist/python/hydra-python/src/main/python/hydra/dsl/python/syntax.py"
 
@@ -506,18 +506,18 @@ native_generate_and_report() {
 # JSON on a cold-start bootstrap (when no JSON exists). In any warm state,
 # native is the only writer — drift from the legacy Haskell DSL is silently
 # accepted because the Haskell DSL never runs.
-banner1 "Phase 5: Native DSL→JSON for self-hosted coders (#344)"
+banner1 "Phase 5: Native DSL→JSON for Java/Python coders (#344)"
 echo ""
 # HYDRA_IN_SYNC tells the generator scripts not to re-invoke sync.sh
 # (which would recurse). Standalone invocations of those scripts run
 # sync.sh themselves to ensure the cross-language dist trees their
 # gradle compile imports from are populated.
 export HYDRA_IN_SYNC=1
-# Skip a language's native self-host pass entirely when that language
+# Skip a language's native DSL→JSON pass entirely when that language
 # is not in HOSTS — e.g. a TypeScript-only sync (--hosts typescript)
 # has no reason to spin up Java's full kernel build or Python's pypy
-# self-host demo, and on a tree where both heads were built previously
-# the sentinel-based skip alone won't catch them.
+# driver, and on a tree where both heads were built previously the
+# sentinel-based skip alone won't catch them.
 if printf '%s\n' $HOSTS | grep -qx java; then
     echo "--- hydra-java (native Java DSL → JSON) ---"
     native_generate_and_report java \
