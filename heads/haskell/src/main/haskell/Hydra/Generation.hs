@@ -578,7 +578,11 @@ writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
       -- so downstream tools (Stage 3 per-target freshness checks) have
       -- something to compare against. Cheap because hashing reads the
       -- DSL files but skips inference + JSON writes.
-      CM.when doInfer $ ensurePerPackageDigests distJsonRoot mods
+      -- Use the unfiltered universe (not the write-filtered 'mods'): the
+      -- per-package input digest must cover native-generator-owned
+      -- hydra.<lang>.* modules even though their JSON write is excluded
+      -- (#344). See refreshPerPackageDigests for the full rationale (#400).
+      CM.when doInfer $ ensurePerPackageDigests distJsonRoot universeMods
     Nothing -> do
       -- Try the incremental path: partition modules into clean
       -- (DSL hash unchanged) and dirty. Re-infer only the dirty ones
@@ -883,17 +887,29 @@ discoverPackagesWithDigests distJsonRoot = do
         return $ if dExists then Just entry else Nothing
 
 -- | After a successful regen, write per-package digest files. Each
--- package's digest hashes only its own DSL sources (the modules that
--- route to that package), letting Stage 3+ check freshness per
--- package without consulting the universe-wide digest.
+-- package's digest hashes its own source modules (the modules that route
+-- to that package), letting Stage 3+ check freshness per package without
+-- consulting the universe-wide digest.
 --
--- 'targetMods' is the post-inference module set (from
--- writeModulesJsonPackageSplit's mods'); we partition it by owning
--- package and hash each package's modules.
+-- We partition the *unfiltered universe* by owning package and hash each
+-- package's modules. The universe is used deliberately rather than the
+-- post-inference write set ('targetMods'): the write set excludes the
+-- native-generator-owned hydra.<lang>.* modules (#344 — their JSON is
+-- written by the native generators, not this pass), but the input digest
+-- must still cover them, because edits to e.g. Coder.java DO feed
+-- downstream generation. Hashing only the write set is exactly the bug
+-- behind #400 — a native coder change never invalidated the digest, so
+-- the freshness gate silently skipped regeneration. Discovery
+-- ('discoverNamespaceFiles') now finds the native .java/.py sources, and
+-- hashing the universe folds them into the right package's digest (routing
+-- already maps hydra.<lang>.* → hydra-<lang>).
+--
+-- 'targetMods' (the post-inference write set) is retained in the signature
+-- for call-site symmetry but is no longer used for digest computation.
 refreshPerPackageDigests :: FilePath -> [Module] -> [Module] -> IO ()
-refreshPerPackageDigests distJsonRoot _universeMods targetMods = do
+refreshPerPackageDigests distJsonRoot universeMods _targetMods = do
   nsFiles <- Digest.discoverNamespaceFiles
-  let groups = groupByPackage targetMods
+  let groups = groupByPackage universeMods
   CM.forM_ groups $ \(pkg, pkgMods) -> do
     pkgDigest <- Digest.hashUniverse nsFiles pkgMods
     -- Some packages (e.g. hydra-haskell with its synthesized coder
@@ -905,20 +921,25 @@ refreshPerPackageDigests distJsonRoot _universeMods targetMods = do
       putStrLn $ "  Per-package digest: " ++ dpath
         ++ " (" ++ show (M.size pkgDigest) ++ " entries)"
 
--- | Ensure per-package digest files exist on disk AND match current DSL source
+-- | Ensure per-package digest files exist on disk AND match current source
 -- content. Called on cache hit so that Stage 3+ tooling has correct digests to
 -- read even when no full regen ran.
 --
--- For each package, compute the current input hash from packages/<pkg>/.../*.hs
--- and compare against the on-disk per-package digest. Rewrite if missing or
+-- For each package, compute the current input hash from its source files
+-- (packages/<pkg>/.../*.hs and the native .java/.py self-host sources) and
+-- compare against the on-disk per-package digest. Rewrite if missing or
 -- stale. Without this, a universe-wide cache hit on top of an out-of-date
 -- per-package digest leaves Phase 3 to silently believe its inputs haven't
 -- changed when in fact they have — causing per-target dist regeneration to be
 -- skipped.
+--
+-- 'universeMods' must be the *unfiltered* universe so the digest covers
+-- native-generator-owned hydra.<lang>.* modules (#400); see
+-- 'refreshPerPackageDigests'.
 ensurePerPackageDigests :: FilePath -> [Module] -> IO ()
-ensurePerPackageDigests distJsonRoot mods = do
+ensurePerPackageDigests distJsonRoot universeMods = do
   nsFiles <- Digest.discoverNamespaceFiles
-  let groups = groupByPackage mods
+  let groups = groupByPackage universeMods
   CM.forM_ groups $ \(pkg, pkgMods) -> do
     pkgDigest <- Digest.hashUniverse nsFiles pkgMods
     CM.when (not (M.null pkgDigest)) $ do

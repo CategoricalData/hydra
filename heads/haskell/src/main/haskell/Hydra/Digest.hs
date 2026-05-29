@@ -59,35 +59,65 @@ packagesRoot :: FilePath
 packagesRoot = ".." FP.</> ".." FP.</> "packages"
 
 
--- | Walk packages/*/src/main/haskell/Hydra/Sources/ to build a namespace →
--- file map. Each source file must declare its namespace with a top-level
--- line of the form: ns = ModuleName "hydra.foo.bar"
+-- | Walk packages/*/src/main/haskell/Hydra/Sources/ (Haskell DSL sources) and
+-- packages/*/src/main/{java,python}/hydra/sources/ (native coder sources) to
+-- build a namespace → file map. Each source file declares its namespace with
+-- one of the recognized idioms (see 'extractNs' / 'extractNativeNs').
 --
--- Files without a recognizable ns declaration are silently skipped.
+-- Native (.java/.py) sources are scanned because hydra-java/hydra-python are
+-- self-hosted: their canonical hydra.<lang>.* modules are authored natively
+-- (#344), not as Haskell DSL. Without scanning them, a change to e.g.
+-- Coder.java would never invalidate the per-package input digest, so the
+-- freshness gate would skip regeneration even though the coder changed (#400).
+--
+-- Files without a recognizable namespace declaration are silently skipped.
 discoverNamespaceFiles :: IO (M.Map ModuleName FilePath)
 discoverNamespaceFiles = do
     exists <- SD.doesDirectoryExist packagesRoot
     if not exists then return M.empty else do
       pkgs <- SD.listDirectory packagesRoot
-      pairs <- L.concat <$> mapM scanPackage pkgs
-      return $ M.fromList pairs
+      hsPairs     <- L.concat <$> mapM scanPackage pkgs
+      nativePairs <- L.concat <$> mapM scanNativePackage pkgs
+      -- Native sources are the authoritative owners of hydra.<lang>.* (#344),
+      -- so they take precedence over any stale legacy Haskell DSL copy of the
+      -- same namespace. M.union is left-biased, so list native pairs first.
+      return $ M.union (M.fromList nativePairs) (M.fromList hsPairs)
   where
     scanPackage pkg = do
       let srcDir = packagesRoot FP.</> pkg FP.</> "src" FP.</> "main"
                                FP.</> "haskell" FP.</> "Hydra" FP.</> "Sources"
       isDir <- SD.doesDirectoryExist srcDir
       if not isDir then return [] else do
-        files <- listHaskellFiles srcDir
+        files <- listFilesWithSuffix ".hs" srcDir
         Y.catMaybes <$> mapM extractNs files
 
-    listHaskellFiles dir = do
+    -- Scan a package's native (.java/.py) self-host coder sources, which live
+    -- under packages/<pkg>/src/main/<lang>/hydra/sources/. Only hydra-java and
+    -- hydra-python currently have these; other packages have no such dir and
+    -- yield [].
+    scanNativePackage pkg = do
+      let javaDir = packagesRoot FP.</> pkg FP.</> "src" FP.</> "main"
+                                FP.</> "java" FP.</> "hydra" FP.</> "sources"
+          pyDir   = packagesRoot FP.</> pkg FP.</> "src" FP.</> "main"
+                                FP.</> "python" FP.</> "hydra" FP.</> "sources"
+      javaPairs <- scanNativeDir ".java" extractNativeNs javaDir
+      pyPairs   <- scanNativeDir ".py"   extractNativeNs pyDir
+      return $ javaPairs ++ pyPairs
+
+    scanNativeDir suffix extract dir = do
+      isDir <- SD.doesDirectoryExist dir
+      if not isDir then return [] else do
+        files <- listFilesWithSuffix suffix dir
+        Y.catMaybes <$> mapM extract files
+
+    listFilesWithSuffix suffix dir = do
       entries <- SD.listDirectory dir
       subResults <- CM.forM entries $ \e -> do
         let p = dir FP.</> e
         isDir <- SD.doesDirectoryExist p
         if isDir
-          then listHaskellFiles p
-          else if ".hs" `L.isSuffixOf` e then return [p] else return []
+          then listFilesWithSuffix suffix p
+          else if suffix `L.isSuffixOf` e then return [p] else return []
       return $ concat subResults
 
     extractNs :: FilePath -> IO (Maybe (ModuleName, FilePath))
@@ -110,6 +140,36 @@ discoverNamespaceFiles = do
               try1 = (s RE.=~ pat1 :: [[String]])
               try2 = (s RE.=~ pat2 :: [[String]])
           in case (try1, try2) of
+               (([_, nsName]:_), _) -> return $ Just (ModuleName nsName, fp)
+               (_, ([_, nsName]:_)) -> return $ Just (ModuleName nsName, fp)
+               _                    -> return Nothing
+
+    -- Extract the namespace a native (.java/.py) coder source defines for
+    -- itself. Two idioms, one per host language:
+    --   * Java:   `ModuleName NS = new ModuleName("hydra.java.<x>")`
+    --   * Python: `NS = ModuleName("hydra.python.<x>")` (optionally `_NS`),
+    --             at column 0.
+    -- Both files also reference OTHER modules via `new ModuleName("...")`
+    -- (Java) or `<NAME>_NS = ModuleName("...")` (Python) as dependency
+    -- declarations; the patterns below are anchored to the file's own `NS`
+    -- field so those dependency references are not mistaken for the owner.
+    extractNativeNs :: FilePath -> IO (Maybe (ModuleName, FilePath))
+    extractNativeNs fp = do
+      content <- E.try (readFile fp) :: IO (Either E.SomeException String)
+      case content of
+        Left _ -> return Nothing
+        Right s ->
+          -- `ModuleName NS = new ModuleName("...")` — the space before `NS`
+          -- (in `ModuleName NS`) ensures we don't match the dependency fields,
+          -- whose names end in `_NS` (e.g. `ModuleName SYNTAX_NS = ...`,
+          -- `ModuleName CORE_NS = ...`).
+          let javaPat = "ModuleName NS = new ModuleName\\(\"([^\"]+)\"\\)" :: String
+              -- `^_?NS = ModuleName("...")` — top-level, optional leading
+              -- underscore (e.g. language.py uses `_NS`).
+              pyPat   = "^_?NS = ModuleName\\(\"([^\"]+)\"\\)" :: String
+              tryJava = (s RE.=~ javaPat :: [[String]])
+              tryPy   = (s RE.=~ pyPat   :: [[String]])
+          in case (tryJava, tryPy) of
                (([_, nsName]:_), _) -> return $ Just (ModuleName nsName, fp)
                (_, ([_, nsName]:_)) -> return $ Just (ModuleName nsName, fp)
                _                    -> return Nothing
