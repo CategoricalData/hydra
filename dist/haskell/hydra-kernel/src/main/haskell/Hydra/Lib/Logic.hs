@@ -31,7 +31,6 @@ and :: Packaging.PrimitiveDefinition
 and =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.logic.and"),
-      Packaging.primitiveDefinitionDescription = "Compute the logical AND of two boolean values.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -48,8 +47,13 @@ and =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
+      Packaging.primitiveDefinitionDescription = "Compute the logical AND of two boolean values.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
           Core.lambdaParameter = (Core.Name "a"),
@@ -70,7 +74,6 @@ ifElse :: Packaging.PrimitiveDefinition
 ifElse =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.logic.ifElse"),
-      Packaging.primitiveDefinitionDescription = "Compute a conditional expression.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -95,14 +98,18 @@ ifElse =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeVariable (Core.Name "x"))}},
+      Packaging.primitiveDefinitionDescription = "Compute a conditional expression.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 not :: Packaging.PrimitiveDefinition
 not =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.logic.not"),
-      Packaging.primitiveDefinitionDescription = "Compute the logical NOT of a boolean value.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -114,8 +121,13 @@ not =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
+      Packaging.primitiveDefinitionDescription = "Compute the logical NOT of a boolean value.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
           Core.lambdaParameter = (Core.Name "a"),
@@ -133,7 +145,6 @@ or :: Packaging.PrimitiveDefinition
 or =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.logic.or"),
-      Packaging.primitiveDefinitionDescription = "Compute the logical OR of two boolean values.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -150,8 +161,13 @@ or =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
+      Packaging.primitiveDefinitionDescription = "Compute the logical OR of two boolean values.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
           Core.lambdaParameter = (Core.Name "a"),

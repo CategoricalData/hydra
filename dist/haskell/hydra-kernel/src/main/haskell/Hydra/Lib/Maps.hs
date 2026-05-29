@@ -30,7 +30,6 @@ alter :: Packaging.PrimitiveDefinition
 alter =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.alter"),
-      Packaging.primitiveDefinitionDescription = "Alter a value at a key using a function which sees the optional current value.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -65,14 +64,18 @@ alter =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
+      Packaging.primitiveDefinitionDescription = "Alter a value at a key using a function which sees the optional current value.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 bimap :: Packaging.PrimitiveDefinition
 bimap =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.bimap"),
-      Packaging.primitiveDefinitionDescription = "Map functions over both the keys and values of a map.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -116,14 +119,18 @@ bimap =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k2")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v2"))}))}},
+      Packaging.primitiveDefinitionDescription = "Map functions over both the keys and values of a map.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 delete :: Packaging.PrimitiveDefinition
 delete =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.delete"),
-      Packaging.primitiveDefinitionDescription = "Remove a key from a map.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -151,14 +158,18 @@ delete =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
+      Packaging.primitiveDefinitionDescription = "Remove a key from a map.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 elems :: Packaging.PrimitiveDefinition
 elems =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.elems"),
-      Packaging.primitiveDefinitionDescription = "Return the values of a map (in key order).",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -179,14 +190,18 @@ elems =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeVariable (Core.Name "v")))}},
+      Packaging.primitiveDefinitionDescription = "Return the values of a map (in key order).",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 empty :: Packaging.PrimitiveDefinition
 empty =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.empty"),
-      Packaging.primitiveDefinitionDescription = "The empty map.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -202,14 +217,18 @@ empty =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
+      Packaging.primitiveDefinitionDescription = "The empty map.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 filter :: Packaging.PrimitiveDefinition
 filter =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.filter"),
-      Packaging.primitiveDefinitionDescription = "Filter a map by value.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -239,14 +258,18 @@ filter =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
+      Packaging.primitiveDefinitionDescription = "Filter a map by value.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 filterWithKey :: Packaging.PrimitiveDefinition
 filterWithKey =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.filterWithKey"),
-      Packaging.primitiveDefinitionDescription = "Filter a map by key and value.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -278,14 +301,18 @@ filterWithKey =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
+      Packaging.primitiveDefinitionDescription = "Filter a map by key and value.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 findWithDefault :: Packaging.PrimitiveDefinition
 findWithDefault =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.findWithDefault"),
-      Packaging.primitiveDefinitionDescription = "Look up a value with a default if the key is absent.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -316,14 +343,18 @@ findWithDefault =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeVariable (Core.Name "v"))}},
+      Packaging.primitiveDefinitionDescription = "Look up a value with a default if the key is absent.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 fromList :: Packaging.PrimitiveDefinition
 fromList =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.fromList"),
-      Packaging.primitiveDefinitionDescription = "Build a map from a list of key-value pairs.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -346,14 +377,18 @@ fromList =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
+      Packaging.primitiveDefinitionDescription = "Build a map from a list of key-value pairs.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 insert :: Packaging.PrimitiveDefinition
 insert =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.insert"),
-      Packaging.primitiveDefinitionDescription = "Insert a key-value pair into a map.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -386,14 +421,18 @@ insert =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
+      Packaging.primitiveDefinitionDescription = "Insert a key-value pair into a map.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 keys :: Packaging.PrimitiveDefinition
 keys =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.keys"),
-      Packaging.primitiveDefinitionDescription = "Return the keys of a map (in key order).",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -414,14 +453,18 @@ keys =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeVariable (Core.Name "k")))}},
+      Packaging.primitiveDefinitionDescription = "Return the keys of a map (in key order).",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 lookup :: Packaging.PrimitiveDefinition
 lookup =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.lookup"),
-      Packaging.primitiveDefinitionDescription = "Look up a value in a map by key, returning Nothing if absent.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -447,14 +490,18 @@ lookup =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "v")))}},
+      Packaging.primitiveDefinitionDescription = "Look up a value in a map by key, returning Nothing if absent.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 map :: Packaging.PrimitiveDefinition
 map =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.map"),
-      Packaging.primitiveDefinitionDescription = "Map a function over the values of a map.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -487,14 +534,18 @@ map =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v2"))}))}},
+      Packaging.primitiveDefinitionDescription = "Map a function over the values of a map.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 mapKeys :: Packaging.PrimitiveDefinition
 mapKeys =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.mapKeys"),
-      Packaging.primitiveDefinitionDescription = "Map a function over the keys of a map.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -528,14 +579,18 @@ mapKeys =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k2")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
+      Packaging.primitiveDefinitionDescription = "Map a function over the keys of a map.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 member :: Packaging.PrimitiveDefinition
 member =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.member"),
-      Packaging.primitiveDefinitionDescription = "Test whether a key is present in a map.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -561,14 +616,18 @@ member =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
+      Packaging.primitiveDefinitionDescription = "Test whether a key is present in a map.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 null :: Packaging.PrimitiveDefinition
 null =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.null"),
-      Packaging.primitiveDefinitionDescription = "Test whether a map is empty.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -589,14 +648,18 @@ null =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
+      Packaging.primitiveDefinitionDescription = "Test whether a map is empty.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 singleton :: Packaging.PrimitiveDefinition
 singleton =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.singleton"),
-      Packaging.primitiveDefinitionDescription = "Construct a map with a single key-value pair.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -622,14 +685,18 @@ singleton =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
+      Packaging.primitiveDefinitionDescription = "Construct a map with a single key-value pair.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 size :: Packaging.PrimitiveDefinition
 size =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.size"),
-      Packaging.primitiveDefinitionDescription = "Return the number of key-value pairs in a map.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -650,14 +717,18 @@ size =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}},
+      Packaging.primitiveDefinitionDescription = "Return the number of key-value pairs in a map.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 toList :: Packaging.PrimitiveDefinition
 toList =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.toList"),
-      Packaging.primitiveDefinitionDescription = "Convert a map to a list of key-value pairs (in key order).",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -680,14 +751,18 @@ toList =
           Typing.resultType = (Core.TypeList (Core.TypePair (Core.PairType {
             Core.pairTypeFirst = (Core.TypeVariable (Core.Name "k")),
             Core.pairTypeSecond = (Core.TypeVariable (Core.Name "v"))})))}},
+      Packaging.primitiveDefinitionDescription = "Convert a map to a list of key-value pairs (in key order).",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 union :: Packaging.PrimitiveDefinition
 union =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.union"),
-      Packaging.primitiveDefinitionDescription = "Compute the union of two maps; the first map's bindings take precedence on key collision.",
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -717,6 +792,11 @@ union =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
+      Packaging.primitiveDefinitionDescription = "Compute the union of two maps; the first map's bindings take precedence on key collision.",
+      Packaging.primitiveDefinitionComments = Nothing,
+      Packaging.primitiveDefinitionSeeAlso = [],
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionAvailableSince = Nothing,
+      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}

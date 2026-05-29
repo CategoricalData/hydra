@@ -987,6 +987,27 @@ We created `hydra.hoisting` to separate these concerns.
 
 ## Example: Changing Graph.elements from Map to List
 
+> **Note: historical case study.** This section preserves the narrative
+> of a real refactor from before 0.15. Several API surfaces it mentions
+> have since moved or been renamed:
+>
+> - **Primitive name constants**: `Hydra.Staging.Lib.Names` →
+>   `Hydra.Sources.Kernel.Lib.Names` (constants are now `qname`-defined
+>   `Name` values without the `_<ns>_<local>` prefix; the legacy
+>   `_<ns>_<local>` form lives as aliases in `Hydra.Sources.Libraries`).
+> - **Interpreter-friendly default impls**: `Hydra.Sources.Eval.Lib.*` →
+>   `Hydra.Sources.Kernel.Lib.Defaults.*` (generated under
+>   `Hydra.Lib.Defaults.*`, not `Hydra.Eval.Lib.*`).
+> - **Native Haskell impls**: `Hydra.Lib.*` → `Hydra.Haskell.Lib.*`.
+> - **Primitive registration helper**: `prim2Eval` and related `*Eval`
+>   helpers no longer exist; the same primitive now registers with
+>   plain `prim1` / `prim2` / `prim3` and pairs with a default impl
+>   declared via `toPrimitive` (or the local `primNoDef`) in the
+>   kernel `Lib/<Sub>.hs` module.
+>
+> See [Adding new primitives to Hydra](adding-primitives.md) for the
+> current step-by-step.
+
 This section documents a deep type change to the Hydra kernel: changing `Graph.elements` from `map<Name,
 Binding>` to `list<Binding>` to preserve element order in graphs.
 

@@ -199,12 +199,12 @@ termVariantEither = unitVariant _TermVariant _TermVariant_either
 
 Place in alphabetical order among the other `termVariantX` helpers.
 
-#### 2.5.3: Update Meta Enum Definitions (CRITICAL!)
+#### 2.5.3: Update Variant Enum Definitions (CRITICAL!)
 
-**File:** `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs`
+**File:** `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Variants.hs`
 
 > **⚠️ CRITICAL:** You MUST add your new constructor to the TermVariant and TypeVariant enum definitions
-> in the Meta module. This is the source of the "No such field: X" error during code generation.
+> in the Variants module (namespace `hydra.variants`). This is the source of the "No such field: X" error during code generation.
 
 Add to the `TermVariant` enum (around line 70-91):
 ```haskell
@@ -234,9 +234,9 @@ def "TypeVariant" $
 ```
 
 **Why this is necessary:** The `Variants` module uses these enums to map between Term/Type constructors
-and their metadata. The enums are defined in the `hydra.meta` module
+and their metadata. The enums are defined in the `hydra.variants` module
 (in the source file
-[`Hydra/Sources/Kernel/Types/Meta.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs)),
+[`Hydra/Sources/Kernel/Types/Variants.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Variants.hs)),
 which provides metadata and reflection types that describe the structure of Hydra core types and terms.
 Without adding your constructor here, code generation will fail with "No such field: X".
 
@@ -672,7 +672,7 @@ stack exec ghci
 
 This regenerates:
 - `dist/python/hydra-kernel/src/main/python/hydra/core.py` (adds `TermEither` constructor)
-- `dist/python/hydra-kernel/src/main/python/hydra/meta.py` (adds variant enums and type classes)
+- `dist/python/hydra-kernel/src/main/python/hydra/variants.py` (adds variant enums and type classes)
 - `dist/python/hydra-kernel/src/main/python/hydra/util.py` (adds utility types)
 - All other Hydra kernel modules in Python
 
@@ -690,7 +690,7 @@ Each language coder needs to know how to encode/decode the new types in the targ
 ```bash
 # Python (run from the worktree root, dist paths are relative)
 python3 -m py_compile dist/python/hydra-kernel/src/main/python/hydra/core.py
-python3 -m py_compile dist/python/hydra-kernel/src/main/python/hydra/meta.py
+python3 -m py_compile dist/python/hydra-kernel/src/main/python/hydra/variants.py
 python3 -m py_compile dist/python/hydra-kernel/src/main/python/hydra/util.py
 
 # Java (from heads/java)
@@ -796,7 +796,7 @@ stack test
 
 | Error | Cause | Solution |
 |-------|-------|----------|
-| `No such field: pair` during code generation | Missing from TermVariant/TypeVariant enums in Meta module | **CRITICAL:** Add to `TermVariant` and `TypeVariant` enum definitions in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs` |
+| `No such field: pair` during code generation | Missing from TermVariant/TypeVariant enums in the Variants module | **CRITICAL:** Add to `TermVariant` and `TypeVariant` enum definitions in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Variants.hs` |
 | `Variable not in scope: fst` compilation error | Variable name clashes with Prelude function | Use descriptive names: `pairFst`, `pairSnd`, not `fst`, `snd` |
 | `No such field: either` | Term union missing the constructor in Core schema | Add to `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs` |
 | `Variable not bound to type: hydra.inference.inferTypeOfX` | Function not registered in module exports | Add `toDefinition inferTypeOfXDef` to `definitions` list |
@@ -856,7 +856,7 @@ stack test
   - [ ] Add to Type union (if applicable)
   - [ ] Add supporting type definitions
 
-- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs` (**CRITICAL!**)
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Variants.hs` (**CRITICAL!**)
   - [ ] Add to `TermVariant` enum definition
   - [ ] Add to `TypeVariant` enum definition (if applicable)
 
@@ -921,7 +921,7 @@ stack test
 - [ ] Regenerate Python code
   - [ ] Run `bin/sync-python.sh` from the worktree root
   - [ ] Verify `dist/python/hydra-kernel/src/main/python/hydra/core.py`
-  - [ ] Verify `dist/python/hydra-kernel/src/main/python/hydra/meta.py`
+  - [ ] Verify `dist/python/hydra-kernel/src/main/python/hydra/variants.py`
   - [ ] Verify `dist/python/hydra-kernel/src/main/python/hydra/util.py`
   - [ ] Compile Python modules
 
