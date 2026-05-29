@@ -19,9 +19,6 @@ ns = ModuleName "hydra.rdf.syntax"
 define :: String -> Type -> Binding
 define = defineType ns
 
-rdf :: String -> Type
-rdf = typeref ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
@@ -48,10 +45,6 @@ module_ = Module {
 
 blankNode :: Binding
 blankNode = define "BlankNode" $ T.wrap T.string
-
-rdfsClass :: Binding
-rdfsClass = define "RdfsClass" $
-  doc "Stand-in for rdfs:Class" $ T.wrap T.unit
 
 dataset :: Binding
 dataset = define "Dataset" $ T.wrap $ T.set $ rdf "Quad"
@@ -131,6 +124,13 @@ quad = define "Quad" $
     "predicate">: rdf "Iri",
     "object">: rdf "Node",
     "graph">: T.maybe $ rdf "Iri"]
+
+rdf :: String -> Type
+rdf = typeref ns
+
+rdfsClass :: Binding
+rdfsClass = define "RdfsClass" $
+  doc "Stand-in for rdfs:Class" $ T.wrap T.unit
 
 resource_ :: Binding
 resource_ = define "Resource" $

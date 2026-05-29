@@ -106,13 +106,24 @@ At the beginning of every new session, follow these steps **before doing any oth
 ### During the session
 
 - **Save progress periodically**: Update the branch plan at milestones or approach changes.
-- **Commit workflow**: Make frequent `WIP:` checkpoint commits when code is stable.
-  All commit messages must be short (120 characters or less), single-line, no
-  "Co-Authored-By:" line. Include the issue number at the end of the message
-  when on a feature branch (e.g., `Regenerated hydra-haskell after kernel changes. For #137`).
-  When ready to finalize, ask the user about squashing:
-  soft-reset WIP commits, re-commit as focused topic groups, source changes first,
-  generated files last.
+- **Commit workflow**:
+  - **Every interim commit starts with `WIP:`** — the prefix marks unfinalized work
+    that has not yet been squashed. No exceptions while iterating on a feature branch:
+    fix-up, regen, test-green, and checkpoint commits all need it.
+  - **Squashed commits drop the `WIP:` prefix** — once a topic group has been
+    consolidated via the squash workflow, it represents shippable history.
+    The absence of `WIP:` is what tells a reader the work is finalized.
+    See [.claude/commands/squash.md](.claude/commands/squash.md).
+  - **All commit messages are short (≤120 chars), single-line, no body.**
+    No `Co-Authored-By` line. End with `For #<issue>` (or `Resolves #<issue>`
+    if this branch closes it). Example:
+    `Regenerated hydra-haskell after kernel changes. For #137`.
+  - **If one line isn't enough, use more commits, not a body.** Each commit
+    should be one focused change with a one-line summary. Splitting into
+    several focused commits is always better than appending a body.
+  - **When ready to finalize**: ask the user about squashing. Soft-reset
+    WIP commits, re-commit as focused topic groups, source changes first,
+    generated files last. See [.claude/commands/squash.md](.claude/commands/squash.md).
 
 ### When waiting on long-running work
 

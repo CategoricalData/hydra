@@ -3,6 +3,7 @@
 
 module Hydra.Validation where
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Core as ErrorCore
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S

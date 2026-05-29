@@ -2,10 +2,10 @@
 -- | Abstractions for paired transformations between languages
 
 module Hydra.Coders where
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -53,10 +53,10 @@ _Bicoder_decode = Core.Name "decode"
 -- | An encoder and decoder; a bidirectional transformation between two types
 data Coder v1 v2 =
   Coder {
-    -- | A function which encodes source values as target values in a given context
-    coderEncode :: (Context.Context -> v1 -> Either Errors.Error v2),
-    -- | A function which decodes target values as source values in a given context
-    coderDecode :: (Context.Context -> v2 -> Either Errors.Error v1)}
+    -- | A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing
+    coderEncode :: (Typing.InferenceContext -> v1 -> Either Errors.Error v2),
+    -- | A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing
+    coderDecode :: (Typing.InferenceContext -> v2 -> Either Errors.Error v1)}
 _Coder = Core.Name "hydra.coders.Coder"
 _Coder_encode = Core.Name "encode"
 _Coder_decode = Core.Name "decode"

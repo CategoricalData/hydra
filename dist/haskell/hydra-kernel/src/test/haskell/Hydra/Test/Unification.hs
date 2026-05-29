@@ -2,18 +2,37 @@
 -- | Test cases for type unification operations
 
 module Hydra.Test.Unification where
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lexical as Lexical
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Literals as Literals
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Literals as Literals
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Unification as Unification
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -240,7 +259,7 @@ allTests =
                     Core.unName (Pairs.first p),
                     ": ",
                     (ShowCore.type_ (Pairs.second p))]) (Maps.toList (Typing.unTypeSubst ts)))),
-                  "}"]) (Unification.unifyTypes Lexical.emptyContext (Maps.fromList (Lists.map (\n -> (
+                  "}"]) (Unification.unifyTypes Lexical.emptyInferenceContext (Maps.fromList (Lists.map (\n -> (
                   n,
                   Core.TypeScheme {
                     Core.typeSchemeVariables = [],
@@ -264,7 +283,7 @@ allTests =
                     Core.unName (Pairs.first p),
                     ": ",
                     (ShowCore.type_ (Pairs.second p))]) (Maps.toList (Typing.unTypeSubst ts)))),
-                  "}"]) (Unification.unifyTypes Lexical.emptyContext (Maps.fromList (Lists.map (\n -> (
+                  "}"]) (Unification.unifyTypes Lexical.emptyInferenceContext (Maps.fromList (Lists.map (\n -> (
                   n,
                   Core.TypeScheme {
                     Core.typeSchemeVariables = [],
@@ -288,7 +307,7 @@ allTests =
                     Core.unName (Pairs.first p),
                     ": ",
                     (ShowCore.type_ (Pairs.second p))]) (Maps.toList (Typing.unTypeSubst ts)))),
-                  "}"]) (Unification.unifyTypes Lexical.emptyContext (Maps.fromList (Lists.map (\n -> (
+                  "}"]) (Unification.unifyTypes Lexical.emptyInferenceContext (Maps.fromList (Lists.map (\n -> (
                   n,
                   Core.TypeScheme {
                     Core.typeSchemeVariables = [],
@@ -312,7 +331,7 @@ allTests =
                     Core.unName (Pairs.first p),
                     ": ",
                     (ShowCore.type_ (Pairs.second p))]) (Maps.toList (Typing.unTypeSubst ts)))),
-                  "}"]) (Unification.unifyTypes Lexical.emptyContext (Maps.fromList (Lists.map (\n -> (
+                  "}"]) (Unification.unifyTypes Lexical.emptyInferenceContext (Maps.fromList (Lists.map (\n -> (
                   n,
                   Core.TypeScheme {
                     Core.typeSchemeVariables = [],
@@ -337,7 +356,7 @@ allTests =
                     Core.unName (Pairs.first p),
                     ": ",
                     (ShowCore.type_ (Pairs.second p))]) (Maps.toList (Typing.unTypeSubst ts)))),
-                  "}"]) (Unification.unifyTypes Lexical.emptyContext (Maps.fromList (Lists.map (\n -> (
+                  "}"]) (Unification.unifyTypes Lexical.emptyInferenceContext (Maps.fromList (Lists.map (\n -> (
                   n,
                   Core.TypeScheme {
                     Core.typeSchemeVariables = [],
@@ -362,7 +381,7 @@ allTests =
                     Core.unName (Pairs.first p),
                     ": ",
                     (ShowCore.type_ (Pairs.second p))]) (Maps.toList (Typing.unTypeSubst ts)))),
-                  "}"]) (Unification.unifyTypes Lexical.emptyContext (Maps.fromList (Lists.map (\n -> (
+                  "}"]) (Unification.unifyTypes Lexical.emptyInferenceContext (Maps.fromList (Lists.map (\n -> (
                   n,
                   Core.TypeScheme {
                     Core.typeSchemeVariables = [],
@@ -387,7 +406,7 @@ allTests =
                     Core.unName (Pairs.first p),
                     ": ",
                     (ShowCore.type_ (Pairs.second p))]) (Maps.toList (Typing.unTypeSubst ts)))),
-                  "}"]) (Unification.unifyTypes Lexical.emptyContext (Maps.fromList (Lists.map (\n -> (
+                  "}"]) (Unification.unifyTypes Lexical.emptyInferenceContext (Maps.fromList (Lists.map (\n -> (
                   n,
                   Core.TypeScheme {
                     Core.typeSchemeVariables = [],
@@ -412,7 +431,7 @@ allTests =
                     Core.unName (Pairs.first p),
                     ": ",
                     (ShowCore.type_ (Pairs.second p))]) (Maps.toList (Typing.unTypeSubst ts)))),
-                  "}"]) (Unification.unifyTypes Lexical.emptyContext (Maps.fromList (Lists.map (\n -> (
+                  "}"]) (Unification.unifyTypes Lexical.emptyInferenceContext (Maps.fromList (Lists.map (\n -> (
                   n,
                   Core.TypeScheme {
                     Core.typeSchemeVariables = [],
@@ -436,7 +455,7 @@ allTests =
                     Core.unName (Pairs.first p),
                     ": ",
                     (ShowCore.type_ (Pairs.second p))]) (Maps.toList (Typing.unTypeSubst ts)))),
-                  "}"]) (Unification.unifyTypes Lexical.emptyContext (Maps.fromList (Lists.map (\n -> (
+                  "}"]) (Unification.unifyTypes Lexical.emptyInferenceContext (Maps.fromList (Lists.map (\n -> (
                   n,
                   Core.TypeScheme {
                     Core.typeSchemeVariables = [],
@@ -466,7 +485,7 @@ allTests =
                     Core.unName (Pairs.first p),
                     ": ",
                     (ShowCore.type_ (Pairs.second p))]) (Maps.toList (Typing.unTypeSubst ts)))),
-                  "}"]) (Unification.unifyTypes Lexical.emptyContext (Maps.fromList (Lists.map (\n -> (
+                  "}"]) (Unification.unifyTypes Lexical.emptyInferenceContext (Maps.fromList (Lists.map (\n -> (
                   n,
                   Core.TypeScheme {
                     Core.typeSchemeVariables = [],
@@ -494,7 +513,7 @@ allTests =
                     Core.unName (Pairs.first p),
                     ": ",
                     (ShowCore.type_ (Pairs.second p))]) (Maps.toList (Typing.unTypeSubst ts)))),
-                  "}"]) (Unification.unifyTypes Lexical.emptyContext (Maps.fromList (Lists.map (\n -> (
+                  "}"]) (Unification.unifyTypes Lexical.emptyInferenceContext (Maps.fromList (Lists.map (\n -> (
                   n,
                   Core.TypeScheme {
                     Core.typeSchemeVariables = [],
@@ -519,7 +538,7 @@ allTests =
                     Core.unName (Pairs.first p),
                     ": ",
                     (ShowCore.type_ (Pairs.second p))]) (Maps.toList (Typing.unTypeSubst ts)))),
-                  "}"]) (Unification.unifyTypes Lexical.emptyContext (Maps.fromList (Lists.map (\n -> (
+                  "}"]) (Unification.unifyTypes Lexical.emptyInferenceContext (Maps.fromList (Lists.map (\n -> (
                   n,
                   Core.TypeScheme {
                     Core.typeSchemeVariables = [],
@@ -549,7 +568,7 @@ allTests =
                     Core.unName (Pairs.first p),
                     ": ",
                     (ShowCore.type_ (Pairs.second p))]) (Maps.toList (Typing.unTypeSubst ts)))),
-                  "}"]) (Unification.unifyTypes Lexical.emptyContext (Maps.fromList (Lists.map (\n -> (
+                  "}"]) (Unification.unifyTypes Lexical.emptyInferenceContext (Maps.fromList (Lists.map (\n -> (
                   n,
                   Core.TypeScheme {
                     Core.typeSchemeVariables = [],
@@ -579,7 +598,7 @@ allTests =
                     Core.unName (Pairs.first p),
                     ": ",
                     (ShowCore.type_ (Pairs.second p))]) (Maps.toList (Typing.unTypeSubst ts)))),
-                  "}"]) (Unification.unifyTypes Lexical.emptyContext (Maps.fromList (Lists.map (\n -> (
+                  "}"]) (Unification.unifyTypes Lexical.emptyInferenceContext (Maps.fromList (Lists.map (\n -> (
                   n,
                   Core.TypeScheme {
                     Core.typeSchemeVariables = [],
@@ -609,7 +628,7 @@ allTests =
                     Core.unName (Pairs.first p),
                     ": ",
                     (ShowCore.type_ (Pairs.second p))]) (Maps.toList (Typing.unTypeSubst ts)))),
-                  "}"]) (Unification.unifyTypes Lexical.emptyContext (Maps.fromList (Lists.map (\n -> (
+                  "}"]) (Unification.unifyTypes Lexical.emptyInferenceContext (Maps.fromList (Lists.map (\n -> (
                   n,
                   Core.TypeScheme {
                     Core.typeSchemeVariables = [],
@@ -634,7 +653,7 @@ allTests =
                     Core.unName (Pairs.first p),
                     ": ",
                     (ShowCore.type_ (Pairs.second p))]) (Maps.toList (Typing.unTypeSubst ts)))),
-                  "}"]) (Unification.unifyTypes Lexical.emptyContext (Maps.fromList (Lists.map (\n -> (
+                  "}"]) (Unification.unifyTypes Lexical.emptyInferenceContext (Maps.fromList (Lists.map (\n -> (
                   n,
                   Core.TypeScheme {
                     Core.typeSchemeVariables = [],
@@ -658,7 +677,7 @@ allTests =
                     Core.unName (Pairs.first p),
                     ": ",
                     (ShowCore.type_ (Pairs.second p))]) (Maps.toList (Typing.unTypeSubst ts)))),
-                  "}"]) (Unification.unifyTypes Lexical.emptyContext (Maps.fromList (Lists.map (\n -> (
+                  "}"]) (Unification.unifyTypes Lexical.emptyInferenceContext (Maps.fromList (Lists.map (\n -> (
                   n,
                   Core.TypeScheme {
                     Core.typeSchemeVariables = [],
@@ -676,7 +695,7 @@ allTests =
                     Core.unName (Pairs.first p),
                     ": ",
                     (ShowCore.type_ (Pairs.second p))]) (Maps.toList (Typing.unTypeSubst ts)))),
-                  "}"]) (Unification.unifyTypes Lexical.emptyContext (Maps.fromList (Lists.map (\n -> (
+                  "}"]) (Unification.unifyTypes Lexical.emptyInferenceContext (Maps.fromList (Lists.map (\n -> (
                   n,
                   Core.TypeScheme {
                     Core.typeSchemeVariables = [],
@@ -696,7 +715,7 @@ allTests =
                     Core.unName (Pairs.first p),
                     ": ",
                     (ShowCore.type_ (Pairs.second p))]) (Maps.toList (Typing.unTypeSubst ts)))),
-                  "}"]) (Unification.unifyTypes Lexical.emptyContext (Maps.fromList (Lists.map (\n -> (
+                  "}"]) (Unification.unifyTypes Lexical.emptyInferenceContext (Maps.fromList (Lists.map (\n -> (
                   n,
                   Core.TypeScheme {
                     Core.typeSchemeVariables = [],
@@ -721,7 +740,7 @@ allTests =
                     " ~ ",
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
-                  "]"]) (Unification.joinTypes Lexical.emptyContext (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) "test")),
+                  "]"]) (Unification.joinTypes Lexical.emptyInferenceContext (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) "test")),
                 Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
@@ -744,7 +763,7 @@ allTests =
                     " ~ ",
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
-                  "]"]) (Unification.joinTypes Lexical.emptyContext (Core.TypeLiteral Core.LiteralTypeString) (Core.TypeLiteral Core.LiteralTypeString) "test")),
+                  "]"]) (Unification.joinTypes Lexical.emptyInferenceContext (Core.TypeLiteral Core.LiteralTypeString) (Core.TypeLiteral Core.LiteralTypeString) "test")),
                 Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
@@ -767,7 +786,7 @@ allTests =
                     " ~ ",
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
-                  "]"]) (Unification.joinTypes Lexical.emptyContext (Core.TypeList (Core.TypeVariable (Core.Name "a"))) (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) "test")),
+                  "]"]) (Unification.joinTypes Lexical.emptyInferenceContext (Core.TypeList (Core.TypeVariable (Core.Name "a"))) (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) "test")),
                 Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
@@ -794,7 +813,7 @@ allTests =
                     " ~ ",
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
-                  "]"]) (Unification.joinTypes Lexical.emptyContext (Core.TypeFunction (Core.FunctionType {
+                  "]"]) (Unification.joinTypes Lexical.emptyInferenceContext (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                   Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "b"))})) (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
@@ -829,7 +848,7 @@ allTests =
                     " ~ ",
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
-                  "]"]) (Unification.joinTypes Lexical.emptyContext (Core.TypeMaybe (Core.TypeVariable (Core.Name "a"))) (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) "test")),
+                  "]"]) (Unification.joinTypes Lexical.emptyInferenceContext (Core.TypeMaybe (Core.TypeVariable (Core.Name "a"))) (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) "test")),
                 Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
@@ -856,7 +875,7 @@ allTests =
                     " ~ ",
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
-                  "]"]) (Unification.joinTypes Lexical.emptyContext (Core.TypePair (Core.PairType {
+                  "]"]) (Unification.joinTypes Lexical.emptyInferenceContext (Core.TypePair (Core.PairType {
                   Core.pairTypeFirst = (Core.TypeVariable (Core.Name "a")),
                   Core.pairTypeSecond = (Core.TypeVariable (Core.Name "b"))})) (Core.TypePair (Core.PairType {
                   Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
@@ -891,7 +910,7 @@ allTests =
                     " ~ ",
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
-                  "]"]) (Unification.joinTypes Lexical.emptyContext (Core.TypeEither (Core.EitherType {
+                  "]"]) (Unification.joinTypes Lexical.emptyInferenceContext (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "a")),
                   Core.eitherTypeRight = (Core.TypeVariable (Core.Name "b"))})) (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
@@ -926,7 +945,7 @@ allTests =
                     " ~ ",
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
-                  "]"]) (Unification.joinTypes Lexical.emptyContext (Core.TypeMap (Core.MapType {
+                  "]"]) (Unification.joinTypes Lexical.emptyInferenceContext (Core.TypeMap (Core.MapType {
                   Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
                   Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))})) (Core.TypeMap (Core.MapType {
                   Core.mapTypeKeys = (Core.TypeLiteral Core.LiteralTypeString),
@@ -961,7 +980,7 @@ allTests =
                     " ~ ",
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
-                  "]"]) (Unification.joinTypes Lexical.emptyContext (Core.TypeSet (Core.TypeVariable (Core.Name "a"))) (Core.TypeSet (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) "test")),
+                  "]"]) (Unification.joinTypes Lexical.emptyInferenceContext (Core.TypeSet (Core.TypeVariable (Core.Name "a"))) (Core.TypeSet (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) "test")),
                 Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
@@ -988,7 +1007,7 @@ allTests =
                     " ~ ",
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
-                  "]"]) (Unification.joinTypes Lexical.emptyContext Core.TypeUnit Core.TypeUnit "test")),
+                  "]"]) (Unification.joinTypes Lexical.emptyInferenceContext Core.TypeUnit Core.TypeUnit "test")),
                 Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
@@ -1011,7 +1030,7 @@ allTests =
                     " ~ ",
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
-                  "]"]) (Unification.joinTypes Lexical.emptyContext (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (Core.TypeLiteral Core.LiteralTypeString) "test")),
+                  "]"]) (Unification.joinTypes Lexical.emptyInferenceContext (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (Core.TypeLiteral Core.LiteralTypeString) "test")),
                 Testing.universalTestCaseExpected = (\_ -> "failure")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -1026,7 +1045,7 @@ allTests =
                     " ~ ",
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
-                  "]"]) (Unification.joinTypes Lexical.emptyContext (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) (Core.TypeFunction (Core.FunctionType {
+                  "]"]) (Unification.joinTypes Lexical.emptyInferenceContext (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})) "test")),
                 Testing.universalTestCaseExpected = (\_ -> "failure")})),
@@ -1043,7 +1062,7 @@ allTests =
                     " ~ ",
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
-                  "]"]) (Unification.joinTypes Lexical.emptyContext (Core.TypePair (Core.PairType {
+                  "]"]) (Unification.joinTypes Lexical.emptyInferenceContext (Core.TypePair (Core.PairType {
                   Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})) (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),

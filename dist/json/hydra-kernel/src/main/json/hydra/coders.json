@@ -185,14 +185,16 @@
                                 "annotation": [
                                   {
                                     "key": "description",
-                                    "value": {"literal": {"string": "A function which encodes source values as target values in a given context"}}}],
+                                    "value": {
+                                      "literal": {
+                                        "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
                                 "body": {
                                   "function": {
                                     "codomain": {
                                       "function": {
                                         "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v2"}}},
                                         "domain": {"variable": "v1"}}},
-                                    "domain": {"variable": "hydra.context.Context"}}}}}},
+                                    "domain": {"variable": "hydra.typing.InferenceContext"}}}}}},
                           {
                             "name": "decode",
                             "type": {
@@ -200,14 +202,16 @@
                                 "annotation": [
                                   {
                                     "key": "description",
-                                    "value": {"literal": {"string": "A function which decodes target values as source values in a given context"}}}],
+                                    "value": {
+                                      "literal": {
+                                        "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
                                 "body": {
                                   "function": {
                                     "codomain": {
                                       "function": {
                                         "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v1"}}},
                                         "domain": {"variable": "v2"}}},
-                                    "domain": {"variable": "hydra.context.Context"}}}}}}]},
+                                    "domain": {"variable": "hydra.typing.InferenceContext"}}}}}}]},
                       "parameter": "v2"}},
                   "parameter": "v1"}}}},
           "variables": []}}},
@@ -376,10 +380,10 @@
                   "domain": {"variable": "hydra.coders.AdapterContext"}}}}},
           "variables": []}}}],
   "dependencies": [
-    {"module": "hydra.context"},
     {"module": "hydra.errors"},
     {"module": "hydra.graph"},
     {"module": "hydra.variants"},
-    {"module": "hydra.core"}],
+    {"module": "hydra.core"},
+    {"module": "hydra.typing"}],
   "description": "Abstractions for paired transformations between languages",
   "name": "hydra.coders"}

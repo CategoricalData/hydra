@@ -29,6 +29,11 @@ boolean = LiteralBoolean
 decimal :: Sci.Scientific -> Literal
 decimal = LiteralDecimal
 
+-- | Create a floating-point literal with specified precision
+-- Example: float (FloatValueFloat32 3.14)
+float :: FloatValue -> Literal
+float = LiteralFloat
+
 -- | Create a 32-bit floating point literal
 -- Example: float32 3.14
 float32 :: Float -> Literal
@@ -38,11 +43,6 @@ float32 = float . FloatValueFloat32
 -- Example: float64 3.14159265359
 float64 :: Double -> Literal
 float64 = float . FloatValueFloat64
-
--- | Create a floating-point literal with specified precision
--- Example: float (FloatValueFloat32 3.14)
-float :: FloatValue -> Literal
-float = LiteralFloat
 
 -- | Create a 16-bit signed integer literal
 -- Example: int16 32767

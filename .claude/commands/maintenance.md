@@ -1,7 +1,9 @@
 ---
-description: Run the full maintenance pass — stale-file detection, design-violation checks, dist consistency, digest hygiene. Follow the procedure in docs/recipes/maintenance.md verbatim.
+description: Run the full maintenance pass — stale-file detection, design-violation checks, dist consistency, digest hygiene. Follow the procedure in docs/recipes/maintenance.md verbatim. Apply fixes autonomously; stage them for review before committing.
 allowed-tools:
   - Read
+  - Edit
+  - Write
   - Bash(*)
   - Grep
   - Glob
@@ -35,9 +37,19 @@ High-level scope (the recipe expands each):
 5. **Cross-host parity spot-checks** — generated outputs across heads
    compare correctly
 
-## What this command does NOT do
+## How fixes are handled
 
-- It does not fix anything autonomously. If a check fails, report the
-  finding and ask the user how to proceed.
-- It does not rerun sync. Sync hygiene is the user's call after
-  reviewing findings.
+- **Apply fixes autonomously where the right action is clear** —
+  delete confirmed-orphan files, fix definition ordering, refresh
+  out-of-date digests, etc. The point of `/maintenance` is to make
+  these mechanical fixes, not just report them.
+- **Pause and ask** when the fix isn't obvious or carries non-trivial
+  risk (e.g. a deletion that could affect downstream consumers, a
+  generator change to remove a class of stale outputs).
+- **Stage fixes for review; do not commit.** Leave the working tree
+  dirty so the user can review the diff before deciding what to
+  commit. Summarize what was fixed and what still needs the user's
+  judgment.
+- **Do not rerun sync automatically.** After applying fixes that
+  affect generated content, surface them; the user decides whether
+  to follow up with `/sync`.
