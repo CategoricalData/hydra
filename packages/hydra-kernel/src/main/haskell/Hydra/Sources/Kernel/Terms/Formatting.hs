@@ -172,7 +172,6 @@ javaStyleComment = define "javaStyleComment" $
   lambda "s" $ string "/**\n" ++ string " * " ++ var "s" ++ string "\n */"
 
 -- TODO: simplify this helper
--- TODO: simplify this helper
 mapFirstLetter :: TypedTermDefinition ((String -> String) -> String -> String)
 mapFirstLetter = define "mapFirstLetter" $
   doc "A helper which maps the first letter of a string to another string" $
