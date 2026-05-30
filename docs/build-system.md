@@ -184,9 +184,9 @@ The caches form a hierarchy: a hit at a coarser layer skips a finer one.
 | Cache | Location | Granularity | What it gates |
 |-------|----------|-------------|---------------|
 | Phase 1 input cache | `heads/haskell/.stack-work/phase1-input-cache.txt` | Universe-wide | Skips all of Phase 1 (no stack startup, no JSON regen) |
-| Universe digest | `dist/json/build/digest.json` | Per-namespace | Drives `check-dsl-fresh.py`; per-module skip inside `bootstrap-from-json` |
-| Per-package input digest | `dist/json/<pkg>/build/<set>/digest.json` | Per-namespace, scoped to one package | Source-of-truth for Layer 2 freshness comparison |
-| Per-package output digest | `dist/<lang>/<pkg>/build/<set>/digest.json` | Per-namespace + per-target generator stamp | Compared against input digest to skip Layer 1 + Layer 2 for one package |
+| Universe digest | `dist/json/build/digest.json` | Per-module-name | Drives `check-dsl-fresh.py`; per-module skip inside `bootstrap-from-json` |
+| Per-package input digest | `dist/json/<pkg>/build/<set>/digest.json` | Per-module-name, scoped to one package | Source-of-truth for Layer 2 freshness comparison |
+| Per-package output digest | `dist/<lang>/<pkg>/build/<set>/digest.json` | Per-module-name + per-target generator stamp | Compared against input digest to skip Layer 1 + Layer 2 for one package |
 | Step caches | `heads/haskell/.stack-work/{verify-json-kernel,bootstrap-from-json,haskell-test}-cache.txt` | Universe-wide hash of inputs + exec source | Skips `verify-json-kernel`, `bootstrap-from-json`, or `stack test` |
 | Per-target test cache | `dist/<lang>/test-cache.json` | Universe of generated sources + test infra + runner | Skips the target's `test-distribution.sh` |
 
@@ -218,7 +218,7 @@ re-assemble relies on the honest gate instead of force-dropping the output diges
 
 The crucial design property: **every cache hashes the inputs that produced its output
 and is keyed off them**. Editing a DSL source invalidates the universe digest →
-invalidates the per-package input digest for whichever package owns the namespace →
+invalidates the per-package input digest for whichever package owns the module name →
 invalidates the per-package output digest for each target that consumes the package →
 invalidates the per-target test cache.
 
@@ -237,7 +237,7 @@ generation, including ones whose JSON output is written by a different producer.
 
 ### The per-target generator stamp
 
-The Layer 2 cache is keyed on (a) per-namespace input hashes and (b) a per-target
+The Layer 2 cache is keyed on (a) per-module-name input hashes and (b) a per-target
 **generator stamp** — a fingerprint of the transform that produced the output. Without
 the stamp, edits to the transform (the per-target coder, the kernel orchestrator code,
 the assembler script) would change downstream emission without changing any tracked
@@ -278,9 +278,9 @@ prototype transform fingerprint and triggered a universal cache miss when any of
 files changed.
 
 `encoderId` is retired by the compositional stamp above. The four files it fingerprinted
-are namespaces in the kernel package, so they're covered by `component_identity
+are module names in the kernel package, so they're covered by `component_identity
 hydra-kernel`. Their effect on output bytes now invalidates the cache through the standard
-per-namespace path (in Phase 1) plus the kernel-id leaf of every target's stamp
+per-module-name path (in Phase 1) plus the kernel-id leaf of every target's stamp
 (in Layer 2).
 
 Legacy on-disk digests carrying `encoderId` are tolerated: `parseDigest` silently ignores
@@ -299,7 +299,7 @@ For each generated file `dist/<lang>/<pkg>/.../foo.<ext>`:
 
 - ✅ Content hash of the DSL source `packages/<pkg>/.../Foo.hs` (or `.java` / `.py`).
 - ✅ Content hash of upstream DSL modules reachable from `Foo` (per-package input
-  digest includes every namespace owned by `<pkg>`).
+  digest includes every module name owned by `<pkg>`).
 - ✅ Per-target generator stamp covering the kernel + per-target coder + host runtime
   (see [The per-target generator stamp](#the-per-target-generator-stamp) above). A
   change to any of these three components invalidates the cache for that target.
@@ -307,7 +307,7 @@ For each generated file `dist/<lang>/<pkg>/.../foo.<ext>`:
   `bootstrap-from-json`) plus, for `bootstrap-from-json`'s BFJ step, every file under
   `heads/haskell/src/main/haskell/**.hs`.
 - ⚠️ Coarse-grained on the source side. A change to one source file invalidates only
-  its own per-namespace hash, but the *consumers* of that namespace aren't automatically
+  its own per-module-name hash, but the *consumers* of that module name aren't automatically
   invalidated unless they themselves changed. The current design treats the per-package
   digest as the unit of invalidation, not the file-level dependency DAG. See [Remaining
   gaps](#remaining-gaps).
@@ -338,16 +338,16 @@ around the corresponding `bin/` script; see [CLAUDE.md §Shorthand commands](../
 
 ### 1. File-level source-dependency Merkle (A-side)
 
-Today the per-package input digest treats each package as an opaque bag of namespaces.
+Today the per-package input digest treats each package as an opaque bag of module names.
 A change to one source file `Foo.hs` invalidates the per-package digest's entry for
-`Foo`'s namespace — but consumers of `Foo` in *other* packages aren't automatically
+`Foo`'s module name — but consumers of `Foo` in *other* packages aren't automatically
 flagged for regen unless they themselves changed. The current design relies on the
 universe-wide invalidation cascade for cross-package propagation, which is correct but
 coarse: a kernel-type edit may invalidate everything even though only a handful of
-downstream namespaces consume the changed type.
+downstream module names consume the changed type.
 
 The proper Merkle structure on the A side is the file-level dependency DAG: each
-namespace's cache key is `hash(its source content, its transitive deps' cache keys)`. A
+module name's cache key is `hash(its source content, its transitive deps' cache keys)`. A
 change at the root propagates exactly to dependents. Substantially overlaps with
 [#329 (definition-level change detection)](https://github.com/CategoricalData/hydra/issues/329);
 worth treating as one piece of work.
@@ -401,7 +401,7 @@ once additional packages are owned by these native pipelines.
 Two pieces, one per side:
 
 **A-side: file-level Merkle over the source DAG.**
-Per-namespace cache key = `hash(source content, dep1 cache key, dep2 cache key, ...)`.
+Per-module-name cache key = `hash(source content, dep1 cache key, dep2 cache key, ...)`.
 A change at the root propagates exactly to dependents. Combines naturally with #329's
 definition-level checksums.
 

@@ -65,8 +65,8 @@ DEPENDENCIES = [
 # ----------------------------------------------------------------------
 
 _PLACEHOLDER = Module(
-    Just("Python naming utilities: encoding Hydra names as Python names"),
     NS,
+    Just("Python naming utilities: encoding Hydra names as Python names"),
     DEPENDENCIES,
     (),
 )
@@ -517,8 +517,8 @@ def _build_module() -> Module:
         to_definition(_variant_name()),
     )
     return Module(
-        _PLACEHOLDER.description,
         _PLACEHOLDER.name,
+        _PLACEHOLDER.description,
         _PLACEHOLDER.dependencies,
         defs,
     )

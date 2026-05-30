@@ -10,7 +10,7 @@ the modules are exported to JSON format.
 
 The JSON export provides a language-agnostic representation of:
 - All kernel modules (types, terms, dependencies)
-- Module metadata (namespace, descriptions)
+- Module metadata (name, descriptions)
 - Type definitions and term bindings with inferred types
 
 Type inference is performed on modules before export,
@@ -198,7 +198,7 @@ Ensure the wrapped type's definition is included in the kernel modules.
 ### "content mismatch" errors
 
 The decoded module differs from the original. The error message indicates:
-- Which field differs (namespace, elements, dependencies, description)
+- Which field differs (name, elements, dependencies, description)
 - For element differences, which binding differs (name, type, or term)
 
 Debug by:

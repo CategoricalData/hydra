@@ -1464,7 +1464,7 @@ Lists.concat (list [var "xs", var "ys"])
 
 ```haskell
 myAddDef @@ int32 1 @@ int32 2
-Serialization.cst @@ string "hello"   -- Serialization helpers are TTermDefinitions
+Serialization.cst @@ string "hello"   -- Serialization helpers are TypedTermDefinitions
 ```
 
 ### Passing primitives as arguments

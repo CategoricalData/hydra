@@ -402,8 +402,8 @@ public class Testing {
         new ModuleName("hydra.variants"));
 
     public static final Module module_ = new Module(
-        Maybe.just("Java test code generation codec for JUnit-based generation tests"),
         NS,
+        Maybe.just("Java test code generation codec for JUnit-based generation tests"),
         DEPENDENCIES,
         DEFINITIONS);
 }

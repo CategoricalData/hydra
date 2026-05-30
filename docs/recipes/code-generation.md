@@ -59,8 +59,8 @@ Generated code is partitioned across per-package `dist/<lang>/<pkg>/`
 trees rather than a single flat `dist/<lang>/` directory. Each package
 (hydra-kernel, hydra-haskell, hydra-java, hydra-python, hydra-scala,
 hydra-lisp, hydra-pg, hydra-rdf, hydra-coq, hydra-typescript, hydra-wasm,
-hydra-ext) owns a range of namespaces, and the generated output for
-those namespaces lands under that package's directory.
+hydra-ext) owns a range of module names, and the generated output for
+those module names lands under that package's directory.
 
 Each package's `package.json` may declare a `targetLanguages` field
 restricting which target languages the package is regenerated to. For
@@ -524,17 +524,17 @@ enabled package), wipe the build-cache subtree (`rm -rf dist/json/build
 dist/json/*/build`) to force downstream regeneration. The whole
 `dist/**/build/` tree is gitignored cache state.
 
-### Renaming a generated namespace leaves orphan files in `dist/`
+### Renaming a generated module name leaves orphan files in `dist/`
 
 Sync writes new generated files but does not delete files that no
-longer correspond to any source. If a DSL module's namespace changes
+longer correspond to any source. If a DSL module's module name changes
 from `hydra.foo.x` to `hydra.bar.x`, the next sync will write
 `dist/json/.../hydra/bar/x.json` and `dist/haskell/.../Hydra/Bar/X.hs`
 but the old `hydra/foo/x.json` and `Hydra/Foo/X.hs` will remain on
 disk and stay tracked in git. The "Checking for new files..." block at
 the end of sync only flags additions, never removals.
 
-After any namespace rename, manually `git rm` the orphaned dist files
+After any module-name rename, manually `git rm` the orphaned dist files
 and verify with `git status` before committing. A regen commit that
 ships both the new and the old files inflates the diff and leaves the
 old modules as "phantom" code that still gets compiled by Stack but is
@@ -544,14 +544,14 @@ never referenced.
 
 `heads/<lang>/src/test/...` files that import a generated module
 (e.g., `Hydra.Lib.Defaults.*`) cannot be built by `stack test` until
-the generated modules exist on disk. After renaming the namespace of
+the generated modules exist on disk. After renaming the module name of
 such a module, the build sequence is:
 
 1. `stack build` -- verifies the library and execs compile against
    the renamed source. The test target is *not* configured at this
    step, so it cannot fail on the missing generated module.
 2. `/sync-haskell` -- regenerates the dist files under the new
-   namespace, then runs `stack test` itself as part of its final
+   module name, then runs `stack test` itself as part of its final
    verification phase.
 
 Running `stack test` between steps 1 and 2 will fail at the test

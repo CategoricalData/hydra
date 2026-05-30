@@ -217,7 +217,7 @@ def strip_term_types(m):
             stripped.append(DefinitionTerm(TermDefinition(td.name, new_term, Nothing())))
         else:
             stripped.append(d)
-    return Module(m.description, m.name, m.dependencies, tuple(stripped))
+    return Module(m.name, m.description, m.dependencies, tuple(stripped))
 
 
 def strip_all_term_types(modules):

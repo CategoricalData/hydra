@@ -286,8 +286,8 @@ public class Language {
         new ModuleName("hydra.variants"));
 
     public static final Module module_ = new Module(
-        Maybe.just("Language constraints and reserved words for Java"),
         NS,
+        Maybe.just("Language constraints and reserved words for Java"),
         DEPENDENCIES,
         DEFINITIONS);
 }

@@ -88,7 +88,7 @@ public class ProfileJavaCoder {
                             new TermDefinition(td.name, td.term, Maybe.<hydra.typing.TermSignature>nothing())));
                     } else stripped.add(d);
                 }
-                strippedTarget = new Module(m.description, m.name, m.dependencies, stripped);
+                strippedTarget = new Module(m.name, m.description, m.dependencies, stripped);
                 universeStripped.add(strippedTarget);
             } else {
                 universeStripped.add(m);
@@ -102,7 +102,7 @@ public class ProfileJavaCoder {
         for (int n : sizes) {
             n = Math.min(n, strippedTarget.definitions.size());
             List<Definition> prefix = new ArrayList<>(strippedTarget.definitions.subList(0, n));
-            Module prefixMod = new Module(strippedTarget.description, strippedTarget.name,
+            Module prefixMod = new Module(strippedTarget.name, strippedTarget.description,
                 strippedTarget.dependencies, prefix);
             // Universe = stripped, with target replaced by prefix.
             List<Module> universeForCall = new ArrayList<>();

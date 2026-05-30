@@ -490,10 +490,10 @@ decodeModule = define "decodeModule" $
         -- 3. The original module's namespace (the schema being decoded) and hydra.util
         "allDecodedDeps" <~ (primitive _lists_nub @@ (Lists.map decodeModuleName (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))) $
         right (just (Packaging.module_
+          (decodeModuleName @@ (Packaging.moduleName (var "mod")))
           (just (Strings.cat $ list [
             string "Term decoders for ",
             Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
-          (decodeModuleName @@ (Packaging.moduleName (var "mod")))
           (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.concat2
             (list [
               (Packaging.moduleName2 $ string "hydra.extract.core"),
