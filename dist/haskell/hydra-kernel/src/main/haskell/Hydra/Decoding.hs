@@ -1080,12 +1080,12 @@ decodeModule cx graph mod =
             Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (decodeBinding cx graph b)) typeBindings) (\decodedBindings ->
       let allDecodedDeps =
-              Lists.nub (Lists.map decodeNamespace (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)))
+              Lists.nub (Lists.map decodeModuleName (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)))
       in (Right (Just (Packaging.Module {
         Packaging.moduleDescription = (Just (Strings.cat [
           "Term decoders for ",
           (Packaging.unModuleName (Packaging.moduleName mod))])),
-        Packaging.moduleName = (decodeNamespace (Packaging.moduleName mod)),
+        Packaging.moduleName = (decodeModuleName (Packaging.moduleName mod)),
         Packaging.moduleDependencies = (Lists.map (\ns -> Packaging.ModuleDependency {
           Packaging.moduleDependencyModule = ns,
           Packaging.moduleDependencyPackage = Nothing}) (Lists.concat2 [
@@ -1098,9 +1098,9 @@ decodeModule cx graph mod =
           Packaging.termDefinitionName = (Core.bindingName b),
           Packaging.termDefinitionTerm = (Core.bindingTerm b),
           Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) decodedBindings)}))))))
--- | Generate a decoder module namespace from a source module namespace
-decodeNamespace :: Packaging.ModuleName -> Packaging.ModuleName
-decodeNamespace ns =
+-- | Generate a decoder module name from a source module name
+decodeModuleName :: Packaging.ModuleName -> Packaging.ModuleName
+decodeModuleName ns =
 
       let parts = Strings.splitOn "." (Packaging.unModuleName ns)
           fallback = Packaging.ModuleName (Packaging.unModuleName ns)

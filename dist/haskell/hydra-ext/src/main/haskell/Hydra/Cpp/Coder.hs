@@ -490,7 +490,7 @@ findIncludes withFwd ns defs =
           Syntax.includeDirectiveIsSystem = False}] [])]
 findTypeDependencies :: Packaging.ModuleName -> [Packaging.TypeDefinition] -> [Core.Name]
 findTypeDependencies ns defs =
-    Lists.filter (\n -> Logic.not (Equality.equal (Maybes.map Packaging.unModuleName (Names.namespaceOf n)) (Just (Packaging.unModuleName ns)))) (Sets.toList (Lists.foldl (\acc -> \d -> Sets.union acc (Dependencies.typeDependencyNames True (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme d)))) Sets.empty defs))
+    Lists.filter (\n -> Logic.not (Equality.equal (Maybes.map Packaging.unModuleName (Names.moduleNameOf n)) (Just (Packaging.unModuleName ns)))) (Sets.toList (Lists.foldl (\acc -> \d -> Sets.union acc (Dependencies.typeDependencyNames True (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme d)))) Sets.empty defs))
 fwdHeaderName :: Packaging.ModuleName -> Core.Name
 fwdHeaderName ns =
     Names.unqualifyName (Packaging.QualifiedName {

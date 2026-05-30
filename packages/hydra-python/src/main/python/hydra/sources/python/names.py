@@ -22,7 +22,7 @@ from hydra.sources.python._kernel_refs import (
     formatting_capitalize,
     formatting_convert_case,
     formatting_sanitize_with_underscores,
-    names_namespace_of,
+    names_module_name_of,
     names_qualify_name,
     packaging_namespaces_focus,
     packaging_qualified_name_local,
@@ -429,7 +429,7 @@ def _variable_reference():
             field("focusPair", packaging_namespaces_focus(var("namespaces"))),
             field("focusNs", Pairs.first(var("focusPair"))),
             field("mns",
-                names_namespace_of(var("name")),
+                names_module_name_of(var("name")),
             ),
             field("sameNamespace",
                 Maybes.maybe(

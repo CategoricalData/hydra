@@ -683,5 +683,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Primitives in the hydra.lib.literals namespace.",
+  "description": "Primitives in the hydra.lib.literals module.",
   "name": "hydra.lib.literals"}

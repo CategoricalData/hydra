@@ -3652,7 +3652,7 @@
                                                                       "application": {
                                                                         "argument": {
                                                                           "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Binding"}}}},
-                                                                        "function": {"variable": "hydra.names.namespaceOf"}}},
+                                                                        "function": {"variable": "hydra.names.moduleNameOf"}}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {
@@ -4568,7 +4568,7 @@
                                                                                                                                                                                       "application": {
                                                                                                                                                                                         "argument": {
                                                                                                                                                                                           "application": {"argument": {"variable": "el"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Binding"}}}},
-                                                                                                                                                                                        "function": {"variable": "hydra.names.namespaceOf"}}},
+                                                                                                                                                                                        "function": {"variable": "hydra.names.moduleNameOf"}}},
                                                                                                                                                                                     "function": {
                                                                                                                                                                                       "application": {
                                                                                                                                                                                         "argument": {
@@ -4619,7 +4619,7 @@
                                                                                                                                                                                                   "application": {
                                                                                                                                                                                                     "argument": {
                                                                                                                                                                                                       "application": {"argument": {"variable": "el"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Binding"}}}},
-                                                                                                                                                                                                    "function": {"variable": "hydra.names.namespaceOf"}}},
+                                                                                                                                                                                                    "function": {"variable": "hydra.names.moduleNameOf"}}},
                                                                                                                                                                                                 "function": {
                                                                                                                                                                                                   "application": {
                                                                                                                                                                                                     "argument": {

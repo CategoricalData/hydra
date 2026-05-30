@@ -116,19 +116,19 @@ dslModule cx graph mod =
       Packaging.moduleDescription = (Just (Strings.cat [
         "DSL functions for ",
         (Packaging.unModuleName (Packaging.moduleName mod))])),
-      Packaging.moduleName = (dslNamespace (Packaging.moduleName mod)),
+      Packaging.moduleName = (dslModuleName (Packaging.moduleName mod)),
       Packaging.moduleDependencies = (Lists.map (\ns -> Packaging.ModuleDependency {
         Packaging.moduleDependencyModule = ns,
         Packaging.moduleDependencyPackage = Nothing}) (Lists.nub (Lists.concat2 [
         Packaging.moduleName mod,
-        (Packaging.ModuleName "hydra.typed")] (Lists.concat2 (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)) (Lists.map dslNamespace (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod))))))),
+        (Packaging.ModuleName "hydra.typed")] (Lists.concat2 (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)) (Lists.map dslModuleName (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod))))))),
       Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
         Packaging.termDefinitionName = (Core.bindingName b),
         Packaging.termDefinitionTerm = (Core.bindingTerm b),
         Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) (deduplicateBindings (Lists.concat dslBindings)))})))))
--- | Generate a DSL module namespace from a source module namespace
-dslNamespace :: Packaging.ModuleName -> Packaging.ModuleName
-dslNamespace ns =
+-- | Generate a DSL module name from a source module name
+dslModuleName :: Packaging.ModuleName -> Packaging.ModuleName
+dslModuleName ns =
 
       let parts = Strings.splitOn "." (Packaging.unModuleName ns)
           prefixFull =
@@ -575,7 +575,7 @@ generateWrappedTypeAccessors origType typeName innerType =
 isDslEligibleBinding :: t0 -> t1 -> Core.Binding -> Either t2 (Maybe Core.Binding)
 isDslEligibleBinding cx graph b =
 
-      let ns = Names.namespaceOf (Core.bindingName b)
+      let ns = Names.moduleNameOf (Core.bindingName b)
       in (Logic.ifElse (Equality.equal (Maybes.maybe "" Packaging.unModuleName ns) "hydra.typed") (Right Nothing) (Right (Just b)))
 -- | Build the nominal result type with type applications for forall variables
 nominalResultType :: Core.Name -> Core.Type -> Core.Type

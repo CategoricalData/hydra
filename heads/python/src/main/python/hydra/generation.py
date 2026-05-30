@@ -17,7 +17,7 @@ sys.setrecursionlimit(10000)
 from hydra.annotations import is_native_type
 from hydra.codegen import (
     generate_source_files,
-    namespace_to_path,
+    module_name_to_path,
 )
 from hydra.typing import InferenceContext
 from hydra.core import Binding
@@ -160,7 +160,7 @@ def load_modules_from_json(base_path, namespaces):
     schema_map = bootstrap_schema_map()
     modules = []
     for ns in namespaces:
-        file_path = os.path.join(base_path, namespace_to_path(ns) + ".json")
+        file_path = os.path.join(base_path, module_name_to_path(ns) + ".json")
         json_val = parse_json_file(file_path)
         mod = decode_module(bs_graph, schema_map, json_val)
         print(f"  Loaded: {ns.value}")
@@ -169,7 +169,7 @@ def load_modules_from_json(base_path, namespaces):
 
 
 def read_manifest_field(base_path, field_name):
-    """Read a field from manifest.json as a list of Namespaces."""
+    """Read a field from manifest.json as a list of module names."""
     manifest_path = os.path.join(base_path, "manifest.json")
     with open(manifest_path, "r", encoding="utf-8") as f:
         manifest = json.load(f)
@@ -300,7 +300,7 @@ def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
     from hydra.lisp.serde import program_to_expr
     from hydra.lisp.syntax import Dialect
     from hydra.serialization import print_expr, parenthesize
-    from hydra.names import namespace_to_file_path
+    from hydra.names import module_name_to_file_path
     from hydra.packaging import FileExtension, ModuleName
     from hydra.util import CaseConvention
 
@@ -321,7 +321,7 @@ def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
                 return result
             case Right(value=program):
                 code = print_expr(parenthesize(program_to_expr(program)))
-                file_path = namespace_to_file_path(case_conv, FileExtension(ext), mod.name)
+                file_path = module_name_to_file_path(case_conv, FileExtension(ext), mod.name)
                 return Right(FrozenDict({file_path: code}))
 
     generate_sources(
@@ -626,7 +626,7 @@ def _write_package_split_json(dist_json_root, universe_mods, universe_for_schema
             result = codegen.module_to_json(schema_map, m)
             match result:
                 case Right(value=json_str):
-                    file_path = os.path.join(pkg_dir, namespace_to_path(m.name) + ".json")
+                    file_path = os.path.join(pkg_dir, module_name_to_path(m.name) + ".json")
                     os.makedirs(os.path.dirname(file_path), exist_ok=True)
                     new_content = json_str + "\n"
                     if os.path.exists(file_path):

@@ -1090,7 +1090,7 @@ moduleToJava cx g mod = do
   classes <- traverse (typeToJavaClass cx g mod) types
 
   -- Generate package structure
-  let packagePath = namespaceToPath (moduleName mod)
+  let packagePath = moduleNameToPath (moduleName mod)
 
   -- Map file paths to source code
   pure $ M.fromList $ map (\cls ->

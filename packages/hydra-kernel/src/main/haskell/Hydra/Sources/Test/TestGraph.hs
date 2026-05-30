@@ -49,8 +49,8 @@ module_ = Module {
    definitions = [
      Phantoms.toDefinition testTerms,
      Phantoms.toDefinition testTypes,
-     Phantoms.toDefinition testNamespace,
-     Phantoms.toDefinition testSchemaNamespace,
+     Phantoms.toDefinition testModuleName,
+     Phantoms.toDefinition testSchemaModuleName,
      Phantoms.toDefinition testGraph,
      Phantoms.toDefinition testContext]
 
@@ -68,11 +68,11 @@ testGraph :: TypedTermDefinition Graph
 testGraph = define "testGraph" $
   TestEnv.testGraph @@ testTypes @@ testTerms
 
-testNamespace :: TypedTermDefinition ModuleName
-testNamespace = define "testNamespace" $ DPackaging.moduleName2 $ Phantoms.string "testGraph"
+testModuleName :: TypedTermDefinition ModuleName
+testModuleName = define "testModuleName" $ DPackaging.moduleName2 $ Phantoms.string "testGraph"
 
-testSchemaNamespace :: TypedTermDefinition ModuleName
-testSchemaNamespace = define "testSchemaNamespace" $ DPackaging.moduleName2 $ Phantoms.string "testSchemaGraph"
+testSchemaModuleName :: TypedTermDefinition ModuleName
+testSchemaModuleName = define "testSchemaModuleName" $ DPackaging.moduleName2 $ Phantoms.string "testSchemaGraph"
 
 testTerms :: TypedTermDefinition (M.Map Name Term)
 testTerms = define "testTerms" $

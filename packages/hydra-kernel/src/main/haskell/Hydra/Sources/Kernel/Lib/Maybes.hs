@@ -23,7 +23,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleDescription = Just "Primitives in the hydra.lib.maybes namespace."}
+            moduleDescription = Just "Primitives in the hydra.lib.maybes module."}
   where
     definitions = [
       toPrimitive "Applicative apply for maybes: combine a maybe function and a maybe argument." applySig (Just

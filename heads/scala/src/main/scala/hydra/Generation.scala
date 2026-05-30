@@ -103,7 +103,7 @@ object Generation:
     val bsGraph = bootstrapGraph()
     namespaces.flatMap { ns =>
       val filePath = jsonDir + File.separator +
-        hydra.codegen.namespaceToPath(ns) + ".json"
+        hydra.codegen.moduleNameToPath(ns) + ".json"
       val file = new File(filePath)
       if !file.exists() then
         throw new RuntimeException(s"Missing module file: $filePath")

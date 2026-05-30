@@ -319,7 +319,7 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
 
       let namespacesSet = Sets.fromList namespaces
           isParentBinding =
-                  \b -> Maybes.maybe False (\ns -> Sets.member ns namespacesSet) (Names.namespaceOf (Core.bindingName b))
+                  \b -> Maybes.maybe False (\ns -> Sets.member ns namespacesSet) (Names.moduleNameOf (Core.bindingName b))
           hoistCases =
                   \bindings ->
                     let stripped =
@@ -414,12 +414,12 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                         Packaging.termDefinitionTerm = (Core.bindingTerm el),
                         Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature ts))}) (Core.bindingTypeScheme el)
               selectedElements =
-                      Lists.filter (\el -> Maybes.maybe False (\ns -> Sets.member ns namespacesSet) (Names.namespaceOf (Core.bindingName el))) bins5
+                      Lists.filter (\el -> Maybes.maybe False (\ns -> Sets.member ns namespacesSet) (Names.moduleNameOf (Core.bindingName el))) bins5
               elementsByNamespace =
                       Lists.foldl (\acc -> \el -> Maybes.maybe acc (\ns ->
                         let existing = Maybes.maybe [] Equality.identity (Maps.lookup ns acc)
                         in (Maps.insert ns (Lists.concat2 existing [
-                          el]) acc)) (Names.namespaceOf (Core.bindingName el))) Maps.empty selectedElements
+                          el]) acc)) (Names.moduleNameOf (Core.bindingName el))) Maps.empty selectedElements
               defsGrouped =
                       Lists.map (\ns ->
                         let elsForNs = Maybes.maybe [] Equality.identity (Maps.lookup ns elementsByNamespace)

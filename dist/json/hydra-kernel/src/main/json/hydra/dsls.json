@@ -478,7 +478,7 @@
                                                                         "application": {
                                                                           "argument": {
                                                                             "application": {"argument": {"variable": "mod"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
-                                                                          "function": {"variable": "hydra.dsls.dslNamespace"}}}},
+                                                                          "function": {"variable": "hydra.dsls.dslModuleName"}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {
@@ -514,7 +514,7 @@
                                                                                                       "type": {"variable": "hydra.packaging.ModuleName"}}}}}}},
                                                                                           "function": {
                                                                                             "application": {
-                                                                                              "argument": {"variable": "hydra.dsls.dslNamespace"},
+                                                                                              "argument": {"variable": "hydra.dsls.dslModuleName"},
                                                                                               "function": {
                                                                                                 "typeApplication": {
                                                                                                   "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
@@ -875,17 +875,14 @@
             "parameter": "t0"}}}},
     {
       "term": {
-        "name": "hydra.dsls.dslNamespace",
+        "name": "hydra.dsls.dslModuleName",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.ModuleName"}}],
           "result": {"type": {"variable": "hydra.packaging.ModuleName"}},
           "typeParameters": []},
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Generate a DSL module namespace from a source module namespace"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a DSL module name from a source module name"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3753,7 +3750,7 @@
                                               "application": {
                                                 "argument": {
                                                   "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Binding"}}}},
-                                                "function": {"variable": "hydra.names.namespaceOf"}}},
+                                                "function": {"variable": "hydra.names.moduleNameOf"}}},
                                             "typeScheme": {"body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}, "variables": []}}],
                                         "body": {
                                           "application": {

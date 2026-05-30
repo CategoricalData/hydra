@@ -18,7 +18,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleDescription = Just "Primitives in the hydra.lib.literals namespace."}
+            moduleDescription = Just "Primitives in the hydra.lib.literals module."}
   where
     definitions = [
       primNoDef "bigintToDecimal"  "Convert a bigint to a decimal." (sigFn Types.bigint Types.decimal) (Just

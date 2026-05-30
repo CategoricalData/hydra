@@ -1040,7 +1040,7 @@ findTypeDependencies = def "findTypeDependencies" $
     Lists.filter
       (lambda "n" $
         Logic.not (Equality.equal
-          (Maybes.map (reify Packaging.unModuleName) (Names.namespaceOf @@ var "n"))
+          (Maybes.map (reify Packaging.unModuleName) (Names.moduleNameOf @@ var "n"))
           (just (Packaging.unModuleName (var "ns")))))
       (Sets.toList (Lists.foldl
         (lambda "acc" $ lambda "d" $
