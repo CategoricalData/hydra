@@ -30,17 +30,17 @@ module_ = Module {
       Phantoms.toDefinition allTests,
       Phantoms.toDefinition testGroupForSystemF]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Algorithm W test cases" $
   supergroup "Algorithm W test cases" [
     testGroupForSystemF]
 
 -- @wisnesky's original Algorithm W test cases, modified so as to normalize type variables
-testGroupForSystemF :: TTermDefinition TestGroup
+testGroupForSystemF :: TypedTermDefinition TestGroup
 testGroupForSystemF = define "testGroupForSystemF" $
   subgroup "STLC to System F" [
 
@@ -89,8 +89,8 @@ testGroupForSystemF = define "testGroupForSystemF" $
 ----  @@ ExprConst (Con "Nil")
 ----  @@ ExprConst (Con "Cons")
 ----
-----foldl :: TTerm ((b -> a -> b) -> b -> [a] -> b)
-----cons :: TTerm (a -> [a] -> [a])
+----foldl :: TypedTerm ((b -> a -> b) -> b -> [a] -> b)
+----cons :: TypedTerm (a -> [a] -> [a])
 ----
 ----[testAdt3]
 ----Untyped input:

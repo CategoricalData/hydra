@@ -32,15 +32,15 @@ KERNEL_TYPES_NAMESPACES = [
         "hydra.paths", "hydra.ast", "hydra.classes", "hydra.coders",
         "hydra.core", "hydra.error.checking", "hydra.error.core",
         "hydra.error.packaging", "hydra.errors", "hydra.graph", "hydra.json.model",
-        "hydra.packaging", "hydra.parsing", "hydra.phantoms", "hydra.query",
+        "hydra.packaging", "hydra.parsing", "hydra.query",
         "hydra.relational", "hydra.tabular", "hydra.testing", "hydra.topology",
-        "hydra.typing", "hydra.util", "hydra.validation", "hydra.variants",
+        "hydra.typed", "hydra.typing", "hydra.util", "hydra.validation", "hydra.variants",
     ]
 ]
 
 
 def make_def(placeholder):
-    """Return a closure `(local_name, term) -> TBinding` bound to `placeholder`.
+    """Return a closure `(local_name, term) -> TypedBinding` bound to `placeholder`.
 
     Usage at the top of a source DSL module:
 
@@ -51,7 +51,7 @@ def make_def(placeholder):
 
 
 def make_local(ns_str: str):
-    """Return a closure `(local_name) -> TTerm` that builds a `var("<ns>.<local>")`.
+    """Return a closure `(local_name) -> TypedTerm` that builds a `var("<ns>.<local>")`.
 
     Usage at the top of a source DSL module:
 
@@ -75,10 +75,10 @@ def ap(fun, *args):
 
 
 def py_name(s):
-    """Wrap a str-or-TTerm into hydra.python.syntax.Name.
+    """Wrap a str-or-TypedTerm into hydra.python.syntax.Name.
 
     - str input is auto-coerced via `string(s)`.
-    - TTerm input passes through.
+    - TypedTerm input passes through.
     """
     if isinstance(s, str):
         s = string(s)

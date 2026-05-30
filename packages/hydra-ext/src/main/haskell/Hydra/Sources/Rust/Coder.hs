@@ -87,11 +87,11 @@ module_ = Module {
 -- Standard derives
 -- =============================================================================
 
-def :: String -> TTerm a -> TTermDefinition a
+def :: String -> TypedTerm a -> TypedTermDefinition a
 def = definitionInModule module_
 
 -- | Encode a Hydra union field as a Rust enum variant
-encodeEnumVariant :: TTermDefinition (InferenceContext -> Graph -> FieldType -> Either Error R.EnumVariant)
+encodeEnumVariant :: TypedTermDefinition (InferenceContext -> Graph -> FieldType -> Either Error R.EnumVariant)
 encodeEnumVariant = def "encodeEnumVariant" $
   "cx" ~> "g" ~> lambda "ft" $
     "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
@@ -127,7 +127,7 @@ encodeEnumVariant = def "encodeEnumVariant" $
 -- =============================================================================
 
 -- | Encode a Hydra literal value as a Rust expression
-encodeLiteral :: TTermDefinition (Literal -> R.Expression)
+encodeLiteral :: TypedTermDefinition (Literal -> R.Expression)
 encodeLiteral = def "encodeLiteral" $
   lambda "lit" $ cases _Literal (var "lit") Nothing [
     _Literal_boolean>>: lambda "b" $
@@ -212,7 +212,7 @@ encodeLiteral = def "encodeLiteral" $
 -- =============================================================================
 
 -- | Encode a Hydra literal type as a Rust type
-encodeLiteralType :: TTermDefinition (LiteralType -> R.Type)
+encodeLiteralType :: TypedTermDefinition (LiteralType -> R.Type)
 encodeLiteralType = def "encodeLiteralType" $
   lambda "lt" $ cases _LiteralType (var "lt") Nothing [
     _LiteralType_binary>>: constant $
@@ -243,7 +243,7 @@ encodeLiteralType = def "encodeLiteralType" $
 
 -- | Encode a Hydra record projection as a Rust expression.
 -- Takes an optional argument for applied projections.
-encodeProjectionElim :: TTermDefinition (InferenceContext -> Graph -> Projection -> Maybe Term -> Either Error R.Expression)
+encodeProjectionElim :: TypedTermDefinition (InferenceContext -> Graph -> Projection -> Maybe Term -> Either Error R.Expression)
 encodeProjectionElim = def "encodeProjectionElim" $
   "cx" ~> "g" ~> lambda "proj" $ lambda "marg" $
         "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionFieldName (var "proj"))) $
@@ -262,7 +262,7 @@ encodeProjectionElim = def "encodeProjectionElim" $
                   R._FieldAccessExpr_field>>: var "fname"]))
 
 -- | Encode a Hydra record field as a Rust struct field
-encodeStructField :: TTermDefinition (InferenceContext -> Graph -> FieldType -> Either Error R.StructField)
+encodeStructField :: TypedTermDefinition (InferenceContext -> Graph -> FieldType -> Either Error R.StructField)
 encodeStructField = def "encodeStructField" $
   "cx" ~> "g" ~> lambda "ft" $
     "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
@@ -279,7 +279,7 @@ encodeStructField = def "encodeStructField" $
 -- =============================================================================
 
 -- | Encode a Hydra term as a Rust expression
-encodeTerm :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error R.Expression)
+encodeTerm :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error R.Expression)
 encodeTerm = def "encodeTerm" $
   "cx" ~> "g" ~> lambda "term" $
     cases _Term (var "term") (Just $
@@ -388,7 +388,7 @@ encodeTerm = def "encodeTerm" $
          ("sval" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "fterm") $
            right (rustCall @@ (rustExprPath @@ Strings.cat2 (Strings.cat2 (var "tname") (string "::")) (var "fname")) @@ list [var "sval"])),
      _Term_unit>>: constant $
-       right (inject R._Expression R._Expression_tuple $ list ([] :: [TTerm R.Expression])),
+       right (inject R._Expression R._Expression_tuple $ list ([] :: [TypedTerm R.Expression])),
      _Term_variable>>: lambda "name" $
        right (rustExprPath @@ (Formatting.convertCaseCamelToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ RustLanguageSource.rustReservedWords @@ Core.unName (var "name")))),
      _Term_wrap>>: lambda "wt" $
@@ -401,7 +401,7 @@ encodeTerm = def "encodeTerm" $
 -- =============================================================================
 
 -- | Encode a Hydra term definition as a Rust function item
-encodeTermDefinition :: TTermDefinition (InferenceContext -> Graph -> TermDefinition -> Either Error R.ItemWithComments)
+encodeTermDefinition :: TypedTermDefinition (InferenceContext -> Graph -> TermDefinition -> Either Error R.ItemWithComments)
 encodeTermDefinition = def "encodeTermDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.termDefinitionName (var "tdef") $
@@ -419,12 +419,12 @@ encodeTermDefinition = def "encodeTermDefinition" $
         R._ItemWithComments_item>>: inject R._Item R._Item_fn $
           record R._FnDef [
             R._FnDef_name>>: var "lname",
-            R._FnDef_generics>>: list ([] :: [TTerm R.GenericParam]),
+            R._FnDef_generics>>: list ([] :: [TypedTerm R.GenericParam]),
             R._FnDef_whereClause>>: nothing,
-            R._FnDef_params>>: list ([] :: [TTerm R.FnParam]),
+            R._FnDef_params>>: list ([] :: [TypedTerm R.FnParam]),
             R._FnDef_returnType>>: just (var "retType"),
             R._FnDef_body>>: record R._Block [
-              R._Block_statements>>: list ([] :: [TTerm R.Statement]),
+              R._Block_statements>>: list ([] :: [TypedTerm R.Statement]),
               R._Block_expression>>: just (var "body")],
             R._FnDef_public>>: boolean True,
             R._FnDef_async>>: boolean False,
@@ -437,7 +437,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
 -- =============================================================================
 
 -- | Encode a Hydra type as a Rust syntax type
-encodeType :: TTermDefinition (InferenceContext -> Graph -> Type -> Either Error R.Type)
+encodeType :: TypedTermDefinition (InferenceContext -> Graph -> Type -> Either Error R.Type)
 encodeType = def "encodeType" $
   "cx" ~> "g" ~> lambda "t" $
     "typ" <~ (Strip.deannotateType @@ var "t") $
@@ -505,7 +505,7 @@ encodeType = def "encodeType" $
 -- =============================================================================
 
 -- | Encode a Hydra type definition as a Rust item
-encodeTypeDefinition :: TTermDefinition (InferenceContext -> Graph -> TypeDefinition -> Either Error R.ItemWithComments)
+encodeTypeDefinition :: TypedTermDefinition (InferenceContext -> Graph -> TypeDefinition -> Either Error R.ItemWithComments)
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.typeDefinitionName (var "tdef") $
@@ -518,7 +518,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
     "generics" <~ (Lists.map (lambda "v" $
       record R._GenericParam [
         R._GenericParam_name>>: Formatting.capitalize @@ Core.unName (var "v"),
-        R._GenericParam_bounds>>: list ([] :: [TTerm R.TypeParamBound])])
+        R._GenericParam_bounds>>: list ([] :: [TypedTerm R.TypeParamBound])])
       (var "freeVars")) $
     "dtyp" <~ (Strip.deannotateType @@ var "typ") $
     "item" <<~ (cases _Type (var "dtyp") (Just $
@@ -578,7 +578,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
 
 -- | Encode a Hydra case statement (union elimination) as a Rust expression.
 -- Takes an optional argument for applied case statements.
-encodeUnionElim :: TTermDefinition (InferenceContext -> Graph -> CaseStatement -> Maybe Term -> Either Error R.Expression)
+encodeUnionElim :: TypedTermDefinition (InferenceContext -> Graph -> CaseStatement -> Maybe Term -> Either Error R.Expression)
 encodeUnionElim = def "encodeUnionElim" $
   "cx" ~> "g" ~> lambda "cs" $ lambda "marg" $
         "tname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ Core.caseStatementTypeName (var "cs"))) $
@@ -635,7 +635,7 @@ encodeUnionElim = def "encodeUnionElim" $
 
 -- | Encode a Hydra wrap elimination (unwrap) as a Rust expression.
 -- Takes an optional argument for applied unwraps.
-encodeUnwrapElim :: TTermDefinition (InferenceContext -> Graph -> Name -> Maybe Term -> Either Error R.Expression)
+encodeUnwrapElim :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Maybe Term -> Either Error R.Expression)
 encodeUnwrapElim = def "encodeUnwrapElim" $
   "cx" ~> "g" ~> lambda "name" $ lambda "marg" $
         Maybes.cases (var "marg")
@@ -657,7 +657,7 @@ encodeUnwrapElim = def "encodeUnwrapElim" $
 -- =============================================================================
 
 -- | Convert a Hydra module to a map of file paths to Rust source code strings.
-moduleToRust :: TTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
+moduleToRust :: TypedTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
 moduleToRust = def "moduleToRust" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
     "partitioned" <~ (Environment.partitionDefinitions @@ var "defs") $
@@ -672,7 +672,7 @@ moduleToRust = def "moduleToRust" $
       right (Maps.singleton (var "filePath") (var "code"))
 
 -- | Apply a type constructor to one type argument (e.g., Vec<T>)
-rustApply1 :: TTermDefinition (String -> R.Type -> R.Type)
+rustApply1 :: TypedTermDefinition (String -> R.Type -> R.Type)
 rustApply1 = def "rustApply1" $
   lambda "name" $ lambda "arg" $
     inject R._Type R._Type_path $
@@ -688,7 +688,7 @@ rustApply1 = def "rustApply1" $
                     inject R._GenericArg R._GenericArg_type (var "arg")]]]]]
 
 -- | Apply a type constructor to two type arguments (e.g., BTreeMap<K, V>)
-rustApply2 :: TTermDefinition (String -> R.Type -> R.Type -> R.Type)
+rustApply2 :: TypedTermDefinition (String -> R.Type -> R.Type -> R.Type)
 rustApply2 = def "rustApply2" $
   lambda "name" $ lambda "arg1" $ lambda "arg2" $
     inject R._Type R._Type_path $
@@ -705,7 +705,7 @@ rustApply2 = def "rustApply2" $
                     inject R._GenericArg R._GenericArg_type (var "arg2")]]]]]
 
 -- | Block expression with statements and trailing expression
-rustBlock :: TTermDefinition ([R.Statement] -> R.Expression -> R.Expression)
+rustBlock :: TypedTermDefinition ([R.Statement] -> R.Expression -> R.Expression)
 rustBlock = def "rustBlock" $
   lambda "stmts" $ lambda "expr" $
     inject R._Expression R._Expression_block $
@@ -714,7 +714,7 @@ rustBlock = def "rustBlock" $
         R._Block_expression>>: just (var "expr")]
 
 -- | Function call expression
-rustCall :: TTermDefinition (R.Expression -> [R.Expression] -> R.Expression)
+rustCall :: TypedTermDefinition (R.Expression -> [R.Expression] -> R.Expression)
 rustCall = def "rustCall" $
   lambda "fun" $ lambda "args" $
     inject R._Expression R._Expression_call $
@@ -723,7 +723,7 @@ rustCall = def "rustCall" $
         R._CallExpr_args>>: var "args"]
 
 -- | Closure expression: |params| body
-rustClosure :: TTermDefinition ([String] -> R.Expression -> R.Expression)
+rustClosure :: TypedTermDefinition ([String] -> R.Expression -> R.Expression)
 rustClosure = def "rustClosure" $
   lambda "params" $ lambda "body" $
     inject R._Expression R._Expression_closure $
@@ -748,7 +748,7 @@ rustClosure = def "rustClosure" $
 -- =============================================================================
 
 -- | Variable reference as a path expression
-rustExprPath :: TTermDefinition (String -> R.Expression)
+rustExprPath :: TypedTermDefinition (String -> R.Expression)
 rustExprPath = def "rustExprPath" $
   lambda "name" $
     inject R._Expression R._Expression_path $
@@ -760,7 +760,7 @@ rustExprPath = def "rustExprPath" $
             R._PathSegment_arguments>>: inject R._GenericArguments R._GenericArguments_none unit]]]
 
 -- | Let statement: let name = expr;
-rustLetStmt :: TTermDefinition (String -> R.Expression -> R.Statement)
+rustLetStmt :: TypedTermDefinition (String -> R.Expression -> R.Statement)
 rustLetStmt = def "rustLetStmt" $
   lambda "name" $ lambda "expr" $
     inject R._Statement R._Statement_let $
@@ -776,7 +776,7 @@ rustLetStmt = def "rustLetStmt" $
         R._LetStatement_init>>: just (var "expr")]
 
 -- | Construct a simple Rust path type (e.g., "String" -> String)
-rustPath :: TTermDefinition (String -> R.Type)
+rustPath :: TypedTermDefinition (String -> R.Type)
 rustPath = def "rustPath" $
   lambda "name" $
     inject R._Type R._Type_path $
@@ -788,7 +788,7 @@ rustPath = def "rustPath" $
             R._PathSegment_arguments>>: inject R._GenericArguments R._GenericArguments_none unit]]]
 
 -- | Construct a Rust path type with multiple segments (e.g., ["num", "BigInt"] -> num::BigInt)
-rustPathSegmented :: TTermDefinition ([String] -> R.Type)
+rustPathSegmented :: TypedTermDefinition ([String] -> R.Type)
 rustPathSegmented = def "rustPathSegmented" $
   lambda "segs" $
     inject R._Type R._Type_path $
@@ -802,7 +802,7 @@ rustPathSegmented = def "rustPathSegmented" $
           (var "segs")]
 
 -- | The Rust unit type ()
-rustUnit :: TTermDefinition R.Type
+rustUnit :: TypedTermDefinition R.Type
 rustUnit = def "rustUnit" $
   inject R._Type R._Type_unit unit
 
@@ -810,7 +810,7 @@ rustUnit = def "rustUnit" $
 -- Rust expression AST helpers
 -- =============================================================================
 
-standardDerives :: TTermDefinition [String]
+standardDerives :: TypedTermDefinition [String]
 standardDerives = def "standardDerives" $
   list $ string <$> ["Clone", "Debug", "PartialEq", "Eq", "PartialOrd", "Ord"]
 

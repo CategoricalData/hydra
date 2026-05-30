@@ -14,7 +14,6 @@ import qualified Hydra.Json.Model as Model
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
-import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Query as Query
 import qualified Hydra.Relational as Relational
 import qualified Hydra.Tabular as Tabular
@@ -56,6 +55,7 @@ import qualified Hydra.Test.Validate.All as ValidateAll
 import qualified Hydra.Test.Variables as Variables
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
 import qualified Hydra.Validation as Validation

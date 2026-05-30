@@ -15,7 +15,7 @@ import           Prelude hiding ((++))
 ns :: ModuleName
 ns = ModuleName "hydra.lib.maybes"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -178,75 +178,75 @@ toListSig = sig $ TypeScheme [Name "x"]
 -- Default implementations.
 
 -- apply mf mx = bind mf (\f -> map (\x -> f x) mx)
-apply_ :: TTermDefinition (Maybe (a -> b) -> Maybe a -> Maybe b)
+apply_ :: TypedTermDefinition (Maybe (a -> b) -> Maybe a -> Maybe b)
 apply_ = define "apply" $
   doc "Applicative apply for optionals, defined in terms of bind and map." $
   "mf" ~> "mx" ~> Maybes.bind (var "mf")
     ("f" ~> Maybes.map ("x" ~> var "f" @@ var "x") (var "mx"))
 
 -- bind m f = maybe Nothing f m
-bind_ :: TTermDefinition (Maybe a -> (a -> Maybe b) -> Maybe b)
+bind_ :: TypedTermDefinition (Maybe a -> (a -> Maybe b) -> Maybe b)
 bind_ = define "bind" $
   doc "Monadic bind for optionals, defined in terms of maybe." $
   "m" ~> "f" ~> Maybes.maybe nothing (var "f") (var "m")
 
 -- cat xs = foldr (\m acc -> maybe acc (\v -> v : acc) m) [] xs
-cat_ :: TTermDefinition ([Maybe a] -> [a])
+cat_ :: TypedTermDefinition ([Maybe a] -> [a])
 cat_ = define "cat" $
   doc "Catenate a list of optionals, keeping only the present values." $
   "xs" ~> Lists.foldr
-    ("m" ~> "acc" ~> Maybes.maybe (var "acc" :: TTerm [a])
+    ("m" ~> "acc" ~> Maybes.maybe (var "acc" :: TypedTerm [a])
       ("v" ~> Lists.cons (var "v") (var "acc"))
       (var "m"))
-    (list ([] :: [TTerm a]))
+    (list ([] :: [TypedTerm a]))
     (var "xs")
 
 -- compose f g x = bind (f x) g
-compose_ :: TTermDefinition ((a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c)
+compose_ :: TypedTermDefinition ((a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c)
 compose_ = define "compose" $
   doc "Kleisli composition for optionals, defined in terms of bind." $
   "f" ~> "g" ~> "x" ~> Maybes.bind (var "f" @@ var "x") (var "g")
 
 -- fromMaybe def m = maybe def (\x -> x) m
-fromMaybe_ :: TTermDefinition (a -> Maybe a -> a)
+fromMaybe_ :: TypedTermDefinition (a -> Maybe a -> a)
 fromMaybe_ = define "fromMaybe" $
   doc "Return the contained value or a default, defined in terms of maybe." $
-  "def" ~> "m" ~> Maybes.maybe (var "def" :: TTerm a) ("x" ~> var "x") (var "m")
+  "def" ~> "m" ~> Maybes.maybe (var "def" :: TypedTerm a) ("x" ~> var "x") (var "m")
 
 -- isJust m = maybe false (\_ -> true) m
-isJust_ :: TTermDefinition (Maybe a -> Bool)
+isJust_ :: TypedTermDefinition (Maybe a -> Bool)
 isJust_ = define "isJust" $
   doc "Test for presence, defined in terms of maybe." $
   "m" ~> Maybes.maybe false ("_" ~> true) (var "m")
 
 -- isNothing m = maybe true (\_ -> false) m
-isNothing_ :: TTermDefinition (Maybe a -> Bool)
+isNothing_ :: TypedTermDefinition (Maybe a -> Bool)
 isNothing_ = define "isNothing" $
   doc "Test for absence, defined in terms of maybe." $
   "m" ~> Maybes.maybe true ("_" ~> false) (var "m")
 
 -- mapMaybe f xs = cat (Lists.map f xs)
-mapMaybe_ :: TTermDefinition ((a -> Maybe b) -> [a] -> [b])
+mapMaybe_ :: TypedTermDefinition ((a -> Maybe b) -> [a] -> [b])
 mapMaybe_ = define "mapMaybe" $
   doc "Map a partial function and keep only the present results, defined in terms of lists.map and cat." $
   "f" ~> "xs" ~> Maybes.cat (Lists.map (var "f") (var "xs"))
 
 -- map f m = maybe Nothing (\x -> Just (f x)) m
-map_ :: TTermDefinition ((a -> b) -> Maybe a -> Maybe b)
+map_ :: TypedTermDefinition ((a -> b) -> Maybe a -> Maybe b)
 map_ = define "map" $
   doc "Map a function over an optional, defined in terms of maybe." $
   "f" ~> "m" ~> Maybes.maybe nothing ("x" ~> just (var "f" @@ var "x")) (var "m")
 
 -- pure x = Just x
-pure_ :: TTermDefinition (a -> Maybe a)
+pure_ :: TypedTermDefinition (a -> Maybe a)
 pure_ = define "pure" $
   doc "Wrap a value in Just." $
   "x" ~> just (var "x")
 
 -- toList m = maybe [] (\x -> [x]) m
-toList_ :: TTermDefinition (Maybe a -> [a])
+toList_ :: TypedTermDefinition (Maybe a -> [a])
 toList_ = define "toList" $
   doc "Convert an optional to a list, defined in terms of maybe." $
-  "m" ~> Maybes.maybe (list ([] :: [TTerm a]))
+  "m" ~> Maybes.maybe (list ([] :: [TypedTerm a]))
     ("x" ~> list [var "x"])
     (var "m")

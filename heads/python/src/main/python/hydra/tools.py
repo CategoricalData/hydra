@@ -9,7 +9,7 @@ from hydra.core import Name
 from hydra.dsl.meta.phantoms import primitive1
 from hydra.dsl.prims import int32, prim1, string
 from hydra.graph import TermCoder
-from hydra.phantoms import TTerm
+from hydra.typed import TypedTerm
 
 A = TypeVar("A")
 B = TypeVar("B")
@@ -22,13 +22,13 @@ TYPE_CODERS: dict[type, Callable[[], TermCoder[Any]]] = {
 
 
 @overload
-def primitive(func: Callable[[A], B]) -> Callable[[TTerm[A]], TTerm[B]]: ...
+def primitive(func: Callable[[A], B]) -> Callable[[TypedTerm[A]], TypedTerm[B]]: ...
 
 
 @overload
 def primitive(
     *, name: str | None = None, namespace: str | None = None
-) -> Callable[[Callable[[A], B]], Callable[[TTerm[A]], TTerm[B]]]: ...
+) -> Callable[[Callable[[A], B]], Callable[[TypedTerm[A]], TypedTerm[B]]]: ...
 
 
 def primitive(
@@ -37,8 +37,8 @@ def primitive(
     name: str | None = None,
     namespace: str | None = None,
 ) -> (
-    Callable[[TTerm[A]], TTerm[B]]
-    | Callable[[Callable[[A], B]], Callable[[TTerm[A]], TTerm[B]]]
+    Callable[[TypedTerm[A]], TypedTerm[B]]
+    | Callable[[Callable[[A], B]], Callable[[TypedTerm[A]], TypedTerm[B]]]
 ):
     """Lift a regular Python function to a Hydra DSL primitive.
 
@@ -47,7 +47,7 @@ def primitive(
             return s.lower()
 
     And transforms it into:
-        def to_lower(s: TTerm[str]) -> TTerm[str]:
+        def to_lower(s: TypedTerm[str]) -> TypedTerm[str]:
             return primitive1(to_lower_name, s)
 
     Parameters
@@ -68,7 +68,7 @@ def primitive(
         return _lift_function(func, name, namespace)
     else:
         # Used as @primitive_lift() with parentheses
-        def decorator(f: Callable[[A], B]) -> Callable[[TTerm[A]], TTerm[B]]:
+        def decorator(f: Callable[[A], B]) -> Callable[[TypedTerm[A]], TypedTerm[B]]:
             return _lift_function(f, name, namespace)
 
         return decorator
@@ -109,7 +109,7 @@ def _infer_namespace_from_file(func: Any) -> str:
 
 def _lift_function(
     func: Callable[[A], B], name: str | None, namespace: str | None
-) -> Callable[[TTerm[A]], TTerm[B]]:
+) -> Callable[[TypedTerm[A]], TypedTerm[B]]:
     """Lift a function to a Hydra DSL primitive."""
     # Get function name and infer namespace if not provided
     func_name = name or func.__name__
@@ -162,20 +162,20 @@ def _lift_function(
     # TODO: Add in registration to the standard library
 
     # Create the lifted function with proper typing
-    def lifted_with_typing(arg: TTerm[A]) -> TTerm[B]:
+    def lifted_with_typing(arg: TypedTerm[A]) -> TypedTerm[B]:
         """Lifted version of the original function."""
-        return cast(TTerm[B], primitive1(primitive_name, arg))
+        return cast(TypedTerm[B], primitive1(primitive_name, arg))
 
     # Preserve original function metadata
     lifted_with_typing.__name__ = func.__name__
     lifted_with_typing.__doc__ = func.__doc__ or f"Lifted version of {func_name}."
     lifted_with_typing.__annotations__ = {
-        next(iter(sig.parameters.keys())): TTerm[input_type],
-        "return": TTerm[return_type],
+        next(iter(sig.parameters.keys())): TypedTerm[input_type],
+        "return": TypedTerm[return_type],
     }
 
     # Store reference to the primitive name on the function
     setattr(lifted_with_typing, "_primitive_name", primitive_name)
     setattr(lifted_with_typing, "_primitive", primitive)
 
-    return cast(Callable[[TTerm[A]], TTerm[B]], lifted_with_typing)
+    return cast(Callable[[TypedTerm[A]], TypedTerm[B]], lifted_with_typing)

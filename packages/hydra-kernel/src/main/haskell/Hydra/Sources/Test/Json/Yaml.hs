@@ -47,18 +47,18 @@ module_ = Module {
     definitions = [
         Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- Local alias for polymorphic application
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Round-trip test cases for the JSON<->YAML decimal bridge" $
     supergroup "JSON<->YAML bridge" [
       decimalBridgeGroup]
 
-decimalBridgeGroup :: TTerm TestGroup
+decimalBridgeGroup :: TypedTerm TestGroup
 decimalBridgeGroup = subgroup "decimal round-trip" [
     yamlBridgeCase "zero" (Json.valueNumber $ Phantoms.decimal 0),
     yamlBridgeCase "positive whole" (Json.valueNumber $ Phantoms.decimal 42),
@@ -83,7 +83,7 @@ decimalBridgeGroup = subgroup "decimal round-trip" [
 
 -- | Round-trip a JSON value through YAML and back, asserting the result prints identically.
 -- JSON -> YAML -> JSON must preserve the full decimal value for any JSON number.
-yamlBridgeCase :: String -> TTerm Value -> TTerm TestCaseWithMetadata
+yamlBridgeCase :: String -> TypedTerm Value -> TypedTerm TestCaseWithMetadata
 yamlBridgeCase testName jsonValue = universalCase testName
   (Eithers.either_
     (Phantoms.lambda "e" $ Phantoms.var "e")

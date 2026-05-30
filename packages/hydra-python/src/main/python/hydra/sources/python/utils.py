@@ -171,7 +171,7 @@ def _comment_statement():
 def _short_circuit_to_nothing(predicates_and_else):
     """Build nested ifElse pred1 nothing $ ifElse pred2 nothing $ ... else_term.
 
-    predicates_and_else: list of TTerm predicates, last element is the else-term TTerm.
+    predicates_and_else: list of TypedTerm predicates, last element is the else-term TypedTerm.
     """
     *preds, else_t = predicates_and_else
     out = else_t

@@ -36,10 +36,10 @@ module_ = Module {
     definitions = [
         Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for hydra.lib.strings primitives" $
     supergroup "hydra.lib.strings primitives" [
@@ -58,13 +58,13 @@ allTests = define "allTests" $
       stringsUnlines]
     where
       -- Show functions for evalPair
-      showInt32 :: TTerm (Int -> String)
+      showInt32 :: TypedTerm (Int -> String)
       showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
-      showBool :: TTerm (Bool -> String)
+      showBool :: TypedTerm (Bool -> String)
       showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
-      showStringList :: TTerm ([String] -> String)
+      showStringList :: TypedTerm ([String] -> String)
       showStringList = Phantoms.lambda "xs" $ Literals.showString (Strings.intercalate (Phantoms.string ", ") (Phantoms.var "xs"))
-      showIntList :: TTerm ([Int] -> String)
+      showIntList :: TypedTerm ([Int] -> String)
       showIntList = Phantoms.lambda "xs" $ Strings.intercalate (Phantoms.string ", ") (Lists.map (Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")) (Phantoms.var "xs"))
 
       stringsCat = subgroup "cat" [

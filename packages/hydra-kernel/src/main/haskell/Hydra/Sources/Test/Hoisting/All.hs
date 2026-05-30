@@ -33,10 +33,10 @@ module_ = Module {
       Cases.ns,
       Let.ns]
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     doc "The group of all hoisting tests" $
-    Testing.testGroup (string "hoisting") nothing (list subgroups) (list ([] :: [TTerm TestCaseWithMetadata]))
+    Testing.testGroup (string "hoisting") nothing (list subgroups) (list ([] :: [TypedTerm TestCaseWithMetadata]))
   where
     subgroups = [
       Cases.allTests,

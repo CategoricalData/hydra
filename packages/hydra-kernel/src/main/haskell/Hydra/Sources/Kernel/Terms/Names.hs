@@ -85,10 +85,10 @@ module_ = Module {
      toDefinition uniqueLabel,
      toDefinition unqualifyName]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-compactName :: TTermDefinition (M.Map ModuleName String -> Name -> String)
+compactName :: TypedTermDefinition (M.Map ModuleName String -> Name -> String)
 compactName = define "compactName" $
   doc "Given a mapping of namespaces to prefixes, convert a name to a compact string representation" $
   lambda "namespaces" $ lambda "name" $ lets [
@@ -103,7 +103,7 @@ compactName = define "compactName" $
             (Maps.lookup (var "ns") (var "namespaces")))
         (var "mns")
 
-freshName :: TTermDefinition (InferenceContext -> (Name, InferenceContext))
+freshName :: TypedTermDefinition (InferenceContext -> (Name, InferenceContext))
 freshName = define "freshName" $
   doc "Generate a fresh type variable name, threading InferenceContext" $
   "cx" ~>
@@ -112,7 +112,7 @@ freshName = define "freshName" $
     (normalTypeVariable @@ var "count")
     (Typing.inferenceContextWithFreshTypeVariableCount (var "cx") (Math.add (var "count") (int32 1)))
 
-freshNames :: TTermDefinition (Int -> InferenceContext -> ([Name], InferenceContext))
+freshNames :: TypedTermDefinition (Int -> InferenceContext -> ([Name], InferenceContext))
 freshNames = define "freshNames" $
   doc "Generate multiple fresh type variable names, threading InferenceContext" $
   "n" ~> "cx" ~>
@@ -124,14 +124,14 @@ freshNames = define "freshNames" $
     "name" <~ Pairs.first (var "result") $
     "cx1" <~ Pairs.second (var "result") $
     pair (Lists.concat2 (var "names") (Lists.pure (var "name"))) (var "cx1")) $
-  Lists.foldl (var "go") (pair (list ([] :: [TTerm Name])) (var "cx")) (Lists.replicate (var "n") unit)
+  Lists.foldl (var "go") (pair (list ([] :: [TypedTerm Name])) (var "cx")) (Lists.replicate (var "n") unit)
 
-localNameOf :: TTermDefinition (Name -> String)
+localNameOf :: TypedTermDefinition (Name -> String)
 localNameOf = define "localNameOf" $
   doc "Extract the local part of a name" $
   reify Packaging.qualifiedNameLocal <.> qualifyName
 
-nameToFilePath :: TTermDefinition (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
+nameToFilePath :: TypedTermDefinition (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
 nameToFilePath = define "nameToFilePath" $
   doc "Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator" $
   "nsConv" ~> "localConv" ~> "ext" ~> "name" ~>
@@ -148,12 +148,12 @@ nameToFilePath = define "nameToFilePath" $
   "suffix" <~ Formatting.convertCase @@ Util.caseConventionPascal @@ var "localConv" @@ var "local" $
   Strings.cat (list [var "prefix", var "suffix", string ".", Packaging.unFileExtension (var "ext")])
 
-namespaceOf :: TTermDefinition (Name -> Maybe ModuleName)
+namespaceOf :: TypedTermDefinition (Name -> Maybe ModuleName)
 namespaceOf = define "namespaceOf" $
   doc "Extract the namespace of a name, if any" $
   reify Packaging.qualifiedNameModuleName <.> qualifyName
 
-namespaceToFilePath :: TTermDefinition (CaseConvention -> FileExtension -> ModuleName -> String)
+namespaceToFilePath :: TypedTermDefinition (CaseConvention -> FileExtension -> ModuleName -> String)
 namespaceToFilePath = define "namespaceToFilePath" $
   doc "Convert a namespace to a file path with the given case convention and file extension" $
   lambda "caseConv" $ lambda "ext" $ lambda "ns" $ lets [
@@ -162,18 +162,18 @@ namespaceToFilePath = define "namespaceToFilePath" $
       (Strings.splitOn (string ".") (Packaging.unModuleName $ var "ns"))]
     $ (Strings.intercalate (string "/") $ var "parts") ++ string "." ++ (Packaging.unFileExtension $ var "ext")
 
-normalTypeVariable :: TTermDefinition (Int -> Name)
+normalTypeVariable :: TypedTermDefinition (Int -> Name)
 normalTypeVariable = define "normalTypeVariable" $
   doc "Type variable naming convention follows Haskell: t0, t1, etc." $
   "i" ~> Core.name (Strings.cat2 (string "t") (Literals.showInt32 $ var "i"))
 
-pushSubtermStep :: TTermDefinition (SubtermStep -> InferenceContext -> InferenceContext)
+pushSubtermStep :: TypedTermDefinition (SubtermStep -> InferenceContext -> InferenceContext)
 pushSubtermStep = define "pushSubtermStep" $
   doc "Prepend a SubtermStep to the InferenceContext's trace. The trace is accumulated backwards as inference descends through subterms; at error-emission time the list is reversed and wrapped into a SubtermPath stamped onto the error." $
   "step" ~> "cx" ~>
   Typing.inferenceContextWithTrace (var "cx") (Lists.cons (var "step") (Typing.inferenceContextTrace (var "cx")))
 
-qname :: TTermDefinition (ModuleName -> String -> Name)
+qname :: TypedTermDefinition (ModuleName -> String -> Name)
 qname = define "qname" $
   doc "Construct a qualified (dot-separated) name" $
   lambda "ns" $ lambda "name" $
@@ -181,7 +181,7 @@ qname = define "qname" $
       Strings.cat $
         list [apply (unwrap _ModuleName) (var "ns"), string ".", var "name"]
 
-qualifyName :: TTermDefinition (Name -> QualifiedName)
+qualifyName :: TypedTermDefinition (Name -> QualifiedName)
 qualifyName = define "qualifyName" $
   doc "Split a dot-separated name into a namespace and local name" $
   lambda "name" $ lets [
@@ -202,7 +202,7 @@ qualifyName = define "qualifyName" $
             (var "localName")))
       (Lists.uncons $ var "parts")
 
-restoreTrace :: TTermDefinition (InferenceContext -> InferenceContext -> InferenceContext)
+restoreTrace :: TypedTermDefinition (InferenceContext -> InferenceContext -> InferenceContext)
 restoreTrace = define "restoreTrace" $
   doc ("Restore the original trace from baseCx, while keeping the freshTypeVariableCount from newCx."
     <> " Used between sibling sub-inferences (e.g. application LHS vs RHS) so that an error in the second sibling"
@@ -210,7 +210,7 @@ restoreTrace = define "restoreTrace" $
   "baseCx" ~> "newCx" ~>
   Typing.inferenceContextWithTrace (var "newCx") (Typing.inferenceContextTrace (var "baseCx"))
 
-uniqueLabel :: TTermDefinition (S.Set String -> String -> String)
+uniqueLabel :: TypedTermDefinition (S.Set String -> String -> String)
 uniqueLabel = define "uniqueLabel" $
   doc "Generate a unique label by appending a suffix if the label is already in use" $
   lambda "visited" $ lambda "l" $
@@ -218,7 +218,7 @@ uniqueLabel = define "uniqueLabel" $
     (uniqueLabel @@ var "visited" @@ Strings.cat2 (var "l") (string "'"))
     (var "l")
 
-unqualifyName :: TTermDefinition (QualifiedName -> Name)
+unqualifyName :: TypedTermDefinition (QualifiedName -> Name)
 unqualifyName = define "unqualifyName" $
   doc "Convert a qualified name to a dot-separated name" $
   lambda "qname" $ lets [

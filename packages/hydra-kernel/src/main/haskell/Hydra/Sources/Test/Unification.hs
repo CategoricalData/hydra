@@ -45,16 +45,16 @@ module_ = Module {
   where
     definitions = [Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- Helper to build names
-nm :: String -> TTerm Name
+nm :: String -> TypedTerm Name
 nm s = Core.name $ Phantoms.string s
 
 -- Local alias for polymorphic application
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for type unification operations" $
     supergroup "unification" [
@@ -64,24 +64,24 @@ allTests = define "allTests" $
 
 -- | Build schema types map from a list of names.
 -- Each name gets TypeScheme [] (TypeVariable name) Nothing
-buildSchemaMap :: TTerm [Name] -> TTerm (M.Map Name TypeScheme)
+buildSchemaMap :: TypedTerm [Name] -> TypedTerm (M.Map Name TypeScheme)
 buildSchemaMap names = Maps.fromList (Lists.map
   (Phantoms.lambda "n" $ Phantoms.pair (Phantoms.var "n") (T.mono (Core.typeVariable (Phantoms.var "n"))))
   names)
 
 -- Helper to create type constraints
-constraint :: TTerm Type -> TTerm Type -> TTerm TypeConstraint
+constraint :: TypedTerm Type -> TypedTerm Type -> TypedTerm TypeConstraint
 constraint left right = Phantoms.record _TypeConstraint [
   Phantoms.field _TypeConstraint_left left,
   Phantoms.field _TypeConstraint_right right,
   Phantoms.field _TypeConstraint_comment (Phantoms.string "join types; test")]
 
 -- Helper: empty substitution (success with no bindings)
-emptySubst :: [(TTerm Name, TTerm Type)]
+emptySubst :: [(TypedTerm Name, TypedTerm Type)]
 emptySubst = []
 
 -- | Universal joinTypes test case (expecting success)
-joinTypesCase :: String -> TTerm Type -> TTerm Type -> TTerm [TypeConstraint] -> TTerm TestCaseWithMetadata
+joinTypesCase :: String -> TypedTerm Type -> TypedTerm Type -> TypedTerm [TypeConstraint] -> TypedTerm TestCaseWithMetadata
 joinTypesCase cname left right constraints = universalCase cname
   (Eithers.either_
     (Phantoms.lambda "_" $ Phantoms.string "failure")
@@ -90,7 +90,7 @@ joinTypesCase cname left right constraints = universalCase cname
   (showConstraints constraints)
 
 -- | Universal joinTypes test case (expecting failure)
-joinTypesFailCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
+joinTypesFailCase :: String -> TypedTerm Type -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
 joinTypesFailCase cname left right = universalCase cname
   (Eithers.either_
     (Phantoms.lambda "_" $ Phantoms.string "failure")
@@ -102,7 +102,7 @@ joinTypesFailCase cname left right = universalCase cname
 -- variableOccursInType tests
 -- ============================================================
 
-joinTypesTests :: TTerm TestGroup
+joinTypesTests :: TypedTerm TestGroup
 joinTypesTests = subgroup "joinTypes" [
   -- Identical primitive types produce no constraints
   joinTypesCase "join identical int32"
@@ -184,15 +184,15 @@ joinTypesTests = subgroup "joinTypes" [
 -- ============================================================
 
 -- Helper for empty constraint list
-noConstraints :: TTerm [TypeConstraint]
-noConstraints = Phantoms.list ([] :: [TTerm TypeConstraint])
+noConstraints :: TypedTerm [TypeConstraint]
+noConstraints = Phantoms.list ([] :: [TypedTerm TypeConstraint])
 
 -- Helper: empty schema types list
-noSchema :: TTerm [Name]
-noSchema = Phantoms.list ([] :: [TTerm Name])
+noSchema :: TypedTerm [Name]
+noSchema = Phantoms.list ([] :: [TypedTerm Name])
 
 -- | Show a list of TypeConstraints as "[(left ~ right), ...]"
-showConstraints :: TTerm [TypeConstraint] -> TTerm String
+showConstraints :: TypedTerm [TypeConstraint] -> TypedTerm String
 showConstraints cs = Strings.cat (Phantoms.list [
   Phantoms.string "[",
   Strings.intercalate (Phantoms.string ", ")
@@ -206,7 +206,7 @@ showConstraints cs = Strings.cat (Phantoms.list [
   Phantoms.string "]"])
 
 -- | Show a TypeSubst as a sorted string like "{a: int32, b: string}"
-showTypeSubst :: TTerm TypeSubst -> TTerm String
+showTypeSubst :: TypedTerm TypeSubst -> TypedTerm String
 showTypeSubst ts = Strings.cat (Phantoms.list [
   Phantoms.string "{",
   Strings.intercalate (Phantoms.string ", ")
@@ -218,7 +218,7 @@ showTypeSubst ts = Strings.cat (Phantoms.list [
   Phantoms.string "}"])
 
 -- | Universal unifyTypes test case (expecting success)
-unifyTypesCase :: String -> TTerm [Name] -> TTerm Type -> TTerm Type -> [(TTerm Name, TTerm Type)] -> TTerm TestCaseWithMetadata
+unifyTypesCase :: String -> TypedTerm [Name] -> TypedTerm Type -> TypedTerm Type -> [(TypedTerm Name, TypedTerm Type)] -> TypedTerm TestCaseWithMetadata
 unifyTypesCase cname schemaTypes left right substPairs = universalCase cname
   (Eithers.either_
     (Phantoms.lambda "_" $ Phantoms.string "failure")
@@ -227,7 +227,7 @@ unifyTypesCase cname schemaTypes left right substPairs = universalCase cname
   (showTypeSubst (Phantoms.wrap _TypeSubst (Phantoms.map (M.fromList substPairs))))
 
 -- | Universal unifyTypes test case (expecting failure)
-unifyTypesFailCase :: String -> TTerm [Name] -> TTerm Type -> TTerm Type -> String -> TTerm TestCaseWithMetadata
+unifyTypesFailCase :: String -> TypedTerm [Name] -> TypedTerm Type -> TypedTerm Type -> String -> TypedTerm TestCaseWithMetadata
 unifyTypesFailCase cname schemaTypes left right _errSubstring = universalCase cname
   (Eithers.either_
     (Phantoms.lambda "_" $ Phantoms.string "failure")
@@ -235,7 +235,7 @@ unifyTypesFailCase cname schemaTypes left right _errSubstring = universalCase cn
     (UnificationModule.unifyTypes @@ Lexical.emptyInferenceContext @@ buildSchemaMap schemaTypes @@ left @@ right @@ Phantoms.string "test"))
   (Phantoms.string "failure")
 
-unifyTypesTests :: TTerm TestGroup
+unifyTypesTests :: TypedTerm TestGroup
 unifyTypesTests = subgroup "unifyTypes" [
   -- Identical types unify with empty substitution
   unifyTypesCase "unify identical int32 types"
@@ -369,13 +369,13 @@ unifyTypesTests = subgroup "unifyTypes" [
 -- ============================================================
 
 -- | Universal variableOccursInType test case
-variableOccursCase :: String -> TTerm Name -> TTerm Type -> TTerm Bool -> TTerm TestCaseWithMetadata
+variableOccursCase :: String -> TypedTerm Name -> TypedTerm Type -> TypedTerm Bool -> TypedTerm TestCaseWithMetadata
 variableOccursCase cname variable typ expected =
   universalCase cname
     (Literals.showBoolean (UnificationModule.variableOccursInType @@ variable @@ typ))
     (Literals.showBoolean expected)
 
-variableOccursInTypeTests :: TTerm TestGroup
+variableOccursInTypeTests :: TypedTerm TestGroup
 variableOccursInTypeTests = subgroup "variableOccursInType" [
   -- Variable occurs in itself
   variableOccursCase "variable occurs in itself"

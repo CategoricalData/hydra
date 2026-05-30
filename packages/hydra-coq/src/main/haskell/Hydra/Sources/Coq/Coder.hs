@@ -40,7 +40,7 @@ import qualified Hydra.Coq.Syntax as C
 import qualified Hydra.Coq.Environment as CE
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 ns :: ModuleName
@@ -95,7 +95,7 @@ module_ = Module {
       toDefinition unitLambdaBody]
 
 -- | Build a Coq arrow type "dom -> cod", represented as forall (_ : dom), cod.
-coqArrow :: TTermDefinition (C.Term -> C.Term -> C.Term)
+coqArrow :: TypedTermDefinition (C.Term -> C.Term -> C.Term)
 coqArrow = define "coqArrow" $
   doc "Build the Coq dependent-function term `forall (_ : dom), cod` used as the arrow type" $
   lambdas ["dom", "cod"] $
@@ -105,29 +105,29 @@ coqArrow = define "coqArrow" $
           C._Forall_binders>>: inject C._OpenBinders C._OpenBinders_binders (list [
             inject C._Binder C._Binder_type $
               record C._TypeBinders [
-                C._TypeBinders_names>>: list [wrap C._Name (nothing :: TTerm (Maybe C.Ident))],
+                C._TypeBinders_names>>: list [wrap C._Name (nothing :: TypedTerm (Maybe C.Ident))],
                 C._TypeBinders_type>>: coqTypeTerm @@ var "dom"]]),
           C._Forall_type>>: coqTypeTerm @@ var "cod"]
 
 -- | Build a Coq Ident from a string.
-coqIdent :: TTermDefinition (String -> C.Ident)
+coqIdent :: TypedTermDefinition (String -> C.Ident)
 coqIdent = define "coqIdent" $
   lambda "s" $ wrap C._Ident $ wrap C._String $ var "s"
 
 -- | Build a Coq Name (optional Ident) from a string.
-coqName :: TTermDefinition (String -> C.Name)
+coqName :: TypedTermDefinition (String -> C.Name)
 coqName = define "coqName" $
   lambda "s" $ wrap C._Name $ just (coqIdent @@ var "s")
 
 -- | Build a simple Coq Qualid from a string (no field-path components).
-coqQualid :: TTermDefinition (String -> C.Qualid)
+coqQualid :: TypedTermDefinition (String -> C.Qualid)
 coqQualid = define "coqQualid" $
   lambda "s" $ record C._Qualid [
     C._Qualid_id>>: coqIdent @@ var "s",
-    C._Qualid_fieldIds>>: list ([] :: [TTerm C.FieldIdent])]
+    C._Qualid_fieldIds>>: list ([] :: [TypedTerm C.FieldIdent])]
 
 -- | Build a Coq function application term "f args..." (or just "f" when there are no args).
-coqTermApp :: TTermDefinition (C.Term -> [C.Term] -> C.Term)
+coqTermApp :: TypedTermDefinition (C.Term -> [C.Term] -> C.Term)
 coqTermApp = define "coqTermApp" $
   doc "Apply a Coq term to a list of argument terms, parenthesising each" $
   lambdas ["f", "args"] $
@@ -151,7 +151,7 @@ coqTermApp = define "coqTermApp" $
 -- | Wrap a term in a Coq type annotation: `(t : T)`. Used to force type
 -- inference for empty containers like `None`, `nil`, and empty maps/sets,
 -- whose element type cannot otherwise be inferred from context.
-coqTermCast :: TTermDefinition (C.Term -> C.Type -> C.Term)
+coqTermCast :: TypedTermDefinition (C.Term -> C.Type -> C.Term)
 coqTermCast = define "coqTermCast" $
   doc "Build a Coq Term expressing `(t : T)` with the normal cast operator" $
   lambdas ["t", "ty"] $
@@ -168,7 +168,7 @@ coqTermCast = define "coqTermCast" $
             inject C._TypeCastOperator C._TypeCastOperator_normal unit]
 
 -- | Build a Coq atomic term from a qualified name (unapplied).
-coqTermQualid :: TTermDefinition (String -> C.Term)
+coqTermQualid :: TypedTermDefinition (String -> C.Term)
 coqTermQualid = define "coqTermQualid" $
   doc "Build a Coq Term that references a (possibly qualified) identifier" $
   lambda "s" $
@@ -178,10 +178,10 @@ coqTermQualid = define "coqTermQualid" $
           inject C._OneTerm C._OneTerm_explicit $
             record C._QualidAnnotated [
               C._QualidAnnotated_qualid>>: coqQualid @@ var "s",
-              C._QualidAnnotated_univAnnot>>: (nothing :: TTerm (Maybe C.UnivAnnot))]
+              C._QualidAnnotated_univAnnot>>: (nothing :: TypedTerm (Maybe C.UnivAnnot))]
 
 -- | Wrap a Term as a Type.
-coqTypeTerm :: TTermDefinition (C.Term -> C.Type)
+coqTypeTerm :: TypedTermDefinition (C.Term -> C.Type)
 coqTypeTerm = define "coqTypeTerm" $
   lambda "t" $ wrap C._Type $ var "t"
 
@@ -189,12 +189,12 @@ coqTypeTerm = define "coqTypeTerm" $
 -- Used for modules whose definitions cannot practically compile under coqc (e.g.
 -- hydra.hoisting, hydra.inference) — their term definitions are replaced by
 -- axioms of the same type, which the rest of the Coq build can still consume.
-encodeAxiomDefinitionPair :: TTermDefinition (CE.CoqEnvironment -> (String, Type) -> C.Sentence)
+encodeAxiomDefinitionPair :: TypedTermDefinition (CE.CoqEnvironment -> (String, Type) -> C.Sentence)
 encodeAxiomDefinitionPair = define "encodeAxiomDefinitionPair" $
   doc "Produce `Axiom name : type.` from a (name, Hydra type) pair" $
   lambdas ["env", "nt"] $
     record C._Sentence [
-      C._Sentence_comment>>: (nothing :: TTerm (Maybe C.Comment)),
+      C._Sentence_comment>>: (nothing :: TypedTerm (Maybe C.Comment)),
       C._Sentence_content>>:
         inject C._SentenceContent C._SentenceContent_axiom $
           record C._AxiomDeclaration [
@@ -206,7 +206,7 @@ encodeAxiomDefinitionPair = define "encodeAxiomDefinitionPair" $
 -- values (`Infinity`, `-Infinity`, `NaN`) have no representation in Coq's
 -- exact rationals, so they are emitted as references to the corresponding
 -- `hydra_posInf`/`hydra_negInf`/`hydra_nan` axioms from `hydra.lib.base`.
-encodeFloatLiteral :: TTermDefinition (String -> C.Term)
+encodeFloatLiteral :: TypedTermDefinition (String -> C.Term)
 encodeFloatLiteral = define "encodeFloatLiteral" $
   doc "Map a Haskell-`show`n Double/Scientific to a Coq term, routing NaN/Inf to base-lib axioms" $
   lambda "s" $
@@ -219,7 +219,7 @@ encodeFloatLiteral = define "encodeFloatLiteral" $
       (coqTermQualid @@ Strings.cat (list [string "(", var "s", string ")"]))
 
 -- | Encode a single Hydra Lambda term into a Coq `fun` term.
-encodeLambdaTerm :: TTermDefinition (CE.CoqEnvironment -> Lambda -> C.Term)
+encodeLambdaTerm :: TypedTermDefinition (CE.CoqEnvironment -> Lambda -> C.Term)
 encodeLambdaTerm = define "encodeLambdaTerm" $
   doc "Encode a Lambda into a Coq `fun` expression, sanitising the parameter name" $
   lambdas ["env", "lam"] $ lets [
@@ -238,7 +238,7 @@ encodeLambdaTerm = define "encodeLambdaTerm" $
           C._Fun_body>>: encodeTerm @@ var "env" @@ (Core.lambdaBody $ var "lam")]
 
 -- | Encode a Hydra literal into a Coq Term.
-encodeLiteral :: TTermDefinition (Literal -> C.Term)
+encodeLiteral :: TypedTermDefinition (Literal -> C.Term)
 encodeLiteral = define "encodeLiteral" $
   doc "Translate a Hydra literal into its Coq stdlib form, with disambiguating parentheses" $
   lambda "lit" $ cases _Literal (var "lit") Nothing [
@@ -273,7 +273,7 @@ encodeLiteral = define "encodeLiteral" $
     _Literal_binary>>: constant (coqTermQualid @@ string "\"\"")]
 
 -- | Encode a Hydra LiteralType to a Coq Term (qualid reference).
-encodeLiteralType :: TTermDefinition (LiteralType -> C.Term)
+encodeLiteralType :: TypedTermDefinition (LiteralType -> C.Term)
 encodeLiteralType = define "encodeLiteralType" $
   doc "Map a Hydra LiteralType to its Coq stdlib counterpart" $
   lambda "lt" $ cases _LiteralType (var "lt") Nothing [
@@ -298,7 +298,7 @@ encodeLiteralType = define "encodeLiteralType" $
 -- type generation (because of a positivity failure), emit an unreachable
 -- stub instead. That replaces the former `replaceSanitizedAccessors` text
 -- post-processor in `packages/hydra-coq/.../Hydra/Coq/Generate.hs`.
-encodeProjectionElim :: TTermDefinition (CE.CoqEnvironment -> Projection -> C.Term)
+encodeProjectionElim :: TypedTermDefinition (CE.CoqEnvironment -> Projection -> C.Term)
 encodeProjectionElim = define "encodeProjectionElim" $
   doc "Translate a Hydra record projection into a Coq lambda that pulls out the field" $
   lambdas ["env", "p"] $ lets [
@@ -326,7 +326,7 @@ encodeProjectionElim = define "encodeProjectionElim" $
               @@ list [coqTermQualid @@ string "r_"]])
 
 -- | Encode a Hydra Term into a Coq Term.
-encodeTerm :: TTermDefinition (CE.CoqEnvironment -> Term -> C.Term)
+encodeTerm :: TypedTermDefinition (CE.CoqEnvironment -> Term -> C.Term)
 encodeTerm = define "encodeTerm" $
   doc "Translate a Hydra Term into its Coq Term counterpart. The environment provides the constructor-count map used by encodeUnionElim (to decide whether a match is exhaustive) and the ambiguous-name set used by resolveQualifiedName (to decide whether cross-module references need to stay fully qualified)." $
   lambdas ["env", "tm"] $ cases _Term (var "tm") Nothing [
@@ -376,9 +376,9 @@ encodeTerm = define "encodeTerm" $
                   record C._LetNamed [
                     C._LetNamed_binder>>: record C._LetBinder [
                       C._LetBinder_name>>: coqName @@ var "safeName",
-                      C._LetBinder_type>>: (nothing :: TTerm (Maybe C.Type)),
+                      C._LetBinder_type>>: (nothing :: TypedTerm (Maybe C.Type)),
                       C._LetBinder_term>>: var "boundTerm"],
-                    C._LetNamed_binders>>: list ([] :: [TTerm C.LetBinder])],
+                    C._LetNamed_binders>>: list ([] :: [TypedTerm C.LetBinder])],
               C._Let_in>>: var "acc"])
         (encodeTerm @@ var "env" @@ var "body")
         (var "bindings"),
@@ -512,29 +512,29 @@ encodeTerm = define "encodeTerm" $
     _Term_wrap>>: "wt" ~> encodeTerm @@ var "env" @@ (Core.wrappedTermBody $ var "wt")]
 
 -- | Wrap an encoded term body as a Coq Definition sentence content.
-encodeTermDefinition :: TTermDefinition (CE.CoqEnvironment -> String -> Term -> C.SentenceContent)
+encodeTermDefinition :: TypedTermDefinition (CE.CoqEnvironment -> String -> Term -> C.SentenceContent)
 encodeTermDefinition = define "encodeTermDefinition" $
   doc "Build a Coq `Definition name := body.` sentence from a Hydra term" $
   lambdas ["env", "name", "body"] $
     inject C._SentenceContent C._SentenceContent_definition $
       record C._Definition [
-        C._Definition_locality>>: (nothing :: TTerm (Maybe C.Locality)),
+        C._Definition_locality>>: (nothing :: TypedTerm (Maybe C.Locality)),
         C._Definition_name>>: coqIdent @@ var "name",
-        C._Definition_binders>>: list ([] :: [TTerm C.Binder]),
-        C._Definition_type>>: (nothing :: TTerm (Maybe C.Type)),
+        C._Definition_binders>>: list ([] :: [TypedTerm C.Binder]),
+        C._Definition_type>>: (nothing :: TypedTerm (Maybe C.Type)),
         C._Definition_body>>: encodeTerm @@ var "env" @@ var "body"]
 
 -- | Encode a (name, Term) pair as a Coq Sentence.
-encodeTermDefinitionPair :: TTermDefinition (CE.CoqEnvironment -> (String, Term) -> C.Sentence)
+encodeTermDefinitionPair :: TypedTermDefinition (CE.CoqEnvironment -> (String, Term) -> C.Sentence)
 encodeTermDefinitionPair = define "encodeTermDefinitionPair" $
   doc "Wrap encodeTermDefinition in a Coq Sentence with no leading comment" $
   lambdas ["env", "ed"] $
     record C._Sentence [
-      C._Sentence_comment>>: (nothing :: TTerm (Maybe C.Comment)),
+      C._Sentence_comment>>: (nothing :: TypedTerm (Maybe C.Comment)),
       C._Sentence_content>>: encodeTermDefinition @@ var "env" @@ Pairs.first (var "ed") @@ Pairs.second (var "ed")]
 
 -- | Encode a Hydra Type to a Coq Term.
-encodeType :: TTermDefinition (CE.CoqEnvironment -> Type -> C.Term)
+encodeType :: TypedTermDefinition (CE.CoqEnvironment -> Type -> C.Term)
 encodeType = define "encodeType" $
   doc "Translate a Hydra Type into a Coq Term representing that type. The environment is consulted to resolve qualified type variable references" $
   lambdas ["env", "ty"] $ cases _Type (var "ty") Nothing [
@@ -597,29 +597,29 @@ encodeType = define "encodeType" $
     _Type_wrap>>: "wt" ~> encodeType @@ var "env" @@ var "wt"]
 
 -- | Wrap an encoded type body as a Coq Definition sentence content (typed `: Type`).
-encodeTypeDefinition :: TTermDefinition (CE.CoqEnvironment -> String -> Type -> C.SentenceContent)
+encodeTypeDefinition :: TypedTermDefinition (CE.CoqEnvironment -> String -> Type -> C.SentenceContent)
 encodeTypeDefinition = define "encodeTypeDefinition" $
   doc "Build a Coq `Definition name : Type := body.` sentence from a Hydra type" $
   lambdas ["env", "name", "ty"] $
     inject C._SentenceContent C._SentenceContent_definition $
       record C._Definition [
-        C._Definition_locality>>: (nothing :: TTerm (Maybe C.Locality)),
+        C._Definition_locality>>: (nothing :: TypedTerm (Maybe C.Locality)),
         C._Definition_name>>: coqIdent @@ var "name",
-        C._Definition_binders>>: list ([] :: [TTerm C.Binder]),
+        C._Definition_binders>>: list ([] :: [TypedTerm C.Binder]),
         C._Definition_type>>: just (coqTypeTerm @@ (coqTermQualid @@ string "Type")),
         C._Definition_body>>: encodeType @@ var "env" @@ var "ty"]
 
 -- | Encode a (name, Type) pair as a Coq Sentence.
-encodeTypeDefinitionPair :: TTermDefinition (CE.CoqEnvironment -> (String, Type) -> C.Sentence)
+encodeTypeDefinitionPair :: TypedTermDefinition (CE.CoqEnvironment -> (String, Type) -> C.Sentence)
 encodeTypeDefinitionPair = define "encodeTypeDefinitionPair" $
   doc "Wrap encodeTypeDefinition in a Coq Sentence with no leading comment" $
   lambdas ["env", "td"] $
     record C._Sentence [
-      C._Sentence_comment>>: (nothing :: TTerm (Maybe C.Comment)),
+      C._Sentence_comment>>: (nothing :: TypedTerm (Maybe C.Comment)),
       C._Sentence_content>>: encodeTypeDefinition @@ var "env" @@ Pairs.first (var "td") @@ Pairs.second (var "td")]
 
 -- | Build a Coq Constructor from a Hydra union FieldType.
-encodeUnionConstructor :: TTermDefinition (CE.CoqEnvironment -> String -> FieldType -> C.Constructor)
+encodeUnionConstructor :: TypedTermDefinition (CE.CoqEnvironment -> String -> FieldType -> C.Constructor)
 encodeUnionConstructor = define "encodeUnionConstructor" $
   doc "Construct a Coq Inductive Constructor line `Name_Tag : body -> Name` for a union variant" $
   lambdas ["env", "typeName", "f"] $ lets [
@@ -630,14 +630,14 @@ encodeUnionConstructor = define "encodeUnionConstructor" $
       Formatting.capitalize @@ (unwrap _Name @@ var "ufn")])] $
     record C._Constructor [
       C._Constructor_name>>: coqIdent @@ var "constrName",
-      C._Constructor_binders>>: list ([] :: [TTerm C.Binder]),
+      C._Constructor_binders>>: list ([] :: [TypedTerm C.Binder]),
       C._Constructor_type>>: just $ coqTypeTerm @@
         (coqArrow
           @@ (encodeType @@ var "env" @@ var "uft")
           @@ (coqTermQualid @@ var "typeName"))]
 
 -- | Translate a union eliminator (Hydra `TermCases`) into a Coq `fun x_ => match x_ with ... end`.
-encodeUnionElim :: TTermDefinition (CE.CoqEnvironment -> CaseStatement -> C.Term)
+encodeUnionElim :: TypedTermDefinition (CE.CoqEnvironment -> CaseStatement -> C.Term)
 encodeUnionElim = define "encodeUnionElim" $
   doc "Build a Coq match expression from a Hydra union eliminator. Uses the constructor-count map in the environment to decide whether the match is exhaustive: if so, an explicit default is suppressed; if not and the kernel didn't provide one, inserts `| _ => hydra_unreachable`." $
   lambdas ["env", "cs"] $ lets [
@@ -667,7 +667,7 @@ encodeUnionElim = define "encodeUnionElim" $
                       record C._Pattern1 [
                         C._Pattern1_pattern>>:
                           inject C._Pattern0 C._Pattern0_qualid (coqQualid @@ string "_"),
-                        C._Pattern1_scope>>: (nothing :: TTerm (Maybe C.ScopeKey))]]]]],
+                        C._Pattern1_scope>>: (nothing :: TypedTerm (Maybe C.ScopeKey))]]]]],
             C._Equation_term>>: encodeTerm @@ var "env" @@ (unitLambdaBody @@ var "cft")])
           -- Normal variant: bind v_ and apply the case body to it.
           (record C._Equation [
@@ -680,7 +680,7 @@ encodeUnionElim = define "encodeUnionElim" $
                       record C._Pattern1 [
                         C._Pattern1_pattern>>:
                           inject C._Pattern0 C._Pattern0_qualid (coqQualid @@ string "v_"),
-                        C._Pattern1_scope>>: (nothing :: TTerm (Maybe C.ScopeKey))]]]]],
+                        C._Pattern1_scope>>: (nothing :: TypedTerm (Maybe C.ScopeKey))]]]]],
             C._Equation_term>>:
               coqTermApp @@ (encodeTerm @@ var "env" @@ var "cft") @@ list [coqTermQualid @@ string "v_"]]))
       (var "csCases"),
@@ -690,7 +690,7 @@ encodeUnionElim = define "encodeUnionElim" $
           inject C._Pattern10 C._Pattern10_qualiid $
             record C._Pattern10_Qualid [
               C._Pattern10_Qualid_qualid>>: coqQualid @@ string "_",
-              C._Pattern10_Qualid_patterns>>: list ([] :: [TTerm C.Pattern1])]]],
+              C._Pattern10_Qualid_patterns>>: list ([] :: [TypedTerm C.Pattern1])]]],
       C._Equation_term>>: var "body"],
     "defaultEqs">: Maybes.maybe
       -- No explicit default: if the match is non-exhaustive, synthesize one as
@@ -701,7 +701,7 @@ encodeUnionElim = define "encodeUnionElim" $
           (lambda "n" $ Logic.not $ Equality.gte (var "caseCount") (var "n"))
           (var "expectedCount"))
         (list [var "wildcardEq" @@ (coqTermQualid @@ string "hydra_unreachable")])
-        (list ([] :: [TTerm C.Equation])))
+        (list ([] :: [TypedTerm C.Equation])))
       -- Kernel provided an explicit default: if the non-default cases already cover
       -- every constructor, drop it (replacing the old removeRedundantDefaults pass);
       -- otherwise keep it.
@@ -709,7 +709,7 @@ encodeUnionElim = define "encodeUnionElim" $
         (Maybes.maybe (boolean False)
           (lambda "n" $ Equality.gte (var "caseCount") (var "n"))
           (var "expectedCount"))
-        (list ([] :: [TTerm C.Equation]))
+        (list ([] :: [TypedTerm C.Equation]))
         (list [var "wildcardEq" @@ (encodeTerm @@ var "env" @@ var "defT")]))
       (var "csDefault"),
     "allEqs">: Lists.concat2 (var "baseEqs") (var "defaultEqs")] $
@@ -734,15 +734,15 @@ encodeUnionElim = define "encodeUnionElim" $
                                     inject C._OneTerm C._OneTerm_explicit $
                                       record C._QualidAnnotated [
                                         C._QualidAnnotated_qualid>>: coqQualid @@ string "x_",
-                                        C._QualidAnnotated_univAnnot>>: (nothing :: TTerm (Maybe C.UnivAnnot))],
-                              C._CaseItem_as>>: (nothing :: TTerm (Maybe Name)),
-                              C._CaseItem_in>>: (nothing :: TTerm (Maybe C.Pattern))]],
-                          C._Match_return>>: (nothing :: TTerm (Maybe C.Term100)),
+                                        C._QualidAnnotated_univAnnot>>: (nothing :: TypedTerm (Maybe C.UnivAnnot))],
+                              C._CaseItem_as>>: (nothing :: TypedTerm (Maybe Name)),
+                              C._CaseItem_in>>: (nothing :: TypedTerm (Maybe C.Pattern))]],
+                          C._Match_return>>: (nothing :: TypedTerm (Maybe C.Term100)),
                           C._Match_pipe>>: true,
                           C._Match_equations>>: var "allEqs"]]
 
 -- | Translate a Hydra wrap eliminator (`TermUnwrap`) into a Coq identity lambda.
-encodeWrapElim :: TTermDefinition (Name -> C.Term)
+encodeWrapElim :: TypedTermDefinition (Name -> C.Term)
 encodeWrapElim = define "encodeWrapElim" $
   doc "A Hydra wrap eliminator is just the identity on the wrapped object in Coq" $
   lambda "_n" $
@@ -754,16 +754,16 @@ encodeWrapElim = define "encodeWrapElim" $
           C._Fun_body>>: coqTermQualid @@ string "w_"]
 
 -- | Escape double quotes in a Coq string literal by doubling them.
-escapeCoqString :: TTermDefinition (String -> String)
+escapeCoqString :: TypedTermDefinition (String -> String)
 escapeCoqString = define "escapeCoqString" $
   doc "Escape a string for Coq string literals: double any embedded quotes" $
   lambda "s" $ Strings.intercalate (string "\"\"") (Strings.splitOn (string "\"") (var "s"))
 
 -- | Walk a Hydra term, collecting the leading lambda binders as Coq Binders.
-extractLambdaBinders :: TTermDefinition (CE.CoqEnvironment -> Term -> [C.Binder])
+extractLambdaBinders :: TypedTermDefinition (CE.CoqEnvironment -> Term -> [C.Binder])
 extractLambdaBinders = define "extractLambdaBinders" $
   doc "Collect a chain of leading lambdas as Coq binders, converting type annotations as well" $
-  lambdas ["env", "tm"] $ cases _Term (var "tm") (Just $ list ([] :: [TTerm C.Binder])) [
+  lambdas ["env", "tm"] $ cases _Term (var "tm") (Just $ list ([] :: [TypedTerm C.Binder])) [
     _Term_annotated>>: "at" ~>
       extractLambdaBinders @@ var "env" @@ (Core.annotatedTermBody $ var "at"),
     _Term_lambda>>: "lam" ~> lets [
@@ -779,7 +779,7 @@ extractLambdaBinders = define "extractLambdaBinders" $
       Lists.cons (var "binder") (extractLambdaBinders @@ var "env" @@ (Core.lambdaBody $ var "lam"))]
 
 -- | Test whether a domain type is the unit type (possibly wrapped in annotations).
-isUnitDomain :: TTermDefinition (Maybe Type -> Bool)
+isUnitDomain :: TypedTermDefinition (Maybe Type -> Bool)
 isUnitDomain = define "isUnitDomain" $
   doc "True if the Maybe Type is the unit type, looking through annotations" $
   lambda "mty" $ Maybes.maybe (boolean False)
@@ -791,7 +791,7 @@ isUnitDomain = define "isUnitDomain" $
     (var "mty")
 
 -- | Test whether a Hydra term is a lambda that ignores its (unit-typed) parameter.
-isUnitLambda :: TTermDefinition (Term -> Bool)
+isUnitLambda :: TypedTermDefinition (Term -> Bool)
 isUnitLambda = define "isUnitLambda" $
   doc "Detect a lambda over the unit type whose parameter is not referenced in the body" $
   lambda "tm" $ cases _Term (var "tm") (Just (boolean False)) [
@@ -807,13 +807,13 @@ isUnitLambda = define "isUnitLambda" $
 
 -- | Local helper: listAny via Lists.find + Maybes.isJust, since the DSL list
 -- library does not expose an `any` primitive directly.
-listAny :: TTerm (a -> Bool) -> TTerm [a] -> TTerm Bool
+listAny :: TypedTerm (a -> Bool) -> TypedTerm [a] -> TypedTerm Bool
 listAny pred xs = Maybes.isJust (Lists.find pred xs)
 
 -- | Given a possibly-qualified name (e.g. "hydra.core.Term"), return its local
 -- part sanitized to avoid Coq reserved words. Used as the lookup key for the
 -- constructor-count map in encodeUnionElim.
-localTypeName :: TTermDefinition (String -> String)
+localTypeName :: TypedTermDefinition (String -> String)
 localTypeName = define "localTypeName" $
   doc "Take the last dot-separated segment of a (possibly) qualified Hydra name and sanitize it" $
   lambda "s" $ lets [
@@ -825,7 +825,7 @@ localTypeName = define "localTypeName" $
 -- The CoqEnvironment is threaded through every encoder so that match expressions
 -- can decide whether to emit a default arm and qualified references can be
 -- rewritten to their short forms.
-moduleToCoq :: TTermDefinition (CE.CoqEnvironment -> [(String, Type)] -> [(String, Term)] -> C.Document)
+moduleToCoq :: TypedTermDefinition (CE.CoqEnvironment -> [(String, Type)] -> [(String, Term)] -> C.Document)
 moduleToCoq = define "moduleToCoq" $
   doc "Build a Coq Document from lists of type definitions and term definitions" $
   lambdas ["env", "typeDefs", "termDefs"] $ lets [
@@ -839,7 +839,7 @@ moduleToCoq = define "moduleToCoq" $
 
 -- | Rename a small set of hydra.lib.* identifiers whose stripped form would
 -- collide with a Coq reserved word (e.g., `lists.at` -> `lists.at_`).
-renameLibKeyword :: TTermDefinition (String -> String)
+renameLibKeyword :: TypedTermDefinition (String -> String)
 renameLibKeyword = define "renameLibKeyword" $
   doc "Rewrite a stripped hydra.lib.<mod>.<func> name to avoid Coq keyword collisions" $
   lambda "s" $
@@ -850,7 +850,7 @@ renameLibKeyword = define "renameLibKeyword" $
       (var "s")
 
 -- | Build a Require Import sentence for a list of module names.
-requireImportSentence :: TTermDefinition ([String] -> C.Sentence)
+requireImportSentence :: TypedTermDefinition ([String] -> C.Sentence)
 requireImportSentence = define "requireImportSentence" $
   doc "Emit a Coq `Require Import m1 m2 ...` sentence with a `Standard library imports` comment" $
   lambda "mods" $
@@ -859,7 +859,7 @@ requireImportSentence = define "requireImportSentence" $
       C._Sentence_content>>:
         inject C._SentenceContent C._SentenceContent_requireImport $
           record C._RequireImport [
-            C._RequireImport_from>>: (nothing :: TTerm (Maybe C.Qualid)),
+            C._RequireImport_from>>: (nothing :: TypedTerm (Maybe C.Qualid)),
             C._RequireImport_require>>: true,
             C._RequireImport_qualification>>:
               just (inject C._ImportQualification C._ImportQualification_import unit),
@@ -877,7 +877,7 @@ requireImportSentence = define "requireImportSentence" $
 --   namespace, or when `<ns>` matches one of the hardcoded
 --   collision-prone modules (e.g. `parsers`); otherwise `<sanitizeVar x>`.
 -- * Otherwise the input is returned unchanged, after `sanitizeVar`.
-resolveQualifiedName :: TTermDefinition (CE.CoqEnvironment -> String -> String)
+resolveQualifiedName :: TypedTermDefinition (CE.CoqEnvironment -> String -> String)
 resolveQualifiedName = define "resolveQualifiedName" $
   doc "Resolve a (possibly qualified) Hydra identifier to the form that should appear in Coq source" $
   lambdas ["env", "s"] $ lets [
@@ -905,7 +905,7 @@ resolveQualifiedName = define "resolveQualifiedName" $
           lets [
             "localRaw">: Maybes.fromMaybe (var "s") (Lists.maybeLast (var "parts")),
             "localN">: sanitizeStripped @@ var "localRaw",
-            "sourceNs">: Strings.intercalate (string ".") (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts"))),
+            "sourceNs">: Strings.intercalate (string ".") (Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts"))),
             "isCurrent">: Equality.equal (var "sourceNs") (var "currentNs"),
             -- Ambiguity check is against the raw (unsanitised) local name,
             -- since the ambiguous-names set in the environment is populated
@@ -935,19 +935,19 @@ resolveQualifiedName = define "resolveQualifiedName" $
 
 -- | Sanitize a stripped local reference. Uses a narrower reserved-word set
 -- than `sanitizeVar`, matching the old text-stripper's behaviour.
-sanitizeStripped :: TTermDefinition (String -> String)
+sanitizeStripped :: TypedTermDefinition (String -> String)
 sanitizeStripped = define "sanitizeStripped" $
   doc "Append an underscore if a stripped-local-name reference collides with a Coq reserved word" $
   lambda "s" $ Formatting.escapeWithUnderscore @@ CoqLanguage.coqStrippedReservedWords @@ var "s"
 
 -- | Sanitize a variable name to avoid Coq reserved words by appending an underscore.
-sanitizeVar :: TTermDefinition (String -> String)
+sanitizeVar :: TypedTermDefinition (String -> String)
 sanitizeVar = define "sanitizeVar" $
   doc "Append an underscore if the name collides with a Coq reserved word" $
   lambda "s" $ Formatting.escapeWithUnderscore @@ CoqLanguage.coqReservedWords @@ var "s"
 
 -- | The fixed set of imports used at the head of every generated .v file.
-standardImports :: TTermDefinition C.Sentence
+standardImports :: TypedTermDefinition C.Sentence
 standardImports = define "standardImports" $
   doc "The Coq stdlib modules plus the hand-written hydra.lib.base axioms" $
   requireImportSentence @@ list [
@@ -958,7 +958,7 @@ standardImports = define "standardImports" $
     string "hydra.lib.base"]
 
 -- | Strip a chain of leading lambdas from a term, returning the inner body.
-stripLambdas :: TTermDefinition (Term -> Term)
+stripLambdas :: TypedTermDefinition (Term -> Term)
 stripLambdas = define "stripLambdas" $
   doc "Peel off leading lambdas and annotations, returning the first non-lambda body" $
   lambda "tm" $ cases _Term (var "tm") (Just (var "tm")) [
@@ -968,7 +968,7 @@ stripLambdas = define "stripLambdas" $
       stripLambdas @@ (Core.lambdaBody $ var "lam")]
 
 -- | Test whether a variable name appears free within a term.
-termReferencesVar :: TTermDefinition (Name -> Term -> Bool)
+termReferencesVar :: TypedTermDefinition (Name -> Term -> Bool)
 termReferencesVar = define "termReferencesVar" $
   doc "Syntactic free-variable check over the shapes encodeTerm walks through" $
   lambdas ["name", "tm"] $ cases _Term (var "tm") (Just (boolean False)) [
@@ -1019,13 +1019,13 @@ termReferencesVar = define "termReferencesVar" $
       termReferencesVar @@ var "name" @@ (Core.wrappedTermBody $ var "wt")]
 
 -- | Build a union-constructor name by combining a (possibly qualified) type name and a field.
-unionConstructorName :: TTermDefinition (String -> String -> String)
+unionConstructorName :: TypedTermDefinition (String -> String -> String)
 unionConstructorName = define "unionConstructorName" $
   doc "Combine a type name and field name into a constructor identifier, preserving the namespace prefix" $
   lambdas ["typeName", "fieldName"] $ lets [
     "parts">: Strings.splitOn (string ".") (var "typeName"),
     "localPart">: Maybes.fromMaybe (var "typeName") (Lists.maybeLast $ var "parts"),
-    "prefixParts">: Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit $ var "parts"),
+    "prefixParts">: Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit $ var "parts"),
     "prefix">: Logic.ifElse (Lists.null $ var "prefixParts")
       (string "")
       (Strings.cat2 (Strings.intercalate (string ".") (var "prefixParts")) (string ".")),
@@ -1037,7 +1037,7 @@ unionConstructorName = define "unionConstructorName" $
       Formatting.capitalize @@ var "fieldName"])
 
 -- | Extract the body of a unit-consuming lambda, skipping lambda/annotation wrappers.
-unitLambdaBody :: TTermDefinition (Term -> Term)
+unitLambdaBody :: TypedTermDefinition (Term -> Term)
 unitLambdaBody = define "unitLambdaBody" $
   doc "Peel the outer unit lambda off a term, returning the body" $
   lambda "tm" $ cases _Term (var "tm") (Just (var "tm")) [

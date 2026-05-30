@@ -3,114 +3,114 @@
 from decimal import Decimal
 
 import hydra.dsl.terms as terms
-from hydra.phantoms import TTerm
+from hydra.typed import TypedTerm
 
 
-def string(value: str) -> TTerm[str]:
+def string(value: str) -> TypedTerm[str]:
     """Construct a string term."""
-    return TTerm[str](terms.string(value))
+    return TypedTerm[str](terms.string(value))
 
 
-def char(value: str) -> TTerm[int]:
+def char(value: str) -> TypedTerm[int]:
     """Construct a character term (represented as int32 code point)."""
-    return TTerm[int](terms.char(value))
+    return TypedTerm[int](terms.char(value))
 
 
-def decimal(value: Decimal) -> TTerm[Decimal]:
+def decimal(value: Decimal) -> TypedTerm[Decimal]:
     """Construct a decimal (arbitrary-precision) term."""
-    return TTerm[Decimal](terms.decimal(value))
+    return TypedTerm[Decimal](terms.decimal(value))
 
 
-def int_(value: int) -> TTerm[int]:
+def int_(value: int) -> TypedTerm[int]:
     """Construct a default-width integer term (alias for int32)."""
     return int32(value)
 
 
-def uint8(value: int) -> TTerm[int]:
+def uint8(value: int) -> TypedTerm[int]:
     """Construct a uint8 term."""
-    return TTerm[int](terms.uint8(value))
+    return TypedTerm[int](terms.uint8(value))
 
 
-def uint16(value: int) -> TTerm[int]:
+def uint16(value: int) -> TypedTerm[int]:
     """Construct a uint16 term."""
-    return TTerm[int](terms.uint16(value))
+    return TypedTerm[int](terms.uint16(value))
 
 
-def uint32(value: int) -> TTerm[int]:
+def uint32(value: int) -> TypedTerm[int]:
     """Construct a uint32 term."""
-    return TTerm[int](terms.uint32(value))
+    return TypedTerm[int](terms.uint32(value))
 
 
-def uint64(value: int) -> TTerm[int]:
+def uint64(value: int) -> TypedTerm[int]:
     """Construct a uint64 term."""
-    return TTerm[int](terms.uint64(value))
+    return TypedTerm[int](terms.uint64(value))
 
 
-def boolean(value: bool) -> TTerm[bool]:
+def boolean(value: bool) -> TypedTerm[bool]:
     """Construct a boolean term."""
-    return TTerm[bool](terms.boolean(value))
+    return TypedTerm[bool](terms.boolean(value))
 
 
-def true() -> TTerm[bool]:
+def true() -> TypedTerm[bool]:
     """Construct a true term."""
     return boolean(True)
 
 
-def false() -> TTerm[bool]:
+def false() -> TypedTerm[bool]:
     """Construct a false term."""
     return boolean(False)
 
 
-def bigint(value: int) -> TTerm[int]:
+def bigint(value: int) -> TypedTerm[int]:
     """Construct a bigint term."""
-    return TTerm[int](terms.bigint(value))
+    return TypedTerm[int](terms.bigint(value))
 
 
-def binary(value: bytes) -> TTerm[bytes]:
+def binary(value: bytes) -> TypedTerm[bytes]:
     """Construct a binary term."""
-    return TTerm[bytes](terms.binary(value))
+    return TypedTerm[bytes](terms.binary(value))
 
 
-def double(value: float) -> TTerm[float]:
+def double(value: float) -> TypedTerm[float]:
     """Construct a double term."""
-    return TTerm[float](terms.float64(value))
+    return TypedTerm[float](terms.float64(value))
 
 
-def float_(value: float) -> TTerm[float]:
+def float_(value: float) -> TypedTerm[float]:
     """Construct a float term."""
     return float32(value)
 
 
-def float32(value: float) -> TTerm[float]:
+def float32(value: float) -> TypedTerm[float]:
     """Construct a float32 term."""
-    return TTerm[float](terms.float32(value))
+    return TypedTerm[float](terms.float32(value))
 
 
-def float64(value: float) -> TTerm[float]:
+def float64(value: float) -> TypedTerm[float]:
     """Construct a float64 term."""
-    return TTerm[float](terms.float64(value))
+    return TypedTerm[float](terms.float64(value))
 
 
-def integer(value: int) -> TTerm[int]:
+def integer(value: int) -> TypedTerm[int]:
     """Construct an int term."""
     return int32(value)
 
 
-def int8(value: int) -> TTerm[int]:
+def int8(value: int) -> TypedTerm[int]:
     """Construct an int8 term."""
-    return TTerm[int](terms.int8(value))
+    return TypedTerm[int](terms.int8(value))
 
 
-def int16(value: int) -> TTerm[int]:
+def int16(value: int) -> TypedTerm[int]:
     """Construct an int16 term."""
-    return TTerm[int](terms.int16(value))
+    return TypedTerm[int](terms.int16(value))
 
 
-def int32(value: int) -> TTerm[int]:
+def int32(value: int) -> TypedTerm[int]:
     """Construct an int32 term."""
-    return TTerm[int](terms.int32(value))
+    return TypedTerm[int](terms.int32(value))
 
 
-def int64(value: int) -> TTerm[int]:
+def int64(value: int) -> TypedTerm[int]:
     """Construct an int64 term."""
-    return TTerm[int](terms.int64(value))
+    return TypedTerm[int](terms.int64(value))

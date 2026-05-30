@@ -35,7 +35,7 @@ module_ = Module {
 
 -- Test groups for hydra.lib.chars primitives
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.chars primitives" $
     supergroup "hydra.lib.chars primitives" [
@@ -46,7 +46,7 @@ allTests = definitionInModule module_ "allTests" $
       charsToLower,
       charsToUpper]
 
-charsIsAlphaNum :: TTerm TestGroup
+charsIsAlphaNum :: TypedTerm TestGroup
 charsIsAlphaNum = subgroup "isAlphaNum" [
   test "letter" (ord 'a') true,
   test "digit" (ord '5') true,
@@ -55,7 +55,7 @@ charsIsAlphaNum = subgroup "isAlphaNum" [
   where
     test name x result = primCase name _chars_isAlphaNum [int32 x] result
 
-charsIsLower :: TTerm TestGroup
+charsIsLower :: TypedTerm TestGroup
 charsIsLower = subgroup "isLower" [
   test "lowercase" (ord 'a') true,
   test "uppercase" (ord 'A') false,
@@ -63,7 +63,7 @@ charsIsLower = subgroup "isLower" [
   where
     test name x result = primCase name _chars_isLower [int32 x] result
 
-charsIsSpace :: TTerm TestGroup
+charsIsSpace :: TypedTerm TestGroup
 charsIsSpace = subgroup "isSpace" [
   test "space" (ord ' ') true,
   test "tab" (ord '\t') true,
@@ -72,7 +72,7 @@ charsIsSpace = subgroup "isSpace" [
   where
     test name x result = primCase name _chars_isSpace [int32 x] result
 
-charsIsUpper :: TTerm TestGroup
+charsIsUpper :: TypedTerm TestGroup
 charsIsUpper = subgroup "isUpper" [
   test "uppercase" (ord 'A') true,
   test "lowercase" (ord 'a') false,
@@ -80,7 +80,7 @@ charsIsUpper = subgroup "isUpper" [
   where
     test name x result = primCase name _chars_isUpper [int32 x] result
 
-charsToLower :: TTerm TestGroup
+charsToLower :: TypedTerm TestGroup
 charsToLower = subgroup "toLower" [
   test "uppercase" (ord 'A') (ord 'a'),
   test "lowercase" (ord 'a') (ord 'a'),
@@ -88,7 +88,7 @@ charsToLower = subgroup "toLower" [
   where
     test name x result = primCase name _chars_toLower [int32 x] (int32 result)
 
-charsToUpper :: TTerm TestGroup
+charsToUpper :: TypedTerm TestGroup
 charsToUpper = subgroup "toUpper" [
   test "lowercase" (ord 'a') (ord 'A'),
   test "uppercase" (ord 'A') (ord 'A'),

@@ -78,7 +78,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
@@ -87,7 +87,7 @@ module_ = Module {
             moduleDefinitions = [toDefinition shaclLanguage],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints for W3C SHACL"}
-shaclLanguage :: TTermDefinition Language
+shaclLanguage :: TypedTermDefinition Language
 shaclLanguage = define "shaclLanguage" $
   doc "Language constraints for W3C SHACL" $ lets [
   "literalVariants">: Sets.fromList $ list [

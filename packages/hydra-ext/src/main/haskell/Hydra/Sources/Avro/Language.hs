@@ -79,7 +79,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
@@ -88,7 +88,7 @@ module_ = Module {
             moduleDefinitions = [toDefinition avroLanguage],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, Strip.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints for Apache Avro"}
-avroLanguage :: TTermDefinition Language
+avroLanguage :: TypedTermDefinition Language
 avroLanguage = define "avroLanguage" $
   doc "Language constraints for Apache Avro" $ lets [
   "literalVariants">: Sets.fromList $ list [

@@ -38,7 +38,7 @@ module Hydra.Kernel (
   module Hydra.Literals,
   module Hydra.Packaging,
   module Hydra.Parsing,
-  module Hydra.Phantoms,
+  module Hydra.Typed,
   module Hydra.Names,
   module Hydra.Predicates,
   module Hydra.Query,
@@ -86,7 +86,7 @@ import Hydra.Lexical
 import Hydra.Literals
 import Hydra.Packaging
 import Hydra.Parsing
-import Hydra.Phantoms
+import Hydra.Typed
 import Hydra.Names
 import Hydra.Predicates
 import Hydra.Query

@@ -23,7 +23,7 @@ import hydra.packaging.Definition;
 import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
-import hydra.phantoms.TTerm;
+import hydra.typed.TypedTerm;
 import hydra.util.Maybe;
 
 import java.util.Arrays;
@@ -172,7 +172,7 @@ import hydra.util.CaseConvention;  // AUTO-IMPORT (hydra-java DSL)
 public class Coder {
     public static final ModuleName NS = new ModuleName("hydra.java.coder");
 
-    private static Def def(String localName, Supplier<TTerm<?>> body) {
+    private static Def def(String localName, Supplier<TypedTerm<?>> body) {
         return define(NS, localName, body);
     }
 
@@ -14329,12 +14329,12 @@ public class Coder {
         new ModuleName("hydra.json.model"),
         new ModuleName("hydra.packaging"),
         new ModuleName("hydra.parsing"),
-        new ModuleName("hydra.phantoms"),
         new ModuleName("hydra.query"),
         new ModuleName("hydra.relational"),
         new ModuleName("hydra.tabular"),
         new ModuleName("hydra.testing"),
         new ModuleName("hydra.topology"),
+        new ModuleName("hydra.typed"),
         new ModuleName("hydra.typing"),
         new ModuleName("hydra.util"),
         new ModuleName("hydra.validation"),
