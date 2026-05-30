@@ -208,8 +208,8 @@ public class Names {
         new ModuleName("hydra.variants"));
 
     public static final Module module_ = new Module(
-        Maybe.just("Java naming constants and package name utilities"),
         NS,
+        Maybe.just("Java naming constants and package name utilities"),
         DEPENDENCIES,
         DEFINITIONS);
 }

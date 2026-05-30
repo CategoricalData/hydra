@@ -185,8 +185,8 @@ def _python_version():
 
 def _build_module() -> Module:
     return Module(
-        Just("Environment types for Python code generation"),
         NS,
+        Just("Environment types for Python code generation"),
         DEPENDENCIES,
         (
             _python_version(),
