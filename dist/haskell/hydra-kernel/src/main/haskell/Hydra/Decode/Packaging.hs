@@ -52,13 +52,13 @@ module_ cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "description" (ExtractCore.decodeMaybe (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+        in (Eithers.bind (ExtractCore.requireField "name" moduleName fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "description" (ExtractCore.decodeMaybe (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2))) fieldMap cx) (\field_description -> Eithers.bind (ExtractCore.requireField "name" moduleName fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "dependencies" (ExtractCore.decodeList moduleDependency) fieldMap cx) (\field_dependencies -> Eithers.bind (ExtractCore.requireField "definitions" (ExtractCore.decodeList definition) fieldMap cx) (\field_definitions -> Right (Packaging.Module {
-          Packaging.moduleDescription = field_description,
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2))) fieldMap cx) (\field_description -> Eithers.bind (ExtractCore.requireField "dependencies" (ExtractCore.decodeList moduleDependency) fieldMap cx) (\field_dependencies -> Eithers.bind (ExtractCore.requireField "definitions" (ExtractCore.decodeList definition) fieldMap cx) (\field_definitions -> Right (Packaging.Module {
           Packaging.moduleName = field_name,
+          Packaging.moduleDescription = field_description,
           Packaging.moduleDependencies = field_dependencies,
           Packaging.moduleDefinitions = field_definitions}))))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
@@ -88,15 +88,15 @@ package cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "name" packageName fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "modules" (ExtractCore.decodeList module_) fieldMap cx) (\field_modules -> Eithers.bind (ExtractCore.requireField "dependencies" (ExtractCore.decodeList packageDependency) fieldMap cx) (\field_dependencies -> Eithers.bind (ExtractCore.requireField "description" (ExtractCore.decodeMaybe (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+        in (Eithers.bind (ExtractCore.requireField "name" packageName fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "description" (ExtractCore.decodeMaybe (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2))) fieldMap cx) (\field_description -> Right (Packaging.Package {
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2))) fieldMap cx) (\field_description -> Eithers.bind (ExtractCore.requireField "dependencies" (ExtractCore.decodeList packageDependency) fieldMap cx) (\field_dependencies -> Eithers.bind (ExtractCore.requireField "modules" (ExtractCore.decodeList module_) fieldMap cx) (\field_modules -> Right (Packaging.Package {
           Packaging.packageName = field_name,
-          Packaging.packageModules = field_modules,
+          Packaging.packageDescription = field_description,
           Packaging.packageDependencies = field_dependencies,
-          Packaging.packageDescription = field_description}))))))
+          Packaging.packageModules = field_modules}))))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.packaging.PackageDependency
 packageDependency :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.PackageDependency

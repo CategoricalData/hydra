@@ -62,8 +62,8 @@ allTests =
                     Core.unName (Packaging.primitiveDefinitionName v0),
                     " :: <primitive>\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModulesGiven TestGraph.testContext TestGraph.testGraph [
                   Packaging.Module {
-                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.a"),
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
@@ -80,8 +80,8 @@ allTests =
                             Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))})),
                           Core.typeSchemeConstraints = Nothing})))})]},
                   Packaging.Module {
-                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.b"),
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleDependencies = [
                       Packaging.ModuleDependency {
                         Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.testInput.a"),
@@ -94,8 +94,8 @@ allTests =
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                         Packaging.termDefinitionSignature = Nothing})]}] [
                   Packaging.Module {
-                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.b"),
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleDependencies = [
                       Packaging.ModuleDependency {
                         Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.testInput.a"),
@@ -120,8 +120,8 @@ allTests =
                     Core.unName (Packaging.primitiveDefinitionName v0),
                     " :: <primitive>\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModules TestGraph.testContext TestGraph.testGraph [
                   Packaging.Module {
-                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.a"),
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
@@ -138,8 +138,8 @@ allTests =
                             Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))})),
                           Core.typeSchemeConstraints = Nothing})))})]},
                   Packaging.Module {
-                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.b"),
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleDependencies = [
                       Packaging.ModuleDependency {
                         Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.testInput.a"),
@@ -152,8 +152,8 @@ allTests =
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                         Packaging.termDefinitionSignature = Nothing})]}] [
                   Packaging.Module {
-                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.b"),
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleDependencies = [
                       Packaging.ModuleDependency {
                         Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.testInput.a"),
@@ -183,8 +183,8 @@ allTests =
                     Core.unName (Packaging.primitiveDefinitionName v0),
                     " :: <primitive>\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModulesGiven TestGraph.testContext TestGraph.testGraph [
                   Packaging.Module {
-                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.a"),
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
@@ -201,8 +201,8 @@ allTests =
                             Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))})),
                           Core.typeSchemeConstraints = Nothing})))})]},
                   Packaging.Module {
-                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.b"),
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleDependencies = [
                       Packaging.ModuleDependency {
                         Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.testInput.a"),
@@ -215,8 +215,8 @@ allTests =
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                         Packaging.termDefinitionSignature = Nothing})]}] [
                   Packaging.Module {
-                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.a"),
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
@@ -233,8 +233,8 @@ allTests =
                             Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))})),
                           Core.typeSchemeConstraints = Nothing})))})]},
                   Packaging.Module {
-                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.b"),
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleDependencies = [
                       Packaging.ModuleDependency {
                         Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.testInput.a"),
@@ -259,8 +259,8 @@ allTests =
                     Core.unName (Packaging.primitiveDefinitionName v0),
                     " :: <primitive>\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModules TestGraph.testContext TestGraph.testGraph [
                   Packaging.Module {
-                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.a"),
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
@@ -277,8 +277,8 @@ allTests =
                             Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))})),
                           Core.typeSchemeConstraints = Nothing})))})]},
                   Packaging.Module {
-                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.b"),
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleDependencies = [
                       Packaging.ModuleDependency {
                         Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.testInput.a"),
@@ -291,8 +291,8 @@ allTests =
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                         Packaging.termDefinitionSignature = Nothing})]}] [
                   Packaging.Module {
-                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.a"),
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
@@ -309,8 +309,8 @@ allTests =
                             Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))})),
                           Core.typeSchemeConstraints = Nothing})))})]},
                   Packaging.Module {
-                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.b"),
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleDependencies = [
                       Packaging.ModuleDependency {
                         Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.testInput.a"),
@@ -340,8 +340,8 @@ allTests =
                     Core.unName (Packaging.primitiveDefinitionName v0),
                     " :: <primitive>\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModulesGiven TestGraph.testContext TestGraph.testGraph [
                   Packaging.Module {
-                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.v"),
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
@@ -370,8 +370,8 @@ allTests =
                                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t2"))}))}))})),
                           Core.typeSchemeConstraints = Nothing})))})]},
                   Packaging.Module {
-                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.w"),
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleDependencies = [
                       Packaging.ModuleDependency {
                         Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.testInput.v"),
@@ -388,8 +388,8 @@ allTests =
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100)))})),
                         Packaging.termDefinitionSignature = Nothing})]}] [
                   Packaging.Module {
-                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleName = (Packaging.ModuleName "hydra.testInput.w"),
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleDependencies = [
                       Packaging.ModuleDependency {
                         Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.testInput.v"),
