@@ -223,9 +223,9 @@ main = case Validate.checkLiteral Core.LiteralTypeString (Core.LiteralString "he
 
 ## What's in `hydra.*`?
 
-A handful of namespaces you'll touch most often as a library user:
+A handful of module names you'll touch most often as a library user:
 
-| Namespace | Contents |
+| Module name | Contents |
 |---|---|
 | `hydra.core` | The kernel types: `Literal`, `LiteralType`, `Term`, `Type`, `Name`, etc. |
 | `hydra.show.core` | Pretty-printers for literals, types, terms. |
@@ -241,7 +241,7 @@ A handful of namespaces you'll touch most often as a library user:
 
 The full primitive lexicon is in
 [`docs/hydra-lexicon.txt`](https://github.com/CategoricalData/hydra/blob/main/docs/hydra-lexicon.txt)
-(241 primitives with their type signatures, organized into 13 `hydra.lib.<sub>` namespaces).
+(241 primitives with their type signatures, organized into 13 `hydra.lib.<sub>` module names).
 
 ---
 
