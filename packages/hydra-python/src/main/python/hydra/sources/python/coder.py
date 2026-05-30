@@ -82,8 +82,8 @@ DEPENDENCIES = [
 
 
 _PLACEHOLDER = Module(
-    Just("Python code generator: converts Hydra modules to Python source code"),
     NS,
+    Just("Python code generator: converts Hydra modules to Python source code"),
     DEPENDENCIES,
     (),
 )
@@ -7993,8 +7993,8 @@ def _load_environment_reorder_defs():
 
 def _build_module() -> Module:
     return Module(
-        _PLACEHOLDER.description,
         _PLACEHOLDER.name,
+        _PLACEHOLDER.description,
         _PLACEHOLDER.dependencies,
         (
             _load_environment_reorder_defs(),

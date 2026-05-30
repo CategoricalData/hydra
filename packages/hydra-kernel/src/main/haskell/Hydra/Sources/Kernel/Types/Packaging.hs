@@ -62,12 +62,12 @@ module' :: TypeDefinition
 module' = define "Module" $
   doc "A logical collection of elements in the same namespace, having dependencies on zero or more other modules" $
   T.record [
-    "description">:
-      doc "An optional human-readable description of the module" $
-      T.maybe T.string,
     "name">:
       doc "The name of the module, which is also the common prefix for all element names in the module"
       moduleNameDef,
+    "description">:
+      doc "An optional human-readable description of the module" $
+      T.maybe T.string,
     "dependencies">:
       doc "Any modules which this module directly depends on" $
       T.list moduleDependency,
@@ -102,15 +102,15 @@ package = define "Package" $
     "name">:
       doc "The name of the package"
       packageName,
-    "modules">:
-      doc "The modules in this package" $
-      T.list module',
+    "description">:
+      doc "An optional human-readable description of the package" $
+      T.maybe T.string,
     "dependencies">:
       doc "The packages which this package depends on" $
       T.list packageDependency,
-    "description">:
-      doc "An optional human-readable description of the package" $
-      T.maybe T.string]
+    "modules">:
+      doc "The modules in this package" $
+      T.list module']
 
 packageDependency :: TypeDefinition
 packageDependency = define "PackageDependency" $

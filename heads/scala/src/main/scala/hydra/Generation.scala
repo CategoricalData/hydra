@@ -79,7 +79,7 @@ object Generation:
       case other => other
 
   private def decodeBinaryInModule(mod: Module): Module =
-    Module(mod.description, mod.name, mod.dependencies, mod.definitions.map {
+    Module(mod.name, mod.description, mod.dependencies, mod.definitions.map {
       case Definition.term(td) =>
         Definition.term(hydra.packaging.TermDefinition(td.name, decodeBinaryLiterals(td.term), td.signature))
       case other => other
