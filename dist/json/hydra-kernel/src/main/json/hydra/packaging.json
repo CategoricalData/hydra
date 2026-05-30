@@ -51,7 +51,8 @@
                 {
                   "key": "description",
                   "value": {
-                    "literal": {"string": "A logical collection of elements in the same namespace, having dependencies on zero or more other modules"}}}],
+                    "literal": {
+                      "string": "A logical collection of elements sharing a common module name, having dependencies on zero or more other modules"}}}],
               "body": {
                 "record": [
                   {
@@ -420,5 +421,5 @@
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.typing"}],
-  "description": "A model for Hydra namespaces, modules, and packages",
+  "description": "A model for Hydra module names, modules, and packages",
   "name": "hydra.packaging"}

@@ -1,5 +1,5 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | Primitives in the hydra.lib.maps namespace.
+-- | Primitives in the hydra.lib.maps module.
 
 module Hydra.Lib.Maps where
 import qualified Hydra.Ast as Ast

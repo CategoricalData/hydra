@@ -219,7 +219,7 @@ constructModule = haskellCoderDefinition "constructModule" $
           H._Import_module>>: var "importName" @@ var "name",
           H._Import_as>>: just $ var "alias",
           H._Import_spec>>: nothing]] $
-      Lists.map (var "toImport") (Maps.toList $ Util.namespacesMapping $ var "namespaces"),
+      Lists.map (var "toImport") (Maps.toList $ Util.moduleNamesMapping $ var "namespaces"),
     "meta">: gatherMetadata @@ var "defs",
     "condImport">: "flag" ~> "triple" ~>
       Logic.ifElse (var "flag")
@@ -695,7 +695,7 @@ encodeUnwrap = haskellCoderDefinition "encodeUnwrap" $
   doc "Encode an unwrap term as a Haskell expression" $
   "namespaces" ~> "name" ~>
   right $ inject H._Expression H._Expression_variable $ HaskellUtilsSource.elementReference @@ var "namespaces" @@
-    (Names.qname @@ (Maybes.fromMaybe (wrap _ModuleName $ string "") (Names.namespaceOf @@ var "name")) @@ (HaskellUtilsSource.newtypeAccessorName @@ var "name"))
+    (Names.qname @@ (Maybes.fromMaybe (wrap _ModuleName $ string "") (Names.moduleNameOf @@ var "name")) @@ (HaskellUtilsSource.newtypeAccessorName @@ var "name"))
 
 extendMetaForTerm :: TypedTermDefinition (HE.HaskellModuleMetadata -> Term -> HE.HaskellModuleMetadata)
 extendMetaForTerm = haskellCoderDefinition "extendMetaForTerm" $
@@ -739,7 +739,7 @@ findOrdVariables = haskellCoderDefinition "findOrdVariables" $
         _Type_set>>: "et" ~>
           var "tryType" @@ var "names" @@ var "et"],
     "isTypeVariable">: "v" ~>
-      Maybes.isNothing $ Names.namespaceOf @@ var "v",
+      Maybes.isNothing $ Names.moduleNameOf @@ var "v",
     "tryType">: "names" ~> "t" ~>
       cases _Type (Strip.deannotateType @@ var "t")
         (Just $ var "names") [
@@ -798,7 +798,7 @@ keyHaskellVar = haskellCoderDefinition "keyHaskellVar" $
 liftStringError :: TypedTerm InferenceContext -> TypedTerm (Either String a) -> TypedTerm (Either Error a)
 liftStringError _cx = Eithers.bimap ("_s" ~> Error.errorExtraction (Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "valid input") (var "_s"))) ("_x" ~> var "_x")
 
-type HaskellNamespaces = Namespaces H.ModuleName
+type HaskellNamespaces = ModuleNames H.ModuleName
 
 moduleToHaskell :: TypedTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Prelude.Either Error (M.Map String String))
 moduleToHaskell = haskellCoderDefinition "moduleToHaskell" $
@@ -806,7 +806,7 @@ moduleToHaskell = haskellCoderDefinition "moduleToHaskell" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
   "hsmod" <<~ moduleToHaskellModule @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g" $ lets [
   "s">: Serialization.printExpr @@ (Serialization.parenthesize @@ (HaskellSerde.moduleToExpr @@ var "hsmod")),
-  "filepath">: Names.namespaceToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension $ string "hs") @@ (Packaging.moduleName $ var "mod")] $
+  "filepath">: Names.moduleNameToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension $ string "hs") @@ (Packaging.moduleName $ var "mod")] $
   right $ Maps.singleton (var "filepath") (var "s")
 
 moduleToHaskellModule :: TypedTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Prelude.Either Error H.Module)
@@ -1012,7 +1012,7 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
       "ftype">: Core.fieldTypeType $ var "fieldType",
       "deconflict">: "name" ~> lets [
         "tname">: Names.unqualifyName @@ record _QualifiedName [
-          _QualifiedName_moduleName>>: just $ Pairs.first $ Util.namespacesFocus $ var "namespaces",
+          _QualifiedName_moduleName>>: just $ Pairs.first $ Util.moduleNamesFocus $ var "namespaces",
           _QualifiedName_local>>: var "name"]] $
         Logic.ifElse (Sets.member (var "tname") (var "boundNames'"))
           (var "deconflict" @@ Strings.cat2 (var "name") (string "_"))

@@ -138,14 +138,14 @@ dottedAssignmentStatement obj attr expr =
 doubleQuotedString :: String -> Syntax.Expression
 doubleQuotedString s = stringToPyExpression Syntax.QuoteStyleDouble s
 -- | Find all namespaces referenced by a list of definitions, plus the core namespace
-findNamespaces :: Packaging.ModuleName -> [Packaging.Definition] -> Util.Namespaces Syntax.DottedName
+findNamespaces :: Packaging.ModuleName -> [Packaging.Definition] -> Util.ModuleNames Syntax.DottedName
 findNamespaces focusNs defs =
 
       let coreNs = Packaging.ModuleName "hydra.core"
-          namespaces = Analysis.namespacesForDefinitions Names.encodeNamespace focusNs defs
-      in (Logic.ifElse (Equality.equal (Packaging.unModuleName (Pairs.first (Util.namespacesFocus namespaces))) (Packaging.unModuleName coreNs)) namespaces (Util.Namespaces {
-        Util.namespacesFocus = (Util.namespacesFocus namespaces),
-        Util.namespacesMapping = (Maps.insert coreNs (Names.encodeNamespace coreNs) (Util.namespacesMapping namespaces))}))
+          namespaces = Analysis.moduleNamesForDefinitions Names.encodeNamespace focusNs defs
+      in (Logic.ifElse (Equality.equal (Packaging.unModuleName (Pairs.first (Util.moduleNamesFocus namespaces))) (Packaging.unModuleName coreNs)) namespaces (Util.ModuleNames {
+        Util.moduleNamesFocus = (Util.moduleNamesFocus namespaces),
+        Util.moduleNamesMapping = (Maps.insert coreNs (Names.encodeNamespace coreNs) (Util.moduleNamesMapping namespaces))}))
 -- | Create a function call expression
 functionCall :: Syntax.Primary -> [Syntax.Expression] -> Syntax.Expression
 functionCall func args = pyPrimaryToPyExpression (primaryWithRhs func (Syntax.PrimaryRhsCall (pyExpressionsToPyArgs args)))

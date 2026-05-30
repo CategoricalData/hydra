@@ -380,7 +380,7 @@ encodeUnionFieldType = define "encodeUnionFieldType" $
 findPrefixes :: TypedTerm (ModuleName -> [TypeDefinition] -> M.Map ModuleName String)
 findPrefixes = lambda "modNs" $ lambda "tdefs" $ lets [
   "namespaces">: (Lists.nub :: TypedTerm [ModuleName] -> TypedTerm [ModuleName]) $ Maybes.cat $ Lists.map
-    (lambda "td" $ Names.namespaceOf @@ (Packaging.typeDefinitionName $ var "td"))
+    (lambda "td" $ Names.moduleNameOf @@ (Packaging.typeDefinitionName $ var "td"))
     (var "tdefs")] $
   Maps.fromList $ Lists.map
     (lambda "ns_" $ pair (var "ns_")
@@ -397,7 +397,7 @@ moduleToGraphql = define "moduleToGraphql" $
     "partitioned">: Environment.partitionDefinitions @@ var "defs",
     "typeDefs">: Pairs.first (var "partitioned"),
     "prefixes">: findPrefixes @@ Packaging.moduleName (var "mod") @@ var "typeDefs",
-    "filePath">: Names.namespaceToFilePath @@ Util.caseConventionCamel @@ (wrap _FileExtension (string "graphql")) @@ Packaging.moduleName (var "mod")] $
+    "filePath">: Names.moduleNameToFilePath @@ Util.caseConventionCamel @@ (wrap _FileExtension (string "graphql")) @@ Packaging.moduleName (var "mod")] $
     "gtdefs" <<~ (Eithers.mapList (lambda "td" $ encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "td") (var "typeDefs")) $
     right (Maps.fromList $ Lists.pure $ pair (var "filePath")
       (Serialization.printExpr @@ (Serialization.parenthesize @@
