@@ -248,8 +248,8 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                         Packaging.DefinitionPrimitive v0 -> Packaging.primitiveDefinitionName v0
               refreshModule =
                       \els -> \m -> Packaging.Module {
-                        Packaging.moduleDescription = (Packaging.moduleDescription m),
                         Packaging.moduleName = (Packaging.moduleName m),
+                        Packaging.moduleDescription = (Packaging.moduleDescription m),
                         Packaging.moduleDependencies = (Packaging.moduleDependencies m),
                         Packaging.moduleDefinitions = (Maybes.cat (Lists.map (\d -> case d of
                           Packaging.DefinitionType v0 -> Just (Packaging.DefinitionType v0)
@@ -380,8 +380,8 @@ lowerPrimitiveDefinitions m =
                         Packaging.moduleDependencyModule = coreNs,
                         Packaging.moduleDependencyPackage = Nothing}]
         in Packaging.Module {
-          Packaging.moduleDescription = (Packaging.moduleDescription m),
           Packaging.moduleName = (Packaging.moduleName m),
+          Packaging.moduleDescription = (Packaging.moduleDescription m),
           Packaging.moduleDependencies = newDeps,
           Packaging.moduleDefinitions = newDefs}))
 -- | Compute transitive closure of dependencies for a set of modules
@@ -414,8 +414,8 @@ moduleToSourceModule m =
                       Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.packaging.Module")),
                       Core.typeSchemeConstraints = Nothing})))})
       in Packaging.Module {
-        Packaging.moduleDescription = (Just (Strings.cat2 "Source module for " (Packaging.unModuleName (Packaging.moduleName m)))),
         Packaging.moduleName = sourceNs,
+        Packaging.moduleDescription = (Just (Strings.cat2 "Source module for " (Packaging.unModuleName (Packaging.moduleName m)))),
         Packaging.moduleDependencies = [
           Packaging.ModuleDependency {
             Packaging.moduleDependencyModule = modTypeNs,
@@ -485,8 +485,8 @@ refreshModule inferredElements m =
         Core.bindingTerm = (Packaging.termDefinitionTerm v0),
         Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
       _ -> Nothing) (Packaging.moduleDefinitions m)))))) m (Packaging.Module {
-      Packaging.moduleDescription = (Packaging.moduleDescription m),
       Packaging.moduleName = (Packaging.moduleName m),
+      Packaging.moduleDescription = (Packaging.moduleDescription m),
       Packaging.moduleDependencies = (Packaging.moduleDependencies m),
       Packaging.moduleDefinitions = (Maybes.cat (Lists.map (\d -> case d of
         Packaging.DefinitionType v0 -> Just (Packaging.DefinitionType v0)

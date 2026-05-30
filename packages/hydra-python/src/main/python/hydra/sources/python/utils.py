@@ -50,8 +50,8 @@ DEPENDENCIES = [
 
 
 _PLACEHOLDER = Module(
-    Just("Python utilities for constructing Python syntax trees"),
     NS,
+    Just("Python utilities for constructing Python syntax trees"),
     DEPENDENCIES,
     (),
 )
@@ -1368,8 +1368,8 @@ def _unit_variant_methods():
 
 def _build_module() -> Module:
     return Module(
-        _PLACEHOLDER.description,
         _PLACEHOLDER.name,
+        _PLACEHOLDER.description,
         _PLACEHOLDER.dependencies,
         (
             to_definition(_annotated_expression()),

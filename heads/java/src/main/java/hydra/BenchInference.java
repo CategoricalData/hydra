@@ -187,7 +187,7 @@ public class BenchInference {
         List<ModuleDependency> deps = new ArrayList<>();
         deps.add(new ModuleDependency(benchMod.name, hydra.util.Maybe.<hydra.packaging.PackageName>nothing()));
         deps.addAll(benchMod.dependencies);
-        return new Module(benchMod.description, targetNs, deps, renamed);
+        return new Module(targetNs, benchMod.description, deps, renamed);
     }
 
     private static BenchResult timeInference(List<Module> universe, Module target, int n, String benchNs) {
