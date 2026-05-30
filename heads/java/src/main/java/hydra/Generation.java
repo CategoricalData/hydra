@@ -552,7 +552,7 @@ public class Generation {
                 }
             });
         }
-        return new Module(m.description, m.name, m.dependencies, stripped);
+        return new Module(m.name, m.description, m.dependencies, stripped);
     }
 
     /**

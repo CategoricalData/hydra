@@ -349,8 +349,8 @@ generateSourceFiles = define "generateSourceFiles" $
         _Definition_primitive>>: "pd" ~> Packaging.primitiveDefinitionName (var "pd")]) $
       "refreshModule" <~ ("els" ~> "m" ~>
         Packaging.module_
-          (Packaging.moduleDescription $ var "m")
           (Packaging.moduleName $ var "m")
+          (Packaging.moduleDescription $ var "m")
           (Packaging.moduleDependencies $ var "m")
           (Maybes.cat $ Lists.map
             ("d" ~> cases _Definition (var "d") Nothing [
@@ -578,8 +578,8 @@ lowerPrimitiveDefinitions = define "lowerPrimitiveDefinitions" $
         Packaging.moduleDependency (var "pkgNs") nothing,
         Packaging.moduleDependency (var "coreNs") nothing]) $
     Packaging.module_
-      (Packaging.moduleDescription $ var "m")
       (Packaging.moduleName $ var "m")
+      (Packaging.moduleDescription $ var "m")
       (var "newDeps")
       (var "newDefs"))
 
@@ -674,8 +674,8 @@ moduleToSourceModule = define "moduleToSourceModule" $
       (Core.typeVariable (wrap _Name (string "hydra.packaging.Module")))
       nothing))) $
   Packaging.module_
-    (just $ (string "Source module for ") ++ Packaging.unModuleName (Packaging.moduleName $ var "m"))
     (var "sourceNs")
+    (just $ (string "Source module for ") ++ Packaging.unModuleName (Packaging.moduleName $ var "m"))
     (list [Packaging.moduleDependency (var "modTypeNs") nothing])
     (list [var "moduleDef"])
 
@@ -761,8 +761,8 @@ refreshModule = define "refreshModule" $
   Logic.ifElse (Logic.not $ hasTermDefinitions (var "m"))
     (var "m")
     (Packaging.module_
-      (Packaging.moduleDescription $ var "m")
       (Packaging.moduleName $ var "m")
+      (Packaging.moduleDescription $ var "m")
       (Packaging.moduleDependencies $ var "m")
       (Maybes.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") Nothing [

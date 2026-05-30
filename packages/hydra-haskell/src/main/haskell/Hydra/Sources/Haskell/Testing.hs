@@ -103,8 +103,8 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
           _Binding_typeScheme>>: nothing])
       (var "testTerms"),
     "tempModule">: record _Module [
-      _Module_description>>: project _Module _Module_description @@ var "mod",
       _Module_name>>: Packaging.moduleName (var "mod"),
+      _Module_description>>: project _Module _Module_description @@ var "mod",
       _Module_dependencies>>: project _Module _Module_dependencies @@ var "mod",
       _Module_definitions>>: Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
         (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")

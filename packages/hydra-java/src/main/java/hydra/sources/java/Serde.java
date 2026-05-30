@@ -3662,8 +3662,8 @@ public class Serde {
         new ModuleName("hydra.variants"));
 
     public static final Module module_ = new Module(
-        Maybe.just("Java serializer: converts Java AST to concrete syntax"),
         NS,
+        Maybe.just("Java serializer: converts Java AST to concrete syntax"),
         DEPENDENCIES,
         DEFINITIONS);
 }
