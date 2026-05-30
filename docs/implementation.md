@@ -187,7 +187,7 @@ the descriptions below cover the main ones:
 #### Utility and specialized
 
 **Testing.hs** - `hydra.testing` — unit testing framework
-**Phantoms.hs** - `hydra.phantoms` — phantom types for DSL use
+**Typed.hs** - `hydra.typed` — typed (phantom) wrappers for DSL use
 **Relational.hs** - `hydra.relational` — Codd's Relational Model
 **Topology.hs** - `hydra.topology` — graph algorithms (Tarjan SCC)
 **Util.hs** - `hydra.util` — misc utilities
@@ -364,12 +364,12 @@ type3 = list (optional boolean)
 Compile-time type safety via phantom types:
 
 ```haskell
--- Phantoms.hs - TTerm a where 'a' is a phantom type
-goodFunc :: TTerm (Int -> String)
+-- Phantoms.hs - TypedTerm a where 'a' is a phantom type
+goodFunc :: TypedTerm (Int -> String)
 goodFunc = lambda "x" (Strings.toUpper (var "x"))
 
 -- Type error at Haskell compile time!
-badFunc :: TTerm (Int -> String)
+badFunc :: TypedTerm (Int -> String)
 badFunc = lambda "x" (int32 42)  -- Expected String, got Int
 ```
 
@@ -381,7 +381,7 @@ Write programs that build programs (meta-programming):
 
 ```haskell
 -- Meta/Terms.hs - terms that construct terms
-buildAddFunction :: TTerm (Int -> Int -> Int)
+buildAddFunction :: TypedTerm (Int -> Int -> Int)
 buildAddFunction =
   lambda "x" $ lambda "y" $
     primitive _math_add @@ var "x" @@ var "y"
@@ -397,7 +397,7 @@ The `hydra.dsls` module (`Sources/Kernel/Terms/Dsls.hs`) automatically generates
 phantom-typed DSL functions from any Hydra type module. For each type definition, it
 produces:
 
-- **Record constructors** — one function taking all fields as `TTerm` arguments
+- **Record constructors** — one function taking all fields as `TypedTerm` arguments
 - **Field accessors** — one function per field, returning the field value
 - **Field updaters** — `withXxx` functions that return a modified copy of the record
 - **Union injectors** — one function per variant (unit variants produce nullary values)
@@ -427,7 +427,7 @@ compatibility shims.
 - **Meta/Core.hs** - Wraps `Hydra.Dsl.Core`; adds `AsTerm` overrides for `binding`, `injection`,
   `typeVariable`; helpers like `equalName_`, `false`
 - **Meta/Graph.hs** - Wraps `Hydra.Dsl.Graph`; adds graph construction helpers
-- **Meta/Phantoms.hs** - Phantom-typed term construction (`TTerm a`), operators (`@@`, `~>`, `<~`)
+- **Meta/Phantoms.hs** - Phantom-typed term construction (`TypedTerm a`), operators (`@@`, `~>`, `<~`)
 - **Meta/Terms.hs** - Phantom-typed term-encoded terms
 - **Meta/Types.hs** - Phantom-typed term-encoded types
 - **Meta/Variants.hs** - Wraps `Hydra.Dsl.Variants`; metadata variants and introspection
@@ -469,9 +469,9 @@ The DSL provides convenient operators for readable code:
 (>:) :: String -> a -> Field           -- Field definition
 
 -- Phantom-typed construction
-(~>) :: String -> TTerm a -> TTerm (x -> b)     -- Lambda
-(<~) :: String -> TTerm a -> TTerm b -> TTerm b  -- Let binding
-(<<~) :: String -> TTerm (Either e a) -> TTerm (Either e b) -> TTerm (Either e b)  -- Either bind
+(~>) :: String -> TypedTerm a -> TypedTerm (x -> b)     -- Lambda
+(<~) :: String -> TypedTerm a -> TypedTerm b -> TypedTerm b  -- Let binding
+(<<~) :: String -> TypedTerm (Either e a) -> TypedTerm (Either e b) -> TypedTerm (Either e b)  -- Either bind
 
 -- Examples
 intToString = int32 --> string                -- Type
@@ -488,7 +488,7 @@ Here's a complete example showing DSL usage in type inference:
 
 ```haskell
 -- From Hydra.Sources.Kernel.Terms.Inference
-inferTypeOfEither :: TTermDefinition (InferenceContext -> Graph -> Either Term Term -> Either Error InferenceResult)
+inferTypeOfEither :: TypedTermDefinition (InferenceContext -> Graph -> Either Term Term -> Either Error InferenceResult)
 inferTypeOfEitherDef = define "inferTypeOfEither" $
   doc "Infer the type of an Either term" $
   "cx" ~> "e" ~>
@@ -644,10 +644,10 @@ module_ = Module {
 andSig :: TermSignature
 andSig = sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) Nothing
 
-and_ :: TTermDefinition (Bool -> Bool -> Bool)
+and_ :: TypedTermDefinition (Bool -> Bool -> Bool)
 and_ = define "and" $
   doc "Logical AND, defined in terms of ifElse." $
-  "a" ~> "b" ~> Logic.ifElse (var "a") (var "b" :: TTerm Bool) false
+  "a" ~> "b" ~> Logic.ifElse (var "a") (var "b" :: TypedTerm Bool) false
 ```
 
 The metadata flows through to JSON in `dist/json/hydra-kernel/src/main/json/hydra/lib/<sub>.json`,
@@ -1453,7 +1453,7 @@ def "Term" $
 
 Add DSL operations in `Phantoms.hs`:
 ```haskell
-either_ :: TTerm (a -> c) -> TTerm (b -> c) -> TTerm (Either a b) -> TTerm c
+either_ :: TypedTerm (a -> c) -> TypedTerm (b -> c) -> TypedTerm (Either a b) -> TypedTerm c
 ```
 
 #### Step 2: Build (Will Fail)
