@@ -5,59 +5,59 @@ module Hydra.Dsl.Tabular where
 import qualified Hydra.Core as Core
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Relational as DslRelational
-import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Relational as Relational
 import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Typed as Typed
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | DSL constructor for hydra.tabular.ColumnType
-columnType :: Phantoms.TTerm Relational.ColumnName -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Tabular.ColumnType
+columnType :: Typed.TypedTerm Relational.ColumnName -> Typed.TypedTerm Core.Type -> Typed.TypedTerm Tabular.ColumnType
 columnType name type_ =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tabular.ColumnType"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
+          Core.fieldTerm = (Typed.unTypedTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm type_)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm type_)}]}))
 -- | DSL accessor for the name field of hydra.tabular.ColumnType
-columnTypeName :: Phantoms.TTerm Tabular.ColumnType -> Phantoms.TTerm Relational.ColumnName
+columnTypeName :: Typed.TypedTerm Tabular.ColumnType -> Typed.TypedTerm Relational.ColumnName
 columnTypeName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tabular.ColumnType"),
         Core.projectionFieldName = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the type field of hydra.tabular.ColumnType
-columnTypeType :: Phantoms.TTerm Tabular.ColumnType -> Phantoms.TTerm Core.Type
+columnTypeType :: Typed.TypedTerm Tabular.ColumnType -> Typed.TypedTerm Core.Type
 columnTypeType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tabular.ColumnType"),
         Core.projectionFieldName = (Core.Name "type")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the name field of hydra.tabular.ColumnType
-columnTypeWithName :: Phantoms.TTerm Tabular.ColumnType -> Phantoms.TTerm Relational.ColumnName -> Phantoms.TTerm Tabular.ColumnType
+columnTypeWithName :: Typed.TypedTerm Tabular.ColumnType -> Typed.TypedTerm Relational.ColumnName -> Typed.TypedTerm Tabular.ColumnType
 columnTypeWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tabular.ColumnType"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tabular.ColumnType"),
               Core.projectionFieldName = (Core.Name "type")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.tabular.ColumnType
-columnTypeWithType :: Phantoms.TTerm Tabular.ColumnType -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Tabular.ColumnType
+columnTypeWithType :: Typed.TypedTerm Tabular.ColumnType -> Typed.TypedTerm Core.Type -> Typed.TypedTerm Tabular.ColumnType
 columnTypeWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tabular.ColumnType"),
       Core.recordFields = [
         Core.Field {
@@ -66,82 +66,82 @@ columnTypeWithType original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tabular.ColumnType"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for the hydra.tabular.DataRow wrapper
-dataRow :: Phantoms.TTerm [Maybe v] -> Phantoms.TTerm (Tabular.DataRow v)
+dataRow :: Typed.TypedTerm [Maybe v] -> Typed.TypedTerm (Tabular.DataRow v)
 dataRow x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.tabular.DataRow"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 -- | DSL constructor for the hydra.tabular.HeaderRow wrapper
-headerRow :: Phantoms.TTerm [String] -> Phantoms.TTerm Tabular.HeaderRow
+headerRow :: Typed.TypedTerm [String] -> Typed.TypedTerm Tabular.HeaderRow
 headerRow x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.tabular.HeaderRow"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 -- | DSL constructor for hydra.tabular.Table
-table :: Phantoms.TTerm (Maybe Tabular.HeaderRow) -> Phantoms.TTerm [Tabular.DataRow v] -> Phantoms.TTerm (Tabular.Table v)
+table :: Typed.TypedTerm (Maybe Tabular.HeaderRow) -> Typed.TypedTerm [Tabular.DataRow v] -> Typed.TypedTerm (Tabular.Table v)
 table header data_ =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tabular.Table"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "header"),
-          Core.fieldTerm = (Phantoms.unTTerm header)},
+          Core.fieldTerm = (Typed.unTypedTerm header)},
         Core.Field {
           Core.fieldName = (Core.Name "data"),
-          Core.fieldTerm = (Phantoms.unTTerm data_)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm data_)}]}))
 -- | DSL accessor for the data field of hydra.tabular.Table
-tableData :: Phantoms.TTerm (Tabular.Table v) -> Phantoms.TTerm [Tabular.DataRow v]
+tableData :: Typed.TypedTerm (Tabular.Table v) -> Typed.TypedTerm [Tabular.DataRow v]
 tableData x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tabular.Table"),
         Core.projectionFieldName = (Core.Name "data")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the header field of hydra.tabular.Table
-tableHeader :: Phantoms.TTerm (Tabular.Table v) -> Phantoms.TTerm (Maybe Tabular.HeaderRow)
+tableHeader :: Typed.TypedTerm (Tabular.Table v) -> Typed.TypedTerm (Maybe Tabular.HeaderRow)
 tableHeader x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tabular.Table"),
         Core.projectionFieldName = (Core.Name "header")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL constructor for hydra.tabular.TableType
-tableType :: Phantoms.TTerm Relational.RelationName -> Phantoms.TTerm [Tabular.ColumnType] -> Phantoms.TTerm Tabular.TableType
+tableType :: Typed.TypedTerm Relational.RelationName -> Typed.TypedTerm [Tabular.ColumnType] -> Typed.TypedTerm Tabular.TableType
 tableType name columns =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tabular.TableType"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
+          Core.fieldTerm = (Typed.unTypedTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "columns"),
-          Core.fieldTerm = (Phantoms.unTTerm columns)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm columns)}]}))
 -- | DSL accessor for the columns field of hydra.tabular.TableType
-tableTypeColumns :: Phantoms.TTerm Tabular.TableType -> Phantoms.TTerm [Tabular.ColumnType]
+tableTypeColumns :: Typed.TypedTerm Tabular.TableType -> Typed.TypedTerm [Tabular.ColumnType]
 tableTypeColumns x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tabular.TableType"),
         Core.projectionFieldName = (Core.Name "columns")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the name field of hydra.tabular.TableType
-tableTypeName :: Phantoms.TTerm Tabular.TableType -> Phantoms.TTerm Relational.RelationName
+tableTypeName :: Typed.TypedTerm Tabular.TableType -> Typed.TypedTerm Relational.RelationName
 tableTypeName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tabular.TableType"),
         Core.projectionFieldName = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the columns field of hydra.tabular.TableType
-tableTypeWithColumns :: Phantoms.TTerm Tabular.TableType -> Phantoms.TTerm [Tabular.ColumnType] -> Phantoms.TTerm Tabular.TableType
+tableTypeWithColumns :: Typed.TypedTerm Tabular.TableType -> Typed.TypedTerm [Tabular.ColumnType] -> Typed.TypedTerm Tabular.TableType
 tableTypeWithColumns original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tabular.TableType"),
       Core.recordFields = [
         Core.Field {
@@ -150,30 +150,30 @@ tableTypeWithColumns original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tabular.TableType"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "columns"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the name field of hydra.tabular.TableType
-tableTypeWithName :: Phantoms.TTerm Tabular.TableType -> Phantoms.TTerm Relational.RelationName -> Phantoms.TTerm Tabular.TableType
+tableTypeWithName :: Typed.TypedTerm Tabular.TableType -> Typed.TypedTerm Relational.RelationName -> Typed.TypedTerm Tabular.TableType
 tableTypeWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tabular.TableType"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "columns"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tabular.TableType"),
               Core.projectionFieldName = (Core.Name "columns")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the data field of hydra.tabular.Table
-tableWithData :: Phantoms.TTerm (Tabular.Table v) -> Phantoms.TTerm [Tabular.DataRow v] -> Phantoms.TTerm (Tabular.Table v)
+tableWithData :: Typed.TypedTerm (Tabular.Table v) -> Typed.TypedTerm [Tabular.DataRow v] -> Typed.TypedTerm (Tabular.Table v)
 tableWithData original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tabular.Table"),
       Core.recordFields = [
         Core.Field {
@@ -182,35 +182,35 @@ tableWithData original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tabular.Table"),
               Core.projectionFieldName = (Core.Name "header")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "data"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the header field of hydra.tabular.Table
-tableWithHeader :: Phantoms.TTerm (Tabular.Table v) -> Phantoms.TTerm (Maybe Tabular.HeaderRow) -> Phantoms.TTerm (Tabular.Table v)
+tableWithHeader :: Typed.TypedTerm (Tabular.Table v) -> Typed.TypedTerm (Maybe Tabular.HeaderRow) -> Typed.TypedTerm (Tabular.Table v)
 tableWithHeader original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tabular.Table"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "header"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "data"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tabular.Table"),
               Core.projectionFieldName = (Core.Name "data")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL accessor for the body of hydra.tabular.DataRow
-unDataRow :: Phantoms.TTerm (Tabular.DataRow v) -> Phantoms.TTerm [Maybe v]
+unDataRow :: Typed.TypedTerm (Tabular.DataRow v) -> Typed.TypedTerm [Maybe v]
 unDataRow x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.tabular.DataRow")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the body of hydra.tabular.HeaderRow
-unHeaderRow :: Phantoms.TTerm Tabular.HeaderRow -> Phantoms.TTerm [String]
+unHeaderRow :: Typed.TypedTerm Tabular.HeaderRow -> Typed.TypedTerm [String]
 unHeaderRow x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.tabular.HeaderRow")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
