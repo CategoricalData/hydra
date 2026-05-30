@@ -1,5 +1,5 @@
 ---
-description: Run bin/sync-clojure.sh — Clojure-host Clojure sync. One of four Lisp-dialect sync entry points; they share the hydra-lisp coder under the hood.
+description: Run bin/sync-clojure.sh — Clojure-host Clojure sync. One of four Lisp-dialect sync entry points; they share the hydra-lisp coder under the hood. Does NOT run target tests — use /test clojure for that.
 allowed-tools:
   - Bash(bin/sync-clojure.sh*)
   - Read

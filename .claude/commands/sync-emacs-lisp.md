@@ -1,5 +1,5 @@
 ---
-description: Run bin/sync-emacs-lisp.sh — Emacs-Lisp-host Emacs-Lisp sync. One of four Lisp-dialect entry points; shares the hydra-lisp coder.
+description: Run bin/sync-emacs-lisp.sh — Emacs-Lisp-host Emacs-Lisp sync. One of four Lisp-dialect entry points; shares the hydra-lisp coder. Does NOT run target tests — use /test emacs-lisp for that.
 allowed-tools:
   - Bash(bin/sync-emacs-lisp.sh*)
   - Read
