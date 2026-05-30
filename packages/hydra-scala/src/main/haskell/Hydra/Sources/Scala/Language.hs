@@ -78,7 +78,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
@@ -87,7 +87,7 @@ module_ = Module {
             moduleDefinitions = [toDefinition scalaLanguage, toDefinition scalaReservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints and reserved words for Scala"}
-scalaLanguage :: TTermDefinition Language
+scalaLanguage :: TypedTermDefinition Language
 scalaLanguage = define "scalaLanguage" $
   doc "Language constraints for Scala" $ lets [
   "literalVariants">: Sets.fromList $ list [
@@ -165,7 +165,7 @@ scalaLanguage = define "scalaLanguage" $
       (var "typeVariants")
       (var "typePredicate"))
 
-scalaReservedWords :: TTermDefinition (S.Set String)
+scalaReservedWords :: TypedTermDefinition (S.Set String)
 scalaReservedWords = define "scalaReservedWords" $
   doc "A set of reserved words in Scala" $ lets [
   "keywords">:

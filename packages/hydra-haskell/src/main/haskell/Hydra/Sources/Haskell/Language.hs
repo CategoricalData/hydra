@@ -88,7 +88,7 @@ module_ = Module {
             moduleDefinitions = [toDefinition haskellLanguage, toDefinition reservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> (KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints and reserved words for Haskell"}
-haskellLanguage :: TTermDefinition Language
+haskellLanguage :: TypedTermDefinition Language
 haskellLanguage = haskellLanguageDefinition "haskellLanguage" $
   doc "Language constraints for Haskell" $ lets [
   "literalVariants">: Sets.fromList $ list [
@@ -158,10 +158,10 @@ haskellLanguage = haskellLanguageDefinition "haskellLanguage" $
       (var "typeVariants")
       (var "typePredicate"))
 
-haskellLanguageDefinition :: String -> TTerm a -> TTermDefinition a
+haskellLanguageDefinition :: String -> TypedTerm a -> TypedTermDefinition a
 haskellLanguageDefinition = definitionInModule module_
 
-reservedWords :: TTermDefinition (S.Set String)
+reservedWords :: TypedTermDefinition (S.Set String)
 reservedWords = haskellLanguageDefinition "reservedWords" $
   doc ("Created on 2025-02-28 using GHCi 9.6.6\n\n"
     <> "You can reproduce these lists of symbols by issuing the command `:browse Prelude` in GHCi, pasting the results into\n"

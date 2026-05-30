@@ -96,7 +96,7 @@ module_ = Module {
      toDefinition type_,
      toDefinition validateTypeNode]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- | Classify a rule-tagged 'Maybe (Name, InvalidTermError)' finding against
@@ -106,7 +106,7 @@ define = definitionInModule module_
 -- 'warningRules' go to the warnings list. Each list respects its bound
 -- ('maxErrors' / 'maxWarnings'); attempting to append past a bound is a
 -- silent drop. A 'Nothing' input leaves the accumulator unchanged.
-appendFinding :: TTermDefinition (
+appendFinding :: TypedTermDefinition (
   ValidationProfile
   -> ValidationResult InvalidTermError
   -> Maybe (Name, InvalidTermError)
@@ -136,7 +136,7 @@ appendFinding = define "appendFinding" $
           (var "acc")))
 
 -- | Type-side counterpart of 'appendFinding'.
-appendFindingType :: TTermDefinition (
+appendFindingType :: TypedTermDefinition (
   ValidationProfile
   -> ValidationResult InvalidTypeError
   -> Maybe (Name, InvalidTypeError)
@@ -166,7 +166,7 @@ appendFindingType = define "appendFindingType" $
           (var "acc")))
 
 -- | Check a list of bindings for duplicate names
-checkDuplicateBindings :: TTermDefinition (SubtermPath -> [Binding] -> Maybe InvalidTermError)
+checkDuplicateBindings :: TypedTermDefinition (SubtermPath -> [Binding] -> Maybe InvalidTermError)
 checkDuplicateBindings = define "checkDuplicateBindings" $
   doc "Check for duplicate binding names in a list of bindings" $
   "path" ~> "bindings" ~>
@@ -182,7 +182,7 @@ checkDuplicateBindings = define "checkDuplicateBindings" $
 -- | Check a list of field names for duplicates
 
 -- | Check a list of FieldType for duplicate names, calling a handler on the first duplicate found
-checkDuplicateFieldTypes :: TTermDefinition ([FieldType] -> (Name -> Maybe InvalidTypeError) -> Maybe InvalidTypeError)
+checkDuplicateFieldTypes :: TypedTermDefinition ([FieldType] -> (Name -> Maybe InvalidTypeError) -> Maybe InvalidTypeError)
 checkDuplicateFieldTypes = define "checkDuplicateFieldTypes" $
   doc "Check for duplicate field names in a list of field types" $
   "fields" ~> "mkError" ~>
@@ -194,7 +194,7 @@ checkDuplicateFieldTypes = define "checkDuplicateFieldTypes" $
 
 -- | Find the first duplicate in a list of names (for field types)
 -- | Check a list of field names for duplicates
-checkDuplicateFields :: TTermDefinition (SubtermPath -> [Name] -> Maybe InvalidTermError)
+checkDuplicateFields :: TypedTermDefinition (SubtermPath -> [Name] -> Maybe InvalidTermError)
 checkDuplicateFields = define "checkDuplicateFields" $
   doc "Check for duplicate field names in a list of fields" $
   "path" ~> "names" ~>
@@ -207,7 +207,7 @@ checkDuplicateFields = define "checkDuplicateFields" $
     (var "dup")
 
 -- | Check that a literal value's type matches an expected literal type
-checkLiteral :: TTermDefinition (LiteralType -> Literal -> Maybe InvalidLiteralError)
+checkLiteral :: TypedTermDefinition (LiteralType -> Literal -> Maybe InvalidLiteralError)
 checkLiteral = define "checkLiteral" $
   doc "Check that a literal value's type matches an expected literal type" $
   "expected" ~> "value" ~>
@@ -221,7 +221,7 @@ checkLiteral = define "checkLiteral" $
 
 -- | Find the first duplicate in a list, if any
 -- | Check a list of names for shadowing against the current graph scope
-checkShadowing :: TTermDefinition (SubtermPath -> Graph -> [Name] -> Maybe InvalidTermError)
+checkShadowing :: TypedTermDefinition (SubtermPath -> Graph -> [Name] -> Maybe InvalidTermError)
 checkShadowing = define "checkShadowing" $
   doc "Check if any name in a list shadows a variable already in scope" $
   "path" ~> "cx" ~> "names" ~>
@@ -249,7 +249,7 @@ checkShadowing = define "checkShadowing" $
 -- The ValidationProfile gates which rules are evaluated; rules in neither
 -- errorRules nor warningRules are skipped entirely. Findings are returned as
 -- (ruleName, payload) pairs; the orchestrator uses the rule name to classify.
-checkTerm :: TTermDefinition (ValidationProfile -> Bool -> SubtermPath -> Graph -> Term -> Maybe (Name, InvalidTermError))
+checkTerm :: TypedTermDefinition (ValidationProfile -> Bool -> SubtermPath -> Graph -> Term -> Maybe (Name, InvalidTermError))
 checkTerm = define "checkTerm" $
   doc "Check a single term node for validation errors. Rules disabled by the profile are not evaluated." $
   "p" ~> "typed" ~> "path" ~> "cx" ~> "term" ~>
@@ -547,7 +547,7 @@ checkTerm = define "checkTerm" $
 -- | Check a type for undefined type variables against the current graph scope.
 -- Takes a path, graph, type, and a handler function that receives the first undefined variable name
 -- and returns an error. Returns Nothing if all type variables are defined.
-checkUndefinedTypeVariablesInType :: TTermDefinition (SubtermPath -> Graph -> Type -> (Name -> Maybe InvalidTermError) -> Maybe InvalidTermError)
+checkUndefinedTypeVariablesInType :: TypedTermDefinition (SubtermPath -> Graph -> Type -> (Name -> Maybe InvalidTermError) -> Maybe InvalidTermError)
 checkUndefinedTypeVariablesInType = define "checkUndefinedTypeVariablesInType" $
   doc "Check a type for type variables not bound in the current scope" $
   "path" ~> "cx" ~> "typ" ~> "mkError" ~>
@@ -562,7 +562,7 @@ checkUndefinedTypeVariablesInType = define "checkUndefinedTypeVariablesInType" $
 -- The scheme's own bound variables are excluded before checking.
 -- | Check a type scheme for undefined type variables against the current graph scope.
 -- The scheme's own bound variables are excluded before checking.
-checkUndefinedTypeVariablesInTypeScheme :: TTermDefinition (SubtermPath -> Graph -> TypeScheme -> (Name -> Maybe InvalidTermError) -> Maybe InvalidTermError)
+checkUndefinedTypeVariablesInTypeScheme :: TypedTermDefinition (SubtermPath -> Graph -> TypeScheme -> (Name -> Maybe InvalidTermError) -> Maybe InvalidTermError)
 checkUndefinedTypeVariablesInTypeScheme = define "checkUndefinedTypeVariablesInTypeScheme" $
   doc "Check a type scheme for type variables not bound by the scheme or the current scope" $
   "path" ~> "cx" ~> "ts" ~> "mkError" ~>
@@ -579,7 +579,7 @@ checkUndefinedTypeVariablesInTypeScheme = define "checkUndefinedTypeVariablesInT
 
 -- | A Nothing of type Maybe InvalidTypeError
 -- | Check if a type is TypeVoid and return a VoidInNonBottomPositionError if so
-checkVoid :: TTermDefinition (Type -> Maybe InvalidTypeError)
+checkVoid :: TypedTermDefinition (Type -> Maybe InvalidTypeError)
 checkVoid = define "checkVoid" $
   doc "Return an error if the given type is TypeVoid" $
   "typ" ~>
@@ -587,16 +587,16 @@ checkVoid = define "checkVoid" $
     _Type_void>>: constant $
       mkJustType $ inject _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition $
         record _VoidInNonBottomPositionError [
-          _VoidInNonBottomPositionError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep]))]]
+          _VoidInNonBottomPositionError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep]))]]
 
 -- | An empty ValidationResult (no errors, no warnings) parameterized by 'e'.
 -- Used as the initial accumulator for the per-tree fold. The phantom type
 -- variable 'e' is left polymorphic so the same constant works for both
 -- InvalidTermError and InvalidTypeError walks.
-emptyResult :: TTerm (ValidationResult e)
+emptyResult :: TypedTerm (ValidationResult e)
 emptyResult = Validation.validationResult
-  (list ([] :: [TTerm e]))
-  (list ([] :: [TTerm e]))
+  (list ([] :: [TypedTerm e]))
+  (list ([] :: [TypedTerm e]))
 
 -- | Wrap a leaf-shaped 'Maybe InvalidTermError' finding with the rule that
 -- produced it, gated by the active profile. If the rule's qualified name is
@@ -606,11 +606,11 @@ emptyResult = Validation.validationResult
 -- payload)'; otherwise 'Nothing'. Used to retrofit existing per-rule checks
 -- in checkTerm without restructuring them.
 guardedTermRule
-  :: TTerm ValidationProfile
+  :: TypedTerm ValidationProfile
   -> Name -- ^ Union-type qualified name (e.g. _InvalidTermError).
   -> Name -- ^ Variant local name (e.g. _InvalidTermError_duplicateBinding).
-  -> TTerm (Maybe InvalidTermError) -- ^ The leaf-shaped finding term.
-  -> TTerm (Maybe (Name, InvalidTermError))
+  -> TypedTerm (Maybe InvalidTermError) -- ^ The leaf-shaped finding term.
+  -> TypedTerm (Maybe (Name, InvalidTermError))
 guardedTermRule profile unionName variantName findingExpr =
   Logic.ifElse (enabled @@ profile @@ ruleNameTerm)
     (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
@@ -620,11 +620,11 @@ guardedTermRule profile unionName variantName findingExpr =
 
 -- | Type-side counterpart of 'guardedTermRule'.
 guardedTypeRule
-  :: TTerm ValidationProfile
+  :: TypedTerm ValidationProfile
   -> Name
   -> Name
-  -> TTerm (Maybe InvalidTypeError)
-  -> TTerm (Maybe (Name, InvalidTypeError))
+  -> TypedTerm (Maybe InvalidTypeError)
+  -> TypedTerm (Maybe (Name, InvalidTypeError))
 guardedTypeRule profile unionName variantName findingExpr =
   Logic.ifElse (enabled @@ profile @@ ruleNameTerm)
     (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
@@ -635,7 +635,7 @@ guardedTypeRule profile unionName variantName findingExpr =
 -- | Test whether a rule is active in a profile (in either errorRules or
 -- warningRules). A rule that is active is evaluated by validators; a rule
 -- that is inactive is skipped entirely.
-enabled :: TTermDefinition (ValidationProfile -> Name -> Bool)
+enabled :: TypedTermDefinition (ValidationProfile -> Name -> Bool)
 enabled = define "enabled" $
   doc "True iff the given rule name appears in the profile's errorRules or warningRules." $
   "p" ~> "ruleName" ~>
@@ -645,7 +645,7 @@ enabled = define "enabled" $
 
 -- | Check a single type node for validation errors (without recursing into subtypes).
 -- | Find the first duplicate in a list, if any
-findDuplicate :: TTermDefinition ([Name] -> Maybe Name)
+findDuplicate :: TypedTermDefinition ([Name] -> Maybe Name)
 findDuplicate = define "findDuplicate" $
   doc "Find the first duplicate name in a list" $
   "names" ~>
@@ -667,7 +667,7 @@ findDuplicate = define "findDuplicate" $
 -- | Validate a name at an introduction site.
 -- Currently only rejects empty strings; may be extended with additional naming conventions.
 -- | Find the first duplicate in a list of names (for field types)
-findDuplicateFieldType :: TTermDefinition ([Name] -> Maybe Name)
+findDuplicateFieldType :: TypedTermDefinition ([Name] -> Maybe Name)
 findDuplicateFieldType = define "findDuplicateFieldType" $
   doc "Find the first duplicate name in a list (for field type validation)" $
   "names" ~>
@@ -684,7 +684,7 @@ findDuplicateFieldType = define "findDuplicateFieldType" $
     (var "names") $
   Pairs.second (var "result")
 -- | Return the first Just from a list of Maybe values, or Nothing
-firstError :: TTermDefinition ([Maybe InvalidTermError] -> Maybe InvalidTermError)
+firstError :: TypedTermDefinition ([Maybe InvalidTermError] -> Maybe InvalidTermError)
 firstError = define "firstError" $
   doc "Return the first error from a list of optional errors, or nothing if all are valid" $
   "checks" ~>
@@ -698,7 +698,7 @@ firstError = define "firstError" $
 
 -- | Return the first Just from a list of rule-tagged optional InvalidTermError findings.
 -- Used by the new profile-aware validators where each finding carries its rule name.
-firstFinding :: TTermDefinition ([Maybe (Name, InvalidTermError)] -> Maybe (Name, InvalidTermError))
+firstFinding :: TypedTermDefinition ([Maybe (Name, InvalidTermError)] -> Maybe (Name, InvalidTermError))
 firstFinding = define "firstFinding" $
   doc "Return the first rule-tagged finding from a list, or nothing if all are valid" $
   "checks" ~>
@@ -711,7 +711,7 @@ firstFinding = define "firstFinding" $
     (var "checks")
 
 -- | Type-side counterpart of 'firstFinding' for rule-tagged InvalidTypeError findings.
-firstFindingType :: TTermDefinition ([Maybe (Name, InvalidTypeError)] -> Maybe (Name, InvalidTypeError))
+firstFindingType :: TypedTermDefinition ([Maybe (Name, InvalidTypeError)] -> Maybe (Name, InvalidTypeError))
 firstFindingType = define "firstFindingType" $
   doc "Return the first rule-tagged type finding from a list, or nothing if all are valid" $
   "checks" ~>
@@ -724,7 +724,7 @@ firstFindingType = define "firstFindingType" $
     (var "checks")
 
 -- | Return the first Just from a list of Maybe InvalidTypeError values
-firstTypeError :: TTermDefinition ([Maybe InvalidTypeError] -> Maybe InvalidTypeError)
+firstTypeError :: TypedTermDefinition ([Maybe InvalidTypeError] -> Maybe InvalidTypeError)
 firstTypeError = define "firstTypeError" $
   doc "Return the first type error from a list of optional errors, or nothing if all are valid" $
   "checks" ~>
@@ -740,22 +740,22 @@ firstTypeError = define "firstTypeError" $
 -- Recursively traverses the type, tracking bound type variables through forall binders.
 -- | Validate a name at an introduction site.
 -- Currently only rejects empty strings; may be extended with additional naming conventions.
-isValidName :: TTermDefinition (Name -> Bool)
+isValidName :: TypedTermDefinition (Name -> Bool)
 isValidName = define "isValidName" $
   doc "Check whether a name is valid at an introduction site. Currently rejects empty strings." $
   "name" ~>
   Logic.not $ Equality.equal (Core.unName $ var "name") (string "")
 
 -- | A Just of type InvalidTermError -> Maybe InvalidTermError
-justError :: TTerm InvalidTermError -> TTerm (Maybe InvalidTermError)
-justError (TTerm t) = TTerm $ TermMaybe $ Just t
+justError :: TypedTerm InvalidTermError -> TypedTerm (Maybe InvalidTermError)
+justError (TypedTerm t) = TypedTerm $ TermMaybe $ Just t
 
 -- | The default validation profile for hydra.validate.core (term and type
 -- validators). Every check currently wired up is in 'errorRules' except
 -- 'InvalidTypeError.singleVariantUnion', which is treated as a warning.
 -- 'maxErrors = 1' preserves the legacy 'first error wins' behaviour;
 -- 'maxWarnings = 20' is a deliberately small starting cap.
-kernelDefaultCoreProfile :: TTermDefinition ValidationProfile
+kernelDefaultCoreProfile :: TypedTermDefinition ValidationProfile
 kernelDefaultCoreProfile = define "kernelDefaultCoreProfile" $
   doc "The default validation profile for term and type validation, with every check classified as an error except InvalidTypeError.singleVariantUnion (warning); maxErrors=1, maxWarnings=20." $
   Validation.validationProfile
@@ -808,20 +808,20 @@ kernelDefaultCoreProfile = define "kernelDefaultCoreProfile" $
     coreWarningRules =
       [qualifiedRule _InvalidTypeError _InvalidTypeError_singleVariantUnion]
 
--- | Helper to make a just from a TTerm
-mkJust :: TTerm InvalidTermError -> TTerm (Maybe InvalidTermError)
+-- | Helper to make a just from a TypedTerm
+mkJust :: TypedTerm InvalidTermError -> TypedTerm (Maybe InvalidTermError)
 mkJust = just
 
 -- | A Just of type InvalidTypeError -> Maybe InvalidTypeError
-mkJustType :: TTerm InvalidTypeError -> TTerm (Maybe InvalidTypeError)
+mkJustType :: TypedTerm InvalidTypeError -> TypedTerm (Maybe InvalidTypeError)
 mkJustType = just
 
 -- | A Nothing of type Maybe InvalidTermError
-noError :: TTerm (Maybe InvalidTermError)
-noError = TTerm $ TermMaybe Nothing
+noError :: TypedTerm (Maybe InvalidTermError)
+noError = TypedTerm $ TermMaybe Nothing
 
-noTypeError :: TTerm (Maybe InvalidTypeError)
-noTypeError = TTerm $ TermMaybe Nothing
+noTypeError :: TypedTerm (Maybe InvalidTypeError)
+noTypeError = TypedTerm $ TermMaybe Nothing
 
 -- | Compose a fully qualified rule identifier from a union-type qualified
 -- name and a variant local name, joined with '.'. Used at profile-construction
@@ -838,7 +838,7 @@ qualifiedRule (Name u) (Name v) = Name (L.concat [u, ".", v])
 -- collected up to 'maxWarnings' but never cause termination. The 'typed'
 -- parameter indicates whether to expect System F (typed) terms; when true,
 -- type variable binding checks and UntypedTermVariableError are active.
-term :: TTermDefinition (ValidationProfile -> Bool -> Graph -> Term -> ValidationResult InvalidTermError)
+term :: TypedTermDefinition (ValidationProfile -> Bool -> Graph -> Term -> ValidationResult InvalidTermError)
 term = define "term" $
   doc "Validate a term against the given ValidationProfile, returning a ValidationResult. Errors hard-stop traversal once maxErrors is reached; warnings are bounded by maxWarnings without causing termination." $
   "p" ~> "typed" ~> "g" ~> "t" ~>
@@ -877,7 +877,7 @@ term = define "term" $
 -- each subtype) so 'maxErrors' is enforced over the entire type tree, not
 -- per subtree. The 'boundVars' set is the in-scope type variables; forall
 -- binders extend it before recursing into the body.
-type_ :: TTermDefinition (
+type_ :: TypedTermDefinition (
   ValidationProfile
   -> ValidationResult InvalidTypeError
   -> S.Set Name
@@ -950,7 +950,7 @@ type_ = define "type" $
 -- | Check if a type is TypeVoid and return a VoidInNonBottomPositionError if so
 -- | Check a single type node for validation errors (without recursing into subtypes).
 -- Profile-aware variant; rules disabled by the profile are skipped entirely.
-validateTypeNode :: TTermDefinition (ValidationProfile -> S.Set Name -> Type -> Maybe (Name, InvalidTypeError))
+validateTypeNode :: TypedTermDefinition (ValidationProfile -> S.Set Name -> Type -> Maybe (Name, InvalidTypeError))
 validateTypeNode = define "validateTypeNode" $
   doc "Check a single type node for validation errors. Rules disabled by the profile are not evaluated." $
   "p" ~> "boundVars" ~> "typ" ~>
@@ -966,7 +966,7 @@ validateTypeNode = define "validateTypeNode" $
           (Logic.ifElse (Maps.null $ var "annMap")
             (mkJustType $ inject _InvalidTypeError _InvalidTypeError_emptyTypeAnnotation $
               record _EmptyTypeAnnotationError [
-                _EmptyTypeAnnotationError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep]))])
+                _EmptyTypeAnnotationError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep]))])
             noTypeError),
         -- Y8. NestedTypeAnnotationError
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_nestedTypeAnnotation
@@ -974,7 +974,7 @@ validateTypeNode = define "validateTypeNode" $
             _Type_annotated>>: constant $
               mkJustType $ inject _InvalidTypeError _InvalidTypeError_nestedTypeAnnotation $
                 record _NestedTypeAnnotationError [
-                  _NestedTypeAnnotationError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep]))]])],
+                  _NestedTypeAnnotationError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep]))]])],
 
     -- Y10: TypeEither — void in either components
     _Type_either>>: "et" ~>
@@ -993,7 +993,7 @@ validateTypeNode = define "validateTypeNode" $
           (Logic.ifElse (Sets.member (var "paramName") (var "boundVars"))
             (mkJustType $ inject _InvalidTypeError _InvalidTypeError_typeVariableShadowingInForall $
               record _TypeVariableShadowingInForallError [
-                _TypeVariableShadowingInForallError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep])),
+                _TypeVariableShadowingInForallError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep])),
                 _TypeVariableShadowingInForallError_name>>: var "paramName"])
             noTypeError),
         -- Y13. InvalidForallParameterNameError
@@ -1002,7 +1002,7 @@ validateTypeNode = define "validateTypeNode" $
             noTypeError
             (mkJustType $ inject _InvalidTypeError _InvalidTypeError_invalidForallParameterName $
               record _InvalidForallParameterNameError [
-                _InvalidForallParameterNameError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep])),
+                _InvalidForallParameterNameError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep])),
                 _InvalidForallParameterNameError_name>>: var "paramName"]))],
 
     -- Y10: TypeFunction — void in codomain
@@ -1024,7 +1024,7 @@ validateTypeNode = define "validateTypeNode" $
             _Type_function>>: constant $
               mkJustType $ inject _InvalidTypeError _InvalidTypeError_nonComparableMapKeyType $
                 record _NonComparableMapKeyTypeError [
-                  _NonComparableMapKeyTypeError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep])),
+                  _NonComparableMapKeyTypeError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep])),
                   _NonComparableMapKeyTypeError_keyType>>: var "keyType"]]),
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition
           (checkVoid @@ var "keyType"),
@@ -1047,7 +1047,7 @@ validateTypeNode = define "validateTypeNode" $
           (Logic.ifElse (Lists.null $ var "fields")
             (mkJustType $ inject _InvalidTypeError _InvalidTypeError_emptyRecordType $
               record _EmptyRecordTypeError [
-                _EmptyRecordTypeError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep]))])
+                _EmptyRecordTypeError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep]))])
             noTypeError),
         -- Y4. DuplicateRecordTypeFieldNamesError
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_duplicateRecordTypeFieldNames
@@ -1055,7 +1055,7 @@ validateTypeNode = define "validateTypeNode" $
             @@ ("dupName" ~>
               mkJustType $ inject _InvalidTypeError _InvalidTypeError_duplicateRecordTypeFieldNames $
                 record _DuplicateRecordTypeFieldNamesError [
-                  _DuplicateRecordTypeFieldNamesError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep])),
+                  _DuplicateRecordTypeFieldNamesError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep])),
                   _DuplicateRecordTypeFieldNamesError_name>>: var "dupName"])),
         -- Y10. VoidInNonBottomPositionError — check field types
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition
@@ -1071,7 +1071,7 @@ validateTypeNode = define "validateTypeNode" $
             _Type_function>>: constant $
               mkJustType $ inject _InvalidTypeError _InvalidTypeError_nonComparableSetElementType $
                 record _NonComparableSetElementTypeError [
-                  _NonComparableSetElementTypeError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep])),
+                  _NonComparableSetElementTypeError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep])),
                   _NonComparableSetElementTypeError_elementType>>: var "elemType"]]),
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition
           (checkVoid @@ var "elemType")],
@@ -1084,7 +1084,7 @@ validateTypeNode = define "validateTypeNode" $
           (Logic.ifElse (Lists.null $ var "fields")
             (mkJustType $ inject _InvalidTypeError _InvalidTypeError_emptyUnionType $
               record _EmptyUnionTypeError [
-                _EmptyUnionTypeError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep]))])
+                _EmptyUnionTypeError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep]))])
             noTypeError),
         -- Y3. SingleVariantUnionError. Profile-aware: kernelDefaultCoreProfile
         -- classifies this as a warning rather than an error, since
@@ -1098,7 +1098,7 @@ validateTypeNode = define "validateTypeNode" $
               ("singleField" ~>
                 mkJustType $ inject _InvalidTypeError _InvalidTypeError_singleVariantUnion $
                   record _SingleVariantUnionError [
-                    _SingleVariantUnionError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep])),
+                    _SingleVariantUnionError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep])),
                     _SingleVariantUnionError_fieldName>>: Core.fieldTypeName (var "singleField")])
               (Lists.maybeHead $ var "fields"))
             noTypeError),
@@ -1108,7 +1108,7 @@ validateTypeNode = define "validateTypeNode" $
             @@ ("dupName" ~>
               mkJustType $ inject _InvalidTypeError _InvalidTypeError_duplicateUnionTypeFieldNames $
                 record _DuplicateUnionTypeFieldNamesError [
-                  _DuplicateUnionTypeFieldNamesError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep])),
+                  _DuplicateUnionTypeFieldNamesError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep])),
                   _DuplicateUnionTypeFieldNamesError_name>>: var "dupName"])),
         -- Y10. VoidInNonBottomPositionError — check field types
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition
@@ -1123,7 +1123,7 @@ validateTypeNode = define "validateTypeNode" $
           noTypeError
           (mkJustType $ inject _InvalidTypeError _InvalidTypeError_undefinedTypeVariable $
             record _UndefinedTypeVariableError [
-              _UndefinedTypeVariableError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep])),
+              _UndefinedTypeVariableError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep])),
               _UndefinedTypeVariableError_name>>: var "varName"]))]
 
 -- | Check a list of FieldType for duplicate names, calling a handler on the first duplicate found

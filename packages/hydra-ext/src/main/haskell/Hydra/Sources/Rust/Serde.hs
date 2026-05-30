@@ -87,7 +87,7 @@ import qualified Hydra.Sources.Rust.Syntax as RustSyntax
 import qualified Hydra.Sources.Rust.Operators as RustOperators
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 ns :: ModuleName
@@ -205,7 +205,7 @@ module_ = Module {
 -- Top-level serialization
 -- =============================================================================
 
-arrayExprToExpr :: TTermDefinition (R.ArrayExpr -> Expr)
+arrayExprToExpr :: TypedTermDefinition (R.ArrayExpr -> Expr)
 arrayExprToExpr = define "arrayExprToExpr" $
   doc "Serialize an array expression" $
   lambda "a" $
@@ -221,7 +221,7 @@ arrayExprToExpr = define "arrayExprToExpr" $
           Serialization.printExpr @@ (expressionToExpr @@ var "len"),
           string "]"]))]
 
-assignExprToExpr :: TTermDefinition (R.AssignExpr -> Expr)
+assignExprToExpr :: TypedTermDefinition (R.AssignExpr -> Expr)
 assignExprToExpr = define "assignExprToExpr" $
   doc "Serialize an assignment expression" $
   lambda "a" $ lets [
@@ -232,7 +232,7 @@ assignExprToExpr = define "assignExprToExpr" $
       Serialization.cst @@ string "=",
       expressionToExpr @@ var "val"]
 
-attributeToExpr :: TTermDefinition (R.Attribute -> Expr)
+attributeToExpr :: TypedTermDefinition (R.Attribute -> Expr)
 attributeToExpr = define "attributeToExpr" $
   doc "Serialize an attribute" $
   lambda "attr" $ lets [
@@ -244,7 +244,7 @@ attributeToExpr = define "attributeToExpr" $
     "tokensPart">: Maybes.maybe (string "") (lambda "t" $ Strings.cat (list [string "(", var "t", string ")"])) (var "tokens")] $
     Serialization.cst @@ (Strings.cat (list [var "prefix", var "pathStr", var "tokensPart", string "]"]))
 
-binaryExprToExpr :: TTermDefinition (R.BinaryExpr -> Expr)
+binaryExprToExpr :: TypedTermDefinition (R.BinaryExpr -> Expr)
 binaryExprToExpr = define "binaryExprToExpr" $
   doc "Serialize a binary expression" $
   lambda "b" $ lets [
@@ -256,7 +256,7 @@ binaryExprToExpr = define "binaryExprToExpr" $
       binaryOpToExpr @@ var "op",
       expressionToExpr @@ var "right"]
 
-binaryOpToExpr :: TTermDefinition (R.BinaryOp -> Expr)
+binaryOpToExpr :: TypedTermDefinition (R.BinaryOp -> Expr)
 binaryOpToExpr = define "binaryOpToExpr" $
   doc "Serialize a binary operator" $
   lambda "op" $
@@ -280,14 +280,14 @@ binaryOpToExpr = define "binaryOpToExpr" $
       R._BinaryOp_gt>>: constant $ string ">",
       R._BinaryOp_ge>>: constant $ string ">="])
 
-blockToExpr :: TTermDefinition (R.Block -> Expr)
+blockToExpr :: TypedTermDefinition (R.Block -> Expr)
 blockToExpr = define "blockToExpr" $
   doc "Serialize a block" $
   lambda "b" $ lets [
     "stmts">: project R._Block R._Block_statements @@ var "b",
     "expr">: project R._Block R._Block_expression @@ var "b",
     "stmtExprs">: Lists.map (statementToExpr) (var "stmts"),
-    "exprPart">: Maybes.maybe (list ([] :: [TTerm Expr])) (lambda "e" $ list [expressionToExpr @@ var "e"]) (var "expr"),
+    "exprPart">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "e" $ list [expressionToExpr @@ var "e"]) (var "expr"),
     "allParts">: Lists.concat2 (var "stmtExprs") (var "exprPart")] $
     Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@ var "allParts"
 
@@ -295,7 +295,7 @@ blockToExpr = define "blockToExpr" $
 -- Patterns
 -- =============================================================================
 
-callExprToExpr :: TTermDefinition (R.CallExpr -> Expr)
+callExprToExpr :: TypedTermDefinition (R.CallExpr -> Expr)
 callExprToExpr = define "callExprToExpr" $
   doc "Serialize a function call expression" $
   lambda "c" $ lets [
@@ -305,7 +305,7 @@ callExprToExpr = define "callExprToExpr" $
       expressionToExpr @@ var "func",
       Serialization.parenListAdaptive @@ (Lists.map (expressionToExpr) (var "args"))]
 
-castExprToExpr :: TTermDefinition (R.CastExpr -> Expr)
+castExprToExpr :: TypedTermDefinition (R.CastExpr -> Expr)
 castExprToExpr = define "castExprToExpr" $
   doc "Serialize a cast expression" $
   lambda "c" $ lets [
@@ -316,7 +316,7 @@ castExprToExpr = define "castExprToExpr" $
       Serialization.cst @@ string "as",
       typeToExpr @@ var "typ"]
 
-closureExprToExpr :: TTermDefinition (R.ClosureExpr -> Expr)
+closureExprToExpr :: TypedTermDefinition (R.ClosureExpr -> Expr)
 closureExprToExpr = define "closureExprToExpr" $
   doc "Serialize a closure expression" $
   lambda "c" $ lets [
@@ -338,7 +338,7 @@ closureExprToExpr = define "closureExprToExpr" $
       var "retPart",
       just $ expressionToExpr @@ var "body"])
 
-closureParamToStr :: TTermDefinition (R.ClosureParam -> String)
+closureParamToStr :: TypedTermDefinition (R.ClosureParam -> String)
 closureParamToStr = define "closureParamToStr" $
   doc "Serialize a closure parameter to string" $
   lambda "cp" $ lets [
@@ -350,7 +350,7 @@ closureParamToStr = define "closureParamToStr" $
       (lambda "t" $ Strings.cat (list [var "patStr", string ": ", Serialization.printExpr @@ (typeToExpr @@ var "t")]))
       (var "typ")
 
-compoundAssignExprToExpr :: TTermDefinition (R.CompoundAssignExpr -> Expr)
+compoundAssignExprToExpr :: TypedTermDefinition (R.CompoundAssignExpr -> Expr)
 compoundAssignExprToExpr = define "compoundAssignExprToExpr" $
   doc "Serialize a compound assignment expression" $
   lambda "c" $ lets [
@@ -373,7 +373,7 @@ compoundAssignExprToExpr = define "compoundAssignExprToExpr" $
       Serialization.cst @@ var "opStr",
       expressionToExpr @@ var "val"]
 
-constDefToExpr :: TTermDefinition (R.ConstDef -> Expr)
+constDefToExpr :: TypedTermDefinition (R.ConstDef -> Expr)
 constDefToExpr = define "constDefToExpr" $
   doc "Serialize a const definition" $
   lambda "c" $ lets [
@@ -388,14 +388,14 @@ constDefToExpr = define "constDefToExpr" $
       expressionToExpr @@ var "val",
       Serialization.cst @@ string ";"]
 
-crateToExpr :: TTermDefinition (R.Crate -> Expr)
+crateToExpr :: TypedTermDefinition (R.Crate -> Expr)
 crateToExpr = define "crateToExpr" $
   doc "Serialize a Rust crate to an AST expression" $
   lambda "crate" $
     Serialization.doubleNewlineSep @@ (Lists.map (itemWithCommentsToExpr)
       (project R._Crate R._Crate_items @@ var "crate"))
 
-derivesToExpr :: TTermDefinition ([String] -> Maybe Expr)
+derivesToExpr :: TypedTermDefinition ([String] -> Maybe Expr)
 derivesToExpr = define "derivesToExpr" $
   doc "Serialize derive macros to an attribute expression" $
   lambda "derives" $
@@ -410,7 +410,7 @@ derivesToExpr = define "derivesToExpr" $
 -- Comments
 -- =============================================================================
 
-enumDefToExpr :: TTermDefinition (R.EnumDef -> Expr)
+enumDefToExpr :: TypedTermDefinition (R.EnumDef -> Expr)
 enumDefToExpr = define "enumDefToExpr" $
   doc "Serialize an enum definition" $
   lambda "e" $ lets [
@@ -421,7 +421,7 @@ enumDefToExpr = define "enumDefToExpr" $
     "derives">: project R._EnumDef R._EnumDef_derives @@ var "e",
     "docC">: project R._EnumDef R._EnumDef_doc @@ var "e",
     "derivesAttr">: derivesToExpr @@ var "derives",
-    "docPart">: Maybes.maybe (list ([] :: [TTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC"),
+    "docPart">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC"),
     "header">: Serialization.spaceSep @@ Maybes.cat (list [
       just $ Serialization.cst @@ string "enum",
       just $ Serialization.cst @@ var "name",
@@ -431,13 +431,13 @@ enumDefToExpr = define "enumDefToExpr" $
       (Lists.map (enumVariantToExpr) (var "variants"))] $
     Serialization.newlineSep @@ Lists.concat (list [
       var "docPart",
-      Maybes.maybe (list ([] :: [TTerm Expr])) (lambda "d" $ list [var "d"]) (var "derivesAttr"),
+      Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [var "d"]) (var "derivesAttr"),
       list [Serialization.spaceSep @@ Maybes.cat (list [
         just $ var "header",
         var "wherePart",
         just $ var "body"])]])
 
-enumVariantBodyToExpr :: TTermDefinition (R.EnumVariantBody -> Expr)
+enumVariantBodyToExpr :: TypedTermDefinition (R.EnumVariantBody -> Expr)
 enumVariantBodyToExpr = define "enumVariantBodyToExpr" $
   doc "Serialize an enum variant body" $
   lambda "body" $
@@ -453,21 +453,21 @@ enumVariantBodyToExpr = define "enumVariantBodyToExpr" $
 -- Function definitions
 -- =============================================================================
 
-enumVariantToExpr :: TTermDefinition (R.EnumVariant -> Expr)
+enumVariantToExpr :: TypedTermDefinition (R.EnumVariant -> Expr)
 enumVariantToExpr = define "enumVariantToExpr" $
   doc "Serialize an enum variant" $
   lambda "v" $ lets [
     "name">: project R._EnumVariant R._EnumVariant_name @@ var "v",
     "body">: project R._EnumVariant R._EnumVariant_body @@ var "v",
     "docC">: project R._EnumVariant R._EnumVariant_doc @@ var "v",
-    "docPart">: Maybes.maybe (list ([] :: [TTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC")] $
+    "docPart">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC")] $
     Serialization.newlineSep @@ Lists.concat (list [
       var "docPart",
       list [Serialization.spaceSep @@ list [
         Serialization.cst @@ var "name",
         enumVariantBodyToExpr @@ var "body"]]])
 
-exprPathToExpr :: TTermDefinition (R.ExprPath -> Expr)
+exprPathToExpr :: TypedTermDefinition (R.ExprPath -> Expr)
 exprPathToExpr = define "exprPathToExpr" $
   doc "Serialize an expression path" $
   lambda "ep" $ lets [
@@ -477,7 +477,7 @@ exprPathToExpr = define "exprPathToExpr" $
     "segStrs">: Lists.map (lambda "s" $ Serialization.printExpr @@ (pathSegmentToExpr @@ var "s")) (var "segs")] $
     Serialization.cst @@ (Strings.cat2 (var "prefix") (Strings.intercalate (string "::") (var "segStrs")))
 
-expressionToExpr :: TTermDefinition (R.Expression -> Expr)
+expressionToExpr :: TypedTermDefinition (R.Expression -> Expr)
 expressionToExpr = define "expressionToExpr" $
   doc "Serialize a Rust expression" $
   lambda "expr" $
@@ -522,7 +522,7 @@ expressionToExpr = define "expressionToExpr" $
       R._Expression_macro>>: lambda "m" $ macroInvocationToExpr @@ var "m",
       R._Expression_paren>>: lambda "e" $ Serialization.parenthesize @@ (expressionToExpr @@ var "e")]
 
-fieldAccessExprToExpr :: TTermDefinition (R.FieldAccessExpr -> Expr)
+fieldAccessExprToExpr :: TypedTermDefinition (R.FieldAccessExpr -> Expr)
 fieldAccessExprToExpr = define "fieldAccessExprToExpr" $
   doc "Serialize a field access expression" $
   lambda "f" $ lets [
@@ -533,7 +533,7 @@ fieldAccessExprToExpr = define "fieldAccessExprToExpr" $
       string ".",
       var "field"]))
 
-fieldPatternToExpr :: TTermDefinition (R.FieldPattern -> Expr)
+fieldPatternToExpr :: TypedTermDefinition (R.FieldPattern -> Expr)
 fieldPatternToExpr = define "fieldPatternToExpr" $
   doc "Serialize a field pattern" $
   lambda "fp" $ lets [
@@ -546,7 +546,7 @@ fieldPatternToExpr = define "fieldPatternToExpr" $
         patternToExpr @@ var "p"])
       (var "pat")
 
-fieldValueToExpr :: TTermDefinition (R.FieldValue -> Expr)
+fieldValueToExpr :: TypedTermDefinition (R.FieldValue -> Expr)
 fieldValueToExpr = define "fieldValueToExpr" $
   doc "Serialize a field-value pair" $
   lambda "fv" $ lets [
@@ -559,7 +559,7 @@ fieldValueToExpr = define "fieldValueToExpr" $
         expressionToExpr @@ var "v"])
       (var "val")
 
-floatLiteralToExpr :: TTermDefinition (R.FloatLiteral -> Expr)
+floatLiteralToExpr :: TypedTermDefinition (R.FloatLiteral -> Expr)
 floatLiteralToExpr = define "floatLiteralToExpr" $
   doc "Serialize a float literal" $
   lambda "fl" $ lets [
@@ -573,7 +573,7 @@ floatLiteralToExpr = define "floatLiteralToExpr" $
 -- Visibility and attributes
 -- =============================================================================
 
-fnDefToExpr :: TTermDefinition (R.FnDef -> Expr)
+fnDefToExpr :: TypedTermDefinition (R.FnDef -> Expr)
 fnDefToExpr = define "fnDefToExpr" $
   doc "Serialize a function definition" $
   lambda "f" $ lets [
@@ -587,7 +587,7 @@ fnDefToExpr = define "fnDefToExpr" $
     "isConst">: project R._FnDef R._FnDef_const @@ var "f",
     "isUnsafe">: project R._FnDef R._FnDef_unsafe @@ var "f",
     "docC">: project R._FnDef R._FnDef_doc @@ var "f",
-    "docPart">: Maybes.maybe (list ([] :: [TTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC"),
+    "docPart">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC"),
     "asyncKw">: Logic.ifElse (var "isAsync") (just $ Serialization.cst @@ string "async") nothing,
     "constKw">: Logic.ifElse (var "isConst") (just $ Serialization.cst @@ string "const") nothing,
     "unsafeKw">: Logic.ifElse (var "isUnsafe") (just $ Serialization.cst @@ string "unsafe") nothing,
@@ -607,7 +607,7 @@ fnDefToExpr = define "fnDefToExpr" $
       var "docPart",
       list [Serialization.spaceSep @@ list [var "header", blockToExpr @@ var "body"]]])
 
-fnParamToExpr :: TTermDefinition (R.FnParam -> Expr)
+fnParamToExpr :: TypedTermDefinition (R.FnParam -> Expr)
 fnParamToExpr = define "fnParamToExpr" $
   doc "Serialize a function parameter" $
   lambda "param" $ lets [
@@ -617,7 +617,7 @@ fnParamToExpr = define "fnParamToExpr" $
       Serialization.cst @@ (Strings.cat2 (Serialization.printExpr @@ (patternToExpr @@ var "pat")) (string ":")),
       typeToExpr @@ var "typ"]
 
-forExprToExpr :: TTermDefinition (R.ForExpr -> Expr)
+forExprToExpr :: TypedTermDefinition (R.ForExpr -> Expr)
 forExprToExpr = define "forExprToExpr" $
   doc "Serialize a for expression" $
   lambda "f" $ lets [
@@ -634,7 +634,7 @@ forExprToExpr = define "forExprToExpr" $
       just $ expressionToExpr @@ var "iter",
       just $ blockToExpr @@ var "body"])
 
-genericArgToExpr :: TTermDefinition (R.GenericArg -> Expr)
+genericArgToExpr :: TypedTermDefinition (R.GenericArg -> Expr)
 genericArgToExpr = define "genericArgToExpr" $
   doc "Serialize a generic argument" $
   lambda "arg" $
@@ -651,7 +651,7 @@ genericArgToExpr = define "genericArgToExpr" $
           Serialization.cst @@ string "=",
           typeToExpr @@ var "typ"]]
 
-genericArgumentsToExpr :: TTermDefinition (R.GenericArguments -> Maybe Expr)
+genericArgumentsToExpr :: TypedTermDefinition (R.GenericArguments -> Maybe Expr)
 genericArgumentsToExpr = define "genericArgumentsToExpr" $
   doc "Serialize generic arguments" $
   lambda "args" $
@@ -669,7 +669,7 @@ genericArgumentsToExpr = define "genericArgumentsToExpr" $
           typeToExpr @@ var "t"]) (var "output")] $
         just $ Serialization.spaceSep @@ Maybes.cat (list [just $ var "inputPart", var "outputPart"])]
 
-genericParamToExpr :: TTermDefinition (R.GenericParam -> Expr)
+genericParamToExpr :: TypedTermDefinition (R.GenericParam -> Expr)
 genericParamToExpr = define "genericParamToExpr" $
   doc "Serialize a generic parameter" $
   lambda "gp" $ lets [
@@ -681,7 +681,7 @@ genericParamToExpr = define "genericParamToExpr" $
         Serialization.cst @@ (Strings.cat2 (var "name") (string ":")),
         Serialization.cst @@ (Strings.intercalate (string " + ") (Lists.map (lambda "b" $ Serialization.printExpr @@ (typeParamBoundToExpr @@ var "b")) (var "bounds")))])
 
-genericParamsToExpr :: TTermDefinition ([R.GenericParam] -> Maybe Expr)
+genericParamsToExpr :: TypedTermDefinition ([R.GenericParam] -> Maybe Expr)
 genericParamsToExpr = define "genericParamsToExpr" $
   doc "Serialize a list of generic parameters" $
   lambda "gps" $
@@ -689,7 +689,7 @@ genericParamsToExpr = define "genericParamsToExpr" $
       nothing
       (just $ Serialization.angleBracesList @@ Serialization.inlineStyle @@ (Lists.map (genericParamToExpr) (var "gps")))
 
-identifierPatternToExpr :: TTermDefinition (R.IdentifierPattern -> Expr)
+identifierPatternToExpr :: TypedTermDefinition (R.IdentifierPattern -> Expr)
 identifierPatternToExpr = define "identifierPatternToExpr" $
   doc "Serialize an identifier pattern" $
   lambda "ip" $ lets [
@@ -705,7 +705,7 @@ identifierPatternToExpr = define "identifierPatternToExpr" $
       just $ Serialization.cst @@ var "name",
       var "atPart"])
 
-ifExprToExpr :: TTermDefinition (R.IfExpr -> Expr)
+ifExprToExpr :: TypedTermDefinition (R.IfExpr -> Expr)
 ifExprToExpr = define "ifExprToExpr" $
   doc "Serialize an if expression" $
   lambda "i" $ lets [
@@ -731,7 +731,7 @@ ifExprToExpr = define "ifExprToExpr" $
       just $ blockToExpr @@ var "thenB",
       var "elsePart"])
 
-implBlockToExpr :: TTermDefinition (R.ImplBlock -> Expr)
+implBlockToExpr :: TypedTermDefinition (R.ImplBlock -> Expr)
 implBlockToExpr = define "implBlockToExpr" $
   doc "Serialize an impl block" $
   lambda "i" $ lets [
@@ -755,7 +755,7 @@ implBlockToExpr = define "implBlockToExpr" $
       (Lists.map (implItemToExpr) (var "items"))] $
     Serialization.spaceSep @@ list [var "header", var "body"]
 
-implItemToExpr :: TTermDefinition (R.ImplItem -> Expr)
+implItemToExpr :: TypedTermDefinition (R.ImplItem -> Expr)
 implItemToExpr = define "implItemToExpr" $
   doc "Serialize an impl item" $
   lambda "item" $
@@ -764,7 +764,7 @@ implItemToExpr = define "implItemToExpr" $
       R._ImplItem_type>>: lambda "t" $ typeAliasToExpr @@ var "t",
       R._ImplItem_const>>: lambda "c" $ constDefToExpr @@ var "c"]
 
-implMethodToExpr :: TTermDefinition (R.ImplMethod -> Expr)
+implMethodToExpr :: TypedTermDefinition (R.ImplMethod -> Expr)
 implMethodToExpr = define "implMethodToExpr" $
   doc "Serialize an impl method" $
   lambda "m" $ lets [
@@ -776,7 +776,7 @@ implMethodToExpr = define "implMethodToExpr" $
     "body">: project R._ImplMethod R._ImplMethod_body @@ var "m",
     "pub">: project R._ImplMethod R._ImplMethod_public @@ var "m",
     "docC">: project R._ImplMethod R._ImplMethod_doc @@ var "m",
-    "docPart">: Maybes.maybe (list ([] :: [TTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC"),
+    "docPart">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC"),
     "pubKw">: Logic.ifElse (var "pub") (just $ Serialization.cst @@ string "pub") nothing,
     "genericsExpr">: genericParamsToExpr @@ var "generics",
     "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (methodParamToExpr) (var "params")),
@@ -800,7 +800,7 @@ implMethodToExpr = define "implMethodToExpr" $
 -- Trait definitions
 -- =============================================================================
 
-indexExprToExpr :: TTermDefinition (R.IndexExpr -> Expr)
+indexExprToExpr :: TypedTermDefinition (R.IndexExpr -> Expr)
 indexExprToExpr = define "indexExprToExpr" $
   doc "Serialize an index expression" $
   lambda "i" $ lets [
@@ -812,7 +812,7 @@ indexExprToExpr = define "indexExprToExpr" $
       Serialization.printExpr @@ (expressionToExpr @@ var "idx"),
       string "]"]))
 
-integerLiteralToExpr :: TTermDefinition (R.IntegerLiteral -> Expr)
+integerLiteralToExpr :: TypedTermDefinition (R.IntegerLiteral -> Expr)
 integerLiteralToExpr = define "integerLiteralToExpr" $
   doc "Serialize an integer literal" $
   lambda "il" $ lets [
@@ -822,7 +822,7 @@ integerLiteralToExpr = define "integerLiteralToExpr" $
     "sufStr">: Maybes.maybe (string "") (lambda "s" $ var "s") (var "suf")] $
     Serialization.cst @@ (Strings.cat2 (var "valStr") (var "sufStr"))
 
-itemToExpr :: TTermDefinition (R.Item -> Expr)
+itemToExpr :: TypedTermDefinition (R.Item -> Expr)
 itemToExpr = define "itemToExpr" $
   doc "Serialize a Rust item to an AST expression" $
   lambda "item" $
@@ -843,7 +843,7 @@ itemToExpr = define "itemToExpr" $
 -- Use declarations
 -- =============================================================================
 
-itemWithCommentsToExpr :: TTermDefinition (R.ItemWithComments -> Expr)
+itemWithCommentsToExpr :: TypedTermDefinition (R.ItemWithComments -> Expr)
 itemWithCommentsToExpr = define "itemWithCommentsToExpr" $
   doc "Serialize an item with optional doc comments and visibility" $
   lambda "iwc" $ lets [
@@ -851,7 +851,7 @@ itemWithCommentsToExpr = define "itemWithCommentsToExpr" $
     "vis">: project R._ItemWithComments R._ItemWithComments_visibility @@ var "iwc",
     "item">: project R._ItemWithComments R._ItemWithComments_item @@ var "iwc",
     "docPart">: Maybes.maybe
-      (list ([] :: [TTerm Expr]))
+      (list ([] :: [TypedTerm Expr]))
       (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")])
       (var "doc"),
     "visPart">: visibilityToExpr @@ var "vis",
@@ -859,7 +859,7 @@ itemWithCommentsToExpr = define "itemWithCommentsToExpr" $
     Serialization.newlineSep @@ Lists.concat (list [var "docPart", list [
       Serialization.spaceSep @@ Maybes.cat (list [var "visPart", just (var "itemPart")])]])
 
-letStatementToExpr :: TTermDefinition (R.LetStatement -> Expr)
+letStatementToExpr :: TypedTermDefinition (R.LetStatement -> Expr)
 letStatementToExpr = define "letStatementToExpr" $
   doc "Serialize a let statement" $
   lambda "l" $ lets [
@@ -882,7 +882,7 @@ letStatementToExpr = define "letStatementToExpr" $
       var "initPart",
       just $ Serialization.cst @@ string ";"])
 
-literalToExpr :: TTermDefinition (R.Literal -> Expr)
+literalToExpr :: TypedTermDefinition (R.Literal -> Expr)
 literalToExpr = define "literalToExpr" $
   doc "Serialize a literal" $
   lambda "lit" $
@@ -896,7 +896,7 @@ literalToExpr = define "literalToExpr" $
       R._Literal_byte>>: lambda "b" $ Serialization.cst @@ (Strings.cat (list [string "b'", Literals.showUint8 $ var "b", string "'"])),
       R._Literal_bool>>: lambda "b" $ Serialization.cst @@ (Logic.ifElse (var "b") (string "true") (string "false"))]
 
-loopExprToExpr :: TTermDefinition (R.LoopExpr -> Expr)
+loopExprToExpr :: TypedTermDefinition (R.LoopExpr -> Expr)
 loopExprToExpr = define "loopExprToExpr" $
   doc "Serialize a loop expression" $
   lambda "l" $ lets [
@@ -908,7 +908,7 @@ loopExprToExpr = define "loopExprToExpr" $
       just $ Serialization.cst @@ string "loop",
       just $ blockToExpr @@ var "body"])
 
-macroInvocationToExpr :: TTermDefinition (R.MacroInvocation -> Expr)
+macroInvocationToExpr :: TypedTermDefinition (R.MacroInvocation -> Expr)
 macroInvocationToExpr = define "macroInvocationToExpr" $
   doc "Serialize a macro invocation" $
   lambda "m" $ lets [
@@ -930,7 +930,7 @@ macroInvocationToExpr = define "macroInvocationToExpr" $
 -- Statements
 -- =============================================================================
 
-matchArmToExpr :: TTermDefinition (R.MatchArm -> Expr)
+matchArmToExpr :: TypedTermDefinition (R.MatchArm -> Expr)
 matchArmToExpr = define "matchArmToExpr" $
   doc "Serialize a match arm" $
   lambda "arm" $ lets [
@@ -947,7 +947,7 @@ matchArmToExpr = define "matchArmToExpr" $
       just $ expressionToExpr @@ var "body",
       just $ Serialization.cst @@ string ","])
 
-matchExprToExpr :: TTermDefinition (R.MatchExpr -> Expr)
+matchExprToExpr :: TypedTermDefinition (R.MatchExpr -> Expr)
 matchExprToExpr = define "matchExprToExpr" $
   doc "Serialize a match expression" $
   lambda "m" $ lets [
@@ -959,7 +959,7 @@ matchExprToExpr = define "matchExprToExpr" $
       Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@
         (Lists.map (matchArmToExpr) (var "arms"))]
 
-methodCallExprToExpr :: TTermDefinition (R.MethodCallExpr -> Expr)
+methodCallExprToExpr :: TypedTermDefinition (R.MethodCallExpr -> Expr)
 methodCallExprToExpr = define "methodCallExprToExpr" $
   doc "Serialize a method call expression" $
   lambda "m" $ lets [
@@ -982,7 +982,7 @@ methodCallExprToExpr = define "methodCallExprToExpr" $
       Strings.intercalate (string ", ") (Lists.map (lambda "a" $ Serialization.printExpr @@ (expressionToExpr @@ var "a")) (var "args")),
       string ")"]))
 
-methodParamToExpr :: TTermDefinition (R.MethodParam -> Expr)
+methodParamToExpr :: TypedTermDefinition (R.MethodParam -> Expr)
 methodParamToExpr = define "methodParamToExpr" $
   doc "Serialize a method parameter" $
   lambda "param" $
@@ -998,7 +998,7 @@ methodParamToExpr = define "methodParamToExpr" $
 -- Type aliases
 -- =============================================================================
 
-modDefToExpr :: TTermDefinition (R.ModDef -> Expr)
+modDefToExpr :: TypedTermDefinition (R.ModDef -> Expr)
 modDefToExpr = define "modDefToExpr" $
   doc "Serialize a module definition" $
   lambda "m" $ lets [
@@ -1020,7 +1020,7 @@ modDefToExpr = define "modDefToExpr" $
 -- Impl blocks
 -- =============================================================================
 
-pathSegmentToExpr :: TTermDefinition (R.PathSegment -> Expr)
+pathSegmentToExpr :: TypedTermDefinition (R.PathSegment -> Expr)
 pathSegmentToExpr = define "pathSegmentToExpr" $
   doc "Serialize a path segment" $
   lambda "seg" $ lets [
@@ -1030,7 +1030,7 @@ pathSegmentToExpr = define "pathSegmentToExpr" $
       just $ Serialization.cst @@ var "name",
       genericArgumentsToExpr @@ var "args"])
 
-patternToExpr :: TTermDefinition (R.Pattern -> Expr)
+patternToExpr :: TypedTermDefinition (R.Pattern -> Expr)
 patternToExpr = define "patternToExpr" $
   doc "Serialize a pattern" $
   lambda "pat" $
@@ -1049,7 +1049,7 @@ patternToExpr = define "patternToExpr" $
       R._Pattern_rest>>: constant $ Serialization.cst @@ string "..",
       R._Pattern_paren>>: lambda "p" $ Serialization.parenthesize @@ (patternToExpr @@ var "p")]
 
-rangeExprToExpr :: TTermDefinition (R.RangeExpr -> Expr)
+rangeExprToExpr :: TypedTermDefinition (R.RangeExpr -> Expr)
 rangeExprToExpr = define "rangeExprToExpr" $
   doc "Serialize a range expression" $
   lambda "r" $ lets [
@@ -1061,7 +1061,7 @@ rangeExprToExpr = define "rangeExprToExpr" $
     "op">: Logic.ifElse (var "incl") (string "..=") (string "..")] $
     Serialization.cst @@ (Strings.cat (list [var "fromStr", var "op", var "toStr"]))
 
-rangePatternToExpr :: TTermDefinition (R.RangePattern -> Expr)
+rangePatternToExpr :: TypedTermDefinition (R.RangePattern -> Expr)
 rangePatternToExpr = define "rangePatternToExpr" $
   doc "Serialize a range pattern" $
   lambda "rp" $ lets [
@@ -1077,7 +1077,7 @@ rangePatternToExpr = define "rangePatternToExpr" $
 -- Literals
 -- =============================================================================
 
-refExprToExpr :: TTermDefinition (R.RefExpr -> Expr)
+refExprToExpr :: TypedTermDefinition (R.RefExpr -> Expr)
 refExprToExpr = define "refExprToExpr" $
   doc "Serialize a reference expression" $
   lambda "r" $ lets [
@@ -1086,7 +1086,7 @@ refExprToExpr = define "refExprToExpr" $
     "prefix">: Logic.ifElse (var "mut") (string "&mut ") (string "&")] $
     Serialization.cst @@ (Strings.cat2 (var "prefix") (Serialization.printExpr @@ (expressionToExpr @@ var "expr")))
 
-refPatternToExpr :: TTermDefinition (R.RefPattern -> Expr)
+refPatternToExpr :: TypedTermDefinition (R.RefPattern -> Expr)
 refPatternToExpr = define "refPatternToExpr" $
   doc "Serialize a reference pattern" $
   lambda "rp" $ lets [
@@ -1095,7 +1095,7 @@ refPatternToExpr = define "refPatternToExpr" $
     "prefix">: Logic.ifElse (var "mut") (string "&mut ") (string "&")] $
     Serialization.cst @@ (Strings.cat2 (var "prefix") (Serialization.printExpr @@ (patternToExpr @@ var "pat")))
 
-referenceTypeToExpr :: TTermDefinition (R.ReferenceType -> Expr)
+referenceTypeToExpr :: TypedTermDefinition (R.ReferenceType -> Expr)
 referenceTypeToExpr = define "referenceTypeToExpr" $
   doc "Serialize a reference type" $
   lambda "rt" $ lets [
@@ -1114,7 +1114,7 @@ referenceTypeToExpr = define "referenceTypeToExpr" $
 -- Expressions
 -- =============================================================================
 
-statementToExpr :: TTermDefinition (R.Statement -> Expr)
+statementToExpr :: TypedTermDefinition (R.Statement -> Expr)
 statementToExpr = define "statementToExpr" $
   doc "Serialize a statement" $
   lambda "stmt" $
@@ -1124,7 +1124,7 @@ statementToExpr = define "statementToExpr" $
       R._Statement_item>>: lambda "i" $ itemToExpr @@ var "i",
       R._Statement_empty>>: constant $ Serialization.cst @@ string ";"]
 
-staticDefToExpr :: TTermDefinition (R.StaticDef -> Expr)
+staticDefToExpr :: TypedTermDefinition (R.StaticDef -> Expr)
 staticDefToExpr = define "staticDefToExpr" $
   doc "Serialize a static definition" $
   lambda "s" $ lets [
@@ -1142,7 +1142,7 @@ staticDefToExpr = define "staticDefToExpr" $
       just $ expressionToExpr @@ var "val",
       just $ Serialization.cst @@ string ";"])
 
-structBodyToExpr :: TTermDefinition (R.StructBody -> Expr)
+structBodyToExpr :: TypedTermDefinition (R.StructBody -> Expr)
 structBodyToExpr = define "structBodyToExpr" $
   doc "Serialize a struct body" $
   lambda "body" $
@@ -1156,7 +1156,7 @@ structBodyToExpr = define "structBodyToExpr" $
           Serialization.cst @@ string ";"],
       R._StructBody_unit>>: constant $ Serialization.cst @@ string ";"]
 
-structDefToExpr :: TTermDefinition (R.StructDef -> Expr)
+structDefToExpr :: TypedTermDefinition (R.StructDef -> Expr)
 structDefToExpr = define "structDefToExpr" $
   doc "Serialize a struct definition" $
   lambda "s" $ lets [
@@ -1167,7 +1167,7 @@ structDefToExpr = define "structDefToExpr" $
     "derives">: project R._StructDef R._StructDef_derives @@ var "s",
     "docC">: project R._StructDef R._StructDef_doc @@ var "s",
     "derivesAttr">: derivesToExpr @@ var "derives",
-    "docPart">: Maybes.maybe (list ([] :: [TTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC"),
+    "docPart">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC"),
     "header">: Serialization.spaceSep @@ Maybes.cat (list [
       just $ Serialization.cst @@ string "struct",
       just $ Serialization.cst @@ var "name",
@@ -1175,13 +1175,13 @@ structDefToExpr = define "structDefToExpr" $
     "wherePart">: Maybes.maybe nothing (lambda "w" $ just $ whereClauseToExpr @@ var "w") (var "whereC")] $
     Serialization.newlineSep @@ Lists.concat (list [
       var "docPart",
-      Maybes.maybe (list ([] :: [TTerm Expr])) (lambda "d" $ list [var "d"]) (var "derivesAttr"),
+      Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [var "d"]) (var "derivesAttr"),
       list [Serialization.spaceSep @@ Maybes.cat (list [
         just $ var "header",
         var "wherePart",
         just $ structBodyToExpr @@ var "body"])]])
 
-structExprToExpr :: TTermDefinition (R.StructExpr -> Expr)
+structExprToExpr :: TypedTermDefinition (R.StructExpr -> Expr)
 structExprToExpr = define "structExprToExpr" $
   doc "Serialize a struct literal expression" $
   lambda "s" $ lets [
@@ -1189,7 +1189,7 @@ structExprToExpr = define "structExprToExpr" $
     "fields">: project R._StructExpr R._StructExpr_fields @@ var "s",
     "rest">: project R._StructExpr R._StructExpr_rest @@ var "s",
     "fieldExprs">: Lists.map (fieldValueToExpr) (var "fields"),
-    "restExpr">: Maybes.maybe (list ([] :: [TTerm Expr])) (lambda "r" $ list [
+    "restExpr">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "r" $ list [
       Serialization.spaceSep @@ list [
         Serialization.cst @@ string "..",
         expressionToExpr @@ var "r"]]) (var "rest"),
@@ -1198,7 +1198,7 @@ structExprToExpr = define "structExprToExpr" $
       exprPathToExpr @@ var "path",
       Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@ var "allFields"]
 
-structFieldToExpr :: TTermDefinition (R.StructField -> Expr)
+structFieldToExpr :: TypedTermDefinition (R.StructField -> Expr)
 structFieldToExpr = define "structFieldToExpr" $
   doc "Serialize a struct field" $
   lambda "field" $ lets [
@@ -1207,7 +1207,7 @@ structFieldToExpr = define "structFieldToExpr" $
     "pub">: project R._StructField R._StructField_public @@ var "field",
     "docC">: project R._StructField R._StructField_doc @@ var "field",
     "pubKw">: Logic.ifElse (var "pub") (just $ Serialization.cst @@ string "pub") nothing,
-    "docPart">: Maybes.maybe (list ([] :: [TTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC")] $
+    "docPart">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC")] $
     Serialization.newlineSep @@ Lists.concat (list [
       var "docPart",
       list [Serialization.spaceSep @@ Maybes.cat (list [
@@ -1219,7 +1219,7 @@ structFieldToExpr = define "structFieldToExpr" $
 -- Enum definitions
 -- =============================================================================
 
-structPatternToExpr :: TTermDefinition (R.StructPattern -> Expr)
+structPatternToExpr :: TypedTermDefinition (R.StructPattern -> Expr)
 structPatternToExpr = define "structPatternToExpr" $
   doc "Serialize a struct pattern" $
   lambda "sp" $ lets [
@@ -1227,13 +1227,13 @@ structPatternToExpr = define "structPatternToExpr" $
     "fields">: project R._StructPattern R._StructPattern_fields @@ var "sp",
     "rest">: project R._StructPattern R._StructPattern_rest @@ var "sp",
     "fieldExprs">: Lists.map (fieldPatternToExpr) (var "fields"),
-    "restExpr">: Logic.ifElse (var "rest") (list [Serialization.cst @@ string ".."]) (list ([] :: [TTerm Expr])),
+    "restExpr">: Logic.ifElse (var "rest") (list [Serialization.cst @@ string ".."]) (list ([] :: [TypedTerm Expr])),
     "allFields">: Lists.concat2 (var "fieldExprs") (var "restExpr")] $
     Serialization.spaceSep @@ list [
       exprPathToExpr @@ var "path",
       Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@ var "allFields"]
 
-toRustComment :: TTermDefinition (String -> String)
+toRustComment :: TypedTermDefinition (String -> String)
 toRustComment = define "toRustComment" $
   doc ("Convert a string to Rust line comments. Empty source lines emit `//`"
     <> " (no trailing space).") $
@@ -1243,7 +1243,7 @@ toRustComment = define "toRustComment" $
       (Strings.cat2 (string "// ") (var "s")))
     (Strings.lines $ var "c")
 
-toRustDocComment :: TTermDefinition (String -> String)
+toRustDocComment :: TypedTermDefinition (String -> String)
 toRustDocComment = define "toRustDocComment" $
   doc ("Convert a string to Rust doc comments. Empty source lines emit `///`"
     <> " (no trailing space) so blank doc lines don't carry trailing whitespace.") $
@@ -1253,7 +1253,7 @@ toRustDocComment = define "toRustDocComment" $
       (Strings.cat2 (string "/// ") (var "s")))
     (Strings.lines $ var "c")
 
-traitConstToExpr :: TTermDefinition (R.TraitConst -> Expr)
+traitConstToExpr :: TypedTermDefinition (R.TraitConst -> Expr)
 traitConstToExpr = define "traitConstToExpr" $
   doc "Serialize a trait associated constant" $
   lambda "c" $ lets [
@@ -1274,7 +1274,7 @@ traitConstToExpr = define "traitConstToExpr" $
 -- Generics and where clauses
 -- =============================================================================
 
-traitDefToExpr :: TTermDefinition (R.TraitDef -> Expr)
+traitDefToExpr :: TypedTermDefinition (R.TraitDef -> Expr)
 traitDefToExpr = define "traitDefToExpr" $
   doc "Serialize a trait definition" $
   lambda "t" $ lets [
@@ -1285,7 +1285,7 @@ traitDefToExpr = define "traitDefToExpr" $
     "items">: project R._TraitDef R._TraitDef_items @@ var "t",
     "isUnsafe">: project R._TraitDef R._TraitDef_unsafe @@ var "t",
     "docC">: project R._TraitDef R._TraitDef_doc @@ var "t",
-    "docPart">: Maybes.maybe (list ([] :: [TTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC"),
+    "docPart">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC"),
     "unsafeKw">: Logic.ifElse (var "isUnsafe") (just $ Serialization.cst @@ string "unsafe") nothing,
     "genericsExpr">: genericParamsToExpr @@ var "generics",
     "superPart">: Logic.ifElse (Lists.null $ var "supers") nothing
@@ -1306,7 +1306,7 @@ traitDefToExpr = define "traitDefToExpr" $
       var "docPart",
       list [Serialization.spaceSep @@ list [var "header", var "body"]]])
 
-traitItemToExpr :: TTermDefinition (R.TraitItem -> Expr)
+traitItemToExpr :: TypedTermDefinition (R.TraitItem -> Expr)
 traitItemToExpr = define "traitItemToExpr" $
   doc "Serialize a trait item" $
   lambda "item" $
@@ -1315,7 +1315,7 @@ traitItemToExpr = define "traitItemToExpr" $
       R._TraitItem_type>>: lambda "t" $ traitTypeToExpr @@ var "t",
       R._TraitItem_const>>: lambda "c" $ traitConstToExpr @@ var "c"]
 
-traitMethodToExpr :: TTermDefinition (R.TraitMethod -> Expr)
+traitMethodToExpr :: TypedTermDefinition (R.TraitMethod -> Expr)
 traitMethodToExpr = define "traitMethodToExpr" $
   doc "Serialize a trait method" $
   lambda "m" $ lets [
@@ -1340,7 +1340,7 @@ traitMethodToExpr = define "traitMethodToExpr" $
       (lambda "body" $ Serialization.spaceSep @@ list [var "header", blockToExpr @@ var "body"])
       (var "defBody")
 
-traitTypeToExpr :: TTermDefinition (R.TraitType -> Expr)
+traitTypeToExpr :: TypedTermDefinition (R.TraitType -> Expr)
 traitTypeToExpr = define "traitTypeToExpr" $
   doc "Serialize a trait associated type" $
   lambda "t" $ lets [
@@ -1361,7 +1361,7 @@ traitTypeToExpr = define "traitTypeToExpr" $
       var "defPart",
       just $ Serialization.cst @@ string ";"])
 
-tupleIndexExprToExpr :: TTermDefinition (R.TupleIndexExpr -> Expr)
+tupleIndexExprToExpr :: TypedTermDefinition (R.TupleIndexExpr -> Expr)
 tupleIndexExprToExpr = define "tupleIndexExprToExpr" $
   doc "Serialize a tuple index expression" $
   lambda "t" $ lets [
@@ -1372,7 +1372,7 @@ tupleIndexExprToExpr = define "tupleIndexExprToExpr" $
       string ".",
       Literals.showInt32 $ var "idx"]))
 
-tupleStructPatternToExpr :: TTermDefinition (R.TupleStructPattern -> Expr)
+tupleStructPatternToExpr :: TypedTermDefinition (R.TupleStructPattern -> Expr)
 tupleStructPatternToExpr = define "tupleStructPatternToExpr" $
   doc "Serialize a tuple struct pattern" $
   lambda "tsp" $ lets [
@@ -1382,7 +1382,7 @@ tupleStructPatternToExpr = define "tupleStructPatternToExpr" $
       exprPathToExpr @@ var "path",
       Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "elems"))]
 
-typeAliasToExpr :: TTermDefinition (R.TypeAlias -> Expr)
+typeAliasToExpr :: TypedTermDefinition (R.TypeAlias -> Expr)
 typeAliasToExpr = define "typeAliasToExpr" $
   doc "Serialize a type alias" $
   lambda "ta" $ lets [
@@ -1390,7 +1390,7 @@ typeAliasToExpr = define "typeAliasToExpr" $
     "generics">: project R._TypeAlias R._TypeAlias_generics @@ var "ta",
     "typ">: project R._TypeAlias R._TypeAlias_type @@ var "ta",
     "docC">: project R._TypeAlias R._TypeAlias_doc @@ var "ta",
-    "docPart">: Maybes.maybe (list ([] :: [TTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC")] $
+    "docPart">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC")] $
     Serialization.newlineSep @@ Lists.concat (list [
       var "docPart",
       list [Serialization.spaceSep @@ Maybes.cat (list [
@@ -1405,7 +1405,7 @@ typeAliasToExpr = define "typeAliasToExpr" $
 -- Const, static, module definitions
 -- =============================================================================
 
-typeAscriptionExprToExpr :: TTermDefinition (R.TypeAscriptionExpr -> Expr)
+typeAscriptionExprToExpr :: TypedTermDefinition (R.TypeAscriptionExpr -> Expr)
 typeAscriptionExprToExpr = define "typeAscriptionExprToExpr" $
   doc "Serialize a type ascription expression" $
   lambda "t" $ lets [
@@ -1416,7 +1416,7 @@ typeAscriptionExprToExpr = define "typeAscriptionExprToExpr" $
       Serialization.cst @@ string ":",
       typeToExpr @@ var "typ"]
 
-typeParamBoundToExpr :: TTermDefinition (R.TypeParamBound -> Expr)
+typeParamBoundToExpr :: TypedTermDefinition (R.TypeParamBound -> Expr)
 typeParamBoundToExpr = define "typeParamBoundToExpr" $
   doc "Serialize a type parameter bound" $
   lambda "bound" $
@@ -1425,7 +1425,7 @@ typeParamBoundToExpr = define "typeParamBoundToExpr" $
       R._TypeParamBound_lifetime>>: lambda "lt" $
         Serialization.cst @@ (Strings.cat2 (string "'") (project R._Lifetime R._Lifetime_name @@ var "lt"))]
 
-typePathToExpr :: TTermDefinition (R.TypePath -> Expr)
+typePathToExpr :: TypedTermDefinition (R.TypePath -> Expr)
 typePathToExpr = define "typePathToExpr" $
   doc "Serialize a type path" $
   lambda "tp" $ lets [
@@ -1435,7 +1435,7 @@ typePathToExpr = define "typePathToExpr" $
     "segStrs">: Lists.map (lambda "s" $ Serialization.printExpr @@ (pathSegmentToExpr @@ var "s")) (var "segs")] $
     Serialization.cst @@ (Strings.cat2 (var "prefix") (Strings.intercalate (string "::") (var "segStrs")))
 
-typeToExpr :: TTermDefinition (R.Type -> Expr)
+typeToExpr :: TypedTermDefinition (R.Type -> Expr)
 typeToExpr = define "typeToExpr" $
   doc "Serialize a Rust type" $
   lambda "typ" $
@@ -1481,7 +1481,7 @@ typeToExpr = define "typeToExpr" $
           typeToExpr @@ var "t"],
       R._Type_macro>>: lambda "m" $ macroInvocationToExpr @@ var "m"]
 
-unaryExprToExpr :: TTermDefinition (R.UnaryExpr -> Expr)
+unaryExprToExpr :: TypedTermDefinition (R.UnaryExpr -> Expr)
 unaryExprToExpr = define "unaryExprToExpr" $
   doc "Serialize a unary expression" $
   lambda "u" $ lets [
@@ -1492,7 +1492,7 @@ unaryExprToExpr = define "unaryExprToExpr" $
       R._UnaryOp_not>>: constant $ string "!"]] $
     Serialization.cst @@ (Strings.cat2 (var "opStr") (Serialization.printExpr @@ (expressionToExpr @@ var "operand")))
 
-useDeclarationToExpr :: TTermDefinition (R.UseDeclaration -> Expr)
+useDeclarationToExpr :: TypedTermDefinition (R.UseDeclaration -> Expr)
 useDeclarationToExpr = define "useDeclarationToExpr" $
   doc "Serialize a use declaration" $
   lambda "use" $ lets [
@@ -1505,7 +1505,7 @@ useDeclarationToExpr = define "useDeclarationToExpr" $
       just $ useTreeToExpr @@ var "tree",
       just $ Serialization.cst @@ string ";"])
 
-useTreeToExpr :: TTermDefinition (R.UseTree -> Expr)
+useTreeToExpr :: TypedTermDefinition (R.UseTree -> Expr)
 useTreeToExpr = define "useTreeToExpr" $
   doc "Serialize a use tree" $
   lambda "tree" $
@@ -1537,7 +1537,7 @@ useTreeToExpr = define "useTreeToExpr" $
 -- Struct definitions
 -- =============================================================================
 
-visibilityToExpr :: TTermDefinition (R.Visibility -> Maybe Expr)
+visibilityToExpr :: TypedTermDefinition (R.Visibility -> Maybe Expr)
 visibilityToExpr = define "visibilityToExpr" $
   doc "Serialize visibility to an optional expression" $
   lambda "vis" $
@@ -1551,7 +1551,7 @@ visibilityToExpr = define "visibilityToExpr" $
           string ")"])),
       R._Visibility_private>>: constant nothing]
 
-whereClauseToExpr :: TTermDefinition (R.WhereClause -> Expr)
+whereClauseToExpr :: TypedTermDefinition (R.WhereClause -> Expr)
 whereClauseToExpr = define "whereClauseToExpr" $
   doc "Serialize a where clause" $
   lambda "wc" $ lets [
@@ -1571,7 +1571,7 @@ whereClauseToExpr = define "whereClauseToExpr" $
 -- Types
 -- =============================================================================
 
-whileExprToExpr :: TTermDefinition (R.WhileExpr -> Expr)
+whileExprToExpr :: TypedTermDefinition (R.WhileExpr -> Expr)
 whileExprToExpr = define "whileExprToExpr" $
   doc "Serialize a while expression" $
   lambda "w" $ lets [

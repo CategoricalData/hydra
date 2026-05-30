@@ -83,7 +83,7 @@ import qualified Hydra.Tinkerpop.Features as TF
 import qualified Hydra.Sources.Tinkerpop.Features as TinkerpopFeatures
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 ns :: ModuleName
@@ -105,7 +105,7 @@ module_ = Module {
 --       for Hydra we cannot support a term or type pattern unless it is provably safe in the target environment.
 --       Otherwise, generated expressions could cause failure during runtime operations.
 -- Also note that extra features are required on top of Graph.Features, again for reasons of completeness.
-tinkerpopLanguage :: TTermDefinition (LanguageName -> TF.Features -> TF.ExtraFeatures a -> Language)
+tinkerpopLanguage :: TypedTermDefinition (LanguageName -> TF.Features -> TF.ExtraFeatures a -> Language)
 tinkerpopLanguage = define "tinkerpopLanguage" $
   doc "Populate language constraints based on TinkerPop Graph.Features" $
   lambda "name" $ lambda "features" $ lambda "extras" $ lets [

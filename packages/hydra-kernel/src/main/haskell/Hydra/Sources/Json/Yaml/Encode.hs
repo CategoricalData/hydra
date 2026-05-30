@@ -90,7 +90,7 @@ import qualified Hydra.Sources.Yaml.Model as YamlModel
 ns :: ModuleName
 ns = ModuleName "hydra.json.yaml.encode"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -105,7 +105,7 @@ module_ = Module {
       toDefinition toYaml]
 
 -- | Convert a JSON Value to a YAML Node. This always succeeds since YAML is a superset of JSON.
-jsonToYaml :: TTermDefinition (Value -> YM.Node)
+jsonToYaml :: TypedTermDefinition (Value -> YM.Node)
 jsonToYaml = define "jsonToYaml" $
   doc "Convert a JSON value to a YAML node. Always succeeds since YAML is a superset of JSON." $
   "value" ~>
@@ -135,7 +135,7 @@ jsonToYaml = define "jsonToYaml" $
       Yaml.nodeScalar $ Yaml.scalarStr $ var "s"]
 
 -- | Encode a Hydra Term to a YAML Node via JSON.
-toYaml :: TTermDefinition (M.Map Name Type -> Name -> Type -> Term -> Either String YM.Node)
+toYaml :: TypedTermDefinition (M.Map Name Type -> Name -> Type -> Term -> Either String YM.Node)
 toYaml = define "toYaml" $
   doc "Encode a Hydra term to a YAML node via JSON encoding." $
   "types" ~> "tname" ~> "typ" ~> "term" ~>

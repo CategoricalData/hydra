@@ -41,29 +41,29 @@ module_ = Module {
   where
     definitions = [Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 
 -- Helper for single-binding let
-letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term
+letExpr :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm Term
 letExpr varName value body = lets [(nm varName, value)] body
 
 -- Helper to build names
-nm :: String -> TTerm Name
+nm :: String -> TypedTerm Name
 nm s = Core.name $ Phantoms.string s
 
 -- | Show a term as a string using ShowCore.term
-showTerm :: TTerm Term -> TTerm String
+showTerm :: TypedTerm Term -> TypedTerm String
 showTerm t = ShowCore.term @@ t
 
 -- | Helper for Term -> Term kernel function test cases
-termCase :: String -> TTermDefinition (Term -> Term) -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+termCase :: String -> TypedTermDefinition (Term -> Term) -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 termCase cname func input output = universalCase cname (showTerm (func @@ input)) (showTerm output)
 
 -- Helper for multi-binding let
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for dependency analysis and let-term transformations" $
     supergroup "dependencies" [
@@ -73,15 +73,15 @@ allTests = define "allTests" $
       topologicalSortBindingsGroup]
 
 -- Helper to build an empty annotation map
-emptyAnnMap :: TTerm (M.Map Name Term)
+emptyAnnMap :: TypedTerm (M.Map Name Term)
 emptyAnnMap = Phantoms.map M.empty
 
 -- | Convenience helpers for specific kernel functions
-flattenCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+flattenCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 flattenCase cname = termCase cname Dependencies.flattenLetTerms
 
 -- | Test cases for flattening nested let terms
-flattenLetTermsGroup :: TTerm TestGroup
+flattenLetTermsGroup :: TypedTerm TestGroup
 flattenLetTermsGroup = subgroup "flattenLetTerms" [
     flattenCase "non-let term unchanged"
       (int32 42)
@@ -143,7 +143,7 @@ flattenLetTermsGroup = subgroup "flattenLetTerms" [
         (list [var "a", var "b"]))]
 
 -- | Test cases for lifting lambda above let
-liftLambdaAboveLetGroup :: TTerm TestGroup
+liftLambdaAboveLetGroup :: TypedTerm TestGroup
 liftLambdaAboveLetGroup = subgroup "liftLambdaAboveLet" [
     liftLambdaCase "simple let with lambda in body"
       (letExpr "x" (int32 42)
@@ -316,14 +316,14 @@ liftLambdaAboveLetGroup = subgroup "liftLambdaAboveLet" [
       (lambda "outer"
         (lambda "inner" (letExpr "x" (int32 42) (var "x"))))]
 
-liftLambdaCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+liftLambdaCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 liftLambdaCase cname = termCase cname Dependencies.liftLambdaAboveLet
 
-simplifyCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+simplifyCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 simplifyCase cname = termCase cname Dependencies.simplifyTerm
 
 -- | Test cases for term simplification (beta reduction)
-simplifyTermGroup :: TTerm TestGroup
+simplifyTermGroup :: TypedTerm TestGroup
 simplifyTermGroup = subgroup "simplifyTerm" [
     simplifyCase "const application with literal"
       (apply (lambda "x" (string "foo")) (int32 42))
@@ -349,16 +349,16 @@ simplifyTermGroup = subgroup "simplifyTerm" [
       (list [string "foo", var "y"])]
 
 -- | Universal sortBindingsCase: applies topologicalSortBindingMap and shows result
-sortBindingsCase :: String -> TTerm [(Name, Term)] -> TTerm [[(Name, Term)]] -> TTerm TestCaseWithMetadata
+sortBindingsCase :: String -> TypedTerm [(Name, Term)] -> TypedTerm [[(Name, Term)]] -> TypedTerm TestCaseWithMetadata
 sortBindingsCase cname bindings expected = universalCase cname
   (showBindingGroups (Dependencies.topologicalSortBindingMap @@ Maps.fromList bindings))
   (showBindingGroups expected)
   where
-    showBindingGroups :: TTerm [[(Name, Term)]] -> TTerm String
+    showBindingGroups :: TypedTerm [[(Name, Term)]] -> TypedTerm String
     showBindingGroups groups = ShowCore.list_ @@ showGroupFn @@ groups
-    showGroupFn :: TTerm ([(Name, Term)] -> String)
+    showGroupFn :: TypedTerm ([(Name, Term)] -> String)
     showGroupFn = Phantoms.lambda "group" $ ShowCore.list_ @@ showBindingFn @@ Phantoms.var "group"
-    showBindingFn :: TTerm ((Name, Term) -> String)
+    showBindingFn :: TypedTerm ((Name, Term) -> String)
     showBindingFn = Phantoms.lambda "pair" $ Strings.cat (Phantoms.list [
       Phantoms.string "(",
       Core.unName (Pairs.first (Phantoms.var "pair")),
@@ -370,7 +370,7 @@ sortBindingsCase cname bindings expected = universalCase cname
 -- The function topologicalSortBindingMap takes a map of (name -> term) bindings
 -- and returns groups of bindings in topological order, where each group contains
 -- mutually recursive bindings (strongly connected components).
-topologicalSortBindingsGroup :: TTerm TestGroup
+topologicalSortBindingsGroup :: TypedTerm TestGroup
 topologicalSortBindingsGroup = subgroup "topologicalSortBindings" [
     sortBindingsCase "isolated bindings"
       (Phantoms.list [

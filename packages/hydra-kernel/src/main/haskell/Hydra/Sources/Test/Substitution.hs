@@ -33,10 +33,10 @@ module_ = Module {
   where
     definitions = [Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     doc "Test cases for type and term substitution operations" $
     supergroup "substitution" [
@@ -44,15 +44,15 @@ allTests = define "allTests" $
       substInTypeSchemeTests]
 
 -- Helper to build names
-nm :: String -> TTerm Name
+nm :: String -> TypedTerm Name
 nm s = Core.name $ string s
 
 -- | Build a TypeScheme DSL value
-scheme :: [String] -> TTerm Type -> TTerm TypeScheme
+scheme :: [String] -> TypedTerm Type -> TypedTerm TypeScheme
 scheme vars body = Core.typeScheme (list [nm v | v <- vars]) body nothing
 
 -- | Apply substInType and show the result as a string
-showSubstInType :: [(String, TTerm Type)] -> TTerm Type -> TTerm String
+showSubstInType :: [(String, TypedTerm Type)] -> TypedTerm Type -> TypedTerm String
 showSubstInType pairs inputType =
   ShowCore.type_ @@ (Substitution.substInType @@
     (wrap _TypeSubst (Maps.fromList (subst pairs))) @@ inputType)
@@ -60,21 +60,21 @@ showSubstInType pairs inputType =
 -- | Apply substInTypeScheme and render just the scheme's body type, which is
 -- where the capture-avoidance behavior shows up. The quantifier list is
 -- preserved unchanged so we test it separately via showSubstInTypeSchemeVars.
-showSubstInTypeSchemeBody :: [(String, TTerm Type)] -> TTerm TypeScheme -> TTerm String
+showSubstInTypeSchemeBody :: [(String, TypedTerm Type)] -> TypedTerm TypeScheme -> TypedTerm String
 showSubstInTypeSchemeBody pairs inputScheme =
   ShowCore.type_ @@ (Core.typeSchemeBody $ Substitution.substInTypeScheme @@
     (wrap _TypeSubst (Maps.fromList (subst pairs))) @@ inputScheme)
 
 -- Helper for building substitution pairs
-subst :: [(String, TTerm Type)] -> TTerm [(Name, Type)]
+subst :: [(String, TypedTerm Type)] -> TypedTerm [(Name, Type)]
 subst pairs = list [pair (nm n) t | (n, t) <- pairs]
 
 -- | Universal substInType test case
-substInTypeCase :: String -> [(String, TTerm Type)] -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
+substInTypeCase :: String -> [(String, TypedTerm Type)] -> TypedTerm Type -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
 substInTypeCase cname pairs input output =
   universalCase cname (showSubstInType pairs input) (ShowCore.type_ @@ output)
 
-substInTypeSchemeBodyCase :: String -> [(String, TTerm Type)] -> TTerm TypeScheme -> TTerm Type -> TTerm TestCaseWithMetadata
+substInTypeSchemeBodyCase :: String -> [(String, TypedTerm Type)] -> TypedTerm TypeScheme -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
 substInTypeSchemeBodyCase cname pairs input expectedBody =
   universalCase cname (showSubstInTypeSchemeBody pairs input)
     (ShowCore.type_ @@ expectedBody)
@@ -83,7 +83,7 @@ substInTypeSchemeBodyCase cname pairs input expectedBody =
 -- substInType tests
 -- ============================================================
 
-substInTypeSchemeTests :: TTerm TestGroup
+substInTypeSchemeTests :: TypedTerm TestGroup
 substInTypeSchemeTests = subgroup "substInTypeScheme" [
   -- Bound variable in scheme's quantifier list must shadow the substitution.
   -- Without proper shadowing, {t0 -> Foo} applied to `forall [t0]. t0 -> t0`
@@ -124,7 +124,7 @@ substInTypeSchemeTests = subgroup "substInTypeScheme" [
 -- All tests
 -- ============================================================
 
-substInTypeTests :: TTerm TestGroup
+substInTypeTests :: TypedTerm TestGroup
 substInTypeTests = subgroup "substInType" [
   -- Empty substitution returns type unchanged
   substInTypeCase "empty substitution returns type unchanged"

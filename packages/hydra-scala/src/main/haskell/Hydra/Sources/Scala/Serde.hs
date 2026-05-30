@@ -84,7 +84,7 @@ import qualified Hydra.Sources.Java.Serde as JavaSerdeSource
 import qualified Hydra.Sources.Scala.Syntax as ScalaSyntax
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 ns :: ModuleName
@@ -124,7 +124,7 @@ module_ = Module {
       toDefinition typeParamToExpr]
 
 
-caseToExpr :: TTermDefinition (Scala.Case -> Expr)
+caseToExpr :: TypedTermDefinition (Scala.Case -> Expr)
 caseToExpr = define "caseToExpr" $
   doc "Convert a case clause to an expression" $
   lambda "c" $ lets [
@@ -136,7 +136,7 @@ caseToExpr = define "caseToExpr" $
       Serialization.cst @@ string "=>",
       termToExpr @@ var "term"]
 
-dataFunctionToExpr :: TTermDefinition (Scala.FunctionData -> Expr)
+dataFunctionToExpr :: TypedTermDefinition (Scala.FunctionData -> Expr)
 dataFunctionToExpr = define "dataFunctionToExpr" $
   doc "Convert a function-data lambda to an expression" $
   lambda "f" $ lets [
@@ -155,13 +155,13 @@ dataFunctionToExpr = define "dataFunctionToExpr" $
         Serialization.cst @@ string "=>",
         var "bodyExpr"])
 
-dataNameToExpr :: TTermDefinition (Scala.NameData -> Expr)
+dataNameToExpr :: TypedTermDefinition (Scala.NameData -> Expr)
 dataNameToExpr = define "dataNameToExpr" $
   doc "Convert a data name to an expression" $
   lambda "dn" $
     Serialization.cst @@ (unwrap Scala._PredefString @@ (project Scala._NameData Scala._NameData_value @@ var "dn"))
 
-dataParamToExpr :: TTermDefinition (Scala.ParamData -> Expr)
+dataParamToExpr :: TypedTermDefinition (Scala.ParamData -> Expr)
 dataParamToExpr = define "dataParamToExpr" $
   doc "Convert a data parameter to an expression" $
   lambda "dp" $ lets [
@@ -173,7 +173,7 @@ dataParamToExpr = define "dataParamToExpr" $
         (lambda "t" $ Serialization.spaceSep @@ list [Serialization.cst @@ string ":", typeToExpr @@ var "t"])
         (var "stype")])
 
-dataRefToExpr :: TTermDefinition (Scala.RefData -> Expr)
+dataRefToExpr :: TypedTermDefinition (Scala.RefData -> Expr)
 dataRefToExpr = define "dataRefToExpr" $
   doc "Convert a data reference to an expression" $
   lambda "ref" $
@@ -181,7 +181,7 @@ dataRefToExpr = define "dataRefToExpr" $
       Scala._RefData_name>>: lambda "name" $ dataNameToExpr @@ var "name",
       Scala._RefData_select>>: lambda "sel" $ dataSelectToExpr @@ var "sel"]
 
-dataSelectToExpr :: TTermDefinition (Scala.SelectData -> Expr)
+dataSelectToExpr :: TypedTermDefinition (Scala.SelectData -> Expr)
 dataSelectToExpr = define "dataSelectToExpr" $
   doc "Convert a data select to an expression" $
   lambda "sel" $ lets [
@@ -190,7 +190,7 @@ dataSelectToExpr = define "dataSelectToExpr" $
     Serialization.ifx @@ dotOp @@ (termToExpr @@ var "arg") @@
       (termToExpr @@ (inject Scala._Data Scala._Data_ref (inject Scala._RefData Scala._RefData_name (var "name"))))
 
-defnToExpr :: TTermDefinition (Scala.Defn -> Expr)
+defnToExpr :: TypedTermDefinition (Scala.Defn -> Expr)
 defnToExpr = define "defnToExpr" $
   doc "Convert a definition to an expression" $
   lambda "def" $
@@ -321,17 +321,17 @@ defnToExpr = define "defnToExpr" $
           Serialization.noSep @@ list [dataNameToExpr @@ var "name", var "params"],
           var "extendsClause"]]
 
-dotOp :: TTermDefinition Op
+dotOp :: TypedTermDefinition Op
 dotOp = define "dotOp" $
   doc "The dot operator for member access" $
   Ast.op (Ast.symbol (string ".")) (Ast.padding Ast.wsNone Ast.wsNone) (Ast.precedence (int32 0)) Ast.associativityLeft
 
-functionArrowOp :: TTermDefinition Op
+functionArrowOp :: TypedTermDefinition Op
 functionArrowOp = define "functionArrowOp" $
   doc "The function arrow operator (=>)" $
   Serialization.op @@ string "=>" @@ Math.negate (int32 1) @@ Ast.associativityRight
 
-importExportStatToExpr :: TTermDefinition (Scala.ImportExportStat -> Expr)
+importExportStatToExpr :: TypedTermDefinition (Scala.ImportExportStat -> Expr)
 importExportStatToExpr = define "importExportStatToExpr" $
   doc "Convert an import/export statement to an expression" $
   lambda "ie" $
@@ -340,7 +340,7 @@ importExportStatToExpr = define "importExportStatToExpr" $
         "importers">: project Scala._Import Scala._Import_importers @@ var "imp"] $
         Serialization.newlineSep @@ (Lists.map importerToExpr (var "importers"))]
 
-importerToExpr :: TTermDefinition (Scala.Importer -> Expr)
+importerToExpr :: TypedTermDefinition (Scala.Importer -> Expr)
 importerToExpr = define "importerToExpr" $
   doc "Convert an importer to an expression" $
   lambda "imp" $ lets [
@@ -375,13 +375,13 @@ importerToExpr = define "importerToExpr" $
       Serialization.cst @@ string "import",
       Serialization.noSep @@ list [Serialization.cst @@ var "refName", var "forImportees"]]
 
-initToExpr :: TTermDefinition (Scala.Init -> Expr)
+initToExpr :: TypedTermDefinition (Scala.Init -> Expr)
 initToExpr = define "initToExpr" $
   doc "Convert an init to an expression" $
   lambda "init" $
     typeToExpr @@ (project Scala._Init Scala._Init_tpe @@ var "init")
 
-litToExpr :: TTermDefinition (Scala.Lit -> Expr)
+litToExpr :: TypedTermDefinition (Scala.Lit -> Expr)
 litToExpr = define "litToExpr" $
   doc "Convert a literal to an expression" $
   lambda "lit" $
@@ -403,12 +403,12 @@ litToExpr = define "litToExpr" $
             (Strings.intercalate (string ", ") (Lists.map (lambda "b" $ Strings.cat2 (Literals.showInt32 (var "b")) (string ".toByte")) (var "bs")))
             (string ")"))]
 
-matchOp :: TTermDefinition Op
+matchOp :: TypedTermDefinition Op
 matchOp = define "matchOp" $
   doc "The match operator" $
   Ast.op (Ast.symbol (string "match")) (Ast.padding Ast.wsSpace (Ast.wsBreakAndIndent (string "  "))) (Ast.precedence (int32 0)) Ast.associativityNone
 
-modToExpr :: TTermDefinition (Scala.Mod -> Expr)
+modToExpr :: TypedTermDefinition (Scala.Mod -> Expr)
 modToExpr = define "modToExpr" $
   doc "Convert a modifier to an expression" $
   lambda "m" $
@@ -423,14 +423,14 @@ modToExpr = define "modToExpr" $
       Scala._Mod_private>>: lambda "_" $ Serialization.cst @@ string "private",
       Scala._Mod_protected>>: lambda "_" $ Serialization.cst @@ string "protected"]
 
-nameToExpr :: TTermDefinition (Scala.Name -> Expr)
+nameToExpr :: TypedTermDefinition (Scala.Name -> Expr)
 nameToExpr = define "nameToExpr" $
   doc "Convert a name to an expression" $
   lambda "name" $
     cases Scala._Name (var "name") Nothing [
       Scala._Name_value>>: lambda "s" $ Serialization.cst @@ var "s"]
 
-patToExpr :: TTermDefinition (Scala.Pat -> Expr)
+patToExpr :: TypedTermDefinition (Scala.Pat -> Expr)
 patToExpr = define "patToExpr" $
   doc "Convert a pattern to an expression" $
   lambda "pat" $
@@ -448,7 +448,7 @@ patToExpr = define "patToExpr" $
         dataNameToExpr @@ (project Scala._VarPat Scala._VarPat_name @@ var "pv"),
       Scala._Pat_wildcard>>: constant (Serialization.cst @@ string "_")]
 
-pkgToExpr :: TTermDefinition (Scala.Pkg -> Expr)
+pkgToExpr :: TypedTermDefinition (Scala.Pkg -> Expr)
 pkgToExpr = define "pkgToExpr" $
   doc "Convert a package to an expression" $
   lambda "pkg" $ lets [
@@ -462,7 +462,7 @@ pkgToExpr = define "pkgToExpr" $
 -- | Convert a showFloat32/showFloat64 result into valid Scala source syntax,
 -- mapping NaN and ±Infinity to {Float,Double}.{NaN,PositiveInfinity,NegativeInfinity}.
 -- The 'prefix' is "Float" or "Double"; 'suffix' is "f" (Float) or "" (Double).
-scalaFloatLiteralText :: TTermDefinition (String -> String -> String -> String)
+scalaFloatLiteralText :: TypedTermDefinition (String -> String -> String -> String)
 scalaFloatLiteralText = define "scalaFloatLiteralText" $
   lambda "prefix" $ lambda "suffix" $ lambda "s" $
     Logic.ifElse (Equality.equal (var "s") (string "NaN"))
@@ -473,7 +473,7 @@ scalaFloatLiteralText = define "scalaFloatLiteralText" $
       (Strings.cat2 (var "prefix") (string ".NegativeInfinity"))
       (Strings.cat2 (var "s") (var "suffix"))
 
-statToExpr :: TTermDefinition (Scala.Stat -> Expr)
+statToExpr :: TypedTermDefinition (Scala.Stat -> Expr)
 statToExpr = define "statToExpr" $
   doc "Convert a statement to an expression" $
   lambda "stat" $
@@ -482,7 +482,7 @@ statToExpr = define "statToExpr" $
       Scala._Stat_defn>>: lambda "def" $ defnToExpr @@ var "def",
       Scala._Stat_importExport>>: lambda "ie" $ importExportStatToExpr @@ var "ie"]
 
-termToExpr :: TTermDefinition (Scala.Data -> Expr)
+termToExpr :: TypedTermDefinition (Scala.Data -> Expr)
 termToExpr = define "termToExpr" $
   doc "Convert a term to an expression" $
   lambda "term" $
@@ -511,19 +511,19 @@ termToExpr = define "termToExpr" $
         "stats">: project Scala._BlockData Scala._BlockData_stats @@ var "blk"] $
         Serialization.curlyBlock @@ Serialization.fullBlockStyle @@ (Serialization.newlineSep @@ (Lists.map statToExpr (var "stats")))]
 
-typeNameToExpr :: TTermDefinition (Scala.NameType -> Expr)
+typeNameToExpr :: TypedTermDefinition (Scala.NameType -> Expr)
 typeNameToExpr = define "typeNameToExpr" $
   doc "Convert a type name to an expression" $
   lambda "tn" $
     Serialization.cst @@ (project Scala._NameType Scala._NameType_value @@ var "tn")
 
-typeParamToExpr :: TTermDefinition (Scala.ParamType -> Expr)
+typeParamToExpr :: TypedTermDefinition (Scala.ParamType -> Expr)
 typeParamToExpr = define "typeParamToExpr" $
   doc "Convert a type parameter to an expression" $
   lambda "tp" $
     nameToExpr @@ (project Scala._ParamType Scala._ParamType_name @@ var "tp")
 
-typeToExpr :: TTermDefinition (Scala.Type -> Expr)
+typeToExpr :: TypedTermDefinition (Scala.Type -> Expr)
 typeToExpr = define "typeToExpr" $
   doc "Convert a type to an expression" $
   lambda "typ" $

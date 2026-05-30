@@ -79,12 +79,12 @@ import qualified Hydra.Sources.Decode.Error.Core   as DecodeErrorCore
 import qualified Hydra.Sources.Decode.Json.Model    as DecodeJson
 import qualified Hydra.Sources.Decode.Packaging      as DecodeModule
 import qualified Hydra.Sources.Decode.Parsing       as DecodeParsing
-import qualified Hydra.Sources.Decode.Phantoms      as DecodePhantoms
 import qualified Hydra.Sources.Decode.Query         as DecodeQuery
 import qualified Hydra.Sources.Decode.Relational    as DecodeRelational
 import qualified Hydra.Sources.Decode.Tabular       as DecodeTabular
 import qualified Hydra.Sources.Decode.Testing       as DecodeTesting
 import qualified Hydra.Sources.Decode.Topology      as DecodeTopology
+import qualified Hydra.Sources.Decode.Typed         as DecodeTyped
 import qualified Hydra.Sources.Decode.Typing        as DecodeTyping
 import qualified Hydra.Sources.Decode.Util          as DecodeUtil
 import qualified Hydra.Sources.Decode.Variants      as DecodeVariants
@@ -100,12 +100,12 @@ import qualified Hydra.Sources.Encode.Error.Core   as EncodeErrorCore
 import qualified Hydra.Sources.Encode.Json.Model    as EncodeJson
 import qualified Hydra.Sources.Encode.Packaging      as EncodeModule
 import qualified Hydra.Sources.Encode.Parsing       as EncodeParsing
-import qualified Hydra.Sources.Encode.Phantoms      as EncodePhantoms
 import qualified Hydra.Sources.Encode.Query         as EncodeQuery
 import qualified Hydra.Sources.Encode.Relational    as EncodeRelational
 import qualified Hydra.Sources.Encode.Tabular       as EncodeTabular
 import qualified Hydra.Sources.Encode.Testing       as EncodeTesting
 import qualified Hydra.Sources.Encode.Topology      as EncodeTopology
+import qualified Hydra.Sources.Encode.Typed         as EncodeTyped
 import qualified Hydra.Sources.Encode.Typing        as EncodeTyping
 import qualified Hydra.Sources.Encode.Util          as EncodeUtil
 import qualified Hydra.Sources.Encode.Variants      as EncodeVariants
@@ -191,12 +191,12 @@ kernelDecodingModules = [
   DecodeJson.module_,
   DecodeModule.module_,
   DecodeParsing.module_,
-  DecodePhantoms.module_,
   DecodeQuery.module_,
   DecodeRelational.module_,
   DecodeTabular.module_,
     DecodeTesting.module_,
   DecodeTopology.module_,
+  DecodeTyped.module_,
   DecodeTyping.module_,
   DecodeUtil.module_,
   DecodeVariants.module_]
@@ -213,12 +213,12 @@ kernelEncodingModules = [
   EncodeJson.module_,
   EncodeModule.module_,
   EncodeParsing.module_,
-  EncodePhantoms.module_,
   EncodeQuery.module_,
   EncodeRelational.module_,
   EncodeTabular.module_,
     EncodeTesting.module_,
   EncodeTopology.module_,
+  EncodeTyped.module_,
   EncodeTyping.module_,
   EncodeUtil.module_,
   EncodeVariants.module_]

@@ -87,7 +87,7 @@ import qualified Hydra.Sources.Rdf.Syntax as RdfSyntax
 import qualified Hydra.Sources.Rdf.Utils as RdfUtils
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 ns :: ModuleName
@@ -120,7 +120,7 @@ module_ = Module {
 
 
 -- | Construct CommonProperties with the given constraints and defaults for everything else
-common :: TTermDefinition ([Shacl.CommonConstraint] -> Shacl.CommonProperties)
+common :: TypedTermDefinition ([Shacl.CommonConstraint] -> Shacl.CommonProperties)
 common = define "common" $
   doc "Construct CommonProperties from a list of constraints, using defaults for other fields" $
   lambda "constraints" $
@@ -135,20 +135,20 @@ common = define "common" $
       Shacl._CommonProperties_targetSubjectsOf>>: Sets.empty]
 
 -- | Default (empty) CommonProperties
-defaultCommonProperties :: TTermDefinition Shacl.CommonProperties
+defaultCommonProperties :: TypedTermDefinition Shacl.CommonProperties
 defaultCommonProperties = define "defaultCommonProperties" $
   doc "Default CommonProperties with empty constraints and default severity" $
-  common @@ (list ([] :: [TTerm Shacl.CommonConstraint]))
+  common @@ (list ([] :: [TypedTerm Shacl.CommonConstraint]))
 
 -- | Convert a Binding's name to an RDF IRI
-elementIri :: TTermDefinition (Binding -> Rdf.Iri)
+elementIri :: TypedTermDefinition (Binding -> Rdf.Iri)
 elementIri = define "elementIri" $
   doc "Convert a binding's name to an RDF IRI" $
   lambda "el" $
     nameToIri @@ (Core.bindingName (var "el"))
 
 -- | Encode a record field as RDF triples
-encodeField :: TTermDefinition (Name -> Rdf.Resource -> Field -> I.Int32 -> Graph -> Either Error ([Rdf.Triple], I.Int32))
+encodeField :: TypedTermDefinition (Name -> Rdf.Resource -> Field -> I.Int32 -> Graph -> Either Error ([Rdf.Triple], I.Int32))
 encodeField = define "encodeField" $
   doc "Encode a record field as RDF triples with a given subject" $
   lambda "rname" $ lambda "subject" $ lambda "field" $ lambda "cx" $ lambda "g" $ lets [
@@ -169,7 +169,7 @@ encodeField = define "encodeField" $
           (var "cx2")))
 
 -- | Encode a FieldType as a SHACL property shape definition
-encodeFieldType :: TTermDefinition (Name -> Maybe Integer -> FieldType -> I.Int32 -> Either Error (Shacl.Definition Shacl.PropertyShape))
+encodeFieldType :: TypedTermDefinition (Name -> Maybe Integer -> FieldType -> I.Int32 -> Either Error (Shacl.Definition Shacl.PropertyShape))
 encodeFieldType = define "encodeFieldType" $
   doc "Encode a FieldType as a SHACL property shape Definition" $
   lambda "rname" $ lambda "order" $ lambda "ft" $ lambda "cx" $ lets [
@@ -207,7 +207,7 @@ encodeFieldType = define "encodeFieldType" $
     var "forType" @@ (just (bigint 1)) @@ (just (bigint 1)) @@ var "ftype"
 
 -- | Helper for encoding lists as RDF (recursive)
-encodeList :: TTermDefinition (Rdf.Resource -> [Term] -> I.Int32 -> Graph -> Either Error ([Rdf.Description], I.Int32))
+encodeList :: TypedTermDefinition (Rdf.Resource -> [Term] -> I.Int32 -> Graph -> Either Error ([Rdf.Description], I.Int32))
 encodeList = define "encodeList" $
   doc "Encode a list of terms as RDF list structure" $
   lambda "subj" $ lambda "terms" $ lambda "cx0" $ lambda "g" $
@@ -218,7 +218,7 @@ encodeList = define "encodeList" $
           Rdf._Description_graph>>: wrap Rdf._Graph Sets.empty]])
         (var "cx0"))
       (Maybes.maybe
-        (right $ pair (list ([] :: [TTerm Rdf.Description])) (var "cx0"))
+        (right $ pair (list ([] :: [TypedTerm Rdf.Description])) (var "cx0"))
         (lambda "p" $ lets [
           "pair1">: nextBlankNode @@ var "cx0",
           "node1">: Pairs.first (var "pair1"),
@@ -250,11 +250,11 @@ encodeList = define "encodeList" $
         (Lists.uncons (var "terms")))
 
 -- | Encode a Hydra Literal as an RDF Literal
-encodeLiteral :: TTerm (Literal -> Rdf.Literal)
-encodeLiteral = TTerm $ TermVariable $ Name "hydra.rdf.utils.encodeLiteral"
+encodeLiteral :: TypedTerm (Literal -> Rdf.Literal)
+encodeLiteral = TypedTerm $ TermVariable $ Name "hydra.rdf.utils.encodeLiteral"
 
 -- | Encode a Hydra LiteralType as SHACL CommonProperties with a datatype constraint
-encodeLiteralType :: TTermDefinition (LiteralType -> Shacl.CommonProperties)
+encodeLiteralType :: TypedTermDefinition (LiteralType -> Shacl.CommonProperties)
 encodeLiteralType = define "encodeLiteralType" $
   doc "Encode a LiteralType as SHACL CommonProperties with an XSD datatype constraint" $
   lambda "lt" $ lets [
@@ -282,7 +282,7 @@ encodeLiteralType = define "encodeLiteralType" $
       _LiteralType_string>>: constant $ var "xsd" @@ string "string"]
 
 -- | Encode a Hydra Term as a list of RDF Descriptions
-encodeTerm :: TTermDefinition (Rdf.Resource -> Term -> I.Int32 -> Graph -> Either Error ([Rdf.Description], I.Int32))
+encodeTerm :: TypedTermDefinition (Rdf.Resource -> Term -> I.Int32 -> Graph -> Either Error ([Rdf.Description], I.Int32))
 encodeTerm = define "encodeTerm" $
   doc "Encode a Hydra term as a list of RDF Descriptions" $
   lambda "subject" $ lambda "term" $ lambda "cx" $ lambda "g" $
@@ -335,7 +335,7 @@ encodeTerm = define "encodeTerm" $
           (encodeTerm @@ var "subject" @@ (Core.wrappedTermBody (var "wt")) @@ var "cx" @@ var "g"),
       _Term_maybe>>: lambda "mterm" $
         Maybes.maybe
-          (right (pair (list ([] :: [TTerm Rdf.Description])) (var "cx")))
+          (right (pair (list ([] :: [TypedTerm Rdf.Description])) (var "cx")))
           ("__inner" ~> encodeTerm @@ var "subject" @@ var "__inner" @@ var "cx" @@ var "g")
           (var "mterm"),
       _Term_record>>: lambda "rec" $ lets [
@@ -377,11 +377,11 @@ encodeTerm = define "encodeTerm" $
           (encodeField @@ var "rname" @@ var "subject" @@ var "field" @@ var "cx" @@ var "g")]
 
 -- | Encode a Hydra Type as SHACL CommonProperties
-encodeType :: TTermDefinition (Name -> Type -> I.Int32 -> Either Error Shacl.CommonProperties)
+encodeType :: TypedTermDefinition (Name -> Type -> I.Int32 -> Either Error Shacl.CommonProperties)
 encodeType = define "encodeType" $
   doc "Encode a Hydra type as SHACL CommonProperties" $
   lambda "tname" $ lambda "typ" $ lambda "cx" $ lets [
-    "any">: right (common @@ (list ([] :: [TTerm Shacl.CommonConstraint])))] $
+    "any">: right (common @@ (list ([] :: [TypedTerm Shacl.CommonConstraint])))] $
     cases _Type (Strip.deannotateType @@ var "typ") (Just (unexpectedE @@ string "type" @@ string "unsupported type variant")) [
       _Type_either>>: lambda "_" $ var "any",
       _Type_list>>: lambda "_" $ var "any",
@@ -420,19 +420,19 @@ encodeType = define "encodeType" $
               inject Shacl._Reference Shacl._Reference_named (nameToIri @@ var "vname")]))])]
 
 -- | Construct a Left Error
-err :: TTermDefinition (String -> Either Error a)
+err :: TypedTermDefinition (String -> Either Error a)
 err = define "err" $
   doc "Construct an error result with the given message" $
   lambda "msg" $
     left (Error.errorOther $ Error.otherError (var "msg"))
 
 -- | Fold over a list, accumulating results and threading context
-foldAccumResult :: TTermDefinition ((I.Int32 -> a -> Either Error (b, I.Int32)) -> I.Int32 -> [a] -> Either Error ([b], I.Int32))
+foldAccumResult :: TypedTermDefinition ((I.Int32 -> a -> Either Error (b, I.Int32)) -> I.Int32 -> [a] -> Either Error ([b], I.Int32))
 foldAccumResult = define "foldAccumResult" $
   doc "Fold over a list, accumulating results and threading context through each step" $
   lambda "f" $ lambda "cx" $ lambda "xs" $
     Maybes.maybe
-      (right (pair (list ([] :: [TTerm b])) (var "cx")))
+      (right (pair (list ([] :: [TypedTerm b])) (var "cx")))
       (lambda "p" $
         Eithers.bind
           (var "f" @@ var "cx" @@ Pairs.first (var "p"))
@@ -444,23 +444,23 @@ foldAccumResult = define "foldAccumResult" $
       (Lists.uncons (var "xs"))
 
 -- | Construct triples from a subject, predicate IRI, and list of object nodes
-forObjects :: TTerm (Rdf.Resource -> Rdf.Iri -> [Rdf.Node] -> [Rdf.Triple])
-forObjects = TTerm $ TermVariable $ Name "hydra.rdf.utils.forObjects"
+forObjects :: TypedTerm (Rdf.Resource -> Rdf.Iri -> [Rdf.Node] -> [Rdf.Triple])
+forObjects = TypedTerm $ TermVariable $ Name "hydra.rdf.utils.forObjects"
 
 -- | Construct a key IRI from a string
-keyIri :: TTerm (String -> Rdf.Iri)
-keyIri = TTerm $ TermVariable $ Name "hydra.rdf.utils.keyIri"
+keyIri :: TypedTerm (String -> Rdf.Iri)
+keyIri = TypedTerm $ TermVariable $ Name "hydra.rdf.utils.keyIri"
 
 -- | Convert a Name to an RDF IRI
-nameToIri :: TTerm (Name -> Rdf.Iri)
-nameToIri = TTerm $ TermVariable $ Name "hydra.rdf.utils.nameToIri"
+nameToIri :: TypedTerm (Name -> Rdf.Iri)
+nameToIri = TypedTerm $ TermVariable $ Name "hydra.rdf.utils.nameToIri"
 
 -- | Get the next blank node, updating the context
-nextBlankNode :: TTerm (I.Int32 -> (Rdf.Resource, I.Int32))
-nextBlankNode = TTerm $ TermVariable $ Name "hydra.rdf.utils.nextBlankNode"
+nextBlankNode :: TypedTerm (I.Int32 -> (Rdf.Resource, I.Int32))
+nextBlankNode = TypedTerm $ TermVariable $ Name "hydra.rdf.utils.nextBlankNode"
 
 -- | Construct a SHACL node shape from a list of common constraints
-node :: TTermDefinition ([Shacl.CommonConstraint] -> Shacl.Shape)
+node :: TypedTermDefinition ([Shacl.CommonConstraint] -> Shacl.Shape)
 node = define "node" $
   doc "Construct a SHACL node shape from a list of common constraints" $
   lambda "constraints" $
@@ -468,7 +468,7 @@ node = define "node" $
       (record Shacl._NodeShape [Shacl._NodeShape_common>>: common @@ var "constraints"])
 
 -- | Construct a default SHACL property shape with a given IRI path
-property :: TTermDefinition (Rdf.Iri -> Shacl.PropertyShape)
+property :: TypedTermDefinition (Rdf.Iri -> Shacl.PropertyShape)
 property = define "property" $
   doc "Construct a default property shape with the given IRI as its path" $
   lambda "iri" $
@@ -482,19 +482,19 @@ property = define "property" $
       Shacl._PropertyShape_path>>: var "iri"]
 
 -- | Construct an IRI for a record field property
-propertyIri :: TTerm (Name -> Name -> Rdf.Iri)
-propertyIri = TTerm $ TermVariable $ Name "hydra.rdf.utils.propertyIri"
+propertyIri :: TypedTerm (Name -> Name -> Rdf.Iri)
+propertyIri = TypedTerm $ TermVariable $ Name "hydra.rdf.utils.propertyIri"
 
 -- | Construct an RDF namespace IRI
-rdfIri :: TTerm (String -> Rdf.Iri)
-rdfIri = TTerm $ TermVariable $ Name "hydra.rdf.utils.rdfIri"
+rdfIri :: TypedTerm (String -> Rdf.Iri)
+rdfIri = TypedTerm $ TermVariable $ Name "hydra.rdf.utils.rdfIri"
 
 -- | Convert an RDF Resource to a Node
-resourceToNode :: TTerm (Rdf.Resource -> Rdf.Node)
-resourceToNode = TTerm $ TermVariable $ Name "hydra.rdf.utils.resourceToNode"
+resourceToNode :: TypedTerm (Rdf.Resource -> Rdf.Node)
+resourceToNode = TypedTerm $ TermVariable $ Name "hydra.rdf.utils.resourceToNode"
 
 -- | Main SHACL coder: encode a module's type elements into a ShapesGraph
-shaclCoder :: TTermDefinition (Module -> I.Int32 -> Graph -> Either Error (Shacl.ShapesGraph, I.Int32))
+shaclCoder :: TypedTermDefinition (Module -> I.Int32 -> Graph -> Either Error (Shacl.ShapesGraph, I.Int32))
 shaclCoder = define "shaclCoder" $
   doc "Encode a module's type elements as a SHACL ShapesGraph" $
   lambda "mod" $ lambda "cx" $ lambda "g" $ lets [
@@ -522,15 +522,15 @@ shaclCoder = define "shaclCoder" $
       (Eithers.mapList (var "toShape") (var "typeEls"))
 
 -- | Extract subject nodes from a list of Descriptions
-subjectsOf :: TTerm ([Rdf.Description] -> [Rdf.Node])
-subjectsOf = TTerm $ TermVariable $ Name "hydra.rdf.utils.subjectsOf"
+subjectsOf :: TypedTerm ([Rdf.Description] -> [Rdf.Node])
+subjectsOf = TypedTerm $ TermVariable $ Name "hydra.rdf.utils.subjectsOf"
 
 -- | Extract triples from a list of Descriptions
-triplesOf :: TTerm ([Rdf.Description] -> [Rdf.Triple])
-triplesOf = TTerm $ TermVariable $ Name "hydra.rdf.utils.triplesOf"
+triplesOf :: TypedTerm ([Rdf.Description] -> [Rdf.Triple])
+triplesOf = TypedTerm $ TermVariable $ Name "hydra.rdf.utils.triplesOf"
 
 -- | Construct an 'expected X, found Y' error
-unexpectedE :: TTermDefinition (String -> String -> Either Error a)
+unexpectedE :: TypedTermDefinition (String -> String -> Either Error a)
 unexpectedE = define "unexpectedE" $
   doc "Construct an error for unexpected input, given expected and found descriptions" $
   lambda "expected" $ lambda "found" $
@@ -541,7 +541,7 @@ unexpectedE = define "unexpectedE" $
       var "found"])
 
 -- | Add an rdf:type triple to an RDF Description
-withType :: TTermDefinition (Name -> Rdf.Description -> Rdf.Description)
+withType :: TypedTermDefinition (Name -> Rdf.Description -> Rdf.Description)
 withType = define "withType" $
   doc "Add an rdf:type triple to an RDF Description" $
   lambda "name" $ lambda "desc" $ lets [
@@ -563,5 +563,5 @@ withType = define "withType" $
 -- These are provided as DSL term references to the staging implementations.
 
 -- | Construct an XSD datatype IRI from a local name
-xmlSchemaDatatypeIri :: TTerm (String -> Rdf.Iri)
-xmlSchemaDatatypeIri = TTerm $ TermVariable $ Name "hydra.rdf.utils.xmlSchemaDatatypeIri"
+xmlSchemaDatatypeIri :: TypedTerm (String -> Rdf.Iri)
+xmlSchemaDatatypeIri = TypedTerm $ TermVariable $ Name "hydra.rdf.utils.xmlSchemaDatatypeIri"

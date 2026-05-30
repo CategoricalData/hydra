@@ -36,7 +36,7 @@ import qualified Data.Map                                  as M
 import qualified Data.Set                                  as S
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 ns :: ModuleName
@@ -92,7 +92,7 @@ module_ = Module {
 
 -- | Build a map from union-type name to the number of its constructors. Used
 -- by the encoder's union-eliminator to decide whether a match is exhaustive.
-buildConstructorCounts :: TTermDefinition ([(String, Type)] -> M.Map String I.Int32)
+buildConstructorCounts :: TypedTermDefinition ([(String, Type)] -> M.Map String I.Int32)
 buildConstructorCounts = define "buildConstructorCounts" $
   doc "Build a map from each union-type definition's name to its constructor count" $
   lambda "defs" $ Maps.fromList $ Lists.concat $
@@ -101,7 +101,7 @@ buildConstructorCounts = define "buildConstructorCounts" $
       "ty">: Pairs.second (var "nt"),
       "extracted">: extractTypeParams @@ var "ty",
       "bodyTy">: Pairs.second (var "extracted")] $
-      cases _Type (var "bodyTy") (Just $ list ([] :: [TTerm (String, I.Int32)])) [
+      cases _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm (String, I.Int32)])) [
         _Type_union>>: "fields" ~>
           list [pair (var "name") (Lists.length $ var "fields")]])
     (var "defs")
@@ -109,20 +109,20 @@ buildConstructorCounts = define "buildConstructorCounts" $
 -- | Build a map from (qualifiedTypeName, bareFieldName) to a prefixed field
 -- name like `typeName_fieldName`. Used to disambiguate Coq record accessor
 -- names across a multi-module kernel where plain Hydra field names collide.
-buildFieldMapping :: TTermDefinition ([Module] -> M.Map (String, String) String)
+buildFieldMapping :: TypedTermDefinition ([Module] -> M.Map (String, String) String)
 buildFieldMapping = define "buildFieldMapping" $
   doc "Build a map keyed by (qualifiedTypeName, rawFieldName) producing the prefixed Coq accessor name" $
   lambda "modules" $ Maps.fromList $ Lists.concat $
     Lists.map (lambda "m" $ Lists.concat $
       Lists.map (lambda "def_" $
-        cases _Definition (var "def_") (Just $ list ([] :: [TTerm ((String, String), String)])) [
+        cases _Definition (var "def_") (Just $ list ([] :: [TypedTerm ((String, String), String)])) [
           _Definition_type>>: "td" ~> lets [
             "qname">: unwrap _Name @@ (Packaging.typeDefinitionName $ var "td"),
             "tname">: localName @@ var "qname",
             "ty">: Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme $ var "td"),
             "extracted">: extractTypeParams @@ var "ty",
             "bodyTy">: Pairs.second (var "extracted")] $
-            cases _Type (var "bodyTy") (Just $ list ([] :: [TTerm ((String, String), String)])) [
+            cases _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm ((String, String), String)])) [
               _Type_record>>: "fields" ~> Lists.map (lambda "ft" $ lets [
                 "rawFn">: localNameRaw @@ (unwrap _Name @@ (Core.fieldTypeName $ var "ft")),
                 "fn">: sanitize @@ var "rawFn",
@@ -138,17 +138,17 @@ buildFieldMapping = define "buildFieldMapping" $
 -- recursing through lambda domains, type applications, let binding type
 -- schemes, etc. Binding occurrences remove the bound name from the result
 -- (both type lambdas and term lambdas whose parameter looks like `t<n>`).
-collectFreeTypeVars :: TTermDefinition (Term -> S.Set String)
+collectFreeTypeVars :: TypedTermDefinition (Term -> S.Set String)
 collectFreeTypeVars = define "collectFreeTypeVars" $
   doc "Collect the set of free type-variable-like names (t0, t1, ...) referenced anywhere inside a Term" $
-  lambda "tm" $ cases _Term (var "tm") (Just (Sets.empty :: TTerm (S.Set String))) [
+  lambda "tm" $ cases _Term (var "tm") (Just (Sets.empty :: TypedTerm (S.Set String))) [
     _Term_annotated>>: "at" ~>
       collectFreeTypeVars @@ (Core.annotatedTermBody $ var "at"),
     _Term_application>>: "app" ~> Sets.union
       (collectFreeTypeVars @@ (Core.applicationFunction $ var "app"))
       (collectFreeTypeVars @@ (Core.applicationArgument $ var "app")),
     _Term_cases>>: "cs" ~> Sets.union
-      (Maybes.maybe (Sets.empty :: TTerm (S.Set String))
+      (Maybes.maybe (Sets.empty :: TypedTerm (S.Set String))
         (lambda "d" $ collectFreeTypeVars @@ var "d")
         (Core.caseStatementDefault $ var "cs"))
       (Sets.unions $ Lists.map
@@ -162,7 +162,7 @@ collectFreeTypeVars = define "collectFreeTypeVars" $
       collectFreeTypeVars @@ (Core.fieldTerm $ Core.injectionField $ var "inj"),
     _Term_lambda>>: "lam" ~> lets [
       "paramName">: unwrap _Name @@ (Core.lambdaParameter $ var "lam"),
-      "domVars">: Maybes.maybe (Sets.empty :: TTerm (S.Set String))
+      "domVars">: Maybes.maybe (Sets.empty :: TypedTerm (S.Set String))
         (lambda "dty" $ collectFreeTypeVarsInType @@ var "dty")
         (Core.lambdaDomain $ var "lam"),
       "bodyVars">: collectFreeTypeVars @@ (Core.lambdaBody $ var "lam"),
@@ -174,14 +174,14 @@ collectFreeTypeVars = define "collectFreeTypeVars" $
       "bindVars">: Sets.unions $ Lists.map
         (lambda "b" $ Sets.union
           (collectFreeTypeVars @@ (Core.bindingTerm $ var "b"))
-          (Maybes.maybe (Sets.empty :: TTerm (S.Set String))
+          (Maybes.maybe (Sets.empty :: TypedTerm (S.Set String))
             (lambda "sch" $ collectFreeTypeVarsInTypeScheme @@ var "sch")
             (Core.bindingTypeScheme $ var "b")))
         (Core.letBindings $ var "lt")] $
       Sets.union (var "bindVars") (collectFreeTypeVars @@ (Core.letBody $ var "lt")),
     _Term_list>>: "xs" ~> Sets.unions $
       Lists.map (lambda "el" $ collectFreeTypeVars @@ var "el") (var "xs"),
-    _Term_maybe>>: "mt" ~> Maybes.maybe (Sets.empty :: TTerm (S.Set String))
+    _Term_maybe>>: "mt" ~> Maybes.maybe (Sets.empty :: TypedTerm (S.Set String))
       (lambda "el" $ collectFreeTypeVars @@ var "el") (var "mt"),
     _Term_pair>>: "p" ~> Sets.union
       (collectFreeTypeVars @@ Pairs.first (var "p"))
@@ -203,10 +203,10 @@ collectFreeTypeVars = define "collectFreeTypeVars" $
 -- | Collect free type-variable-like names (e.g. `t0`, `t1`) from a Type.
 -- Used by the inner-term transformations to detect type parameters that
 -- escape their binders and must be rebound at a higher forall.
-collectFreeTypeVarsInType :: TTermDefinition (Type -> S.Set String)
+collectFreeTypeVarsInType :: TypedTermDefinition (Type -> S.Set String)
 collectFreeTypeVarsInType = define "collectFreeTypeVarsInType" $
   doc "Collect names of type-variable-like references (t0, t1, ...) inside a Type" $
-  lambda "ty" $ cases _Type (var "ty") (Just (Sets.empty :: TTerm (S.Set String))) [
+  lambda "ty" $ cases _Type (var "ty") (Just (Sets.empty :: TypedTerm (S.Set String))) [
     _Type_annotated>>: "at" ~>
       collectFreeTypeVarsInType @@ (Core.annotatedTypeBody $ var "at"),
     _Type_application>>: "app" ~> Sets.union
@@ -234,13 +234,13 @@ collectFreeTypeVarsInType = define "collectFreeTypeVarsInType" $
       "nm">: unwrap _Name @@ var "n"] $
       Logic.ifElse (isTypeVarLike @@ var "nm")
         (Sets.singleton (var "nm"))
-        (Sets.empty :: TTerm (S.Set String)),
+        (Sets.empty :: TypedTerm (S.Set String)),
     _Type_wrap>>: "wt" ~> collectFreeTypeVarsInType @@ var "wt"]
 
 -- | Collect free type-variable-like names from a TypeScheme: both the
 -- explicitly quantified variables (if they look like `t0`) and any such
 -- references inside the body type.
-collectFreeTypeVarsInTypeScheme :: TTermDefinition (TypeScheme -> S.Set String)
+collectFreeTypeVarsInTypeScheme :: TypedTermDefinition (TypeScheme -> S.Set String)
 collectFreeTypeVarsInTypeScheme = define "collectFreeTypeVarsInTypeScheme" $
   doc "Collect type-variable-like names declared or referenced by a TypeScheme" $
   lambda "ts" $ lets [
@@ -254,10 +254,10 @@ collectFreeTypeVarsInTypeScheme = define "collectFreeTypeVarsInTypeScheme" $
 -- Hydra emits nested single-binding lets where Haskell's mutual let would
 -- have appeared, and this helper recovers the flat binding group so that
 -- SCC-based reordering can be applied to it.
-collectLetBindings :: TTermDefinition (Term -> ([Binding], Term))
+collectLetBindings :: TypedTermDefinition (Term -> ([Binding], Term))
 collectLetBindings = define "collectLetBindings" $
   doc "Flatten consecutive TermLet wrappers into (bindings, innermostBody)" $
-  lambda "tm" $ cases _Term (var "tm") (Just $ pair (list ([] :: [TTerm Binding])) (var "tm")) [
+  lambda "tm" $ cases _Term (var "tm") (Just $ pair (list ([] :: [TypedTerm Binding])) (var "tm")) [
     _Term_let>>: "lt" ~> lets [
       "rest">: collectLetBindings @@ (Core.letBody $ var "lt")] $
       pair
@@ -267,10 +267,10 @@ collectLetBindings = define "collectLetBindings" $
 -- | Walk a Hydra Term and collect every qualified Name occurrence. Also
 -- recurses into type annotations and type applications so that qualified
 -- type-level references are picked up.
-collectQualifiedNamesInTerm :: TTermDefinition (Term -> S.Set String)
+collectQualifiedNamesInTerm :: TypedTermDefinition (Term -> S.Set String)
 collectQualifiedNamesInTerm = define "collectQualifiedNamesInTerm" $
   doc "Collect the set of qualified (hydra.*) Name strings that a Hydra Term references" $
-  lambda "tm" $ cases _Term (var "tm") (Just (Sets.empty :: TTerm (S.Set String))) [
+  lambda "tm" $ cases _Term (var "tm") (Just (Sets.empty :: TypedTerm (S.Set String))) [
     _Term_annotated>>: "at" ~>
       collectQualifiedNamesInTerm @@ (Core.annotatedTermBody $ var "at"),
     _Term_application>>: "app" ~> Sets.union
@@ -282,7 +282,7 @@ collectQualifiedNamesInTerm = define "collectQualifiedNamesInTerm" $
         (Sets.unions $ Lists.map
           (lambda "f" $ collectQualifiedNamesInTerm @@ (Core.fieldTerm $ var "f"))
           (Core.caseStatementCases $ var "cs"))
-        (Maybes.maybe (Sets.empty :: TTerm (S.Set String))
+        (Maybes.maybe (Sets.empty :: TypedTerm (S.Set String))
           (lambda "d" $ collectQualifiedNamesInTerm @@ var "d")
           (Core.caseStatementDefault $ var "cs"))),
     _Term_either>>: "e" ~> Eithers.either_
@@ -293,7 +293,7 @@ collectQualifiedNamesInTerm = define "collectQualifiedNamesInTerm" $
       (qualifiedFromName @@ (Core.injectionTypeName $ var "inj"))
       (collectQualifiedNamesInTerm @@ (Core.fieldTerm $ Core.injectionField $ var "inj")),
     _Term_lambda>>: "lam" ~> Sets.union
-      (Maybes.maybe (Sets.empty :: TTerm (S.Set String))
+      (Maybes.maybe (Sets.empty :: TypedTerm (S.Set String))
         (lambda "domTy" $ collectQualifiedNamesInType @@ var "domTy")
         (Core.lambdaDomain $ var "lam"))
       (collectQualifiedNamesInTerm @@ (Core.lambdaBody $ var "lam")),
@@ -304,7 +304,7 @@ collectQualifiedNamesInTerm = define "collectQualifiedNamesInTerm" $
       (collectQualifiedNamesInTerm @@ (Core.letBody $ var "lt")),
     _Term_list>>: "xs" ~> Sets.unions $
       Lists.map (lambda "el" $ collectQualifiedNamesInTerm @@ var "el") (var "xs"),
-    _Term_maybe>>: "mt" ~> Maybes.maybe (Sets.empty :: TTerm (S.Set String))
+    _Term_maybe>>: "mt" ~> Maybes.maybe (Sets.empty :: TypedTerm (S.Set String))
       (lambda "el" $ collectQualifiedNamesInTerm @@ var "el")
       (var "mt"),
     _Term_pair>>: "p" ~> Sets.union
@@ -326,10 +326,10 @@ collectQualifiedNamesInTerm = define "collectQualifiedNamesInTerm" $
 
 -- | Walk a Hydra Type and collect every Name occurrence that begins with
 -- `"hydra."` (a qualified cross-module reference).
-collectQualifiedNamesInType :: TTermDefinition (Type -> S.Set String)
+collectQualifiedNamesInType :: TypedTermDefinition (Type -> S.Set String)
 collectQualifiedNamesInType = define "collectQualifiedNamesInType" $
   doc "Collect the set of qualified (hydra.*) Name strings that a Hydra Type references" $
-  lambda "ty" $ cases _Type (var "ty") (Just (Sets.empty :: TTerm (S.Set String))) [
+  lambda "ty" $ cases _Type (var "ty") (Just (Sets.empty :: TypedTerm (S.Set String))) [
     _Type_annotated>>: "at" ~>
       collectQualifiedNamesInType @@ (Core.annotatedTypeBody $ var "at"),
     _Type_application>>: "app" ~> Sets.union
@@ -360,7 +360,7 @@ collectQualifiedNamesInType = define "collectQualifiedNamesInType" $
     _Type_wrap>>: "wt" ~> collectQualifiedNamesInType @@ var "wt"]
 
 -- | Walk a Hydra TypeScheme, collecting qualified Names from its body type.
-collectQualifiedNamesInTypeScheme :: TTermDefinition (TypeScheme -> S.Set String)
+collectQualifiedNamesInTypeScheme :: TypedTermDefinition (TypeScheme -> S.Set String)
 collectQualifiedNamesInTypeScheme = define "collectQualifiedNamesInTypeScheme" $
   doc "Collect qualified (hydra.*) Name strings from a TypeScheme's body, after stripping forall binders" $
   lambda "ts" $ lets [
@@ -373,7 +373,7 @@ collectQualifiedNamesInTypeScheme = define "collectQualifiedNamesInTypeScheme" $
 -- `typeName_fieldName` (with the type name decapitalized and the field name
 -- sanitized against Coq reserved words). The Coq encoder replaces references
 -- to these accessors with `hydra_unreachable`.
-collectSanitizedAccessors :: TTermDefinition ([(Bool, [(String, Type)])] -> S.Set String)
+collectSanitizedAccessors :: TypedTermDefinition ([(Bool, [(String, Type)])] -> S.Set String)
 collectSanitizedAccessors = define "collectSanitizedAccessors" $
   doc "Return the set of decapitalized, sanitized accessor names whose fields were replaced with unit due to positivity issues" $
   lambda "typeGroups" $ Sets.fromList $ Lists.concat $
@@ -386,7 +386,7 @@ collectSanitizedAccessors = define "collectSanitizedAccessors" $
           "ty">: Pairs.second (var "nt"),
           "extracted">: extractTypeParams @@ var "ty",
           "bodyTy">: Pairs.second (var "extracted")] $
-          cases _Type (var "bodyTy") (Just $ list ([] :: [TTerm String])) [
+          cases _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm String])) [
             _Type_record>>: "fields" ~>
               Maybes.cat $ Lists.map (lambda "f" $
                 Logic.ifElse (fieldCausesPositivityIssue @@ var "groupNames" @@ (Core.fieldTypeType $ var "f"))
@@ -394,9 +394,9 @@ collectSanitizedAccessors = define "collectSanitizedAccessors" $
                     Formatting.decapitalize @@ var "typeName",
                     string "_",
                     sanitize @@ (localName @@ (unwrap _Name @@ (Core.fieldTypeName $ var "f")))]))
-                  (Phantoms.nothing :: TTerm (Maybe String)))
+                  (Phantoms.nothing :: TypedTerm (Maybe String)))
                 (var "fields")]) (var "defs"))
-        (list ([] :: [TTerm String])))
+        (list ([] :: [TypedTerm String])))
       (var "typeGroups")
 
 -- | Encode a mutually recursive group of let bindings via hydra_fix bundling.
@@ -406,7 +406,7 @@ collectSanitizedAccessors = define "collectSanitizedAccessors" $
 -- restore access to each individual binding name. See the hand-written
 -- original in `heads/haskell/.../Hydra/Coq/Generate.hs` for the emitted
 -- Coq shape.
-encodeMutualLetGroup :: TTermDefinition ([Binding] -> Term -> Term)
+encodeMutualLetGroup :: TypedTermDefinition ([Binding] -> Term -> Term)
 encodeMutualLetGroup = define "encodeMutualLetGroup" $
   doc "Wrap a mutually recursive binding group in a hydra_fix nested-pair bundle with per-name projection lets" $
   lambdas ["grp", "body"] $
@@ -468,10 +468,10 @@ encodeMutualLetGroup = define "encodeMutualLetGroup" $
   "fixTerm" <~ (Core.termApplication $ Core.application
     (Core.termVariable $ wrap _Name (string "hydra_fix"))
     (Core.termLambda $ Core.lambda (var "bundleInner")
-      (Phantoms.nothing :: TTerm (Maybe Type))
+      (Phantoms.nothing :: TypedTerm (Maybe Type))
       (var "fixBody"))) $
   "bundleBinding" <~ Core.binding (var "bundleName") (var "fixTerm")
-    (Phantoms.nothing :: TTerm (Maybe TypeScheme)) $
+    (Phantoms.nothing :: TypedTerm (Maybe TypeScheme)) $
   Core.termLet $ Core.let_
     (list [var "bundleBinding"])
     (rebuildLets @@ var "outerProjBindings" @@ var "body")
@@ -481,14 +481,14 @@ encodeMutualLetGroup = define "encodeMutualLetGroup" $
 -- Hydra's generic type inference; erasing them lets Coq reinfer a concrete
 -- domain. Term lambdas whose domain is `TypeVariable "Type"` introduce a
 -- fresh type binder and extend the bound set before recursing into the body.
-eraseUnboundTypeVarDomains :: TTermDefinition (S.Set String -> Term -> Term)
+eraseUnboundTypeVarDomains :: TypedTermDefinition (S.Set String -> Term -> Term)
 eraseUnboundTypeVarDomains = define "eraseUnboundTypeVarDomains" $
   doc "Erase lambda domain annotations referencing unbound type variables; recurse under new type binders" $
   "initialBound" ~> "term0" ~>
   "eraseIfUnbound" <~ ("bound" ~> "mdom" ~>
-    Maybes.maybe (Phantoms.nothing :: TTerm (Maybe Type))
+    Maybes.maybe (Phantoms.nothing :: TypedTerm (Maybe Type))
       ("ty" ~> Logic.ifElse (hasUnboundTypeVar @@ var "bound" @@ var "ty")
-        (Phantoms.nothing :: TTerm (Maybe Type))
+        (Phantoms.nothing :: TypedTerm (Maybe Type))
         (Phantoms.just $ var "ty"))
       (var "mdom")) $
   "f" <~ ("recurse" ~> "bound" ~> "term" ~>
@@ -515,21 +515,21 @@ eraseUnboundTypeVarDomains = define "eraseUnboundTypeVarDomains" $
 -- `"hydra.core.Term_Literal"` -> `"hydra.core"`.
 -- `"hydra.lib.strings.cat"` -> `"hydra.lib.strings"`.
 -- Names without at least one dot are returned unchanged.
-extractQualifiedNamespace :: TTermDefinition (String -> String)
+extractQualifiedNamespace :: TypedTermDefinition (String -> String)
 extractQualifiedNamespace = define "extractQualifiedNamespace" $
   doc "Extract the namespace (everything except the last dot-separated component) from a qualified Hydra name" $
   lambda "s" $ lets [
     "parts">: Strings.splitOn (string ".") (var "s")] $
     Logic.ifElse (Equality.gte (Lists.length (var "parts")) (int32 2))
-      (Strings.intercalate (string ".") (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts"))))
+      (Strings.intercalate (string ".") (Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts"))))
       (var "s")
 
 -- | Extract the leading forall-bound parameter names from a type, returning
 -- the remaining body.
-extractTypeParams :: TTermDefinition (Type -> ([String], Type))
+extractTypeParams :: TypedTermDefinition (Type -> ([String], Type))
 extractTypeParams = define "extractTypeParams" $
   doc "Peel off leading forall binders, returning the list of parameter names and the inner body type" $
-  lambda "ty" $ cases _Type (var "ty") (Just (pair (list ([] :: [TTerm String])) (var "ty"))) [
+  lambda "ty" $ cases _Type (var "ty") (Just (pair (list ([] :: [TypedTerm String])) (var "ty"))) [
     _Type_forall>>: "ft" ~> lets [
       "param">: unwrap _Name @@ (Core.forallTypeParameter $ var "ft"),
       "rest">: extractTypeParams @@ (Core.forallTypeBody $ var "ft")] $
@@ -541,7 +541,7 @@ extractTypeParams = define "extractTypeParams" $
 -- the given group? A violation occurs when any group member appears in the
 -- domain of a function type, recursively descending through annotations,
 -- foralls, wrappers, and function codomains.
-fieldCausesPositivityIssue :: TTermDefinition (S.Set String -> Type -> Bool)
+fieldCausesPositivityIssue :: TypedTermDefinition (S.Set String -> Type -> Bool)
 fieldCausesPositivityIssue = define "fieldCausesPositivityIssue" $
   doc "Return True if the field type contains a function whose domain mentions a group member" $
   lambdas ["groupNames", "fty"] $ cases _Type (var "fty") (Just (boolean False)) [
@@ -557,7 +557,7 @@ fieldCausesPositivityIssue = define "fieldCausesPositivityIssue" $
 
 -- | Does a mutual group of type definitions contain any field that causes a
 -- strict-positivity violation?
-hasPositivityIssue :: TTermDefinition (S.Set String -> [(String, Type)] -> Bool)
+hasPositivityIssue :: TypedTermDefinition (S.Set String -> [(String, Type)] -> Bool)
 hasPositivityIssue = define "hasPositivityIssue" $
   doc "Return True if any definition in the group has a record/union field whose type causes a positivity violation" $
   lambdas ["groupNames", "defs"] $
@@ -584,7 +584,7 @@ hasPositivityIssue = define "hasPositivityIssue" $
 
 -- | Does a Type reference any type-variable-like name (e.g. `t0`) that is
 -- NOT in the given set of bound type variables?
-hasUnboundTypeVar :: TTermDefinition (S.Set String -> Type -> Bool)
+hasUnboundTypeVar :: TypedTermDefinition (S.Set String -> Type -> Bool)
 hasUnboundTypeVar = define "hasUnboundTypeVar" $
   doc "Return True if the type mentions a t<digits> variable not present in the given set" $
   lambdas ["bound", "ty"] $ cases _Type (var "ty") (Just (boolean False)) [
@@ -613,7 +613,7 @@ hasUnboundTypeVar = define "hasUnboundTypeVar" $
 -- | Is this Term a TermTypeLambda (after peeling TermAnnotated wrappers)?
 -- Used to detect let-bindings whose body starts with a type lambda so that
 -- the binding gets converted into a polymorphic value at Coq emission time.
-isTypeLambdaTerm :: TTermDefinition (Term -> Bool)
+isTypeLambdaTerm :: TypedTermDefinition (Term -> Bool)
 isTypeLambdaTerm = define "isTypeLambdaTerm" $
   doc "Return True if a Term (possibly under TermAnnotated wrappers) is a TermTypeLambda" $
   lambda "tm" $ cases _Term (var "tm") (Just (boolean False)) [
@@ -622,7 +622,7 @@ isTypeLambdaTerm = define "isTypeLambdaTerm" $
     _Term_typeLambda>>: constant (boolean True)]
 
 -- | Does a name look like a Hydra-generated type variable (`t0`, `t1`, ...)?
-isTypeVarLike :: TTermDefinition (String -> Bool)
+isTypeVarLike :: TypedTermDefinition (String -> Bool)
 isTypeVarLike = define "isTypeVarLike" $
   doc "Return True if the string is of the form `t<digits>` with at least one digit" $
   lambda "s" $ lets [
@@ -644,7 +644,7 @@ isTypeVarLike = define "isTypeVarLike" $
 
 -- | Take the last dot-separated segment of a qualified Hydra name and sanitise
 -- it against Coq's stripped-reserved-words list.
-localName :: TTermDefinition (String -> String)
+localName :: TypedTermDefinition (String -> String)
 localName = define "localName" $
   doc "Return the last dot-separated segment of a qualified Hydra name, sanitised via `sanitize`" $
   lambda "s" $ lets [
@@ -655,7 +655,7 @@ localName = define "localName" $
 -- | Take the last dot-separated segment of a qualified Hydra name, without
 -- sanitizing it against Coq reserved words. Used when the raw field name is
 -- needed as a map key; contrast with `localName` which sanitizes.
-localNameRaw :: TTermDefinition (String -> String)
+localNameRaw :: TypedTermDefinition (String -> String)
 localNameRaw = define "localNameRaw" $
   doc "Return the last dot-separated segment of a qualified Hydra name, unsanitized" $
   lambda "s" $ lets [
@@ -664,14 +664,14 @@ localNameRaw = define "localNameRaw" $
 
 -- | Collect the dependency namespaces of a Hydra Module, minus the module's
 -- own namespace, deduplicated while preserving first-occurrence order.
-moduleDependencyNames :: TTermDefinition (Module -> [String])
+moduleDependencyNames :: TypedTermDefinition (Module -> [String])
 moduleDependencyNames = define "moduleDependencyNames" $
   doc "Return the deduplicated list of dependency namespace strings for a Module, excluding its own namespace" $
   lambda "m" $ lets [
     "allDeps">: Lists.map (lambda "dep" $ Packaging.unModuleName (Packaging.moduleDependencyModule (var "dep"))) (Packaging.moduleDependencies (var "m")),
     "ownNs">: Packaging.unModuleName (Packaging.moduleName (var "m")),
     "filtered">: Lists.filter (lambda "s" $ Logic.not (Equality.equal (var "s") (var "ownNs"))) (var "allDeps")] $
-    (Lists.nub :: TTerm [String] -> TTerm [String]) (var "filtered")
+    (Lists.nub :: TypedTerm [String] -> TypedTerm [String]) (var "filtered")
 
 -- | Normalize inner TermTypeLambda nodes inside a term, rewriting them as
 -- regular term lambdas whose domain is `Type`. At each TermLet node, any
@@ -682,13 +682,13 @@ moduleDependencyNames = define "moduleDependencyNames" $
 -- are erased since their targets are treated as implicitly polymorphic.
 -- The outer TermTypeLambda chain (matching the definition's `typeVars`) is
 -- stripped and rebuilt around the transformed body so it stays intact.
-normalizeInnerTypeLambdas :: TTermDefinition (Term -> Term)
+normalizeInnerTypeLambdas :: TypedTermDefinition (Term -> Term)
 normalizeInnerTypeLambdas = define "normalizeInnerTypeLambdas" $
   doc "Rewrite inner TermTypeLambda nodes and type applications so that polymorphic helpers work under Coq's erasure-based encoding" $
   "term" ~>
   -- Strip outer TermTypeLambda chain: returns (params, innerBody).
   "stripTypeLambdas" <~ ("tm" ~>
-    cases _Term (var "tm") (Just $ pair (list ([] :: [TTerm String])) (var "tm")) [
+    cases _Term (var "tm") (Just $ pair (list ([] :: [TypedTerm String])) (var "tm")) [
       _Term_typeLambda>>: "tl" ~>
         "rest" <~ (var "stripTypeLambdas" @@ (Core.typeLambdaBody $ var "tl")) $
         pair
@@ -709,7 +709,7 @@ normalizeInnerTypeLambdas = define "normalizeInnerTypeLambdas" $
         "newPoly" <~ Sets.fromList (Maybes.cat $ Lists.map
           ("b" ~> Logic.ifElse (isTypeLambdaTerm @@ (Core.bindingTerm $ var "b"))
             (Phantoms.just $ unwrap _Name @@ (Core.bindingName $ var "b"))
-            (Phantoms.nothing :: TTerm (Maybe String)))
+            (Phantoms.nothing :: TypedTerm (Maybe String)))
           (Core.letBindings $ var "lt")) $
         "polyNames2" <~ Sets.union (var "polyNames") (var "newPoly") $
         Core.termLet $ Core.let_
@@ -717,7 +717,7 @@ normalizeInnerTypeLambdas = define "normalizeInnerTypeLambdas" $
             (Core.bindingName $ var "b")
             (var "f" @@ var "recurse" @@ var "polyNames2" @@ (Core.bindingTerm $ var "b"))
             (Logic.ifElse (isTypeLambdaTerm @@ (Core.bindingTerm $ var "b"))
-              (Phantoms.nothing :: TTerm (Maybe TypeScheme))
+              (Phantoms.nothing :: TypedTerm (Maybe TypeScheme))
               (Core.bindingTypeScheme $ var "b")))
             (Core.letBindings $ var "lt"))
           (var "f" @@ var "recurse" @@ var "polyNames2" @@ (Core.letBody $ var "lt")),
@@ -744,7 +744,7 @@ normalizeInnerTypeLambdas = define "normalizeInnerTypeLambdas" $
   Logic.ifElse (Lists.null (var "outerParams"))
     (var "term")
     (var "rebuildTypeLambdas" @@ var "outerParams" @@
-      (Rewriting.rewriteTermWithContext @@ var "f" @@ (Sets.empty :: TTerm (S.Set String)) @@ var "body0"))
+      (Rewriting.rewriteTermWithContext @@ var "f" @@ (Sets.empty :: TypedTerm (S.Set String)) @@ var "body0"))
 
 -- | Group a list of bindings into SCC components in dependency order,
 -- using topological sort over a graph whose edges are the free variables of
@@ -759,7 +759,7 @@ normalizeInnerTypeLambdas = define "normalizeInnerTypeLambdas" $
 -- (which preserved source order) but is semantically equivalent for Coq's
 -- sequential `let ... in`, and the common test suite still compiles 128/132
 -- `.v` files — matching the pre-refactor baseline exactly.
-processLetSCCs :: TTermDefinition ([Binding] -> [[Binding]])
+processLetSCCs :: TypedTermDefinition ([Binding] -> [[Binding]])
 processLetSCCs = define "processLetSCCs" $
   doc "Sort bindings into SCC groups using free-var analysis and local-name matching" $
   lambda "bindings" $ lets [
@@ -783,7 +783,7 @@ processLetSCCs = define "processLetSCCs" $
 
 -- | Return a singleton set containing the given Name's raw string iff it begins
 -- with `"hydra."`; empty set otherwise.
-qualifiedFromName :: TTermDefinition (Name -> S.Set String)
+qualifiedFromName :: TypedTermDefinition (Name -> S.Set String)
 qualifiedFromName = define "qualifiedFromName" $
   doc "Wrap a Hydra Name as a singleton set of its raw string, iff it is a qualified (hydra.*) reference" $
   lambda "n" $ lets [
@@ -793,11 +793,11 @@ qualifiedFromName = define "qualifiedFromName" $
         (Equality.gte (Lists.length (var "parts")) (int32 2))
         (Equality.equal (Maybes.fromMaybe (string "") (Lists.maybeHead (var "parts"))) (string "hydra")))
       (Sets.singleton (var "raw"))
-      (Sets.empty :: TTerm (S.Set String))
+      (Sets.empty :: TypedTerm (S.Set String))
 
 -- | Wrap each binding in its own nested TermLet, producing a sequence of
 -- single-binding lets terminating in `body`.
-rebuildLets :: TTermDefinition ([Binding] -> Term -> Term)
+rebuildLets :: TypedTermDefinition ([Binding] -> Term -> Term)
 rebuildLets = define "rebuildLets" $
   doc "Build a chain of single-binding TermLet wrappers around the given body" $
   lambdas ["bindings", "body"] $
@@ -809,7 +809,7 @@ rebuildLets = define "rebuildLets" $
 -- | Rebuild a let sequence from a list of SCC groups: each acyclic singleton
 -- becomes a plain TermLet, each cyclic group is wrapped via
 -- `encodeMutualLetGroup`, and groups are nested in dependency order.
-rebuildMutualLets :: TTermDefinition ([[Binding]] -> Term -> Term)
+rebuildMutualLets :: TypedTermDefinition ([[Binding]] -> Term -> Term)
 rebuildMutualLets = define "rebuildMutualLets" $
   doc "Rebuild a chain of TermLet/hydra_fix wrappers from SCC-sorted binding groups" $
   lambdas ["groups", "body"] $
@@ -826,7 +826,7 @@ rebuildMutualLets = define "rebuildMutualLets" $
 -- the full chain of nested lets is flattened, grouped into SCCs by
 -- free-variable analysis, and rebuilt. Mutually recursive groups get
 -- encoded via `encodeMutualLetGroup`.
-reorderLetBindings :: TTermDefinition (Term -> Term)
+reorderLetBindings :: TypedTermDefinition (Term -> Term)
 reorderLetBindings = define "reorderLetBindings" $
   doc "Topologically reorder let bindings and pair-encode mutually recursive groups" $
   "term0" ~>
@@ -851,7 +851,7 @@ reorderLetBindings = define "reorderLetBindings" $
 -- | Rewrite all TermProject nodes in a term, replacing each field name with
 -- its prefixed form from the supplied mapping. Leaves unmapped projections
 -- untouched. Recurses over all subterms via `Rewriting.rewriteTerm`.
-rewriteTermFields :: TTermDefinition (M.Map (String, String) String -> Term -> Term)
+rewriteTermFields :: TypedTermDefinition (M.Map (String, String) String -> Term -> Term)
 rewriteTermFields = define "rewriteTermFields" $
   doc "Replace field names in TermProject nodes using the given (typeName, rawFieldName) -> prefixedName map" $
   lambdas ["fm", "term0"] $ lets [
@@ -870,7 +870,7 @@ rewriteTermFields = define "rewriteTermFields" $
 
 -- | Sanitise a name that appears in a stripped-local reference position: if it
 -- collides with a Coq reserved word, append an underscore.
-sanitize :: TTermDefinition (String -> String)
+sanitize :: TypedTermDefinition (String -> String)
 sanitize = define "sanitize" $
   doc "Escape a stripped local name against Coq's stripped reserved-words set" $
   lambda "s" $ Formatting.escapeWithUnderscore @@ CoqLanguage.coqStrippedReservedWords @@ var "s"
@@ -879,7 +879,7 @@ sanitize = define "sanitize" $
 -- binders. Used to allow otherwise mutually recursive Coq Inductive groups to
 -- type-check. The generated accessor becomes a dummy that callers replace
 -- with `hydra_unreachable`; see `collectSanitizedAccessors`.
-sanitizePositivity :: TTermDefinition (S.Set String -> Type -> Type)
+sanitizePositivity :: TypedTermDefinition (S.Set String -> Type -> Type)
 sanitizePositivity = define "sanitizePositivity" $
   doc "Rewrite a Type, replacing offending record/union fields with TypeUnit and restoring forall binders" $
   lambdas ["groupNames", "ty"] $ lets [
@@ -903,7 +903,7 @@ sanitizePositivity = define "sanitizePositivity" $
 -- | Sort a list of (name, Term) pairs into SCC groups, flagging each group
 -- as cyclic or acyclic. Acyclic singletons become `Definition`; cyclic
 -- groups get emitted via the `hydra_fix` bundling pipeline.
-sortTermDefsSCC :: TTermDefinition ([(String, Term)] -> [(Bool, [(String, Term)])])
+sortTermDefsSCC :: TypedTermDefinition ([(String, Term)] -> [(Bool, [(String, Term)])])
 sortTermDefsSCC = define "sortTermDefsSCC" $
   doc "Group term definitions into SCC components with a cyclic/acyclic flag" $
   lambda "defs" $ lets [
@@ -931,7 +931,7 @@ sortTermDefsSCC = define "sortTermDefsSCC" $
 -- with a Bool indicating whether it is cyclic (mutually recursive, including
 -- self-loops). Acyclic singletons produce Coq `Inductive`/`Definition`/
 -- `Record` sentences; cyclic groups produce `Inductive ... with ...` blocks.
-sortTypeDefsSCC :: TTermDefinition ([(String, Type)] -> [(Bool, [(String, Type)])])
+sortTypeDefsSCC :: TypedTermDefinition ([(String, Type)] -> [(Bool, [(String, Type)])])
 sortTypeDefsSCC = define "sortTypeDefsSCC" $
   doc "Group type definitions into SCC components with a cyclic/acyclic flag" $
   lambda "defs" $ lets [
@@ -957,7 +957,7 @@ sortTypeDefsSCC = define "sortTypeDefsSCC" $
 -- free occurrences of `innerName` substituted by `bName`. Otherwise return
 -- the term unchanged. Used while bundling a mutually recursive group so
 -- that the outer bundle's fixpoint replaces the per-binding wrappers.
-stripHydraFix :: TTermDefinition (Name -> Term -> Term)
+stripHydraFix :: TypedTermDefinition (Name -> Term -> Term)
 stripHydraFix = define "stripHydraFix" $
   doc "Strip an outer hydra_fix lambda wrapper, substituting the inner self-reference for the binding name" $
   lambdas ["bName", "tm"] $ cases _Term (var "tm") (Just $ var "tm") [
@@ -978,7 +978,7 @@ stripHydraFix = define "stripHydraFix" $
 -- | Does a type application's ultimate target (after peeling TermAnnotated
 -- and nested TermTypeApplication wrappers) resolve to a variable in the
 -- given poly-names set?
-targetsPolyName :: TTermDefinition (S.Set String -> Term -> Bool)
+targetsPolyName :: TypedTermDefinition (S.Set String -> Term -> Bool)
 targetsPolyName = define "targetsPolyName" $
   doc "Return True if the innermost target of a (possibly nested) type application is a poly-converted local name" $
   lambdas ["polyNames", "tm"] $ cases _Term (var "tm") (Just (boolean False)) [
@@ -991,10 +991,10 @@ targetsPolyName = define "targetsPolyName" $
 
 -- | Walk a Term collecting local name references, filtered by a provided set
 -- of locally-defined names.
-termRefs :: TTermDefinition (S.Set String -> Term -> S.Set String)
+termRefs :: TypedTermDefinition (S.Set String -> Term -> S.Set String)
 termRefs = define "termRefs" $
   doc "Walk a Term and collect the local names it references, intersected with the given locally-defined names" $
-  lambdas ["locals", "tm"] $ cases _Term (var "tm") (Just (Sets.empty :: TTerm (S.Set String))) [
+  lambdas ["locals", "tm"] $ cases _Term (var "tm") (Just (Sets.empty :: TypedTerm (S.Set String))) [
     _Term_annotated>>: "at" ~>
       termRefs @@ var "locals" @@ (Core.annotatedTermBody $ var "at"),
     _Term_application>>: "app" ~> Sets.union
@@ -1004,7 +1004,7 @@ termRefs = define "termRefs" $
       (Sets.unions $ Lists.map
         (lambda "f" $ termRefs @@ var "locals" @@ (Core.fieldTerm $ var "f"))
         (Core.caseStatementCases $ var "cs"))
-      (Maybes.maybe (Sets.empty :: TTerm (S.Set String))
+      (Maybes.maybe (Sets.empty :: TypedTerm (S.Set String))
         (lambda "d" $ termRefs @@ var "locals" @@ var "d")
         (Core.caseStatementDefault $ var "cs")),
     _Term_either>>: "e" ~> Eithers.either_
@@ -1022,7 +1022,7 @@ termRefs = define "termRefs" $
       (termRefs @@ var "locals" @@ (Core.letBody $ var "lt")),
     _Term_list>>: "xs" ~> Sets.unions $
       Lists.map (lambda "el" $ termRefs @@ var "locals" @@ var "el") (var "xs"),
-    _Term_maybe>>: "mt" ~> Maybes.maybe (Sets.empty :: TTerm (S.Set String))
+    _Term_maybe>>: "mt" ~> Maybes.maybe (Sets.empty :: TypedTerm (S.Set String))
       (lambda "el" $ termRefs @@ var "locals" @@ var "el")
       (var "mt"),
     _Term_pair>>: "p" ~> Sets.union
@@ -1040,14 +1040,14 @@ termRefs = define "termRefs" $
       "local">: localName @@ (unwrap _Name @@ var "n")] $
       Logic.ifElse (Sets.member (var "local") (var "locals"))
         (Sets.singleton (var "local"))
-        (Sets.empty :: TTerm (S.Set String)),
+        (Sets.empty :: TypedTerm (S.Set String)),
     _Term_wrap>>: "wt" ~>
       termRefs @@ var "locals" @@ (Core.wrappedTermBody $ var "wt")]
 
 -- | Does a Type reference any type variable whose sanitized local name
 -- belongs to the given set of group names? Used by the mutual-inductive
 -- positivity analysis.
-typeContainsGroupRef :: TTermDefinition (S.Set String -> Type -> Bool)
+typeContainsGroupRef :: TypedTermDefinition (S.Set String -> Type -> Bool)
 typeContainsGroupRef = define "typeContainsGroupRef" $
   doc "Return True if the Type mentions any type variable whose local name is in the given set" $
   lambdas ["groupNames", "ty"] $ cases _Type (var "ty") (Just (boolean False)) [
@@ -1081,10 +1081,10 @@ typeContainsGroupRef = define "typeContainsGroupRef" $
 -- Type refers to, filtered by a provided set of locally-defined names. Used to
 -- build the dependency graph for SCC-based mutual-recursion detection in type
 -- definitions.
-typeRefs :: TTermDefinition (S.Set String -> Type -> S.Set String)
+typeRefs :: TypedTermDefinition (S.Set String -> Type -> S.Set String)
 typeRefs = define "typeRefs" $
   doc "Walk a Type and collect the local names it references, intersected with the given locally-defined names" $
-  lambdas ["locals", "ty"] $ cases _Type (var "ty") (Just (Sets.empty :: TTerm (S.Set String))) [
+  lambdas ["locals", "ty"] $ cases _Type (var "ty") (Just (Sets.empty :: TypedTerm (S.Set String))) [
     _Type_annotated>>: "at" ~>
       typeRefs @@ var "locals" @@ (Core.annotatedTypeBody $ var "at"),
     _Type_application>>: "app" ~> Sets.union
@@ -1115,7 +1115,7 @@ typeRefs = define "typeRefs" $
       "local">: localName @@ (unwrap _Name @@ var "n")] $
       Logic.ifElse (Sets.member (var "local") (var "locals"))
         (Sets.singleton (var "local"))
-        (Sets.empty :: TTerm (S.Set String)),
+        (Sets.empty :: TypedTerm (S.Set String)),
     _Type_wrap>>: "wt" ~> typeRefs @@ var "locals" @@ var "wt"]
 
 -- | Convert a Hydra Type into a Term that can be passed as an explicit type
@@ -1123,7 +1123,7 @@ typeRefs = define "typeRefs" $
 -- function types used as type args, and literal/unit, falls back to the
 -- `unit` variable, since these are rarely used as explicit type parameters.
 -- TypeForall binders are stripped; TypeAnnotated passes through.
-typeToTerm :: TTermDefinition (Type -> Term)
+typeToTerm :: TypedTermDefinition (Type -> Term)
 typeToTerm = define "typeToTerm" $
   doc "Convert a Hydra Type to a placeholder Term for use as an explicit Coq type argument. Coq-builtin type constructors are marked with a `Coq.` prefix so the encoder can emit them raw without going through sanitizeVar, which would clash with user-level lambda parameters of the same name (e.g. `list` -> `list_`)." $
   lambda "ty" $ cases _Type (var "ty") (Just $ Core.termVariable (wrap _Name (string "Coq.unit"))) [
