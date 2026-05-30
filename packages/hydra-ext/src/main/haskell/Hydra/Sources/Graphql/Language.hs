@@ -79,7 +79,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
@@ -88,7 +88,7 @@ module_ = Module {
             moduleDefinitions = [toDefinition graphqlLanguage, toDefinition graphqlReservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, Strip.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints and reserved words for GraphQL"}
-graphqlLanguage :: TTermDefinition Language
+graphqlLanguage :: TypedTermDefinition Language
 graphqlLanguage = define "graphqlLanguage" $
   doc "Language constraints for GraphQL" $ lets [
   "literalVariants">: Sets.fromList $ list [
@@ -137,7 +137,7 @@ graphqlLanguage = define "graphqlLanguage" $
       (var "typeVariants")
       (var "typePredicate"))
 
-graphqlReservedWords :: TTermDefinition (S.Set String)
+graphqlReservedWords :: TypedTermDefinition (S.Set String)
 graphqlReservedWords = define "graphqlReservedWords" $
   doc "A set of reserved words in GraphQL" $
   Sets.fromList $ list $ string <$> ["true", "false"]

@@ -129,7 +129,7 @@ The block has these sections:
    `Hydra.Haskell.Ast as H`)
 
 Not every module needs all of these — include only what you use.
-The `(++)` from `Phantoms` is for `TTerm String` concatenation; use `L.++` for regular list concatenation.
+The `(++)` from `Phantoms` is for `TypedTerm String` concatenation; use `L.++` for regular list concatenation.
 
 ### 4. Define module name and module
 
@@ -152,7 +152,7 @@ module_ = Module {
       -- ... more bindings
       ]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 ```
 
@@ -260,7 +260,7 @@ it uses GraphSON domain types which were defined using Hydra.
 ```haskell
 -- Hydra source module in Hydra.Sources.Pg.Graphson.Coder
 
-doubleValueToJson :: TTermDefinition (G.DoubleValue -> JM.Value)
+doubleValueToJson :: TypedTermDefinition (G.DoubleValue -> JM.Value)
 doubleValueToJson = define "doubleValueToJson" $
   doc "Convert a GraphSON DoubleValue to a JSON Value" $
   match G._DoubleValue Nothing [
@@ -358,10 +358,10 @@ Raw function application becomes `@@`:
 f @@ var "x" @@ var "y"
 ```
 
-When calling a `TTermDefinition` (a defined function in the same module), use `@@`:
+When calling a `TypedTermDefinition` (a defined function in the same module), use `@@`:
 
 ```haskell
--- If you have: myHelper :: TTermDefinition (String -> Int)
+-- If you have: myHelper :: TypedTermDefinition (String -> Int)
 -- Call it with:
 myHelper @@ var "str"
 
@@ -571,7 +571,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
 
    ```haskell
    -- If you need 'any' but Lists doesn't export it:
-   listAny :: TTermDefinition ((a -> Bool) -> [a] -> Bool)
+   listAny :: TypedTermDefinition ((a -> Bool) -> [a] -> Bool)
    listAny = define "listAny" $
      "pred" ~> "xs" ~>
        Logic.not $ Lists.null $ Lists.filter (var "pred") (var "xs")
@@ -595,31 +595,31 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
    inject _Definition _Definition_type @@ var "td"
    ```
 
-   This is because `inject` returns a `TTerm b`, not a curried `TTerm (a -> b)`.
+   This is because `inject` returns a `TypedTerm b`, not a curried `TypedTerm (a -> b)`.
    Other functions like `wrap` follow the same pattern.
 
-10. **`TTermDefinition` vs `TTerm`**: A `TTermDefinition a` value must be explicitly converted with `asTerm` when used in a context
-    expecting `TTerm a`. This comes up when passing module-level configuration bindings to DSL functions like
+10. **`TypedTermDefinition` vs `TypedTerm`**: A `TypedTermDefinition a` value must be explicitly converted with `asTerm` when used in a context
+    expecting `TypedTerm a`. This comes up when passing module-level configuration bindings to DSL functions like
     `Logic.and` or `Equality.equal`:
 
     ```haskell
-    -- If you have: useInlineTypeParams :: TTermDefinition Bool
+    -- If you have: useInlineTypeParams :: TypedTermDefinition Bool
     -- Wrong:
     Logic.and useInlineTypeParams (var "flag")
     -- Correct:
     Logic.and (asTerm useInlineTypeParams) (var "flag")
     ```
 
-    Note: `TTermDefinition` values work fine with `@@` (application) without conversion, since `@@` has an `AsTerm` constraint.
-    The issue only arises with DSL functions that expect `TTerm` directly.
+    Note: `TypedTermDefinition` values work fine with `@@` (application) without conversion, since `@@` has an `AsTerm` constraint.
+    The issue only arises with DSL functions that expect `TypedTerm` directly.
 
 11. **Wrapping Haskell-level DSL functions in lambdas for higher-order use**: DSL library functions like `Lists.concat`
-    are Haskell functions (`TTerm [[a]] -> TTerm [a]`), not DSL-level function values.
+    are Haskell functions (`TypedTerm [[a]] -> TypedTerm [a]`), not DSL-level function values.
     When passing them to higher-order DSL functions like `Eithers.map` or `Lists.map` (which expect an `AsTerm f (x ->
     y)`), wrap them in a lambda:
 
     ```haskell
-    -- Wrong (type error — Lists.concat is a Haskell function, not a TTerm):
+    -- Wrong (type error — Lists.concat is a Haskell function, not a TypedTerm):
     Eithers.map Lists.concat (var "eitherOfLists")
 
     -- Correct:
@@ -631,7 +631,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     copying all unchanged fields:
 
     ```haskell
-    setMyField :: TTermDefinition (MyRecord -> Int -> MyRecord)
+    setMyField :: TypedTermDefinition (MyRecord -> Int -> MyRecord)
     setMyField = define "setMyField" $
       "r" ~> "v" ~>
         record _MyRecord [
@@ -641,7 +641,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     ```
 
 13. **Where clauses become separate TTermDefinitions**: Haskell `where` clauses have no DSL equivalent.
-    Extract local helper functions into separate top-level `TTermDefinition` definitions and add them to the module's elements
+    Extract local helper functions into separate top-level `TypedTermDefinition` definitions and add them to the module's elements
     list.
 
 14. **Constructing syntax types without DSL helpers**: Not all generated types have convenience constructors in DSL
@@ -739,8 +739,8 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     importAliasesForModule = def "importAliasesForModule" $
       lambda "mod" $ record _Aliases [
         _Aliases_currentNamespace>>: Packaging.moduleName (var "mod"),
-        _Aliases_packages>>: (Maps.empty :: TTerm (M.Map ModuleName Java.PackageName)),
-        _Aliases_branchVars>>: (Sets.empty :: TTerm (S.Set Name)),
+        _Aliases_packages>>: (Maps.empty :: TypedTerm (M.Map ModuleName Java.PackageName)),
+        _Aliases_branchVars>>: (Sets.empty :: TypedTerm (S.Set Name)),
         -- ... all other fields
         ]
 
@@ -791,13 +791,13 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
 
     ```haskell
     -- Full definition for encodeTerm (calls encodeApplication)
-    encodeTerm :: TTermDefinition (...)
+    encodeTerm :: TypedTermDefinition (...)
     encodeTerm = def "encodeTerm" $
       lambda "env" $ lambda "term" $
         ... encodeApplication @@ var "env" @@ var "app" ...
 
     -- Stub for encodeApplication (not yet promoted)
-    encodeApplication :: TTermDefinition (...)
+    encodeApplication :: TypedTermDefinition (...)
     encodeApplication = def "encodeApplication" $
       lambda "env" $ lambda "app" $
         Monads.unexpected @@ string "encodeApplication stub" @@ string "encodeApplication"
@@ -809,12 +809,12 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     while any path that hits a stub will fail with a clear error message.
 
     **Extracting nested helpers**: Complex staging functions often have `where`-clause helpers that capture closed-over
-    variables. When promoting, extract these into separate top-level `TTermDefinition` definitions,
+    variables. When promoting, extract these into separate top-level `TypedTermDefinition` definitions,
     passing the captured variables as explicit parameters. Add the extracted helpers to the `definitions` list.
 
     **Fallback pattern**: When a function has complex nested case analysis (e.g.,
     `encodeApplication` has a `fallback` helper),
-    extract the fallback logic into a separate `TTermDefinition` with an explicit name like `encodeApplication_fallback`.
+    extract the fallback logic into a separate `TypedTermDefinition` with an explicit name like `encodeApplication_fallback`.
     This simplifies the main function and creates a clean separation of concerns.
 
 22. **DSL function availability pitfalls**: When translating Haskell code to DSL,
@@ -857,7 +857,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     "prims" <~ Graph.graphPrimitives (var "g") $
     ```
 
-    Note: `Graph.graphPrimitives`, `Graph.primitiveType`, etc. are Haskell-level DSL helpers (not `TTermDefinition`s),
+    Note: `Graph.graphPrimitives`, `Graph.primitiveType`, etc. are Haskell-level DSL helpers (not `TypedTermDefinition`s),
     so they take direct arguments without `@@`.
 
 25. **`Arity` module**: The `typeArity` function for computing function type arity is in
@@ -879,10 +879,10 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     `bindingsToStatements`, extract substantial `where`-clause helpers (e.g., `otherwiseBranch`, `visitBranch`,
     `toDeclInit`, `toDeclStatement`) as separate TTermDefinitions.
     Pass shared state (like `aliases`, `tcExtended`, `recursiveVars`) as explicit parameters.
-    This makes each TBinding manageable and independently testable.
+    This makes each TypedBinding manageable and independently testable.
 
 28. **`encodeTypeAsTerm` helper**: The staging code uses `EncodeCore.type_ typ` to encode a `Type` as a `Term` for
-    annotations. In the DSL, use the pre-defined helper `encodeTypeAsTerm @@ var "typ"` (defined as `TTerm $
+    annotations. In the DSL, use the pre-defined helper `encodeTypeAsTerm @@ var "typ"` (defined as `TypedTerm $
     TermVariable $ Name "hydra.encode.core.type"`). Alternatively, `Phantoms.encoderFor _Type @@ var "typ"` works too.
 
 29. **`Let` record fields**: The `Let` type has fields `_Let_bindings` and `_Let_body` (not `_Let_environment`).
@@ -893,7 +893,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     When the staging code uses `FieldType (Name "value") someType`,
     use `Core.fieldType (wrap _Name (string "value")) (var "someType")`, NOT `Core.field`.
 
-31. **`project` and `unwrap` require `@@`**: These DSL functions return a `TTerm (a -> b)`,
+31. **`project` and `unwrap` require `@@`**: These DSL functions return a `TypedTerm (a -> b)`,
     not a function at the Haskell level. You must apply them with `@@`: `project _Foo _Foo_bar @@ var "x"`,
     NOT `project _Foo _Foo_bar (var "x")`. Similarly, `unwrap _Name @@ var "x"`, NOT `unwrap _Name (var "x")`.
 
@@ -912,10 +912,10 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     `JavaUtilsSource.javaMethodInvocationToJavaPrimary`) that handles the wrapping,
     rather than constructing the Primary inline.
 
-35. **`Rewriting.deannotateType` is a TBinding**: Like other TTermDefinitions,
+35. **`Rewriting.deannotateType` is a TypedBinding**: Like other TTermDefinitions,
     it must be applied with `@@`: `Rewriting.deannotateType @@ var "t"`, NOT `Rewriting.deannotateType (var "t")`.
 
-36. **Naming collisions with kernel imports**: If your TBinding name (e.g.,
+36. **Naming collisions with kernel imports**: If your TypedBinding name (e.g.,
     `isSerializableType`) conflicts with a name imported from `Hydra.Kernel`, rename it (e.g.,
     `isSerializableJavaType`) to avoid ambiguity.
 
@@ -934,11 +934,11 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     right (list [])
 
     -- Fix: construct via Terms.list with a type annotation
-    right (TTerm (Terms.list []) :: TTerm [(String, String)])
+    right (TypedTerm (Terms.list []) :: TypedTerm [(String, String)])
     ```
 
     This works because `Terms.list` operates at the untyped term level and doesn't require the `AsTerm` constraint,
-    while the outer `TTerm` annotation tells GHC the phantom type.
+    while the outer `TypedTerm` annotation tells GHC the phantom type.
 
 39. **Mixed type/term module pitfall**: If a module contains any `isNativeType` element (a type definition),
     the code generator (`generateSourceFiles`)
@@ -951,7 +951,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     define the type in a Types module and the functions in a separate Terms module that depends on it.
 
 40. **`Prelude hiding ((++))` and Haskell-level string operations**: Most DSL source modules import `Prelude hiding
-    ((++))` because `Hydra.Dsl.Meta.Phantoms` exports its own `(++)` for `TTerm String` concatenation.
+    ((++))` because `Hydra.Dsl.Meta.Phantoms` exports its own `(++)` for `TypedTerm String` concatenation.
     This means you cannot use Haskell's native `(++)` for regular `String` concatenation in DSL helper functions.
     Use `(<>)` instead, which works on any `Semigroup` including `String`:
 
@@ -1095,7 +1095,7 @@ Not all promotions involve functions. Sometimes you need to promote a module of 
 > **Note: historical example.** This walkthrough captures an
 > intermediate stage in which `Hydra.Sources.Kernel.Lib.Names` was
 > emitted as a regular DSL module via `defineNs`/`defineName`
-> returning `TTermDefinition` values. The current
+> returning `TypedTermDefinition` values. The current
 > `Hydra.Sources.Kernel.Lib.Names` is simpler still — a Haskell-side
 > derived index that exposes plain `Name` values built from
 > `qname namespace localName` (no `module_ :: Module`, no
@@ -1121,15 +1121,15 @@ The promoted DSL version in `Hydra.Sources.Kernel.Lib.Names`:
 
 ```haskell
 -- ModuleName constants
-defineNs :: String -> String -> TTermDefinition ModuleName
+defineNs :: String -> String -> TypedTermDefinition ModuleName
 defineNs name nsStr = define name $
   wrap _ModuleName $ string nsStr
 
-lists :: TTermDefinition ModuleName
+lists :: TypedTermDefinition ModuleName
 lists = defineNs "lists" "hydra.lib.lists"
 
 -- Name constants
-defineName :: String -> String -> String -> TTermDefinition Name
+defineName :: String -> String -> String -> TypedTermDefinition Name
 defineName name nsStr localName = define name $
   wrap _Name $ string (nsStr <> "." <> localName)
 

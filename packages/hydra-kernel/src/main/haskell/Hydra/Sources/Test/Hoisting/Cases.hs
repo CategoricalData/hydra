@@ -47,7 +47,7 @@ module_ = Module {
   where
     definitions = [Phantoms.toDefinition allTests]
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for subterm hoisting and case statement hoisting" $
     supergroup "hoistCases" [
@@ -55,54 +55,54 @@ allTests = definitionInModule module_ "allTests" $
       hoistCaseStatementsGroup]
 
 -- Helper to build an empty annotation map
-emptyAnnMap :: TTerm (M.Map Name Term)
+emptyAnnMap :: TypedTerm (M.Map Name Term)
 emptyAnnMap = Phantoms.map M.empty
 
 
 -- | Universal hoistSubterms test case
-hoistCase :: String -> TTerm (([SubtermStep], Term) -> Bool) -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+hoistCase :: String -> TypedTerm (([SubtermStep], Term) -> Bool) -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 hoistCase cname predicate input output = universalCase cname
   (showTerm (Hoisting.hoistSubterms @@ predicate @@ Lexical.emptyGraph @@ input))
   (showTerm output)
 
 -- | Local universal version of hoistCaseStatementsCase
-hoistCaseStatementsCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+hoistCaseStatementsCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 hoistCaseStatementsCase cname input output = universalCase cname
   (showTerm (Hoisting.hoistCaseStatements @@ Lexical.emptyGraph @@ input))
   (showTerm output)
 
 -- | Predicate: hoist function applications
-hoistPredicateApplications :: TTerm (([SubtermStep], Term) -> Bool)
+hoistPredicateApplications :: TypedTerm (([SubtermStep], Term) -> Bool)
 hoistPredicateApplications = Phantoms.lambda "pt" $
   Phantoms.cases _Term (Pairs.second (Phantoms.var "pt")) (Just Phantoms.false) [
     _Term_application ~>: Phantoms.lambda "_" Phantoms.true]
 
 -- | Predicate: hoist case statements (elimination unions)
-hoistPredicateCaseStatements :: TTerm (([SubtermStep], Term) -> Bool)
+hoistPredicateCaseStatements :: TypedTerm (([SubtermStep], Term) -> Bool)
 hoistPredicateCaseStatements = Phantoms.lambda "pt" $
   Phantoms.cases _Term (Pairs.second (Phantoms.var "pt")) (Just Phantoms.false) [
     _Term_cases ~>: Phantoms.lambda "_" Phantoms.true]
 
 -- | Predicate: hoist list terms
-hoistPredicateLists :: TTerm (([SubtermStep], Term) -> Bool)
+hoistPredicateLists :: TypedTerm (([SubtermStep], Term) -> Bool)
 hoistPredicateLists = Phantoms.lambda "pt" $
   Phantoms.cases _Term (Pairs.second (Phantoms.var "pt")) (Just Phantoms.false) [
     _Term_list ~>: Phantoms.lambda "_" Phantoms.true]
 
 -- | Predicate: never hoist anything
-hoistPredicateNothing :: TTerm (([SubtermStep], Term) -> Bool)
+hoistPredicateNothing :: TypedTerm (([SubtermStep], Term) -> Bool)
 hoistPredicateNothing = Phantoms.lambda "_" Phantoms.false
 
 -- Helper for single-binding let
-letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term
+letExpr :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm Term
 letExpr varName value body = lets [(nm varName, value)] body
 
 -- Helper to build names
-nm :: String -> TTerm Name
+nm :: String -> TypedTerm Name
 nm s = Core.name $ Phantoms.string s
 
 -- | Show a term as a string using ShowCore.term
-showTerm :: TTerm Term -> TTerm String
+showTerm :: TypedTerm Term -> TypedTerm String
 showTerm t = ShowCore.term @@ t
 
 -- Helper for multi-binding let
@@ -112,7 +112,7 @@ showTerm t = ShowCore.term @@ t
 -- Top level means: the root, or reachable through annotations, lambda bodies,
 -- or ONE application LHS. Case statements at top level can become Python match
 -- statements; those not at top level need to be hoisted.
-hoistCaseStatementsGroup :: TTerm TestGroup
+hoistCaseStatementsGroup :: TypedTerm TestGroup
 hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
     -- ============================================================
     -- Test: Case statement at top level - should NOT be hoisted
@@ -978,7 +978,7 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
 -- For each let term, immediate subterms (binding values and body) are processed:
 -- matching subterms are collected and hoisted into a local let that wraps
 -- that immediate subterm.
-hoistSubtermsGroup :: TTerm TestGroup
+hoistSubtermsGroup :: TypedTerm TestGroup
 hoistSubtermsGroup = subgroup "hoistSubterms" [
     -- ============================================================
     -- Test: hoistNothing predicate (identity transformation)

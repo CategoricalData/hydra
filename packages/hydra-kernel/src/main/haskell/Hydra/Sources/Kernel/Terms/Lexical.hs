@@ -63,7 +63,7 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 ns :: ModuleName
 ns = ModuleName "hydra.lexical"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -103,7 +103,7 @@ module_ = Module {
 -- | Build a Graph from element bindings, environment, and primitives.
 -- Construction-time shadowing: any bound term or type whose name matches a primitive is removed,
 -- so primitives always take priority by construction.
-buildGraph :: TTermDefinition ([Binding] -> M.Map Name (Maybe Term) -> M.Map Name Primitive -> Graph)
+buildGraph :: TypedTermDefinition ([Binding] -> M.Map Name (Maybe Term) -> M.Map Name Primitive -> Graph)
 buildGraph = define "buildGraph" $
   doc "Build a Graph from element bindings, environment, and primitives" $
   "elements" ~> "environment" ~> "primitives" ~>
@@ -134,7 +134,7 @@ buildGraph = define "buildGraph" $
     Maps.empty
     Sets.empty
 
-chooseUniqueName :: TTermDefinition (S.Set Name -> Name -> Name)
+chooseUniqueName :: TypedTermDefinition (S.Set Name -> Name -> Name)
 chooseUniqueName = define "chooseUniqueName" $
   doc "Pick a name that does not collide with a reserved set, by appending a numeric suffix to the requested name when necessary" $
   "reserved" ~> "name" ~>
@@ -147,12 +147,12 @@ chooseUniqueName = define "chooseUniqueName" $
       (var "candidate")) $
   var "tryName" @@ (int32 1)
 
-dereferenceSchemaType :: TTermDefinition (Name -> M.Map Name TypeScheme -> Maybe TypeScheme)
+dereferenceSchemaType :: TypedTermDefinition (Name -> M.Map Name TypeScheme -> Maybe TypeScheme)
 dereferenceSchemaType = define "dereferenceSchemaType" $
   doc "Resolve a schema type through a chain of zero or more typedefs" $
   "name" ~> "types" ~>
   "forType" <~ ("t" ~> cases _Type (var "t")
-    (Just (just (Core.typeScheme (list ([] :: [TTerm Name])) (var "t") Phantoms.nothing))) [
+    (Just (just (Core.typeScheme (list ([] :: [TypedTerm Name])) (var "t") Phantoms.nothing))) [
     _Type_annotated>>: "at" ~> var "forType" @@ (Core.annotatedTypeBody (var "at")),
     _Type_forall>>: "ft" ~> Maybes.map
       ("ts" ~> Core.typeScheme
@@ -172,7 +172,7 @@ dereferenceSchemaType = define "dereferenceSchemaType" $
         (Core.typeSchemeConstraints (var "ts2")))
       (var "forType" @@ (Core.typeSchemeBody (var "ts"))))
 
-dereferenceVariable :: TTermDefinition (Graph -> Name -> Either Error Binding)
+dereferenceVariable :: TypedTermDefinition (Graph -> Name -> Either Error Binding)
 dereferenceVariable = define "dereferenceVariable" $
   doc "Look up a binding by name in a graph, returning Either an error or the binding" $
   "graph" ~> "name" ~>
@@ -181,7 +181,7 @@ dereferenceVariable = define "dereferenceVariable" $
     right_
     (lookupBinding @@ var "graph" @@ var "name")
 
-elementsToGraph :: TTermDefinition (Graph -> M.Map Name TypeScheme -> [Binding] -> Graph)
+elementsToGraph :: TypedTermDefinition (Graph -> M.Map Name TypeScheme -> [Binding] -> Graph)
 elementsToGraph = define "elementsToGraph" $
   doc "Create a graph from a parent graph, schema types, and list of element bindings" $
   "parent" ~> "schemaTypes" ~> "elements" ~>
@@ -189,31 +189,31 @@ elementsToGraph = define "elementsToGraph" $
   "g" <~ (buildGraph @@ var "elements" @@ Maps.empty @@ var "prims") $
   Graph.graphWithSchemaTypes (var "g") (var "schemaTypes")
 
-emptyGraph :: TTermDefinition Graph
+emptyGraph :: TypedTermDefinition Graph
 emptyGraph = define "emptyGraph" $
   doc "An empty graph; no elements, no primitives, no schema." $
   Graph.emptyGraph
 
-emptyInferenceContext :: TTermDefinition InferenceContext
+emptyInferenceContext :: TypedTermDefinition InferenceContext
 emptyInferenceContext = define "emptyInferenceContext" $
   doc "An empty inference context; fresh-variable counter at zero and empty trace." $
-  Typing.inferenceContext (MetaLiterals.int32 0) (list ([] :: [TTerm SubtermStep]))
+  Typing.inferenceContext (MetaLiterals.int32 0) (list ([] :: [TypedTerm SubtermStep]))
 
-fieldsOf :: TTermDefinition (Type -> [FieldType])
+fieldsOf :: TypedTermDefinition (Type -> [FieldType])
 fieldsOf = define "fieldsOf" $
   doc "Extract the fields of a record or union type" $
   "t" ~>
   "stripped" <~ Strip.deannotateType @@ var "t" $
   cases _Type (var "stripped")
-    (Just (list ([] :: [TTerm FieldType]))) [
+    (Just (list ([] :: [TypedTerm FieldType]))) [
     _Type_forall>>: "forallType" ~> fieldsOf @@ (Core.forallTypeBody (var "forallType")),
     _Type_record>>: "rt" ~> var "rt",
     _Type_union>>: "rt" ~> var "rt"]
 
-formatError :: TTerm (Error -> String)
+formatError :: TypedTerm (Error -> String)
 formatError = "e" ~> ShowError.error_ @@ var "e"
 
-getField :: TTermDefinition (M.Map Name Term -> Name -> (Term -> Either Error b) -> Either Error b)
+getField :: TypedTermDefinition (M.Map Name Term -> Name -> (Term -> Either Error b) -> Either Error b)
 getField = define "getField" $
   doc "Look up a field by name in a record's field map and decode its value, failing if the field is missing" $
   "m" ~> "fname" ~> "decode" ~>
@@ -222,7 +222,7 @@ getField = define "getField" $
     (var "decode")
     (Maps.lookup (var "fname") (var "m"))
 
-graphToBindings :: TTermDefinition (Graph -> [Binding])
+graphToBindings :: TypedTermDefinition (Graph -> [Binding])
 graphToBindings = define "graphToBindings" $
   doc "Reconstruct a list of Bindings from a Graph's boundTerms and boundTypes" $
   "g" ~>
@@ -233,16 +233,16 @@ graphToBindings = define "graphToBindings" $
       (Maps.lookup (var "name") (Graph.graphBoundTypes (var "g"))))
     (Maps.toList (Graph.graphBoundTerms (var "g")))
 
-graphWithPrimitives :: TTermDefinition ([Primitive] -> [Primitive] -> Graph)
+graphWithPrimitives :: TypedTermDefinition ([Primitive] -> [Primitive] -> Graph)
 graphWithPrimitives = define "graphWithPrimitives" $
   doc "Build a graph with primitives assembled from built-in and user-provided lists. User-provided primitives shadow built-in ones." $
   "builtIn" ~> "userProvided" ~>
   "toMap" <~ ("ps" ~> Maps.fromList (Lists.map ("p" ~>
     pair (Packaging.primitiveDefinitionName $ Graph.primitiveDefinition (var "p")) (var "p")) (var "ps"))) $
   "prims" <~ Maps.union (var "toMap" @@ var "userProvided") (var "toMap" @@ var "builtIn") $
-  buildGraph @@ list ([] :: [TTerm Binding]) @@ Maps.empty @@ var "prims"
+  buildGraph @@ list ([] :: [TypedTerm Binding]) @@ Maps.empty @@ var "prims"
 
-lookupBinding :: TTermDefinition (Graph -> Name -> Maybe Binding)
+lookupBinding :: TypedTermDefinition (Graph -> Name -> Maybe Binding)
 lookupBinding = define "lookupBinding" $
   doc "Look up a binding in a graph by name" $
   "graph" ~> "name" ~>
@@ -251,26 +251,26 @@ lookupBinding = define "lookupBinding" $
       (Maps.lookup (var "name") (Graph.graphBoundTypes (var "graph"))))
     (Maps.lookup (var "name") (Graph.graphBoundTerms (var "graph")))
 
-lookupPrimitive :: TTermDefinition (Graph -> Name -> Maybe Primitive)
+lookupPrimitive :: TypedTermDefinition (Graph -> Name -> Maybe Primitive)
 lookupPrimitive = define "lookupPrimitive" $
   doc "Look up a primitive function in a graph by name" $
   "graph" ~> "name" ~>
   Maps.lookup (var "name") (Graph.graphPrimitives (var "graph"))
 
-lookupTerm :: TTermDefinition (Graph -> Name -> Maybe Term)
+lookupTerm :: TypedTermDefinition (Graph -> Name -> Maybe Term)
 lookupTerm = define "lookupTerm" $
   doc "Look up a term by name in a graph" $
   "graph" ~> "name" ~>
   Maps.lookup (var "name") (Graph.graphBoundTerms (var "graph"))
 
-matchEnum :: TTermDefinition (Graph -> Name -> [(Name, b)] -> Term -> Either Error b)
+matchEnum :: TypedTermDefinition (Graph -> Name -> [(Name, b)] -> Term -> Either Error b)
 matchEnum = define "matchEnum" $
   doc "Match a term against an enum type, dispatching on the variant name to a value from the supplied list" $
   "graph" ~> "tname" ~> "pairs" ~>
   matchUnion @@ var "graph" @@ var "tname" @@ (Lists.map ("pair" ~>
     matchUnitField @@ (Pairs.first (var "pair")) @@ (Pairs.second (var "pair"))) (var "pairs"))
 
-matchRecord :: TTermDefinition (Graph -> (M.Map Name Term -> Either Error b) -> Term -> Either Error b)
+matchRecord :: TypedTermDefinition (Graph -> (M.Map Name Term -> Either Error b) -> Term -> Either Error b)
 matchRecord = define "matchRecord" $
   doc "Match a term against a record type and decode its fields, failing if the term is not a record" $
   "graph" ~> "decode" ~> "term" ~>
@@ -282,7 +282,7 @@ matchRecord = define "matchRecord" $
         ("field" ~> pair (Core.fieldName (var "field")) (Core.fieldTerm (var "field")))
         (Core.recordFields (var "record"))))]
 
-matchUnion :: TTermDefinition (Graph -> Name -> [(Name, Term -> Either Error b)] -> Term -> Either Error b)
+matchUnion :: TypedTermDefinition (Graph -> Name -> [(Name, Term -> Either Error b)] -> Term -> Either Error b)
 matchUnion = define "matchUnion" $
   doc "Match a term against a union type, dispatching on the injected variant to the appropriate decoder. Variable terms are dereferenced through the graph before matching." $
   "graph" ~> "tname" ~> "pairs" ~> "term" ~>
@@ -305,12 +305,12 @@ matchUnion = define "matchUnion" $
         (var "exp")
         (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (Strings.cat2 (string "injection for type ") (Core.unName (var "tname"))) (ShowCore.term @@ var "term")))]
 
-matchUnitField :: TTermDefinition (Name -> y -> (Name, x -> Either Error y))
+matchUnitField :: TypedTermDefinition (Name -> y -> (Name, x -> Either Error y))
 matchUnitField = define "matchUnitField" $
   doc "Build a (fieldName, decoder) pair for a unit-valued union variant: the decoder ignores its argument and returns a fixed value" $
   "fname" ~> "x" ~> pair (var "fname") ("ignored" ~> right (var "x"))
 
-requireBinding :: TTermDefinition (Graph -> Name -> Either Error Binding)
+requireBinding :: TypedTermDefinition (Graph -> Name -> Either Error Binding)
 requireBinding = define "requireBinding" $
   doc "Look up a binding in a graph by name, failing with a list of available names if it is not found" $
   "graph" ~> "name" ~>
@@ -329,7 +329,7 @@ requireBinding = define "requireBinding" $
     (reify right)
     (lookupBinding @@ var "graph" @@ var "name")
 
-requirePrimitive :: TTermDefinition (Graph -> Name -> Either Error Primitive)
+requirePrimitive :: TypedTermDefinition (Graph -> Name -> Either Error Primitive)
 requirePrimitive = define "requirePrimitive" $
   doc "Look up a primitive in a graph by name, failing if it is not registered" $
   "graph" ~> "name" ~>
@@ -338,7 +338,7 @@ requirePrimitive = define "requirePrimitive" $
     (reify right)
     (lookupPrimitive @@ var "graph" @@ var "name")
 
-requirePrimitiveType :: TTermDefinition (Graph -> Name -> Either Error TypeScheme)
+requirePrimitiveType :: TypedTermDefinition (Graph -> Name -> Either Error TypeScheme)
 requirePrimitiveType = define "requirePrimitiveType" $
   doc "Look up a primitive's type scheme in a graph by name, failing if the primitive is not registered" $
   "tx" ~> "name" ~>
@@ -349,7 +349,7 @@ requirePrimitiveType = define "requirePrimitiveType" $
     (left (Error.errorResolution $ Error.resolutionErrorNoSuchPrimitive $ Error.noSuchPrimitiveError (var "name")))
     ("ts" ~> right $ var "ts")
 
-requireTerm :: TTermDefinition (Graph -> Name -> Either Error Term)
+requireTerm :: TypedTermDefinition (Graph -> Name -> Either Error Term)
 requireTerm = define "requireTerm" $
   doc "Resolve a name to a term in the graph, following variable references, and fail if the name is not bound" $
   "graph" ~> "name" ~>
@@ -358,7 +358,7 @@ requireTerm = define "requireTerm" $
     (reify right)
     (resolveTerm @@ var "graph" @@ var "name")
 
-resolveTerm :: TTermDefinition (Graph -> Name -> Maybe Term)
+resolveTerm :: TypedTermDefinition (Graph -> Name -> Maybe Term)
 resolveTerm = define "resolveTerm" $
   doc "TODO: distinguish between lambda-bound and let-bound variables" $
   "graph" ~> "name" ~>
@@ -372,7 +372,7 @@ resolveTerm = define "resolveTerm" $
     (var "recurse")
     (lookupTerm @@ var "graph" @@ var "name")
 
-stripAndDereferenceTerm :: TTermDefinition (Graph -> Term -> Either Error Term)
+stripAndDereferenceTerm :: TypedTermDefinition (Graph -> Term -> Either Error Term)
 stripAndDereferenceTerm = define "stripAndDereferenceTerm" $
   doc "Strip annotations and type lambdas/applications from a term, then follow variable references through the graph until a non-variable term is reached" $
   "graph" ~> "term" ~>
@@ -383,7 +383,7 @@ stripAndDereferenceTerm = define "stripAndDereferenceTerm" $
       Eithers.bind (requireTerm @@ var "graph" @@ var "v") (
         "t" ~> stripAndDereferenceTerm @@ var "graph" @@ var "t")]
 
-stripAndDereferenceTermEither :: TTermDefinition (Graph -> Term -> Either Error Term)
+stripAndDereferenceTermEither :: TypedTermDefinition (Graph -> Term -> Either Error Term)
 stripAndDereferenceTermEither = define "stripAndDereferenceTermEither" $
   doc "Strip annotations and dereference variables, returning Either an error or the resolved term" $
   "graph" ~> "term" ~>

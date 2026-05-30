@@ -1,7 +1,7 @@
-"""TTerm references to kernel functions used by the Python DSL sources.
+"""TypedTerm references to kernel functions used by the Python DSL sources.
 
 These mirror the Haskell pattern where Names.qualifyName, Formatting.convertCase,
-etc. are TTermDefinitions/TermVariables. In Python we expose them as TTerm-valued
+etc. are TTermDefinitions/TermVariables. In Python we expose them as TypedTerm-valued
 constants (var(...)) for use inside source-DSL code.
 
 Keep this list minimal — only add what's actually used.

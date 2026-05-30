@@ -68,10 +68,10 @@ module_ = Module {
      toDefinition subtermStep,
      toDefinition termToSubtermGraph]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-subtermStep :: TTermDefinition (SubtermStep -> Maybe String)
+subtermStep :: TypedTermDefinition (SubtermStep -> Maybe String)
 subtermStep = define "subtermStep" $
   doc "Convert a subterm step to a string representation" $
   "step" ~>
@@ -101,7 +101,7 @@ subtermStep = define "subtermStep" $
     _SubtermStep_injectionTerm>>: constant nothing,
     _SubtermStep_wrappedTerm>>: constant nothing]
 
-termToSubtermGraph :: TTermDefinition (M.Map ModuleName String -> Term -> SubtermGraph)
+termToSubtermGraph :: TypedTermDefinition (M.Map ModuleName String -> Term -> SubtermGraph)
 termToSubtermGraph = define "termToSubtermGraph" $
   doc "Build a subterm graph from a term" $
   lambda "namespaces" $ lambda "term" $ lets [
@@ -138,7 +138,7 @@ termToSubtermGraph = define "termToSubtermGraph" $
             $ pair (pair (var "newNodes") (var "newVisited")) (var "newIds"),
           "nodesVisitedIds1">: Lists.foldl
             (var "addBindingName")
-            (pair (pair (list ([] :: [TTerm SubtermNode])) (var "visited")) (var "ids"))
+            (pair (pair (list ([] :: [TypedTerm SubtermNode])) (var "visited")) (var "ids"))
             (var "bindingNames"),
           "nodes1">: Pairs.first $ Pairs.first $ var "nodesVisitedIds1",
           "visited1">: Pairs.second $ Pairs.first $ var "nodesVisitedIds1",
@@ -148,7 +148,7 @@ termToSubtermGraph = define "termToSubtermGraph" $
             "root">: Pairs.first $ var "nodeBinding",
             "binding">: Pairs.second $ var "nodeBinding",
             "term1">: Core.bindingTerm $ var "binding"]
-            $ var "helper" @@ var "ids1" @@ just (var "root") @@ list ([] :: [TTerm SubtermStep]) @@ var "currentState" @@
+            $ var "helper" @@ var "ids1" @@ just (var "root") @@ list ([] :: [TypedTerm SubtermStep]) @@ var "currentState" @@
               pair (var "dontCareStep") (var "term1"),
           "nodeBindingPairs">: Lists.zip (var "nodes1") (var "bindings"),
           "stateAfterBindings">: Lists.foldl
@@ -169,8 +169,8 @@ termToSubtermGraph = define "termToSubtermGraph" $
                 (Maps.lookup (var "name") (var "ids")))
             (var "mroot")]
       @@ var "currentTerm",
-    "initialState">: pair (pair (list ([] :: [TTerm SubtermNode])) (list ([] :: [TTerm SubtermEdge]))) Sets.empty,
-    "result">: var "helper" @@ Maps.empty @@ nothing @@ list ([] :: [TTerm SubtermStep]) @@ var "initialState" @@
+    "initialState">: pair (pair (list ([] :: [TypedTerm SubtermNode])) (list ([] :: [TypedTerm SubtermEdge]))) Sets.empty,
+    "result">: var "helper" @@ Maps.empty @@ nothing @@ list ([] :: [TypedTerm SubtermStep]) @@ var "initialState" @@
       pair (var "dontCareStep") (var "term"),
     "finalNodesEdges">: Pairs.first $ var "result",
     "finalNodes">: Pairs.first $ var "finalNodesEdges",

@@ -26,8 +26,8 @@ import qualified Hydra.Sources.Kernel.Terms.Reduction as Reduction
 import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
 
 
--- Local alias for polymorphic application (Phantoms.@@ applies TBindings; Terms.@@ only works on TTerm Term)
-(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
+-- Local alias for polymorphic application (Phantoms.@@ applies TypedBindings; Terms.@@ only works on TypedTerm Term)
+(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TypedTerm b
 (#) = (Phantoms.@@)
 infixl 1 #
 
@@ -48,7 +48,7 @@ module_ = Module {
   where
     definitions = [Phantoms.toDefinition allTests]
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for term reduction mechanics" $
     supergroup "reduction" [
@@ -66,7 +66,7 @@ allTests = definitionInModule module_ "allTests" $
 -- | Test cases for alpha conversion (variable renaming in lambda calculus)
 -- Property: Variables are correctly substituted at all levels.
 -- Property: Lambdas binding the old variable are opaque to alpha conversion (prevent variable capture).
-alphaConversionTests :: TTerm TestGroup
+alphaConversionTests :: TypedTerm TestGroup
 alphaConversionTests = subgroup "alpha conversion" [
   -- Variables are substituted at the top level
   alphaCase "variable at top level"
@@ -108,7 +108,7 @@ alphaConversionTests = subgroup "alpha conversion" [
     (var "y" @@ var "y")]
 
 -- | Test cases for beta reduction (lambda application)
-betaReductionTests :: TTerm TestGroup
+betaReductionTests :: TypedTerm TestGroup
 betaReductionTests = subgroup "beta reduction" [
   test "identity function applied to literal"
     (lambda "x" (var "x") @@ int32 42)
@@ -123,7 +123,7 @@ betaReductionTests = subgroup "beta reduction" [
     test name input output = evalCase name input output
 
 -- | Universal eta expansion test case: applies etaExpandTypedTerm with testContext and testGraph
-etaCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+etaCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 etaCase cname input output = universalCase cname
   (Eithers.either_
     (Phantoms.lambda "_" $ Phantoms.string "eta expansion failed")
@@ -133,7 +133,7 @@ etaCase cname input output = universalCase cname
 
 -- | Test cases for eta expansion of terms
 -- Eta expansion adds explicit lambda wrappers to partially applied functions
-etaExpandTermGroup :: TTerm TestGroup
+etaExpandTermGroup :: TypedTerm TestGroup
 etaExpandTermGroup = subgroup "etaExpandTerm" [
     -- Terms that don't expand (already saturated or not functions)
     etaCase "integer literal unchanged"
@@ -199,11 +199,11 @@ etaExpandTermGroup = subgroup "etaExpandTerm" [
       (list [lambda "x" (list [string "foo"]), lambda "v1" (apply (apply (primitive _strings_splitOn) (string "bar")) (var "v1"))])]
 
 -- Helper for single-binding let
-letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term
+letExpr :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm Term
 letExpr varName value body = lets [(nm varName, value)] body
 
 -- | Test cases for list reduction
-listReductionTests :: TTerm TestGroup
+listReductionTests :: TypedTerm TestGroup
 listReductionTests = subgroup "list reduction" [
   test "empty list is a value"
     (list [])
@@ -220,7 +220,7 @@ listReductionTests = subgroup "list reduction" [
 -- | Test cases for literal values
 -- Property: Literal terms are fully reduced; evaluating a literal returns the same literal.
 -- Property: Literal terms cannot be applied; applying a literal to another term leaves the application unchanged.
-literalValueTests :: TTerm TestGroup
+literalValueTests :: TypedTerm TestGroup
 literalValueTests = subgroup "literals as values" [
   -- Various literal types reduce to themselves
   test "integer literal is a value"
@@ -264,7 +264,7 @@ literalValueTests = subgroup "literals as values" [
 -- Property: Simple applications of a unary primitive function succeed.
 -- Property: Simple applications of a binary primitive function succeed.
 -- Property: Extra arguments to a primitive function are tolerated (primitive is applied, extra args remain).
-monomorphicPrimitiveTests :: TTerm TestGroup
+monomorphicPrimitiveTests :: TypedTerm TestGroup
 monomorphicPrimitiveTests = subgroup "monomorphic primitives" [
   -- Unary string functions
   test "toUpper on lowercase"
@@ -322,11 +322,11 @@ monomorphicPrimitiveTests = subgroup "monomorphic primitives" [
     test name input output = evalCase name input output
 
 -- Helper to build names
-nm :: String -> TTerm Name
+nm :: String -> TypedTerm Name
 nm s = Core.name $ Phantoms.string s
 
 -- | Test cases for nullary primitives (constants)
-nullaryPrimitiveTests :: TTerm TestGroup
+nullaryPrimitiveTests :: TypedTerm TestGroup
 nullaryPrimitiveTests = subgroup "nullary primitives" [
   test "empty set has size zero"
     (primitive _sets_size @@ primitive _sets_empty)
@@ -335,7 +335,7 @@ nullaryPrimitiveTests = subgroup "nullary primitives" [
     test name input output = evalCase name input output
 
 -- | Test cases for optional/maybe reduction
-optionalReductionTests :: TTerm TestGroup
+optionalReductionTests :: TypedTerm TestGroup
 optionalReductionTests = subgroup "optional reduction" [
   test "nothing is a value"
     (optional nothing)
@@ -351,7 +351,7 @@ optionalReductionTests = subgroup "optional reduction" [
 
 -- | Test cases for polymorphic primitive application
 -- Property: Polymorphic primitives work correctly with different element types.
-polymorphicPrimitiveTests :: TTerm TestGroup
+polymorphicPrimitiveTests :: TypedTerm TestGroup
 polymorphicPrimitiveTests = subgroup "polymorphic primitives" [
   -- List length (polymorphic in element type)
   test "length of integer list"
@@ -395,13 +395,13 @@ polymorphicPrimitiveTests = subgroup "polymorphic primitives" [
     test name input output = evalCase name input output
 
 -- | Show a term as a string using ShowCore.term
-showTerm :: TTerm Term -> TTerm String
+showTerm :: TypedTerm Term -> TypedTerm String
 showTerm t = ShowCore.term # t
 
 -- | Test cases for type-level beta reduction
 -- Property: Type applications of forall types are reduced by substitution.
 -- Property: Non-application types are unchanged by reduction.
-typeReductionTests :: TTerm TestGroup
+typeReductionTests :: TypedTerm TestGroup
 typeReductionTests = subgroup "type reduction" [
   -- Non-application types are unchanged
   typeRedCase "unit type unchanged"

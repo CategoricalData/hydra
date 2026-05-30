@@ -150,7 +150,7 @@ All kernel type modules use the direct Types DSL to construct `Type` instances.
 import Hydra.Dsl.Meta.Phantoms
 
 -- Type signature enforces this is a function!
-myFunction :: TTerm (a -> Int)
+myFunction :: TypedTerm (a -> Int)
 myFunction = lambda "x" (int32 42)
 ```
 
@@ -169,7 +169,7 @@ This isn't needed for types because we don't have "types of different types".
 import Hydra.Dsl.Meta.Terms
 
 -- Creates a Term that represents a lambda
-myFunction :: TTerm Term
+myFunction :: TypedTerm Term
 myFunction = lambda "x" (int32 42)
 ```
 
@@ -226,16 +226,16 @@ These are produced by the `hydra.dsls` module from type definitions.
 ```haskell
 import qualified Hydra.Dsl.Core as Core
 
--- Record constructor (all fields as TTerm arguments)
-myAnnotatedTerm :: TTerm AnnotatedTerm
+-- Record constructor (all fields as TypedTerm arguments)
+myAnnotatedTerm :: TypedTerm AnnotatedTerm
 myAnnotatedTerm = Core.annotatedTerm myBody myAnnotation
 
 -- Field accessor
-getBody :: TTerm AnnotatedTerm -> TTerm Term
+getBody :: TypedTerm AnnotatedTerm -> TypedTerm Term
 getBody = Core.annotatedTermBody
 
 -- Field updater (original, newValue -> updated)
-withNewBody :: TTerm AnnotatedTerm -> TTerm Term -> TTerm AnnotatedTerm
+withNewBody :: TypedTerm AnnotatedTerm -> TypedTerm Term -> TypedTerm AnnotatedTerm
 withNewBody = Core.annotatedTermWithBody
 ```
 
@@ -463,14 +463,14 @@ inject _Result _Result_success (int32 42)
 
 The phantom-typed DSL uses Haskell's type system to verify Hydra programs at compile time.
 
-### Key concept: TTerm
+### Key concept: TypedTerm
 
-The phantom-typed DSL wraps terms in `TTerm a` where `a` is a phantom type parameter representing the Haskell type:
+The phantom-typed DSL wraps terms in `TypedTerm a` where `a` is a phantom type parameter representing the Haskell type:
 
 ```haskell
-TTerm Int        -- A Hydra term representing an Int
-TTerm String     -- A Hydra term representing a String
-TTerm (Int -> String)  -- A Hydra term representing a function
+TypedTerm Int        -- A Hydra term representing an Int
+TypedTerm String     -- A Hydra term representing a String
+TypedTerm (Int -> String)  -- A Hydra term representing a function
 ```
 
 ### Imports
@@ -483,11 +483,11 @@ import Hydra.Dsl.Meta.Phantoms
 
 ```haskell
 -- Haskell knows this is a function Int -> Int
-addOne :: TTerm (Int -> Int)
+addOne :: TypedTerm (Int -> Int)
 addOne = "x" ~> Math.add (int32 1) (var "x")
 
 -- Type error! This wouldn't compile:
--- wrongType :: TTerm String
+-- wrongType :: TypedTerm String
 -- wrongType = "x" ~> var "x"  -- ERROR: lambda produces a function type
 ```
 
@@ -566,8 +566,8 @@ The meta DSLs are used for specifying programs that build terms or types.
 ### Key concept: Programs that construct Hydra objects
 
 The meta DSLs let you write programs whose output is Hydra terms or types.
-A `TTerm Term` is a Hydra term that, when evaluated, produces another Hydra `Term`.
-Similarly, `TTerm Type` produces a Hydra `Type`.
+A `TypedTerm Term` is a Hydra term that, when evaluated, produces another Hydra `Term`.
+Similarly, `TypedTerm Type` produces a Hydra `Type`.
 
 The key difference from the phantom-typed DSL is that meta DSLs are for **building Hydra structures programmatically** -
 when you need to generate terms or types based on runtime data, loop over collections, or create Hydra data structures
@@ -746,23 +746,23 @@ The entire Hydra kernel is defined using the meta DSLs.
 
 | Operator | DSL | Type | Description | Example |
 |----------|-----|------|-------------|---------|
-| `~>` | Phantom | `String -> TTerm x -> TTerm (a -> b)` | Lambda parameter | `"x" ~> var "x"` |
-| `@@` | Phantom/Meta | `TTerm (a -> b) -> TTerm a -> TTerm b` | Function application | `f @@ arg` |
-| `<.>` | Phantom | `TTerm (b -> c) -> TTerm (a -> b) -> TTerm (a -> c)` | Function composition | `f <.> g` |
+| `~>` | Phantom | `String -> TypedTerm x -> TypedTerm (a -> b)` | Lambda parameter | `"x" ~> var "x"` |
+| `@@` | Phantom/Meta | `TypedTerm (a -> b) -> TypedTerm a -> TypedTerm b` | Function application | `f @@ arg` |
+| `<.>` | Phantom | `TypedTerm (b -> c) -> TypedTerm (a -> b) -> TypedTerm (a -> c)` | Function composition | `f <.> g` |
 
 ### Let bindings
 
 | Operator | DSL | Type | Description | Example |
 |----------|-----|------|-------------|---------|
-| `<~` | Phantom | `String -> TTerm a -> TTerm b -> TTerm b` | Pure let binding | `"x" <~ expr $ body` |
-| `<<~` | Phantom | `String -> TTerm (Flow s a) -> TTerm (Flow s b) -> TTerm (Flow s b)` | Flow let binding | `"x" <<~ flowExpr $ body` |
+| `<~` | Phantom | `String -> TypedTerm a -> TypedTerm b -> TypedTerm b` | Pure let binding | `"x" <~ expr $ body` |
+| `<<~` | Phantom | `String -> TypedTerm (Flow s a) -> TypedTerm (Flow s b) -> TypedTerm (Flow s b)` | Flow let binding | `"x" <<~ flowExpr $ body` |
 
 ### Record construction
 
 | Operator | DSL | Type | Description | Example |
 |----------|-----|------|-------------|---------|
-| `>:` | All | `String -> a -> (TTerm Name, a)` | Field definition | `"name">: value` |
-| `>>:` | Base | `Name -> a -> (TTerm Name, a)` | Record field (tuple) | `fname>>: value` |
+| `>:` | All | `String -> a -> (TypedTerm Name, a)` | Field definition | `"name">: value` |
+| `>>:` | Base | `Name -> a -> (TypedTerm Name, a)` | Record field (tuple) | `fname>>: value` |
 
 ### Pattern matching
 
@@ -863,8 +863,8 @@ zaphod = record (Name "Person") [
   "age">: int32 42,
   "email">: string "zaphod@heartofgold.com"]
 
--- Phantom-typed DSL (produces a typed TTerm)
-zaphod :: TTerm Person
+-- Phantom-typed DSL (produces a typed TypedTerm)
+zaphod :: TypedTerm Person
 zaphod = record _Person [
   _Person_name>>: string "Zaphod",
   _Person_age>>: int32 42,
@@ -873,7 +873,7 @@ zaphod = record _Person [
 
 **Note the differences**:
 - Direct DSLs: Type signature is `Term`, uses `Name "Person"` and string field names with `>:`
-- Phantom DSL: Type signature is `TTerm Person`, uses `_Person` and generated field constants with `>>:`
+- Phantom DSL: Type signature is `TypedTerm Person`, uses `_Person` and generated field constants with `>>:`
 
 ### Pattern 6: List operations
 
@@ -913,7 +913,7 @@ attaches a human-readable description to a term or type binding.
 ```haskell
 import Hydra.Dsl.Annotations (doc)
 
-myFunction :: TTermDefinition (Int -> Int)
+myFunction :: TypedTermDefinition (Int -> Int)
 myFunction = define "myFunction" $
   doc "Add one to an integer" $
   "x" ~> Math.add (var "x") (int32 1)
@@ -1211,14 +1211,14 @@ Logic.not (boolean True)
 **Problem**: Without a type signature, Haskell doesn't know which phantom type to use
 
 ```haskell
--- Error: What type is 'a' in TTerm a?
+-- Error: What type is 'a' in TypedTerm a?
 myFunc = "x" ~> var "x"
 ```
 
 **Solution**: Add a type signature to activate compile-time checking
 
 ```haskell
-myFunc :: TTerm (a -> a)
+myFunc :: TypedTerm (a -> a)
 myFunc = "x" ~> var "x"
 ```
 
@@ -1230,15 +1230,15 @@ It activates Haskell's compile-time type checking so your IDE can help you write
 **Problem**: Type mismatch in phantom-typed DSL
 
 ```haskell
--- Error: int32 returns TTerm Int, but we claimed TTerm String
-myFunc :: TTerm String
+-- Error: int32 returns TypedTerm Int, but we claimed TypedTerm String
+myFunc :: TypedTerm String
 myFunc = int32 42
 ```
 
 **Solution**: Fix the type signature or the implementation
 
 ```haskell
-myFunc :: TTerm Int
+myFunc :: TypedTerm Int
 myFunc = int32 42
 ```
 
@@ -1259,12 +1259,12 @@ import Hydra.Dsl.Meta.Phantoms
 myFunc = lambda "x" (var "x")
 ```
 
-#### Error: "No instance for (Num (TTerm a))"
+#### Error: "No instance for (Num (TypedTerm a))"
 
-**Problem**: Trying to use Haskell's numeric operators on TTerm
+**Problem**: Trying to use Haskell's numeric operators on TypedTerm
 
 ```haskell
--- Error: Can't use + directly on TTerm
+-- Error: Can't use + directly on TypedTerm
 result = int32 2 + int32 3
 ```
 
@@ -1281,13 +1281,13 @@ result = Math.add (int32 2) (int32 3)
 **Problem**: The `>>:` operator is defined in two places with different types:
 
 - `Hydra.Dsl.Meta.Phantoms`: `Name -> t -> Field` (for `cases`/`match` branches)
-- `Hydra.Dsl.Meta.Base`: `Name -> a -> (TTerm Name, a)` (for record field definitions)
+- `Hydra.Dsl.Meta.Base`: `Name -> a -> (TypedTerm Name, a)` (for record field definitions)
 
 If `Phantoms` is imported qualified (as in test source files), the unqualified `>>:` resolves to the
 `Base` version, which produces a tuple. Passing these tuples to `Phantoms.cases` causes a type error:
 
 ```haskell
--- Error: Couldn't match expected type 'Field' with actual type '(TTerm Name, TTerm (a -> b))'
+-- Error: Couldn't match expected type 'Field' with actual type '(TypedTerm Name, TypedTerm (a -> b))'
 Phantoms.cases _Term (Phantoms.var "t") (Just defaultVal) [
   _Term_literal >>: Phantoms.lambda "lit" $ ...]   -- >>: is Base.>>:, returns a tuple
 ```
@@ -1424,7 +1424,7 @@ For computations that can fail:
 import Hydra.Dsl.Meta.Lib.Logic as Logic
 import Hydra.Dsl.Meta.Lib.Eithers as Eithers
 
-safeDivide :: TTerm (Int -> Int -> Either String Int)
+safeDivide :: TypedTerm (Int -> Int -> Either String Int)
 safeDivide = "x" ~> "y" ~>
   Maybes.maybe
     (left (string "Division by zero"))
@@ -1448,7 +1448,7 @@ a common source of errors.
 ### DSL helpers (direct Haskell application)
 
 Functions from `Hydra.Dsl.Meta.Lib.*` and `Hydra.Dsl.Meta.Phantoms` are Haskell functions
-on `TTerm` values. They take arguments directly via Haskell function application -- no `@@`
+on `TypedTerm` values. They take arguments directly via Haskell function application -- no `@@`
 needed. This includes all primitive function wrappers (`Lists.concat`, `Strings.cat`,
 `Maybes.maybe`, `Logic.ifElse`, etc.) and DSL combinators (`list`, `lambda`, `cases`,
 `project`, `lets`, etc.).
@@ -1460,7 +1460,7 @@ Lists.concat (list [var "xs", var "ys"])
 
 ### Element definitions (apply with `@@`)
 
-`TTermDefinition`s created with `define` are applied using the `@@` operator:
+`TypedTermDefinition`s created with `define` are applied using the `@@` operator:
 
 ```haskell
 myAddDef @@ int32 1 @@ int32 2

@@ -66,10 +66,10 @@ module_ = Module {
    definitions = [
      toDefinition graph]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-graph :: TTermDefinition ([Binding] -> String)
+graph :: TypedTermDefinition ([Binding] -> String)
 graph = define "graph" $
   doc "Show a list of bindings as a string" $
   lambda "elements" $ lets [

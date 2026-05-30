@@ -48,24 +48,24 @@ module_ = Module {
   where
     definitions = [Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 
 -- Helper for single-binding let
-letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term
+letExpr :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm Term
 letExpr varName value body = lets [(nm varName, value)] body
 
 -- Helper to build a set of Names
-nameSet :: [String] -> TTerm (S.Set Name)
+nameSet :: [String] -> TypedTerm (S.Set Name)
 nameSet names = Phantoms.set $ (nm <$> names)
 
 -- Helper to build names
-nm :: String -> TTerm Name
+nm :: String -> TypedTerm Name
 nm s = Core.name $ Phantoms.string s
 
 -- | Show a set of names as a sorted, comma-separated string: "{name1, name2, ...}"
-showNameSet :: TTerm (S.Set Name) -> TTerm String
+showNameSet :: TypedTerm (S.Set Name) -> TypedTerm String
 showNameSet s = Strings.cat $ plist [
   pstring "{",
   Strings.intercalate (pstring ", ") (Lists.map (plambda "n" (Core.unName (pvar "n"))) (Sets.toList s)),
@@ -74,17 +74,17 @@ showNameSet s = Strings.cat $ plist [
     plist = Phantoms.list; pstring = Phantoms.string; plambda = Phantoms.lambda; pvar = Phantoms.var
 
 -- | Show a term as a string using ShowCore.term
-showTerm :: TTerm Term -> TTerm String
+showTerm :: TypedTerm Term -> TypedTerm String
 showTerm t = ShowCore.term @@ t
 
 -- | Helper for Term -> Term kernel function test cases
-termCase :: String -> TTermDefinition (Term -> Term) -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+termCase :: String -> TypedTermDefinition (Term -> Term) -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 termCase cname func input output = universalCase cname (showTerm (func @@ input)) (showTerm output)
 
 -- Helper for multi-binding let
 
 -- | Test cases for free variables computation
-freeVariablesGroup :: TTerm TestGroup
+freeVariablesGroup :: TypedTerm TestGroup
 freeVariablesGroup = subgroup "freeVariables" [
     freeVarsCase "string literal has no free variables"
       (string "foo")
@@ -114,14 +114,14 @@ freeVariablesGroup = subgroup "freeVariables" [
         apply (lambda "y" (var "y")) (var "y")])
       (nameSet ["x", "y"])]
 
-freeVarsCase :: String -> TTerm Term -> TTerm (S.Set Name) -> TTerm TestCaseWithMetadata
+freeVarsCase :: String -> TypedTerm Term -> TypedTerm (S.Set Name) -> TypedTerm TestCaseWithMetadata
 freeVarsCase cname input expected = universalCase cname
   (showNameSet (Variables.freeVariablesInTerm @@ input))
   (showNameSet expected)
 
 -- | Test cases for normalizing type variables in terms
 -- The function normalizeTypeVariablesInTerm renames type variables to a canonical form (t0, t1, t2, etc.)
-normalizeTypeVariablesGroup :: TTerm TestGroup
+normalizeTypeVariablesGroup :: TypedTerm TestGroup
 normalizeTypeVariablesGroup = subgroup "normalizeTypeVariables" [
     -- No type variables - terms should remain unchanged
     normalizeTypeVarsCase "literal without type variables unchanged"
@@ -261,11 +261,11 @@ normalizeTypeVariablesGroup = subgroup "normalizeTypeVariables" [
         T.poly ["t0", "t1"] (T.function (T.var "t0") (T.function (T.var "t1") (T.pair (T.var "t0") (T.var "t1")))))]
         (apply (apply (var "fun1") (string "foo")) (int32 42)))]
 
-normalizeTypeVarsCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+normalizeTypeVarsCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 normalizeTypeVarsCase cname = termCase cname Variables.normalizeTypeVariablesInTerm
 
 -- | Convenience helpers for specific kernel functions
-unshadowCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+unshadowCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 unshadowCase cname = termCase cname Variables.unshadowVariables
 
 -- | Test cases for unshadowVariables
@@ -274,7 +274,7 @@ unshadowCase cname = termCase cname Variables.unshadowVariables
 -- When the same name is introduced again in an inner scope (shadowing), the inner
 -- binding is renamed to name<counter> (e.g., x2, x3, ...), and references in
 -- the inner body are updated accordingly.
-unshadowVariablesGroup :: TTerm TestGroup
+unshadowVariablesGroup :: TypedTerm TestGroup
 unshadowVariablesGroup = subgroup "unshadowVariables" [
 
     -- === No shadowing: terms should be unchanged ===
@@ -477,7 +477,7 @@ unshadowVariablesGroup = subgroup "unshadowVariables" [
       (record (nm "Point") [(nm "x", int32 10), (nm "y", int32 20)])
       (record (nm "Point") [(nm "x", int32 10), (nm "y", int32 20)])]
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for variable analysis and manipulation" $
     supergroup "variables" [
@@ -486,5 +486,5 @@ allTests = define "allTests" $
       unshadowVariablesGroup]
 
 -- Helper to build an empty annotation map
-emptyAnnMap :: TTerm (M.Map Name Term)
+emptyAnnMap :: TypedTerm (M.Map Name Term)
 emptyAnnMap = Phantoms.map M.empty

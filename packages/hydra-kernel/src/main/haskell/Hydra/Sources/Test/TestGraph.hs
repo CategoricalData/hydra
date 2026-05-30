@@ -54,32 +54,32 @@ module_ = Module {
      Phantoms.toDefinition testGraph,
      Phantoms.toDefinition testContext]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- | The test context. Emits a reference to the hand-written
 -- Hydra.Test.TestEnv.testContext.
-testContext :: TTermDefinition InferenceContext
+testContext :: TypedTermDefinition InferenceContext
 testContext = define "testContext" $ asTerm TestEnv.testContext
 
 -- | The test graph. Emits a call to the hand-written
 -- Hydra.Test.TestEnv.testGraph (applied to testTypes and testTerms).
-testGraph :: TTermDefinition Graph
+testGraph :: TypedTermDefinition Graph
 testGraph = define "testGraph" $
   TestEnv.testGraph @@ testTypes @@ testTerms
 
-testNamespace :: TTermDefinition ModuleName
+testNamespace :: TypedTermDefinition ModuleName
 testNamespace = define "testNamespace" $ DPackaging.moduleName2 $ Phantoms.string "testGraph"
 
-testSchemaNamespace :: TTermDefinition ModuleName
+testSchemaNamespace :: TypedTermDefinition ModuleName
 testSchemaNamespace = define "testSchemaNamespace" $ DPackaging.moduleName2 $ Phantoms.string "testSchemaGraph"
 
-testTerms :: TTermDefinition (M.Map Name Term)
+testTerms :: TypedTermDefinition (M.Map Name Term)
 testTerms = define "testTerms" $
   Maps.fromList $ Phantoms.list [
     Phantoms.pair (name "testDataArthur") TestTerms.testDataArthur]
 
-testTypes :: TTermDefinition (M.Map Name Type)
+testTypes :: TypedTermDefinition (M.Map Name Type)
 testTypes = define "testTypes" $
   Maps.fromList $ Phantoms.list [
     Phantoms.pair TestTypes.testTypeBuddyListAName TestTypes.testTypeBuddyListA,

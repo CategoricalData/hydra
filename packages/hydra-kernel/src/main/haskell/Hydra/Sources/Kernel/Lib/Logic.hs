@@ -15,7 +15,7 @@ import           Prelude hiding ((++))
 ns :: ModuleName
 ns = ModuleName "hydra.lib.logic"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -68,17 +68,17 @@ orSig = sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types
 
 -- Default implementations (all defined in terms of ifElse).
 
-and_ :: TTermDefinition (Bool -> Bool -> Bool)
+and_ :: TypedTermDefinition (Bool -> Bool -> Bool)
 and_ = define "and" $
   doc "Logical AND, defined in terms of ifElse." $
-  "a" ~> "b" ~> Logic.ifElse (var "a") (var "b" :: TTerm Bool) false
+  "a" ~> "b" ~> Logic.ifElse (var "a") (var "b" :: TypedTerm Bool) false
 
-not_ :: TTermDefinition (Bool -> Bool)
+not_ :: TypedTermDefinition (Bool -> Bool)
 not_ = define "not" $
   doc "Logical NOT, defined in terms of ifElse." $
   "a" ~> Logic.ifElse (var "a") false true
 
-or_ :: TTermDefinition (Bool -> Bool -> Bool)
+or_ :: TypedTermDefinition (Bool -> Bool -> Bool)
 or_ = define "or" $
   doc "Logical OR, defined in terms of ifElse." $
-  "a" ~> "b" ~> Logic.ifElse (var "a") true (var "b" :: TTerm Bool)
+  "a" ~> "b" ~> Logic.ifElse (var "a") true (var "b" :: TypedTerm Bool)
