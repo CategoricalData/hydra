@@ -356,6 +356,32 @@ change and must be updated.
 Java is the opposite: the local identifier (e.g., `keyClasses()`) reflects
 the new camelCase exactly, so dist/java is visibly affected.
 
+#### Multi-word renames: hand-written heads reference the symbol in several mangled forms
+
+When the rename *does* change the case-converted form (any multi-word rename, e.g.
+`namespaceOf` → `moduleNameOf` lower-snakes from `namespace_of` to `module_name_of`),
+a camelCase-only `grep` over the source will miss the hand-written head references,
+because each host spells the kernel symbol differently. A complete sweep must cover
+**all** of these surface forms, not just the camelCase one:
+
+- **Haskell sources**: camelCase, both bare and qualified (`Names.namespaceOf`); and
+  watch for the same type alias defined in *more than one* file (e.g. a per-module
+  `type HaskellNamespaces = Namespaces H.ModuleName` in both `Utils.hs` and `Coder.hs`)
+  — a unique-looking line can have duplicates.
+- **`heads/python/`**: snake_case imports and calls (`from hydra.names import namespace_to_file_path`).
+- **`heads/lisp/*/`**: the mangled `hydra_<module>_<snake_symbol>` form
+  (`hydra_codegen_namespace_to_path`, `hydra_names_namespace_to_file_path`).
+- **Native DSL sources** (`packages/hydra-{java,python}/src/main/<lang>/`): the generated
+  DSL *helper* is referenced in the host's native casing — Python uses **snake_case
+  attribute access** for the helper itself (`Util.module_names(...)`, not
+  `Util.moduleNames(...)`) but **camelCase inside `var("hydra.…")` qualified-name strings**.
+  Getting this wrong is invisible until the native self-host regen (sync Phase 5) runs.
+
+The compile gate (`stack build` of `heads/haskell`) catches the Haskell-side misses
+including duplicate aliases; the **target-language misses only surface during `/sync`**
+(Python/Lisp head import errors, and the Phase-5 native Python/Java JSON regen). Plan
+for `/sync` to flush out a second round of fixes after the source-and-`dist` patch.
+
 ---
 
 ## Moving or Renaming Modules (namespace refactoring)
