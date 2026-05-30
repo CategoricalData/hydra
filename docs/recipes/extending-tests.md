@@ -54,21 +54,21 @@ If you must add DSL functions:
 In [TTerms.hs][tterms]:
 ```haskell
 -- Example: Adding constructors for Either
-left :: TTerm Term -> TTerm Term
+left :: TypedTerm Term -> TypedTerm Term
 left t = Core.termEither $ Phantoms.left t
 
-right :: TTerm Term -> TTerm Term
+right :: TypedTerm Term -> TypedTerm Term
 right t = Core.termEither $ Phantoms.right t
 ```
 
 In [TTypes.hs][ttypes]:
 ```haskell
 -- Example: Adding a type constructor
-either :: TTerm Type -> TTerm Type -> TTerm Type
+either :: TypedTerm Type -> TypedTerm Type -> TypedTerm Type
 either leftType rightType = Core.typeFunction _Either [leftType, rightType]
 ```
 
-Pattern: Import `qualified Hydra.Dsl.Meta.Core as Core`, use `Core.*` functions, return `TTerm` phantom types.
+Pattern: Import `qualified Hydra.Dsl.Meta.Core as Core`, use `Core.*` functions, return `TypedTerm` phantom types.
 
 **Note**: As Hydra matures, DSL extensions should become increasingly rare.
 Most new tests can be written using existing DSL functions.
@@ -158,7 +158,7 @@ Common issues when tests fail:
 
 **General debugging:**
 - Compare verbose test output with expected values
-- Use `unTTerm` to extract `Term` from `TTerm` for inspection
+- Use `unTypedTerm` to extract `Term` from `TypedTerm` for inspection
 - Create minimal test cases to isolate the issue
 - Look at similar passing tests in the same module for patterns
 
@@ -203,7 +203,7 @@ Migrate tests when:
    |-------------------------|------------------------------|
    | `Terms.lambda "x"` | `lambda "x"` |
    | `Types.int32` | `T.int32` |
-   | Direct `Term` values | `TTerm Term` phantom types |
+   | Direct `Term` values | `TypedTerm Term` phantom types |
    | Haskell test framework calls | `checkWithType`, `primCase`, etc. |
 
 5. **Migrate in batches** - Add 5-10 test cases at a time

@@ -41,7 +41,7 @@ module_ = Module {
      toDefinition testNamespaceDef,
      toDefinition testSchemaNamespaceDef]
 
-testTypesDef :: TTermDefinition (M.Map Name Type)
+testTypesDef :: TypedTermDefinition (M.Map Name Type)
 testTypesDef = define "testTypes" $
   Maps.fromList $ Phantoms.list [
     Phantoms.tuple2 (ref TestTypes.testTypePersonNameDef) (ref TestTypes.testTypePersonDef),
@@ -92,10 +92,10 @@ module_ = Module {
     definitions = [
       Phantoms.toDefinition allTestsDef]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = Phantoms.definitionInModule module_
 
-allTestsDef :: TTermDefinition TestGroup
+allTestsDef :: TypedTermDefinition TestGroup
 allTestsDef = define "allTests" $
   Phantoms.doc "Description of test group" $
   Testing.testGroup (Phantoms.string "myTest")
@@ -160,7 +160,7 @@ starts, and per-group timings collapse to 0 ms. See issue #311 for context.
 
 The DSL helper `Hydra.Dsl.Meta.Testing.universalTestCase` wraps each string
 expression in a unit-lambda internally, so callers continue to pass plain
-`TTerm String` values:
+`TypedTerm String` values:
 
 ```haskell
 import qualified Hydra.Dsl.Meta.Testing as Testing
@@ -242,44 +242,44 @@ record personType ["name">: string "Alice", "age">: int32 30]  -- Term
 
 ### Meta-Level DSL (`Hydra.Dsl.Meta.Phantoms`, `Hydra.Dsl.Meta.Testing`)
 
-Used for constructing **`TTerm a` values** - meta-representations of Hydra terms used in modules:
+Used for constructing **`TypedTerm a` values** - meta-representations of Hydra terms used in modules:
 
 ```haskell
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Meta.Testing as Testing
 
--- These create TTerm values (meta-representations)
-Phantoms.string "name"                  -- TTerm String
-Phantoms.list [...]                     -- TTerm [a]
-Phantoms.nothing                        -- TTerm (Maybe a)
-Testing.testGroup (Phantoms.string "name") ...  -- TTerm TestGroup
+-- These create TypedTerm values (meta-representations)
+Phantoms.string "name"                  -- TypedTerm String
+Phantoms.list [...]                     -- TypedTerm [a]
+Phantoms.nothing                        -- TypedTerm (Maybe a)
+Testing.testGroup (Phantoms.string "name") ...  -- TypedTerm TestGroup
 ```
 
 ### Converting Between Levels
 
 For tests that construct `Term` values (like eta expansion tests),
-use the `TTerm` constructor to lift terms to the meta-level:
+use the `TypedTerm` constructor to lift terms to the meta-level:
 
 ```haskell
--- Helper to convert Term to TTerm Term
-metaTerm :: Term -> TTerm Term
-metaTerm = TTerm  -- TTerm is a newtype wrapper around Term
+-- Helper to convert Term to TypedTerm Term
+metaTerm :: Term -> TypedTerm Term
+metaTerm = TypedTerm  -- TypedTerm is a newtype wrapper around Term
 
 -- Usage in test helper
-testCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+testCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 testCase name input output = Testing.testCaseWithMetadata (Phantoms.string name) tcase ...
   where
     tcase = Testing.testCaseEtaExpansion $ Testing.etaExpansionTestCase input output
 ```
 
-Note that in the user's updated code, test helpers now accept `TTerm Term` directly, which is cleaner:
+Note that in the user's updated code, test helpers now accept `TypedTerm Term` directly, which is cleaner:
 
 ```haskell
 -- Current pattern
-testCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+testCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 
--- Called with term-level DSL wrapped in TTerm:
-testCase "my test" (TTerm $ lambda "x" $ var "x") (TTerm $ lambda "x" $ var "x")
+-- Called with term-level DSL wrapped in TypedTerm:
+testCase "my test" (TypedTerm $ lambda "x" $ var "x") (TypedTerm $ lambda "x" $ var "x")
 ```
 
 ## Hierarchical Test Organization
@@ -307,7 +307,7 @@ module_ = Module {
       Advanced.module_,
       Failures.module_]
 
-allTestsDef :: TTermDefinition TestGroup
+allTestsDef :: TypedTermDefinition TestGroup
 allTestsDef = definitionInModule module_ "allTests" $
     Phantoms.doc "The group of all checking tests" $
     Testing.testGroup (Phantoms.string "checking") Phantoms.nothing (Phantoms.list subgroups) (Phantoms.list [])
@@ -337,7 +337,7 @@ module_ = Module {
   where
     definitions = [Phantoms.toDefinition allTests]
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     doc "The group of all common tests" $
     Testing.testGroup (string "common") nothing (list subgroups) (list [])
@@ -345,7 +345,7 @@ allTests = definitionInModule module_ "allTests" $
     subgroups = snd <$> testPairs
 
 -- Test pairs organized into library and other categories
-libPairs :: [(ModuleName, TTermDefinition TestGroup)]
+libPairs :: [(ModuleName, TypedTermDefinition TestGroup)]
 libPairs = [
   (Chars.ns, Chars.allTests),
   (Eithers.ns, Eithers.allTests),
@@ -354,7 +354,7 @@ libPairs = [
   -- ... plus Equality, Flows, Literals, Logic, Maps, Math, Maybes, Pairs, Sets
   ]
 
-otherPairs :: [(ModuleName, TTermDefinition TestGroup)]
+otherPairs :: [(ModuleName, TypedTermDefinition TestGroup)]
 otherPairs = [
   (CheckingAll.ns, CheckingAll.allTests),
   (InferenceAll.ns, InferenceAll.allTests),
@@ -490,7 +490,7 @@ Testing.testGroup "name" nothing (list subgroups) (list [])  -- Wrong DSL level
 Add documentation to test groups:
 
 ```haskell
-allTestsDef :: TTermDefinition TestGroup
+allTestsDef :: TypedTermDefinition TestGroup
 allTestsDef = define "allTests" $
   Phantoms.doc "Clear description of what this test group validates" $
   Testing.testGroup (Phantoms.string "name") ...

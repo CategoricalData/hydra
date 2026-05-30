@@ -80,16 +80,16 @@ module_ = Module {
       toDefinition myFunction2]
 
 -- Helper for defining elements
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- Define elements
-myFunction1 :: TTermDefinition (Int -> Int)
+myFunction1 :: TypedTermDefinition (Int -> Int)
 myFunction1 = define "myFunction1" $
   doc "Description of myFunction1" $
   "x" ~> var "x"
 
-myFunction2 :: TTermDefinition (String -> String)
+myFunction2 :: TypedTermDefinition (String -> String)
 myFunction2 = define "myFunction2" $
   doc "Description of myFunction2" $
   "s" ~> var "s"
@@ -163,7 +163,7 @@ cd ../heads/haskell
 In the source module, add the new definition:
 
 ```haskell
-myNewFunction :: TTermDefinition (A -> B)
+myNewFunction :: TypedTermDefinition (A -> B)
 myNewFunction = define "myNewFunction" $
   doc "Description" $
   "x" ~> someExpression (var "x")
@@ -1053,13 +1053,13 @@ Adding a primitive requires updates to **six files**:
 
 4. **`Hydra.Sources.Eval.Lib.Lists`** - The interpreter-friendly definition:
    ```haskell
-   find_ :: TTermDefinition (Term -> Term -> Flow s Term)
+   find_ :: TypedTermDefinition (Term -> Term -> Flow s Term)
    find_ = define "find" $ ...
    ```
 
 5. **`Hydra.Dsl.Meta.Lib.Lists`** - The DSL helper:
    ```haskell
-   find :: TTerm (a -> Bool) -> TTerm [a] -> TTerm (Maybe a)
+   find :: TypedTerm (a -> Bool) -> TypedTerm [a] -> TypedTerm (Maybe a)
    find = primitive2 _lists_find
    ```
 
@@ -1097,8 +1097,8 @@ Adding a primitive requires updates to **six files**:
    ```haskell
    -- Updated function signatures to use [Binding] instead of M.Map Name Binding
    graph :: ...
-   graphElements :: TTerm Graph -> TTerm [Binding]
-   graphWithElements :: [Binding] -> TTerm Graph
+   graphElements :: TypedTerm Graph -> TypedTerm [Binding]
+   graphWithElements :: [Binding] -> TypedTerm Graph
    ```
 
 4. **Added Lists.find primitive** (see above)

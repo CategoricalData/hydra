@@ -43,7 +43,7 @@ goes away here; the result is the Lazy object itself. The `.get()`
 happens at the use site (Site 4).
 
 ```haskell
-makeThunk :: TTermDefinition (Py.Expression -> Py.Expression)
+makeThunk :: TypedTermDefinition (Py.Expression -> Py.Expression)
 makeThunk = def "makeThunk" $
   doc "Create a Lazy(lambda: ...) wrapping the given expression for memoization" $
   "pbody" ~>
@@ -111,13 +111,13 @@ Logic.ifElse (Logic.and (...) (Logic.not (var "elTrivial1")))
 Where `lazyDotGet` is a small helper:
 ```haskell
 -- | Wrap a Py.Expression in a `.get()` call (for Lazy use sites)
-lazyDotGet :: TTermDefinition (Py.Expression -> Py.Expression)
+lazyDotGet :: TypedTermDefinition (Py.Expression -> Py.Expression)
 lazyDotGet = def "lazyDotGet" $
   doc "Wrap an expression in a .get() method call (for Lazy thunks)" $
   "expr" ~>
     PyUtils.functionCall @@
       (PyUtils.attributeAccess @@ (PyUtils.pyExpressionToPyPrimary @@ var "expr") @@ string "get") @@
-      list ([] :: [TTerm Py.Expression])
+      list ([] :: [TypedTerm Py.Expression])
 ```
 
 Apply at line 2126 and line 2173.
@@ -360,7 +360,7 @@ Lines 2126/2173 stay unchanged.
 
 ```haskell
 -- | Wrap an expression in `Lazy(lambda: ...)` for one-shot memoization.
-makeLazy :: TTermDefinition (Py.Expression -> Py.Expression)
+makeLazy :: TypedTermDefinition (Py.Expression -> Py.Expression)
 makeLazy = def "makeLazy" $
   doc "Wrap an expression in Lazy(lambda: ...) for one-shot lazy memoization" $
   "pbody" ~>
@@ -369,13 +369,13 @@ makeLazy = def "makeLazy" $
       list [wrapInNullaryLambda @@ var "pbody"]
 
 -- | Wrap an expression in a `.get()` method call (for Lazy use sites).
-lazyDotGet :: TTermDefinition (Py.Expression -> Py.Expression)
+lazyDotGet :: TypedTermDefinition (Py.Expression -> Py.Expression)
 lazyDotGet = def "lazyDotGet" $
   doc "Wrap an expression in a .get() method call (for Lazy unwrap)" $
   "expr" ~>
     PyUtils.functionCall @@
       (PyUtils.attributeAccess @@ (PyUtils.pyExpressionToPyPrimary @@ var "expr") @@ string "get") @@
-      list ([] :: [TTerm Py.Expression])
+      list ([] :: [TypedTerm Py.Expression])
 ```
 
 (`PyUtils.attributeAccess` may need to be located/created; if not, use

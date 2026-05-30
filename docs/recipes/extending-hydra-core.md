@@ -130,11 +130,11 @@ Check that term-level constructors exist in the DSL:
 
 ```haskell
 -- Example: Either constructors (already present)
-left :: TTerm a -> TTerm (Either a b)
-left (TTerm term) = TTerm $ Terms.left term
+left :: TypedTerm a -> TypedTerm (Either a b)
+left (TypedTerm term) = TypedTerm $ Terms.left term
 
-right :: TTerm b -> TTerm (Either a b)
-right (TTerm term) = TTerm $ Terms.right term
+right :: TypedTerm b -> TypedTerm (Either a b)
+right (TypedTerm term) = TypedTerm $ Terms.right term
 ```
 
 If missing, add them following existing patterns like `just` and `nothing` for `Maybe`.
@@ -182,7 +182,7 @@ Add DSL helpers for the variant metadata:
 
 1. **Add case to `termVariant` pattern match:**
 ```haskell
-termVariant :: TermVariant -> TTerm TermVariant
+termVariant :: TermVariant -> TypedTerm TermVariant
 termVariant v = unitVariant _TermVariant $ case v of
   TermVariantAnnotated -> _TermVariant_annotated
   TermVariantApplication -> _TermVariant_application
@@ -193,7 +193,7 @@ termVariant v = unitVariant _TermVariant $ case v of
 
 2. **Add helper function:**
 ```haskell
-termVariantEither :: TTerm TermVariant
+termVariantEither :: TypedTerm TermVariant
 termVariantEither = unitVariant _TermVariant _TermVariant_either
 ```
 
@@ -254,7 +254,7 @@ Without adding your constructor here, code generation will fail with "No such fi
 > Use descriptive names like `pairFst`, `pairSnd`, `listHead`, etc.
 
 ```haskell
-inferTypeOfEitherDef :: TTermDefinition (InferenceContext -> Prelude.Either Term Term -> Either Error InferenceResult)
+inferTypeOfEitherDef :: TypedTermDefinition (InferenceContext -> Prelude.Either Term Term -> Either Error InferenceResult)
 inferTypeOfEitherDef = define "inferTypeOfEither" $
   doc "Infer the type of an either value" $
   "cx" ~> "e" ~>
@@ -326,7 +326,7 @@ import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
 Type checking reconstructs types from terms that already have type applications (added during inference).
 
 ```haskell
-typeOfEitherDef :: TTermDefinition (TypeContext -> [Type] -> Prelude.Either Term Term -> Either Error Type)
+typeOfEitherDef :: TypedTermDefinition (TypeContext -> [Type] -> Prelude.Either Term Term -> Either Error Type)
 typeOfEitherDef = define "typeOfEither" $
   doc "Reconstruct the type of an either value" $
   "tx" ~> "typeArgs" ~> "et" ~>
@@ -717,8 +717,8 @@ Add test cases in the "Type checking" describe block. Use helper functions for c
 
 ```haskell
 -- Helper functions (already defined in the file)
-tyapps :: TTerm a -> [Type] -> TTerm b          -- Multiple type applications
-tylams :: [Name] -> TTerm a -> TTerm b          -- Multiple type abstractions
+tyapps :: TypedTerm a -> [Type] -> TypedTerm b          -- Multiple type applications
+tylams :: [Name] -> TypedTerm a -> TypedTerm b          -- Multiple type abstractions
 forAll :: Name -> Type -> Type                   -- Polymorphic type quantification
 ```
 
@@ -1039,10 +1039,10 @@ The DSL helper module provides functions used by all `Hydra.Sources.*` files to 
 
 ```haskell
 -- Before:
-typeContext :: TTerm (M.Map Name Type) -> TTerm (M.Map Name Term) -> TTerm (S.Set Name) -> TTerm (S.Set Name) -> TTerm InferenceContext -> TTerm TypeContext
+typeContext :: TypedTerm (M.Map Name Type) -> TypedTerm (M.Map Name Term) -> TypedTerm (S.Set Name) -> TypedTerm (S.Set Name) -> TypedTerm InferenceContext -> TypedTerm TypeContext
 
 -- After:
-typeContext :: TTerm (M.Map Name Type) -> TTerm (M.Map Name Term) -> TTerm (S.Set Name) -> TTerm (S.Set Name) -> TTerm (S.Set Name) -> TTerm InferenceContext -> TTerm TypeContext
+typeContext :: TypedTerm (M.Map Name Type) -> TypedTerm (M.Map Name Term) -> TypedTerm (S.Set Name) -> TypedTerm (S.Set Name) -> TypedTerm (S.Set Name) -> TypedTerm InferenceContext -> TypedTerm TypeContext
 typeContext types metadata typeVariables lambdaVariables letVariables inferenceContext = Phantoms.record _TypeContext [
   _TypeContext_types>>: types,
   _TypeContext_metadata>>: metadata,
@@ -1055,14 +1055,14 @@ typeContext types metadata typeVariables lambdaVariables letVariables inferenceC
 **2.2: Add the accessor function:**
 
 ```haskell
-typeContextLetVariables :: TTerm TypeContext -> TTerm (S.Set Name)
+typeContextLetVariables :: TypedTerm TypeContext -> TypedTerm (S.Set Name)
 typeContextLetVariables tc = Phantoms.project _TypeContext _TypeContext_letVariables @@ tc
 ```
 
 **2.3: Add the "with" helper function:**
 
 ```haskell
-typeContextWithLetVariables :: TTerm TypeContext -> TTerm (S.Set Name) -> TTerm TypeContext
+typeContextWithLetVariables :: TypedTerm TypeContext -> TypedTerm (S.Set Name) -> TypedTerm TypeContext
 typeContextWithLetVariables ctx letVariables = typeContext
   (Hydra.Dsl.Meta.Typing.typeContextTypes ctx)
   (Hydra.Dsl.Meta.Typing.typeContextMetadata ctx)
@@ -1075,7 +1075,7 @@ typeContextWithLetVariables ctx letVariables = typeContext
 **2.4: Update ALL existing "with" helpers** to pass through the new field:
 
 ```haskell
-typeContextWithTypes :: TTerm TypeContext -> TTerm (M.Map Name Type) -> TTerm TypeContext
+typeContextWithTypes :: TypedTerm TypeContext -> TypedTerm (M.Map Name Type) -> TypedTerm TypeContext
 typeContextWithTypes ctx types = typeContext
   types
   (Hydra.Dsl.Meta.Typing.typeContextMetadata ctx)
@@ -1462,7 +1462,7 @@ The deltas worth knowing:
    non-empty side, or `Lists.concat2 listA listB` semantics from the dist
    side) now produce host-level Haskell `++`. Many DSL source files import
    `Prelude hiding ((++))` so the DSL's own polymorphic `(++)` (defined for
-   `TTerm String`) takes precedence. Use `L.++` from `Data.List` (and add the
+   `TypedTerm String`) takes precedence. Use `L.++` from `Data.List` (and add the
    `import qualified Data.List as L` if missing). Some files import Phantoms
    *unqualified* and don't hide Prelude `(++)`, in which case the operator is
    ambiguous — qualify as `Prelude.++`. Both cases produce deterministic GHC
@@ -1471,7 +1471,7 @@ The deltas worth knowing:
 3. **Local function-name clashes with the merged kernel field.** A package
    may already define a top-level helper using one of the names you're
    collapsing into. Concrete case: `Hydra.Sources.Coq.Utils.moduleDependencies
-   :: TTermDefinition (Module -> [String])` (a per-element helper) shadowed
+   :: TypedTermDefinition (Module -> [String])` (a per-element helper) shadowed
    the new kernel field `moduleDependencies :: [ModuleDependency]`. Renamed to
    `moduleDependencyNames` and updated 2 callers. Search for top-level
    `<newField>` definitions across all hosts before declaring the merge done.

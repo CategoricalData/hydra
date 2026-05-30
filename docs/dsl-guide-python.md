@@ -39,7 +39,7 @@ Hydra-Python provides a layered DSL system for working with Hydra types and term
 | Layer | Module | Purpose |
 |-------|--------|---------|
 | **Direct DSLs** | `hydra.dsl.types`, `hydra.dsl.terms` | Raw construction of `Type` and `Term` instances |
-| **Phantom-typed DSL** | `hydra.dsl.meta.phantoms` | Type safety via `TTerm[A]` phantom types |
+| **Phantom-typed DSL** | `hydra.dsl.meta.phantoms` | Type safety via `TypedTerm[A]` phantom types |
 | **Domain-specific DSLs** | `hydra.dsl.meta.core`, `hydra.dsl.meta.graph` | Typed accessors for Hydra kernel types |
 | **Library wrappers** | `hydra.dsl.meta.lib.*` | Typed wrappers around Hydra primitives (lists, sets, maps, etc.) |
 
@@ -81,7 +81,7 @@ person = Terms.record(Name("Person"), [
 
 **Module**: `hydra.dsl.meta.phantoms`
 
-Wraps raw `Term` construction with `TTerm[A]` phantom types for type tracking.
+Wraps raw `Term` construction with `TypedTerm[A]` phantom types for type tracking.
 
 ```python
 # Recommended idiom: star-import for clean call sites
@@ -102,7 +102,7 @@ cases("hydra.core.Term", arg, ..., [field("lambda", ...)])
 cases(Name("hydra.core.Term"), arg, ..., [field(Name("lambda"), ...)])
 ```
 
-The `@` operator and the call operator are overloaded on `TTerm`, so function
+The `@` operator and the call operator are overloaded on `TypedTerm`, so function
 application reads naturally:
 
 ```python
@@ -286,7 +286,7 @@ def describe(term: Term) -> str:
 ## Phantom-typed DSL
 
 The phantom-typed DSL is the core of Hydra's Python metaprogramming system.
-It wraps raw `Term` values in `TTerm[A]` to provide type tracking.
+It wraps raw `Term` values in `TypedTerm[A]` to provide type tracking.
 
 ### Import pattern
 
@@ -626,11 +626,11 @@ import hydra.core
 import hydra.packaging
 import hydra.dsl.meta.core as Core
 from hydra.dsl.python import Just, Nothing
-from hydra.phantoms import TBinding
+from hydra.typed import TypedBinding
 
 ns = hydra.packaging.ModuleName("my.namespace")
 
-def define(lname: str, term) -> TBinding:
+def define(lname: str, term) -> TypedBinding:
     return definition_in_namespace(ns, lname, term)
 
 # Qualified self-reference helper
@@ -638,7 +638,7 @@ def _self(lname: str):
     return var("my.namespace." + lname)
 
 # Simple function
-deannotate_term: TBinding = define("deannotateTerm",
+deannotate_term: TypedBinding = define("deannotateTerm",
     doc("Remove annotations from a term",
     lam("term",
         cases(hydra.core.TERM__NAME, var("term"),
