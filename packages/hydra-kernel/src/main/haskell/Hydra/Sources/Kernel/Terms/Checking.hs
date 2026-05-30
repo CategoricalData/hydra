@@ -271,6 +271,7 @@ checkNominalApplication = define "checkNominalApplication" $
     (right $ pair unit (var "cx2"))
     (left (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeVariable (var "tname")) (var "varslen") (var "argslen") (var "typeArgs")))
 
+-- Currently unused, but preserved for future inference debugging.
 checkSameType :: TypedTermDefinition (InferenceContext -> Graph -> String -> [Type] -> Prelude.Either Error Type)
 checkSameType = define "checkSameType" $
   doc "Ensure all types in a list are equal and return the common type" $
@@ -280,8 +281,7 @@ checkSameType = define "checkSameType" $
     (Maybes.maybe (var "unequalErr") ("t" ~> right $ var "t") (Lists.maybeHead $ var "types"))
     (var "unequalErr")
 
--- TODO: unused
--- TODO: unused
+-- Currently unused, but preserved for future inference debugging.
 checkType :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Type -> Prelude.Either Error ())
 checkType = define "checkType" $
   doc "Check that a term has the expected type" $
@@ -317,6 +317,7 @@ checkTypeSubst = define "checkTypeSubst" $
     (right $ var "subst")
     (left (Error.errorChecking $ ErrorsChecking.checkingErrorIncorrectUnification $ ErrorsChecking.incorrectUnificationError (var "subst")))
 
+-- Currently unused, but preserved for future inference debugging.
 checkTypeVariables :: TypedTermDefinition (Graph -> Type -> ())
 checkTypeVariables = define "checkTypeVariables" $
   doc "Check that all type variables in a type are bound. NOTE: This check is currently disabled to allow phantom type variables from polymorphic instantiation to pass through. The proper fix is to ensure `typeOf` doesn't create fresh variables for post-inference code." $
