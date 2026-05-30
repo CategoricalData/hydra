@@ -41,7 +41,7 @@ This is the recommended workflow:
    replace complex pattern matching with simpler case expressions,
    and eliminate syntax features that have no DSL equivalent. Test the refactored code to verify it still works.
 2. **Create the DSL module structure** —
-   set up the source module file with standard imports, namespace, module definition, and an empty `definitions` list.
+   set up the source module file with standard imports, module name, module definition, and an empty `definitions` list.
    Build to verify it compiles.
 3. **Promote one function** — translate it into the Hydra DSL and add it to the module's `definitions` list.
 4. **Regenerate** — generate the promoted function into `dist/haskell/<pkg>/src/main/haskell/` (e.g., `writeHaskell`).
@@ -640,7 +640,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
           _MyRecord_field3>>: project _MyRecord _MyRecord_field3 @@ var "r"]
     ```
 
-13. **Where clauses become separate TTermDefinitions**: Haskell `where` clauses have no DSL equivalent.
+13. **Where clauses become separate TypedTermDefinitions**: Haskell `where` clauses have no DSL equivalent.
     Extract local helper functions into separate top-level `TypedTermDefinition` definitions and add them to the module's elements
     list.
 
@@ -771,9 +771,9 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
 ## Checklist
 
 - [ ] Simplify staging code (break up complex functions, extract pure logic)
-- [ ] Create source module file with proper namespace
+- [ ] Create source module file with proper module name
 - [ ] Add standard imports (watch for name conflicts)
-- [ ] Define namespace, module, and `define` helper
+- [ ] Define module name, module, and `define` helper
 - [ ] Add module to registry in `All.hs`
 - [ ] Build empty module to verify structure compiles
 - [ ] Promote functions one at a time, testing after each:
@@ -862,7 +862,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
 
 25. **`Arity` module**: The `typeArity` function for computing function type arity is in
     `Hydra.Sources.Kernel.Terms.Arity`. Import it as `qualified Hydra.Sources.Kernel.Terms.Arity as Arity` and add
-    `Arity.ns` to the module's namespace dependencies.
+    `Arity.ns` to the module's module-name dependencies.
 
 26. **More DSL function availability pitfalls (batch 27-28)**:
 
@@ -877,7 +877,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
 
 27. **Extracting large `where`-clause helpers**: When promoting complex functions like `encodeElimination` or
     `bindingsToStatements`, extract substantial `where`-clause helpers (e.g., `otherwiseBranch`, `visitBranch`,
-    `toDeclInit`, `toDeclStatement`) as separate TTermDefinitions.
+    `toDeclInit`, `toDeclStatement`) as separate TypedTermDefinitions.
     Pass shared state (like `aliases`, `tcExtended`, `recursiveVars`) as explicit parameters.
     This makes each TypedBinding manageable and independently testable.
 
@@ -912,7 +912,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     `JavaUtilsSource.javaMethodInvocationToJavaPrimary`) that handles the wrapping,
     rather than constructing the Primary inline.
 
-35. **`Rewriting.deannotateType` is a TypedBinding**: Like other TTermDefinitions,
+35. **`Rewriting.deannotateType` is a TypedBinding**: Like other TypedTermDefinitions,
     it must be applied with `@@`: `Rewriting.deannotateType @@ var "t"`, NOT `Rewriting.deannotateType (var "t")`.
 
 36. **Naming collisions with kernel imports**: If your TypedBinding name (e.g.,
