@@ -28,7 +28,7 @@ import qualified Data.Maybe                                as Y
 import Hydra.Ast
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 ns :: ModuleName
@@ -48,7 +48,7 @@ module_ = Module {
 
 -- | Language constraints for Coq.
 -- Coq's type system (CIC) is a strict superset of System F, so it supports all Hydra features.
-coqLanguage :: TTermDefinition Language
+coqLanguage :: TypedTermDefinition Language
 coqLanguage = define "coqLanguage" $ lets [
     "literalVariants">: Sets.fromList $ list [
       Variants.literalVariantBoolean,
@@ -119,7 +119,7 @@ coqLanguage = define "coqLanguage" $ lets [
 -- This set is kept narrower than the full Coq lexicon: it includes only the tokens
 -- that actually clash with Coq variable-name usage (Gallina and vernacular keywords)
 -- plus a few stdlib names that appear as Hydra-generated lambda parameter names.
-coqReservedWords :: TTermDefinition (S.Set String)
+coqReservedWords :: TypedTermDefinition (S.Set String)
 coqReservedWords = define "coqReservedWords" $
   Sets.fromList $ list $ fmap string reservedWords
   where
@@ -151,7 +151,7 @@ coqReservedWords = define "coqReservedWords" $
 -- disambiguation is handled by the ambiguous-names mechanism, not by
 -- underscore-escaping. It is narrower at the lambda-parameter side too, but
 -- that set is tracked separately via `coqReservedWords`.
-coqStrippedReservedWords :: TTermDefinition (S.Set String)
+coqStrippedReservedWords :: TypedTermDefinition (S.Set String)
 coqStrippedReservedWords = define "coqStrippedReservedWords" $
   Sets.fromList $ list $ fmap string reservedWords
   where

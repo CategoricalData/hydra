@@ -35,10 +35,10 @@ module_ = Module {
       Phantoms.toDefinition nestedAnnotationsTests,
       Phantoms.toDefinition annotationsInComplexContextsTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Advanced type checking test cases" $
   supergroup "Advanced" [
@@ -48,14 +48,14 @@ allTests = define "allTests" $
 
 ------ Annotated terms ------
 
-annotatedTermsTests :: TTermDefinition TestGroup
+annotatedTermsTests :: TypedTermDefinition TestGroup
 annotatedTermsTests = define "annotatedTermsTests" $
   supergroup "Annotated terms" [
     topLevelAnnotationsTests,
     nestedAnnotationsTests,
     annotationsInComplexContextsTests]
 
-annotationsInComplexContextsTests :: TTermDefinition TestGroup
+annotationsInComplexContextsTests :: TypedTermDefinition TestGroup
 annotationsInComplexContextsTests = define "annotationsInComplexContextsTests" $
   subgroup "Annotations in complex contexts" [
     checkTest "annotated let binding" []
@@ -88,7 +88,7 @@ annotationsInComplexContextsTests = define "annotationsInComplexContextsTests" $
 
 
 
-nestedAnnotationsTests :: TTermDefinition TestGroup
+nestedAnnotationsTests :: TypedTermDefinition TestGroup
 nestedAnnotationsTests = define "nestedAnnotationsTests" $
   subgroup "Nested annotations" [
     noChange "annotation within annotation"
@@ -104,7 +104,7 @@ nestedAnnotationsTests = define "nestedAnnotationsTests" $
       (annotated (lambdaTyped "x" T.int32 $ var "x") mapTermEmpty @@ annotated (int32 42) mapTermEmpty)
       T.int32]
 
-topLevelAnnotationsTests :: TTermDefinition TestGroup
+topLevelAnnotationsTests :: TypedTermDefinition TestGroup
 topLevelAnnotationsTests = define "topLevelAnnotationsTests" $
   subgroup "Top-level annotations" [
     noChange "annotated literal"

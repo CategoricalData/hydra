@@ -43,10 +43,10 @@ module_ = Module {
       KernelExamples.ns,
       NominalTypes.ns]
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     doc "The group of all inference tests" $
-    Testing.testGroup (string "inference") nothing (list subgroups) (list ([] :: [TTerm TestCaseWithMetadata]))
+    Testing.testGroup (string "inference") nothing (list subgroups) (list ([] :: [TypedTerm TestCaseWithMetadata]))
   where
     subgroups = [
       AlgebraicTypes.allTests,

@@ -2,7 +2,7 @@
 
 module Hydra.Sources.Test.TestSuite where
 
--- Standard imports for deep DSL tests (produces TTerm a with specific types)
+-- Standard imports for deep DSL tests (produces TypedTerm a with specific types)
 import Hydra.Kernel
 import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
@@ -86,14 +86,14 @@ module_ = Module {
     definitions = [Phantoms.toDefinition allTests]
     namespaces = fst <$> testPairs
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     doc "The group of all common tests" $
-    Testing.testGroup (string "common") nothing (list subgroups) (list ([] :: [TTerm TestCaseWithMetadata]))
+    Testing.testGroup (string "common") nothing (list subgroups) (list ([] :: [TypedTerm TestCaseWithMetadata]))
   where
     subgroups = snd <$> testPairs
 
-libPairs :: [(ModuleName, TTermDefinition TestGroup)]
+libPairs :: [(ModuleName, TypedTermDefinition TestGroup)]
 libPairs = [
   (Chars.ns, Chars.allTests),
   (Eithers.ns, Eithers.allTests),
@@ -109,7 +109,7 @@ libPairs = [
   (Sets.ns, Sets.allTests),
   (Strings.ns, Strings.allTests)]
 
-otherPairs :: [(ModuleName, TTermDefinition TestGroup)]
+otherPairs :: [(ModuleName, TypedTermDefinition TestGroup)]
 otherPairs = [
   (Annotations.ns, Annotations.allTests),
   (CheckingAll.ns, CheckingAll.allTests),
@@ -135,7 +135,7 @@ otherPairs = [
   (ValidateAll.ns, ValidateAll.allTests),
   (Variables.ns, Variables.allTests)]
 
-testPairs :: [(ModuleName, TTermDefinition TestGroup)]
+testPairs :: [(ModuleName, TypedTermDefinition TestGroup)]
 testPairs = libPairs ++ otherPairs
 
 -- | All test suite modules (the actual Module values)

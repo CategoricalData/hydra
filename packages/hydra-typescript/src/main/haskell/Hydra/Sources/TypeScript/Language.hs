@@ -81,7 +81,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
@@ -90,7 +90,7 @@ module_ = Module {
             moduleDefinitions = [toDefinition typeScriptLanguage, toDefinition typeScriptReservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints and reserved words for TypeScript 5.x (ECMAScript 2024 base)"}
-typeScriptLanguage :: TTermDefinition Language
+typeScriptLanguage :: TypedTermDefinition Language
 typeScriptLanguage = define "typeScriptLanguage" $
     doc "Language constraints for TypeScript 5.x" $ lets [
     "literalVariants">: Sets.fromList $ list [
@@ -162,7 +162,7 @@ typeScriptLanguage = define "typeScriptLanguage" $
         (var "typeVariants")
         (var "typePredicate"))
 
-typeScriptReservedWords :: TTermDefinition (S.Set String)
+typeScriptReservedWords :: TypedTermDefinition (S.Set String)
 typeScriptReservedWords = define "typeScriptReservedWords" $
   doc "A set of reserved words in TypeScript" $
   lets [

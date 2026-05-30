@@ -77,7 +77,7 @@ import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 ns :: ModuleName
 ns = ModuleName "hydra.dependencies"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -104,7 +104,7 @@ module_ = Module {
      toDefinition typeDependencyNames,
      toDefinition typeNamesInType]
 
-definitionsWithDependencies :: TTermDefinition (InferenceContext -> Graph -> [Binding] -> Either Error [Binding])
+definitionsWithDependencies :: TypedTermDefinition (InferenceContext -> Graph -> [Binding] -> Either Error [Binding])
 definitionsWithDependencies = define "definitionsWithDependencies" $
   doc "Get definitions with their dependencies" $
   "cx" ~> "graph" ~> "original" ~>
@@ -114,7 +114,7 @@ definitionsWithDependencies = define "definitionsWithDependencies" $
     (Lists.concat (Lists.map (var "depNames") (var "original")))) $
   Eithers.mapList ("name" ~> Lexical.requireBinding @@ var "graph" @@ var "name") (var "allDepNames")
 
-flattenLetTerms :: TTermDefinition (Term -> Term)
+flattenLetTerms :: TypedTermDefinition (Term -> Term)
 flattenLetTerms = define "flattenLetTerms" $
   doc "Flatten nested let expressions" $
   "term" ~>
@@ -123,7 +123,7 @@ flattenLetTerms = define "flattenLetTerms" $
     "val0" <~ Core.bindingTerm (var "binding") $
     "t" <~ Core.bindingTypeScheme (var "binding") $
     cases _Term (var "val0")
-      (Just $ pair (Core.binding (var "key0") (var "val0") (var "t")) (list ([] :: [TTerm Binding]))) [
+      (Just $ pair (Core.binding (var "key0") (var "val0") (var "t")) (list ([] :: [TypedTerm Binding]))) [
       _Term_annotated>>: "at" ~>
         "val1" <~ Core.annotatedTermBody (var "at") $
         "ann" <~ Core.annotatedTermAnnotation (var "at") $
@@ -154,7 +154,7 @@ flattenLetTerms = define "flattenLetTerms" $
   -- Note: The default case uses concat2 with empty list to force bindings to have type [Binding]
   -- This ensures proper type inference and prevents incorrect generalization
   "flattenBodyLet" <~ ("bindings" ~> "body" ~>
-    cases _Term (var "body") (Just $ pair (Lists.concat2 (list ([] :: [TTerm Binding])) (var "bindings")) (var "body")) [
+    cases _Term (var "body") (Just $ pair (Lists.concat2 (list ([] :: [TypedTerm Binding])) (var "bindings")) (var "body")) [
       _Term_let>>: "innerLt" ~>
         "innerBindings" <~ Core.letBindings (var "innerLt") $
         "innerBody" <~ Core.letBody (var "innerLt") $
@@ -178,7 +178,7 @@ flattenLetTerms = define "flattenLetTerms" $
         Core.termLet $ Core.let_ (var "newBindings") (var "newBody")]) $
   Rewriting.rewriteTerm @@ var "flatten" @@ var "term"
 
-inlineType :: TTermDefinition (M.Map Name Type -> Type -> Prelude.Either Error Type)
+inlineType :: TypedTermDefinition (M.Map Name Type -> Type -> Prelude.Either Error Type)
 inlineType = define "inlineType" $
   doc "Inline all type variables in a type using the provided schema (Either version). Note: this function is only appropriate for nonrecursive type definitions" $
   "schema" ~> "typ" ~>
@@ -194,7 +194,7 @@ inlineType = define "inlineType" $
     var "afterRecurse" @@ var "tr") $
   Rewriting.rewriteTypeM @@ var "f" @@ var "typ"
 
-isLambda :: TTermDefinition (Term -> Bool)
+isLambda :: TypedTermDefinition (Term -> Bool)
 isLambda = define "isLambda" $
   doc "Check whether a term is a lambda, possibly nested within let and/or annotation terms" $
   "term" ~> cases _Term (Strip.deannotateTerm @@ var "term")
@@ -203,7 +203,7 @@ isLambda = define "isLambda" $
     _Term_let>>: "lt" ~> isLambda @@ (project _Let _Let_body @@ var "lt")]
 
 -- TODO: account for shadowing among let- and lambda-bound variables
-liftLambdaAboveLet :: TTermDefinition (Term -> Term)
+liftLambdaAboveLet :: TypedTermDefinition (Term -> Term)
 liftLambdaAboveLet = define "liftLambdaAboveLet" $
   doc ("Rewrite terms like `let foo = bar in λx.baz` to `λx.let foo = bar in baz`, lifting lambda-bound variables"
     <> " above let-bound variables, recursively. This is helpful for targets such as Python.") $
@@ -235,7 +235,7 @@ liftLambdaAboveLet = define "liftLambdaAboveLet" $
         @@ Core.letBody (var "l")]) $
   Rewriting.rewriteTerm @@ var "rewrite" @@ var "term0"
 
-pruneLet :: TTermDefinition (Let -> Let)
+pruneLet :: TypedTermDefinition (Let -> Let)
 pruneLet = define "pruneLet" $
   doc ("Given a let expression, remove any unused bindings. The resulting expression is still a let,"
     <> " even if has no remaining bindings") $
@@ -257,7 +257,7 @@ pruneLet = define "pruneLet" $
     (var "prunedBindings")
     (Core.letBody $ var "l")
 
-replaceTypedefs :: TTermDefinition (M.Map Name TypeScheme -> Type -> Type)
+replaceTypedefs :: TypedTermDefinition (M.Map Name TypeScheme -> Type -> Type)
 replaceTypedefs = define "replaceTypedefs" $
   doc "Replace all occurrences of simple typedefs (type aliases) with the aliased types, recursively" $
   "types" ~> "typ0" ~>
@@ -290,7 +290,7 @@ replaceTypedefs = define "replaceTypedefs" $
       _Type_wrap>>: constant $ var "typ"]) $
   Rewriting.rewriteType @@ var "rewrite" @@ var "typ0"
 
-simplifyTerm :: TTermDefinition (Term -> Term)
+simplifyTerm :: TypedTermDefinition (Term -> Term)
 simplifyTerm = define "simplifyTerm" $
   doc "Simplify terms by applying beta reduction where possible" $
   "term" ~>
@@ -318,7 +318,7 @@ simplifyTerm = define "simplifyTerm" $
     var "recurse" @@ (var "forTerm" @@ var "stripped")) $
   Rewriting.rewriteTerm @@ var "simplify" @@ var "term"
 
-termDependencyNames :: TTermDefinition (Bool -> Bool -> Bool -> Term -> S.Set Name)
+termDependencyNames :: TypedTermDefinition (Bool -> Bool -> Bool -> Term -> S.Set Name)
 termDependencyNames = define "termDependencyNames" $
   doc "Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that" $
   "binds" ~> "withPrims" ~> "withNoms" ~> "term0" ~>
@@ -343,7 +343,7 @@ termDependencyNames = define "termDependencyNames" $
       _Term_wrap>>: "wrappedTerm" ~> var "nominal" @@ (Core.wrappedTermTypeName $ var "wrappedTerm")]) $
   Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty @@ var "term0"
 
-toShortNames :: TTermDefinition ([Name] -> M.Map Name Name)
+toShortNames :: TypedTermDefinition ([Name] -> M.Map Name Name)
 toShortNames = define "toShortNames" $
   doc "Generate short names from a list of fully qualified names" $
   "original" ~>
@@ -364,7 +364,7 @@ toShortNames = define "toShortNames" $
     Lists.zipWith (var "rename") (Sets.toList $ var "names") (var "rangeFrom" @@ int32 1)) $
   Maps.fromList $ Lists.concat $ Lists.map (var "renameGroup") $ Maps.toList $ var "groups"
 
-topologicalSortBindingMap :: TTermDefinition (M.Map Name Term -> [[(Name, Term)]])
+topologicalSortBindingMap :: TypedTermDefinition (M.Map Name Term -> [[(Name, Term)]])
 topologicalSortBindingMap = define "topologicalSortBindingMap" $
   doc "Topological sort of connected components, in terms of dependencies between variable/term binding pairs" $
   "bindingMap" ~>
@@ -379,14 +379,14 @@ topologicalSortBindingMap = define "topologicalSortBindingMap" $
     "name" <~ Pairs.first (var "nameAndTerm") $
     "term" <~ Pairs.second (var "nameAndTerm") $
     pair (var "name") $ Logic.ifElse (var "hasTypeAnnotation" @@ var "term")
-      (list ([] :: [TTerm Name]))
+      (list ([] :: [TypedTerm Name]))
       (Sets.toList $ Sets.intersection (var "keys") $ Variables.freeVariablesInTerm @@ var "term")) $
   "toPair" <~ ("name" ~> pair (var "name") $ Maybes.fromMaybe
     (Core.termLiteral $ Core.literalString $ string "Impossible!")
     (Maps.lookup (var "name") (var "bindingMap"))) $
   Lists.map (reify $ Lists.map $ var "toPair") (Sorting.topologicalSortComponents @@ Lists.map (var "depsOf") (var "bindings"))
 
-topologicalSortBindings :: TTermDefinition ([Binding] -> Either [[Name]] [Name])
+topologicalSortBindings :: TypedTermDefinition ([Binding] -> Either [[Name]] [Name])
 topologicalSortBindings = define "topologicalSortBindings" $
   doc "Topological sort of elements based on their dependencies" $
   "els" ~>
@@ -395,7 +395,7 @@ topologicalSortBindings = define "topologicalSortBindings" $
     (Sets.toList $ termDependencyNames @@ false @@ true @@ true @@ (Core.bindingTerm $ var "e"))) $
   Sorting.topologicalSort @@ Lists.map (var "adjlist") (var "els")
 
-topologicalSortTypeDefinitions :: TTermDefinition ([TypeDefinition] -> [[TypeDefinition]])
+topologicalSortTypeDefinitions :: TypedTermDefinition ([TypeDefinition] -> [[TypeDefinition]])
 topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
   doc "Topologically sort type definitions by dependencies" $
   "defs" ~>
@@ -409,7 +409,7 @@ topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
   Lists.map ("names" ~> Maybes.cat (Lists.map ("n" ~> Maps.lookup (var "n") (var "nameToDef")) (var "names"))) (
     var "sorted")
 
-typeDependencyNames :: TTermDefinition (Bool -> Type -> S.Set Name)
+typeDependencyNames :: TypedTermDefinition (Bool -> Type -> S.Set Name)
 typeDependencyNames = define "typeDependencyNames" $
   doc "Collect all type names referenced by a type. The boolean controls whether type-scheme references (free variables in type expressions) are included alongside structural references" $
   "withSchema" ~> "typ" ~> Logic.ifElse (var "withSchema")
@@ -418,7 +418,7 @@ typeDependencyNames = define "typeDependencyNames" $
       (typeNamesInType @@ var "typ"))
     (Variables.freeVariablesInType @@ var "typ")
 
-typeNamesInType :: TTermDefinition (Type -> S.Set Name)
+typeNamesInType :: TypedTermDefinition (Type -> S.Set Name)
 typeNamesInType = define "typeNamesInType" $
   doc "Collect every type name that appears anywhere inside a type expression" $
   "typ0" ~>

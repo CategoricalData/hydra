@@ -11,7 +11,7 @@
 -- `module_ :: Module` declaration. It exists purely so kernel/coder DSL
 -- source files (and host-side primN registrations) can reference primitive
 -- names without re-typing the qualified-string form. Each constant has type
--- `Name` (not `TTermDefinition Name`), matching the type expected by
+-- `Name` (not `TypedTermDefinition Name`), matching the type expected by
 -- `prim1` / `prim2` / `prim3` and `primitive1` / `primitive2` / `primitive3`.
 --
 -- The namespace constants (`chars`, `eithers`, ...) are declared here as

@@ -88,7 +88,7 @@ import qualified Hydra.Sources.Avro.Schema as AvroSchema
 type Result a = Either Error a
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 ns :: ModuleName
@@ -183,7 +183,7 @@ module_ = Module {
 
 -- | Error helpers
 
-avroSchemaJsonCoder :: TTermDefinition (InferenceContext -> Coder Avro.Schema JM.Value)
+avroSchemaJsonCoder :: TypedTermDefinition (InferenceContext -> Coder Avro.Schema JM.Value)
 avroSchemaJsonCoder = define "avroSchemaJsonCoder" $
   doc "Create a coder between Avro schemas and JSON values" $
   lambda "cx" $
@@ -194,7 +194,7 @@ avroSchemaJsonCoder = define "avroSchemaJsonCoder" $
 avroSchemaPhantomNs :: ModuleName
 avroSchemaPhantomNs = ModuleName "hydra.avro.schema"
 
-avroSchemaStringCoder :: TTermDefinition (InferenceContext -> Coder Avro.Schema String)
+avroSchemaStringCoder :: TypedTermDefinition (InferenceContext -> Coder Avro.Schema String)
 avroSchemaStringCoder = define "avroSchemaStringCoder" $
   doc "Create a coder between Avro schemas and JSON strings" $
   lambda "cx" $
@@ -212,94 +212,94 @@ avroSchemaStringCoder = define "avroSchemaStringCoder" $
 
 -- | Decode functions
 
-avro_aliases :: TTermDefinition String
+avro_aliases :: TypedTermDefinition String
 avro_aliases = define "avro_aliases" $ string "aliases"
 
-avro_array :: TTermDefinition String
+avro_array :: TypedTermDefinition String
 avro_array = define "avro_array" $ string "array"
 
-avro_ascending :: TTermDefinition String
+avro_ascending :: TypedTermDefinition String
 avro_ascending = define "avro_ascending" $ string "ascending"
 
-avro_boolean :: TTermDefinition String
+avro_boolean :: TypedTermDefinition String
 avro_boolean = define "avro_boolean" $ string "boolean"
 
-avro_bytes :: TTermDefinition String
+avro_bytes :: TypedTermDefinition String
 avro_bytes = define "avro_bytes" $ string "bytes"
 
-avro_default :: TTermDefinition String
+avro_default :: TypedTermDefinition String
 avro_default = define "avro_default" $ string "default"
 
-avro_descending :: TTermDefinition String
+avro_descending :: TypedTermDefinition String
 avro_descending = define "avro_descending" $ string "descending"
 
-avro_doc :: TTermDefinition String
+avro_doc :: TypedTermDefinition String
 avro_doc = define "avro_doc" $ string "doc"
 
-avro_double :: TTermDefinition String
+avro_double :: TypedTermDefinition String
 avro_double = define "avro_double" $ string "double"
 
-avro_enum :: TTermDefinition String
+avro_enum :: TypedTermDefinition String
 avro_enum = define "avro_enum" $ string "enum"
 
-avro_fields :: TTermDefinition String
+avro_fields :: TypedTermDefinition String
 avro_fields = define "avro_fields" $ string "fields"
 
-avro_fixed :: TTermDefinition String
+avro_fixed :: TypedTermDefinition String
 avro_fixed = define "avro_fixed" $ string "fixed"
 
-avro_float :: TTermDefinition String
+avro_float :: TypedTermDefinition String
 avro_float = define "avro_float" $ string "float"
 
-avro_ignore :: TTermDefinition String
+avro_ignore :: TypedTermDefinition String
 avro_ignore = define "avro_ignore" $ string "ignore"
 
-avro_int :: TTermDefinition String
+avro_int :: TypedTermDefinition String
 avro_int = define "avro_int" $ string "int"
 
-avro_items :: TTermDefinition String
+avro_items :: TypedTermDefinition String
 avro_items = define "avro_items" $ string "items"
 
-avro_long :: TTermDefinition String
+avro_long :: TypedTermDefinition String
 avro_long = define "avro_long" $ string "long"
 
-avro_map :: TTermDefinition String
+avro_map :: TypedTermDefinition String
 avro_map = define "avro_map" $ string "map"
 
-avro_name :: TTermDefinition String
+avro_name :: TypedTermDefinition String
 avro_name = define "avro_name" $ string "name"
 
-avro_namespace :: TTermDefinition String
+avro_namespace :: TypedTermDefinition String
 avro_namespace = define "avro_namespace" $ string "namespace"
 
-avro_null :: TTermDefinition String
+avro_null :: TypedTermDefinition String
 avro_null = define "avro_null" $ string "null"
 
-avro_order :: TTermDefinition String
+avro_order :: TypedTermDefinition String
 avro_order = define "avro_order" $ string "order"
 
-avro_record :: TTermDefinition String
+avro_record :: TypedTermDefinition String
 avro_record = define "avro_record" $ string "record"
 
-avro_size :: TTermDefinition String
+avro_size :: TypedTermDefinition String
 avro_size = define "avro_size" $ string "size"
 
-avro_string :: TTermDefinition String
+avro_string :: TypedTermDefinition String
 avro_string = define "avro_string" $ string "string"
 
-avro_symbols :: TTermDefinition String
+avro_symbols :: TypedTermDefinition String
 avro_symbols = define "avro_symbols" $ string "symbols"
 
-avro_type :: TTermDefinition String
+avro_type :: TypedTermDefinition String
 avro_type = define "avro_type" $ string "type"
 
-avro_values :: TTermDefinition String
+avro_values :: TypedTermDefinition String
 avro_values = define "avro_values" $ string "values"
 
 
 -- | Encode functions
 
-decodeAliases :: TTermDefinition (InferenceContext -> M.Map String JM.Value -> Result (Maybe [String]))
+decodeAliases :: TypedTermDefinition (InferenceContext -> M.Map String JM.Value -> Result (Maybe [String]))
 decodeAliases = define "decodeAliases" $
   doc "Decode aliases from a JSON object map" $
   lambda "cx" $ lambda "m" $
@@ -313,7 +313,7 @@ decodeAliases = define "decodeAliases" $
               (Eithers.mapList (expectStringE @@ var "cx") (var "arr")))
           (var "mArr"))
 
-decodeArraySchema :: TTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.Schema)
+decodeArraySchema :: TypedTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.Schema)
 decodeArraySchema = define "decodeArraySchema" $
   doc "Decode an Avro array schema from a JSON object map" $
   lambda "cx" $ lambda "m" $
@@ -324,7 +324,7 @@ decodeArraySchema = define "decodeArraySchema" $
             Avro._Array_items>>: var "s"]))
           (decodeSchema @@ var "cx" @@ var "items"))
 
-decodeEnum :: TTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.NamedType)
+decodeEnum :: TypedTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.NamedType)
 decodeEnum = define "decodeEnum" $
   doc "Decode an Avro enum type from a JSON object map" $
   lambda "cx" $ lambda "m" $
@@ -339,7 +339,7 @@ decodeEnum = define "decodeEnum" $
                     Avro._Enum_symbols>>: var "symbols",
                     Avro._Enum_default>>: var "defVal"])))))
 
-decodeField :: TTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.Field)
+decodeField :: TypedTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.Field)
 decodeField = define "decodeField" $
   doc "Decode an Avro field from a JSON object map" $
   lambda "cx" $ lambda "m" $
@@ -366,7 +366,7 @@ decodeField = define "decodeField" $
                               Avro._Field_aliases>>: var "aliases",
                               Avro._Field_annotations>>: getAnnotations @@ var "m"])))))))
 
-decodeFixed :: TTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.NamedType)
+decodeFixed :: TypedTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.NamedType)
 decodeFixed = define "decodeFixed" $
   doc "Decode an Avro fixed type from a JSON object map" $
   lambda "cx" $ lambda "m" $
@@ -377,7 +377,7 @@ decodeFixed = define "decodeFixed" $
           record Avro._Fixed [
             Avro._Fixed_size>>: var "size"])
 
-decodeMapSchema :: TTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.Schema)
+decodeMapSchema :: TypedTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.Schema)
 decodeMapSchema = define "decodeMapSchema" $
   doc "Decode an Avro map schema from a JSON object map" $
   lambda "cx" $ lambda "m" $
@@ -388,7 +388,7 @@ decodeMapSchema = define "decodeMapSchema" $
             Avro._Map_values>>: var "s"]))
           (decodeSchema @@ var "cx" @@ var "values"))
 
-decodeNamedSchema :: TTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.NamedType -> Result Avro.Schema)
+decodeNamedSchema :: TypedTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.NamedType -> Result Avro.Schema)
 decodeNamedSchema = define "decodeNamedSchema" $
   doc "Decode a named Avro schema from a JSON object map and a decoded named type result" $
   lambda "cx" $ lambda "m" $ lambda "namedTypeResult" $
@@ -411,7 +411,7 @@ decodeNamedSchema = define "decodeNamedSchema" $
                             Avro._Named_type>>: var "namedType",
                             Avro._Named_annotations>>: getAnnotations @@ var "m"])))))))
 
-decodeObjectSchema :: TTermDefinition (InferenceContext -> M.Map String JM.Value -> String -> Result Avro.Schema)
+decodeObjectSchema :: TypedTermDefinition (InferenceContext -> M.Map String JM.Value -> String -> Result Avro.Schema)
 decodeObjectSchema = define "decodeObjectSchema" $
   doc "Decode an Avro schema from a JSON object given the type name" $
   lambda "cx" $ lambda "m" $ lambda "typeName" $
@@ -431,7 +431,7 @@ decodeObjectSchema = define "decodeObjectSchema" $
                 (lambda "p" $ Phantoms.right (inject Avro._Schema Avro._Schema_primitive (var "p")))
                 (decodePrimitiveName @@ var "typeName"))))))
 
-decodeOrder :: TTermDefinition (InferenceContext -> String -> Result Avro.Order)
+decodeOrder :: TypedTermDefinition (InferenceContext -> String -> Result Avro.Order)
 decodeOrder = define "decodeOrder" $
   doc "Decode an Avro field ordering from a string" $
   lambda "cx" $ lambda "o" $
@@ -443,7 +443,7 @@ decodeOrder = define "decodeOrder" $
           (Phantoms.right (inject Avro._Order Avro._Order_ignore unit))
           (err @@ var "cx" @@ (Strings.cat $ list [string "unknown order: ", var "o"]))))
 
-decodePrimitiveName :: TTermDefinition (String -> Maybe Avro.Primitive)
+decodePrimitiveName :: TypedTermDefinition (String -> Maybe Avro.Primitive)
 decodePrimitiveName = define "decodePrimitiveName" $
   doc "Decode a primitive type name string to a Primitive, or Nothing if not a primitive" $
   lambda "s" $
@@ -465,7 +465,7 @@ decodePrimitiveName = define "decodePrimitiveName" $
                     (just (inject Avro._Primitive Avro._Primitive_string unit))
                     nothing)))))))
 
-decodeRecord :: TTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.NamedType)
+decodeRecord :: TypedTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.NamedType)
 decodeRecord = define "decodeRecord" $
   doc "Decode an Avro record type from a JSON object map" $
   lambda "cx" $ lambda "m" $
@@ -481,7 +481,7 @@ decodeRecord = define "decodeRecord" $
               (record Avro._Record [
                 Avro._Record_fields>>: var "fields"]))))
 
-decodeSchema :: TTermDefinition (InferenceContext -> JM.Value -> Result Avro.Schema)
+decodeSchema :: TypedTermDefinition (InferenceContext -> JM.Value -> Result Avro.Schema)
 decodeSchema = define "decodeSchema" $
   doc "Decode an Avro schema from a JSON value" $
   lambda "cx" $ lambda "v" $
@@ -502,7 +502,7 @@ decodeSchema = define "decodeSchema" $
         Eithers.bind (requireStringE @@ var "cx" @@ avro_type @@ var "m")
           (lambda "typeName" $ decodeObjectSchema @@ var "cx" @@ var "m" @@ var "typeName")]
 
-encodeAnnotations :: TTermDefinition (M.Map String JM.Value -> [(String, JM.Value)])
+encodeAnnotations :: TypedTermDefinition (M.Map String JM.Value -> [(String, JM.Value)])
 encodeAnnotations = define "encodeAnnotations" $
   doc "Encode annotations as key-value pairs with @ prefix on keys" $
   lambda "m" $
@@ -515,7 +515,7 @@ encodeAnnotations = define "encodeAnnotations" $
 
 -- | Coder functions
 
-encodeArray :: TTermDefinition (Avro.Array -> JM.Value)
+encodeArray :: TypedTermDefinition (Avro.Array -> JM.Value)
 encodeArray = define "encodeArray" $
   doc "Encode an Avro array schema to a JSON object" $
   lambda "arr" $
@@ -524,16 +524,16 @@ encodeArray = define "encodeArray" $
         pair (string "type") (inject JM._Value JM._Value_string (string "array")),
         pair (string "items") (encodeSchema @@ (project Avro._Array Avro._Array_items @@ var "arr"))]))
 
-encodeEnumE :: TTermDefinition (Avro.Enum -> [(String, JM.Value)])
+encodeEnumE :: TypedTermDefinition (Avro.Enum -> [(String, JM.Value)])
 encodeEnumE = define "encodeEnum" $
   doc "Encode an Avro enum type as key-value pairs" $
   lambda "e" $
     Lists.concat (list [
       list [pair (string "type") (inject JM._Value JM._Value_string (string "enum"))],
       list [pair (string "symbols") (inject JM._Value JM._Value_array (Lists.map (lambda "s" $ inject JM._Value JM._Value_string (var "s")) (project Avro._Enum Avro._Enum_symbols @@ var "e")))],
-      Maybes.maybe (list ([] :: [TTerm (String, JM.Value)])) (lambda "d" $ list [pair (string "default") (inject JM._Value JM._Value_string (var "d"))]) (project Avro._Enum Avro._Enum_default @@ var "e")])
+      Maybes.maybe (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "d" $ list [pair (string "default") (inject JM._Value JM._Value_string (var "d"))]) (project Avro._Enum Avro._Enum_default @@ var "e")])
 
-encodeFieldE :: TTermDefinition (Avro.Field -> JM.Value)
+encodeFieldE :: TypedTermDefinition (Avro.Field -> JM.Value)
 encodeFieldE = define "encodeField" $
   doc "Encode an Avro field to a JSON object" $
   lambda "f" $
@@ -541,13 +541,13 @@ encodeFieldE = define "encodeField" $
       (Maps.fromList (Lists.concat (list [
         list [pair (string "name") (inject JM._Value JM._Value_string (project Avro._Field Avro._Field_name @@ var "f"))],
         list [pair (string "type") (encodeSchema @@ (project Avro._Field Avro._Field_type @@ var "f"))],
-        Maybes.maybe (list ([] :: [TTerm (String, JM.Value)])) (lambda "d" $ list [pair (string "doc") (inject JM._Value JM._Value_string (var "d"))]) (project Avro._Field Avro._Field_doc @@ var "f"),
-        Maybes.maybe (list ([] :: [TTerm (String, JM.Value)])) (lambda "d" $ list [pair (string "default") (var "d")]) (project Avro._Field Avro._Field_default @@ var "f"),
-        Maybes.maybe (list ([] :: [TTerm (String, JM.Value)])) (lambda "o" $ list [encodeOrderE @@ var "o"]) (project Avro._Field Avro._Field_order @@ var "f"),
-        Maybes.maybe (list ([] :: [TTerm (String, JM.Value)])) (lambda "als" $ list [pair (string "aliases") (inject JM._Value JM._Value_array (Lists.map (lambda "a" $ inject JM._Value JM._Value_string (var "a")) (var "als")))]) (project Avro._Field Avro._Field_aliases @@ var "f"),
+        Maybes.maybe (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "d" $ list [pair (string "doc") (inject JM._Value JM._Value_string (var "d"))]) (project Avro._Field Avro._Field_doc @@ var "f"),
+        Maybes.maybe (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "d" $ list [pair (string "default") (var "d")]) (project Avro._Field Avro._Field_default @@ var "f"),
+        Maybes.maybe (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "o" $ list [encodeOrderE @@ var "o"]) (project Avro._Field Avro._Field_order @@ var "f"),
+        Maybes.maybe (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "als" $ list [pair (string "aliases") (inject JM._Value JM._Value_array (Lists.map (lambda "a" $ inject JM._Value JM._Value_string (var "a")) (var "als")))]) (project Avro._Field Avro._Field_aliases @@ var "f"),
         encodeAnnotations @@ (project Avro._Field Avro._Field_annotations @@ var "f")])))
 
-encodeFixedE :: TTermDefinition (Avro.Fixed -> [(String, JM.Value)])
+encodeFixedE :: TypedTermDefinition (Avro.Fixed -> [(String, JM.Value)])
 encodeFixedE = define "encodeFixed" $
   doc "Encode an Avro fixed type as key-value pairs" $
   lambda "f" $
@@ -555,7 +555,7 @@ encodeFixedE = define "encodeFixed" $
       pair (string "type") (inject JM._Value JM._Value_string (string "fixed")),
       pair (string "size") (inject JM._Value JM._Value_number (Literals.bigintToDecimal (Literals.int32ToBigint (project Avro._Fixed Avro._Fixed_size @@ var "f"))))]
 
-encodeMap :: TTermDefinition (Avro.Map -> JM.Value)
+encodeMap :: TypedTermDefinition (Avro.Map -> JM.Value)
 encodeMap = define "encodeMap" $
   doc "Encode an Avro map schema to a JSON object" $
   lambda "mp" $
@@ -564,20 +564,20 @@ encodeMap = define "encodeMap" $
         pair (string "type") (inject JM._Value JM._Value_string (string "map")),
         pair (string "values") (encodeSchema @@ (project Avro._Map Avro._Map_values @@ var "mp"))]))
 
-encodeNamed :: TTermDefinition (Avro.Named -> JM.Value)
+encodeNamed :: TypedTermDefinition (Avro.Named -> JM.Value)
 encodeNamed = define "encodeNamed" $
   doc "Encode an Avro named type to a JSON object" $
   lambda "n" $
     inject JM._Value JM._Value_object
       (Maps.fromList (Lists.concat (list [
         list [pair (string "name") (inject JM._Value JM._Value_string (project Avro._Named Avro._Named_name @@ var "n"))],
-        Maybes.maybe (list ([] :: [TTerm (String, JM.Value)])) (lambda "ns" $ list [pair (string "namespace") (inject JM._Value JM._Value_string (var "ns"))]) (project Avro._Named Avro._Named_namespace @@ var "n"),
-        Maybes.maybe (list ([] :: [TTerm (String, JM.Value)])) (lambda "d" $ list [pair (string "doc") (inject JM._Value JM._Value_string (var "d"))]) (project Avro._Named Avro._Named_doc @@ var "n"),
-        Maybes.maybe (list ([] :: [TTerm (String, JM.Value)])) (lambda "als" $ list [pair (string "aliases") (inject JM._Value JM._Value_array (Lists.map (lambda "a" $ inject JM._Value JM._Value_string (var "a")) (var "als")))]) (project Avro._Named Avro._Named_aliases @@ var "n"),
+        Maybes.maybe (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "ns" $ list [pair (string "namespace") (inject JM._Value JM._Value_string (var "ns"))]) (project Avro._Named Avro._Named_namespace @@ var "n"),
+        Maybes.maybe (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "d" $ list [pair (string "doc") (inject JM._Value JM._Value_string (var "d"))]) (project Avro._Named Avro._Named_doc @@ var "n"),
+        Maybes.maybe (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "als" $ list [pair (string "aliases") (inject JM._Value JM._Value_array (Lists.map (lambda "a" $ inject JM._Value JM._Value_string (var "a")) (var "als")))]) (project Avro._Named Avro._Named_aliases @@ var "n"),
         encodeNamedType @@ (project Avro._Named Avro._Named_type @@ var "n"),
         encodeAnnotations @@ (project Avro._Named Avro._Named_annotations @@ var "n")])))
 
-encodeNamedType :: TTermDefinition (Avro.NamedType -> [(String, JM.Value)])
+encodeNamedType :: TypedTermDefinition (Avro.NamedType -> [(String, JM.Value)])
 encodeNamedType = define "encodeNamedType" $
   doc "Encode the specific variant of a named Avro type" $
   lambda "nt" $
@@ -586,7 +586,7 @@ encodeNamedType = define "encodeNamedType" $
       Avro._NamedType_fixed>>: lambda "f" $ encodeFixedE @@ var "f",
       Avro._NamedType_record>>: lambda "r" $ encodeRecordE @@ var "r"]
 
-encodeOrderE :: TTermDefinition (Avro.Order -> (String, JM.Value))
+encodeOrderE :: TypedTermDefinition (Avro.Order -> (String, JM.Value))
 encodeOrderE = define "encodeOrder" $
   doc "Encode an Avro field ordering as a key-value pair" $
   lambda "o" $
@@ -596,7 +596,7 @@ encodeOrderE = define "encodeOrder" $
         Avro._Order_descending>>: constant (string "descending"),
         Avro._Order_ignore>>: constant (string "ignore")]))
 
-encodePrimitive :: TTermDefinition (Avro.Primitive -> JM.Value)
+encodePrimitive :: TypedTermDefinition (Avro.Primitive -> JM.Value)
 encodePrimitive = define "encodePrimitive" $
   doc "Encode an Avro primitive type as a JSON string" $
   lambda "p" $
@@ -611,7 +611,7 @@ encodePrimitive = define "encodePrimitive" $
         Avro._Primitive_bytes>>: constant (string "bytes"),
         Avro._Primitive_string>>: constant (string "string")])
 
-encodeRecordE :: TTermDefinition (Avro.Record -> [(String, JM.Value)])
+encodeRecordE :: TypedTermDefinition (Avro.Record -> [(String, JM.Value)])
 encodeRecordE = define "encodeRecord" $
   doc "Encode an Avro record type as key-value pairs" $
   lambda "r" $
@@ -619,7 +619,7 @@ encodeRecordE = define "encodeRecord" $
       pair (string "type") (inject JM._Value JM._Value_string (string "record")),
       pair (string "fields") (inject JM._Value JM._Value_array (Lists.map encodeFieldE (project Avro._Record Avro._Record_fields @@ var "r")))]
 
-encodeSchema :: TTermDefinition (Avro.Schema -> JM.Value)
+encodeSchema :: TypedTermDefinition (Avro.Schema -> JM.Value)
 encodeSchema = define "encodeSchema" $
   doc "Encode an Avro schema to a JSON value" $
   lambda "schema" $
@@ -631,48 +631,48 @@ encodeSchema = define "encodeSchema" $
       Avro._Schema_reference>>: lambda "ref" $ inject JM._Value JM._Value_string (var "ref"),
       Avro._Schema_union>>: lambda "u" $ encodeUnion @@ var "u"]
 
-encodeUnion :: TTermDefinition (Avro.Union -> JM.Value)
+encodeUnion :: TypedTermDefinition (Avro.Union -> JM.Value)
 encodeUnion = define "encodeUnion" $
   doc "Encode an Avro union as a JSON array of schemas" $
   lambda "u" $
     inject JM._Value JM._Value_array
       (Lists.map encodeSchema (unwrap Avro._Union @@ var "u"))
 
-err :: TTermDefinition (InferenceContext -> String -> Result a)
+err :: TypedTermDefinition (InferenceContext -> String -> Result a)
 err = define "err" $
   doc "Construct an error result with a message in context" $
   lambda "cx" $ lambda "msg" $
     left (Error.errorOther $ Error.otherError (var "msg"))
 
-expectArrayE :: TTermDefinition (InferenceContext -> JM.Value -> Result [JM.Value])
+expectArrayE :: TypedTermDefinition (InferenceContext -> JM.Value -> Result [JM.Value])
 expectArrayE = define "expectArrayE" $
   doc "Extract a JSON array or return an error" $
   lambda "cx" $ lambda "value" $
     cases JM._Value (var "value") Nothing [
       JM._Value_array>>: lambda "v" $ Phantoms.right (var "v")]
 
-expectNumberE :: TTermDefinition (InferenceContext -> JM.Value -> Result Sci.Scientific)
+expectNumberE :: TypedTermDefinition (InferenceContext -> JM.Value -> Result Sci.Scientific)
 expectNumberE = define "expectNumberE" $
   doc "Extract a JSON number or return an error" $
   lambda "cx" $ lambda "value" $
     cases JM._Value (var "value") Nothing [
       JM._Value_number>>: lambda "v" $ Phantoms.right (var "v")]
 
-expectObjectE :: TTermDefinition (InferenceContext -> JM.Value -> Result (M.Map String JM.Value))
+expectObjectE :: TypedTermDefinition (InferenceContext -> JM.Value -> Result (M.Map String JM.Value))
 expectObjectE = define "expectObjectE" $
   doc "Extract a JSON object or return an error" $
   lambda "cx" $ lambda "value" $
     cases JM._Value (var "value") Nothing [
       JM._Value_object>>: lambda "v" $ Phantoms.right (var "v")]
 
-expectStringE :: TTermDefinition (InferenceContext -> JM.Value -> Result String)
+expectStringE :: TypedTermDefinition (InferenceContext -> JM.Value -> Result String)
 expectStringE = define "expectStringE" $
   doc "Extract a JSON string or return an error" $
   lambda "cx" $ lambda "value" $
     cases JM._Value (var "value") Nothing [
       JM._Value_string>>: lambda "v" $ Phantoms.right (var "v")]
 
-getAnnotations :: TTermDefinition (M.Map String JM.Value -> M.Map String JM.Value)
+getAnnotations :: TypedTermDefinition (M.Map String JM.Value -> M.Map String JM.Value)
 getAnnotations = define "getAnnotations" $
   doc "Extract annotation entries (keys starting with @) from a JSON object map" $
   lambda "m" $
@@ -695,7 +695,7 @@ jsonParserNs = ModuleName "hydra.json.parser"
 jsonWriterNs :: ModuleName
 jsonWriterNs = ModuleName "hydra.json.writer"
 
-optArrayE :: TTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result (Maybe [JM.Value]))
+optArrayE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result (Maybe [JM.Value]))
 optArrayE = define "optArrayE" $
   doc "Look up an optional array attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
@@ -704,13 +704,13 @@ optArrayE = define "optArrayE" $
       (lambda "v" $ Eithers.map (lambda "a" $ Maybes.pure (var "a")) (expectArrayE @@ var "cx" @@ var "v"))
       (Maps.lookup (var "fname") (var "m"))
 
-optE :: TTermDefinition (String -> M.Map String JM.Value -> Maybe JM.Value)
+optE :: TypedTermDefinition (String -> M.Map String JM.Value -> Maybe JM.Value)
 optE = define "optE" $
   doc "Look up an optional attribute in a JSON object map" $
   lambda "k" $ lambda "m" $
     Maps.lookup (var "k") (var "m")
 
-optStringE :: TTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result (Maybe String))
+optStringE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result (Maybe String))
 optStringE = define "optStringE" $
   doc "Look up an optional string attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
@@ -719,14 +719,14 @@ optStringE = define "optStringE" $
       (lambda "v" $ Eithers.map (lambda "s" $ Maybes.pure (var "s")) (expectStringE @@ var "cx" @@ var "v"))
       (Maps.lookup (var "fname") (var "m"))
 
-requireArrayE :: TTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result [JM.Value])
+requireArrayE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result [JM.Value])
 requireArrayE = define "requireArrayE" $
   doc "Look up a required array attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
     Eithers.bind (requireE @@ var "cx" @@ var "fname" @@ var "m")
       (lambda "v" $ expectArrayE @@ var "cx" @@ var "v")
 
-requireE :: TTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result JM.Value)
+requireE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result JM.Value)
 requireE = define "requireE" $
   doc "Look up a required attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
@@ -735,27 +735,27 @@ requireE = define "requireE" $
       (lambda "v" $ Phantoms.right (var "v"))
       (Maps.lookup (var "fname") (var "m"))
 
-requireNumberE :: TTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result Sci.Scientific)
+requireNumberE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result Sci.Scientific)
 requireNumberE = define "requireNumberE" $
   doc "Look up a required number attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
     Eithers.bind (requireE @@ var "cx" @@ var "fname" @@ var "m")
       (lambda "v" $ expectNumberE @@ var "cx" @@ var "v")
 
-requireStringE :: TTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result String)
+requireStringE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result String)
 requireStringE = define "requireStringE" $
   doc "Look up a required string attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
     Eithers.bind (requireE @@ var "cx" @@ var "fname" @@ var "m")
       (lambda "v" $ expectStringE @@ var "cx" @@ var "v")
 
-showJsonValue :: TTermDefinition (JM.Value -> String)
+showJsonValue :: TypedTermDefinition (JM.Value -> String)
 showJsonValue = define "showJsonValue" $
   doc "Convert a JSON value to its string representation" $
   lambda "v" $
     var "hydra.json.writer.printJson" @@ var "v"
 
-stringToJsonValue :: TTermDefinition (String -> Either String JM.Value)
+stringToJsonValue :: TypedTermDefinition (String -> Either String JM.Value)
 stringToJsonValue = define "stringToJsonValue" $
   doc "Parse a JSON string, returning Either for compatibility" $
   lambda "s" $
@@ -768,7 +768,7 @@ stringToJsonValue = define "stringToJsonValue" $
 
 -- | String constants
 
-unexpectedE :: TTermDefinition (InferenceContext -> String -> String -> Result a)
+unexpectedE :: TypedTermDefinition (InferenceContext -> String -> String -> Result a)
 unexpectedE = define "unexpectedE" $
   doc "Construct an error for unexpected values" $
   lambda "cx" $ lambda "expected" $ lambda "found" $

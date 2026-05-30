@@ -95,7 +95,7 @@ import qualified Hydra.Sources.Test.Utils as TestUtils
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as SerializationSource
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 
@@ -119,7 +119,7 @@ module_ = Module {
 
 
 -- | Build complete Python test module
-buildPythonTestModule :: TTermDefinition (Module -> TestGroup -> String -> String)
+buildPythonTestModule :: TypedTermDefinition (Module -> TestGroup -> String -> String)
 buildPythonTestModule = define "buildPythonTestModule" $
   doc "Build the complete Python test module content" $
   lambda "testModule" $ lambda "testGroup" $ lambda "testBody" $ lets [
@@ -133,7 +133,7 @@ buildPythonTestModule = define "buildPythonTestModule" $
 
 
 -- | Format a test name for Python (snake_case, valid identifier)
-formatPythonTestName :: TTermDefinition (String -> String)
+formatPythonTestName :: TypedTermDefinition (String -> String)
 formatPythonTestName = define "formatPythonTestName" $
   doc "Format a test name for Python (snake_case with test_ prefix)" $
   lambda "name" $
@@ -147,7 +147,7 @@ formatPythonTestName = define "formatPythonTestName" $
 
 
 -- | Generate a single test case for Python/pytest
-generatePythonTestCase :: TTermDefinition ([String] -> TestCaseWithMetadata -> Either String [String])
+generatePythonTestCase :: TypedTermDefinition ([String] -> TestCaseWithMetadata -> Either String [String])
 generatePythonTestCase = define "generatePythonTestCase" $
   doc "Generate a single pytest test case from a test case with metadata" $
   lambda "groupPath" $ lambda "tcm" $ lets [
@@ -167,7 +167,7 @@ generatePythonTestCase = define "generatePythonTestCase" $
 
 
 -- | Generate Python test file for a test group
-generatePythonTestFile :: TTermDefinition (Module -> TestGroup -> Graph -> Either String (String, String))
+generatePythonTestFile :: TypedTermDefinition (Module -> TestGroup -> Graph -> Either String (String, String))
 generatePythonTestFile = define "generatePythonTestFile" $
   doc "Generate a Python test file for a test group" $
   lambda "testModule" $ lambda "testGroup" $ lambda "_g" $
@@ -177,7 +177,7 @@ generatePythonTestFile = define "generatePythonTestFile" $
 
 
 -- | Generate Python test group hierarchy
-generatePythonTestGroupHierarchy :: TTermDefinition ([String] -> TestGroup -> Either String String)
+generatePythonTestGroupHierarchy :: TypedTermDefinition ([String] -> TestGroup -> Either String String)
 generatePythonTestGroupHierarchy = define "generatePythonTestGroupHierarchy" $
   doc "Generate test hierarchy for Python with nested subgroups" $
   lambda "groupPath" $ lambda "testGroup" $ lets [
@@ -208,7 +208,7 @@ generatePythonTestGroupHierarchy = define "generatePythonTestGroupHierarchy" $
 
 
 -- | Generate test file using Python codec
-generateTestFileWithPythonCodec :: TTermDefinition (Module -> TestGroup -> Either String (String, String))
+generateTestFileWithPythonCodec :: TypedTermDefinition (Module -> TestGroup -> Either String (String, String))
 generateTestFileWithPythonCodec = define "generateTestFileWithPythonCodec" $
   doc "Generate a complete test file for Python" $
   lambda "testModule" $ lambda "testGroup" $
@@ -217,8 +217,8 @@ generateTestFileWithPythonCodec = define "generateTestFileWithPythonCodec" $
         "testModuleContent">: buildPythonTestModule @@ var "testModule" @@ var "testGroup" @@ var "testBody",
         "ns_">: Packaging.moduleName (var "testModule"),
         "parts">: Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns_"),
-        "dirParts">: Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts")),
+        "dirParts">: Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts")),
         "fileName">: Strings.cat (list [string "test_", Maybes.fromMaybe (string "") (Lists.maybeLast (var "parts")), string ".py"]),
         "filePath">: Strings.cat (list [Strings.intercalate (string "/") (var "dirParts"), string "/", var "fileName"])] $
         Phantoms.pair (var "filePath") (var "testModuleContent"))
-      (generatePythonTestGroupHierarchy @@ list ([] :: [TTerm String]) @@ var "testGroup")
+      (generatePythonTestGroupHierarchy @@ list ([] :: [TypedTerm String]) @@ var "testGroup")

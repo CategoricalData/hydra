@@ -40,7 +40,7 @@ import qualified Hydra.Yaml.Model as YM
 ns :: ModuleName
 ns = ModuleName "hydra.yaml.coder"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -60,7 +60,7 @@ module_ = Module {
       toDefinition unitCoder,
       toDefinition yamlCoder]
 
-decodeRecord :: TTermDefinition (Name -> [(FieldType, Coder Term YM.Node)] -> InferenceContext -> YM.Node -> Either Error Term)
+decodeRecord :: TypedTermDefinition (Name -> [(FieldType, Coder Term YM.Node)] -> InferenceContext -> YM.Node -> Either Error Term)
 decodeRecord = define "decodeRecord" $
   doc "Decode a YAML value to a record term" $
   "tname" ~> "coders" ~> "cx" ~> "n" ~>
@@ -79,7 +79,7 @@ decodeRecord = define "decodeRecord" $
     (Just $ left (Error.errorOther $ Error.otherError (string "expected mapping"))) [
     YM._Node_mapping>>: var "decodeObjectBody"]
 
-encodeRecord :: TTermDefinition ([(FieldType, Coder Term YM.Node)] -> InferenceContext -> Graph -> Term -> Either Error YM.Node)
+encodeRecord :: TypedTermDefinition ([(FieldType, Coder Term YM.Node)] -> InferenceContext -> Graph -> Term -> Either Error YM.Node)
 encodeRecord = define "encodeRecord" $
   doc "Encode a record term to YAML" $
   "coders" ~> "cx" ~> "graph" ~> "term" ~>
@@ -109,10 +109,10 @@ encodeRecord = define "encodeRecord" $
   right (Yaml.nodeMapping $ Maps.fromList $ Maybes.cat $ var "maybeFields")
 
 -- | Lift Either String to Either Error using a context
-liftStringError :: TTerm InferenceContext -> TTerm (Either String a) -> TTerm (Either Error a)
+liftStringError :: TypedTerm InferenceContext -> TypedTerm (Either String a) -> TypedTerm (Either Error a)
 liftStringError cx = Eithers.bimap ("_s" ~> Error.errorOther (Error.otherError $ var "_s")) ("_x" ~> var "_x")
 
-literalYamlCoder :: TTermDefinition (LiteralType -> Either Error (Coder Literal YM.Scalar))
+literalYamlCoder :: TypedTermDefinition (LiteralType -> Either Error (Coder Literal YM.Scalar))
 literalYamlCoder = define "literalYamlCoder" $
   doc "Create a YAML coder for literal types" $
   "lt" ~>
@@ -174,7 +174,7 @@ literalYamlCoder = define "literalYamlCoder" $
       (var "decodeString")]) $
   right $ var "encoded"
 
-recordCoder :: TTermDefinition (Name -> [FieldType] -> InferenceContext -> Graph -> Either Error (Coder Term YM.Node))
+recordCoder :: TypedTermDefinition (Name -> [FieldType] -> InferenceContext -> Graph -> Either Error (Coder Term YM.Node))
 recordCoder = define "recordCoder" $
   doc "Create a YAML coder for record types" $
   "tname" ~> "rt" ~> "cx" ~> "g" ~>
@@ -189,7 +189,7 @@ recordCoder = define "recordCoder" $
 -- | Check whether a float's string form is an IEEE value that Hydra YAML cannot represent
 -- as a plain scalar: NaN, Infinity, -Infinity, or -0.0. Hydra YAML's float scalar deliberately
 -- excludes these (see Yaml.Model) so the encoder must refuse them rather than silently coerce.
-requiresYamlStringSentinel :: TTermDefinition (String -> Bool)
+requiresYamlStringSentinel :: TypedTermDefinition (String -> Bool)
 requiresYamlStringSentinel = define "requiresYamlStringSentinel" $
   doc "True for IEEE sentinel strings that Hydra YAML cannot represent as a float scalar." $
   "s" ~> Logic.or (Equality.equal (var "s") (string "NaN")) $
@@ -197,7 +197,7 @@ requiresYamlStringSentinel = define "requiresYamlStringSentinel" $
          Logic.or (Equality.equal (var "s") (string "-Infinity"))
                   (Equality.equal (var "s") (string "-0.0"))
 
-termCoder :: TTermDefinition (Type -> InferenceContext -> Graph -> Either Error (Coder Term YM.Node))
+termCoder :: TypedTermDefinition (Type -> InferenceContext -> Graph -> Either Error (Coder Term YM.Node))
 termCoder = define "termCoder" $
   doc "Create a YAML coder for term types" $
   "typ" ~> "cx" ~> "g" ~>
@@ -297,10 +297,10 @@ termCoder = define "termCoder" $
         (var "encodeMaybe" @@ var "maybeElementCoder")
         (var "decodeMaybe" @@ var "maybeElementCoder"),
     _Type_record>>: "rt" ~> recordCoder @@ Core.name (string "yaml") @@ var "rt" @@ var "cx" @@ var "g",
-    _Type_unit>>: constant $ right $ (var "hydra.yaml.coder.unitCoder" :: TTerm (Coder Term YM.Node))]) $
+    _Type_unit>>: constant $ right $ (var "hydra.yaml.coder.unitCoder" :: TypedTerm (Coder Term YM.Node))]) $
   var "result"
 
-unitCoder :: TTermDefinition (Coder Term YM.Node)
+unitCoder :: TypedTermDefinition (Coder Term YM.Node)
 unitCoder = define "unitCoder" $
   doc "YAML coder for unit values" $
   "encodeUnit" <~ ("cx" ~> "term" ~>
@@ -316,7 +316,7 @@ unitCoder = define "unitCoder" $
           YM._Scalar_null>>: constant $ right Core.termUnit]]) $
   Coders.coder (var "encodeUnit") (var "decodeUnit")
 
-yamlCoder :: TTermDefinition (Type -> InferenceContext -> Graph -> Either Error (Coder Term YM.Node))
+yamlCoder :: TypedTermDefinition (Type -> InferenceContext -> Graph -> Either Error (Coder Term YM.Node))
 yamlCoder = define "yamlCoder" $
   doc "Create a YAML coder for a given type" $
   "typ" ~> "cx" ~> "g" ~>

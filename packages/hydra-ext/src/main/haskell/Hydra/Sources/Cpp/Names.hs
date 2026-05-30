@@ -118,7 +118,7 @@ module_ = Module {
       toDefinition visitorName]
 
 -- | Get the C++ class name from a Hydra Name
-className :: TTermDefinition (Name -> String)
+className :: TypedTermDefinition (Name -> String)
 className = def "className" $
   doc "Get the C++ class name from a Hydra Name" $
   lambda "name" $
@@ -128,7 +128,7 @@ cppLanguageNs :: ModuleName
 cppLanguageNs = ModuleName "hydra.cpp.language"
 
 -- | Create a type reference, optionally wrapped in shared_ptr
-createTypeReference :: TTermDefinition (Bool -> CppUtils.CppEnvironment -> Name -> Cpp.TypeExpression)
+createTypeReference :: TypedTermDefinition (Bool -> CppUtils.CppEnvironment -> Name -> Cpp.TypeExpression)
 createTypeReference = def "createTypeReference" $
   doc "Create a type reference, optionally wrapped in shared_ptr" $
   lambdas ["isPointer", "env", "name"] $ lets [
@@ -140,24 +140,24 @@ createTypeReference = def "createTypeReference" $
       (CppUtils.toConstType @@ var "baseType")
       (var "baseType")
 
-def :: String -> TTerm a -> TTermDefinition a
+def :: String -> TypedTerm a -> TypedTermDefinition a
 def = definitionInModule module_
 
 -- | Encode an enum value with appropriate naming convention
-encodeEnumValue :: TTermDefinition (CppUtils.CppEnvironment -> Name -> String)
+encodeEnumValue :: TypedTermDefinition (CppUtils.CppEnvironment -> Name -> String)
 encodeEnumValue = def "encodeEnumValue" $
   doc "Encode an enum value with appropriate naming convention" $
   encodeName @@ false @@ Util.caseConventionUpperSnake
 
 -- | Encode a field name with appropriate naming convention
-encodeFieldName :: TTermDefinition (CppUtils.CppEnvironment -> Name -> String)
+encodeFieldName :: TypedTermDefinition (CppUtils.CppEnvironment -> Name -> String)
 encodeFieldName = def "encodeFieldName" $
   doc "Encode a field name with appropriate naming convention" $
   lambdas ["env", "fname"] $
     encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "fname"
 
 -- | Encode a name with specified convention
-encodeName :: TTermDefinition (Bool -> CaseConvention -> CppUtils.CppEnvironment -> Name -> String)
+encodeName :: TypedTermDefinition (Bool -> CaseConvention -> CppUtils.CppEnvironment -> Name -> String)
 encodeName = def "encodeName" $
   doc "Encode a name with specified convention" $
   lambdas ["isQualified", "conv", "env", "name"] $ lets [
@@ -184,7 +184,7 @@ encodeName = def "encodeName" $
       (var "cppLocal")
 
 -- | Encode a qualified name with namespace
-encodeNameQualified :: TTermDefinition (CppUtils.CppEnvironment -> Name -> String)
+encodeNameQualified :: TypedTermDefinition (CppUtils.CppEnvironment -> Name -> String)
 encodeNameQualified = def "encodeNameQualified" $
   doc "Encode a qualified name with namespace" $
   lambdas ["env", "name"] $ lets [
@@ -206,7 +206,7 @@ encodeNameQualified = def "encodeNameQualified" $
       (Maps.lookup (var "name") (var "boundVars"))
 
 -- | Encode a namespace as a C++ namespace string
-encodeNamespace :: TTermDefinition (ModuleName -> String)
+encodeNamespace :: TypedTermDefinition (ModuleName -> String)
 encodeNamespace = def "encodeNamespace" $
   doc "Encode a namespace as a C++ namespace string" $
   lambda "nsVal" $
@@ -215,14 +215,14 @@ encodeNamespace = def "encodeNamespace" $
         (Strings.splitOn (string ".") (Packaging.unModuleName $ var "nsVal")))
 
 -- | Encode a type variable name
-encodeTypeVariable :: TTermDefinition (Name -> String)
+encodeTypeVariable :: TypedTermDefinition (Name -> String)
 encodeTypeVariable = def "encodeTypeVariable" $
   doc "Encode a type variable name" $
   lambda "name" $
     Formatting.capitalize @@ (Core.unName $ var "name")
 
 -- | Get the forward header name for a namespace
-fwdHeaderName :: TTermDefinition (ModuleName -> Name)
+fwdHeaderName :: TypedTermDefinition (ModuleName -> Name)
 fwdHeaderName = def "fwdHeaderName" $
   doc "Get the forward header name for a namespace" $
   lambda "nsVal" $
@@ -230,7 +230,7 @@ fwdHeaderName = def "fwdHeaderName" $
       (Packaging.qualifiedName (just $ var "nsVal") (string "Fwd"))
 
 -- | Create a namespace declaration wrapping inner declarations
-namespaceDecl :: TTermDefinition (ModuleName -> [Cpp.Declaration] -> Cpp.Declaration)
+namespaceDecl :: TypedTermDefinition (ModuleName -> [Cpp.Declaration] -> Cpp.Declaration)
 namespaceDecl = def "namespaceDecl" $
   doc "Create a namespace declaration wrapping inner declarations" $
   lambdas ["nsVal", "decls"] $
@@ -240,26 +240,26 @@ namespaceDecl = def "namespaceDecl" $
         Cpp._NamespaceDeclaration_declarations>>: var "decls"]
 
 -- | Get the partial visitor name for a type
-partialVisitorName :: TTermDefinition (Name -> String)
+partialVisitorName :: TypedTermDefinition (Name -> String)
 partialVisitorName = def "partialVisitorName" $
   doc "Get the partial visitor name for a type" $
   lambda "name" $
     sanitizeCppName @@ (Strings.cat2 (Names.localNameOf @@ var "name") (string "PartialVisitor"))
 
 -- | Sanitize a name to be valid in C++
-sanitizeCppName :: TTermDefinition (String -> String)
+sanitizeCppName :: TypedTermDefinition (String -> String)
 sanitizeCppName = def "sanitizeCppName" $
   doc "Sanitize a name to be valid in C++" $
   Formatting.sanitizeWithUnderscores @@ CppLanguage.cppReservedWords
 
 -- | Create a reference to a term variable
-termVariableReference :: TTermDefinition (CppUtils.CppEnvironment -> Name -> Cpp.Expression)
+termVariableReference :: TypedTermDefinition (CppUtils.CppEnvironment -> Name -> Cpp.Expression)
 termVariableReference = def "termVariableReference" $
   doc "Create a reference to a term variable" $
   variableReference @@ Util.caseConventionLowerSnake
 
 -- | Create a reference to a type variable
-typeVariableReference :: TTermDefinition (CppUtils.CppEnvironment -> Name -> Cpp.TypeExpression)
+typeVariableReference :: TypedTermDefinition (CppUtils.CppEnvironment -> Name -> Cpp.TypeExpression)
 typeVariableReference = def "typeVariableReference" $
   doc "Create a reference to a type variable" $
   lambdas ["env", "name"] $
@@ -268,14 +268,14 @@ typeVariableReference = def "typeVariableReference" $
         encodeName @@ true @@ Util.caseConventionPascal @@ var "env" @@ var "name"
 
 -- | Create a variable reference expression
-variableReference :: TTermDefinition (CaseConvention -> CppUtils.CppEnvironment -> Name -> Cpp.Expression)
+variableReference :: TypedTermDefinition (CaseConvention -> CppUtils.CppEnvironment -> Name -> Cpp.Expression)
 variableReference = def "variableReference" $
   doc "Create a variable reference expression" $
   lambdas ["conv", "env", "name"] $
     CppUtils.createIdentifierExpr @@ (encodeName @@ true @@ var "conv" @@ var "env" @@ var "name")
 
 -- | Get the variant name by combining type name and field name
-variantName :: TTermDefinition (Name -> Name -> String)
+variantName :: TypedTermDefinition (Name -> Name -> String)
 variantName = def "variantName" $
   doc "Get the variant name by combining type name and field name" $
   lambdas ["tname", "fname"] $
@@ -283,7 +283,7 @@ variantName = def "variantName" $
       (Strings.cat2 (Names.localNameOf @@ var "tname") (Formatting.capitalize @@ (Core.unName $ var "fname")))
 
 -- | Get the visitor name for a type
-visitorName :: TTermDefinition (Name -> String)
+visitorName :: TypedTermDefinition (Name -> String)
 visitorName = def "visitorName" $
   doc "Get the visitor name for a type" $
   lambda "name" $

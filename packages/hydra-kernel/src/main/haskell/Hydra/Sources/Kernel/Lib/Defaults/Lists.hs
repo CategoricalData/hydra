@@ -59,7 +59,7 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 ns :: ModuleName
 ns = ModuleName "hydra.lib.defaults.lists"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -97,7 +97,7 @@ module_ = Module {
 
 -- | Interpreter-friendly applicative apply for List terms.
 -- Applies each function in funsTerm to each argument in argsTerm.
-apply_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+apply_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 apply_ = define "apply" $
   doc "Interpreter-friendly applicative apply for List terms." $
   "cx" ~> "g" ~>
@@ -111,7 +111,7 @@ apply_ = define "apply" $
 
 -- | Interpreter-friendly monadic bind for List terms.
 -- Applies funTerm to each element and concatenates the results.
-bind_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+bind_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 bind_ = define "bind" $
   doc "Interpreter-friendly monadic bind for List terms." $
   "cx" ~> "g" ~>
@@ -125,7 +125,7 @@ bind_ = define "bind" $
 
 -- | Interpreter-friendly concat2 for List terms.
 -- Concatenates two lists.
-concat2_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+concat2_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 concat2_ = define "concat2" $
   doc "Interpreter-friendly concat2 for List terms." $
   "cx" ~> "g" ~>
@@ -137,7 +137,7 @@ concat2_ = define "concat2" $
 
 -- | Interpreter-friendly dropWhile for List terms.
 -- Drops elements from the front while predTerm returns true.
-dropWhile_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+dropWhile_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 dropWhile_ = define "dropWhile" $
   doc "Interpreter-friendly dropWhile for List terms." $
   "cx" ~> "g" ~>
@@ -153,7 +153,7 @@ dropWhile_ = define "dropWhile" $
 
 -- | Interpreter-friendly elem for List terms.
 -- Tests whether an element is in the list: elem x xs = isJust (find (equal x) xs)
-elem_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+elem_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 elem_ = define "elem" $
   doc "Interpreter-friendly elem for List terms." $
   "cx" ~> "g" ~>
@@ -171,7 +171,7 @@ elem_ = define "elem" $
 
 -- | Interpreter-friendly filter for List terms.
 -- Keeps elements where predTerm returns true.
-filter_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+filter_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 filter_ = define "filter" $
   doc "Interpreter-friendly filter for List terms." $
   "cx" ~> "g" ~>
@@ -187,12 +187,12 @@ filter_ = define "filter" $
             (Core.termVariable $ encodedName _logic_ifElse)
             (Core.termApplication $ Core.application (var "predTerm") (var "el")))
           (Core.termList $ Lists.pure (var "el")))
-        (Core.termList $ list ([] :: [TTerm Term])))
+        (Core.termList $ list ([] :: [TypedTerm Term])))
       (var "elements"))
 
 -- | Interpreter-friendly find for List terms.
 -- Returns the first element where predTerm returns true, or Nothing if none found.
-find_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+find_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 find_ = define "find" $
   doc "Interpreter-friendly find for List terms." $
   "cx" ~> "g" ~>
@@ -209,7 +209,7 @@ find_ = define "find" $
 -- | Interpreter-friendly left fold for List terms.
 -- Folds from the left: foldl f init [e1,e2,e3] = f (f (f init e1) e2) e3
 -- Each step is reduced through the interpreter so that the accumulator is always a value.
-foldl_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
+foldl_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
 foldl_ = define "foldl" $
   doc "Interpreter-friendly left fold for List terms." $
   "cx" ~> "g" ~>
@@ -231,7 +231,7 @@ foldl_ = define "foldl" $
 -- | Interpreter-friendly right fold for List terms.
 -- Folds from the right: foldr f init [e1,e2,e3] = f e1 (f e2 (f e3 init))
 -- Each step is reduced through the interpreter so that the accumulator is always a value.
-foldr_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
+foldr_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
 foldr_ = define "foldr" $
   doc "Interpreter-friendly right fold for List terms." $
   "cx" ~> "g" ~>
@@ -255,7 +255,7 @@ foldr_ = define "foldr" $
 -- The interpreter's native foldl uses functionWithReduce, which reduces each step
 -- via reduceTerm — so the accumulator is always a value, not an unreduced expression.
 -- Uses maybeHead+maybe instead of null+head+ifElse to avoid eager evaluation of head on empty lists.
-group_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
+group_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 group_ = define "group" $
   doc "Interpreter-friendly group for List terms." $
   "cx" ~> "g" ~>
@@ -296,8 +296,8 @@ group_ = define "group" $
         (prim1 _lists_maybeHead (prim1 _pairs_first (tv "acc")))
 
     initState = Core.termPair $ pair
-      (Core.termList $ list ([] :: [TTerm Term]))
-      (Core.termList $ list ([] :: [TTerm Term]))
+      (Core.termList $ list ([] :: [TypedTerm Term]))
+      (Core.termList $ list ([] :: [TypedTerm Term]))
 
     foldExpr = prim3 _lists_foldl stepFn initState (var "listTerm")
 
@@ -312,7 +312,7 @@ group_ = define "group" $
 
 -- | Interpreter-friendly intercalate for List terms.
 -- intercalate sep xss = concat (intersperse sep xss)
-intercalate_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+intercalate_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 intercalate_ = define "intercalate" $
   doc "Interpreter-friendly intercalate for List terms." $
   "cx" ~> "g" ~>
@@ -328,14 +328,14 @@ intercalate_ = define "intercalate" $
 
 -- | Interpreter-friendly intersperse for List terms.
 -- intersperse sep [a,b,c] = [a,sep,b,sep,c]
-intersperse_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+intersperse_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 intersperse_ = define "intersperse" $
   doc "Interpreter-friendly intersperse for List terms." $
   "cx" ~> "g" ~>
   "sep" ~> "listTerm" ~>
   "elements" <<~ (ExtractCore.list @@ var "g" @@ var "listTerm") $
   right $ Core.termList $ Maybes.maybe
-    (list ([] :: [TTerm Term]))
+    (list ([] :: [TypedTerm Term]))
     ("p" ~> Lists.cons
       (Pairs.first (var "p"))
       (Lists.concat $ Lists.map
@@ -346,7 +346,7 @@ intersperse_ = define "intersperse" $
 -- | Interpreter-friendly map for List terms.
 -- Applies funTerm to each element of listTerm.
 -- Note: builds result directly using foldl to avoid recursive primitive calls.
-map_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+map_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for List terms." $
   "cx" ~> "g" ~>
@@ -358,12 +358,12 @@ map_ = define "map" $
     ("acc" ~> "el" ~> Lists.cons
       (Core.termApplication $ Core.application (var "funTerm") (var "el"))
       (var "acc"))
-    (list ([] :: [TTerm Term]))
+    (list ([] :: [TypedTerm Term]))
     (var "elements")
 
 -- | Interpreter-friendly maybeHead for List terms.
 -- maybeHead xs = maybe Nothing (Just . fst) (uncons xs)
-maybeHead_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
+maybeHead_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 maybeHead_ = define "maybeHead" $
   doc "Interpreter-friendly maybeHead for List terms." $
   "cx" ~> "g" ~>
@@ -376,7 +376,7 @@ maybeHead_ = define "maybeHead" $
 
 -- | Interpreter-friendly nub for List terms.
 -- Removes duplicates using equality. nub xs = foldl (\acc x -> ifElse (elem x acc) acc (concat2 acc [x])) [] xs
-nub_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
+nub_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 nub_ = define "nub" $
   doc "Interpreter-friendly nub for List terms." $
   "cx" ~> "g" ~>
@@ -407,14 +407,14 @@ nub_ = define "nub" $
                   (Core.termVariable $ wrap _Name $ string "acc"))
                 (Core.termList $ list [Core.termVariable $ wrap _Name $ string "x"]))))
       -- initial: []
-      (Core.termList $ list ([] :: [TTerm Term])))
+      (Core.termList $ list ([] :: [TypedTerm Term])))
     -- list
     (var "listTerm")
 
 -- | Interpreter-friendly partition for List terms.
 -- Partitions elements into (satisfying predicate, not satisfying predicate).
 -- Unlike span, partition checks ALL elements, not just the prefix.
-partition_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+partition_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 partition_ = define "partition" $
   doc "Interpreter-friendly partition for List terms." $
   "cx" ~> "g" ~>
@@ -425,8 +425,8 @@ partition_ = define "partition" $
   -- Step: ifElse (pred el) (append yeses [el], nos) (yeses, append nos [el])
   -- Result: (yeses, nos) - already in correct order due to foldl + concat2
   "initialState" <~ (Core.termPair $ pair
-    (Core.termList $ list ([] :: [TTerm Term]))
-    (Core.termList $ list ([] :: [TTerm Term]))) $
+    (Core.termList $ list ([] :: [TypedTerm Term]))
+    (Core.termList $ list ([] :: [TypedTerm Term]))) $
   "finalState" <~ (Lists.foldl
     ("acc" ~> "el" ~>
       -- Extract state components
@@ -466,7 +466,7 @@ partition_ = define "partition" $
 
 -- | Interpreter-friendly pure for List terms.
 -- Wraps a single element in a list: pure x = [x]
-pure_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
+pure_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 pure_ = define "pure" $
   doc "Interpreter-friendly pure for List terms." $
   "cx" ~> "g" ~>
@@ -475,7 +475,7 @@ pure_ = define "pure" $
 
 -- | Interpreter-friendly replicate for List terms.
 -- replicate n x = map (const x) (range 0 n)
-replicate_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+replicate_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 replicate_ = define "replicate" $
   doc "Interpreter-friendly replicate for List terms." $
   "cx" ~> "g" ~>
@@ -494,7 +494,7 @@ replicate_ = define "replicate" $
 
 -- | Interpreter-friendly singleton for List terms.
 -- singleton x = [x]
-singleton_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
+singleton_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 singleton_ = define "singleton" $
   doc "Interpreter-friendly singleton for List terms." $
   "cx" ~> "g" ~>
@@ -504,7 +504,7 @@ singleton_ = define "singleton" $
 -- | Interpreter-friendly sortOn for List terms.
 -- Sorts elements by comparing the results of applying projTerm to each.
 -- Uses insertion sort: for each element, use span to find insertion point.
-sortOn_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+sortOn_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 sortOn_ = define "sortOn" $
   doc "Interpreter-friendly sortOn for List terms." $
   "cx" ~> "g" ~>
@@ -545,12 +545,12 @@ sortOn_ = define "sortOn" $
             (Core.termVariable $ encodedName _lists_cons)
             (var "x"))
           (var "after")))
-    (Core.termList $ list ([] :: [TTerm Term]))
+    (Core.termList $ list ([] :: [TypedTerm Term]))
     (var "elements")
 
 -- | Interpreter-friendly sort for List terms.
 -- sort xs = sortOn identity xs
-sort_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
+sort_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 sort_ = define "sort" $
   doc "Interpreter-friendly sort for List terms." $
   "cx" ~> "g" ~>
@@ -565,7 +565,7 @@ sort_ = define "sort" $
 -- | Interpreter-friendly span for List terms.
 -- Splits the list into (takeWhile pred list, dropWhile pred list).
 -- Uses foldl with state ((stillTaking, left), right) to track the split point.
-span_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+span_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 span_ = define "span" $
   doc "Interpreter-friendly span for List terms." $
   "cx" ~> "g" ~>
@@ -580,8 +580,8 @@ span_ = define "span" $
   "initialState" <~ (Core.termPair $ pair
     (Core.termPair $ pair
       (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True)
-      (Core.termList $ list ([] :: [TTerm Term])))
-    (Core.termList $ list ([] :: [TTerm Term]))) $
+      (Core.termList $ list ([] :: [TypedTerm Term])))
+    (Core.termList $ list ([] :: [TypedTerm Term]))) $
   "finalState" <~ (Lists.foldl
     ("acc" ~> "el" ~>
       -- Extract state components using term-level pairs
@@ -643,7 +643,7 @@ span_ = define "span" $
 
 -- | Interpreter-friendly uncons for List terms.
 -- uncons xs = maybe Nothing (\h -> Just (h, drop 1 xs)) (maybeAt 0 xs)
-uncons_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
+uncons_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 uncons_ = define "uncons" $
   doc "Interpreter-friendly uncons for List terms." $
   "cx" ~> "g" ~>
@@ -658,7 +658,7 @@ uncons_ = define "uncons" $
 
 -- | Interpreter-friendly zipWith for List terms.
 -- Applies funTerm to corresponding pairs of elements.
-zipWith_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
+zipWith_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
 zipWith_ = define "zipWith" $
   doc "Interpreter-friendly zipWith for List terms." $
   "cx" ~> "g" ~>

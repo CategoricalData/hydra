@@ -30,16 +30,16 @@ module_ = Module {
       Phantoms.toDefinition allTests,
       Phantoms.toDefinition testGroupForNestedLet]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Examples from the Hydra kernel" $
   supergroup "Examples from the Hydra kernel" [
     testGroupForNestedLet]
 
-testGroupForNestedLet :: TTermDefinition TestGroup
+testGroupForNestedLet :: TypedTermDefinition TestGroup
 testGroupForNestedLet = define "testGroupForNestedLet" $
   supergroup "Nested let" [
     subgroup "hydra.formatting.mapFirstLetter" [
