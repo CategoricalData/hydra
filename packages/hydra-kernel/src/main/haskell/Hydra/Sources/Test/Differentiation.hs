@@ -39,10 +39,10 @@ module_ = Module {
   where
     definitions = [Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     doc "Test cases for automatic differentiation" $
     supergroup "differentiation" [
@@ -59,7 +59,7 @@ allTests = define "allTests" $
 -- Deep/meta-level helpers (for structural tests that compare term shapes)
 -- ============================================================
 
-basicDiffGroup :: TTerm TestGroup
+basicDiffGroup :: TypedTerm TestGroup
 basicDiffGroup = subgroup "basic rules" [
     diffCase "variable wrt itself"
       (mkVar "x")
@@ -94,7 +94,7 @@ basicDiffGroup = subgroup "basic rules" [
       (mkLambda "x" (f64 0.0))]
 
 -- Binary tests: input uses Int32 names (add/mul/sub), output uses Float64 names (addFloat64 etc.)
-binaryDiffGroup :: TTerm TestGroup
+binaryDiffGroup :: TypedTerm TestGroup
 binaryDiffGroup = subgroup "binary primitives" [
     diffCase "add variable to itself"
       (prim2 _math_add (mkVar "x") (mkVar "x"))
@@ -110,7 +110,7 @@ binaryDiffGroup = subgroup "binary primitives" [
       (prim2 _math_sub (mkVar "x") (f64 5.0))
       (prim2 _math_subFloat64 (f64 1.0) (f64 0.0))]
 
-chainRuleGroup :: TTerm TestGroup
+chainRuleGroup :: TypedTerm TestGroup
 chainRuleGroup = subgroup "chain rule" [
     diffCase "nested sin(cos(x))"
       (prim1 _math_sin (prim1 _math_cos (mkVar "x")))
@@ -124,13 +124,13 @@ chainRuleGroup = subgroup "chain rule" [
             (mkVar "x"))
           (f64 1.0)))]
 
-diffCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+diffCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 diffCase cname input expected =
   universalCase cname
     (showTerm (Diff.differentiateTerm @@ mkName "x" @@ input))
     (showTerm expected)
 
-diffFnCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+diffFnCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 diffFnCase cname input expected =
   universalCase cname
     (showTerm (Diff.differentiateFunction @@ input))
@@ -141,10 +141,10 @@ diffFnCase cname input expected =
 -- ============================================================
 
 -- Evaluate a derivative: differentiate, substitute x=xVal, reduce
-evalDiffCase :: String -> TTerm Term -> Double -> Double -> TTerm TestCaseWithMetadata
+evalDiffCase :: String -> TypedTerm Term -> Double -> Double -> TypedTerm TestCaseWithMetadata
 evalDiffCase cname expr xVal expected = roundedEvalDiffCase cname expr xVal expected
 
-evalDiffGroup :: TTerm TestGroup
+evalDiffGroup :: TypedTerm TestGroup
 evalDiffGroup = subgroup "evaluate derivatives" [
     evalDiffCase "d/dx(x) at 3.0"
       (mkVar "x")
@@ -230,16 +230,16 @@ evalDiffGroup = subgroup "evaluate derivatives" [
 -- Gradient check: AD vs finite differences
 -- ============================================================
 
-f64 :: Double -> TTerm Term
+f64 :: Double -> TypedTerm Term
 f64 d = Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 (float64 d)
 
-gradCase :: String -> TTerm Term -> [String] -> TTerm Term -> TTerm TestCaseWithMetadata
+gradCase :: String -> TypedTerm Term -> [String] -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 gradCase cname input vars expected =
   universalCase cname
     (showTerm (Diff.gradient @@ mkName "Gradient" @@ list (fmap mkName vars) @@ input))
     (showTerm expected)
 
-gradientCheckGroup :: TTerm TestGroup
+gradientCheckGroup :: TypedTerm TestGroup
 gradientCheckGroup = subgroup "gradient check" [
     gradCheck "x^2" (\x -> x * x) (prim2 _math_mul (mkVar "x") (mkVar "x")) 2.0,
     gradCheck "sin(x)" sin (prim1 _math_sin (mkVar "x")) 1.0,
@@ -256,7 +256,7 @@ gradientCheckGroup = subgroup "gradient check" [
     gradDigits :: Int
     gradDigits = 5
 
-    gradCheck :: String -> (Double -> Double) -> TTerm Term -> Double -> TTerm TestCaseWithMetadata
+    gradCheck :: String -> (Double -> Double) -> TypedTerm Term -> Double -> TypedTerm TestCaseWithMetadata
     gradCheck cname hsFn expr xVal = evalCase cname adResult fdResult
       where
         deriv = Diff.differentiateTerm @@ mkName "x" @@ expr
@@ -273,7 +273,7 @@ gradientCheckGroup = subgroup "gradient check" [
 -- Gradient tests (multi-variable partial derivatives)
 -- ============================================================
 
-gradientGroup :: TTerm TestGroup
+gradientGroup :: TypedTerm TestGroup
 gradientGroup = subgroup "gradient" [
     -- gradient of x+y w.r.t. [x, y] => {x: 1+0, y: 0+1}
     gradCase "add two variables"
@@ -309,30 +309,30 @@ gradientGroup = subgroup "gradient" [
       ["x", "y"]
       (mkRecord "Gradient" [("x", f64 0.0), ("y", f64 0.0)])]
 
-mkLambda :: String -> TTerm Term -> TTerm Term
+mkLambda :: String -> TypedTerm Term -> TypedTerm Term
 mkLambda param body = Core.termLambda $ Core.lambda (mkName param) nothing body
 
-mkName :: String -> TTerm Name
+mkName :: String -> TypedTerm Name
 mkName s = Core.name (string s)
 
-mkRecord :: String -> [(String, TTerm Term)] -> TTerm Term
+mkRecord :: String -> [(String, TypedTerm Term)] -> TypedTerm Term
 mkRecord tname fields = Core.termRecord $ Core.record
   (mkName tname)
   (list [Core.field (mkName fname) val | (fname, val) <- fields])
 
-mkVar :: String -> TTerm Term
+mkVar :: String -> TypedTerm Term
 mkVar s = Core.termVariable $ mkName s
 
 -- Deep-level primitive application (for structural test expectations)
-prim1 :: Name -> TTerm Term -> TTerm Term
+prim1 :: Name -> TypedTerm Term -> TypedTerm Term
 prim1 name arg = Core.termApplication $ Core.application (Core.termVariable $ encodedName name) arg
 
-prim2 :: Name -> TTerm Term -> TTerm Term -> TTerm Term
+prim2 :: Name -> TypedTerm Term -> TypedTerm Term -> TypedTerm Term
 prim2 name a b = Core.termApplication $ Core.application
   (Core.termApplication $ Core.application (Core.termVariable $ encodedName name) a)
   b
 
-primitiveDiffGroup :: TTerm TestGroup
+primitiveDiffGroup :: TypedTerm TestGroup
 primitiveDiffGroup = subgroup "unary primitives" [
     diffCase "sin of variable"
       (prim1 _math_sin (mkVar "x"))
@@ -353,14 +353,14 @@ primitiveDiffGroup = subgroup "unary primitives" [
         (f64 0.0))]
 
 -- Coerce phantom types
-retype :: TTerm a -> TTerm b
-retype (TTerm t) = TTerm t
+retype :: TypedTerm a -> TypedTerm b
+retype (TypedTerm t) = TypedTerm t
 
 roundDigits :: Int
 roundDigits = 10
 
 -- Rounded eval case: round both sides to 12 significant digits for cross-platform portability
-roundedEvalDiffCase :: String -> TTerm Term -> Double -> Double -> TTerm TestCaseWithMetadata
+roundedEvalDiffCase :: String -> TypedTerm Term -> Double -> Double -> TypedTerm TestCaseWithMetadata
 roundedEvalDiffCase cname expr xVal expected = evalCase cname input output
   where
     digits = 12
@@ -375,10 +375,10 @@ roundedEvalDiffCase cname expr xVal expected = evalCase cname input output
 -- Structural tests
 -- ============================================================
 
-showTerm :: TTerm Term -> TTerm String
+showTerm :: TypedTerm Term -> TypedTerm String
 showTerm t = ShowCore.term @@ t
 
-structuralDiffGroup :: TTerm TestGroup
+structuralDiffGroup :: TypedTerm TestGroup
 structuralDiffGroup = subgroup "structural" [
     diffCase "list of terms"
       (Core.termList $ list [mkVar "x", f64 5.0])

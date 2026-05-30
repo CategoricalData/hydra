@@ -86,7 +86,7 @@ import qualified Hydra.Wasm.Syntax as W
 import qualified Hydra.Sources.Wasm.Syntax as WasmSyntax
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 ns :: ModuleName
@@ -142,7 +142,7 @@ module_ = Module {
 -- Top-level serialization
 -- =============================================================================
 
-blockInstructionToExpr :: TTermDefinition (String -> W.BlockInstruction -> Expr)
+blockInstructionToExpr :: TypedTermDefinition (String -> W.BlockInstruction -> Expr)
 blockInstructionToExpr = define "blockInstructionToExpr" $
   doc "Serialize a block or loop instruction to WAT" $
   lambda "keyword" $ lambda "b" $ lets [
@@ -160,7 +160,7 @@ blockInstructionToExpr = define "blockInstructionToExpr" $
       Lists.map (lambda "p" $ Serialization.cst @@ Strings.cat2 (string "  ") (Serialization.printExpr @@ var "p")) (var "bodyParts"),
       list [Serialization.cst @@ string ")"]])
 
-blockTypeToExpr :: TTermDefinition (W.BlockType -> Maybe Expr)
+blockTypeToExpr :: TypedTermDefinition (W.BlockType -> Maybe Expr)
 blockTypeToExpr = define "blockTypeToExpr" $
   doc "Serialize a block type to WAT" $
   lambda "bt" $
@@ -171,7 +171,7 @@ blockTypeToExpr = define "blockTypeToExpr" $
       W._BlockType_typeUse>>: lambda "tu" $
         just (typeUseToExpr @@ var "tu")]
 
-constValueToExpr :: TTermDefinition (W.ConstValue -> Expr)
+constValueToExpr :: TypedTermDefinition (W.ConstValue -> Expr)
 constValueToExpr = define "constValueToExpr" $
   doc "Serialize a constant value instruction to WAT" $
   lambda "c" $
@@ -190,7 +190,7 @@ constValueToExpr = define "constValueToExpr" $
 -- Helpers
 -- =============================================================================
 
-dataSegmentToExpr :: TTermDefinition (W.DataSegment -> Expr)
+dataSegmentToExpr :: TypedTermDefinition (W.DataSegment -> Expr)
 dataSegmentToExpr = define "dataSegmentToExpr" $
   doc "Serialize a data segment to WAT" $
   lambda "d" $ lets [
@@ -212,7 +212,7 @@ dataSegmentToExpr = define "dataSegmentToExpr" $
           Serialization.cst @@ Strings.cat2 (string "(data") (var "nameStr"),
           Serialization.cst @@ Strings.cat (list [string "\"", var "bytes", string "\")"])]]
 
-exportDefToExpr :: TTermDefinition (W.ExportDef -> Expr)
+exportDefToExpr :: TypedTermDefinition (W.ExportDef -> Expr)
 exportDefToExpr = define "exportDefToExpr" $
   doc "Serialize an export declaration to WAT" $
   lambda "e" $ lets [
@@ -224,7 +224,7 @@ exportDefToExpr = define "exportDefToExpr" $
       exportDescToExpr @@ var "desc",
       Serialization.cst @@ string ")"]
 
-exportDescToExpr :: TTermDefinition (W.ExportDesc -> Expr)
+exportDescToExpr :: TypedTermDefinition (W.ExportDesc -> Expr)
 exportDescToExpr = define "exportDescToExpr" $
   doc "Serialize an export descriptor to WAT" $
   lambda "desc" $
@@ -243,7 +243,7 @@ exportDescToExpr = define "exportDescToExpr" $
 -- Constants
 -- =============================================================================
 
-funcLocalToExpr :: TTermDefinition (W.FuncLocal -> Expr)
+funcLocalToExpr :: TypedTermDefinition (W.FuncLocal -> Expr)
 funcLocalToExpr = define "funcLocalToExpr" $
   doc "Serialize a local variable declaration to WAT" $
   lambda "l" $ lets [
@@ -258,7 +258,7 @@ funcLocalToExpr = define "funcLocalToExpr" $
 -- Instructions
 -- =============================================================================
 
-funcToExpr :: TTermDefinition (W.Func -> Expr)
+funcToExpr :: TypedTermDefinition (W.Func -> Expr)
 funcToExpr = define "funcToExpr" $
   doc "Serialize a function definition to WAT" $
   lambda "f" $ lets [
@@ -282,7 +282,7 @@ funcToExpr = define "funcToExpr" $
         Lists.map (lambda "p" $ Serialization.cst @@ Strings.cat2 (string "  ") (Serialization.printExpr @@ var "p")) (var "innerParts"),
         list [Serialization.cst @@ string ")"]]))
 
-funcTypeToExpr :: TTermDefinition (W.FuncType -> Expr)
+funcTypeToExpr :: TypedTermDefinition (W.FuncType -> Expr)
 funcTypeToExpr = define "funcTypeToExpr" $
   doc "Serialize a function type to WAT" $
   lambda "ft" $ lets [
@@ -300,7 +300,7 @@ funcTypeToExpr = define "funcTypeToExpr" $
       Logic.ifElse (Lists.null (var "resultParts")) nothing (just (Serialization.spaceSep @@ var "resultParts")),
       just (Serialization.cst @@ string ")")])
 
-globalDefToExpr :: TTermDefinition (W.GlobalDef -> Expr)
+globalDefToExpr :: TypedTermDefinition (W.GlobalDef -> Expr)
 globalDefToExpr = define "globalDefToExpr" $
   doc "Serialize a global definition to WAT" $
   lambda "g" $ lets [
@@ -314,7 +314,7 @@ globalDefToExpr = define "globalDefToExpr" $
       Serialization.spaceSep @@ Lists.map instructionToExpr (var "init"),
       Serialization.cst @@ string ")"]
 
-globalTypeToExpr :: TTermDefinition (W.GlobalType -> Expr)
+globalTypeToExpr :: TypedTermDefinition (W.GlobalType -> Expr)
 globalTypeToExpr = define "globalTypeToExpr" $
   doc "Serialize a global type to WAT" $
   lambda "gt" $ lets [
@@ -329,7 +329,7 @@ globalTypeToExpr = define "globalTypeToExpr" $
 -- Tables
 -- =============================================================================
 
-ifInstructionToExpr :: TTermDefinition (W.IfInstruction -> Expr)
+ifInstructionToExpr :: TypedTermDefinition (W.IfInstruction -> Expr)
 ifInstructionToExpr = define "ifInstructionToExpr" $
   doc "Serialize an if instruction to WAT" $
   lambda "i" $ lets [
@@ -361,7 +361,7 @@ ifInstructionToExpr = define "ifInstructionToExpr" $
 -- Memory
 -- =============================================================================
 
-importDefToExpr :: TTermDefinition (W.ImportDef -> Expr)
+importDefToExpr :: TypedTermDefinition (W.ImportDef -> Expr)
 importDefToExpr = define "importDefToExpr" $
   doc "Serialize an import declaration to WAT" $
   lambda "i" $ lets [
@@ -375,7 +375,7 @@ importDefToExpr = define "importDefToExpr" $
       importDescToExpr @@ var "desc",
       Serialization.cst @@ string ")"]
 
-importDescToExpr :: TTermDefinition (W.ImportDesc -> Expr)
+importDescToExpr :: TypedTermDefinition (W.ImportDesc -> Expr)
 importDescToExpr = define "importDescToExpr" $
   doc "Serialize an import descriptor to WAT" $
   lambda "desc" $
@@ -415,7 +415,7 @@ importDescToExpr = define "importDescToExpr" $
           globalTypeToExpr @@ var "gt",
           Serialization.cst @@ string ")"]]
 
-instructionToExpr :: TTermDefinition (W.Instruction -> Expr)
+instructionToExpr :: TypedTermDefinition (W.Instruction -> Expr)
 instructionToExpr = define "instructionToExpr" $
   doc "Serialize an instruction to WAT" $
   lambda "instr" $
@@ -507,7 +507,7 @@ instructionToExpr = define "instructionToExpr" $
       W._Instruction_raw>>: lambda "s" $
         Serialization.cst @@ var "s"]
 
-limitsToExpr :: TTermDefinition (W.Limits -> Expr)
+limitsToExpr :: TypedTermDefinition (W.Limits -> Expr)
 limitsToExpr = define "limitsToExpr" $
   doc "Serialize limits to WAT" $
   lambda "l" $ lets [
@@ -522,7 +522,7 @@ limitsToExpr = define "limitsToExpr" $
 -- Globals
 -- =============================================================================
 
-memoryDefToExpr :: TTermDefinition (W.MemoryDef -> Expr)
+memoryDefToExpr :: TypedTermDefinition (W.MemoryDef -> Expr)
 memoryDefToExpr = define "memoryDefToExpr" $
   doc "Serialize a memory definition to WAT" $
   lambda "m" $ lets [
@@ -534,7 +534,7 @@ memoryDefToExpr = define "memoryDefToExpr" $
       limitsToExpr @@ var "lim",
       Serialization.cst @@ string ")"]
 
-moduleFieldToExpr :: TTermDefinition (W.ModuleField -> Expr)
+moduleFieldToExpr :: TypedTermDefinition (W.ModuleField -> Expr)
 moduleFieldToExpr = define "moduleFieldToExpr" $
   doc "Serialize a module field to a WAT expression" $
   lambda "field" $
@@ -556,7 +556,7 @@ moduleFieldToExpr = define "moduleFieldToExpr" $
 -- Types
 -- =============================================================================
 
-moduleToExpr :: TTermDefinition (W.Module -> Expr)
+moduleToExpr :: TypedTermDefinition (W.Module -> Expr)
 moduleToExpr = define "moduleToExpr" $
   doc "Serialize a WebAssembly module to a WAT expression" $
   lambda "mod" $ lets [
@@ -569,7 +569,7 @@ moduleToExpr = define "moduleToExpr" $
       Lists.map (lambda "fe" $ Serialization.cst @@ Strings.cat2 (string "  ") (Serialization.printExpr @@ var "fe")) (var "fieldExprs"),
       list [Serialization.cst @@ string ")"]])
 
-paramToExpr :: TTermDefinition (W.Param -> Expr)
+paramToExpr :: TypedTermDefinition (W.Param -> Expr)
 paramToExpr = define "paramToExpr" $
   doc "Serialize a function parameter to WAT" $
   lambda "p" $ lets [
@@ -583,7 +583,7 @@ paramToExpr = define "paramToExpr" $
 -- Functions
 -- =============================================================================
 
-refTypeToStr :: TTermDefinition (W.RefType -> String)
+refTypeToStr :: TypedTermDefinition (W.RefType -> String)
 refTypeToStr = define "refTypeToStr" $
   doc "Convert a reference type to its WAT string" $
   lambda "rt" $
@@ -591,7 +591,7 @@ refTypeToStr = define "refTypeToStr" $
       W._RefType_funcref>>: constant $ string "funcref",
       W._RefType_externref>>: constant $ string "externref"]
 
-tableDefToExpr :: TTermDefinition (W.TableDef -> Expr)
+tableDefToExpr :: TypedTermDefinition (W.TableDef -> Expr)
 tableDefToExpr = define "tableDefToExpr" $
   doc "Serialize a table definition to WAT" $
   lambda "t" $ lets [
@@ -610,13 +610,13 @@ tableDefToExpr = define "tableDefToExpr" $
 -- Imports and exports
 -- =============================================================================
 
-toWatComment :: TTermDefinition (String -> String)
+toWatComment :: TypedTermDefinition (String -> String)
 toWatComment = define "toWatComment" $
   doc "Convert a string to a WAT comment" $
   lambda "s" $
     Strings.cat (list [string ";; ", var "s"])
 
-typeDefToExpr :: TTermDefinition (W.TypeDef -> Expr)
+typeDefToExpr :: TypedTermDefinition (W.TypeDef -> Expr)
 typeDefToExpr = define "typeDefToExpr" $
   doc "Serialize a type definition to WAT" $
   lambda "td" $ lets [
@@ -628,7 +628,7 @@ typeDefToExpr = define "typeDefToExpr" $
       funcTypeToExpr @@ var "ft",
       Serialization.cst @@ string ")"]
 
-typeUseToExpr :: TTermDefinition (W.TypeUse -> Expr)
+typeUseToExpr :: TypedTermDefinition (W.TypeUse -> Expr)
 typeUseToExpr = define "typeUseToExpr" $
   doc "Serialize a type use clause to WAT" $
   lambda "tu" $ lets [
@@ -647,7 +647,7 @@ typeUseToExpr = define "typeUseToExpr" $
       Lists.map (lambda "p" $ just (var "p")) (var "paramParts"),
       Lists.map (lambda "r" $ just (var "r")) (var "resultParts")]))
 
-valTypeToStr :: TTermDefinition (W.ValType -> String)
+valTypeToStr :: TypedTermDefinition (W.ValType -> String)
 valTypeToStr = define "valTypeToStr" $
   doc "Convert a value type to its WAT string representation" $
   lambda "vt" $

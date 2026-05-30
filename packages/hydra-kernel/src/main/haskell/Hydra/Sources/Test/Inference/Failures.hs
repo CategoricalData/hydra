@@ -42,10 +42,10 @@ module_ = Module {
       Phantoms.toDefinition primitiveTypeErrorTests,
       Phantoms.toDefinition complexConstraintFailureTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Expected failure tests" $
   supergroup "Expected failures" [
@@ -63,7 +63,7 @@ allTests = define "allTests" $
     primitiveTypeErrorTests,
     complexConstraintFailureTests]
 
-arityMismatchTests :: TTermDefinition TestGroup
+arityMismatchTests :: TypedTermDefinition TestGroup
 arityMismatchTests = define "arityMismatchTests" $
   supergroup "Arity mismatch" [
   subgroup "Too many arguments" [
@@ -82,7 +82,7 @@ arityMismatchTests = define "arityMismatchTests" $
     expectFailure 3 []
       ((lambda "x" $ int32 42) @@ string "arg" @@ int32 137 @@ true)]]
 
-complexConstraintFailureTests :: TTermDefinition TestGroup
+complexConstraintFailureTests :: TypedTermDefinition TestGroup
 complexConstraintFailureTests = define "complexConstraintFailureTests" $
   supergroup "Complex constraint failures" [
   subgroup "Multi-level constraint conflicts" [
@@ -117,7 +117,7 @@ complexConstraintFailureTests = define "complexConstraintFailureTests" $
         "bad">: var "compose" @@ var "reverse_compose" @@ primitive _math_add @@ primitive _strings_length] $
         var "bad")]]
 
-constraintSolverEdgeCaseTests :: TTermDefinition TestGroup
+constraintSolverEdgeCaseTests :: TypedTermDefinition TestGroup
 constraintSolverEdgeCaseTests = define "constraintSolverEdgeCaseTests" $
   supergroup "Constraint solver edge cases" [
   subgroup "Complex constraint propagation" [
@@ -154,7 +154,7 @@ constraintSolverEdgeCaseTests = define "constraintSolverEdgeCaseTests" $
         "circular">: lambda "f" $ var "f" @@ var "circular" @@ var "f"] $
         var "circular" @@ var "circular")]]
 
-invalidApplicationTests :: TTermDefinition TestGroup
+invalidApplicationTests :: TypedTermDefinition TestGroup
 invalidApplicationTests = define "invalidApplicationTests" $
   supergroup "Invalid application" [
   subgroup "Non-function application" [
@@ -187,7 +187,7 @@ invalidApplicationTests = define "invalidApplicationTests" $
     expectFailure 4 []
       (list [] @@ true)]]
 
-letBindingMismatchTests :: TTermDefinition TestGroup
+letBindingMismatchTests :: TypedTermDefinition TestGroup
 letBindingMismatchTests = define "letBindingMismatchTests" $
   supergroup "Let binding type mismatches" [
   subgroup "Application type mismatches" [
@@ -232,7 +232,7 @@ letBindingMismatchTests = define "letBindingMismatchTests" $
         "bad">: var "g" @@ string "foo" @@ true] $
         var "bad")]]
 
-occurCheckTests :: TTermDefinition TestGroup
+occurCheckTests :: TypedTermDefinition TestGroup
 occurCheckTests = define "occurCheckTests" $
   supergroup "Occur check failures" [
   subgroup "Function occur checks" [
@@ -259,7 +259,7 @@ occurCheckTests = define "occurCheckTests" $
     expectFailure 2 []
       (lets ["loop">: lambda "x" $ lambda "y" $ var "loop" @@ (var "x" @@ var "loop") @@ var "y"] $ var "loop")]]
 
-polymorphismViolationTests :: TTermDefinition TestGroup
+polymorphismViolationTests :: TypedTermDefinition TestGroup
 polymorphismViolationTests = define "polymorphismViolationTests" $
   supergroup "Polymorphism violations" [
   subgroup "Identity function violations" [
@@ -293,7 +293,7 @@ polymorphismViolationTests = define "polymorphismViolationTests" $
     expectFailure 3 []
       (lambda "h" $ primitive _math_add @@ (var "h" @@ int32 42) @@ (var "h" @@ string "error"))]]
 
-primitiveTypeErrorTests :: TTermDefinition TestGroup
+primitiveTypeErrorTests :: TypedTermDefinition TestGroup
 primitiveTypeErrorTests = define "primitiveTypeErrorTests" $
   supergroup "Primitive function type errors" [
   subgroup "Logic primitive errors" [
@@ -326,7 +326,7 @@ primitiveTypeErrorTests = define "primitiveTypeErrorTests" $
     expectFailure 4 []
       (primitive _math_maybeMod @@ int32 42 @@ string "not a number")]]
 
-recursiveTypeTests :: TTermDefinition TestGroup
+recursiveTypeTests :: TypedTermDefinition TestGroup
 recursiveTypeTests = define "recursiveTypeTests" $
   supergroup "Recursive type construction" [
   subgroup "Direct recursive types" [
@@ -353,7 +353,7 @@ recursiveTypeTests = define "recursiveTypeTests" $
     expectFailure 3 []
       (lets ["f">: list [var "g"], "g">: tuple [var "f", var "f"]] $ var "f")]]
 
-selfApplicationTests :: TTermDefinition TestGroup
+selfApplicationTests :: TypedTermDefinition TestGroup
 selfApplicationTests = define "selfApplicationTests" $
   supergroup "Self-application" [
   subgroup "Direct self-application" [
@@ -370,7 +370,7 @@ selfApplicationTests = define "selfApplicationTests" $
     expectFailure 3 []
       (lets ["cycle">: lambda "f" $ var "f" @@ var "cycle"] $ var "cycle" @@ var "cycle")]]
 
-typeConstructorMisuseTests :: TTermDefinition TestGroup
+typeConstructorMisuseTests :: TypedTermDefinition TestGroup
 typeConstructorMisuseTests = define "typeConstructorMisuseTests" $
   supergroup "Type constructor misuse" [
   subgroup "List constructor errors" [
@@ -403,7 +403,7 @@ typeConstructorMisuseTests = define "typeConstructorMisuseTests" $
     expectFailure 4 []
       (primitive _math_maybeDiv @@ true @@ false)]]
 
-undefinedVariableTests :: TTermDefinition TestGroup
+undefinedVariableTests :: TypedTermDefinition TestGroup
 undefinedVariableTests = define "undefinedVariableTests" $
   supergroup "Undefined variable" [
   subgroup "Basic unbound variables" [
@@ -430,7 +430,7 @@ undefinedVariableTests = define "undefinedVariableTests" $
     expectFailure 3 []
       (lets ["x">: lambda "y" $ var "z"] $ var "x")]]
 
-unificationFailureTests :: TTermDefinition TestGroup
+unificationFailureTests :: TypedTermDefinition TestGroup
 unificationFailureTests = define "unificationFailureTests" $
   supergroup "Unification failure" [
   subgroup "Basic type mismatches" [

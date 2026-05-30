@@ -76,7 +76,7 @@ import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 ns :: ModuleName
 ns = ModuleName "hydra.rewriting"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -107,7 +107,7 @@ module_ = Module {
      toDefinition subtermsWithSteps,
      toDefinition subtypes]
 
-applyInsideTypeLambdasAndAnnotations :: TTermDefinition ((Term -> Term) -> Term -> Term)
+applyInsideTypeLambdasAndAnnotations :: TypedTermDefinition ((Term -> Term) -> Term -> Term)
 applyInsideTypeLambdasAndAnnotations = define "applyInsideTypeLambdasAndAnnotations" $
   doc "Apply a term-level function inside any leading type lambdas" $
   "f" ~> "term0" ~> cases _Term (var "term0")
@@ -117,7 +117,7 @@ applyInsideTypeLambdasAndAnnotations = define "applyInsideTypeLambdasAndAnnotati
     _Term_typeLambda>>: "tl" ~> Core.termTypeLambda $ Core.typeLambdaWithBody (var "tl")
       (applyInsideTypeLambdasAndAnnotations @@ var "f" @@ (Core.typeLambdaBody $ var "tl"))]
 
-foldOverTerm :: TTermDefinition (TraversalOrder -> (x -> Term -> x) -> x -> Term -> x)
+foldOverTerm :: TypedTermDefinition (TraversalOrder -> (x -> Term -> x) -> x -> Term -> x)
 foldOverTerm = define "foldOverTerm" $
   doc "Fold over a term, traversing its subterms in the specified order" $
   "order" ~> "fld" ~> "b0" ~> "term" ~> cases _TraversalOrder (var "order") Nothing [
@@ -130,7 +130,7 @@ foldOverTerm = define "foldOverTerm" $
         @@ (subterms @@ var "term"))
       @@ var "term")]
 
-foldOverType :: TTermDefinition (TraversalOrder -> (x -> Type -> x) -> x -> Type -> x)
+foldOverType :: TypedTermDefinition (TraversalOrder -> (x -> Type -> x) -> x -> Type -> x)
 foldOverType = define "foldOverType" $
   doc "Fold over a type, traversing its subtypes in the specified order" $
   "order" ~> "fld" ~> "b0" ~> "typ" ~> cases _TraversalOrder (var "order") Nothing [
@@ -144,7 +144,7 @@ foldOverType = define "foldOverType" $
       @@ var "typ")]
 
 
-foldTermWithGraphAndPath :: TTermDefinition (
+foldTermWithGraphAndPath :: TypedTermDefinition (
   ((a -> Term -> a) -> [SubtermStep] -> Graph -> a -> Term -> a)
   -> Graph -> a -> Term -> a)
 foldTermWithGraphAndPath = define "foldTermWithGraphAndPath" $
@@ -161,7 +161,7 @@ foldTermWithGraphAndPath = define "foldTermWithGraphAndPath" $
   "result" <~ rewriteAndFoldTermWithGraphAndPath @@ var "wrapper" @@ var "cx0" @@ var "val0" @@ var "term0" $
   Pairs.first $ var "result"
 
-mapBeneathTypeAnnotations :: TTermDefinition ((Type -> Type) -> Type -> Type)
+mapBeneathTypeAnnotations :: TypedTermDefinition ((Type -> Type) -> Type -> Type)
 mapBeneathTypeAnnotations = define "mapBeneathTypeAnnotations" $
   doc "Apply a transformation to the first type beneath a chain of annotations" $
   "f" ~> "t" ~> cases _Type (var "t")
@@ -170,7 +170,7 @@ mapBeneathTypeAnnotations = define "mapBeneathTypeAnnotations" $
       (mapBeneathTypeAnnotations @@ var "f" @@ (Core.annotatedTypeBody $ var "at"))
       (Core.annotatedTypeAnnotation $ var "at")]
 
-rewriteAndFoldTerm :: TTermDefinition (((a -> Term -> (a, Term)) -> a -> Term -> (a, Term)) -> a -> Term -> (a, Term))
+rewriteAndFoldTerm :: TypedTermDefinition (((a -> Term -> (a, Term)) -> a -> Term -> (a, Term)) -> a -> Term -> (a, Term))
 rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
   doc "Rewrite a term, and at the same time, fold a function over it, accumulating a value" $
   "f" ~> "term0" ~>
@@ -183,7 +183,7 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
         ("r" ~> "el" ~>
           "r2" <~ var "rec" @@ (Pairs.first $ var "r") @@ var "el" $
           pair (Pairs.first $ var "r2") (Lists.cons (Pairs.second $ var "r2") (Pairs.second $ var "r")))
-        (pair (var "val") (list ([] :: [TTerm Term])))
+        (pair (var "val") (list ([] :: [TypedTerm Term])))
         (var "els") $
       pair (Pairs.first $ var "rr") (var "cons" @@ (Lists.reverse $ Pairs.second $ var "rr"))) $
     "forField" <~ ("val" ~> "field" ~>
@@ -305,7 +305,7 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "term0"
 
-rewriteAndFoldTermWithGraph :: TTermDefinition (((a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term))
+rewriteAndFoldTermWithGraph :: TypedTermDefinition (((a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term))
 rewriteAndFoldTermWithGraph = define "rewriteAndFoldTermWithGraph" $
   doc ("Rewrite a term while folding to produce a value, with Graph updated as we descend into subterms."
     <> " Combines the features of rewriteAndFoldTerm and rewriteTermWithGraph."
@@ -327,7 +327,7 @@ rewriteAndFoldTermWithGraph = define "rewriteAndFoldTermWithGraph" $
   "result" <~ rewriteAndFoldTerm @@ var "wrapper" @@ pair (var "val0") (var "cx0") @@ var "term0" $
   pair (Pairs.first $ Pairs.first $ var "result") (Pairs.second $ var "result")
 
-rewriteAndFoldTermWithGraphAndPath :: TTermDefinition (
+rewriteAndFoldTermWithGraphAndPath :: TypedTermDefinition (
   ((a -> Term -> (a, Term)) -> [SubtermStep] -> Graph -> a -> Term -> (a, Term))
   -> Graph -> a -> Term -> (a, Term))
 rewriteAndFoldTermWithGraphAndPath = define "rewriteAndFoldTermWithGraphAndPath" $
@@ -355,7 +355,7 @@ rewriteAndFoldTermWithGraphAndPath = define "rewriteAndFoldTermWithGraphAndPath"
 -- | Rewrite a term with path tracking, and fold a function over it.
 -- The path is the list of accessors from the root to the current term.
 -- The function f receives: (recurse path acc term -> (acc', term')) -> path -> acc -> term -> (acc', term')
-rewriteAndFoldTermWithPath :: TTermDefinition ((([SubtermStep] -> a -> Term -> (a, Term)) -> [SubtermStep] -> a -> Term -> (a, Term)) -> a -> Term -> (a, Term))
+rewriteAndFoldTermWithPath :: TypedTermDefinition ((([SubtermStep] -> a -> Term -> (a, Term)) -> [SubtermStep] -> a -> Term -> (a, Term)) -> a -> Term -> (a, Term))
 rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
   doc "Rewrite a term with path tracking, and fold a function over it, accumulating a value. The path is a list of SubtermSteps from root to current position." $
   "f" ~> "term0" ~>
@@ -373,7 +373,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
             @@ (Pairs.first $ var "r")
             @@ (Pairs.second $ var "atp") $
           pair (Pairs.first $ var "r2") (Lists.cons (Pairs.second $ var "r2") (Pairs.second $ var "r")))
-        (pair (var "val") (list ([] :: [TTerm Term])))
+        (pair (var "val") (list ([] :: [TypedTerm Term])))
         (var "accessorTermPairs") $
       pair (Pairs.first $ var "rr") (var "cons" @@ (Lists.reverse $ Pairs.second $ var "rr"))) $
     -- Helper for record/case fields with accessors
@@ -499,7 +499,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
           ("r" ~> "binding" ~>
             "rb" <~ var "forBindingWithAccessor" @@ (Pairs.first $ var "r") @@ var "binding" $
             pair (Pairs.first $ var "rb") (Lists.cons (Pairs.second $ var "rb") (Pairs.second $ var "r")))
-          (pair (Pairs.first $ var "renv") (list ([] :: [TTerm Binding])))
+          (pair (Pairs.first $ var "renv") (list ([] :: [TypedTerm Binding])))
           (Core.letBindings $ var "l") $
         pair
           (Pairs.first $ var "rbindings")
@@ -515,7 +515,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
             pair
               (Math.add (Pairs.first $ var "r") (int32 1))
               (pair (Pairs.first $ var "r2") (Lists.cons (Pairs.second $ var "r2") (Pairs.second $ Pairs.second $ var "r"))))
-          (pair (var "idx") (pair (var "val0") (list ([] :: [TTerm Term]))))
+          (pair (var "idx") (pair (var "val0") (list ([] :: [TypedTerm Term]))))
           (var "els") $
         pair (Pairs.first $ Pairs.second $ var "rr") (Core.termList $ Lists.reverse $ Pairs.second $ Pairs.second $ var "rr"),
       _Term_map>>: "m" ~>
@@ -535,7 +535,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
               (pair
                 (Pairs.first $ var "rv")
                 (Lists.cons (pair (Pairs.second $ var "rk") (Pairs.second $ var "rv")) (Pairs.second $ Pairs.second $ var "r"))))
-          (pair (var "idx") (pair (var "val0") (list ([] :: [TTerm (Term, Term)]))))
+          (pair (var "idx") (pair (var "val0") (list ([] :: [TypedTerm (Term, Term)]))))
           (Maps.toList $ var "m") $
         pair (Pairs.first $ Pairs.second $ var "rr") (Core.termMap $ Maps.fromList $ Lists.reverse $ Pairs.second $ Pairs.second $ var "rr"),
       _Term_maybe>>: "mt" ~> optCases (var "mt")
@@ -587,7 +587,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
             pair
               (Math.add (Pairs.first $ var "r") (int32 1))
               (pair (Pairs.first $ var "r2") (Lists.cons (Pairs.second $ var "r2") (Pairs.second $ Pairs.second $ var "r"))))
-          (pair (var "idx") (pair (var "val0") (list ([] :: [TTerm Term]))))
+          (pair (var "idx") (pair (var "val0") (list ([] :: [TypedTerm Term]))))
           (Sets.toList $ var "els") $
         pair (Pairs.first $ Pairs.second $ var "rr") (Core.termSet $ Sets.fromList $ Lists.reverse $ Pairs.second $ Pairs.second $ var "rr"),
       _Term_typeApplication>>: "ta" ~> var "forSingleWithAccessor"
@@ -618,9 +618,9 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
         @@ var "val0"
         @@ (Core.wrappedTermBody $ var "wt")]) $
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
-  var "recurse" @@ list ([] :: [TTerm SubtermStep]) @@ var "term0"
+  var "recurse" @@ list ([] :: [TypedTerm SubtermStep]) @@ var "term0"
 
-rewriteTerm :: TTermDefinition (((Term -> Term) -> Term -> Term) -> Term -> Term)
+rewriteTerm :: TypedTermDefinition (((Term -> Term) -> Term -> Term) -> Term -> Term)
 rewriteTerm = define "rewriteTerm" $
   doc "Rewrite a term with a custom transformation function. The function receives a recursive walker and the current term and decides whether to recurse, replace, or both." $
   "f" ~> "term0" ~>
@@ -688,7 +688,7 @@ rewriteTerm = define "rewriteTerm" $
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "term0"
 
-rewriteTermM :: TTermDefinition (((Term -> Prelude.Either e Term) -> Term -> Prelude.Either e Term) -> Term -> Prelude.Either e Term)
+rewriteTermM :: TypedTermDefinition (((Term -> Prelude.Either e Term) -> Term -> Prelude.Either e Term) -> Term -> Prelude.Either e Term)
 rewriteTermM = define "rewriteTermM" $
   doc "Either-based term rewriting with custom transformation function" $
   "f" ~> "term0" ~>
@@ -789,7 +789,7 @@ rewriteTermM = define "rewriteTermM" $
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "term0"
 
-rewriteTermWithContext :: TTermDefinition (((a -> Term -> Term) -> a -> Term -> Term) -> a -> Term -> Term)
+rewriteTermWithContext :: TypedTermDefinition (((a -> Term -> Term) -> a -> Term -> Term) -> a -> Term -> Term)
 rewriteTermWithContext = define "rewriteTermWithContext" $
   doc ("A variant of rewriteTerm which allows a context (e.g. a TypeContext)"
     <> " to be passed down to all subterms during rewriting") $
@@ -858,7 +858,7 @@ rewriteTermWithContext = define "rewriteTermWithContext" $
   "rewrite" <~ ("cx" ~> "term" ~> var "f" @@ (var "forSubterms" @@ var "rewrite") @@ var "cx" @@ var "term") $
   var "rewrite" @@ var "cx0" @@ var "term0"
 
-rewriteTermWithContextM :: TTermDefinition (((a -> Term -> Prelude.Either e Term) -> a -> Term -> Prelude.Either e Term) -> a -> Term -> Prelude.Either e Term)
+rewriteTermWithContextM :: TypedTermDefinition (((a -> Term -> Prelude.Either e Term) -> a -> Term -> Prelude.Either e Term) -> a -> Term -> Prelude.Either e Term)
 rewriteTermWithContextM = define "rewriteTermWithContextM" $
   doc ("Either-based variant of rewriteTermWithContextM which allows a context (e.g. a TypeContext)"
     <> " to be passed down to all subterms during rewriting") $
@@ -962,7 +962,7 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
   "rewrite" <~ ("cx" ~> "term" ~> var "f" @@ (var "forSubterms" @@ var "rewrite") @@ var "cx" @@ var "term") $
   var "rewrite" @@ var "cx0" @@ var "term0"
 
-rewriteTermWithGraph :: TTermDefinition (((Term -> Term) -> Graph -> Term -> Term) -> Graph -> Term -> Term)
+rewriteTermWithGraph :: TypedTermDefinition (((Term -> Term) -> Graph -> Term -> Term) -> Graph -> Term -> Term)
 rewriteTermWithGraph = define "rewriteTermWithGraph" $
   doc "Rewrite a term with the help of a Graph which is updated as we descend into subterms" $
   "f" ~> "cx0" ~> "term0" ~>
@@ -984,7 +984,7 @@ rewriteTermWithGraph = define "rewriteTermWithGraph" $
   "rewrite" <~ ("cx" ~> "term" ~> var "f2" @@ (var "rewrite") @@ var "cx" @@ var "term") $
   var "rewrite" @@ var "cx0" @@ var "term0"
 
-rewriteType :: TTermDefinition (((Type -> Type) -> Type -> Type) -> Type -> Type)
+rewriteType :: TypedTermDefinition (((Type -> Type) -> Type -> Type) -> Type -> Type)
 rewriteType = define "rewriteType" $
   doc "Rewrite a type with a custom transformation function. The function receives a recursive walker and the current type and decides whether to recurse, replace, or both." $
   "f" ~> "typ0" ~>
@@ -1029,7 +1029,7 @@ rewriteType = define "rewriteType" $
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "typ0"
 
-rewriteTypeM :: TTermDefinition (((Type -> Prelude.Either e Type) -> Type -> Prelude.Either e Type) -> Type -> Prelude.Either e Type)
+rewriteTypeM :: TypedTermDefinition (((Type -> Prelude.Either e Type) -> Type -> Prelude.Either e Type) -> Type -> Prelude.Either e Type)
 rewriteTypeM = define "rewriteTypeM" $
   doc "Either-based type rewriting" $
   "f" ~> "typ0" ~>
@@ -1091,7 +1091,7 @@ rewriteTypeM = define "rewriteTypeM" $
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "typ0"
 
-subterms :: TTermDefinition (Term -> [Term])
+subterms :: TypedTermDefinition (Term -> [Term])
 subterms = define "subterms" $
   doc "Find the children of a given term" $
   match _Term Nothing [
@@ -1100,7 +1100,7 @@ subterms = define "subterms" $
       Core.applicationFunction $ var "p",
       Core.applicationArgument $ var "p"],
     _Term_cases>>: "cs" ~> Lists.concat2
-      (Maybes.maybe (list ([] :: [TTerm Term])) ("t" ~> list [var "t"]) (Core.caseStatementDefault $ var "cs"))
+      (Maybes.maybe (list ([] :: [TypedTerm Term])) ("t" ~> list [var "t"]) (Core.caseStatementDefault $ var "cs"))
       (Lists.map (reify Core.fieldTerm) (Core.caseStatementCases $ var "cs")),
     _Term_either>>: "e" ~> Eithers.either_
       ("l" ~> list [var "l"])
@@ -1111,24 +1111,24 @@ subterms = define "subterms" $
       (Core.letBody $ var "lt")
       (Lists.map (reify Core.bindingTerm) (Core.letBindings $ var "lt")),
     _Term_list>>: "l" ~> var "l",
-    _Term_literal>>: constant $ list ([] :: [TTerm Term]),
+    _Term_literal>>: constant $ list ([] :: [TypedTerm Term]),
     _Term_map>>: "m" ~> Lists.concat $ Lists.map
       ("p" ~> list [Pairs.first $ var "p", Pairs.second $ var "p"])
       (Maps.toList $ var "m"),
-    _Term_maybe>>: "m" ~> Maybes.maybe (list ([] :: [TTerm Term])) ("t" ~> list [var "t"]) (var "m"),
+    _Term_maybe>>: "m" ~> Maybes.maybe (list ([] :: [TypedTerm Term])) ("t" ~> list [var "t"]) (var "m"),
     _Term_pair>>: "p" ~> list [Pairs.first $ var "p", Pairs.second $ var "p"],
-    _Term_project>>: constant $ list ([] :: [TTerm Term]),
+    _Term_project>>: constant $ list ([] :: [TypedTerm Term]),
     _Term_record>>: "rt" ~> Lists.map (reify Core.fieldTerm) (Core.recordFields $ var "rt"),
     _Term_set>>: "l" ~> Sets.toList $ var "l",
     _Term_typeApplication>>: "ta" ~> list [Core.typeApplicationTermBody $ var "ta"],
     _Term_typeLambda>>: "ta" ~> list [Core.typeLambdaBody $ var "ta"],
     _Term_inject>>: "ut" ~> list [Core.fieldTerm $ (Core.injectionField $ var "ut")],
-    _Term_unit>>: constant $ list ([] :: [TTerm Term]),
-    _Term_unwrap>>: constant $ list ([] :: [TTerm Term]),
-    _Term_variable>>: constant $ list ([] :: [TTerm Term]),
+    _Term_unit>>: constant $ list ([] :: [TypedTerm Term]),
+    _Term_unwrap>>: constant $ list ([] :: [TypedTerm Term]),
+    _Term_variable>>: constant $ list ([] :: [TypedTerm Term]),
     _Term_wrap>>: "n" ~> list [Core.wrappedTermBody $ var "n"]]
 
-subtermsWithSteps :: TTermDefinition (Term -> [(SubtermStep, Term)])
+subtermsWithSteps :: TypedTermDefinition (Term -> [(SubtermStep, Term)])
 subtermsWithSteps = define "subtermsWithSteps" $
   doc "Find the children of a given term" $
   match _Term Nothing [
@@ -1188,11 +1188,11 @@ subtermsWithSteps = define "subtermsWithSteps" $
     _Term_variable>>: constant none,
     _Term_wrap>>: "n" ~> single Paths.subtermStepWrappedTerm $ Core.wrappedTermBody $ var "n"]
   where
-    none = list ([] :: [TTerm (SubtermStep, Term)])
+    none = list ([] :: [TypedTerm (SubtermStep, Term)])
     single step term = list [result step term]
     result step term = pair step term
 
-subtypes :: TTermDefinition (Type -> [Type])
+subtypes :: TypedTermDefinition (Type -> [Type])
 subtypes = define "subtypes" $
   doc "Find the children of a given type expression" $
   match _Type Nothing [
@@ -1211,7 +1211,7 @@ subtypes = define "subtypes" $
       Core.functionTypeCodomain $ var "ft"],
     _Type_forall>>: "lt" ~> list [Core.forallTypeBody $ var "lt"],
     _Type_list>>: "lt" ~> list [var "lt"],
-    _Type_literal>>: constant $ list ([] :: [TTerm Type]),
+    _Type_literal>>: constant $ list ([] :: [TypedTerm Type]),
     _Type_map>>: "mt" ~> list [
       Core.mapTypeKeys $ var "mt",
       Core.mapTypeValues $ var "mt"],
@@ -1219,7 +1219,7 @@ subtypes = define "subtypes" $
     _Type_record>>: "rt" ~> Lists.map (reify Core.fieldTypeType) (var "rt"),
     _Type_set>>: "st" ~> list [var "st"],
     _Type_union>>: "rt" ~> Lists.map (reify Core.fieldTypeType) (var "rt"),
-    _Type_unit>>: constant $ list ([] :: [TTerm Type]),
-    _Type_variable>>: constant $ list ([] :: [TTerm Type]),
-    _Type_void>>: constant $ list ([] :: [TTerm Type]),
+    _Type_unit>>: constant $ list ([] :: [TypedTerm Type]),
+    _Type_variable>>: constant $ list ([] :: [TypedTerm Type]),
+    _Type_void>>: constant $ list ([] :: [TypedTerm Type]),
     _Type_wrap>>: "nt" ~> list [var "nt"]]

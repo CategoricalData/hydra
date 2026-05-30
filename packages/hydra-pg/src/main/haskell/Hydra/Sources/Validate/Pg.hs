@@ -84,7 +84,7 @@ allPgRuleNames = L.concat
 -- ============================================================================
 
 -- | Edge counterpart of 'appendFindingVertex'.
-appendFindingEdge :: TTermDefinition (
+appendFindingEdge :: TypedTermDefinition (
   ValidationProfile
   -> ValidationResult InvalidEdgeError
   -> Maybe (Name, InvalidEdgeError)
@@ -114,7 +114,7 @@ appendFindingEdge = validationDefinition "appendFindingEdge" $
           (var "acc")))
 
 -- | Graph counterpart. Polymorphic in the vertex value type 'v'.
-appendFindingGraph :: TTermDefinition (
+appendFindingGraph :: TypedTermDefinition (
   ValidationProfile
   -> ValidationResult (InvalidGraphError v)
   -> Maybe (Name, InvalidGraphError v)
@@ -153,7 +153,7 @@ appendFindingGraph = validationDefinition "appendFindingGraph" $
 -- ============================================================================
 
 -- | Property counterpart. Payload type is 'InvalidElementPropertyError'.
-appendFindingProperty :: TTermDefinition (
+appendFindingProperty :: TypedTermDefinition (
   ValidationProfile
   -> ValidationResult InvalidElementPropertyError
   -> Maybe (Name, InvalidElementPropertyError)
@@ -186,7 +186,7 @@ appendFindingProperty = validationDefinition "appendFindingProperty" $
 -- against the active profile and append the payload (without its rule
 -- tag) to the appropriate list in the accumulator. Same semantics as
 -- 'appendFinding' in Validate/Core.hs.
-appendFindingVertex :: TTermDefinition (
+appendFindingVertex :: TypedTermDefinition (
   ValidationProfile
   -> ValidationResult InvalidVertexError
   -> Maybe (Name, InvalidVertexError)
@@ -219,7 +219,7 @@ appendFindingVertex = validationDefinition "appendFindingVertex" $
 -- is classified as an error; no warnings; 'maxErrors = 1' preserves the
 -- legacy 'first error wins' behaviour; 'maxWarnings = 20' is a small
 -- starting cap.
-defaultPgProfile :: TTermDefinition ValidationProfile
+defaultPgProfile :: TypedTermDefinition ValidationProfile
 defaultPgProfile = validationDefinition "defaultPgProfile" $
   doc "The default validation profile for property-graph validation. Every PG rule classified as an error; no warnings; maxErrors=1, maxWarnings=20." $
   Validation.validationProfile
@@ -229,16 +229,16 @@ defaultPgProfile = validationDefinition "defaultPgProfile" $
     (int32 20)
 
 -- | An empty ValidationResult parameterized by 'e'.
-emptyResult :: TTerm (ValidationResult e)
+emptyResult :: TypedTerm (ValidationResult e)
 emptyResult = Validation.validationResult
-  (list ([] :: [TTerm e]))
-  (list ([] :: [TTerm e]))
+  (list ([] :: [TypedTerm e]))
+  (list ([] :: [TypedTerm e]))
 
 -- | Test whether a rule is active in a profile (in either errorRules or
 -- warningRules). Local counterpart of 'enabled' in Validate/Core.hs;
 -- named 'enabledPg' to avoid clashing if both modules are imported into
 -- the same scope.
-enabledPg :: TTermDefinition (ValidationProfile -> Name -> Bool)
+enabledPg :: TypedTermDefinition (ValidationProfile -> Name -> Bool)
 enabledPg = validationDefinition "enabledPg" $
   doc "True iff the given rule name appears in the profile's errorRules or warningRules." $
   "p" ~> "ruleName" ~>
@@ -256,11 +256,11 @@ qualifiedRule (Name u) (Name v) = Name (L.concat [u, ".", v])
 -- produced it, gated by the active profile. Same pattern as 'guardedTermRule'
 -- in Validate/Core.hs.
 guardedVertexRule
-  :: TTerm ValidationProfile
+  :: TypedTerm ValidationProfile
   -> Name -- ^ Union-type qualified name (e.g. _InvalidVertexError).
   -> Name -- ^ Variant local name (e.g. _InvalidVertexError_label).
-  -> TTerm (Maybe InvalidVertexError)
-  -> TTerm (Maybe (Name, InvalidVertexError))
+  -> TypedTerm (Maybe InvalidVertexError)
+  -> TypedTerm (Maybe (Name, InvalidVertexError))
 guardedVertexRule profile unionName variantName findingExpr =
   Logic.ifElse (enabledPg @@ profile @@ ruleNameTerm)
     (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
@@ -270,11 +270,11 @@ guardedVertexRule profile unionName variantName findingExpr =
 
 -- | Edge counterpart of 'guardedVertexRule'.
 guardedEdgeRule
-  :: TTerm ValidationProfile
+  :: TypedTerm ValidationProfile
   -> Name
   -> Name
-  -> TTerm (Maybe InvalidEdgeError)
-  -> TTerm (Maybe (Name, InvalidEdgeError))
+  -> TypedTerm (Maybe InvalidEdgeError)
+  -> TypedTerm (Maybe (Name, InvalidEdgeError))
 guardedEdgeRule profile unionName variantName findingExpr =
   Logic.ifElse (enabledPg @@ profile @@ ruleNameTerm)
     (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
@@ -287,11 +287,11 @@ guardedEdgeRule profile unionName variantName findingExpr =
 -- 'InvalidPropertyError'), but the rule name still refers to the inner
 -- 'InvalidPropertyError' variant.
 guardedPropertyRule
-  :: TTerm ValidationProfile
+  :: TypedTerm ValidationProfile
   -> Name -- ^ _InvalidPropertyError
   -> Name -- ^ Variant local name (e.g. _InvalidPropertyError_missingRequired).
-  -> TTerm (Maybe InvalidElementPropertyError)
-  -> TTerm (Maybe (Name, InvalidElementPropertyError))
+  -> TypedTerm (Maybe InvalidElementPropertyError)
+  -> TypedTerm (Maybe (Name, InvalidElementPropertyError))
 guardedPropertyRule profile unionName variantName findingExpr =
   Logic.ifElse (enabledPg @@ profile @@ ruleNameTerm)
     (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
@@ -301,7 +301,7 @@ guardedPropertyRule profile unionName variantName findingExpr =
 
 -- | Validate a single edge against its expected type. Each per-rule
 -- check is gated by the profile.
-validateEdge :: TTermDefinition (
+validateEdge :: TypedTermDefinition (
      ValidationProfile
   -> (t -> v -> Maybe InvalidValueError)
   -> Y.Maybe (v -> Y.Maybe PG.VertexLabel)
@@ -412,7 +412,7 @@ validateEdge = validationDefinition "validateEdge" $
 -- The accumulator is threaded across the two phases (vertices, then
 -- edges) so 'maxErrors' is enforced over the entire graph, not per
 -- phase.
-validateGraph :: TTermDefinition (
+validateGraph :: TypedTermDefinition (
      ValidationProfile
   -> ValidationResult (InvalidGraphError v)
   -> (t -> v -> Maybe InvalidValueError)
@@ -450,7 +450,7 @@ validateGraph = validationDefinition "validateGraph" $
                 record _NoSuchVertexLabelError [
                   _NoSuchVertexLabelError_label>>:
                     project _Vertex _Vertex_label @@ var "el"]])
-            (list ([] :: [TTerm InvalidVertexError])))
+            (list ([] :: [TypedTerm InvalidVertexError])))
           ("t" ~> validateVertex @@ var "p" @@ var "checkValue" @@ var "t" @@ var "el")
           (var "tOpt")]
         $ Lists.map
@@ -473,7 +473,7 @@ validateGraph = validationDefinition "validateGraph" $
                 record _NoSuchEdgeLabelError [
                   _NoSuchEdgeLabelError_label>>:
                     project _Edge _Edge_label @@ var "el"]])
-            (list ([] :: [TTerm InvalidEdgeError])))
+            (list ([] :: [TypedTerm InvalidEdgeError])))
           ("t" ~> validateEdge @@ var "p" @@ var "checkValue" @@ var "labelForVertexId" @@ var "t" @@ var "el")
           (var "tOpt")]
         $ Lists.map
@@ -502,7 +502,7 @@ validateGraph = validationDefinition "validateGraph" $
 -- not in schema), 'invalidValue' (per actual key whose value fails the
 -- caller's checkValue). Each finding is a per-property
 -- 'InvalidElementPropertyError' (key + inner InvalidPropertyError).
-validateProperties :: TTermDefinition (
+validateProperties :: TypedTermDefinition (
      ValidationProfile
   -> (t -> v -> Maybe InvalidValueError)
   -> [PG.PropertyType t]
@@ -578,7 +578,7 @@ validateProperties = validationDefinition "validateProperties" $
 
 -- | Validate a single vertex against its expected type. Each per-rule
 -- check ('label', 'id', 'property') is gated by the profile.
-validateVertex :: TTermDefinition (
+validateVertex :: TypedTermDefinition (
      ValidationProfile
   -> (t -> v -> Maybe InvalidValueError)
   -> PG.VertexType t
@@ -631,5 +631,5 @@ validateVertex = validationDefinition "validateVertex" $
             @@ (project _VertexType _VertexType_properties @@ var "typ")
             @@ (project _Vertex _Vertex_properties @@ var "el")))])
 
-validationDefinition :: String -> TTerm a -> TTermDefinition a
+validationDefinition :: String -> TypedTerm a -> TypedTermDefinition a
 validationDefinition = definitionInModule module_

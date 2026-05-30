@@ -85,10 +85,10 @@ module_ = Module {
       Phantoms.toDefinition eliminationsTests,
       Phantoms.toDefinition projectionsWithVariablesTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
   supergroup "Nominal types" [
   recordsTests,
@@ -100,7 +100,7 @@ allTests = define "allTests" $
 
 ------ Records ------
 
-monomorphicRecordsTests :: TTermDefinition TestGroup
+monomorphicRecordsTests :: TypedTermDefinition TestGroup
 monomorphicRecordsTests = define "monomorphicRecordsTests" $
   subgroup "Monomorphic records" [
   noChange "latlon record"
@@ -136,7 +136,7 @@ monomorphicRecordsTests = define "monomorphicRecordsTests" $
       "age" >: var "age"])
     (T.function T.string (T.function T.int32 (T.var "Person")))]
 
-multiParameterPolymorphicRecordsTests :: TTermDefinition TestGroup
+multiParameterPolymorphicRecordsTests :: TypedTermDefinition TestGroup
 multiParameterPolymorphicRecordsTests = define "multiParameterPolymorphicRecordsTests" $
   subgroup "Multi-parameter polymorphic records" [
   checkTest "triple with three monomorphic types" []
@@ -175,7 +175,7 @@ multiParameterPolymorphicRecordsTests = define "multiParameterPolymorphicRecords
          T.apply (T.var "PersonOrSomething") (T.map (T.var "t0") (T.var "t1")),
          T.int32])]
 
-polymorphicRecordsTests :: TTermDefinition TestGroup
+polymorphicRecordsTests :: TypedTermDefinition TestGroup
 polymorphicRecordsTests = define "polymorphicRecordsTests" $
   subgroup "Polymorphic records" [
   checkTest "latlon poly float" []
@@ -219,7 +219,7 @@ polymorphicRecordsTests = define "polymorphicRecordsTests" $
       "tail" >: tyapp (optional nothing) (T.apply (T.var "BuddyListB") (T.var "t0"))]) (T.var "t0"))
     (T.forAll "t0" $ T.function (T.var "t0") (T.apply (T.var "BuddyListA") (T.var "t0")))]
 
-recordsInComplexContextsTests :: TTermDefinition TestGroup
+recordsInComplexContextsTests :: TypedTermDefinition TestGroup
 recordsInComplexContextsTests = define "recordsInComplexContextsTests" $
   subgroup "Records in complex contexts" [
   checkTest "records in tuple" []
@@ -274,7 +274,7 @@ recordsInComplexContextsTests = define "recordsInComplexContextsTests" $
           "tail" >: tyapp (optional nothing) (T.var "IntList")]))])
     (T.var "IntList")]
 
-recordsTests :: TTermDefinition TestGroup
+recordsTests :: TypedTermDefinition TestGroup
 recordsTests = define "recordsTests" $
   supergroup "Records" [
   monomorphicRecordsTests,
@@ -284,7 +284,7 @@ recordsTests = define "recordsTests" $
 
 ------ Record eliminations ------
 
-higherOrderRecordProjectionsTests :: TTermDefinition TestGroup
+higherOrderRecordProjectionsTests :: TypedTermDefinition TestGroup
 higherOrderRecordProjectionsTests = define "higherOrderRecordProjectionsTests" $
   subgroup "Higher-order record projections" [
   checkTest "map projection over list of records" []
@@ -353,7 +353,7 @@ higherOrderRecordProjectionsTests = define "higherOrderRecordProjectionsTests" $
              "age">: (int32 25)]])
     (T.list (Core.typeVariable $ TestTypes.testTypePersonName))]
 
-multiParameterPolymorphicProjectionsTests :: TTermDefinition TestGroup
+multiParameterPolymorphicProjectionsTests :: TypedTermDefinition TestGroup
 multiParameterPolymorphicProjectionsTests = define "multiParameterPolymorphicProjectionsTests" $
   subgroup "Multi-parameter polymorphic projections" [
   checkTest "project first from Triple" []
@@ -404,7 +404,7 @@ multiParameterPolymorphicProjectionsTests = define "multiParameterPolymorphicPro
            T.var "t3"])
         (T.function (T.var "t1") (T.optional (T.var "t2"))))]
 
-polymorphicRecordProjectionsAppliedTests :: TTermDefinition TestGroup
+polymorphicRecordProjectionsAppliedTests :: TypedTermDefinition TestGroup
 polymorphicRecordProjectionsAppliedTests = define "polymorphicRecordProjectionsAppliedTests" $
   subgroup "Polymorphic record projections applied" [
   checkTest "project lat from LatLonPoly with int32" []
@@ -438,7 +438,7 @@ polymorphicRecordProjectionsAppliedTests = define "polymorphicRecordProjectionsA
        "tail" >: tyapp (optional nothing) (T.apply (T.var "BuddyListB") T.string)]) T.string)
     T.string]
 
-polymorphicRecordProjectionsTests :: TTermDefinition TestGroup
+polymorphicRecordProjectionsTests :: TypedTermDefinition TestGroup
 polymorphicRecordProjectionsTests = define "polymorphicRecordProjectionsTests" $
   subgroup "Polymorphic record projections" [
   checkTest "project lat from polymorphic LatLonPoly" []
@@ -460,7 +460,7 @@ polymorphicRecordProjectionsTests = define "polymorphicRecordProjectionsTests" $
       (T.apply (T.var "BuddyListA") (T.var "t0"))
       (T.optional (T.apply (T.var "BuddyListB") (T.var "t0"))))]
 
-recordEliminationsTests :: TTermDefinition TestGroup
+recordEliminationsTests :: TypedTermDefinition TestGroup
 recordEliminationsTests = define "recordEliminationsTests" $
   supergroup "Record eliminations" [
   simpleRecordProjectionsTests,
@@ -475,7 +475,7 @@ recordEliminationsTests = define "recordEliminationsTests" $
   recordProjectionsWithMutualRecursionTests,
   projectionsWithVariablesTests]
 
-recordProjectionsAppliedToRecordsTests :: TTermDefinition TestGroup
+recordProjectionsAppliedToRecordsTests :: TypedTermDefinition TestGroup
 recordProjectionsAppliedToRecordsTests = define "recordProjectionsAppliedToRecordsTests" $
   subgroup "Record projections applied to records" [
   noChange "project firstName applied to person record"
@@ -499,7 +499,7 @@ recordProjectionsAppliedToRecordsTests = define "recordProjectionsAppliedToRecor
        "lon" >: float32 (-74.0060)])
     T.float32]
 
-recordProjectionsInComplexContextsTests :: TTermDefinition TestGroup
+recordProjectionsInComplexContextsTests :: TypedTermDefinition TestGroup
 recordProjectionsInComplexContextsTests = define "recordProjectionsInComplexContextsTests" $
   subgroup "Record projections in complex contexts" [
   checkTest "projection in let binding" []
@@ -531,7 +531,7 @@ recordProjectionsInComplexContextsTests = define "recordProjectionsInComplexCont
            project (TestTypes.testTypePersonName) (name "lastName")])
     (T.list (T.function (T.var "Person") T.string))]
 
-recordProjectionsWithMutualRecursionTests :: TTermDefinition TestGroup
+recordProjectionsWithMutualRecursionTests :: TypedTermDefinition TestGroup
 recordProjectionsWithMutualRecursionTests = define "recordProjectionsWithMutualRecursionTests" $
   subgroup "Record projections with mutual recursion" [
   checkTest "project head from BuddyListA" []
@@ -567,7 +567,7 @@ recordProjectionsWithMutualRecursionTests = define "recordProjectionsWithMutualR
       (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListAName) (T.var "t0"))
       (T.optional (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0"))))]
 
-recordProjectionsWithVariablesTests :: TTermDefinition TestGroup
+recordProjectionsWithVariablesTests :: TypedTermDefinition TestGroup
 recordProjectionsWithVariablesTests = define "recordProjectionsWithVariablesTests" $
   subgroup "Record projections with variables" [
   checkTest "project from lambda parameter" []
@@ -588,7 +588,7 @@ recordProjectionsWithVariablesTests = define "recordProjectionsWithVariablesTest
        (project (TestTypes.testTypePersonName) (name "lastName") @@ var "person")) [T.string, T.string])
     (T.function (T.var "Person") (T.pair T.string T.string))]
 
-recursiveRecordProjectionsTests :: TTermDefinition TestGroup
+recursiveRecordProjectionsTests :: TypedTermDefinition TestGroup
 recursiveRecordProjectionsTests = define "recursiveRecordProjectionsTests" $
   subgroup "Recursive record projections" [
   checkTest "nested projection from recursive record" []
@@ -604,7 +604,7 @@ recursiveRecordProjectionsTests = define "recursiveRecordProjectionsTests" $
      (project (TestTypes.testTypeIntListName) (name "tail") @@ var "intList"))
     (T.function (Core.typeVariable $ TestTypes.testTypeIntListName) T.int32)]
 
-simpleRecordProjectionsTests :: TTermDefinition TestGroup
+simpleRecordProjectionsTests :: TypedTermDefinition TestGroup
 simpleRecordProjectionsTests = define "simpleRecordProjectionsTests" $
   subgroup "Simple record projections" [
   noChange "project firstName from Person"
@@ -625,7 +625,7 @@ simpleRecordProjectionsTests = define "simpleRecordProjectionsTests" $
 
 ------ Unions ------
 
-multiParameterPolymorphicInjectionsTests :: TTermDefinition TestGroup
+multiParameterPolymorphicInjectionsTests :: TypedTermDefinition TestGroup
 multiParameterPolymorphicInjectionsTests = define "multiParameterPolymorphicInjectionsTests" $
   subgroup "Multi-parameter polymorphic injections" [
   checkTest "either left with int" []
@@ -676,7 +676,7 @@ multiParameterPolymorphicInjectionsTests = define "multiParameterPolymorphicInje
            T.applys (Core.typeVariable $ TestTypes.testTypeEitherName) [T.var "t0", T.var "t4"],
            T.applys (Core.typeVariable $ TestTypes.testTypeEitherName) [T.var "t5", T.var "t1"]])]
 
-polymorphicRecursiveUnionInjectionsTests :: TTermDefinition TestGroup
+polymorphicRecursiveUnionInjectionsTests :: TypedTermDefinition TestGroup
 polymorphicRecursiveUnionInjectionsTests = define "polymorphicRecursiveUnionInjectionsTests" $
   subgroup "Polymorphic recursive union injections" [
   checkTest "inject boolean into UnionPolymorphicRecursive" []
@@ -692,7 +692,7 @@ polymorphicRecursiveUnionInjectionsTests = define "polymorphicRecursiveUnionInje
     (tyapp (inject (TestTypes.testTypeUnionPolymorphicRecursiveName) "value" (int32 123)) T.int32)
     (T.apply (Core.typeVariable $ TestTypes.testTypeUnionPolymorphicRecursiveName) T.int32)]
 
-polymorphicUnionInjectionsTests :: TTermDefinition TestGroup
+polymorphicUnionInjectionsTests :: TypedTermDefinition TestGroup
 polymorphicUnionInjectionsTests = define "polymorphicUnionInjectionsTests" $
   subgroup "Polymorphic union injections" [
   checkTest "inject person into PersonOrSomething" []
@@ -716,7 +716,7 @@ polymorphicUnionInjectionsTests = define "polymorphicUnionInjectionsTests" $
     (tyapp (inject (TestTypes.testTypePersonOrSomethingName) "other" (int32 42)) T.int32)
     (T.apply (Core.typeVariable $ TestTypes.testTypePersonOrSomethingName) T.int32)]
 
-polymorphicUnionsFromLambdaTests :: TTermDefinition TestGroup
+polymorphicUnionsFromLambdaTests :: TypedTermDefinition TestGroup
 polymorphicUnionsFromLambdaTests = define "polymorphicUnionsFromLambdaTests" $
   subgroup "Polymorphic unions from lambda" [
   checkTest "lambda creating PersonOrSomething other variant" []
@@ -728,7 +728,7 @@ polymorphicUnionsFromLambdaTests = define "polymorphicUnionsFromLambdaTests" $
     (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ tyapp (inject (TestTypes.testTypeUnionPolymorphicRecursiveName) "value" (var "x")) (T.var "t0"))
     (T.forAll "t0" $ T.function (T.var "t0") (T.apply (Core.typeVariable $ TestTypes.testTypeUnionPolymorphicRecursiveName) (T.var "t0")))]
 
-simpleUnionInjectionsTests :: TTermDefinition TestGroup
+simpleUnionInjectionsTests :: TypedTermDefinition TestGroup
 simpleUnionInjectionsTests = define "simpleUnionInjectionsTests" $
   subgroup "Simple union injections" [
   noChange "inject into Comparison lessThan variant"
@@ -741,7 +741,7 @@ simpleUnionInjectionsTests = define "simpleUnionInjectionsTests" $
     (injectUnit (TestTypes.testTypeComparisonName) "greaterThan")
     (Core.typeVariable $ TestTypes.testTypeComparisonName)]
 
-unionInjectionsWithDataTests :: TTermDefinition TestGroup
+unionInjectionsWithDataTests :: TypedTermDefinition TestGroup
 unionInjectionsWithDataTests = define "unionInjectionsWithDataTests" $
   subgroup "Union injections with data" [
   noChange "inject into Number int variant"
@@ -757,7 +757,7 @@ unionInjectionsWithDataTests = define "unionInjectionsWithDataTests" $
     (inject (TestTypes.testTypeTimestampName) "date" (string "2021-01-01"))
     (Core.typeVariable $ TestTypes.testTypeTimestampName)]
 
-unionsInComplexContextsTests :: TTermDefinition TestGroup
+unionsInComplexContextsTests :: TypedTermDefinition TestGroup
 unionsInComplexContextsTests = define "unionsInComplexContextsTests" $
   subgroup "Unions in complex contexts" [
   checkTest "union in tuple" []
@@ -780,7 +780,7 @@ unionsInComplexContextsTests = define "unionsInComplexContextsTests" $
       var "value")
     (T.apply (Core.typeVariable $ TestTypes.testTypePersonOrSomethingName) T.string)]
 
-unionsTests :: TTermDefinition TestGroup
+unionsTests :: TypedTermDefinition TestGroup
 unionsTests = define "unionsTests" $
   supergroup "Unions" [
   simpleUnionInjectionsTests,
@@ -793,7 +793,7 @@ unionsTests = define "unionsTests" $
 
 ------ Union eliminations ------
 
-higherOrderUnionEliminationsTests :: TTermDefinition TestGroup
+higherOrderUnionEliminationsTests :: TypedTermDefinition TestGroup
 higherOrderUnionEliminationsTests = define "higherOrderUnionEliminationsTests" $
   subgroup "Higher-order union eliminations" [
   checkTest "map match over list" []
@@ -841,7 +841,7 @@ higherOrderUnionEliminationsTests = define "higherOrderUnionEliminationsTests" $
      var "unionValue")
     (T.function (Core.typeVariable $ TestTypes.testTypeNumberName) T.int32)]
 
-multiParameterPolymorphicCaseStatementsTests :: TTermDefinition TestGroup
+multiParameterPolymorphicCaseStatementsTests :: TypedTermDefinition TestGroup
 multiParameterPolymorphicCaseStatementsTests = define "multiParameterPolymorphicCaseStatementsTests" $
   subgroup "Multi-parameter polymorphic case statements" [
   checkTest "case Either converting both to string" []
@@ -921,7 +921,7 @@ multiParameterPolymorphicCaseStatementsTests = define "multiParameterPolymorphic
         var "flag")
     (T.function (T.applys (Core.typeVariable $ TestTypes.testTypeEitherName) [T.int32, T.string]) (T.applys (Core.typeVariable $ TestTypes.testTypeEitherName) [T.int32, T.int32]))]
 
-nestedUnionEliminationsTests :: TTermDefinition TestGroup
+nestedUnionEliminationsTests :: TypedTermDefinition TestGroup
 nestedUnionEliminationsTests = define "nestedUnionEliminationsTests" $
   subgroup "Nested union eliminations" [
   checkTest "nested match statements" []
@@ -956,14 +956,14 @@ nestedUnionEliminationsTests = define "nestedUnionEliminationsTests" $
       [T.function (Core.typeVariable $ TestTypes.testTypeComparisonName) T.int32, T.string])
     (T.pair (T.function (Core.typeVariable $ TestTypes.testTypeComparisonName) T.int32) T.string)]
 
-polymorphicUnionEliminationsTests :: TTermDefinition TestGroup
+polymorphicUnionEliminationsTests :: TypedTermDefinition TestGroup
 polymorphicUnionEliminationsTests = define "polymorphicUnionEliminationsTests" $
   supergroup "Polymorphic union eliminations" [
   simplePolymorphicUnionTests,
   usingUnionPolymorphicRecursiveTests,
   usingKernelTypesTests]
 
-recursiveUnionEliminationsTests :: TTermDefinition TestGroup
+recursiveUnionEliminationsTests :: TypedTermDefinition TestGroup
 recursiveUnionEliminationsTests = define "recursiveUnionEliminationsTests" $
   subgroup "Recursive union eliminations" [
   checkTest "match HydraType recursively" []
@@ -983,7 +983,7 @@ recursiveUnionEliminationsTests = define "recursiveUnionEliminationsTests" $
       "list">: lambdaTyped "nested" (Core.typeVariable $ TestTypes.testTypeHydraTypeName) (string "list")])
     (T.function (Core.typeVariable $ TestTypes.testTypeHydraTypeName) T.string)]
 
-simplePolymorphicUnionTests :: TTermDefinition TestGroup
+simplePolymorphicUnionTests :: TypedTermDefinition TestGroup
 simplePolymorphicUnionTests = define "simplePolymorphicUnionTests" $
   subgroup "Simple polymorphic unions" [
   checkTest "match PersonOrSomething with string" []
@@ -1005,7 +1005,7 @@ simplePolymorphicUnionTests = define "simplePolymorphicUnionTests" $
      tyapp (inject (TestTypes.testTypePersonOrSomethingName) "other" (string "test")) T.string)
     T.string]
 
-simpleUnitVariantEliminationsTests :: TTermDefinition TestGroup
+simpleUnitVariantEliminationsTests :: TypedTermDefinition TestGroup
 simpleUnitVariantEliminationsTests = define "simpleUnitVariantEliminationsTests" $
   subgroup "Simple unit inject eliminations" [
   checkTest "match Comparison with all cases" []
@@ -1041,7 +1041,7 @@ simpleUnitVariantEliminationsTests = define "simpleUnitVariantEliminationsTests"
      injectUnit (TestTypes.testTypeComparisonName) "equalTo")
     T.string]
 
-unionEliminationsInComplexContextsTests :: TTermDefinition TestGroup
+unionEliminationsInComplexContextsTests :: TypedTermDefinition TestGroup
 unionEliminationsInComplexContextsTests = define "unionEliminationsInComplexContextsTests" $
   subgroup "Union eliminations in complex contexts" [
   checkTest "match in let binding" []
@@ -1088,7 +1088,7 @@ unionEliminationsInComplexContextsTests = define "unionEliminationsInComplexCont
       int32 30])
     (T.list T.int32)]
 
-unionEliminationsTests :: TTermDefinition TestGroup
+unionEliminationsTests :: TypedTermDefinition TestGroup
 unionEliminationsTests = define "unionEliminationsTests" $
   supergroup "Union eliminations" [
   simpleUnitVariantEliminationsTests,
@@ -1101,7 +1101,7 @@ unionEliminationsTests = define "unionEliminationsTests" $
   higherOrderUnionEliminationsTests,
   recursiveUnionEliminationsTests]
 
-unionEliminationsWithDataTests :: TTermDefinition TestGroup
+unionEliminationsWithDataTests :: TypedTermDefinition TestGroup
 unionEliminationsWithDataTests = define "unionEliminationsWithDataTests" $
   subgroup "Union eliminations with data" [
   checkTest "match Number extracting int values" []
@@ -1139,7 +1139,7 @@ unionEliminationsWithDataTests = define "unionEliminationsWithDataTests" $
       "date">: lambdaTyped "dateStr" T.string (var "dateStr")])
     (T.function (Core.typeVariable $ TestTypes.testTypeTimestampName) T.string)]
 
-unionEliminationsWithDefaultsTests :: TTermDefinition TestGroup
+unionEliminationsWithDefaultsTests :: TypedTermDefinition TestGroup
 unionEliminationsWithDefaultsTests = define "unionEliminationsWithDefaultsTests" $
   subgroup "Union eliminations with defaults" [
   checkTest "match Comparison with default case" []
@@ -1165,7 +1165,7 @@ unionEliminationsWithDefaultsTests = define "unionEliminationsWithDefaultsTests"
       "string">: lambdaTyped "s" T.string (var "s")])
     (T.function (Core.typeVariable $ TestTypes.testTypeUnionMonomorphicName) T.string)]
 
-usingKernelTypesTests :: TTermDefinition TestGroup
+usingKernelTypesTests :: TypedTermDefinition TestGroup
 usingKernelTypesTests = define "usingKernelTypesTests" $
   subgroup "Using kernel types" [
   checkTest "case statement on CoderDirection applied to argument" [tag_disabled]
@@ -1204,7 +1204,7 @@ usingKernelTypesTests = define "usingKernelTypesTests" $
         T.var "t0",
         T.either_ (T.var "hydra.errors.Error") (T.var "t0")])]
 
-usingUnionPolymorphicRecursiveTests :: TTermDefinition TestGroup
+usingUnionPolymorphicRecursiveTests :: TypedTermDefinition TestGroup
 usingUnionPolymorphicRecursiveTests = define "usingUnionPolymorphicRecursiveTests" $
   subgroup "using UnionPolymorphicRecursive" [
   checkTest "non-applied UnionPolymorphicRecursive" []
@@ -1274,7 +1274,7 @@ usingUnionPolymorphicRecursiveTests = define "usingUnionPolymorphicRecursiveTest
 
 ------ Wrapped terms ------
 
-monomorphicWrappedTermsTests :: TTermDefinition TestGroup
+monomorphicWrappedTermsTests :: TypedTermDefinition TestGroup
 monomorphicWrappedTermsTests = define "monomorphicWrappedTermsTests" $
   subgroup "Monomorphic wrapped terms" [
   noChange "string alias"
@@ -1292,7 +1292,7 @@ monomorphicWrappedTermsTests = define "monomorphicWrappedTermsTests" $
       [Core.typeVariable $ TestTypes.testTypeStringAliasName, T.string])
     (T.pair (Core.typeVariable $ TestTypes.testTypeStringAliasName) T.string)]
 
-multiParameterPolymorphicWrappersTests :: TTermDefinition TestGroup
+multiParameterPolymorphicWrappersTests :: TypedTermDefinition TestGroup
 multiParameterPolymorphicWrappersTests = define "multiParameterPolymorphicWrappersTests" $
   subgroup "Multi-parameter polymorphic wrappers" [
   checkTest "symmetric triple wrapping simple types" []
@@ -1362,7 +1362,7 @@ multiParameterPolymorphicWrappersTests = define "multiParameterPolymorphicWrappe
       T.function (T.list T.int32) $
       T.applys (Core.typeVariable $ TestTypes.testTypeSymmetricTripleName) [T.int32, T.list (T.list T.int32)])]
 
-multipleWrappingLevelsTests :: TTermDefinition TestGroup
+multipleWrappingLevelsTests :: TypedTermDefinition TestGroup
 multipleWrappingLevelsTests = define "multipleWrappingLevelsTests" $
   subgroup "Multiple wrapping levels" [
   noChange "wrapped in optional"
@@ -1375,7 +1375,7 @@ multipleWrappingLevelsTests = define "multipleWrappingLevelsTests" $
            tyapp (wrap (TestTypes.testTypePolymorphicWrapperName) (list [int32 2])) T.int32])
     (T.list $ T.apply (Core.typeVariable $ TestTypes.testTypePolymorphicWrapperName) T.int32)]
 
-nestedWrappedTermsTests :: TTermDefinition TestGroup
+nestedWrappedTermsTests :: TypedTermDefinition TestGroup
 nestedWrappedTermsTests = define "nestedWrappedTermsTests" $
   subgroup "Nested wrapped terms" [
   checkTest "wrapped tuple" []
@@ -1391,7 +1391,7 @@ nestedWrappedTermsTests = define "nestedWrappedTermsTests" $
     (tyapp (wrap (TestTypes.testTypePolymorphicWrapperName) (list [mapTerm [(string "key", int32 42)]])) (T.map T.string T.int32))
     (T.apply (Core.typeVariable $ TestTypes.testTypePolymorphicWrapperName) (T.map T.string T.int32))]
 
-polymorphicWrappedTermsTests :: TTermDefinition TestGroup
+polymorphicWrappedTermsTests :: TypedTermDefinition TestGroup
 polymorphicWrappedTermsTests = define "polymorphicWrappedTermsTests" $
   subgroup "Polymorphic wrapped terms" [
   checkTest "polymorphic wrapper with int" []
@@ -1407,7 +1407,7 @@ polymorphicWrappedTermsTests = define "polymorphicWrappedTermsTests" $
     (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ tyapp (wrap (TestTypes.testTypePolymorphicWrapperName) (list [var "x"])) (T.var "t0"))
     (T.forAll "t0" $ T.function (T.var "t0") (T.apply (Core.typeVariable $ TestTypes.testTypePolymorphicWrapperName) (T.var "t0")))]
 
-wrappedTermsInComplexContextsTests :: TTermDefinition TestGroup
+wrappedTermsInComplexContextsTests :: TypedTermDefinition TestGroup
 wrappedTermsInComplexContextsTests = define "wrappedTermsInComplexContextsTests" $
   subgroup "Wrapped terms in complex contexts" [
   noChange "wrapped in record"
@@ -1428,7 +1428,7 @@ wrappedTermsInComplexContextsTests = define "wrappedTermsInComplexContextsTests"
            wrap (TestTypes.testTypeStringAliasName) (string "second")])
     (T.list $ Core.typeVariable $ TestTypes.testTypeStringAliasName)]
 
-wrappedTermsTests :: TTermDefinition TestGroup
+wrappedTermsTests :: TypedTermDefinition TestGroup
 wrappedTermsTests = define "wrappedTermsTests" $
   supergroup "Wrapped terms" [
   monomorphicWrappedTermsTests,
@@ -1440,7 +1440,7 @@ wrappedTermsTests = define "wrappedTermsTests" $
 
 ------ Wrap eliminations ------
 
-chainedUnwrappingTests :: TTermDefinition TestGroup
+chainedUnwrappingTests :: TypedTermDefinition TestGroup
 chainedUnwrappingTests = define "chainedUnwrappingTests" $
   subgroup "Chained unwrapping" [
   checkTest "unwrap then process" []
@@ -1456,14 +1456,14 @@ chainedUnwrappingTests = define "chainedUnwrappingTests" $
       (tyapps (primitive _lists_map) [T.int32, T.int32]) @@ (primitive _math_add @@ int32 1) @@ (tyapp (unwrap (TestTypes.testTypePolymorphicWrapperName)) T.int32 @@ var "wrappedList"))
     (T.function (T.apply (Core.typeVariable $ TestTypes.testTypePolymorphicWrapperName) T.int32) (T.list T.int32))]
 
-monomorphicUnwrappingTests :: TTermDefinition TestGroup
+monomorphicUnwrappingTests :: TypedTermDefinition TestGroup
 monomorphicUnwrappingTests = define "monomorphicUnwrappingTests" $
   subgroup "Monomorphic unwrapping" [
   noChange "unwrap string alias"
     (unwrap (TestTypes.testTypeStringAliasName))
     (T.function (Core.typeVariable $ TestTypes.testTypeStringAliasName) T.string)]
 
-multiParameterPolymorphicUnwrappersTests :: TTermDefinition TestGroup
+multiParameterPolymorphicUnwrappersTests :: TypedTermDefinition TestGroup
 multiParameterPolymorphicUnwrappersTests = define "multiParameterPolymorphicUnwrappersTests" $
   subgroup "Multi-parameter polymorphic unwrappers" [
   checkTest "unwrap symmetric triple to tuple" []
@@ -1529,7 +1529,7 @@ multiParameterPolymorphicUnwrappersTests = define "multiParameterPolymorphicUnwr
         (T.optional $ T.applys (Core.typeVariable $ TestTypes.testTypeSymmetricTripleName) [T.var "t0", T.var "t1"])
         (T.optional $ T.var "t1"))]
 
-multipleUnwrapOperationsTests :: TTermDefinition TestGroup
+multipleUnwrapOperationsTests :: TypedTermDefinition TestGroup
 multipleUnwrapOperationsTests = define "multipleUnwrapOperationsTests" $
   subgroup "Multiple unwrap operations" [
   checkTest "unwrap different types" []
@@ -1548,7 +1548,7 @@ multipleUnwrapOperationsTests = define "multipleUnwrapOperationsTests" $
       (T.function (T.apply (Core.typeVariable $ TestTypes.testTypePolymorphicWrapperName) (T.var "t0"))
         (T.pair T.string (T.list $ T.var "t0"))))]
 
-polymorphicUnwrappingTests :: TTermDefinition TestGroup
+polymorphicUnwrappingTests :: TypedTermDefinition TestGroup
 polymorphicUnwrappingTests = define "polymorphicUnwrappingTests" $
   subgroup "Polymorphic unwrapping" [
   checkTest "unwrap polymorphic wrapper" []
@@ -1556,7 +1556,7 @@ polymorphicUnwrappingTests = define "polymorphicUnwrappingTests" $
     (tylam "t0" $ tyapp (unwrap (TestTypes.testTypePolymorphicWrapperName)) (T.var "t0"))
     (T.forAll "t0" $ T.function (T.apply (Core.typeVariable $ TestTypes.testTypePolymorphicWrapperName) (T.var "t0")) (T.list $ T.var "t0"))]
 
-unwrapEliminationsInApplicationsTests :: TTermDefinition TestGroup
+unwrapEliminationsInApplicationsTests :: TypedTermDefinition TestGroup
 unwrapEliminationsInApplicationsTests = define "unwrapEliminationsInApplicationsTests" $
   subgroup "Unwrap eliminations in applications" [
   noChange "unwrap applied to wrapped term"
@@ -1567,7 +1567,7 @@ unwrapEliminationsInApplicationsTests = define "unwrapEliminationsInApplications
     (tyapp (unwrap (TestTypes.testTypePolymorphicWrapperName)) T.int32 @@ tyapp (wrap (TestTypes.testTypePolymorphicWrapperName) (list [int32 1, int32 2])) T.int32)
     (T.list T.int32)]
 
-unwrapInComplexContextsTests :: TTermDefinition TestGroup
+unwrapInComplexContextsTests :: TypedTermDefinition TestGroup
 unwrapInComplexContextsTests = define "unwrapInComplexContextsTests" $
   subgroup "Unwrap in complex contexts" [
   checkTest "unwrap in let binding" []
@@ -1591,7 +1591,7 @@ unwrapInComplexContextsTests = define "unwrapInComplexContextsTests" $
     (lambdaTyped "wrapped" (Core.typeVariable $ TestTypes.testTypeStringAliasName) $ unwrap (TestTypes.testTypeStringAliasName) @@ var "wrapped")
     (T.function (Core.typeVariable $ TestTypes.testTypeStringAliasName) T.string)]
 
-wrapEliminationsTests :: TTermDefinition TestGroup
+wrapEliminationsTests :: TypedTermDefinition TestGroup
 wrapEliminationsTests = define "wrapEliminationsTests" $
   supergroup "Wrap eliminations" [
   monomorphicUnwrappingTests,
@@ -1604,14 +1604,14 @@ wrapEliminationsTests = define "wrapEliminationsTests" $
 
 ------ Eliminations parent group ------
 
-eliminationsTests :: TTermDefinition TestGroup
+eliminationsTests :: TypedTermDefinition TestGroup
 eliminationsTests = define "eliminationsTests" $
   supergroup "Eliminations" [
   recordEliminationsTests,
   unionEliminationsTests,
   wrapEliminationsTests]
 
-projectionsWithVariablesTests :: TTermDefinition TestGroup
+projectionsWithVariablesTests :: TypedTermDefinition TestGroup
 projectionsWithVariablesTests = define "projectionsWithVariablesTests" $
   subgroup "Projections with variables" [
   checkTest "project from lambda parameter" []

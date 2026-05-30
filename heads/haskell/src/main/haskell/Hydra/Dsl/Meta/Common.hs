@@ -5,11 +5,11 @@
 module Hydra.Dsl.Meta.Common where
 
 import Hydra.Core
-import Hydra.Phantoms
+import Hydra.Typed
 
 import Data.String(IsString(..))
 
 
 instance IsString Type where fromString = TypeVariable . Name
 instance IsString Term where fromString = TermLiteral . LiteralString
-instance IsString (TTerm a) where fromString = TTerm . TermLiteral . LiteralString
+instance IsString (TypedTerm a) where fromString = TypedTerm . TermLiteral . LiteralString

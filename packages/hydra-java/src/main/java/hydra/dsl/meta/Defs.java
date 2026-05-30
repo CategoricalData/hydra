@@ -7,7 +7,7 @@ import hydra.packaging.ModuleDependency;
 import hydra.packaging.ModuleName;
 import hydra.packaging.PackageName;
 import hydra.packaging.TermDefinition;
-import hydra.phantoms.TTerm;
+import hydra.typed.TypedTerm;
 import hydra.typing.TermSignature;
 import hydra.util.Maybe;
 
@@ -30,7 +30,7 @@ import java.util.function.Supplier;
  *   public class Coder {
  *     public static final ModuleName NS = new ModuleName("hydra.java.coder");
  *
- *     private static Def define(String localName, Supplier&lt;TTerm&lt;?&gt;&gt; body) {
+ *     private static Def define(String localName, Supplier&lt;TypedTerm&lt;?&gt;&gt; body) {
  *       return Defs.define(NS, localName, body);
  *     }
  *
@@ -66,7 +66,7 @@ public final class Defs {
         private final Supplier<Term> bodySupplier;
         private volatile Definition cached;
 
-        Def(ModuleName ns, String localName, Supplier<TTerm<?>> bodyBuilder) {
+        Def(ModuleName ns, String localName, Supplier<TypedTerm<?>> bodyBuilder) {
             this.fqName = new Name(ns.value + "." + localName);
             this.bodySupplier = () -> bodyBuilder.get().value;
         }
@@ -96,7 +96,7 @@ public final class Defs {
     }
 
     /** Construct a {@link Def} for the given namespace. */
-    public static Def define(ModuleName ns, String localName, Supplier<TTerm<?>> body) {
+    public static Def define(ModuleName ns, String localName, Supplier<TypedTerm<?>> body) {
         return new Def(ns, localName, body);
     }
 
@@ -106,7 +106,7 @@ public final class Defs {
      * including inside another {@code Def}'s body supplier (only
      * {@code d.name()} is read, which does not depend on the body).
      */
-    public static <A> TTerm<A> ref(Def d) {
+    public static <A> TypedTerm<A> ref(Def d) {
         return Phantoms.var(d.name());
     }
 

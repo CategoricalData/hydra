@@ -66,10 +66,10 @@ module_ = Module {
      toDefinition termVariant,
      toDefinition typeVariant]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-termVariant :: TTermDefinition (TermVariant -> String)
+termVariant :: TypedTermDefinition (TermVariant -> String)
 termVariant = define "termVariant" $
   doc "Show a term variant as a string" $
   match _TermVariant Nothing [
@@ -95,7 +95,7 @@ termVariant = define "termVariant" $
     _TermVariant_variable>>: constant $ string "variable",
     _TermVariant_wrap>>: constant $ string "wrap"]
 
-typeVariant :: TTermDefinition (TypeVariant -> String)
+typeVariant :: TypedTermDefinition (TypeVariant -> String)
 typeVariant = define "typeVariant" $
   doc "Show a type variant as a string" $
   match _TypeVariant Nothing [

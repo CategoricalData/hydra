@@ -78,7 +78,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
@@ -87,7 +87,7 @@ module_ = Module {
             moduleDefinitions = [toDefinition pdlLanguage],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints for LinkedIn Pegasus (PDL)"}
-pdlLanguage :: TTermDefinition Language
+pdlLanguage :: TypedTermDefinition Language
 pdlLanguage = define "pdlLanguage" $
   doc "Language constraints for LinkedIn Pegasus (PDL)" $ lets [
   "literalVariants">: Sets.fromList $ list [

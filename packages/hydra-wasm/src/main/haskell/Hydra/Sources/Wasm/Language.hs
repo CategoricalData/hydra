@@ -78,7 +78,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
@@ -87,7 +87,7 @@ module_ = Module {
             moduleDefinitions = [toDefinition wasmLanguage, toDefinition wasmReservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints and reserved words for WebAssembly (WAT text format)"}
-wasmLanguage :: TTermDefinition Language
+wasmLanguage :: TypedTermDefinition Language
 wasmLanguage = define "wasmLanguage" $
     doc "Language constraints for WebAssembly" $ lets [
     "literalVariants">: Sets.fromList $ list [
@@ -158,7 +158,7 @@ wasmLanguage = define "wasmLanguage" $
         (var "typeVariants")
         (var "typePredicate"))
 
-wasmReservedWords :: TTermDefinition (S.Set String)
+wasmReservedWords :: TypedTermDefinition (S.Set String)
 wasmReservedWords = define "wasmReservedWords" $
   doc "A set of reserved words in WebAssembly text format" $
   lets [

@@ -42,10 +42,10 @@ module_ = Module {
       NominalTypes.ns,
       ModuleName "hydra.rewriting"]
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     doc "The group of all type checking tests" $
-    Testing.testGroup (string "checking") nothing (list subgroups) (list ([] :: [TTerm TestCaseWithMetadata]))
+    Testing.testGroup (string "checking") nothing (list subgroups) (list ([] :: [TypedTerm TestCaseWithMetadata]))
   where
     subgroups = [
       Advanced.allTests,

@@ -18,7 +18,7 @@ import qualified Hydra.Pg.Model                            as PG
 ns :: ModuleName
 ns = ModuleName "hydra.show.error.pg"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
@@ -41,7 +41,7 @@ module_ = Module {
       toDefinition noSuchVertexLabelError,
       toDefinition wrongVertexLabelError]
 
-invalidEdgeError :: TTermDefinition (InvalidEdgeError -> String)
+invalidEdgeError :: TypedTermDefinition (InvalidEdgeError -> String)
 invalidEdgeError = define "invalidEdgeError" $
   doc "Show an invalid edge error as a string" $
   "e" ~>
@@ -61,7 +61,7 @@ invalidEdgeError = define "invalidEdgeError" $
     _InvalidEdgeError_property>>:
       ("p" ~> invalidElementPropertyError @@ var "p")]
 
-invalidElementPropertyError :: TTermDefinition (InvalidElementPropertyError -> String)
+invalidElementPropertyError :: TypedTermDefinition (InvalidElementPropertyError -> String)
 invalidElementPropertyError = define "invalidElementPropertyError" $
   doc "Show an invalid element property error as a string" $
   "e" ~> Strings.cat $ list [
@@ -70,7 +70,7 @@ invalidElementPropertyError = define "invalidElementPropertyError" $
     string ": ",
     invalidPropertyError @@ (project _InvalidElementPropertyError _InvalidElementPropertyError_error @@ var "e")]
 
-invalidGraphEdgeError :: TTermDefinition ((v -> String) -> InvalidGraphEdgeError v -> String)
+invalidGraphEdgeError :: TypedTermDefinition ((v -> String) -> InvalidGraphEdgeError v -> String)
 invalidGraphEdgeError = define "invalidGraphEdgeError" $
   doc "Show an invalid graph edge error as a string, given a value printer" $
   "printValue" ~> "e" ~> Strings.cat $ list [
@@ -79,7 +79,7 @@ invalidGraphEdgeError = define "invalidGraphEdgeError" $
     string ": ",
     invalidEdgeError @@ (project _InvalidGraphEdgeError _InvalidGraphEdgeError_error @@ var "e")]
 
-invalidGraphError :: TTermDefinition ((v -> String) -> InvalidGraphError v -> String)
+invalidGraphError :: TypedTermDefinition ((v -> String) -> InvalidGraphError v -> String)
 invalidGraphError = define "invalidGraphError" $
   doc "Show an invalid graph error as a string, given a value printer" $
   "printValue" ~> "e" ~>
@@ -89,7 +89,7 @@ invalidGraphError = define "invalidGraphError" $
     _InvalidGraphError_vertex>>:
       ("gv" ~> invalidGraphVertexError @@ var "printValue" @@ var "gv")]
 
-invalidGraphVertexError :: TTermDefinition ((v -> String) -> InvalidGraphVertexError v -> String)
+invalidGraphVertexError :: TypedTermDefinition ((v -> String) -> InvalidGraphVertexError v -> String)
 invalidGraphVertexError = define "invalidGraphVertexError" $
   doc "Show an invalid graph vertex error as a string, given a value printer" $
   "printValue" ~> "e" ~> Strings.cat $ list [
@@ -98,7 +98,7 @@ invalidGraphVertexError = define "invalidGraphVertexError" $
     string ": ",
     invalidVertexError @@ (project _InvalidGraphVertexError _InvalidGraphVertexError_error @@ var "e")]
 
-invalidPropertyError :: TTermDefinition (InvalidPropertyError -> String)
+invalidPropertyError :: TypedTermDefinition (InvalidPropertyError -> String)
 invalidPropertyError = define "invalidPropertyError" $
   doc "Show an invalid property error as a string" $
   "e" ~>
@@ -110,7 +110,7 @@ invalidPropertyError = define "invalidPropertyError" $
     _InvalidPropertyError_unexpectedKey>>:
       ("k" ~> Strings.cat2 (string "unexpected property key: ") (unwrap PG._PropertyKey @@ var "k"))]
 
-invalidValueError :: TTermDefinition (InvalidValueError -> String)
+invalidValueError :: TypedTermDefinition (InvalidValueError -> String)
 invalidValueError = define "invalidValueError" $
   doc "Show an invalid value error as a string" $
   "e" ~> Strings.cat $ list [
@@ -119,7 +119,7 @@ invalidValueError = define "invalidValueError" $
     string ", got ",
     project _InvalidValueError _InvalidValueError_value @@ var "e"]
 
-invalidVertexError :: TTermDefinition (InvalidVertexError -> String)
+invalidVertexError :: TypedTermDefinition (InvalidVertexError -> String)
 invalidVertexError = define "invalidVertexError" $
   doc "Show an invalid vertex error as a string" $
   "e" ~>
@@ -131,21 +131,21 @@ invalidVertexError = define "invalidVertexError" $
     _InvalidVertexError_property>>:
       ("p" ~> invalidElementPropertyError @@ var "p")]
 
-noSuchEdgeLabelError :: TTermDefinition (NoSuchEdgeLabelError -> String)
+noSuchEdgeLabelError :: TypedTermDefinition (NoSuchEdgeLabelError -> String)
 noSuchEdgeLabelError = define "noSuchEdgeLabelError" $
   doc "Show a no-such-edge-label error as a string" $
   "e" ~> Strings.cat $ list [
     string "no such edge label: ",
     unwrap PG._EdgeLabel @@ (project _NoSuchEdgeLabelError _NoSuchEdgeLabelError_label @@ var "e")]
 
-noSuchVertexLabelError :: TTermDefinition (NoSuchVertexLabelError -> String)
+noSuchVertexLabelError :: TypedTermDefinition (NoSuchVertexLabelError -> String)
 noSuchVertexLabelError = define "noSuchVertexLabelError" $
   doc "Show a no-such-vertex-label error as a string" $
   "e" ~> Strings.cat $ list [
     string "no such vertex label: ",
     unwrap PG._VertexLabel @@ (project _NoSuchVertexLabelError _NoSuchVertexLabelError_label @@ var "e")]
 
-wrongVertexLabelError :: TTermDefinition (WrongVertexLabelError -> String)
+wrongVertexLabelError :: TypedTermDefinition (WrongVertexLabelError -> String)
 wrongVertexLabelError = define "wrongVertexLabelError" $
   doc "Show a wrong-vertex-label error as a string" $
   "e" ~> Strings.cat $ list [

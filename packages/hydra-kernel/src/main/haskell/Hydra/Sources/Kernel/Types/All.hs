@@ -16,12 +16,12 @@ import qualified Hydra.Sources.Json.Model               as JsonModel
 import qualified Hydra.Sources.Kernel.Types.Variants    as Variants
 import qualified Hydra.Sources.Kernel.Types.Packaging   as Packaging
 import qualified Hydra.Sources.Kernel.Types.Parsing     as Parsing
-import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
 import qualified Hydra.Sources.Kernel.Types.Query       as Query
 import qualified Hydra.Sources.Kernel.Types.Relational  as Relational
 import qualified Hydra.Sources.Kernel.Types.Tabular     as Tabular
 import qualified Hydra.Sources.Kernel.Types.Testing     as Testing
 import qualified Hydra.Sources.Kernel.Types.Topology    as Topology
+import qualified Hydra.Sources.Kernel.Types.Typed       as Typed
 import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
 import qualified Hydra.Sources.Kernel.Types.Util        as Util
 import qualified Hydra.Sources.Kernel.Types.Validation  as Validation
@@ -41,12 +41,12 @@ kernelTypesModules = [
   JsonModel.module_,
   Packaging.module_,
   Parsing.module_,
-  Phantoms.module_,
   Query.module_,
   Relational.module_,
   Tabular.module_,
   Testing.module_,
   Topology.module_,
+  Typed.module_,
   Typing.module_,
   Util.module_,
   Validation.module_,

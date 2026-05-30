@@ -78,7 +78,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
@@ -87,7 +87,7 @@ module_ = Module {
             moduleDefinitions = [toDefinition csharpLanguage, toDefinition csharpReservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints and reserved words for C Sharp (C#)"}
-csharpLanguage :: TTermDefinition Language
+csharpLanguage :: TypedTermDefinition Language
 csharpLanguage = define "csharpLanguage" $
   doc "Language constraints for C Sharp (C#)" $ lets [
   "literalVariants">: Sets.fromList $ list [
@@ -161,7 +161,7 @@ csharpLanguage = define "csharpLanguage" $
       (var "typeVariants")
       (var "typePredicate"))
 
-csharpReservedWords :: TTermDefinition (S.Set String)
+csharpReservedWords :: TypedTermDefinition (S.Set String)
 csharpReservedWords = define "csharpReservedWords" $
   doc ("A set of reserved words in C#. Both the \"keywords\" and \"contextual keywords\" are drawn from"
     <> " section 6.4.4 of the C# documentation:\n"

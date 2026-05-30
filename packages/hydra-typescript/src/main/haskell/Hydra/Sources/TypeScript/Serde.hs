@@ -89,7 +89,7 @@ import qualified Hydra.Sources.TypeScript.Syntax as TypeScriptSyntax
 import qualified Hydra.Sources.TypeScript.Operators as TypeScriptOperators
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 ns :: ModuleName
@@ -199,7 +199,7 @@ module_ = Module {
 -- ============================================================================
 
 -- | True iff every codepoint is an ASCII digit '0'..'9' (and the list is non-empty).
-allDigits :: TTermDefinition ([Int] -> Bool)
+allDigits :: TypedTermDefinition ([Int] -> Bool)
 allDigits = define "allDigits" $
   lambda "cps" $
     Logic.and
@@ -212,7 +212,7 @@ allDigits = define "allDigits" $
         (boolean True)
         (var "cps"))
 
-arrayElementToExpr :: TTermDefinition (TS.ArrayElement -> Expr)
+arrayElementToExpr :: TypedTermDefinition (TS.ArrayElement -> Expr)
 arrayElementToExpr = define "arrayElementToExpr" $
   doc "Convert an array element to an AST expression" $
   lambda "elem" $
@@ -222,14 +222,14 @@ arrayElementToExpr = define "arrayElementToExpr" $
         Serialization.prefix @@ string "..." @@ (expressionToExpr @@ (unwrap TS._SpreadElement @@ var "s")),
       TS._ArrayElement_hole>>: constant $ Serialization.cst @@ string ""]
 
-arrayExpressionToExpr :: TTermDefinition (TS.ArrayExpression -> Expr)
+arrayExpressionToExpr :: TypedTermDefinition (TS.ArrayExpression -> Expr)
 arrayExpressionToExpr = define "arrayExpressionToExpr" $
   doc "Convert an array expression to an AST expression" $
   lambda "arr" $
     Serialization.bracketList @@ Serialization.inlineStyle @@
       (Lists.map (arrayElementToExpr) (var "arr"))
 
-arrayPatternToExpr :: TTermDefinition (TS.ArrayPattern -> Expr)
+arrayPatternToExpr :: TypedTermDefinition (TS.ArrayPattern -> Expr)
 arrayPatternToExpr = define "arrayPatternToExpr" $
   doc "Convert an array pattern to an AST expression" $
   lambda "arr" $
@@ -238,7 +238,7 @@ arrayPatternToExpr = define "arrayPatternToExpr" $
         (lambda "maybeP" $ Maybes.maybe (Serialization.cst @@ string "") (patternToExpr) (var "maybeP"))
         (var "arr"))
 
-arrowFunctionExpressionToExpr :: TTermDefinition (TS.ArrowFunctionExpression -> Expr)
+arrowFunctionExpressionToExpr :: TypedTermDefinition (TS.ArrowFunctionExpression -> Expr)
 arrowFunctionExpressionToExpr = define "arrowFunctionExpressionToExpr" $
   doc "Convert an arrow function expression to an AST expression" $
   lambda "arrow" $ lets [
@@ -247,7 +247,7 @@ arrowFunctionExpressionToExpr = define "arrowFunctionExpressionToExpr" $
     "async">: project TS._ArrowFunctionExpression TS._ArrowFunctionExpression_async @@ var "arrow",
     "asyncKw">: Logic.ifElse (var "async")
       (list [Serialization.cst @@ string "async"])
-      (list ([] :: [TTerm Expr])),
+      (list ([] :: [TypedTerm Expr])),
     -- Always parenthesize. A bare untyped identifier could appear without
     -- parens (`x => x`), but a typed pattern (`(x: T) => x`) requires them.
     -- Defaulting to parens keeps the emitter simple.
@@ -265,7 +265,7 @@ arrowFunctionExpressionToExpr = define "arrowFunctionExpressionToExpr" $
       var "asyncKw",
       list [Serialization.ifx @@ TypeScriptOperators.arrowOp @@ var "paramsExpr" @@ var "bodyExpr"]])
 
-assignmentExpressionToExpr :: TTermDefinition (TS.AssignmentExpression -> Expr)
+assignmentExpressionToExpr :: TypedTermDefinition (TS.AssignmentExpression -> Expr)
 assignmentExpressionToExpr = define "assignmentExpressionToExpr" $
   doc "Convert an assignment expression to an AST expression" $
   lambda "assign" $ lets [
@@ -283,7 +283,7 @@ assignmentExpressionToExpr = define "assignmentExpressionToExpr" $
 -- Pattern Conversions
 -- ============================================================================
 
-assignmentOperatorToString :: TTermDefinition (TS.AssignmentOperator -> String)
+assignmentOperatorToString :: TypedTermDefinition (TS.AssignmentOperator -> String)
 assignmentOperatorToString = define "assignmentOperatorToString" $
   doc "Convert an assignment operator to a string" $
   lambda "op" $
@@ -310,7 +310,7 @@ assignmentOperatorToString = define "assignmentOperatorToString" $
 -- Comments
 -- ============================================================================
 
-assignmentPatternToExpr :: TTermDefinition (TS.AssignmentPattern -> Expr)
+assignmentPatternToExpr :: TypedTermDefinition (TS.AssignmentPattern -> Expr)
 assignmentPatternToExpr = define "assignmentPatternToExpr" $
   doc "Convert an assignment pattern to an AST expression" $
   lambda "assign" $ lets [
@@ -325,7 +325,7 @@ assignmentPatternToExpr = define "assignmentPatternToExpr" $
 -- Statement Conversions
 -- ============================================================================
 
-binaryExpressionToExpr :: TTermDefinition (TS.BinaryExpression -> Expr)
+binaryExpressionToExpr :: TypedTermDefinition (TS.BinaryExpression -> Expr)
 binaryExpressionToExpr = define "binaryExpressionToExpr" $
   doc "Convert a binary expression to an AST expression" $
   lambda "bin" $ lets [
@@ -337,7 +337,7 @@ binaryExpressionToExpr = define "binaryExpressionToExpr" $
       (expressionToExpr @@ var "left") @@
       (expressionToExpr @@ var "right")
 
-binaryOperatorToExpr :: TTermDefinition (TS.BinaryOperator -> Op)
+binaryOperatorToExpr :: TypedTermDefinition (TS.BinaryOperator -> Op)
 binaryOperatorToExpr = define "binaryOperatorToExpr" $
   doc "Convert a binary operator to an Op" $
   lambda "op" $
@@ -368,14 +368,14 @@ binaryOperatorToExpr = define "binaryOperatorToExpr" $
       TS._BinaryOperator_in>>: constant TypeScriptOperators.inOp,
       TS._BinaryOperator_instanceof>>: constant TypeScriptOperators.instanceOfOp]
 
-blockStatementToExpr :: TTermDefinition (TS.BlockStatement -> Expr)
+blockStatementToExpr :: TypedTermDefinition (TS.BlockStatement -> Expr)
 blockStatementToExpr = define "blockStatementToExpr" $
   doc "Convert a block statement to an AST expression. Renders as `{ stmt1\\n stmt2\\n ... }` using curlyBlock + newlineSep: statements are separated by newlines, NOT by commas (which curlyBracesList's default would insert and which TypeScript rejects between block statements)." $
   lambda "block" $
     Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
       (Serialization.newlineSep @@ (Lists.map (statementToExpr) (var "block")))
 
-breakStatementToExpr :: TTermDefinition (TS.BreakStatement -> Expr)
+breakStatementToExpr :: TypedTermDefinition (TS.BreakStatement -> Expr)
 breakStatementToExpr = define "breakStatementToExpr" $
   doc "Convert a break statement to an AST expression" $
   lambda "b" $
@@ -387,7 +387,7 @@ breakStatementToExpr = define "breakStatementToExpr" $
           identifierToExpr @@ var "label"]))
       (var "b")
 
-callExpressionToExpr :: TTermDefinition (TS.CallExpression -> Expr)
+callExpressionToExpr :: TypedTermDefinition (TS.CallExpression -> Expr)
 callExpressionToExpr = define "callExpressionToExpr" $
   doc "Convert a call expression to an AST expression" $
   lambda "call" $ lets [
@@ -413,7 +413,7 @@ callExpressionToExpr = define "callExpressionToExpr" $
       Serialization.cst @@ var "optionalDot",
       var "argsExpr"]
 
-catchClauseToExpr :: TTermDefinition (TS.CatchClause -> Expr)
+catchClauseToExpr :: TypedTermDefinition (TS.CatchClause -> Expr)
 catchClauseToExpr = define "catchClauseToExpr" $
   doc "Convert a catch clause to an AST expression" $
   lambda "c" $ lets [
@@ -427,7 +427,7 @@ catchClauseToExpr = define "catchClauseToExpr" $
       (var "param")] $
     Serialization.spaceSep @@ list [var "catchKw", blockStatementToExpr @@ var "body"]
 
-classDeclarationToExpr :: TTermDefinition (TS.ClassDeclaration -> Expr)
+classDeclarationToExpr :: TypedTermDefinition (TS.ClassDeclaration -> Expr)
 classDeclarationToExpr = define "classDeclarationToExpr" $
   doc "Convert a class declaration to an AST expression" $
   lambda "cls" $ lets [
@@ -435,7 +435,7 @@ classDeclarationToExpr = define "classDeclarationToExpr" $
     "superClass">: project TS._ClassDeclaration TS._ClassDeclaration_superClass @@ var "cls",
     "body">: project TS._ClassDeclaration TS._ClassDeclaration_body @@ var "cls",
     "extendsClause">: Maybes.maybe
-      (list ([] :: [TTerm Expr]))
+      (list ([] :: [TypedTerm Expr]))
       (lambda "s" $ list [Serialization.cst @@ string "extends", expressionToExpr @@ var "s"])
       (var "superClass"),
     "bodyExpr">: Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
@@ -445,7 +445,7 @@ classDeclarationToExpr = define "classDeclarationToExpr" $
       var "extendsClause",
       list [var "bodyExpr"]])
 
-classDeclarationWithCommentsToExpr :: TTermDefinition (TS.ClassDeclarationWithComments -> Expr)
+classDeclarationWithCommentsToExpr :: TypedTermDefinition (TS.ClassDeclarationWithComments -> Expr)
 classDeclarationWithCommentsToExpr = define "classDeclarationWithCommentsToExpr" $
   doc "Convert a class declaration with comments to an AST expression" $
   lambda "cdwc" $ lets [
@@ -458,7 +458,7 @@ classDeclarationWithCommentsToExpr = define "classDeclarationWithCommentsToExpr"
         classDeclarationToExpr @@ var "body"])
       (var "mc")
 
-conditionalExpressionToExpr :: TTermDefinition (TS.ConditionalExpression -> Expr)
+conditionalExpressionToExpr :: TypedTermDefinition (TS.ConditionalExpression -> Expr)
 conditionalExpressionToExpr = define "conditionalExpressionToExpr" $
   doc "Convert a conditional expression to an AST expression" $
   lambda "cond" $ lets [
@@ -484,7 +484,7 @@ conditionalExpressionToExpr = define "conditionalExpressionToExpr" $
       Serialization.cst @@ string ":",
       var "altExpr"]
 
-continueStatementToExpr :: TTermDefinition (TS.ContinueStatement -> Expr)
+continueStatementToExpr :: TypedTermDefinition (TS.ContinueStatement -> Expr)
 continueStatementToExpr = define "continueStatementToExpr" $
   doc "Convert a continue statement to an AST expression" $
   lambda "c" $
@@ -496,7 +496,7 @@ continueStatementToExpr = define "continueStatementToExpr" $
           identifierToExpr @@ var "label"]))
       (var "c")
 
-doWhileStatementToExpr :: TTermDefinition (TS.DoWhileStatement -> Expr)
+doWhileStatementToExpr :: TypedTermDefinition (TS.DoWhileStatement -> Expr)
 doWhileStatementToExpr = define "doWhileStatementToExpr" $
   doc "Convert a do-while statement to an AST expression" $
   lambda "d" $ lets [
@@ -509,7 +509,7 @@ doWhileStatementToExpr = define "doWhileStatementToExpr" $
         Serialization.cst @@ string "while",
         Serialization.parens @@ (expressionToExpr @@ var "test")])
 
-documentationCommentToExpr :: TTermDefinition (TS.DocumentationComment -> Expr)
+documentationCommentToExpr :: TypedTermDefinition (TS.DocumentationComment -> Expr)
 documentationCommentToExpr = define "documentationCommentToExpr" $
   doc "Convert a documentation comment to an AST expression" $
   lambda "doc" $ lets [
@@ -517,7 +517,7 @@ documentationCommentToExpr = define "documentationCommentToExpr" $
     "tags">: project TS._DocumentationComment TS._DocumentationComment_tags @@ var "doc"] $
     Serialization.cst @@ (toTypeScriptComments @@ var "description" @@ var "tags")
 
-documentationTagToLine :: TTermDefinition (TS.DocumentationTag -> String)
+documentationTagToLine :: TypedTermDefinition (TS.DocumentationTag -> String)
 documentationTagToLine = define "documentationTagToLine" $
   doc ("Convert a documentation tag to a JSDoc line. Built by joining"
     <> " non-empty parts with spaces so that absent type/param/description"
@@ -537,7 +537,7 @@ documentationTagToLine = define "documentationTagToLine" $
     "nonEmpty">: Lists.filter (lambda "p" $ Logic.not $ Equality.equal (var "p") (string "")) (var "parts")] $
     Strings.cat2 (string " * ") (Strings.intercalate (string " ") (var "nonEmpty"))
 
-escapeString :: TTermDefinition (String -> Bool -> String)
+escapeString :: TypedTermDefinition (String -> Bool -> String)
 escapeString = define "escapeString" $
   doc "Escape special characters in a string for TypeScript" $
   lambda "s" $ lambda "singleQuote" $ lets [
@@ -551,7 +551,7 @@ escapeString = define "escapeString" $
       (var "replace" @@ string "'"  @@ string "\\'" @@ var "s4")
       (var "replace" @@ string "\"" @@ string "\\\"" @@ var "s4")
 
-exportAllToExpr :: TTermDefinition (TS.ExportAllDeclaration -> Expr)
+exportAllToExpr :: TypedTermDefinition (TS.ExportAllDeclaration -> Expr)
 exportAllToExpr = define "exportAllToExpr" $
   doc "Convert an export all declaration to an AST expression" $
   lambda "a" $ lets [
@@ -576,7 +576,7 @@ exportAllToExpr = define "exportAllToExpr" $
 -- Operators
 -- ============================================================================
 
-exportDeclarationToExpr :: TTermDefinition (TS.ExportDeclaration -> Expr)
+exportDeclarationToExpr :: TypedTermDefinition (TS.ExportDeclaration -> Expr)
 exportDeclarationToExpr = define "exportDeclarationToExpr" $
   doc "Convert an export declaration to an AST expression" $
   lambda "exp" $
@@ -594,7 +594,7 @@ exportDeclarationToExpr = define "exportDeclarationToExpr" $
           statementToExpr @@ var "d"],
       TS._ExportDeclaration_all>>: lambda "a" $ exportAllToExpr @@ var "a"]
 
-exportSpecifierToExpr :: TTermDefinition (TS.ExportSpecifier -> Expr)
+exportSpecifierToExpr :: TypedTermDefinition (TS.ExportSpecifier -> Expr)
 exportSpecifierToExpr = define "exportSpecifierToExpr" $
   doc "Convert an export specifier to an AST expression" $
   lambda "spec" $ lets [
@@ -607,7 +607,7 @@ exportSpecifierToExpr = define "exportSpecifierToExpr" $
         Serialization.cst @@ string "as",
         identifierToExpr @@ var "exported"])
 
-expressionToExpr :: TTermDefinition (TS.Expression -> Expr)
+expressionToExpr :: TypedTermDefinition (TS.Expression -> Expr)
 expressionToExpr = define "expressionToExpr" $
   doc "Convert a TypeScript expression to an AST expression" $
   lambda "expr" $
@@ -657,7 +657,7 @@ expressionToExpr = define "expressionToExpr" $
           Serialization.cst @@ string "as",
           Serialization.cst @@ (tsTypeExpressionToString @@ var "typ")])]
 
-forInStatementToExpr :: TTermDefinition (TS.ForInStatement -> Expr)
+forInStatementToExpr :: TypedTermDefinition (TS.ForInStatement -> Expr)
 forInStatementToExpr = define "forInStatementToExpr" $
   doc "Convert a for-in statement to an AST expression" $
   lambda "f" $ lets [
@@ -675,7 +675,7 @@ forInStatementToExpr = define "forInStatementToExpr" $
         expressionToExpr @@ var "right"]),
       statementToExpr @@ var "body"]
 
-forOfStatementToExpr :: TTermDefinition (TS.ForOfStatement -> Expr)
+forOfStatementToExpr :: TypedTermDefinition (TS.ForOfStatement -> Expr)
 forOfStatementToExpr = define "forOfStatementToExpr" $
   doc "Convert a for-of statement to an AST expression" $
   lambda "f" $ lets [
@@ -697,7 +697,7 @@ forOfStatementToExpr = define "forOfStatementToExpr" $
         expressionToExpr @@ var "right"]),
       statementToExpr @@ var "body"]
 
-forStatementToExpr :: TTermDefinition (TS.ForStatement -> Expr)
+forStatementToExpr :: TypedTermDefinition (TS.ForStatement -> Expr)
 forStatementToExpr = define "forStatementToExpr" $
   doc "Convert a for statement to an AST expression" $
   lambda "f" $ lets [
@@ -717,14 +717,14 @@ forStatementToExpr = define "forStatementToExpr" $
       Serialization.parenListAdaptive @@ list [var "initExpr", var "testExpr", var "updateExpr"],
       statementToExpr @@ var "body"]
 
-formatImportSpecifiers :: TTermDefinition ([Expr] -> Expr)
+formatImportSpecifiers :: TypedTermDefinition ([Expr] -> Expr)
 formatImportSpecifiers = define "formatImportSpecifiers" $
   doc "Format import specifiers, handling default vs named imports" $
   lambda "specs" $
     -- Simplified: just wrap named imports in braces
     Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ var "specs"
 
-functionDeclarationToExpr :: TTermDefinition (TS.FunctionDeclaration -> Expr)
+functionDeclarationToExpr :: TypedTermDefinition (TS.FunctionDeclaration -> Expr)
 functionDeclarationToExpr = define "functionDeclarationToExpr" $
   doc "Convert a function declaration to an AST expression" $
   lambda "fn" $ lets [
@@ -733,7 +733,7 @@ functionDeclarationToExpr = define "functionDeclarationToExpr" $
     "body">: project TS._FunctionDeclaration TS._FunctionDeclaration_body @@ var "fn",
     "async">: project TS._FunctionDeclaration TS._FunctionDeclaration_async @@ var "fn",
     "generator">: project TS._FunctionDeclaration TS._FunctionDeclaration_generator @@ var "fn",
-    "asyncKw">: Logic.ifElse (var "async") (list [Serialization.cst @@ string "async"]) (list ([] :: [TTerm Expr])),
+    "asyncKw">: Logic.ifElse (var "async") (list [Serialization.cst @@ string "async"]) (list ([] :: [TypedTerm Expr])),
     "funcKw">: Logic.ifElse (var "generator")
       (Serialization.cst @@ string "function*")
       (Serialization.cst @@ string "function"),
@@ -747,7 +747,7 @@ functionDeclarationToExpr = define "functionDeclarationToExpr" $
       var "asyncKw",
       list [var "funcKw", identifierToExpr @@ var "id", var "paramsExpr", var "retAnnot", blockStatementToExpr @@ var "body"]])
 
-functionDeclarationWithCommentsToExpr :: TTermDefinition (TS.FunctionDeclarationWithComments -> Expr)
+functionDeclarationWithCommentsToExpr :: TypedTermDefinition (TS.FunctionDeclarationWithComments -> Expr)
 functionDeclarationWithCommentsToExpr = define "functionDeclarationWithCommentsToExpr" $
   doc "Convert a function declaration with comments to an AST expression" $
   lambda "fdwc" $ lets [
@@ -760,7 +760,7 @@ functionDeclarationWithCommentsToExpr = define "functionDeclarationWithCommentsT
         functionDeclarationToExpr @@ var "body"])
       (var "mc")
 
-functionExpressionToExpr :: TTermDefinition (TS.FunctionExpression -> Expr)
+functionExpressionToExpr :: TypedTermDefinition (TS.FunctionExpression -> Expr)
 functionExpressionToExpr = define "functionExpressionToExpr" $
   doc "Convert a function expression to an AST expression" $
   lambda "fn" $ lets [
@@ -769,12 +769,12 @@ functionExpressionToExpr = define "functionExpressionToExpr" $
     "body">: project TS._FunctionExpression TS._FunctionExpression_body @@ var "fn",
     "async">: project TS._FunctionExpression TS._FunctionExpression_async @@ var "fn",
     "generator">: project TS._FunctionExpression TS._FunctionExpression_generator @@ var "fn",
-    "asyncKw">: Logic.ifElse (var "async") (list [Serialization.cst @@ string "async"]) (list ([] :: [TTerm Expr])),
+    "asyncKw">: Logic.ifElse (var "async") (list [Serialization.cst @@ string "async"]) (list ([] :: [TypedTerm Expr])),
     "funcKw">: Logic.ifElse (var "generator")
       (Serialization.cst @@ string "function*")
       (Serialization.cst @@ string "function"),
     "nameExpr">: Maybes.maybe
-      (list ([] :: [TTerm Expr]))
+      (list ([] :: [TypedTerm Expr]))
       (lambda "id" $ list [identifierToExpr @@ var "id"])
       (var "mid"),
     "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "params"))] $
@@ -784,12 +784,12 @@ functionExpressionToExpr = define "functionExpressionToExpr" $
       var "nameExpr",
       list [var "paramsExpr", blockStatementToExpr @@ var "body"]])
 
-identifierToExpr :: TTermDefinition (TS.Identifier -> Expr)
+identifierToExpr :: TypedTermDefinition (TS.Identifier -> Expr)
 identifierToExpr = define "identifierToExpr" $
   doc "Convert an identifier to an AST expression" $
   lambda "id" $ Serialization.cst @@ (unwrap TS._Identifier @@ var "id")
 
-ifStatementToExpr :: TTermDefinition (TS.IfStatement -> Expr)
+ifStatementToExpr :: TypedTermDefinition (TS.IfStatement -> Expr)
 ifStatementToExpr = define "ifStatementToExpr" $
   doc "Convert an if statement to an AST expression" $
   lambda "ifStmt" $ lets [
@@ -808,7 +808,7 @@ ifStatementToExpr = define "ifStatementToExpr" $
         statementToExpr @@ var "alt"])
       (var "alternate")
 
-importDeclarationToExpr :: TTermDefinition (TS.ImportDeclaration -> Expr)
+importDeclarationToExpr :: TypedTermDefinition (TS.ImportDeclaration -> Expr)
 importDeclarationToExpr = define "importDeclarationToExpr" $
   doc "Convert an import declaration to an AST expression" $
   lambda "imp" $ lets [
@@ -828,7 +828,7 @@ importDeclarationToExpr = define "importDeclarationToExpr" $
           Serialization.cst @@ string "from",
           var "sourceExpr"]))
 
-importSpecifierToExpr :: TTermDefinition (TS.ImportClause -> Expr)
+importSpecifierToExpr :: TypedTermDefinition (TS.ImportClause -> Expr)
 importSpecifierToExpr = define "importSpecifierToExpr" $
   doc "Convert an import specifier to an AST expression" $
   lambda "spec" $
@@ -855,7 +855,7 @@ importSpecifierToExpr = define "importSpecifierToExpr" $
 -- generic-binder clause to introduce them. The renderer substitutes `any`.
 -- Implementation walks the codepoint list rather than using a substring
 -- builtin (the kernel String DSL doesn't expose one).
-isKernelTypeVarName :: TTermDefinition (String -> Bool)
+isKernelTypeVarName :: TypedTermDefinition (String -> Bool)
 isKernelTypeVarName = define "isKernelTypeVarName" $
   lambda "s" $ lets [
     "cps">: Strings.toList (var "s"),
@@ -863,14 +863,14 @@ isKernelTypeVarName = define "isKernelTypeVarName" $
     "first">: Maybes.fromMaybe (int32 0) (Lists.maybeHead (var "cps")),
     "rest">: Logic.ifElse (Equality.gt (var "len") (int32 0))
       (Lists.drop (int32 1) (var "cps"))
-      (list ([] :: [TTerm Int]))] $
+      (list ([] :: [TypedTerm Int]))] $
     Logic.and
       (Equality.gt (var "len") (int32 1))
       (Logic.and
         (Equality.equal (var "first") (int32 84))     -- 'T' = 84
         (allDigits @@ (var "rest")))
 
-labeledStatementToExpr :: TTermDefinition (TS.LabeledStatement -> Expr)
+labeledStatementToExpr :: TypedTermDefinition (TS.LabeledStatement -> Expr)
 labeledStatementToExpr = define "labeledStatementToExpr" $
   doc "Convert a labeled statement to an AST expression" $
   lambda "l" $ lets [
@@ -885,7 +885,7 @@ labeledStatementToExpr = define "labeledStatementToExpr" $
 -- Declaration Conversions
 -- ============================================================================
 
-literalToExpr :: TTermDefinition (TS.Literal -> Expr)
+literalToExpr :: TypedTermDefinition (TS.Literal -> Expr)
 literalToExpr = define "literalToExpr" $
   doc "Convert a literal to an AST expression" $
   lambda "lit" $
@@ -900,7 +900,7 @@ literalToExpr = define "literalToExpr" $
         Serialization.cst @@ (Strings.cat2 (Literals.showBigint $ var "n") (string "n")),
       TS._Literal_template>>: lambda "t" $ templateLiteralToExpr @@ var "t"]
 
-memberExpressionToExpr :: TTermDefinition (TS.MemberExpression -> Expr)
+memberExpressionToExpr :: TypedTermDefinition (TS.MemberExpression -> Expr)
 memberExpressionToExpr = define "memberExpressionToExpr" $
   doc "Convert a member expression to an AST expression" $
   lambda "mem" $ lets [
@@ -932,7 +932,7 @@ memberExpressionToExpr = define "memberExpressionToExpr" $
         (Logic.ifElse (var "optional") TypeScriptOperators.optionalChainOp TypeScriptOperators.memberOp) @@
         var "objExpr" @@ var "propExpr")
 
-methodDefinitionToExpr :: TTermDefinition (TS.MethodDefinition -> Expr)
+methodDefinitionToExpr :: TypedTermDefinition (TS.MethodDefinition -> Expr)
 methodDefinitionToExpr = define "methodDefinitionToExpr" $
   doc "Convert a method definition to an AST expression" $
   lambda "method" $ lets [
@@ -941,10 +941,10 @@ methodDefinitionToExpr = define "methodDefinitionToExpr" $
     "kind">: project TS._MethodDefinition TS._MethodDefinition_kind @@ var "method",
     "computed">: project TS._MethodDefinition TS._MethodDefinition_computed @@ var "method",
     "static">: project TS._MethodDefinition TS._MethodDefinition_static @@ var "method",
-    "staticKw">: Logic.ifElse (var "static") (list [Serialization.cst @@ string "static"]) (list ([] :: [TTerm Expr])),
+    "staticKw">: Logic.ifElse (var "static") (list [Serialization.cst @@ string "static"]) (list ([] :: [TypedTerm Expr])),
     "kindKw">: cases TS._MethodKind (var "kind") Nothing [
-      TS._MethodKind_constructor>>: constant $ list ([] :: [TTerm Expr]),
-      TS._MethodKind_method>>: constant $ list ([] :: [TTerm Expr]),
+      TS._MethodKind_constructor>>: constant $ list ([] :: [TypedTerm Expr]),
+      TS._MethodKind_method>>: constant $ list ([] :: [TypedTerm Expr]),
       TS._MethodKind_get>>: constant $ list [Serialization.cst @@ string "get"],
       TS._MethodKind_set>>: constant $ list [Serialization.cst @@ string "set"]],
     "keyExpr">: Logic.ifElse (var "computed")
@@ -963,7 +963,7 @@ methodDefinitionToExpr = define "methodDefinitionToExpr" $
 -- Module Conversions
 -- ============================================================================
 
-moduleItemToExpr :: TTermDefinition (TS.ModuleItem -> Expr)
+moduleItemToExpr :: TypedTermDefinition (TS.ModuleItem -> Expr)
 moduleItemToExpr = define "moduleItemToExpr" $
   doc "Convert a module item to an AST expression" $
   lambda "item" $
@@ -972,7 +972,7 @@ moduleItemToExpr = define "moduleItemToExpr" $
       TS._ModuleItem_import>>: lambda "i" $ importDeclarationToExpr @@ var "i",
       TS._ModuleItem_export>>: lambda "e" $ exportDeclarationToExpr @@ var "e"]
 
-moduleItemWithCommentsToExpr :: TTermDefinition (TS.ModuleItemWithComments -> Expr)
+moduleItemWithCommentsToExpr :: TypedTermDefinition (TS.ModuleItemWithComments -> Expr)
 moduleItemWithCommentsToExpr = define "moduleItemWithCommentsToExpr" $
   doc "Convert a module item with comments to an AST expression" $
   lambda "miwc" $ lets [
@@ -985,7 +985,7 @@ moduleItemWithCommentsToExpr = define "moduleItemWithCommentsToExpr" $
         moduleItemToExpr @@ var "body"])
       (var "mc")
 
-namedExportToExpr :: TTermDefinition (TS.NamedExport -> Expr)
+namedExportToExpr :: TypedTermDefinition (TS.NamedExport -> Expr)
 namedExportToExpr = define "namedExportToExpr" $
   doc "Convert a named export to an AST expression" $
   lambda "n" $ lets [
@@ -993,7 +993,7 @@ namedExportToExpr = define "namedExportToExpr" $
     "source">: project TS._NamedExport TS._NamedExport_source @@ var "n",
     "specExprs">: Lists.map (exportSpecifierToExpr) (var "specifiers"),
     "fromClause">: Maybes.maybe
-      (list ([] :: [TTerm Expr]))
+      (list ([] :: [TypedTerm Expr]))
       (lambda "s" $ list [Serialization.cst @@ string "from", stringLiteralToExpr @@ var "s"])
       (var "source")] $
     Serialization.suffix @@ string ";" @@
@@ -1002,7 +1002,7 @@ namedExportToExpr = define "namedExportToExpr" $
         list [Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ var "specExprs"],
         var "fromClause"]))
 
-numericLiteralToExpr :: TTermDefinition (TS.NumericLiteral -> Expr)
+numericLiteralToExpr :: TypedTermDefinition (TS.NumericLiteral -> Expr)
 numericLiteralToExpr = define "numericLiteralToExpr" $
   doc "Convert a numeric literal to an AST expression" $
   lambda "n" $
@@ -1017,14 +1017,14 @@ numericLiteralToExpr = define "numericLiteralToExpr" $
 -- Expression Conversions
 -- ============================================================================
 
-objectExpressionToExpr :: TTermDefinition (TS.ObjectExpression -> Expr)
+objectExpressionToExpr :: TypedTermDefinition (TS.ObjectExpression -> Expr)
 objectExpressionToExpr = define "objectExpressionToExpr" $
   doc "Convert an object expression to an AST expression" $
   lambda "obj" $
     Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@
       (Lists.map (propertyToExpr) (var "obj"))
 
-objectPatternPropertyToExpr :: TTermDefinition (TS.ObjectPatternProperty -> Expr)
+objectPatternPropertyToExpr :: TypedTermDefinition (TS.ObjectPatternProperty -> Expr)
 objectPatternPropertyToExpr = define "objectPatternPropertyToExpr" $
   doc "Convert an object pattern property to an AST expression" $
   lambda "prop" $
@@ -1033,7 +1033,7 @@ objectPatternPropertyToExpr = define "objectPatternPropertyToExpr" $
       TS._ObjectPatternProperty_rest>>: lambda "r" $
         Serialization.prefix @@ string "..." @@ (patternToExpr @@ (unwrap TS._RestElement @@ var "r"))]
 
-objectPatternToExpr :: TTermDefinition (TS.ObjectPattern -> Expr)
+objectPatternToExpr :: TypedTermDefinition (TS.ObjectPattern -> Expr)
 objectPatternToExpr = define "objectPatternToExpr" $
   doc "Convert an object pattern to an AST expression" $
   lambda "obj" $ lets [
@@ -1041,7 +1041,7 @@ objectPatternToExpr = define "objectPatternToExpr" $
     Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@
       (Lists.map (objectPatternPropertyToExpr) (var "props"))
 
-patternToExpr :: TTermDefinition (TS.Pattern -> Expr)
+patternToExpr :: TypedTermDefinition (TS.Pattern -> Expr)
 patternToExpr = define "patternToExpr" $
   doc "Convert a pattern to an AST expression" $
   lambda "pat" $
@@ -1058,7 +1058,7 @@ patternToExpr = define "patternToExpr" $
 -- contexts the inner pattern is almost always an identifier. Destructuring
 -- patterns fall back to "_" since they are not currently produced by the
 -- TypeScript coder.
-patternToString :: TTermDefinition (TS.Pattern -> String)
+patternToString :: TypedTermDefinition (TS.Pattern -> String)
 patternToString = define "patternToString" $
   doc "Render a TS.Pattern as a plain string" $
   lambda "pat" $
@@ -1072,7 +1072,7 @@ patternToString = define "patternToString" $
           string ": ",
           tsTypeExpressionToString @@ (project TS._TypedPattern TS._TypedPattern_type @@ var "tp2")])]
 
-programToExpr :: TTermDefinition (TS.Program -> Expr)
+programToExpr :: TypedTermDefinition (TS.Program -> Expr)
 programToExpr = define "programToExpr" $
   doc "Convert a TypeScript program to an AST expression" $
   lambda "prog" $ lets [
@@ -1081,7 +1081,7 @@ programToExpr = define "programToExpr" $
     "items">: Lists.map (moduleItemToExpr) (var "body")] $
     Serialization.doubleNewlineSep @@ (Lists.concat $ list [var "warning", var "items"])
 
-propertyToExpr :: TTermDefinition (TS.Property -> Expr)
+propertyToExpr :: TypedTermDefinition (TS.Property -> Expr)
 propertyToExpr = define "propertyToExpr" $
   doc "Convert an object property to an AST expression" $
   lambda "prop" $ lets [
@@ -1096,7 +1096,7 @@ propertyToExpr = define "propertyToExpr" $
       (var "keyExpr")
       (Serialization.ifx @@ TypeScriptOperators.colonOp @@ var "keyExpr" @@ (expressionToExpr @@ var "value"))
 
-returnStatementToExpr :: TTermDefinition (TS.ReturnStatement -> Expr)
+returnStatementToExpr :: TypedTermDefinition (TS.ReturnStatement -> Expr)
 returnStatementToExpr = define "returnStatementToExpr" $
   doc "Convert a return statement to an AST expression" $
   lambda "r" $
@@ -1108,7 +1108,7 @@ returnStatementToExpr = define "returnStatementToExpr" $
           expressionToExpr @@ var "e"]))
       (var "r")
 
-statementToExpr :: TTermDefinition (TS.Statement -> Expr)
+statementToExpr :: TypedTermDefinition (TS.Statement -> Expr)
 statementToExpr = define "statementToExpr" $
   doc "Convert a statement to an AST expression" $
   lambda "stmt" $
@@ -1135,7 +1135,7 @@ statementToExpr = define "statementToExpr" $
       TS._Statement_classDeclaration>>: lambda "c" $ classDeclarationToExpr @@ var "c",
       TS._Statement_labeled>>: lambda "l" $ labeledStatementToExpr @@ var "l"]
 
-stringLiteralToExpr :: TTermDefinition (TS.StringLiteral -> Expr)
+stringLiteralToExpr :: TypedTermDefinition (TS.StringLiteral -> Expr)
 stringLiteralToExpr = define "stringLiteralToExpr" $
   doc "Convert a string literal to an AST expression" $
   lambda "s" $ lets [
@@ -1145,7 +1145,7 @@ stringLiteralToExpr = define "stringLiteralToExpr" $
     "escaped">: escapeString @@ var "value" @@ var "singleQuote"] $
     Serialization.cst @@ (Strings.cat $ list [var "quote", var "escaped", var "quote"])
 
-switchCaseToExpr :: TTermDefinition (TS.SwitchCase -> Expr)
+switchCaseToExpr :: TypedTermDefinition (TS.SwitchCase -> Expr)
 switchCaseToExpr = define "switchCaseToExpr" $
   doc "Convert a switch case to an AST expression" $
   lambda "c" $ lets [
@@ -1160,7 +1160,7 @@ switchCaseToExpr = define "switchCaseToExpr" $
       (var "test")] $
     Serialization.newlineSep @@ (Lists.cons (var "caseLabel") (Lists.map (statementToExpr) (var "consequent")))
 
-switchStatementToExpr :: TTermDefinition (TS.SwitchStatement -> Expr)
+switchStatementToExpr :: TypedTermDefinition (TS.SwitchStatement -> Expr)
 switchStatementToExpr = define "switchStatementToExpr" $
   doc "Convert a switch statement to an AST expression" $
   lambda "switchStmt" $ lets [
@@ -1172,7 +1172,7 @@ switchStatementToExpr = define "switchStatementToExpr" $
       Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
         (Serialization.newlineSep @@ (Lists.map (switchCaseToExpr) (var "cases")))]
 
-templateLiteralToExpr :: TTermDefinition (TS.TemplateLiteral -> Expr)
+templateLiteralToExpr :: TypedTermDefinition (TS.TemplateLiteral -> Expr)
 templateLiteralToExpr = define "templateLiteralToExpr" $
   doc "Convert a template literal to an AST expression" $
   lambda "t" $ lets [
@@ -1186,7 +1186,7 @@ templateLiteralToExpr = define "templateLiteralToExpr" $
         project TS._TemplateElement TS._TemplateElement_value @@ var "q") (var "quasis")),
       string "`"])
 
-throwStatementToExpr :: TTermDefinition (TS.ThrowStatement -> Expr)
+throwStatementToExpr :: TypedTermDefinition (TS.ThrowStatement -> Expr)
 throwStatementToExpr = define "throwStatementToExpr" $
   doc "Convert a throw statement to an AST expression" $
   lambda "t" $
@@ -1195,7 +1195,7 @@ throwStatementToExpr = define "throwStatementToExpr" $
         Serialization.cst @@ string "throw",
         expressionToExpr @@ (unwrap TS._ThrowStatement @@ var "t")])
 
-toLineComment :: TTermDefinition (String -> String)
+toLineComment :: TypedTermDefinition (String -> String)
 toLineComment = define "toLineComment" $
   doc ("Convert a string to a TypeScript line comment. Empty source lines"
     <> " emit `//` (no trailing space).") $
@@ -1210,13 +1210,13 @@ toLineComment = define "toLineComment" $
 -- With Comments Variants
 -- ============================================================================
 
-toTypeScriptComments :: TTermDefinition (String -> [TS.DocumentationTag] -> String)
+toTypeScriptComments :: TypedTermDefinition (String -> [TS.DocumentationTag] -> String)
 toTypeScriptComments = define "toTypeScriptComments" $
   doc ("Format a description and tags as a JSDoc comment. Empty doc lines"
     <> " emit ` *` (no trailing space) so blank lines don't carry trailing whitespace.") $
   lambda "desc" $ lambda "tags" $ lets [
     "descLines">: Logic.ifElse (Equality.equal (var "desc") (string ""))
-      (list ([] :: [TTerm String]))
+      (list ([] :: [TypedTerm String]))
       (Lists.map (lambda "line" $ Logic.ifElse (Equality.equal (var "line") (string ""))
           (string " *")
           (Strings.cat2 (string " * ") (var "line")))
@@ -1231,7 +1231,7 @@ toTypeScriptComments = define "toTypeScriptComments" $
           var "allLines",
           list [string " */"]])
 
-tryStatementToExpr :: TTermDefinition (TS.TryStatement -> Expr)
+tryStatementToExpr :: TypedTermDefinition (TS.TryStatement -> Expr)
 tryStatementToExpr = define "tryStatementToExpr" $
   doc "Convert a try statement to an AST expression" $
   lambda "t" $ lets [
@@ -1242,11 +1242,11 @@ tryStatementToExpr = define "tryStatementToExpr" $
       Serialization.cst @@ string "try",
       blockStatementToExpr @@ var "block"],
     "catchPart">: Maybes.maybe
-      (list ([] :: [TTerm Expr]))
+      (list ([] :: [TypedTerm Expr]))
       (lambda "c" $ list [catchClauseToExpr @@ var "c"])
       (var "handler"),
     "finallyPart">: Maybes.maybe
-      (list ([] :: [TTerm Expr]))
+      (list ([] :: [TypedTerm Expr]))
       (lambda "f" $ list [Serialization.spaceSep @@ list [
         Serialization.cst @@ string "finally",
         blockStatementToExpr @@ var "f"]])
@@ -1256,7 +1256,7 @@ tryStatementToExpr = define "tryStatementToExpr" $
 -- | Render a TS.TypeExpression as a TypeScript type-syntax string. Used by
 -- typedPatternToExpr and other contexts that need true TS type syntax
 -- (distinct from the JSDoc-style `typeExpressionToString`).
-tsTypeExpressionToString :: TTermDefinition (TS.TypeExpression -> String)
+tsTypeExpressionToString :: TypedTermDefinition (TS.TypeExpression -> String)
 tsTypeExpressionToString = define "tsTypeExpressionToString" $
   doc "Render a TypeScript type expression as a string in TS syntax" $
   lambda "t" $ cases TS._TypeExpression (var "t") (Just $ string "unknown") [
@@ -1318,7 +1318,7 @@ tsTypeExpressionToString = define "tsTypeExpressionToString" $
     TS._TypeExpression_function>>: constant $
       string "((...args: any[]) => any)"]
 
-typeExpressionToString :: TTermDefinition (TS.TypeExpression -> String)
+typeExpressionToString :: TypedTermDefinition (TS.TypeExpression -> String)
 typeExpressionToString = define "typeExpressionToString" $
   doc "Convert a type expression to a string for JSDoc" $
   lambda "typ" $
@@ -1352,7 +1352,7 @@ typeExpressionToString = define "typeExpressionToString" $
               pair
                 (Math.add (var "i") (int32 1))
                 (Lists.concat2 (var "soFar") (Lists.pure (var "this"))))
-            (pair (int32 0) (list ([] :: [TTerm String])))
+            (pair (int32 0) (list ([] :: [TypedTerm String])))
             (var "params")] $
         Strings.cat $ list [
           string "(",
@@ -1371,7 +1371,7 @@ typeExpressionToString = define "typeExpressionToString" $
           string ">"],
       TS._TypeExpression_optional>>: lambda "o" $ Strings.cat2 (string "?") (typeExpressionToString @@ var "o")]
 
-typedPatternToExpr :: TTermDefinition (TS.TypedPattern -> Expr)
+typedPatternToExpr :: TypedTermDefinition (TS.TypedPattern -> Expr)
 typedPatternToExpr = define "typedPatternToExpr" $
   doc "Render `<pattern>: <type>` (TypeScript parameter / variable type annotation)" $
   lambda "tp" $ lets [
@@ -1381,7 +1381,7 @@ typedPatternToExpr = define "typedPatternToExpr" $
     "typeStr">: tsTypeExpressionToString @@ var "typ"] $
     Serialization.cst @@ (Strings.cat (list [var "innerStr", string ": ", var "typeStr"]))
 
-unaryExpressionToExpr :: TTermDefinition (TS.UnaryExpression -> Expr)
+unaryExpressionToExpr :: TypedTermDefinition (TS.UnaryExpression -> Expr)
 unaryExpressionToExpr = define "unaryExpressionToExpr" $
   doc "Convert a unary expression to an AST expression" $
   lambda "un" $ lets [
@@ -1394,7 +1394,7 @@ unaryExpressionToExpr = define "unaryExpressionToExpr" $
       (Serialization.prefix @@ var "opStr" @@ var "argExpr")
       (Serialization.suffix @@ var "opStr" @@ var "argExpr")
 
-unaryOperatorToString :: TTermDefinition (TS.UnaryOperator -> String)
+unaryOperatorToString :: TypedTermDefinition (TS.UnaryOperator -> String)
 unaryOperatorToString = define "unaryOperatorToString" $
   doc "Convert a unary operator to a string" $
   lambda "op" $
@@ -1409,7 +1409,7 @@ unaryOperatorToString = define "unaryOperatorToString" $
       TS._UnaryOperator_increment>>: constant $ string "++",
       TS._UnaryOperator_decrement>>: constant $ string "--"]
 
-variableDeclarationToExpr :: TTermDefinition (TS.VariableDeclaration -> Expr)
+variableDeclarationToExpr :: TypedTermDefinition (TS.VariableDeclaration -> Expr)
 variableDeclarationToExpr = define "variableDeclarationToExpr" $
   doc "Convert a variable declaration to an AST expression" $
   lambda "decl" $ lets [
@@ -1420,7 +1420,7 @@ variableDeclarationToExpr = define "variableDeclarationToExpr" $
         variableKindToExpr @@ var "kind",
         Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map (variableDeclaratorToExpr) (var "declarations"))])
 
-variableDeclaratorToExpr :: TTermDefinition (TS.VariableDeclarator -> Expr)
+variableDeclaratorToExpr :: TypedTermDefinition (TS.VariableDeclarator -> Expr)
 variableDeclaratorToExpr = define "variableDeclaratorToExpr" $
   doc "Convert a variable declarator to an AST expression" $
   lambda "decl" $ lets [
@@ -1433,7 +1433,7 @@ variableDeclaratorToExpr = define "variableDeclaratorToExpr" $
         (expressionToExpr @@ var "e"))
       (var "init")
 
-variableKindToExpr :: TTermDefinition (TS.VariableKind -> Expr)
+variableKindToExpr :: TypedTermDefinition (TS.VariableKind -> Expr)
 variableKindToExpr = define "variableKindToExpr" $
   doc "Convert a variable kind to an AST expression" $
   lambda "kind" $
@@ -1442,7 +1442,7 @@ variableKindToExpr = define "variableKindToExpr" $
       TS._VariableKind_let>>: constant $ Serialization.cst @@ string "let",
       TS._VariableKind_const>>: constant $ Serialization.cst @@ string "const"]
 
-whileStatementToExpr :: TTermDefinition (TS.WhileStatement -> Expr)
+whileStatementToExpr :: TypedTermDefinition (TS.WhileStatement -> Expr)
 whileStatementToExpr = define "whileStatementToExpr" $
   doc "Convert a while statement to an AST expression" $
   lambda "w" $ lets [
