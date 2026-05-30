@@ -42,11 +42,11 @@ module_ x =
       Core.recordTypeName = (Core.Name "hydra.packaging.Module"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Packaging.moduleDescription x))},
-        Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (moduleName (Packaging.moduleName x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Packaging.moduleDescription x))},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map moduleDependency xs)) (Packaging.moduleDependencies x))},
@@ -81,14 +81,14 @@ package x =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (packageName (Packaging.packageName x))},
         Core.Field {
-          Core.fieldName = (Core.Name "modules"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map module_ xs)) (Packaging.packageModules x))},
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Packaging.packageDescription x))},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map packageDependency xs)) (Packaging.packageDependencies x))},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Packaging.packageDescription x))}]})
+          Core.fieldName = (Core.Name "modules"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map module_ xs)) (Packaging.packageModules x))}]})
 -- | Encoder for hydra.packaging.PackageDependency
 packageDependency :: Packaging.PackageDependency -> Core.Term
 packageDependency x =

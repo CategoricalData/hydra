@@ -433,7 +433,7 @@ from hydra.sources.python._source_dsl import proj as _proj
 name = _proj("hydra.core.Person", "name", "p")
 ```
 
-Source modules with a fixed type-namespace prefix typically wrap this
+Source modules with a fixed type module-name prefix typically wrap this
 with a thinner local helper (e.g., `_env`, `_pygraph`, `_meta_proj` in
 `coder.py`). Prefer the helper form to the long-form `project(...)(var(...))`
 in source modules — it's the idiomatic style.

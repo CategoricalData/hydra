@@ -359,10 +359,10 @@ encodeModule = define "encodeModule" $
           (encodeBinding @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
         -- The encoder module depends on encoder modules of the source's dependencies, plus the original module
         right (just (Packaging.module_
+          (encodeModuleName @@ (Packaging.moduleName (var "mod")))
           (just (Strings.cat $ list [
             string "Term encoders for ",
             Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
-          (encodeModuleName @@ (Packaging.moduleName (var "mod")))
           (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.nub (Lists.concat2
             (primitive _lists_map @@ encodeModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))
             (list [Packaging.moduleName (var "mod")]))))

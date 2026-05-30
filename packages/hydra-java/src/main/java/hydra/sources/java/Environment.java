@@ -109,8 +109,8 @@ public class Environment {
         SYNTAX_NS, CORE_NS, GRAPH_NS, MODULE_NS, TYPING_NS);
 
     public static final Module module_ = new Module(
-        Maybe.just("Environment types for Java code generation"),
         NS,
+        Maybe.just("Environment types for Java code generation"),
         DEPENDENCIES,
         DEFINITIONS);
 }

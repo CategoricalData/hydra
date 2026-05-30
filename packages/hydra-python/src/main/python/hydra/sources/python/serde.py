@@ -62,8 +62,8 @@ DEPENDENCIES = [
 
 
 _PLACEHOLDER = Module(
-    Just("Python serializer: converts Python AST to concrete syntax"),
     NS,
+    Just("Python serializer: converts Python AST to concrete syntax"),
     DEPENDENCIES,
     (),
 )
@@ -2398,8 +2398,8 @@ def _to_python_comments():
 
 def _build_module() -> Module:
     return Module(
-        _PLACEHOLDER.description,
         _PLACEHOLDER.name,
+        _PLACEHOLDER.description,
         _PLACEHOLDER.dependencies,
         (
             to_definition(_annotated_rhs_to_expr()),
