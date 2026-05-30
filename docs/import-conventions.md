@@ -69,14 +69,14 @@ Each category has a canonical comment tag placed above its import block.
 ## `reify` and `reify2`
 
 A common operation in categories 3, 4, 5, 6, 7 is to convert a Haskell-level
-meta-function `TTerm a -> TTerm b` into a first-class term-level function
-`TTerm (a -> b)`. Use `reify` (unary) and `reify2` (binary), exported from
+meta-function `TypedTerm a -> TypedTerm b` into a first-class term-level function
+`TypedTerm (a -> b)`. Use `reify` (unary) and `reify2` (binary), exported from
 `Hydra.Dsl.Meta.Phantoms`:
 
 ```haskell
 ShowCore.list_ @@ reify Literals.showInt32 @@ xs
 ShowCore.map_ @@ reify Literals.showInt32 @@ reify Literals.showString @@ m
-binPrim :: TTerm (a -> b -> c)
+binPrim :: TypedTerm (a -> b -> c)
 binPrim = reify2 (\x y -> Maths.add x (Maths.mul x y))
 ```
 
@@ -154,7 +154,7 @@ import qualified Data.Set   as S
 
 **Tag**: `kernel terms modules`
 
-**Definition shape**: `define :: String -> TTerm a -> TTermDefinition a`
+**Definition shape**: `define :: String -> TypedTerm a -> TypedTermDefinition a`
 
 **Centrally important (unqualified)**:
 - `Hydra.Kernel`
@@ -288,7 +288,7 @@ import qualified Hydra.Sources.<Lang>.Syntax         as <Lang>SyntaxSource -- DS
 
 **Tag**: `tests`
 
-**Definition shape**: defines `TTermDefinition TestGroup` values. Test cases call
+**Definition shape**: defines `TypedTermDefinition TestGroup` values. Test cases call
 **kernel function bindings** via the polymorphic `(@@)` from Phantoms — e.g.
 `validateCoreTermProfiledRef @@ profile @@ graph @@ input`. Composes fixtures
 (`TestGraph`, `TestTerms`, `TestTypes`).
@@ -350,7 +350,7 @@ term applications** (encoded `Term` values containing lambda applications, primi
 applications, etc.) — e.g. `lambda "x" body @@ arg`, `primitive _strings_toUpper @@ string "hello"`.
 
 **Distinguishing feature**: bare `(@@)` is *term application* (Terms.@@), the
-monomorphic `TTerm Term -> TTerm Term -> TTerm Term`. The polymorphic Phantoms.@@
+monomorphic `TypedTerm Term -> TypedTerm Term -> TypedTerm Term`. The polymorphic Phantoms.@@
 is qualified at use sites where binding application is also needed.
 
 These tests typically test kernel infrastructure for handling encoded terms —
@@ -387,8 +387,8 @@ a kernel-side ref like `validateCoreTermRef`), use `Phantoms.@@` qualified.
 
 **Tag**: `kernel test fixtures`
 
-**Definition shape**: defines `TTermDefinition Term`, `TTermDefinition Type`, or
-`TTermDefinition Binding` values — named test data used as inputs to category-6/7 files.
+**Definition shape**: defines `TypedTermDefinition Term`, `TypedTermDefinition Type`, or
+`TypedTermDefinition Binding` values — named test data used as inputs to category-6/7 files.
 
 **Same as category 7, with two deltas**:
 - `Hydra.Testing` is **NOT** imported (no `TestGroup`/`TestCase` constructors needed).
@@ -444,8 +444,8 @@ A few non-obvious rules emerged from a survey of the existing codebase:
 1. **`Phantoms.@@` was an anti-pattern in tests that apply kernel bindings.**
    Files that imported `Hydra.Dsl.Meta.Terms` unqualified-with-alias and `Phantoms`
    qualified had to write `Phantoms.@@` everywhere — because the unqualified `(@@)`
-   from `Meta.Terms` is the narrower `TTerm Term -> TTerm Term -> TTerm Term`, while
-   the polymorphic `Phantoms.@@ :: AsTerm f (a -> b) => f -> g -> TTerm b` is what
+   from `Meta.Terms` is the narrower `TypedTerm Term -> TypedTerm Term -> TypedTerm Term`, while
+   the polymorphic `Phantoms.@@ :: AsTerm f (a -> b) => f -> g -> TypedTerm b` is what
    binding-application call sites actually want. Category 6 (`tests`) inverts this:
    `Meta.Terms hiding ((@@))`, then `Phantoms ((@@))` brought unqualified, so bare
    `@@` is the polymorphic version. Category 7 (`term-encoded tests`) keeps the
@@ -460,7 +460,7 @@ A few non-obvious rules emerged from a survey of the existing codebase:
    files used `DC`; standardize on `DeepCore`.
 5. **`AsName` typeclass.** Phantoms's `inject`, `injectUnit`, `match`, `project`,
    `record`, `unwrap`, `wrap` accept any `AsName n => n` for type-name arguments —
-   `Name`, `TBinding Name`, or `TTermDefinition Name`. This lets call sites pass
+   `Name`, `TypedBinding Name`, or `TypedTermDefinition Name`. This lets call sites pass
    pre-defined kernel name constants like `_Foo` directly, without explicit lifts.
 6. **`annot` vs `annots`.** `Phantoms.annot` attaches a single `(key, value)`
    annotation to a term. `MetaTerms.annots` (formerly `MetaTerms.annot`) attaches

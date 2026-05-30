@@ -49,7 +49,7 @@ Hydra-Java provides a layered DSL system for working with Hydra types and terms:
 | Layer | Module | Purpose |
 |-------|--------|---------|
 | **Direct DSLs** | `hydra.dsl.Types`, `hydra.dsl.Terms` | Raw construction of `Type` and `Term` instances |
-| **Phantom-typed DSL** | `hydra.dsl.meta.Phantoms` | Compile-time type safety via `TTerm<A>` phantom types |
+| **Phantom-typed DSL** | `hydra.dsl.meta.Phantoms` | Compile-time type safety via `TypedTerm<A>` phantom types |
 | **Domain-specific DSLs** | `hydra.dsl.meta.Core`, `hydra.dsl.meta.Graph`, `hydra.dsl.meta.Compute` | Typed accessors for Hydra kernel types |
 | **Library wrappers** | `hydra.dsl.meta.Lib.*` | Typed wrappers around Hydra primitives (lists, sets, maps, etc.) |
 
@@ -91,15 +91,15 @@ Term person = Terms.record(new Name("Person"),
 
 **Module**: `hydra.dsl.meta.Phantoms`
 
-Wraps raw `Term` construction with `TTerm<A>` phantom types for compile-time type safety.
+Wraps raw `Term` construction with `TypedTerm<A>` phantom types for compile-time type safety.
 The phantom type parameter `A` tracks the Hydra type at the Java level.
 
 ```java
 import static hydra.dsl.meta.Phantoms.*;
 
-TTerm<String> greeting = string("hello");
-TTerm<Integer> age = int32(30);
-TTerm<Object> identity = lambda("x", var("x"));
+TypedTerm<String> greeting = string("hello");
+TypedTerm<Integer> age = int32(30);
+TypedTerm<Object> identity = lambda("x", var("x"));
 ```
 
 ### 4. Domain-specific DSLs (aspirational — not yet implemented)
@@ -115,10 +115,10 @@ do not currently exist in the Java codebase. The example below is provisional:
 import static hydra.dsl.meta.Core.*;
 
 // Extract the body of a lambda term
-TTerm<Object> body = lambdaBody(var("myLambda"));
+TypedTerm<Object> body = lambdaBody(var("myLambda"));
 
 // Construct a Lambda record
-TTerm<Object> lam = lambda_(
+TypedTerm<Object> lam = lambda_(
     wrap(Term.TYPE_NAME, string("x")),
     nothing(),
     var("body"));
@@ -135,7 +135,7 @@ to operations like set union, list fold, etc.
 
 ```java
 // Inline library helpers (or import from hydra.dsl.meta.Lib.Sets, etc.)
-static <R> TTerm<R> setsUnion(TTerm<?> s1, TTerm<?> s2) {
+static <R> TypedTerm<R> setsUnion(TypedTerm<?> s1, TypedTerm<?> s2) {
     return primitive2(new Name("hydra.lib.sets.union"), s1, s2);
 }
 ```
@@ -270,13 +270,13 @@ String describe(Term term) {
 ## Phantom-typed DSL
 
 The phantom-typed DSL is the core of Hydra's Java metaprogramming system.
-It wraps raw `Term` values in `TTerm<A>` to provide compile-time type tracking.
+It wraps raw `Term` values in `TypedTerm<A>` to provide compile-time type tracking.
 
 ### Import pattern
 
 ```java
-import hydra.phantoms.TBinding;
-import hydra.phantoms.TTerm;
+import hydra.typed.TypedBinding;
+import hydra.typed.TypedTerm;
 import hydra.util.Maybe;
 
 import static hydra.dsl.meta.Phantoms.*;
@@ -286,59 +286,59 @@ import static hydra.dsl.meta.Core.*;
 ### Literals
 
 ```java
-TTerm<String> greeting = string("hello");
-TTerm<Integer> age = int32(42);
-TTerm<Boolean> flag = boolean_(true);
-TTerm<Boolean> yes = true_();
-TTerm<Boolean> no = false_();
+TypedTerm<String> greeting = string("hello");
+TypedTerm<Integer> age = int32(42);
+TypedTerm<Boolean> flag = boolean_(true);
+TypedTerm<Boolean> yes = true_();
+TypedTerm<Boolean> no = false_();
 ```
 
 ### Functions
 
 ```java
 // Lambda (single parameter)
-TTerm<Object> id = lambda("x", var("x"));
+TypedTerm<Object> id = lambda("x", var("x"));
 
 // Lambda (multiple parameters — curried)
-TTerm<Object> add = lambdas(List.of("x", "y"),
+TypedTerm<Object> add = lambdas(List.of("x", "y"),
     primitive2(new Name("hydra.lib.math.add"), var("x"), var("y")));
 
 // Function application
-TTerm<Object> result = apply(var("f"), int32(5));
+TypedTerm<Object> result = apply(var("f"), int32(5));
 
 // Composition
-TTerm<Object> composed = compose(var("g"), var("f"));
+TypedTerm<Object> composed = compose(var("g"), var("f"));
 
 // Constant function
-TTerm<Object> alwaysTrue = constant(true_());
+TypedTerm<Object> alwaysTrue = constant(true_());
 
 // Identity
-TTerm<Object> id2 = identity();
+TypedTerm<Object> id2 = identity();
 ```
 
 ### Data structures
 
 ```java
 // Lists
-TTerm<List<Integer>> nums = list(int32(1), int32(2), int32(3));
+TypedTerm<List<Integer>> nums = list(int32(1), int32(2), int32(3));
 
 // Pairs
-TTerm<Object> kv = pair(string("key"), int32(42));
+TypedTerm<Object> kv = pair(string("key"), int32(42));
 
 // Optional values
-TTerm<Object> some = just(int32(42));
-TTerm<Object> none = nothing();
+TypedTerm<Object> some = just(int32(42));
+TypedTerm<Object> none = nothing();
 
 // Either
-TTerm<Object> ok = right(int32(42));
-TTerm<Object> err = left(string("error"));
+TypedTerm<Object> ok = right(int32(42));
+TypedTerm<Object> err = left(string("error"));
 ```
 
 ### Records
 
 ```java
 // Construct a record (requires type name + fields)
-TTerm<Object> person = record(Person.TYPE_NAME,
+TypedTerm<Object> person = record(Person.TYPE_NAME,
     field(Person.FIELD_NAME_NAME, string("Alice")),
     field(Person.FIELD_NAME_AGE, int32(30)));
 ```
@@ -347,18 +347,18 @@ TTerm<Object> person = record(Person.TYPE_NAME,
 
 ```java
 // Inject into a union type
-TTerm<Object> circle = inject(Shape.TYPE_NAME, Shape.FIELD_NAME_CIRCLE,
+TypedTerm<Object> circle = inject(Shape.TYPE_NAME, Shape.FIELD_NAME_CIRCLE,
     float64(3.14));
 
 // Unit injection (for enum-like variants)
-TTerm<Object> none = injectUnit(FloatType.TYPE_NAME, FloatType.FIELD_NAME_FLOAT32);
+TypedTerm<Object> none = injectUnit(FloatType.TYPE_NAME, FloatType.FIELD_NAME_FLOAT32);
 ```
 
 ### Pattern matching (`cases`/`match`)
 
 ```java
 // match creates a case elimination (unapplied)
-TTerm<Object> matcher = match(Term.TYPE_NAME,
+TypedTerm<Object> matcher = match(Term.TYPE_NAME,
     Maybe.just(var("default")),         // default case
     field(Term.FIELD_NAME_LITERAL,      // case: literal
         lambda("lit", string("found a literal"))),
@@ -366,7 +366,7 @@ TTerm<Object> matcher = match(Term.TYPE_NAME,
         lambda("v", string("found a variable"))));
 
 // cases applies the match to an argument
-TTerm<Object> result = cases(Term.TYPE_NAME, var("myTerm"),
+TypedTerm<Object> result = cases(Term.TYPE_NAME, var("myTerm"),
     Maybe.nothing(),                    // no default
     field(Term.FIELD_NAME_LITERAL,
         lambda("lit", var("lit"))),
@@ -378,11 +378,11 @@ TTerm<Object> result = cases(Term.TYPE_NAME, var("myTerm"),
 
 ```java
 // Single let binding
-TTerm<Object> expr = let1("x", int32(5),
+TypedTerm<Object> expr = let1("x", int32(5),
     apply(var("add"), var("x")));
 
 // Multiple let bindings
-TTerm<Object> expr2 = lets(List.of(
+TypedTerm<Object> expr2 = lets(List.of(
     field(new Name("x"), int32(5)),
     field(new Name("y"), int32(10))),
     apply(apply(var("add"), var("x")), var("y")));
@@ -392,10 +392,10 @@ TTerm<Object> expr2 = lets(List.of(
 
 ```java
 // Create a field accessor function
-TTerm<Object> getName = project(Person.TYPE_NAME, Person.FIELD_NAME_NAME);
+TypedTerm<Object> getName = project(Person.TYPE_NAME, Person.FIELD_NAME_NAME);
 
 // Apply it
-TTerm<Object> name = apply(getName, var("person"));
+TypedTerm<Object> name = apply(getName, var("person"));
 ```
 
 The combined "project a field, then apply to a named variable" pattern
@@ -403,12 +403,12 @@ is so common that `Phantoms` provides a `proj` shortcut:
 
 ```java
 // Equivalent to: apply(project(Person.TYPE_NAME, Person.FIELD_NAME), var("person"))
-TTerm<Object> name = proj(Person.TYPE_NAME, Person.FIELD_NAME, "person");
+TypedTerm<Object> name = proj(Person.TYPE_NAME, Person.FIELD_NAME, "person");
 ```
 
 Overloads accept `String` or `Name` for the type/field arguments, and
 either a `String` variable name (which becomes `var("...")`) or a
-`TTerm<?>` for the receiver. Prefer `proj()` in DSL source modules —
+`TypedTerm<?>` for the receiver. Prefer `proj()` in DSL source modules —
 it's the idiomatic form.
 
 If the field has a thunked type (e.g., `unit -> T`, used to defer
@@ -418,7 +418,7 @@ with an extra `apply(..., unit())`:
 
 ```java
 // field type is `unit -> string` — force the thunk
-TTerm<Object> value = apply(
+TypedTerm<Object> value = apply(
     apply(
         project("hydra.testing.UniversalTestCase", "actual"),
         var("ucase")),
@@ -433,28 +433,28 @@ containing module, since the inferencer processes them in a shared context.
 
 ```java
 // Wrap a value (create a newtype instance)
-TTerm<Object> hydraName = wrap(Name.TYPE_NAME, string("myName"));
+TypedTerm<Object> hydraName = wrap(Name.TYPE_NAME, string("myName"));
 
 // Unwrap function
-TTerm<Object> unwrapper = unwrap(Name.TYPE_NAME);
+TypedTerm<Object> unwrapper = unwrap(Name.TYPE_NAME);
 ```
 
 ### Primitive functions
 
 ```java
 // Reference a primitive
-TTerm<Object> addPrim = primitive(new Name("hydra.lib.math.add"));
+TypedTerm<Object> addPrim = primitive(new Name("hydra.lib.math.add"));
 
 // Apply primitives with 1, 2, or 3 arguments
-TTerm<Object> len = primitive1(new Name("hydra.lib.strings.length"), var("s"));
-TTerm<Object> sum = primitive2(new Name("hydra.lib.math.add"), var("x"), var("y"));
+TypedTerm<Object> len = primitive1(new Name("hydra.lib.strings.length"), var("s"));
+TypedTerm<Object> sum = primitive2(new Name("hydra.lib.math.add"), var("x"), var("y"));
 ```
 
 ### Documentation
 
 ```java
 // Attach documentation to a term
-TTerm<Object> documented = doc("Adds two numbers", var("add"));
+TypedTerm<Object> documented = doc("Adds two numbers", var("add"));
 ```
 
 ## Domain-specific DSLs
@@ -469,19 +469,19 @@ and less error-prone than using raw field name strings.
 import static hydra.dsl.meta.Core.*;
 
 // Field accessors (each is project + apply)
-TTerm<Object> param = lambdaParameter(var("lam"));       // Lambda.parameter
-TTerm<Object> body = lambdaBody(var("lam"));             // Lambda.body
-TTerm<Object> atBody = annotatedTermBody(var("at"));     // AnnotatedTerm.body
-TTerm<Object> ann = annotatedTermAnnotation(var("at"));  // AnnotatedTerm.annotation
-TTerm<Object> tname = injectionTypeName(var("inj"));     // Injection.typeName
+TypedTerm<Object> param = lambdaParameter(var("lam"));       // Lambda.parameter
+TypedTerm<Object> body = lambdaBody(var("lam"));             // Lambda.body
+TypedTerm<Object> atBody = annotatedTermBody(var("at"));     // AnnotatedTerm.body
+TypedTerm<Object> ann = annotatedTermAnnotation(var("at"));  // AnnotatedTerm.annotation
+TypedTerm<Object> tname = injectionTypeName(var("inj"));     // Injection.typeName
 
 // Constructors (build records)
-TTerm<Object> lam = lambda_(
+TypedTerm<Object> lam = lambda_(
     wrap(Name.TYPE_NAME, string("x")),
     nothing(),
     var("body"));
 
-TTerm<Object> at = annotatedTerm(var("body"), var("annotation"));
+TypedTerm<Object> at = annotatedTerm(var("body"), var("annotation"));
 ```
 
 ### Generated name constants
@@ -512,15 +512,15 @@ They follow a consistent pattern:
 
 ```java
 // Pattern: wrap primitive2/primitive1 with descriptive names
-static <R> TTerm<R> setsUnion(TTerm<?> s1, TTerm<?> s2) {
+static <R> TypedTerm<R> setsUnion(TypedTerm<?> s1, TypedTerm<?> s2) {
     return primitive2(new Name("hydra.lib.sets.union"), s1, s2);
 }
 
-static <R> TTerm<R> setsEmpty() {
+static <R> TypedTerm<R> setsEmpty() {
     return primitive(new Name("hydra.lib.sets.empty"));
 }
 
-static <R> TTerm<R> listsFoldl(TTerm<?> f, TTerm<?> init, TTerm<?> list) {
+static <R> TypedTerm<R> listsFoldl(TypedTerm<?> f, TypedTerm<?> init, TypedTerm<?> list) {
     return primitive3(new Name("hydra.lib.lists.foldl"), f, init, list);
 }
 ```
@@ -587,12 +587,12 @@ idiom against the full Hydra kernel.
 ## Term definitions
 
 Term-level modules define Hydra functions using the Phantom-typed DSL.
-Each function definition is a `TBinding<A>` (a phantom-typed name-term pair).
+Each function definition is a `TypedBinding<A>` (a phantom-typed name-term pair).
 
 ### Pattern
 
 ```java
-import hydra.phantoms.*;
+import hydra.typed.*;
 import hydra.util.Maybe;
 import static hydra.dsl.meta.Phantoms.*;
 import static hydra.dsl.meta.Core.*;
@@ -600,12 +600,12 @@ import static hydra.dsl.meta.Core.*;
 public class MyFunctions {
     public static final ModuleName NS = new ModuleName("my.namespace");
 
-    private static Def def(String localName, Supplier<TTerm<?>> body) {
+    private static Def def(String localName, Supplier<TypedTerm<?>> body) {
         return Defs.define(NS, localName, body);
     }
 
     // Simple function: pattern match + extract body
-    TBinding<Object> deannotateTerm = define("deannotateTerm",
+    TypedBinding<Object> deannotateTerm = define("deannotateTerm",
         doc("Remove annotations from a term",
         lambda("term",
             cases(Term.TYPE_NAME, var("term"),
@@ -643,7 +643,7 @@ which serve as the live working examples.
 Match on a union type, handle one variant, pass others through:
 
 ```java
-TTerm<Object> fn = lambda("term",
+TypedTerm<Object> fn = lambda("term",
     cases(Term.TYPE_NAME, var("term"),
         Maybe.just(var("term")),                    // default: identity
         field(Term.FIELD_NAME_ANNOTATED,            // handle one case
@@ -655,7 +655,7 @@ TTerm<Object> fn = lambda("term",
 Bind a local transform, pass it to a rewriting function:
 
 ```java
-TTerm<Object> fn = lambda("typ",
+TypedTerm<Object> fn = lambda("typ",
     let1("f",
         lambda("recurse", lambda("t",
             cases(Type.TYPE_NAME, var("t"),
@@ -672,7 +672,7 @@ TTerm<Object> fn = lambda("typ",
 Accumulate results over subterms:
 
 ```java
-TTerm<Object> vars = let1("dfltVars",
+TypedTerm<Object> vars = let1("dfltVars",
     listsFoldl(
         lambda("s", lambda("t",
             setsUnion(var("s"),
@@ -691,7 +691,7 @@ TTerm<Object> vars = let1("dfltVars",
 Check whether a variable is shadowed before rewriting:
 
 ```java
-TTerm<Object> replaceFn = lambda("recurse", lambda("t",
+TypedTerm<Object> replaceFn = lambda("recurse", lambda("t",
     cases(Term.TYPE_NAME, var("t"),
         Maybe.just(apply(var("recurse"), var("t"))),
         field(Term.FIELD_NAME_FUNCTION,
