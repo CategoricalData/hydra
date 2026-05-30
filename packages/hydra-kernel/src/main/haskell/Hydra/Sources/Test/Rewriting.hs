@@ -52,42 +52,42 @@ module_ = Module {
   where
     definitions = [Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 
 -- | Apply a fold operation and wrap the result as a Term
-applyFoldOp :: FoldOp -> TTerm TraversalOrder -> TTerm Term -> TTerm Term
+applyFoldOp :: FoldOp -> TypedTerm TraversalOrder -> TypedTerm Term -> TypedTerm Term
 applyFoldOp FoldOpSumInt32 order input =
   Core.termLiteral (Core.literalInteger (Core.integerValueInt32
     (Rewriting.foldOverTerm @@ order @@ sumInt32LiteralsFoldFn @@ Phantoms.int32 0 @@ input)))
 applyFoldOp FoldOpCollectListLengths order input =
   Core.termList (Lists.map
     (Phantoms.lambda "n" $ Core.termLiteral (Core.literalInteger (Core.integerValueInt32 (Phantoms.var "n"))))
-    (Rewriting.foldOverTerm @@ order @@ collectListLengthsFoldFn @@ Phantoms.list ([] :: [TTerm Int]) @@ input))
+    (Rewriting.foldOverTerm @@ order @@ collectListLengthsFoldFn @@ Phantoms.list ([] :: [TypedTerm Int]) @@ input))
 applyFoldOp FoldOpCollectLabels order input =
   Core.termList (Lists.map
     (Phantoms.lambda "lit" $ Core.termLiteral (Phantoms.var "lit"))
-    (Rewriting.foldOverTerm @@ order @@ collectLabelsFoldFn @@ Phantoms.list ([] :: [TTerm Literal]) @@ input))
+    (Rewriting.foldOverTerm @@ order @@ collectLabelsFoldFn @@ Phantoms.list ([] :: [TypedTerm Literal]) @@ input))
 
 -- | Fold operation: collect labels from pair terms
 -- \acc term -> acc ++ (case term of TermPair (TermLiteral s, _) -> [s]; _ -> [])
-collectLabelsFoldFn :: TTerm ([Literal] -> Term -> [Literal])
+collectLabelsFoldFn :: TypedTerm ([Literal] -> Term -> [Literal])
 collectLabelsFoldFn = Phantoms.lambda "acc" $ Phantoms.lambda "term" $
   Lists.concat (Phantoms.list [
     Phantoms.var "acc",
-    Phantoms.cases _Term (Phantoms.var "term") (Just (Phantoms.list ([] :: [TTerm Literal]))) [
+    Phantoms.cases _Term (Phantoms.var "term") (Just (Phantoms.list ([] :: [TypedTerm Literal]))) [
       _Term_pair ~>: Phantoms.lambda "p" $
-        Phantoms.cases _Term (Pairs.first (Phantoms.var "p")) (Just (Phantoms.list ([] :: [TTerm Literal]))) [
+        Phantoms.cases _Term (Pairs.first (Phantoms.var "p")) (Just (Phantoms.list ([] :: [TypedTerm Literal]))) [
           _Term_literal ~>: Phantoms.lambda "lit" $ Phantoms.list [Phantoms.var "lit"]]]])
 
 -- | Fold operation: collect list lengths
 -- \acc term -> acc ++ (case term of TermList elems -> [length elems]; _ -> [])
-collectListLengthsFoldFn :: TTerm ([Int] -> Term -> [Int])
+collectListLengthsFoldFn :: TypedTerm ([Int] -> Term -> [Int])
 collectListLengthsFoldFn = Phantoms.lambda "acc" $ Phantoms.lambda "term" $
   Lists.concat (Phantoms.list [
     Phantoms.var "acc",
-    Phantoms.cases _Term (Phantoms.var "term") (Just (Phantoms.list ([] :: [TTerm Int]))) [
+    Phantoms.cases _Term (Phantoms.var "term") (Just (Phantoms.list ([] :: [TypedTerm Int]))) [
       _Term_list ~>: Phantoms.lambda "elems" $
         Phantoms.list [Lists.length (Phantoms.var "elems")]]])
 
@@ -101,7 +101,7 @@ foldOpSumInt32Literals :: FoldOp
 foldOpSumInt32Literals = FoldOpSumInt32
 
 -- | Universal foldOverTermCase: applies fold operation and shows result
-foldOverTermCase :: String -> TTerm Term -> TTerm TraversalOrder -> FoldOp -> TTerm Term -> TTerm TestCaseWithMetadata
+foldOverTermCase :: String -> TypedTerm Term -> TypedTerm TraversalOrder -> FoldOp -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 foldOverTermCase cname input order op output = universalCase cname
   (showTerm (applyFoldOp op order input))
   (showTerm output)
@@ -110,16 +110,16 @@ foldOverTermCase cname input order op output = universalCase cname
 data FoldOp = FoldOpSumInt32 | FoldOpCollectListLengths | FoldOpCollectLabels
 
 -- Helper for single-binding let
-letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term
+letExpr :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm Term
 letExpr varName value body = lets [(nm varName, value)] body
 
 -- Helper to build names
-nm :: String -> TTerm Name
+nm :: String -> TypedTerm Name
 nm s = Core.name $ Phantoms.string s
 
 -- | The "replaceFooWithBar" rewriter function for rewriteTerm tests
 -- \recurse term -> if term == literal "foo" then literal "bar" else recurse term
-replaceFooWithBarFn :: TTerm ((Term -> Term) -> Term -> Term)
+replaceFooWithBarFn :: TypedTerm ((Term -> Term) -> Term -> Term)
 replaceFooWithBarFn = Phantoms.lambda "recurse" $ Phantoms.lambda "term" $
   Logic.ifElse
     (Equality.equal (Phantoms.var "term") (tStr "foo"))
@@ -128,7 +128,7 @@ replaceFooWithBarFn = Phantoms.lambda "recurse" $ Phantoms.lambda "term" $
 
 -- | The "replaceStringWithInt32" rewriter function for rewriteType tests
 -- \recurse typ -> if typ == TypeLiteral LiteralTypeString then TypeLiteral (LiteralTypeInteger IntegerTypeInt32) else recurse typ
-replaceStringWithInt32Fn :: TTerm ((Type -> Type) -> Type -> Type)
+replaceStringWithInt32Fn :: TypedTerm ((Type -> Type) -> Type -> Type)
 replaceStringWithInt32Fn = Phantoms.lambda "recurse" $ Phantoms.lambda "typ" $
   Logic.ifElse
     (Equality.equal (Phantoms.var "typ") (Core.typeLiteral Core.literalTypeString))
@@ -136,28 +136,28 @@ replaceStringWithInt32Fn = Phantoms.lambda "recurse" $ Phantoms.lambda "typ" $
     (Phantoms.var "recurse" @@ Phantoms.var "typ")
 
 -- | Universal rewriteTerm test case: applies replaceFooWithBar rewriter
-rewriteTermCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+rewriteTermCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 rewriteTermCase cname input output = universalCase cname
   (showTerm (Rewriting.rewriteTerm @@ replaceFooWithBarFn @@ input))
   (showTerm output)
 
 -- | Universal rewriteType test case: applies replaceStringWithInt32 rewriter
-rewriteTypeCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
+rewriteTypeCase :: String -> TypedTerm Type -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
 rewriteTypeCase cname input output = universalCase cname
   (showType (Rewriting.rewriteType @@ replaceStringWithInt32Fn @@ input))
   (showType output)
 
 -- | Show a term as a string using ShowCore.term
-showTerm :: TTerm Term -> TTerm String
+showTerm :: TypedTerm Term -> TypedTerm String
 showTerm t = ShowCore.term @@ t
 
 -- | Show a type as a string using ShowCore.type_
-showType :: TTerm Type -> TTerm String
+showType :: TypedTerm Type -> TypedTerm String
 showType t = ShowCore.type_ @@ t
 
 -- | Fold operation: sum int32 literals
 -- \acc term -> acc + (case term of TermLiteral (LiteralInteger (IntegerValueInt32 n)) -> n; _ -> 0)
-sumInt32LiteralsFoldFn :: TTerm (Int -> Term -> Int)
+sumInt32LiteralsFoldFn :: TypedTerm (Int -> Term -> Int)
 sumInt32LiteralsFoldFn = Phantoms.lambda "acc" $ Phantoms.lambda "term" $
   Math.add (Phantoms.var "acc") $
     Phantoms.cases _Term (Phantoms.var "term") (Just (Phantoms.int32 0)) [
@@ -169,12 +169,12 @@ sumInt32LiteralsFoldFn = Phantoms.lambda "acc" $ Phantoms.lambda "term" $
 
 -- | Core DSL Term-level constructors for building Term-typed values
 -- These produce values of Hydra type Term (not String, Int, etc.)
-tStr :: String -> TTerm Term
+tStr :: String -> TypedTerm Term
 tStr s = Core.termLiteral (Core.literalString (Phantoms.string s))
 
 -- Helper for multi-binding let
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for core rewrite/fold combinators" $
     supergroup "rewriting" [
@@ -183,19 +183,19 @@ allTests = define "allTests" $
       rewriteTermGroup,
       rewriteAndFoldTermWithPathGroup]
 
-bar :: TTerm Term
+bar :: TypedTerm Term
 bar = string "bar"
 
-baz :: TTerm Term
+baz :: TypedTerm Term
 baz = string "baz"
 
 -- Helper to build an empty annotation map
-emptyAnnMap :: TTerm (M.Map Name Term)
+emptyAnnMap :: TypedTerm (M.Map Name Term)
 emptyAnnMap = Phantoms.map M.empty
 
 -- | Test cases for foldOverTerm
 -- Using predefined fold operations: collectLabels, sumInt32Literals, collectListLengths
-foldOverTermGroup :: TTerm TestGroup
+foldOverTermGroup :: TypedTerm TestGroup
 foldOverTermGroup = subgroup "foldOverTerm" [
     -- collectLabels tests (from checkFoldOverTerm in RewritingSpec.hs)
     -- Nodes are represented as pairs: (label, children)
@@ -244,17 +244,17 @@ foldOverTermGroup = subgroup "foldOverTerm" [
       (list [int32 2, int32 1, int32 2])]
 
 -- Helper for foo, bar, baz
-foo :: TTerm Term
+foo :: TypedTerm Term
 foo = string "foo"
 
 -- Helper to create labeled node (pair of label and list of children)
-labeledNode :: String -> [TTerm Term] -> TTerm Term
+labeledNode :: String -> [TypedTerm Term] -> TypedTerm Term
 labeledNode label children = pair (string label) (list children)
 
 -- | Test cases for rewriteAndFoldTermWithPath
 -- These tests verify that the path-tracking rewrite function correctly tracks accessor paths
 -- and properly folds values while rewriting terms
-rewriteAndFoldTermWithPathGroup :: TTerm TestGroup
+rewriteAndFoldTermWithPathGroup :: TypedTerm TestGroup
 rewriteAndFoldTermWithPathGroup = subgroup "rewriteAndFoldTermWithPath" [
     -- The function is used by hoistSubtermsIntoLet, so we test that behavior
     -- Note: These test the path-tracking through the fold accumulator behavior
@@ -347,7 +347,7 @@ rewriteAndFoldTermWithPathGroup = subgroup "rewriteAndFoldTermWithPath" [
 
 -- | Test cases for rewriteTerm
 -- Using predefined term rewriter: replaceFooWithBar
-rewriteTermGroup :: TTerm TestGroup
+rewriteTermGroup :: TypedTerm TestGroup
 rewriteTermGroup = subgroup "rewriteTerm" [
     -- Simple terms
     rewriteTermCase "string literal foo replaced with bar"
@@ -484,7 +484,7 @@ rewriteTermGroup = subgroup "rewriteTerm" [
 
 -- | Test cases for rewriteType
 -- Using predefined type rewriter: replaceStringWithInt32
-rewriteTypeGroup :: TTerm TestGroup
+rewriteTypeGroup :: TypedTerm TestGroup
 rewriteTypeGroup = subgroup "rewriteType" [
     rewriteTypeCase "String type in left side of either is replaced"
       (T.either_ T.string T.int32)

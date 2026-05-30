@@ -33,10 +33,10 @@ module_ = Module {
     definitions = [
       Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for hydra.lib.lists primitives" $
     supergroup "hydra.lib.lists primitives" [
@@ -433,31 +433,31 @@ allTests = define "allTests" $
           testStr name op lst1 lst2 result = primCase name _lists_zipWith [op, stringList lst1, stringList lst2] (stringList result)
 
 -- Helper functions for building test terms
-intList :: [Int] -> TTerm Term
+intList :: [Int] -> TypedTerm Term
 intList els = list (int32 <$> els)
 
-intListList :: [[Int]] -> TTerm Term
+intListList :: [[Int]] -> TypedTerm Term
 intListList lists = list (intList <$> lists)
 
-optionalInt32 :: Maybe Int -> TTerm Term
+optionalInt32 :: Maybe Int -> TypedTerm Term
 optionalInt32 Nothing = Core.termMaybe nothing
 optionalInt32 (Just x) = Core.termMaybe  $ just (int32 x)
 
-optionalIntAndIntList :: Maybe (Int, [Int]) -> TTerm Term
+optionalIntAndIntList :: Maybe (Int, [Int]) -> TypedTerm Term
 optionalIntAndIntList Nothing = Core.termMaybe nothing
 optionalIntAndIntList (Just (x, xs)) = Core.termMaybe $ just (pair (int32 x) (intList xs))
 
-optionalIntList :: Maybe [Int] -> TTerm Term
+optionalIntList :: Maybe [Int] -> TypedTerm Term
 optionalIntList Nothing = Core.termMaybe nothing
 optionalIntList (Just xs) = Core.termMaybe $ just (intList xs)
 
-optionalString :: Maybe String -> TTerm Term
+optionalString :: Maybe String -> TypedTerm Term
 optionalString Nothing = Core.termMaybe nothing
 optionalString (Just x) = Core.termMaybe  $ just (string x)
 
-optionalStringList :: Maybe [String] -> TTerm Term
+optionalStringList :: Maybe [String] -> TypedTerm Term
 optionalStringList Nothing = Core.termMaybe nothing
 optionalStringList (Just xs) = Core.termMaybe $ just (stringList xs)
 
-stringList :: [String] -> TTerm Term
+stringList :: [String] -> TypedTerm Term
 stringList els = list (string <$> els)

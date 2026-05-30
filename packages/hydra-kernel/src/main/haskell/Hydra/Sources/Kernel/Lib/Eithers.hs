@@ -15,7 +15,7 @@ import qualified Data.Set                    as S
 ns :: ModuleName
 ns = ModuleName "hydra.lib.eithers"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -185,7 +185,7 @@ rightsSig = sig $ TypeScheme [Name "x", Name "y"]
 -- Default implementations (for the easy ones).
 
 -- bimap f g e = either (\x -> Left (f x)) (\y -> Right (g y)) e
-bimap_ :: TTermDefinition ((a -> c) -> (b -> d) -> Either a b -> Either c d)
+bimap_ :: TypedTermDefinition ((a -> c) -> (b -> d) -> Either a b -> Either c d)
 bimap_ = define "bimap" $
   doc "Map over both sides of an Either, defined in terms of either." $
   "f" ~> "g" ~> "e" ~>
@@ -195,7 +195,7 @@ bimap_ = define "bimap" $
       (var "e")
 
 -- bind e f = either Left f e
-bind_ :: TTermDefinition (Either a b -> (b -> Either a c) -> Either a c)
+bind_ :: TypedTermDefinition (Either a b -> (b -> Either a c) -> Either a c)
 bind_ = define "bind" $
   doc "Monadic bind for Either, defined in terms of either." $
   "e" ~> "f" ~>
@@ -205,33 +205,33 @@ bind_ = define "bind" $
       (var "e")
 
 -- fromLeft def e = either (\x -> x) (\_ -> def) e
-fromLeft_ :: TTermDefinition (a -> Either a b -> a)
+fromLeft_ :: TypedTermDefinition (a -> Either a b -> a)
 fromLeft_ = define "fromLeft" $
   doc "Extract the Left value or return a default, defined in terms of either." $
   "def" ~> "e" ~>
     Eithers.either_ ("x" ~> var "x") ("_" ~> var "def") (var "e")
 
 -- fromRight def e = either (\_ -> def) (\x -> x) e
-fromRight_ :: TTermDefinition (b -> Either a b -> b)
+fromRight_ :: TypedTermDefinition (b -> Either a b -> b)
 fromRight_ = define "fromRight" $
   doc "Extract the Right value or return a default, defined in terms of either." $
   "def" ~> "e" ~>
     Eithers.either_ ("_" ~> var "def") ("x" ~> var "x") (var "e")
 
 -- isLeft e = either (\_ -> true) (\_ -> false) e
-isLeft_ :: TTermDefinition (Either a b -> Bool)
+isLeft_ :: TypedTermDefinition (Either a b -> Bool)
 isLeft_ = define "isLeft" $
   doc "Check whether an Either is a Left value, defined in terms of either." $
   "e" ~> Eithers.either_ ("_" ~> true) ("_" ~> false) (var "e")
 
 -- isRight e = either (\_ -> false) (\_ -> true) e
-isRight_ :: TTermDefinition (Either a b -> Bool)
+isRight_ :: TypedTermDefinition (Either a b -> Bool)
 isRight_ = define "isRight" $
   doc "Check whether an Either is a Right value, defined in terms of either." $
   "e" ~> Eithers.either_ ("_" ~> false) ("_" ~> true) (var "e")
 
 -- map f e = either Left (\x -> Right (f x)) e
-map_ :: TTermDefinition ((a -> b) -> Either c a -> Either c b)
+map_ :: TypedTermDefinition ((a -> b) -> Either c a -> Either c b)
 map_ = define "map" $
   doc "Map a function over the Right side, defined in terms of either." $
   "f" ~> "e" ~>

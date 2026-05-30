@@ -44,10 +44,10 @@ module_ = Module {
     definitions = [
         Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for JSON parsing" $
     supergroup "JSON parsing" [
@@ -59,10 +59,10 @@ allTests = define "allTests" $
       nestedGroup,
       whitespaceGroup]
 
-arraysGroup :: TTerm TestGroup
+arraysGroup :: TypedTerm TestGroup
 arraysGroup = subgroup "arrays" [
     -- Empty and single element
-    parserCase "empty array" "[]" (Json.valueArray $ Phantoms.list ([] :: [TTerm Value])),
+    parserCase "empty array" "[]" (Json.valueArray $ Phantoms.list ([] :: [TypedTerm Value])),
     parserCase "single element" "[1]" (Json.valueArray $ Phantoms.list [Json.valueNumber $ Phantoms.decimal 1.0]),
 
     -- Multiple elements
@@ -86,7 +86,7 @@ arraysGroup = subgroup "arrays" [
 -- We do not test "more digits than Double" cases here because several Hydra hosts emit
 -- decimal literals as host-native Double, losing precision before the test can exercise
 -- the parser. The decimal type coder (separate test) preserves full precision end-to-end.
-decimalPrecisionGroup :: TTerm TestGroup
+decimalPrecisionGroup :: TypedTerm TestGroup
 decimalPrecisionGroup = subgroup "decimal precision" [
     parserCase "tiny exponent"
       "1e-20"
@@ -95,7 +95,7 @@ decimalPrecisionGroup = subgroup "decimal precision" [
       "1e20"
       (Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 20))]
 
-nestedGroup :: TTerm TestGroup
+nestedGroup :: TypedTerm TestGroup
 nestedGroup = subgroup "nested structures" [
     -- Array of arrays
     parserCase "nested arrays" "[[1, 2], [3, 4]]" (Json.valueArray $ Phantoms.list [
@@ -118,7 +118,7 @@ nestedGroup = subgroup "nested structures" [
         (Phantoms.string "user", Json.valueObject $ Phantoms.map $ M.fromList [
             (Phantoms.string "name", Json.valueString $ Phantoms.string "Bob")])])]
 
-objectsGroup :: TTerm TestGroup
+objectsGroup :: TypedTerm TestGroup
 objectsGroup = subgroup "objects" [
     -- Empty and single key
     parserCase "empty object" "{}" (Json.valueObject $ Phantoms.map M.empty),
@@ -137,12 +137,12 @@ objectsGroup = subgroup "objects" [
         (Phantoms.string "active", Json.valueBoolean $ Phantoms.boolean True)])]
 
 -- Helper for creating successful JSON parser test cases as UniversalTestCase
-parserCase :: String -> String -> TTerm Value -> TTerm TestCaseWithMetadata
+parserCase :: String -> String -> TypedTerm Value -> TypedTerm TestCaseWithMetadata
 parserCase name input expectedValue = universalCase name
   (showParseResult (Parsers.runParser @@ JsonParser.jsonValue @@ Phantoms.string input))
   (showParseResult (Parsing.parseResultSuccess $ Parsing.parseSuccess expectedValue (Phantoms.string "")))
 
-primitivesGroup :: TTerm TestGroup
+primitivesGroup :: TypedTerm TestGroup
 primitivesGroup = subgroup "primitives" [
     -- Null
     parserCase "null" "null" Json.valueNull,
@@ -168,7 +168,7 @@ primitivesGroup = subgroup "primitives" [
 
 -- Show a ParseResult Value as a string for universal test comparison.
 -- Uses Phantoms.cases to pattern-match the ParseResult union.
-showParseResult :: TTerm (ParseResult Value) -> TTerm String
+showParseResult :: TypedTerm (ParseResult Value) -> TypedTerm String
 showParseResult pr = Phantoms.cases _ParseResult pr Nothing [
     _ParseResult_success Phantoms.>>: Phantoms.lambda "ps" (Strings.cat2
       (Phantoms.string "success(")
@@ -180,7 +180,7 @@ showParseResult pr = Phantoms.cases _ParseResult pr Nothing [
       (Phantoms.string "failure(")
       (Strings.cat2 (Phantoms.string "parse error") (Phantoms.string ")")))]
 
-stringsGroup :: TTerm TestGroup
+stringsGroup :: TypedTerm TestGroup
 stringsGroup = subgroup "strings" [
     -- Basic strings
     parserCase "empty string" "\"\"" (Json.valueString $ Phantoms.string ""),
@@ -195,7 +195,7 @@ stringsGroup = subgroup "strings" [
     parserCase "escaped tab" "\"col1\\tcol2\"" (Json.valueString $ Phantoms.string "col1\tcol2"),
     parserCase "escaped forward slash" "\"a\\/b\"" (Json.valueString $ Phantoms.string "a/b")]
 
-whitespaceGroup :: TTerm TestGroup
+whitespaceGroup :: TypedTerm TestGroup
 whitespaceGroup = subgroup "whitespace handling" [
     -- Trailing whitespace (leading whitespace is not stripped by the parser)
     parserCase "trailing whitespace" "null  " Json.valueNull,

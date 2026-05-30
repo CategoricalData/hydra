@@ -47,7 +47,7 @@ import qualified Hydra.Coq.Syntax as C
 import qualified Hydra.Coq.Environment as CE
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 ns :: ModuleName
@@ -97,7 +97,7 @@ module_ = Module {
 -- Axiom-only modules bypass term encoding entirely to avoid Coq
 -- type-checking memory blowups on heavily polymorphic modules like
 -- `hydra.hoisting` and `hydra.inference`.
-buildAxiomOnlyContent :: TTermDefinition (CE.CoqEnvironment
+buildAxiomOnlyContent :: TypedTermDefinition (CE.CoqEnvironment
                                        -> String
                                        -> String
                                        -> [(String, Type)]
@@ -118,7 +118,7 @@ buildAxiomOnlyContent = define "buildAxiomOnlyContent" $
       "tvars" <~ (Pairs.first $ Pairs.second $ Pairs.second $ var "td") $
       "mty" <~ (Pairs.second $ Pairs.second $ Pairs.second $ var "td") $
       Maybes.maybe
-        (Phantoms.nothing :: TTerm (Maybe C.Sentence))
+        (Phantoms.nothing :: TypedTerm (Maybe C.Sentence))
         ("schemeTy" ~>
           -- Re-wrap the TypeScheme's forall binders around the body type so
           -- the emitted axiom has well-scoped type variables:
@@ -147,7 +147,7 @@ buildAxiomOnlyContent = define "buildAxiomOnlyContent" $
 -- produces sentences + per-mutual-group text, and joins the pieces with
 -- the standard header and discovered dependency imports. Returns the file
 -- content keyed by its relative output path.
-buildFullModule :: TTermDefinition (CE.CoqEnvironment
+buildFullModule :: TypedTermDefinition (CE.CoqEnvironment
                                   -> M.Map (String, String) String
                                   -> Module
                                   -> String
@@ -273,7 +273,7 @@ buildFullModule = define "buildFullModule" $
           (Strings.cat (list [var "nsC", string "."])) @@
           (var "other")))
       (var "otherList")) $
-  "referencedNs" <~ ((Lists.nub :: TTerm [String] -> TTerm [String]) $ Lists.filter
+  "referencedNs" <~ ((Lists.nub :: TypedTerm [String] -> TypedTerm [String]) $ Lists.filter
     ("nsC" ~> Logic.and
       (Logic.not (Equality.equal (var "nsC") (var "nsStr")))
       (Logic.not (var "hasStrictSuffix" @@ var "nsC" @@ (Sets.toList $ var "nsSet"))))
@@ -300,16 +300,16 @@ buildFullModule = define "buildFullModule" $
 -- dependency namespace strings. Returns an empty list when the input is
 -- empty, otherwise a single `Sentence` containing all deps under one
 -- `RequireImport` node with the comment "Module dependencies".
-dependencyImports :: TTermDefinition ([String] -> [C.Sentence])
+dependencyImports :: TypedTermDefinition ([String] -> [C.Sentence])
 dependencyImports = define "dependencyImports" $
   doc "Emit a Require Import sentence for the given dependency namespaces; empty list yields no sentence" $
   lambda "deps" $
     Logic.ifElse (Lists.null $ var "deps")
-      (list ([] :: [TTerm C.Sentence]))
+      (list ([] :: [TypedTerm C.Sentence]))
       (list [CSyntax.sentence
         (Phantoms.just $ CSyntax.comment (string "Module dependencies"))
         (CSyntax.sentenceContentRequireImport $ CSyntax.requireImport
-          (Phantoms.nothing :: TTerm (Maybe C.Qualid))
+          (Phantoms.nothing :: TypedTerm (Maybe C.Qualid))
           (boolean True)
           (Phantoms.just CSyntax.importQualificationImport)
           (Lists.map (lambda "d" $ CoqCoderSource.coqQualid @@ var "d") (var "deps")))])
@@ -318,7 +318,7 @@ dependencyImports = define "dependencyImports" $
 -- definitions, bundling them via `hydra_fix` over a nested product type.
 -- Each (name, body, typeVars, mType) entry is fed into the bundle; the
 -- surrounding `letBlock` binds each name to its corresponding projection.
-encodeMutualGroupText :: TTermDefinition (CE.CoqEnvironment -> [(String, (Term, ([Name], Maybe Type)))] -> String)
+encodeMutualGroupText :: TypedTermDefinition (CE.CoqEnvironment -> [(String, (Term, ([Name], Maybe Type)))] -> String)
 encodeMutualGroupText = define "encodeMutualGroupText" $
   doc "Render a mutually recursive term group as a hydra_fix bundle plus projection Definitions" $
   lambdas ["env", "group"] $
@@ -357,7 +357,7 @@ encodeMutualGroupText = define "encodeMutualGroupText" $
       pair (var "name") (pair (var "typeText") (var "bodyText")))
     (var "group")) $
   -- Collect type variable binders across the whole group.
-  "allTypeVarNames" <~ ((Lists.nub :: TTerm [String] -> TTerm [String]) $ Lists.concat $ Lists.map
+  "allTypeVarNames" <~ ((Lists.nub :: TypedTerm [String] -> TypedTerm [String]) $ Lists.concat $ Lists.map
     ("td" ~>
       "rest1" <~ Pairs.second (var "td") $
       "b" <~ Pairs.first (var "rest1") $
@@ -447,7 +447,7 @@ encodeMutualGroupText = define "encodeMutualGroupText" $
 -- The body is first passed through `reorderLetBindings` and
 -- `eraseUnboundTypeVarDomains` so that only scheme-bound type variables
 -- remain as Coq definition parameters.
-encodeTermGroupSingleton :: TTermDefinition (CE.CoqEnvironment -> (String, (Term, ([Name], Maybe Type))) -> [C.Sentence])
+encodeTermGroupSingleton :: TypedTermDefinition (CE.CoqEnvironment -> (String, (Term, ([Name], Maybe Type))) -> [C.Sentence])
 encodeTermGroupSingleton = define "encodeTermGroupSingleton" $
   doc "Encode a non-cyclic term definition as a Coq Definition sentence" $
   lambdas ["env", "td"] $
@@ -464,16 +464,16 @@ encodeTermGroupSingleton = define "encodeTermGroupSingleton" $
   "binders" <~ (mkTypeBinders @@ var "body2" @@ var "typeVars") $
   "typeBinders" <~ Pairs.second (var "binders") $
   "returnType" <~ Maybes.maybe
-    (Phantoms.nothing :: TTerm (Maybe C.Type))
+    (Phantoms.nothing :: TypedTerm (Maybe C.Type))
     ("ty" ~>
       "ep" <~ (CoqUtils.extractTypeParams @@ var "ty") $
       "bodyTy" <~ Pairs.second (var "ep") $
       Phantoms.just $ CSyntax.type_ $ CoqCoderSource.encodeType @@ var "env" @@ var "bodyTy")
     (var "mType") $
   list [CSyntax.sentence
-    (Phantoms.nothing :: TTerm (Maybe C.Comment))
+    (Phantoms.nothing :: TypedTerm (Maybe C.Comment))
     (CSyntax.sentenceContentDefinition $ CSyntax.definition
-      (Phantoms.nothing :: TTerm (Maybe C.Locality))
+      (Phantoms.nothing :: TypedTerm (Maybe C.Locality))
       (CoqCoderSource.coqIdent @@ var "name")
       (var "typeBinders")
       (var "returnType")
@@ -484,7 +484,7 @@ encodeTermGroupSingleton = define "encodeTermGroupSingleton" $
 -- type parameter implicit on `Build_T`, on each field accessor, and on
 -- each union constructor. Returns the Coq source fragment (or empty
 -- string if there are no parameterized types), leading with a newline.
-generateArgumentsDecls :: TTermDefinition ([(String, Type)] -> String)
+generateArgumentsDecls :: TypedTermDefinition ([(String, Type)] -> String)
 generateArgumentsDecls = define "generateArgumentsDecls" $
   doc "Produce Arguments {p} declarations for every parameterized type's constructor and field accessors" $
   "typeDefs" ~>
@@ -499,7 +499,7 @@ generateArgumentsDecls = define "generateArgumentsDecls" $
     "params" <~ (Pairs.first $ Pairs.second $ var "triple") $
     "bodyTy" <~ (Pairs.second $ Pairs.second $ var "triple") $
     "impAll" <~ (var "implicitAll" @@ var "params") $
-    cases _Type (var "bodyTy") (Just $ list ([] :: [TTerm String])) [
+    cases _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm String])) [
       _Type_union>>: "fields" ~> Lists.map
         ("ft" ~> Strings.cat (list [
           string "Arguments ",
@@ -512,7 +512,7 @@ generateArgumentsDecls = define "generateArgumentsDecls" $
         (var "fields"),
       _Type_record>>: "fields" ~>
         Logic.ifElse (Lists.null $ var "fields")
-          (list ([] :: [TTerm String]))
+          (list ([] :: [TypedTerm String]))
           (lets [
             "constrLine">: Strings.cat (list [
               string "Arguments Build_",
@@ -541,7 +541,7 @@ generateArgumentsDecls = define "generateArgumentsDecls" $
       "params" <~ (Pairs.first $ var "ep") $
       "bodyTy" <~ (Pairs.second $ var "ep") $
       Logic.ifElse (Lists.null $ var "params")
-        (Phantoms.nothing :: TTerm (Maybe (String, ([String], Type))))
+        (Phantoms.nothing :: TypedTerm (Maybe (String, ([String], Type))))
         (Phantoms.just $ pair (var "name") (pair (var "params") (var "bodyTy"))))
     (var "typeDefs")) $
   "allLines" <~ (Lists.concat $ Lists.map (var "linesFor") (var "triples")) $
@@ -556,7 +556,7 @@ generateArgumentsDecls = define "generateArgumentsDecls" $
 -- singletons delegate to `generateTypeSentence`. Cyclic groups produce a
 -- single `Inductive ... with ...` block plus accessor Definitions for any
 -- record members; positivity-violating fields are replaced with `unit`.
-generateTypeGroup :: TTermDefinition (CE.CoqEnvironment -> (Bool, [(String, Type)]) -> [C.Sentence])
+generateTypeGroup :: TypedTermDefinition (CE.CoqEnvironment -> (Bool, [(String, Type)]) -> [C.Sentence])
 generateTypeGroup = define "generateTypeGroup" $
   doc "Emit Coq sentences for a type-definition SCC group, handling mutual recursion and positivity" $
   lambdas ["env", "group"] $
@@ -565,7 +565,7 @@ generateTypeGroup = define "generateTypeGroup" $
   Logic.ifElse
     (Logic.and (Logic.not $ var "cyclic") (Equality.equal (Lists.length $ var "defs") (int32 1)))
     -- Non-cyclic singleton: delegate.
-    (Maybes.fromMaybe (list ([] :: [TTerm C.Sentence])) (Maybes.map
+    (Maybes.fromMaybe (list ([] :: [TypedTerm C.Sentence])) (Maybes.map
       (lambda "d" $
         generateTypeSentence @@ var "env" @@ (Pairs.first $ var "d") @@ (Pairs.second $ var "d"))
       (Lists.maybeHead $ var "defs")))
@@ -590,11 +590,11 @@ generateTypeGroup = define "generateTypeGroup" $
         (lambda "d" $ makeAccessorDefs @@ var "d")
         (var "sanitizedGroup"),
       "inductiveSent">: Logic.ifElse (Lists.null $ var "bodies")
-        (list ([] :: [TTerm C.Sentence]))
+        (list ([] :: [TypedTerm C.Sentence]))
         (list [CSyntax.sentence
-          (Phantoms.nothing :: TTerm (Maybe C.Comment))
+          (Phantoms.nothing :: TypedTerm (Maybe C.Comment))
           (CSyntax.sentenceContentInductive $ CSyntax.inductiveDefinition
-            (Phantoms.nothing :: TTerm (Maybe C.Locality))
+            (Phantoms.nothing :: TypedTerm (Maybe C.Locality))
             (boolean False)
             (var "bodies"))])] $
       Lists.concat2 (var "inductiveSent") (var "accessors"))
@@ -603,7 +603,7 @@ generateTypeGroup = define "generateTypeGroup" $
 -- become Coq `Record`s with prefixed field names; unions become `Inductive`s;
 -- other types become `Definition` aliases. Returns a list of sentences
 -- so that future extensions can emit multiple related sentences at once.
-generateTypeSentence :: TTermDefinition (CE.CoqEnvironment -> String -> Type -> [C.Sentence])
+generateTypeSentence :: TypedTermDefinition (CE.CoqEnvironment -> String -> Type -> [C.Sentence])
 generateTypeSentence = define "generateTypeSentence" $
   doc "Generate the Coq sentence(s) for a non-cyclic type definition" $
   lambdas ["env", "name", "ty"] $
@@ -617,9 +617,9 @@ generateTypeSentence = define "generateTypeSentence" $
     (var "params") $
   "mkDef" <~ ("n" ~> "binders" ~> "body" ~>
     CSyntax.sentence
-      (Phantoms.nothing :: TTerm (Maybe C.Comment))
+      (Phantoms.nothing :: TypedTerm (Maybe C.Comment))
       (CSyntax.sentenceContentDefinition $ CSyntax.definition
-        (Phantoms.nothing :: TTerm (Maybe C.Locality))
+        (Phantoms.nothing :: TypedTerm (Maybe C.Locality))
         (CoqCoderSource.coqIdent @@ var "n")
         (var "binders")
         (Phantoms.just $ CSyntax.type_ $ CoqCoderSource.coqTermQualid @@ string "Type")
@@ -636,20 +636,20 @@ generateTypeSentence = define "generateTypeSentence" $
             (lambda "ft" $ makeConstructor @@ var "env" @@ var "name" @@ var "params" @@ var "ft")
             (var "fields")),
         "indDef">: CSyntax.inductiveDefinition
-          (Phantoms.nothing :: TTerm (Maybe C.Locality))
+          (Phantoms.nothing :: TypedTerm (Maybe C.Locality))
           (boolean False)
           (list [var "body"])] $
         list [CSyntax.sentence
-          (Phantoms.nothing :: TTerm (Maybe C.Comment))
+          (Phantoms.nothing :: TypedTerm (Maybe C.Comment))
           (CSyntax.sentenceContentInductive $ var "indDef")],
     _Type_record>>: "fields" ~>
       Logic.ifElse (Lists.null $ var "fields")
         (list [var "mkDef" @@ var "name" @@ var "paramBinders"
                 @@ (CoqCoderSource.coqTermQualid @@ string "unit")])
         (list [CSyntax.sentence
-          (Phantoms.nothing :: TTerm (Maybe C.Comment))
+          (Phantoms.nothing :: TypedTerm (Maybe C.Comment))
           (CSyntax.sentenceContentRecord $ CSyntax.recordDefinition
-            (Phantoms.nothing :: TTerm (Maybe C.Locality))
+            (Phantoms.nothing :: TypedTerm (Maybe C.Locality))
             (CoqCoderSource.coqIdent @@ var "name")
             (var "paramBinders")
             (Phantoms.just CSyntax.sortType)
@@ -671,7 +671,7 @@ generateTypeSentence = define "generateTypeSentence" $
 -- | Build the global set of local names that appear in more than one
 -- module. References to such names must remain fully qualified so that
 -- Coq's module system resolves the right definition.
-globalAmbiguousNames :: TTermDefinition ([Module] -> S.Set String)
+globalAmbiguousNames :: TypedTermDefinition ([Module] -> S.Set String)
 globalAmbiguousNames = define "globalAmbiguousNames" $
   doc "Collect local names that occur in more than one module's type or term definitions" $
   lambda "modules" $ lets [
@@ -679,7 +679,7 @@ globalAmbiguousNames = define "globalAmbiguousNames" $
       ("m" ~> lets [
         "nsStr">: Packaging.unModuleName (Packaging.moduleName $ var "m"),
         "fromDef">: lambda "def_" $ cases _Definition (var "def_")
-          (Just (Phantoms.nothing :: TTerm (Maybe (String, String)))) [
+          (Just (Phantoms.nothing :: TypedTerm (Maybe (String, String)))) [
             _Definition_type>>: "td" ~> Phantoms.just $ pair
               (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.typeDefinitionName $ var "td")))
               (var "nsStr"),
@@ -694,28 +694,28 @@ globalAmbiguousNames = define "globalAmbiguousNames" $
         "n" <~ Pairs.first (var "np") $
         "nsVal" <~ Pairs.second (var "np") $
         "existing" <~ Maybes.fromMaybe
-          (Sets.empty :: TTerm (S.Set String))
+          (Sets.empty :: TypedTerm (S.Set String))
           (Maps.lookup (var "n") (var "acc")) $
         Maps.insert (var "n") (Sets.insert (var "nsVal") (var "existing")) (var "acc"))
-      (Maps.empty :: TTerm (M.Map String (S.Set String)))
+      (Maps.empty :: TypedTerm (M.Map String (S.Set String)))
       (var "allNames")] $
     -- A name is ambiguous iff it appears in >= 2 distinct namespaces.
     Sets.fromList $ Maybes.cat $ Lists.map
       ("entry" ~> Logic.ifElse
         (Equality.gte (Lists.length $ Sets.toList $ Pairs.second $ var "entry") (int32 2))
         (Phantoms.just $ Pairs.first $ var "entry")
-        (Phantoms.nothing :: TTerm (Maybe String)))
+        (Phantoms.nothing :: TypedTerm (Maybe String)))
       (Maps.toList $ var "nameToNs")
 
 -- | Build the global map from each union-type name to its constructor count.
 -- Used by the encoder's match-exhaustiveness decision.
-globalConstructorCounts :: TTermDefinition ([Module] -> M.Map String I.Int32)
+globalConstructorCounts :: TypedTermDefinition ([Module] -> M.Map String I.Int32)
 globalConstructorCounts = define "globalConstructorCounts" $
   doc "Collect all type definitions from every module and run buildConstructorCounts over them" $
   lambda "modules" $ lets [
     "allTypeDefs">: Lists.concat $ Lists.map
       ("m" ~> Maybes.cat $ Lists.map
-        ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TTerm (Maybe (String, Type)))) [
+        ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TypedTerm (Maybe (String, Type)))) [
           _Definition_type>>: "td" ~> Phantoms.just $ pair
             (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.typeDefinitionName $ var "td")))
             (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td")])
@@ -725,7 +725,7 @@ globalConstructorCounts = define "globalConstructorCounts" $
 
 -- | Build the global (qualifiedTypeName, rawFieldName) -> prefixedFieldName
 -- map across all modules in the kernel universe.
-globalFieldMapping :: TTermDefinition ([Module] -> M.Map (String, String) String)
+globalFieldMapping :: TypedTermDefinition ([Module] -> M.Map (String, String) String)
 globalFieldMapping = define "globalFieldMapping" $
   doc "Delegate to CoqUtils.buildFieldMapping across all supplied modules" $
   lambda "modules" $ CoqUtils.buildFieldMapping @@ var "modules"
@@ -734,14 +734,14 @@ globalFieldMapping = define "globalFieldMapping" $
 -- module. Accessors listed here came from record fields that were replaced
 -- with `unit` to satisfy Coq's strict positivity constraint. The encoder
 -- replaces their call sites with `hydra_unreachable`.
-globalSanitizedAccessors :: TTermDefinition ([Module] -> S.Set String)
+globalSanitizedAccessors :: TypedTermDefinition ([Module] -> S.Set String)
 globalSanitizedAccessors = define "globalSanitizedAccessors" $
   doc "Collect sanitized accessor names by SCC-sorting every module's type defs and folding collectSanitizedAccessors" $
   lambda "modules" $ lets [
     "allTypeGroups">: Lists.concat $ Lists.map
       ("m" ~> lets [
         "typeDefs">: Maybes.cat $ Lists.map
-          ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TTerm (Maybe (String, Type)))) [
+          ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TypedTerm (Maybe (String, Type)))) [
             _Definition_type>>: "td" ~> Phantoms.just $ pair
               (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.typeDefinitionName $ var "td")))
               (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td")])
@@ -753,7 +753,7 @@ globalSanitizedAccessors = define "globalSanitizedAccessors" $
 -- | Emit the "Arguments name {v1} {v2} ...\n" line for a definition with
 -- implicit type variable binders. Returns empty string when there are no
 -- type variables.
-implicitArgsLine :: TTermDefinition (String -> [String] -> String)
+implicitArgsLine :: TypedTermDefinition (String -> [String] -> String)
 implicitArgsLine = define "implicitArgsLine" $
   doc "Emit an Arguments line marking every type parameter of a definition as implicit" $
   lambdas ["name", "typeVarNames"] $
@@ -772,7 +772,7 @@ implicitArgsLine = define "implicitArgsLine" $
 -- Non-record types produce an empty list. Used inside mutual inductive
 -- groups where records can't use `Record` syntax, so explicit accessors
 -- are generated as separate Definitions.
-makeAccessorDefs :: TTermDefinition ((String, Type) -> [C.Sentence])
+makeAccessorDefs :: TypedTermDefinition ((String, Type) -> [C.Sentence])
 makeAccessorDefs = define "makeAccessorDefs" $
   doc "Build one Definition per record field, pattern-matching on Build_T" $
   lambda "nt" $
@@ -780,10 +780,10 @@ makeAccessorDefs = define "makeAccessorDefs" $
   "ty" <~ (Pairs.second $ var "nt") $
   "extracted" <~ (CoqUtils.extractTypeParams @@ var "ty") $
   "bodyTy" <~ (Pairs.second $ var "extracted") $
-  cases _Type (var "bodyTy") (Just $ list ([] :: [TTerm C.Sentence])) [
+  cases _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm C.Sentence])) [
     _Type_record>>: "fields" ~>
       Logic.ifElse (Lists.null $ var "fields")
-        (list ([] :: [TTerm C.Sentence]))
+        (list ([] :: [TypedTerm C.Sentence]))
         (lets [
           "nFields">: Lists.length $ var "fields",
           "fieldVars">: Lists.map
@@ -794,7 +794,7 @@ makeAccessorDefs = define "makeAccessorDefs" $
             (Lists.map
               (lambda "v" $ CSyntax.pattern1
                 (CSyntax.pattern0Qualid $ CoqCoderSource.coqQualid @@ var "v")
-                (Phantoms.nothing :: TTerm (Maybe C.ScopeKey)))
+                (Phantoms.nothing :: TypedTerm (Maybe C.ScopeKey)))
               (var "fieldVars")),
           "indexed">: Lists.zip
             (Math.range (int32 0) (Math.sub (var "nFields") (int32 1)))
@@ -809,7 +809,7 @@ makeAccessorDefs = define "makeAccessorDefs" $
 
 -- | Build one Coq constructor for a union field: a curried arrow of its
 -- field types (just the return type if the field carries `unit`).
-makeConstructor :: TTermDefinition (CE.CoqEnvironment -> String -> [String] -> FieldType -> C.Constructor)
+makeConstructor :: TypedTermDefinition (CE.CoqEnvironment -> String -> [String] -> FieldType -> C.Constructor)
 makeConstructor = define "makeConstructor" $
   doc "Build a Coq Constructor from a union field (prepended with the type name and capitalized field name)" $
   lambdas ["env", "typeName", "params", "ft"] $
@@ -820,14 +820,14 @@ makeConstructor = define "makeConstructor" $
   "returnType" <~ (makeReturnType @@ var "typeName" @@ var "params") $
   CSyntax.constructor
     (CoqCoderSource.coqIdent @@ var "constrName")
-    (list ([] :: [TTerm C.Binder]))
+    (list ([] :: [TypedTerm C.Binder]))
     (Phantoms.just $ CSyntax.type_ $ CoqCoderSource.coqArrow @@ var "argType" @@ var "returnType")
 
 -- | Build an Inductive body for a type in a mutual group: either a
 -- sum-type (`TypeUnion`) with one Coq Constructor per field, or a product
 -- (`TypeRecord`) with a single `Build_T` constructor whose arrow chain
 -- threads the field types to the return type.
-makeInductiveBody :: TTermDefinition (CE.CoqEnvironment -> String -> Type -> [C.InductiveBody])
+makeInductiveBody :: TypedTermDefinition (CE.CoqEnvironment -> String -> Type -> [C.InductiveBody])
 makeInductiveBody = define "makeInductiveBody" $
   doc "Build an Inductive body for a union or record type in a mutual group" $
   lambdas ["env", "name", "ty"] $
@@ -839,7 +839,7 @@ makeInductiveBody = define "makeInductiveBody" $
       (list [CoqCoderSource.coqName @@ var "p"])
       (CSyntax.type_ $ CoqCoderSource.coqTermQualid @@ string "Type"))
     (var "params") $
-  cases _Type (var "bodyTy") (Just $ list ([] :: [TTerm C.InductiveBody])) [
+  cases _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm C.InductiveBody])) [
     _Type_union>>: "fields" ~>
       list [CSyntax.inductiveBody
         (CoqCoderSource.coqIdent @@ var "name")
@@ -856,7 +856,7 @@ makeInductiveBody = define "makeInductiveBody" $
           (Phantoms.just $ CSyntax.type_ $ CoqCoderSource.coqTermQualid @@ string "Type")
           (list [CSyntax.constructor
             (CoqCoderSource.coqIdent @@ Strings.cat (list [string "Build_", var "name"]))
-            (list ([] :: [TTerm C.Binder]))
+            (list ([] :: [TypedTerm C.Binder]))
             (Phantoms.just $ CSyntax.type_ $ makeReturnType @@ var "name" @@ var "params")])])
         -- Non-empty record: Build_T with an arrow-chain of field types.
         (lets [
@@ -873,13 +873,13 @@ makeInductiveBody = define "makeInductiveBody" $
             (Phantoms.just $ CSyntax.type_ $ CoqCoderSource.coqTermQualid @@ string "Type")
             (list [CSyntax.constructor
               (CoqCoderSource.coqIdent @@ Strings.cat (list [string "Build_", var "name"]))
-              (list ([] :: [TTerm C.Binder]))
+              (list ([] :: [TypedTerm C.Binder]))
               (Phantoms.just $ CSyntax.type_ $ var "constrType")])])]
 
 -- | Build one field-accessor Definition sentence for a field at the given
 -- index of a record inductive body. The accessor pattern-matches on the
 -- `Build_T` constructor and returns the indexed projection variable.
-makeOneAccessor :: TTermDefinition (String -> C.Pattern10_Qualid -> [String] -> I.Int32 -> FieldType -> C.Sentence)
+makeOneAccessor :: TypedTermDefinition (String -> C.Pattern10_Qualid -> [String] -> I.Int32 -> FieldType -> C.Sentence)
 makeOneAccessor = define "makeOneAccessor" $
   doc "Emit a Definition for a record field accessor, keyed by the Build_T pattern" $
   lambdas ["typeName", "constrPat", "fieldVars", "idx", "ft"] $
@@ -903,29 +903,29 @@ makeOneAccessor = define "makeOneAccessor" $
                 (CSyntax.term100Term10 $ CSyntax.term10OneTerm $
                   CSyntax.oneTermExplicit $ CSyntax.qualidAnnotated
                     (CoqCoderSource.coqQualid @@ string "r_")
-                    (Phantoms.nothing :: TTerm (Maybe C.UnivAnnot)))
-                (Phantoms.nothing :: TTerm (Maybe C.Name))
-                (Phantoms.nothing :: TTerm (Maybe C.Pattern))])
-              (Phantoms.nothing :: TTerm (Maybe C.Term100))
+                    (Phantoms.nothing :: TypedTerm (Maybe C.UnivAnnot)))
+                (Phantoms.nothing :: TypedTerm (Maybe C.Name))
+                (Phantoms.nothing :: TypedTerm (Maybe C.Pattern))])
+              (Phantoms.nothing :: TypedTerm (Maybe C.Term100))
               (boolean False)
               (list [CSyntax.equation
                 (list [list [inject C._Pattern C._Pattern_pattern (CSyntax.pattern10Qualiid $ var "constrPat")]])
                 (var "returnExpr")])) $
   CSyntax.sentence
-    (Phantoms.nothing :: TTerm (Maybe C.Comment))
+    (Phantoms.nothing :: TypedTerm (Maybe C.Comment))
     (CSyntax.sentenceContentDefinition $ CSyntax.definition
-      (Phantoms.nothing :: TTerm (Maybe C.Locality))
+      (Phantoms.nothing :: TypedTerm (Maybe C.Locality))
       (CoqCoderSource.coqIdent @@ var "prefixedFn")
       (list [CSyntax.binderType $ CSyntax.typeBinders
         (list [CoqCoderSource.coqName @@ string "r_"])
         (CSyntax.type_ $ CoqCoderSource.coqTermQualid @@ var "typeName")])
-      (Phantoms.nothing :: TTerm (Maybe C.Type))
+      (Phantoms.nothing :: TypedTerm (Maybe C.Type))
       (var "matchExpr"))
 
 -- | Build a nested Coq product-type textual expression from a list of type
 -- text fragments. `[t]` -> `"t"`; `[t1, t2, ...]` -> `"prod (t1) (prod (...))"`.
 -- Empty list defaults to `"unit"`.
-makeProdType :: TTermDefinition ([String] -> String)
+makeProdType :: TypedTermDefinition ([String] -> String)
 makeProdType = define "makeProdType" $
   doc "Emit nested `prod (T1) (prod ...)` textual type expression" $
   lambda "ts" $
@@ -944,7 +944,7 @@ makeProdType = define "makeProdType" $
 -- | Build a nested Coq pair-value textual expression.
 -- `[b]` -> `"b"`; multi -> `"(pair (b1) ((pair (b2) (...))))"`.
 -- Empty list defaults to `"tt"`.
-makeProdVal :: TTermDefinition ([String] -> String)
+makeProdVal :: TypedTermDefinition ([String] -> String)
 makeProdVal = define "makeProdVal" $
   doc "Emit a nested `(pair (b1) (...))` textual value expression" $
   lambda "bs" $
@@ -963,7 +963,7 @@ makeProdVal = define "makeProdVal" $
 -- | Build n projection expressions for a given bundle variable name.
 -- n = 0: []; n = 1: [var]; n > 1: for each index 0..n-1, emit
 -- `(fst v)`, `(fst (snd v))`, ..., `(snd (... (snd v)))`.
-makeProjectionExprs :: TTermDefinition (I.Int32 -> String -> [String])
+makeProjectionExprs :: TypedTermDefinition (I.Int32 -> String -> [String])
 makeProjectionExprs = define "makeProjectionExprs" $
   doc "Emit the n projection expressions extracting each member of a nested pair bundle" $
   lambdas ["n", "bvar"] $
@@ -979,7 +979,7 @@ makeProjectionExprs = define "makeProjectionExprs" $
         (var "snds" @@ var "i" @@ var "v")
         (Strings.cat (list [string "(fst ", var "snds" @@ var "i" @@ var "v", string ")"])))) $
     Logic.ifElse (Equality.lte (var "n") (int32 0))
-      (list ([] :: [TTerm String]))
+      (list ([] :: [TypedTerm String]))
       (Logic.ifElse (Equality.equal (var "n") (int32 1))
         (list [var "bvar"])
         (Lists.map
@@ -989,7 +989,7 @@ makeProjectionExprs = define "makeProjectionExprs" $
 -- | Build the return-type Coq term for a type definition with the given
 -- name and parameter-name list. Zero-param: just a qualified reference;
 -- otherwise apply the type to each parameter name.
-makeReturnType :: TTermDefinition (String -> [String] -> C.Term)
+makeReturnType :: TypedTermDefinition (String -> [String] -> C.Term)
 makeReturnType = define "makeReturnType" $
   doc "Return-type Coq term: `TypeName` or `TypeName p1 p2 ...`" $
   lambdas ["typeName", "params"] $
@@ -1000,7 +1000,7 @@ makeReturnType = define "makeReturnType" $
         @@ (Lists.map (lambda "p" $ CoqCoderSource.coqTermQualid @@ var "p") (var "params")))
 
 -- | Build a single Coq TypeBinder for a type parameter name.
-makeTypeBinder :: TTermDefinition (String -> C.Binder)
+makeTypeBinder :: TypedTermDefinition (String -> C.Binder)
 makeTypeBinder = define "makeTypeBinder" $
   doc "Build a Coq `(p : Type)` binder for a type parameter" $
   lambda "p" $ CSyntax.binderType $ CSyntax.typeBinders
@@ -1011,20 +1011,20 @@ makeTypeBinder = define "makeTypeBinder" $
 -- binders for a term definition: union of the explicit scheme variables
 -- with any `t0`/`t1`-like variables discovered in the body (only when the
 -- scheme already has type parameters — monomorphic functions never hoist).
-mkTypeBinders :: TTermDefinition (Term -> [Name] -> ([String], [C.Binder]))
+mkTypeBinders :: TypedTermDefinition (Term -> [Name] -> ([String], [C.Binder]))
 mkTypeBinders = define "mkTypeBinders" $
   doc "Collect type-variable names and the Coq binders needed for a term definition" $
   lambdas ["body", "typeVars"] $
   "schemeVarNames" <~ (Sets.fromList $ Lists.map
     ("n" ~> unwrap _Name @@ var "n") (var "typeVars")) $
   "innerTypeVars" <~ Logic.ifElse (Lists.null $ var "typeVars")
-    (Sets.empty :: TTerm (S.Set String))
+    (Sets.empty :: TypedTerm (S.Set String))
     (CoqUtils.collectFreeTypeVars @@ var "body") $
   "explicit" <~ (Lists.map ("n" ~> unwrap _Name @@ var "n") (var "typeVars")) $
   "extras" <~ (Lists.filter
     ("nm" ~> Logic.not (Sets.member (var "nm") (var "schemeVarNames")))
     (Sets.toList $ var "innerTypeVars")) $
-  "allTypeVarNames" <~ ((Lists.nub :: TTerm [String] -> TTerm [String])
+  "allTypeVarNames" <~ ((Lists.nub :: TypedTerm [String] -> TypedTerm [String])
     (Lists.concat2 (var "explicit") (var "extras"))) $
   "binders" <~ Lists.map (lambda "v" $ makeTypeBinder @@ var "v") (var "allTypeVarNames") $
   pair (var "allTypeVarNames") (var "binders")
@@ -1035,7 +1035,7 @@ mkTypeBinders = define "mkTypeBinders" $
 -- `buildFullModule` or (for modules that exceed Coq's practical
 -- type-checking limits) emits an axiom-only stub via
 -- `buildAxiomOnlyContent`.
-moduleToCoq :: TTermDefinition (M.Map (String, String) String
+moduleToCoq :: TypedTermDefinition (M.Map (String, String) String
                               -> M.Map String I.Int32
                               -> S.Set String
                               -> S.Set String
@@ -1053,23 +1053,23 @@ moduleToCoq = define "moduleToCoq" $
     (Packaging.moduleDescription $ var "mod_") $
   -- Modules known to blow up Coq's type-checker; emit axiom stubs instead.
   "axiomOnlyModules" <~ (list [string "hydra.hoisting", string "hydra.inference"]) $
-  "isAxiomOnly" <~ ((Lists.elem :: TTerm String -> TTerm [String] -> TTerm Bool)
+  "isAxiomOnly" <~ ((Lists.elem :: TypedTerm String -> TypedTerm [String] -> TypedTerm Bool)
     (var "nsStr") (var "axiomOnlyModules")) $
   -- Extract type and term definitions from the adapted definition list.
   "typeDefs" <~ Maybes.cat (Lists.map
-    ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TTerm (Maybe (String, Type)))) [
+    ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TypedTerm (Maybe (String, Type)))) [
       _Definition_type>>: "td" ~> Phantoms.just $ pair
         (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.typeDefinitionName $ var "td")))
         (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td")])
     (var "defs")) $
   "termDefs" <~ Maybes.cat (Lists.map
     ("def_" ~> cases _Definition (var "def_")
-      (Just (Phantoms.nothing :: TTerm (Maybe (String, (Term, ([Name], Maybe Type)))))) [
+      (Just (Phantoms.nothing :: TypedTerm (Maybe (String, (Term, ([Name], Maybe Type)))))) [
       _Definition_term>>: "td" ~>
         "msig" <~ (Packaging.termDefinitionSignature $ var "td") $
         "mts" <~ Maybes.map Scoping.termSignatureToTypeScheme (var "msig") $
         "vs" <~ Maybes.maybe
-          (list ([] :: [TTerm Name]))
+          (list ([] :: [TypedTerm Name]))
           ("ts" ~> Core.typeSchemeVariables $ var "ts")
           (var "mts") $
         "mty" <~ Maybes.map ("ts" ~> Core.typeSchemeBody $ var "ts") (var "mts") $
@@ -1109,12 +1109,12 @@ moduleToCoq = define "moduleToCoq" $
 -- using `/` as the directory separator and appending `.v`. For example,
 -- `"hydra.show.core"` becomes `"hydra/show/core.v"`. The last dotted
 -- segment becomes the file name; earlier segments become directories.
-namespaceToPath :: TTermDefinition (String -> String)
+namespaceToPath :: TypedTermDefinition (String -> String)
 namespaceToPath = define "namespaceToPath" $
   doc "Convert a Hydra namespace string (e.g. hydra.show.core) into a relative .v file path" $
   lambda "ns" $ lets [
     "parts">: Strings.splitOn (string ".") (var "ns"),
-    "dirParts">: Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts")),
+    "dirParts">: Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts")),
     "fileName">: Strings.cat (list [Maybes.fromMaybe (var "ns") (Lists.maybeLast (var "parts")), string ".v"])] $
     Logic.ifElse (Lists.null (var "dirParts"))
       (var "fileName")
@@ -1125,7 +1125,7 @@ namespaceToPath = define "namespaceToPath" $
 
 -- | Render the Require Import block: the standard imports followed by any
 -- user-supplied dependency import sentences.
-renderRequireImports :: TTermDefinition ([C.Sentence] -> String)
+renderRequireImports :: TypedTermDefinition ([C.Sentence] -> String)
 renderRequireImports = define "renderRequireImports" $
   doc "Pretty-print the standard-imports sentence followed by additional dependency imports" $
   lambda "depSentences" $
@@ -1134,7 +1134,7 @@ renderRequireImports = define "renderRequireImports" $
 
 -- | Render a list of Coq sentences as a textual Document via the Serde
 -- layer, parenthesising and pretty-printing the resulting expression.
-renderSentences :: TTermDefinition ([C.Sentence] -> String)
+renderSentences :: TypedTermDefinition ([C.Sentence] -> String)
 renderSentences = define "renderSentences" $
   doc "Pretty-print a Document containing the given Coq sentences" $
   lambda "sentences" $
@@ -1145,7 +1145,7 @@ renderSentences = define "renderSentences" $
 -- | Replace every occurrence of the literal `"bundle_"` in a string with a
 -- given replacement. Implemented by splitting on the sentinel and
 -- intercalating with the replacement.
-replaceBundle :: TTermDefinition (String -> String -> String)
+replaceBundle :: TypedTermDefinition (String -> String -> String)
 replaceBundle = define "replaceBundle" $
   doc "Replace literal `bundle_` with the given replacement string" $
   lambdas ["s", "bname"] $

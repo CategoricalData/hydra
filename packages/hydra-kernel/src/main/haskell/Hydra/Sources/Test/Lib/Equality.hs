@@ -34,7 +34,7 @@ module_ = Module {
 
 -- Test groups for hydra.lib.equality primitives
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.equality primitives" $
     supergroup "hydra.lib.equality primitives" [
@@ -59,7 +59,7 @@ allTests = definitionInModule module_ "allTests" $
       equalityLtFloats,
       equalityGtFloats]
 
-equalityCompare :: TTerm TestGroup
+equalityCompare :: TypedTerm TestGroup
 equalityCompare = subgroup "compare" [
   test "less than" 3 5 "lessThan",
   test "equal" 5 5 "equalTo",
@@ -68,7 +68,7 @@ equalityCompare = subgroup "compare" [
     test testName x y resultField = primCase testName _equality_compare [int32 x, int32 y] (injectUnit (name "hydra.util.Comparison") resultField)
 
 -- Tests for ordering with float values
-equalityCompareFloats :: TTerm TestGroup
+equalityCompareFloats :: TypedTerm TestGroup
 equalityCompareFloats = subgroup "compare floats" [
   test "less than" 1.5 2.5 "lessThan",
   test "equal" 3.14 3.14 "equalTo",
@@ -78,7 +78,7 @@ equalityCompareFloats = subgroup "compare floats" [
     test testName x y resultField = primCase testName _equality_compare [float64 x, float64 y] (injectUnit (name "hydra.util.Comparison") resultField)
 
 -- Tests for ordering with string values
-equalityCompareStrings :: TTerm TestGroup
+equalityCompareStrings :: TypedTerm TestGroup
 equalityCompareStrings = subgroup "compare strings" [
   test "less than (lexicographic)" "apple" "banana" "lessThan",
   test "equal" "hello" "hello" "equalTo",
@@ -88,14 +88,14 @@ equalityCompareStrings = subgroup "compare strings" [
   where
     test testName x y resultField = primCase testName _equality_compare [string x, string y] (injectUnit (name "hydra.util.Comparison") resultField)
 
-equalityEqual :: TTerm TestGroup
+equalityEqual :: TypedTerm TestGroup
 equalityEqual = subgroup "equal" [
   test "equal integers" 5 5 true,
   test "unequal integers" 5 3 false]
   where
     test name x y result = primCase name _equality_equal [int32 x, int32 y] result
 
-equalityGt :: TTerm TestGroup
+equalityGt :: TypedTerm TestGroup
 equalityGt = subgroup "gt" [
   test "greater" 5 3 true,
   test "equal" 5 5 false,
@@ -103,7 +103,7 @@ equalityGt = subgroup "gt" [
   where
     test name x y result = primCase name _equality_gt [int32 x, int32 y] result
 
-equalityGtFloats :: TTerm TestGroup
+equalityGtFloats :: TypedTerm TestGroup
 equalityGtFloats = subgroup "gt floats" [
   test "greater" 5.0 3.0 true,
   test "equal" 3.14 3.14 false,
@@ -111,7 +111,7 @@ equalityGtFloats = subgroup "gt floats" [
   where
     test name x y result = primCase name _equality_gt [float64 x, float64 y] result
 
-equalityGtStrings :: TTerm TestGroup
+equalityGtStrings :: TypedTerm TestGroup
 equalityGtStrings = subgroup "gt strings" [
   test "greater (lexicographic)" "zebra" "apple" true,
   test "equal" "hello" "hello" false,
@@ -119,7 +119,7 @@ equalityGtStrings = subgroup "gt strings" [
   where
     test name x y result = primCase name _equality_gt [string x, string y] result
 
-equalityGte :: TTerm TestGroup
+equalityGte :: TypedTerm TestGroup
 equalityGte = subgroup "gte" [
   test "greater" 5 3 true,
   test "equal" 5 5 true,
@@ -127,13 +127,13 @@ equalityGte = subgroup "gte" [
   where
     test name x y result = primCase name _equality_gte [int32 x, int32 y] result
 
-equalityIdentity :: TTerm TestGroup
+equalityIdentity :: TypedTerm TestGroup
 equalityIdentity = subgroup "identity" [
   test "integer" 42 42]
   where
     test name x result = primCase name _equality_identity [int32 x] (int32 result)
 
-equalityLt :: TTerm TestGroup
+equalityLt :: TypedTerm TestGroup
 equalityLt = subgroup "lt" [
   test "less" 3 5 true,
   test "equal" 5 5 false,
@@ -141,7 +141,7 @@ equalityLt = subgroup "lt" [
   where
     test name x y result = primCase name _equality_lt [int32 x, int32 y] result
 
-equalityLtFloats :: TTerm TestGroup
+equalityLtFloats :: TypedTerm TestGroup
 equalityLtFloats = subgroup "lt floats" [
   test "less" 1.5 2.5 true,
   test "equal" 3.14 3.14 false,
@@ -149,7 +149,7 @@ equalityLtFloats = subgroup "lt floats" [
   where
     test name x y result = primCase name _equality_lt [float64 x, float64 y] result
 
-equalityLtStrings :: TTerm TestGroup
+equalityLtStrings :: TypedTerm TestGroup
 equalityLtStrings = subgroup "lt strings" [
   test "less (lexicographic)" "apple" "banana" true,
   test "equal" "hello" "hello" false,
@@ -157,7 +157,7 @@ equalityLtStrings = subgroup "lt strings" [
   where
     test name x y result = primCase name _equality_lt [string x, string y] result
 
-equalityLte :: TTerm TestGroup
+equalityLte :: TypedTerm TestGroup
 equalityLte = subgroup "lte" [
   test "less" 3 5 true,
   test "equal" 5 5 true,
@@ -165,7 +165,7 @@ equalityLte = subgroup "lte" [
   where
     test name x y result = primCase name _equality_lte [int32 x, int32 y] result
 
-equalityMax :: TTerm TestGroup
+equalityMax :: TypedTerm TestGroup
 equalityMax = subgroup "max" [
   test "first greater" 5 3 5,
   test "second greater" 3 5 5,
@@ -173,7 +173,7 @@ equalityMax = subgroup "max" [
   where
     test name x y result = primCase name _equality_max [int32 x, int32 y] (int32 result)
 
-equalityMaxStrings :: TTerm TestGroup
+equalityMaxStrings :: TypedTerm TestGroup
 equalityMaxStrings = subgroup "max strings" [
   test "first greater" "zebra" "apple" "zebra",
   test "second greater" "apple" "zebra" "zebra",
@@ -181,7 +181,7 @@ equalityMaxStrings = subgroup "max strings" [
   where
     test name x y result = primCase name _equality_max [string x, string y] (string result)
 
-equalityMin :: TTerm TestGroup
+equalityMin :: TypedTerm TestGroup
 equalityMin = subgroup "min" [
   test "first less" 3 5 3,
   test "second less" 5 3 3,
@@ -189,7 +189,7 @@ equalityMin = subgroup "min" [
   where
     test name x y result = primCase name _equality_min [int32 x, int32 y] (int32 result)
 
-equalityMinStrings :: TTerm TestGroup
+equalityMinStrings :: TypedTerm TestGroup
 equalityMinStrings = subgroup "min strings" [
   test "first less" "apple" "zebra" "apple",
   test "second less" "zebra" "apple" "apple",

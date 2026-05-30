@@ -79,10 +79,10 @@ module_ = Module {
      toDefinition invalidPackageNameError,
      toDefinition missingDocumentationError]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-conflictingModuleNameError :: TTermDefinition (ConflictingModuleNameError -> String)
+conflictingModuleNameError :: TypedTermDefinition (ConflictingModuleNameError -> String)
 conflictingModuleNameError = define "conflictingModuleNameError" $
   doc "Show a conflicting module namespace error as a string" $
   "e" ~> Strings.cat $ list [
@@ -91,7 +91,7 @@ conflictingModuleNameError = define "conflictingModuleNameError" $
     string " vs ",
     Packaging.unModuleName $ project _ConflictingModuleNameError _ConflictingModuleNameError_second @@ var "e"]
 
-conflictingVariantNameError :: TTermDefinition (ConflictingVariantNameError -> String)
+conflictingVariantNameError :: TypedTermDefinition (ConflictingVariantNameError -> String)
 conflictingVariantNameError = define "conflictingVariantNameError" $
   doc "Show a conflicting variant name error as a string" $
   "e" ~> Strings.cat $ list [
@@ -105,7 +105,7 @@ conflictingVariantNameError = define "conflictingVariantNameError" $
     Core.unName $ project _ConflictingVariantNameError _ConflictingVariantNameError_conflictingName @@ var "e",
     string " which conflicts with another type definition"]
 
-definitionNotInModuleNameError :: TTermDefinition (DefinitionNotInModuleNameError -> String)
+definitionNotInModuleNameError :: TypedTermDefinition (DefinitionNotInModuleNameError -> String)
 definitionNotInModuleNameError = define "definitionNotInModuleNameError" $
   doc "Show a definition-not-in-module-namespace error as a string" $
   "e" ~> Strings.cat $ list [
@@ -114,7 +114,7 @@ definitionNotInModuleNameError = define "definitionNotInModuleNameError" $
     string " is not in module namespace ",
     Packaging.unModuleName $ project _DefinitionNotInModuleNameError _DefinitionNotInModuleNameError_moduleName @@ var "e"]
 
-definitionsOutOfOrderError :: TTermDefinition (DefinitionsOutOfOrderError -> String)
+definitionsOutOfOrderError :: TypedTermDefinition (DefinitionsOutOfOrderError -> String)
 definitionsOutOfOrderError = define "definitionsOutOfOrderError" $
   doc "Show a definitions-out-of-order error as a string" $
   "e" ~> Strings.cat $ list [
@@ -125,7 +125,7 @@ definitionsOutOfOrderError = define "definitionsOutOfOrderError" $
     string " precedes ",
     Core.unName $ project _DefinitionsOutOfOrderError _DefinitionsOutOfOrderError_followingName @@ var "e"]
 
-duplicateDefinitionNameError :: TTermDefinition (DuplicateDefinitionNameError -> String)
+duplicateDefinitionNameError :: TypedTermDefinition (DuplicateDefinitionNameError -> String)
 duplicateDefinitionNameError = define "duplicateDefinitionNameError" $
   doc "Show a duplicate definition name error as a string" $
   "e" ~> Strings.cat $ list [
@@ -134,14 +134,14 @@ duplicateDefinitionNameError = define "duplicateDefinitionNameError" $
     string ": duplicate definition name ",
     Core.unName $ project _DuplicateDefinitionNameError _DuplicateDefinitionNameError_name @@ var "e"]
 
-duplicateModuleNameError :: TTermDefinition (DuplicateModuleNameError -> String)
+duplicateModuleNameError :: TypedTermDefinition (DuplicateModuleNameError -> String)
 duplicateModuleNameError = define "duplicateModuleNameError" $
   doc "Show a duplicate module namespace error as a string" $
   "e" ~> Strings.cat $ list [
     string "duplicate module namespace ",
     Packaging.unModuleName $ project _DuplicateModuleNameError _DuplicateModuleNameError_moduleName @@ var "e"]
 
-invalidDefinitionNameError :: TTermDefinition (InvalidDefinitionNameError -> String)
+invalidDefinitionNameError :: TypedTermDefinition (InvalidDefinitionNameError -> String)
 invalidDefinitionNameError = define "invalidDefinitionNameError" $
   doc "Show an invalid definition name error as a string" $
   "e" ~> Strings.cat $ list [
@@ -152,7 +152,7 @@ invalidDefinitionNameError = define "invalidDefinitionNameError" $
     string " does not match expected ",
     ShowUtil.caseConvention @@ (project _InvalidDefinitionNameError _InvalidDefinitionNameError_expectedConvention @@ var "e")]
 
-invalidModuleError :: TTermDefinition (InvalidModuleError -> String)
+invalidModuleError :: TypedTermDefinition (InvalidModuleError -> String)
 invalidModuleError = define "invalidModuleError" $
   doc "Show an invalid module error as a string" $
   "e" ~> Strings.cat2 (string "invalid module: ") $
@@ -165,7 +165,7 @@ invalidModuleError = define "invalidModuleError" $
       _InvalidModuleError_invalidModuleNameConvention>>: invalidModuleNameConventionError,
       _InvalidModuleError_missingDocumentation>>: missingDocumentationError]
 
-invalidModuleNameConventionError :: TTermDefinition (InvalidModuleNameConventionError -> String)
+invalidModuleNameConventionError :: TypedTermDefinition (InvalidModuleNameConventionError -> String)
 invalidModuleNameConventionError = define "invalidModuleNameConventionError" $
   doc "Show an invalid namespace convention error as a string" $
   "e" ~> Strings.cat $ list [
@@ -173,7 +173,7 @@ invalidModuleNameConventionError = define "invalidModuleNameConventionError" $
     Packaging.unModuleName $ project _InvalidModuleNameConventionError _InvalidModuleNameConventionError_moduleName @@ var "e",
     string " does not match the dotted-camelCase naming convention"]
 
-invalidPackageError :: TTermDefinition (InvalidPackageError -> String)
+invalidPackageError :: TypedTermDefinition (InvalidPackageError -> String)
 invalidPackageError = define "invalidPackageError" $
   doc "Show an invalid package error as a string" $
   "e" ~> Strings.cat2 (string "invalid package: ") $
@@ -183,7 +183,7 @@ invalidPackageError = define "invalidPackageError" $
       _InvalidPackageError_invalidModule>>: invalidModuleError,
       _InvalidPackageError_invalidPackageName>>: invalidPackageNameError]
 
-invalidPackageNameError :: TTermDefinition (InvalidPackageNameError -> String)
+invalidPackageNameError :: TypedTermDefinition (InvalidPackageNameError -> String)
 invalidPackageNameError = define "invalidPackageNameError" $
   doc "Show an invalid package name error as a string" $
   "e" ~> Strings.cat $ list [
@@ -191,7 +191,7 @@ invalidPackageNameError = define "invalidPackageNameError" $
     Packaging.unPackageName $ project _InvalidPackageNameError _InvalidPackageNameError_packageName @@ var "e",
     string " does not match the hyphen-separated lowercase naming convention"]
 
-missingDocumentationError :: TTermDefinition (MissingDocumentationError -> String)
+missingDocumentationError :: TypedTermDefinition (MissingDocumentationError -> String)
 missingDocumentationError = define "missingDocumentationError" $
   doc "Show a missing documentation error as a string" $
   "e" ~> Strings.cat $ list [

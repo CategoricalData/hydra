@@ -54,7 +54,7 @@ import qualified Data.Maybe                  as Y
 ns :: ModuleName
 ns = ModuleName "hydra.arity"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -71,13 +71,13 @@ module_ = Module {
       toDefinition typeSchemeArity,
       toDefinition uncurryType]
 
-primitiveArity :: TTermDefinition (Primitive -> Int)
+primitiveArity :: TypedTermDefinition (Primitive -> Int)
 primitiveArity = define "primitiveArity" $
   doc "Find the arity (expected number of arguments) of a primitive constant or function" $
   "prim" ~>
   Lists.length $ Typing.termSignatureParameters $ Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "prim")
 
-termArity :: TTermDefinition (Term -> Int)
+termArity :: TypedTermDefinition (Term -> Int)
 termArity = define "termArity" $
   doc "Find the arity (expected number of arguments) of a term" $
   match _Term (Just $ int32 0) [
@@ -88,7 +88,7 @@ termArity = define "termArity" $
     _Term_unwrap>>: constant (int32 1)]
     -- Note: ignoring variables which might resolve to functions
 
-typeArity :: TTermDefinition (Type -> Int)
+typeArity :: TypedTermDefinition (Type -> Int)
 typeArity = define "typeArity" $
   doc "Find the arity (expected number of arguments) of a type" $
   match _Type (Just $ int32 0) [
@@ -98,12 +98,12 @@ typeArity = define "typeArity" $
     _Type_function>>: lambda "f" $
       Math.add (int32 1) (typeArity <.> reify Core.functionTypeCodomain @@ var "f")]
 
-typeSchemeArity :: TTermDefinition (TypeScheme -> Int)
+typeSchemeArity :: TypedTermDefinition (TypeScheme -> Int)
 typeSchemeArity = define "typeSchemeArity" $
   doc "Find the arity (expected number of arguments) of a type scheme" $
   typeArity <.> reify Core.typeSchemeBody
 
-uncurryType :: TTermDefinition (Type -> [Type])
+uncurryType :: TypedTermDefinition (Type -> [Type])
 uncurryType = define "uncurryType" $
   doc "Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)" $
   lambda "t" ((match _Type (Just $ list [var "t"]) [

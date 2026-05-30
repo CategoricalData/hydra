@@ -34,10 +34,10 @@ testModule = Module {
                moduleDependencies = [] :: [ModuleDependency],
                moduleDescription = Nothing}
   where
-    test local tterm = TTermDefinition (unqualifyName $ QualifiedName (Just testNs) local) tterm
+    test local tterm = TypedTermDefinition (unqualifyName $ QualifiedName (Just testNs) local) tterm
     definitions = [
         toDefinition $ test "catStrings" (string "foo" ++ string "bar" ++ string "quux" ++ (Literals.showInt32 $ int32 42)),
-        toDefinition $ test "describeType" $ ShowCore.type_ @@ (TTerm $ EncodeCore.type_ $ Types.list $ Types.int32)]
+        toDefinition $ test "describeType" $ ShowCore.type_ @@ (TypedTerm $ EncodeCore.type_ $ Types.list $ Types.int32)]
 
 demoMeteredEvaluation :: IO ()
 demoMeteredEvaluation = do

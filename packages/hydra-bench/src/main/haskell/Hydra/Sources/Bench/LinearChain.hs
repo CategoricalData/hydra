@@ -40,7 +40,7 @@ import           Prelude                     hiding ((++))
 ns :: ModuleName
 ns = ModuleName "hydra.bench.linearChain"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -54,7 +54,7 @@ module_ = Module {
     definitions = [toDefinition (mkWalker k) | k <- [0 .. numWalkers - 1]]
 
 -- | Build the kth walker definition.
-mkWalker :: Int -> TTermDefinition (Term -> Maybe Term)
+mkWalker :: Int -> TypedTermDefinition (Term -> Maybe Term)
 mkWalker k = define (L.concat ["walker", show k])
   $ doc (L.concat ["Term walker level ", show k, "; recurses to walker", show (max 0 (k-1)), "."])
   $ walkerBody k
@@ -68,7 +68,7 @@ numWalkers = 800
 --
 -- Base case @k = 0@: identity wrapped in @Just@.
 -- Inductive case @k > 0@: case on @_Term@ and recurse via @walkerRef (k-1)@.
-walkerBody :: Int -> TTerm (Term -> Maybe Term)
+walkerBody :: Int -> TypedTerm (Term -> Maybe Term)
 walkerBody 0 =
   "t" ~> just (var "t")
 walkerBody k =
@@ -102,6 +102,6 @@ walkerBody k =
 walkerName :: Int -> Name
 walkerName k = Name $ L.concat ["hydra.bench.linearChain.walker", show k]
 
--- | Reference to the @k@th walker as a TTerm, suitable for application.
-walkerRef :: Int -> TTerm (Term -> Maybe Term)
-walkerRef k = TTerm $ TermVariable (walkerName k)
+-- | Reference to the @k@th walker as a TypedTerm, suitable for application.
+walkerRef :: Int -> TypedTerm (Term -> Maybe Term)
+walkerRef k = TypedTerm $ TermVariable (walkerName k)

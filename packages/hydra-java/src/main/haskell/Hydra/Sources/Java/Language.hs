@@ -78,7 +78,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
@@ -87,7 +87,7 @@ module_ = Module {
             moduleDefinitions = [toDefinition javaMaxTupleLength, toDefinition javaLanguage, toDefinition reservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints and reserved words for Java"}
-javaLanguage :: TTermDefinition Language
+javaLanguage :: TypedTermDefinition Language
 javaLanguage = define "javaLanguage" $
   doc "Language constraints for Java" $ lets [
   "literalVariants">: Sets.fromList $ list [
@@ -163,13 +163,13 @@ javaLanguage = define "javaLanguage" $
       (var "typeVariants")
       (var "typePredicate"))
 
-javaMaxTupleLength :: TTermDefinition Int
+javaMaxTupleLength :: TypedTermDefinition Int
 javaMaxTupleLength = define "javaMaxTupleLength" $
   doc ("The maximum supported length of a tuple in Hydra-Java. "
     <> "Note: if this constant is changed, also change Tuples.java correspondingly") $
   int32 9
 
-reservedWords :: TTermDefinition (S.Set String)
+reservedWords :: TypedTermDefinition (S.Set String)
 reservedWords = define "reservedWords" $
   doc "A set of reserved words in Java" $ lets [
   "specialNames">:

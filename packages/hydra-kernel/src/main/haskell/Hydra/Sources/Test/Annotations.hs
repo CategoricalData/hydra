@@ -39,7 +39,7 @@ module_ = Module {
     definitions = [Phantoms.toDefinition allTests]
 
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = Phantoms.definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.annotations functions" $
     supergroup "annotations" [
@@ -50,11 +50,11 @@ allTests = Phantoms.definitionInModule module_ "allTests" $
 -- | Annotation eval case: like annEvalCase but tagged as disabled because these tests
 -- require kernel term bindings in the test graph (via reduceTerm), which not all
 -- implementations provide yet. See hydra.test.environment in the branch plan.
-annEvalCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+annEvalCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 annEvalCase name = evalCase name
 
 -- | Test cases for getTermAnnotation and setTermAnnotation
-arbitraryAnnotationTests :: TTerm TestGroup
+arbitraryAnnotationTests :: TypedTerm TestGroup
 arbitraryAnnotationTests = subgroup "arbitrary annotations" [
   -- Set a single key/value pair (multiple cases for property test coverage)
   -- Note: These tests require interpretation because setTermAnnotation uses maps.alter which has no interpreter impl
@@ -146,7 +146,7 @@ arbitraryAnnotationTests = subgroup "arbitrary annotations" [
     (annotatedTerm (stringTerm "x") $ Terms.map $ Maps.singleton (nameTerm "a") (int32Term 1))]
 
 -- | Test cases for getTermDescription and setTermDescription
-descriptionTests :: TTerm TestGroup
+descriptionTests :: TypedTerm TestGroup
 descriptionTests = subgroup "descriptions" [
   -- Set a single description (multiple cases)
   -- Note: These tests require interpretation because setTermDescription uses maps.alter which has no interpreter impl
@@ -207,7 +207,7 @@ descriptionTests = subgroup "descriptions" [
 
 -- | Test cases for layered (non-compact) annotations
 -- Note: These tests require interpretation because they call getTermAnnotation which is not a primitive
-layeredAnnotationTests :: TTerm TestGroup
+layeredAnnotationTests :: TypedTerm TestGroup
 layeredAnnotationTests = subgroup "layered annotations" [
   -- Annotations at different levels, with different keys, are all available
   annEvalCase "get annotation from unannotated term"
@@ -254,11 +254,11 @@ layeredAnnotationTests = subgroup "layered annotations" [
     (optional $ just $ int32Term 99)]
 
 -- | Empty InferenceContext for Either-based function tests
-testContext :: TTerm Term
+testContext :: TypedTerm Term
 testContext = metaref Lexical.emptyInferenceContext
 
 
 
 -- | Test state (an empty Graph)
-testState :: TTerm Term
+testState :: TypedTerm Term
 testState = metaref Lexical.emptyGraph

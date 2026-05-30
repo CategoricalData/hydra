@@ -82,7 +82,7 @@ renaming a single type leaves an orphan class file on the classpath.
 | Module deleted | Old files in every implementation |
 | Type renamed (within a module) | Old `.java` file in Java |
 | Type deleted (within a module) | Old `.java` file in Java |
-| Namespace split (`hydra.error` → `hydra.error.core` + `hydra.error.checking` + ...) | Old unsplit files in every implementation |
+| Module split (`hydra.error` → `hydra.error.core` + `hydra.error.checking` + ...) | Old unsplit files in every implementation |
 
 ### Where to look
 
@@ -196,7 +196,7 @@ cd heads/python && uv run pytest
 
 These refactoring patterns are especially prone to leaving orphans:
 
-- **Namespace splits**: When `hydra.foo` is split into `hydra.foo.bar` and `hydra.foo.baz`,
+- **Module splits**: When `hydra.foo` is split into `hydra.foo.bar` and `hydra.foo.baz`,
   the old `foo.hs` / `foo.py` / `foo.java` / `foo.clj` etc. remain.
   The decoder, encoder, and DSL modules also split
   (`Decode/Foo.hs` → `Decode/Foo/Bar.hs` + `Decode/Foo/Baz.hs`).
@@ -234,10 +234,10 @@ linked against an out-of-date kernel.
 The Haskell sync executables (`update-json-main`, `update-json-test`, `update-json-manifest`,
 `bootstrap-from-json`, `verify-json-kernel`, etc.) are compiled by Stack and cached under
 `heads/haskell/.stack-work/install/`.
-Each binary has constants, type names, namespace strings, and serialized term fragments
+Each binary has constants, type names, module-name strings, and serialized term fragments
 **baked in at link time** from whatever the kernel looked like when the binary was built.
-If you rename a kernel namespace, regenerate `dist/haskell/hydra-kernel/`, then run a generation
-exec without rebuilding it first, the exec emits the **old** namespace string into the JSON
+If you rename a kernel module name, regenerate `dist/haskell/hydra-kernel/`, then run a generation
+exec without rebuilding it first, the exec emits the **old** module-name string into the JSON
 output — even though the kernel sources on disk are correct.
 
 `sync-haskell.sh` does call `stack build` between phases, so in principle Stack should
@@ -259,7 +259,7 @@ in `dist/json/`** (or, transitively, in any language target that copies content 
 
 Stale binary cache shows up as:
 
-- A specific text pattern (an old namespace, an old type name, a removed function name)
+- A specific text pattern (an old module name, an old type name, a removed function name)
   appearing in `dist/json/` or in language-target outputs **after** sync-all completes.
 - The same pattern absent from all hand-written sources (`packages/`, `heads/`, `dist/haskell/`).
 - Mtimes on the offending dist files showing they were rewritten by the recent sync,
@@ -297,7 +297,7 @@ from source. A full rebuild from cold cache takes 30–60 minutes.
 #### When to suspect this hazard
 
 After any of:
-- A namespace rename across the kernel (e.g., #290's `hydra.module` → `hydra.packaging`).
+- A module-name rename across the kernel (e.g., #290's `hydra.module` → `hydra.packaging`).
 - An ext-prefix removal (#331).
 - A type rename in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/`.
 - A move of a primitive between libraries.

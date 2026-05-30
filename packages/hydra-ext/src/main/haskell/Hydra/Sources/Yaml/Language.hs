@@ -31,10 +31,10 @@ module_ = Module {
             moduleDefinitions = [toDefinition yamlLanguage],
             moduleDependencies = unqualifiedDep <$> ([Strip.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints for YAML"}
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-yamlLanguage :: TTermDefinition Language
+yamlLanguage :: TypedTermDefinition Language
 yamlLanguage = define "yamlLanguage" $
   doc "Language constraints for YAML" $ lets [
   "literalVariants">: Sets.fromList $ list [

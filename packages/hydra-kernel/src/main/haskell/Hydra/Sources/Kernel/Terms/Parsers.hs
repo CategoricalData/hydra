@@ -84,11 +84,11 @@ module_ = Module {
      toDefinition some,
      toDefinition string_]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- | Try the first parser, if it fails try the second
-alt :: TTermDefinition (Parser a -> Parser a -> Parser a)
+alt :: TypedTermDefinition (Parser a -> Parser a -> Parser a)
 alt = define "alt" $
   doc "Try the first parser; if it fails without consuming input, try the second" $
   "p1" ~> "p2" ~>
@@ -103,13 +103,13 @@ alt = define "alt" $
   Parsing.parser (var "parse")
 
 -- | Parse any single character (as codepoint)
-anyChar :: TTermDefinition (Parser Int)
+anyChar :: TypedTermDefinition (Parser Int)
 anyChar = define "anyChar" $
   doc "Parse any single character (codepoint)" $
   satisfy @@ (constant true)
 
 -- | Applicative apply for parsers
-apply :: TTermDefinition (Parser (a -> b) -> Parser a -> Parser b)
+apply :: TypedTermDefinition (Parser (a -> b) -> Parser a -> Parser b)
 apply = define "apply" $
   doc "Apply a parser containing a function to a parser containing a value" $
   "pf" ~> "pa" ~>
@@ -127,7 +127,7 @@ apply = define "apply" $
   Parsing.parser (var "parse")
 
 -- | Parse something between two other parsers
-between :: TTermDefinition (Parser open -> Parser close -> Parser a -> Parser a)
+between :: TypedTermDefinition (Parser open -> Parser close -> Parser a -> Parser a)
 between = define "between" $
   doc "Parse something between an opening and closing parser" $
   "open" ~> "close" ~> "p" ~>
@@ -137,7 +137,7 @@ between = define "between" $
           pure @@ var "x")))
 
 -- | Monadic bind for parsers
-bind :: TTermDefinition (Parser a -> (a -> Parser b) -> Parser b)
+bind :: TypedTermDefinition (Parser a -> (a -> Parser b) -> Parser b)
 bind = define "bind" $
   doc "Sequence two parsers, passing the result of the first to a function that produces the second" $
   "pa" ~> "f" ~>
@@ -151,21 +151,21 @@ bind = define "bind" $
   Parsing.parser (var "parse")
 
 -- | Parse a specific character (as codepoint)
-char :: TTermDefinition (Int -> Parser Int)
+char :: TypedTermDefinition (Int -> Parser Int)
 char = define "char" $
   doc "Parse a specific character (codepoint)" $
   "c" ~>
     satisfy @@ ("x" ~> Equality.equal (var "x") (var "c"))
 
 -- | Try parsers in order until one succeeds
-choice :: TTermDefinition ([Parser a] -> Parser a)
+choice :: TypedTermDefinition ([Parser a] -> Parser a)
 choice = define "choice" $
   doc "Try each parser in the list until one succeeds" $
   "ps" ~>
     Lists.foldl alt (fail @@ string "no choice matched") (var "ps")
 
 -- | Parse end of input
-eof :: TTermDefinition (Parser ())
+eof :: TypedTermDefinition (Parser ())
 eof = define "eof" $
   doc "A parser that succeeds only at the end of input" $
   Parsing.parser ("input" ~>
@@ -174,7 +174,7 @@ eof = define "eof" $
       (Parsing.parseResultFailure (Parsing.parseError (string "expected end of input") (var "input"))))
 
 -- | A parser that always fails with the given message
-fail :: TTermDefinition (String -> Parser a)
+fail :: TypedTermDefinition (String -> Parser a)
 fail = define "fail" $
   doc "A parser that always fails with the given error message" $
   "msg" ~>
@@ -183,7 +183,7 @@ fail = define "fail" $
 
 -- | Create a parser that defers construction of another parser until parsing time.
 -- This is essential for breaking recursive parser definitions.
-lazy :: TTermDefinition ((() -> Parser a) -> Parser a)
+lazy :: TypedTermDefinition ((() -> Parser a) -> Parser a)
 lazy = define "lazy" $
   doc ("Create a parser that defers construction of another parser until parsing time."
     <> " This is essential for breaking recursive parser definitions.") $
@@ -192,14 +192,14 @@ lazy = define "lazy" $
     unwrap _Parser @@ (var "f" @@ unit) @@ (var "input"))
 
 -- | Parse zero or more occurrences
-many :: TTermDefinition (Parser a -> Parser [a])
+many :: TypedTermDefinition (Parser a -> Parser [a])
 many = define "many" $
   doc "Parse zero or more occurrences of the given parser" $
   "p" ~>
-    alt @@ (some @@ var "p") @@ (pure @@ list ([] :: [TTerm a]))
+    alt @@ (some @@ var "p") @@ (pure @@ list ([] :: [TypedTerm a]))
 
 -- | Map a function over the result of a parser
-map :: TTermDefinition ((a -> b) -> Parser a -> Parser b)
+map :: TypedTermDefinition ((a -> b) -> Parser a -> Parser b)
 map = define "map" $
   doc "Apply a function to the result of a parser" $
   "f" ~> "pa" ~>
@@ -213,7 +213,7 @@ map = define "map" $
   Parsing.parser (var "parse")
 
 -- | Optionally parse something
-optional :: TTermDefinition (Parser a -> Parser (Maybe a))
+optional :: TypedTermDefinition (Parser a -> Parser (Maybe a))
 optional = define "optional" $
   doc "Optionally parse something, returning Nothing if it fails" $
   "p" ~>
@@ -222,7 +222,7 @@ optional = define "optional" $
       @@ (pure @@ nothing)
 
 -- | A parser that always succeeds with the given value
-pure :: TTermDefinition (a -> Parser a)
+pure :: TypedTermDefinition (a -> Parser a)
 pure = define "pure" $
   doc "A parser that always succeeds with the given value without consuming input" $
   "a" ~>
@@ -230,14 +230,14 @@ pure = define "pure" $
       Parsing.parseResultSuccess (Parsing.parseSuccess (var "a") (var "input")))
 
 -- | Run a parser on input and return the result
-runParser :: TTermDefinition (Parser a -> String -> ParseResult a)
+runParser :: TypedTermDefinition (Parser a -> String -> ParseResult a)
 runParser = define "runParser" $
   doc "Run a parser on the given input string" $
   "p" ~> "input" ~>
     unwrap _Parser @@ (var "p") @@ (var "input")
 
 -- | Parse a character that satisfies a predicate (characters represented as codepoints)
-satisfy :: TTermDefinition ((Int -> Bool) -> Parser Int)
+satisfy :: TypedTermDefinition ((Int -> Bool) -> Parser Int)
 satisfy = define "satisfy" $
   doc "Parse a character (codepoint) that satisfies the given predicate" $
   "pred" ~>
@@ -254,14 +254,14 @@ satisfy = define "satisfy" $
   Parsing.parser (var "parse")
 
 -- | Parse zero or more occurrences separated by a separator
-sepBy :: TTermDefinition (Parser a -> Parser sep -> Parser [a])
+sepBy :: TypedTermDefinition (Parser a -> Parser sep -> Parser [a])
 sepBy = define "sepBy" $
   doc "Parse zero or more occurrences separated by a separator" $
   "p" ~> "sep" ~>
-    alt @@ (sepBy1 @@ var "p" @@ var "sep") @@ (pure @@ list ([] :: [TTerm a]))
+    alt @@ (sepBy1 @@ var "p" @@ var "sep") @@ (pure @@ list ([] :: [TypedTerm a]))
 
 -- | Parse one or more occurrences separated by a separator
-sepBy1 :: TTermDefinition (Parser a -> Parser sep -> Parser [a])
+sepBy1 :: TypedTermDefinition (Parser a -> Parser sep -> Parser [a])
 sepBy1 = define "sepBy1" $
   doc "Parse one or more occurrences separated by a separator" $
   "p" ~> "sep" ~>
@@ -270,7 +270,7 @@ sepBy1 = define "sepBy1" $
         pure @@ (Lists.cons (var "x") (var "xs"))))
 
 -- | Parse one or more occurrences
-some :: TTermDefinition (Parser a -> Parser [a])
+some :: TypedTermDefinition (Parser a -> Parser [a])
 some = define "some" $
   doc "Parse one or more occurrences of the given parser" $
   "p" ~>
@@ -279,7 +279,7 @@ some = define "some" $
         pure @@ (Lists.cons (var "x") (var "xs"))))
 
 -- | Parse a specific string
-string_ :: TTermDefinition (String -> Parser String)
+string_ :: TypedTermDefinition (String -> Parser String)
 string_ = define "string" $
   doc "Parse a specific string" $
   "str" ~>

@@ -17,12 +17,12 @@ import qualified Data.Maybe as Y
 
 
 infixr 0 >:
-(>:) :: String -> a -> (TTerm Name, a)
+(>:) :: String -> a -> (TypedTerm Name, a)
 n >: d = (name n, d)
 
 infixr 0 >>:
-(>>:) :: Name -> a -> (TTerm Name, a)
+(>>:) :: Name -> a -> (TypedTerm Name, a)
 n >>: d = (Core.nameLift n, d)
 
-name :: String -> TTerm Name
+name :: String -> TypedTerm Name
 name s = Core.nameLift $ Name s

@@ -74,10 +74,10 @@ module_ = Module {
      toDefinition unifyTypes,
      toDefinition variableOccursInType]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-joinTypes :: TTermDefinition (InferenceContext -> Type -> Type -> String -> Either UnificationError [TypeConstraint])
+joinTypes :: TypedTermDefinition (InferenceContext -> Type -> Type -> String -> Either UnificationError [TypeConstraint])
 joinTypes = define "joinTypes" $
   doc ("Join two types, producing a list of type constraints."
     <> "The comment is used to provide context for the constraints.") $
@@ -89,7 +89,7 @@ joinTypes = define "joinTypes" $
       ((string "cannot unify ") ++ (ShowCore.type_ @@ var "sleft") ++ (string " with ") ++ (ShowCore.type_ @@ var "sright"))) $
   "assertEqual" <~ Logic.ifElse
     (Equality.equal (var "sleft") (var "sright"))
-    (right (list ([] :: [TTerm TypeConstraint])))
+    (right (list ([] :: [TypedTerm TypeConstraint])))
     (var "cannotUnify") $
   "joinList" <~ ("lefts" ~> "rights" ~> Logic.ifElse
     (Equality.equal (Lists.length (var "lefts")) (Lists.length (var "rights")))
@@ -139,14 +139,14 @@ joinTypes = define "joinTypes" $
     _Type_union>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
       _Type_union>>: "r" ~> var "joinRowTypes" @@ (var "l") @@ (var "r")],
     _Type_unit>>: constant (cases _Type (var "sright") (Just (var "cannotUnify")) [
-      _Type_unit>>: constant (right (list ([] :: [TTerm TypeConstraint])))]),
+      _Type_unit>>: constant (right (list ([] :: [TypedTerm TypeConstraint])))]),
     _Type_void>>: constant (cases _Type (var "sright") (Just (var "cannotUnify")) [
-      _Type_void>>: constant (right (list ([] :: [TTerm TypeConstraint])))]),
+      _Type_void>>: constant (right (list ([] :: [TypedTerm TypeConstraint])))]),
     _Type_wrap>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
       _Type_wrap>>: "r" ~> right (list [
         var "joinOne" @@ (var "l") @@ (var "r")])]]
 
-unifyTypeConstraints :: TTermDefinition (InferenceContext -> M.Map Name TypeScheme -> [TypeConstraint] -> Either UnificationError TypeSubst)
+unifyTypeConstraints :: TypedTermDefinition (InferenceContext -> M.Map Name TypeScheme -> [TypeConstraint] -> Either UnificationError TypeSubst)
 unifyTypeConstraints = define "unifyTypeConstraints" $
   doc (""
     <> "Robinson's algorithm, following https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf\n"
@@ -193,20 +193,20 @@ unifyTypeConstraints = define "unifyTypeConstraints" $
     ("uc" ~> var "withConstraint" @@ (Pairs.first $ var "uc") @@ (Pairs.second $ var "uc"))
     (Lists.uncons $ var "constraints")
 
-unifyTypeLists :: TTermDefinition (InferenceContext -> M.Map Name TypeScheme -> [Type] -> [Type] -> String -> Either UnificationError TypeSubst)
+unifyTypeLists :: TypedTermDefinition (InferenceContext -> M.Map Name TypeScheme -> [Type] -> [Type] -> String -> Either UnificationError TypeSubst)
 unifyTypeLists = define "unifyTypeLists" $
   doc "Unify two lists of types pairwise, producing a single substitution that satisfies every pair. The lists must have the same length; the comment is attached to each generated constraint for diagnostics." $
   "cx" ~> "schemaTypes" ~> "l" ~> "r" ~> "comment" ~>
   "toConstraint" <~ ("l" ~> "r" ~> Typing.typeConstraint (var "l") (var "r") (var "comment")) $
   unifyTypeConstraints @@ var "cx" @@ var "schemaTypes" @@ (Lists.zipWith (var "toConstraint") (var "l") (var "r"))
 
-unifyTypes :: TTermDefinition (InferenceContext -> M.Map Name TypeScheme -> Type -> Type -> String -> Either UnificationError TypeSubst)
+unifyTypes :: TypedTermDefinition (InferenceContext -> M.Map Name TypeScheme -> Type -> Type -> String -> Either UnificationError TypeSubst)
 unifyTypes = define "unifyTypes" $
   doc "Unify two types, producing a substitution that makes them equal (or an error). The comment is attached to the generated constraint for diagnostics." $
   "cx" ~> "schemaTypes" ~> "l" ~> "r" ~> "comment" ~>
   unifyTypeConstraints @@ var "cx" @@ var "schemaTypes" @@ list [Typing.typeConstraint (var "l") (var "r") (var "comment")]
 
-variableOccursInType :: TTermDefinition (Name -> Type -> Bool)
+variableOccursInType :: TypedTermDefinition (Name -> Type -> Bool)
 variableOccursInType = define "variableOccursInType" $
   doc ("Determine whether a type variable appears within a type expression."
     <> "No distinction is made between free and bound type variables.") $

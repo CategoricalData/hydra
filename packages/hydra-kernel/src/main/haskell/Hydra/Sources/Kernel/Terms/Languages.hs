@@ -63,7 +63,7 @@ module_ = Module {
             moduleDefinitions = [toDefinition hydraLanguage],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Reflect.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "Language constraints for Hydra Core"}
-hydraLanguage :: TTermDefinition Language
+hydraLanguage :: TypedTermDefinition Language
 hydraLanguage = definitionInModule module_ "hydraLanguage" $
   doc "Language constraints for Hydra Core, i.e. no constraints." $ lets [
   "literalVariants">: Sets.fromList Reflect.literalVariants,

@@ -36,7 +36,7 @@ import           Prelude                     hiding ((++))
 ns :: ModuleName
 ns = ModuleName "hydra.bench.fanOut"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -60,7 +60,7 @@ fanPredecessors k =
 
 -- | Body of @fanWalker_K@. Case on @_Term@; each branch recurses on a
 -- different predecessor.
-fanWalkerBody :: Int -> TTerm (Term -> Maybe Term)
+fanWalkerBody :: Int -> TypedTerm (Term -> Maybe Term)
 fanWalkerBody 0 =
   "t" ~> just (var "t")
 fanWalkerBody k =
@@ -92,10 +92,10 @@ fanWalkerName :: Int -> Name
 fanWalkerName k = Name $ L.concat ["hydra.bench.fanOut.fanWalker", show k]
 
 -- | Reference to the @k@th fanWalker.
-fanWalkerRef :: Int -> TTerm (Term -> Maybe Term)
-fanWalkerRef k = TTerm $ TermVariable (fanWalkerName k)
+fanWalkerRef :: Int -> TypedTerm (Term -> Maybe Term)
+fanWalkerRef k = TypedTerm $ TermVariable (fanWalkerName k)
 
-mkFanWalker :: Int -> TTermDefinition (Term -> Maybe Term)
+mkFanWalker :: Int -> TypedTermDefinition (Term -> Maybe Term)
 mkFanWalker k =
   let (p1, p2, p3) = fanPredecessors k
   in define (L.concat ["fanWalker", show k])

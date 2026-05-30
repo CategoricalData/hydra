@@ -39,11 +39,11 @@ module_ = Module {
      Phantoms.toDefinition testContext,
      Phantoms.toDefinition testGraph]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- | Stub: the real testContext lives in hand-written Hydra.Test.TestEnv
-testContext :: TTermDefinition InferenceContext
+testContext :: TypedTermDefinition InferenceContext
 testContext = define "testContext" $ asTerm Lexical.emptyInferenceContext
 
 -- | Stub: the real testGraph lives in hand-written Hydra.Test.TestEnv.
@@ -55,6 +55,6 @@ testContext = define "testContext" $ asTerm Lexical.emptyInferenceContext
 -- expressed at the DSL level), but languages like Clojure and Emacs
 -- Lisp, where the generated testGraph value drives tests directly,
 -- need both maps to populate schema_types and bound_terms.
-testGraph :: TTermDefinition (M.Map Name Type -> M.Map Name Term -> Graph)
+testGraph :: TypedTermDefinition (M.Map Name Type -> M.Map Name Term -> Graph)
 testGraph = define "testGraph" $
   "tys" ~> "tms" ~> asTerm Lexical.emptyGraph

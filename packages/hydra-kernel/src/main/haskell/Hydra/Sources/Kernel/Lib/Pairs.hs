@@ -14,7 +14,7 @@ import           Prelude hiding ((++))
 ns :: ModuleName
 ns = ModuleName "hydra.lib.pairs"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -71,7 +71,7 @@ secondSig = sig $ TypeScheme [Name "a", Name "b"]
 -- Default implementations.
 
 -- bimap f g p = pair (f (first p)) (g (second p))
-bimap_ :: TTermDefinition ((a -> c) -> (b -> d) -> (a, b) -> (c, d))
+bimap_ :: TypedTermDefinition ((a -> c) -> (b -> d) -> (a, b) -> (c, d))
 bimap_ = define "bimap" $
   doc "Map over both elements of a pair, defined in terms of first and second." $
   "f" ~> "g" ~> "p" ~> pair

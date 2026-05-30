@@ -38,10 +38,10 @@ module_ = Module {
   where
     definitions = [Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for annotation and type stripping operations" $
     supergroup "strip" [
@@ -49,12 +49,12 @@ allTests = define "allTests" $
       deannotateTypeGroup]
 
 -- | Convenience helpers for specific kernel functions
-deannotateTermCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+deannotateTermCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 deannotateTermCase cname = termCase cname Strip.deannotateTerm
 
 -- | Test cases for deannotating terms (stripping top-level annotations)
 -- Note: deannotateTerm only strips annotations at the top level, not recursively
-deannotateTermGroup :: TTerm TestGroup
+deannotateTermGroup :: TypedTerm TestGroup
 deannotateTermGroup = subgroup "deannotateTerm" [
     deannotateTermCase "unannotated literal unchanged"
       (int32 42)
@@ -84,12 +84,12 @@ deannotateTermGroup = subgroup "deannotateTerm" [
       (annots emptyAnnMap (apply (var "f") (var "x")))
       (apply (var "f") (var "x"))]
 
-deannotateTypeCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
+deannotateTypeCase :: String -> TypedTerm Type -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
 deannotateTypeCase cname = typeCase cname Strip.deannotateType
 
 -- | Test cases for deannotating types (stripping top-level annotations)
 -- Note: deannotateType only strips annotations at the top level, not recursively
-deannotateTypeGroup :: TTerm TestGroup
+deannotateTypeGroup :: TypedTerm TestGroup
 deannotateTypeGroup = subgroup "deannotateType" [
     deannotateTypeCase "unannotated primitive type unchanged"
       T.int32
@@ -120,21 +120,21 @@ deannotateTypeGroup = subgroup "deannotateType" [
       (T.function T.int32 T.string)]
 
 -- Helper to build an empty annotation map
-emptyAnnMap :: TTerm (M.Map Name Term)
+emptyAnnMap :: TypedTerm (M.Map Name Term)
 emptyAnnMap = Phantoms.map M.empty
 
 -- | Show a term as a string using ShowCore.term
-showTerm :: TTerm Term -> TTerm String
+showTerm :: TypedTerm Term -> TypedTerm String
 showTerm t = ShowCore.term @@ t
 
 -- | Show a type as a string using ShowCore.type_
-showType :: TTerm Type -> TTerm String
+showType :: TypedTerm Type -> TypedTerm String
 showType t = ShowCore.type_ @@ t
 
 -- | Helper for Term -> Term kernel function test cases
-termCase :: String -> TTermDefinition (Term -> Term) -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+termCase :: String -> TypedTermDefinition (Term -> Term) -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 termCase cname func input output = universalCase cname (showTerm (func @@ input)) (showTerm output)
 
 -- | Helper for Type -> Type kernel function test cases
-typeCase :: String -> TTermDefinition (Type -> Type) -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
+typeCase :: String -> TypedTermDefinition (Type -> Type) -> TypedTerm Type -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
 typeCase cname func input output = universalCase cname (showType (func @@ input)) (showType output)

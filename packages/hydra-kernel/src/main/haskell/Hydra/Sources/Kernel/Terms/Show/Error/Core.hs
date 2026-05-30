@@ -110,107 +110,107 @@ module_ = Module {
      toDefinition untypedTermVariableError,
      toDefinition voidInNonBottomPositionError]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- ============================================================================
 -- Existing error types
 -- ============================================================================
 
-constantConditionError :: TTermDefinition (ConstantConditionError -> String)
+constantConditionError :: TypedTermDefinition (ConstantConditionError -> String)
 constantConditionError = define "constantConditionError" $
   doc "Show a constant condition error as a string" $
   "e" ~> Strings.cat $ list [
     string "constant condition: ifElse with literal ",
     Literals.showBoolean $ project _ConstantConditionError _ConstantConditionError_value @@ var "e"]
 
-duplicateBindingError :: TTermDefinition (DuplicateBindingError -> String)
+duplicateBindingError :: TypedTermDefinition (DuplicateBindingError -> String)
 duplicateBindingError = define "duplicateBindingError" $
   doc "Show a duplicate binding error as a string" $
   "e" ~> Strings.cat $ list [
     string "duplicate binding: ",
     Core.unName $ project _DuplicateBindingError _DuplicateBindingError_name @@ var "e"]
 
-duplicateFieldError :: TTermDefinition (DuplicateFieldError -> String)
+duplicateFieldError :: TypedTermDefinition (DuplicateFieldError -> String)
 duplicateFieldError = define "duplicateFieldError" $
   doc "Show a duplicate field error as a string" $
   "e" ~> Strings.cat $ list [
     string "duplicate field: ",
     Core.unName $ project _DuplicateFieldError _DuplicateFieldError_name @@ var "e"]
 
-duplicateRecordTypeFieldNamesError :: TTermDefinition (DuplicateRecordTypeFieldNamesError -> String)
+duplicateRecordTypeFieldNamesError :: TypedTermDefinition (DuplicateRecordTypeFieldNamesError -> String)
 duplicateRecordTypeFieldNamesError = define "duplicateRecordTypeFieldNamesError" $
   doc "Show a duplicate record type field names error as a string" $
   "e" ~> Strings.cat $ list [
     string "duplicate field in record type: ",
     Core.unName $ project _DuplicateRecordTypeFieldNamesError _DuplicateRecordTypeFieldNamesError_name @@ var "e"]
 
-duplicateUnionTypeFieldNamesError :: TTermDefinition (DuplicateUnionTypeFieldNamesError -> String)
+duplicateUnionTypeFieldNamesError :: TypedTermDefinition (DuplicateUnionTypeFieldNamesError -> String)
 duplicateUnionTypeFieldNamesError = define "duplicateUnionTypeFieldNamesError" $
   doc "Show a duplicate union type field names error as a string" $
   "e" ~> Strings.cat $ list [
     string "duplicate field in union type: ",
     Core.unName $ project _DuplicateUnionTypeFieldNamesError _DuplicateUnionTypeFieldNamesError_name @@ var "e"]
 
-emptyCaseStatementError :: TTermDefinition (EmptyCaseStatementError -> String)
+emptyCaseStatementError :: TypedTermDefinition (EmptyCaseStatementError -> String)
 emptyCaseStatementError = define "emptyCaseStatementError" $
   doc "Show an empty case statement error as a string" $
   "e" ~> Strings.cat $ list [
     string "empty case statement for type: ",
     Core.unName $ project _EmptyCaseStatementError _EmptyCaseStatementError_typeName @@ var "e"]
 
-emptyLetBindingsError :: TTermDefinition (EmptyLetBindingsError -> String)
+emptyLetBindingsError :: TypedTermDefinition (EmptyLetBindingsError -> String)
 emptyLetBindingsError = define "emptyLetBindingsError" $
   doc "Show an empty let bindings error as a string" $
   "e" ~> string "let expression with no bindings"
 
-emptyRecordTypeError :: TTermDefinition (EmptyRecordTypeError -> String)
+emptyRecordTypeError :: TypedTermDefinition (EmptyRecordTypeError -> String)
 emptyRecordTypeError = define "emptyRecordTypeError" $
   doc "Show an empty record type error as a string" $
   "e" ~> string "record type with no fields (use TypeUnit instead)"
 
-emptyTermAnnotationError :: TTermDefinition (EmptyTermAnnotationError -> String)
+emptyTermAnnotationError :: TypedTermDefinition (EmptyTermAnnotationError -> String)
 emptyTermAnnotationError = define "emptyTermAnnotationError" $
   doc "Show an empty term annotation error as a string" $
   "e" ~> string "term annotation with empty annotation map"
 
-emptyTypeAnnotationError :: TTermDefinition (EmptyTypeAnnotationError -> String)
+emptyTypeAnnotationError :: TypedTermDefinition (EmptyTypeAnnotationError -> String)
 emptyTypeAnnotationError = define "emptyTypeAnnotationError" $
   doc "Show an empty type annotation error as a string" $
   "e" ~> string "type annotation with empty annotation map"
 
-emptyTypeNameInTermError :: TTermDefinition (EmptyTypeNameInTermError -> String)
+emptyTypeNameInTermError :: TypedTermDefinition (EmptyTypeNameInTermError -> String)
 emptyTypeNameInTermError = define "emptyTypeNameInTermError" $
   doc "Show an empty type name in term error as a string" $
   "e" ~> string "term with empty type name"
 
-emptyUnionTypeError :: TTermDefinition (EmptyUnionTypeError -> String)
+emptyUnionTypeError :: TypedTermDefinition (EmptyUnionTypeError -> String)
 emptyUnionTypeError = define "emptyUnionTypeError" $
   doc "Show an empty union type error as a string" $
   "e" ~> string "union type with no alternatives (use TypeVoid instead)"
 
-invalidForallParameterNameError :: TTermDefinition (InvalidForallParameterNameError -> String)
+invalidForallParameterNameError :: TypedTermDefinition (InvalidForallParameterNameError -> String)
 invalidForallParameterNameError = define "invalidForallParameterNameError" $
   doc "Show an invalid forall parameter name error as a string" $
   "e" ~> Strings.cat $ list [
     string "invalid forall parameter name: ",
     Core.unName $ project _InvalidForallParameterNameError _InvalidForallParameterNameError_name @@ var "e"]
 
-invalidLambdaParameterNameError :: TTermDefinition (InvalidLambdaParameterNameError -> String)
+invalidLambdaParameterNameError :: TypedTermDefinition (InvalidLambdaParameterNameError -> String)
 invalidLambdaParameterNameError = define "invalidLambdaParameterNameError" $
   doc "Show an invalid lambda parameter name error as a string" $
   "e" ~> Strings.cat $ list [
     string "invalid lambda parameter name: ",
     Core.unName $ project _InvalidLambdaParameterNameError _InvalidLambdaParameterNameError_name @@ var "e"]
 
-invalidLetBindingNameError :: TTermDefinition (InvalidLetBindingNameError -> String)
+invalidLetBindingNameError :: TypedTermDefinition (InvalidLetBindingNameError -> String)
 invalidLetBindingNameError = define "invalidLetBindingNameError" $
   doc "Show an invalid let binding name error as a string" $
   "e" ~> Strings.cat $ list [
     string "invalid let binding name: ",
     Core.unName $ project _InvalidLetBindingNameError _InvalidLetBindingNameError_name @@ var "e"]
 
-invalidTermError :: TTermDefinition (InvalidTermError -> String)
+invalidTermError :: TypedTermDefinition (InvalidTermError -> String)
 invalidTermError = define "invalidTermError" $
   doc "Show an invalid term error as a string" $
   "e" ~> Strings.cat2 (string "invalid term: ") $
@@ -242,7 +242,7 @@ invalidTermError = define "invalidTermError" $
 -- Type validation error show functions
 -- ============================================================================
 
-invalidTypeError :: TTermDefinition (InvalidTypeError -> String)
+invalidTypeError :: TypedTermDefinition (InvalidTypeError -> String)
 invalidTypeError = define "invalidTypeError" $
   doc "Show an invalid type error as a string" $
   "e" ~> Strings.cat2 (string "invalid type: ") $
@@ -262,87 +262,87 @@ invalidTypeError = define "invalidTypeError" $
       _InvalidTypeError_undefinedTypeVariable>>: undefinedTypeVariableError,
       _InvalidTypeError_voidInNonBottomPosition>>: voidInNonBottomPositionError]
 
-invalidTypeLambdaParameterNameError :: TTermDefinition (InvalidTypeLambdaParameterNameError -> String)
+invalidTypeLambdaParameterNameError :: TypedTermDefinition (InvalidTypeLambdaParameterNameError -> String)
 invalidTypeLambdaParameterNameError = define "invalidTypeLambdaParameterNameError" $
   doc "Show an invalid type lambda parameter name error as a string" $
   "e" ~> Strings.cat $ list [
     string "invalid type lambda parameter name: ",
     Core.unName $ project _InvalidTypeLambdaParameterNameError _InvalidTypeLambdaParameterNameError_name @@ var "e"]
 
-invalidTypeSchemeVariableNameError :: TTermDefinition (InvalidTypeSchemeVariableNameError -> String)
+invalidTypeSchemeVariableNameError :: TypedTermDefinition (InvalidTypeSchemeVariableNameError -> String)
 invalidTypeSchemeVariableNameError = define "invalidTypeSchemeVariableNameError" $
   doc "Show an invalid type scheme variable name error as a string" $
   "e" ~> Strings.cat $ list [
     string "invalid type scheme variable name: ",
     Core.unName $ project _InvalidTypeSchemeVariableNameError _InvalidTypeSchemeVariableNameError_name @@ var "e"]
 
-nestedTermAnnotationError :: TTermDefinition (NestedTermAnnotationError -> String)
+nestedTermAnnotationError :: TypedTermDefinition (NestedTermAnnotationError -> String)
 nestedTermAnnotationError = define "nestedTermAnnotationError" $
   doc "Show a nested term annotation error as a string" $
   "e" ~> string "nested term annotations should be merged"
 
-nestedTypeAnnotationError :: TTermDefinition (NestedTypeAnnotationError -> String)
+nestedTypeAnnotationError :: TypedTermDefinition (NestedTypeAnnotationError -> String)
 nestedTypeAnnotationError = define "nestedTypeAnnotationError" $
   doc "Show a nested type annotation error as a string" $
   "e" ~> string "nested type annotations should be merged"
 
-nonComparableMapKeyTypeError :: TTermDefinition (NonComparableMapKeyTypeError -> String)
+nonComparableMapKeyTypeError :: TypedTermDefinition (NonComparableMapKeyTypeError -> String)
 nonComparableMapKeyTypeError = define "nonComparableMapKeyTypeError" $
   doc "Show a non-comparable map key type error as a string" $
   "e" ~> Strings.cat $ list [
     string "map key type contains a function type: ",
     ShowCore.type_ @@ (project _NonComparableMapKeyTypeError _NonComparableMapKeyTypeError_keyType @@ var "e")]
 
-nonComparableSetElementTypeError :: TTermDefinition (NonComparableSetElementTypeError -> String)
+nonComparableSetElementTypeError :: TypedTermDefinition (NonComparableSetElementTypeError -> String)
 nonComparableSetElementTypeError = define "nonComparableSetElementTypeError" $
   doc "Show a non-comparable set element type error as a string" $
   "e" ~> Strings.cat $ list [
     string "set element type contains a function type: ",
     ShowCore.type_ @@ (project _NonComparableSetElementTypeError _NonComparableSetElementTypeError_elementType @@ var "e")]
 
-redundantWrapUnwrapError :: TTermDefinition (RedundantWrapUnwrapError -> String)
+redundantWrapUnwrapError :: TypedTermDefinition (RedundantWrapUnwrapError -> String)
 redundantWrapUnwrapError = define "redundantWrapUnwrapError" $
   doc "Show a redundant wrap/unwrap error as a string" $
   "e" ~> Strings.cat $ list [
     string "redundant wrap/unwrap for type: ",
     Core.unName $ project _RedundantWrapUnwrapError _RedundantWrapUnwrapError_typeName @@ var "e"]
 
-selfApplicationError :: TTermDefinition (SelfApplicationError -> String)
+selfApplicationError :: TypedTermDefinition (SelfApplicationError -> String)
 selfApplicationError = define "selfApplicationError" $
   doc "Show a self-application error as a string" $
   "e" ~> Strings.cat $ list [
     string "self-application of variable: ",
     Core.unName $ project _SelfApplicationError _SelfApplicationError_name @@ var "e"]
 
-singleVariantUnionError :: TTermDefinition (SingleVariantUnionError -> String)
+singleVariantUnionError :: TypedTermDefinition (SingleVariantUnionError -> String)
 singleVariantUnionError = define "singleVariantUnionError" $
   doc "Show a single variant union error as a string" $
   "e" ~> Strings.cat $ list [
     string "union type with single variant: ",
     Core.unName $ project _SingleVariantUnionError _SingleVariantUnionError_fieldName @@ var "e"]
 
-termVariableShadowingError :: TTermDefinition (TermVariableShadowingError -> String)
+termVariableShadowingError :: TypedTermDefinition (TermVariableShadowingError -> String)
 termVariableShadowingError = define "termVariableShadowingError" $
   doc "Show a term variable shadowing error as a string" $
   "e" ~> Strings.cat $ list [
     string "variable shadowing: ",
     Core.unName $ project _TermVariableShadowingError _TermVariableShadowingError_name @@ var "e"]
 
-typeVariableShadowingInForallError :: TTermDefinition (TypeVariableShadowingInForallError -> String)
+typeVariableShadowingInForallError :: TypedTermDefinition (TypeVariableShadowingInForallError -> String)
 typeVariableShadowingInForallError = define "typeVariableShadowingInForallError" $
   doc "Show a type variable shadowing in forall error as a string" $
   "e" ~> Strings.cat $ list [
     string "type variable shadowing in forall: ",
     Core.unName $ project _TypeVariableShadowingInForallError _TypeVariableShadowingInForallError_name @@ var "e"]
 
-typeVariableShadowingInTypeLambdaError :: TTermDefinition (TypeVariableShadowingInTypeLambdaError -> String)
+typeVariableShadowingInTypeLambdaError :: TypedTermDefinition (TypeVariableShadowingInTypeLambdaError -> String)
 typeVariableShadowingInTypeLambdaError = define "typeVariableShadowingInTypeLambdaError" $
   doc "Show a type variable shadowing in type lambda error as a string" $
   "e" ~> Strings.cat $ list [
     string "type variable shadowing in type lambda: ",
     Core.unName $ project _TypeVariableShadowingInTypeLambdaError _TypeVariableShadowingInTypeLambdaError_name @@ var "e"]
 
-undefinedFieldError :: TTermDefinition (UndefinedFieldError -> String)
+undefinedFieldError :: TypedTermDefinition (UndefinedFieldError -> String)
 undefinedFieldError = define "undefinedFieldError" $
   doc "Show an undefined field error as a string" $
   "e" ~>
@@ -355,42 +355,42 @@ undefinedFieldError = define "undefinedFieldError" $
     Core.unName $ var "tname",
     string "\""]
 
-undefinedTermVariableError :: TTermDefinition (UndefinedTermVariableError -> String)
+undefinedTermVariableError :: TypedTermDefinition (UndefinedTermVariableError -> String)
 undefinedTermVariableError = define "undefinedTermVariableError" $
   doc "Show an undefined term variable error as a string" $
   "e" ~> Strings.cat $ list [
     string "undefined term variable: ",
     Core.unName $ project _UndefinedTermVariableError _UndefinedTermVariableError_name @@ var "e"]
 
-undefinedTypeVariableError :: TTermDefinition (UndefinedTypeVariableError -> String)
+undefinedTypeVariableError :: TypedTermDefinition (UndefinedTypeVariableError -> String)
 undefinedTypeVariableError = define "undefinedTypeVariableError" $
   doc "Show an undefined type variable error as a string" $
   "e" ~> Strings.cat $ list [
     string "undefined type variable: ",
     Core.unName $ project _UndefinedTypeVariableError _UndefinedTypeVariableError_name @@ var "e"]
 
-undefinedTypeVariableInBindingTypeError :: TTermDefinition (UndefinedTypeVariableInBindingTypeError -> String)
+undefinedTypeVariableInBindingTypeError :: TypedTermDefinition (UndefinedTypeVariableInBindingTypeError -> String)
 undefinedTypeVariableInBindingTypeError = define "undefinedTypeVariableInBindingTypeError" $
   doc "Show an undefined type variable in binding type error as a string" $
   "e" ~> Strings.cat $ list [
     string "undefined type variable in binding type: ",
     Core.unName $ project _UndefinedTypeVariableInBindingTypeError _UndefinedTypeVariableInBindingTypeError_name @@ var "e"]
 
-undefinedTypeVariableInLambdaDomainError :: TTermDefinition (UndefinedTypeVariableInLambdaDomainError -> String)
+undefinedTypeVariableInLambdaDomainError :: TypedTermDefinition (UndefinedTypeVariableInLambdaDomainError -> String)
 undefinedTypeVariableInLambdaDomainError = define "undefinedTypeVariableInLambdaDomainError" $
   doc "Show an undefined type variable in lambda domain error as a string" $
   "e" ~> Strings.cat $ list [
     string "undefined type variable in lambda domain: ",
     Core.unName $ project _UndefinedTypeVariableInLambdaDomainError _UndefinedTypeVariableInLambdaDomainError_name @@ var "e"]
 
-undefinedTypeVariableInTypeApplicationError :: TTermDefinition (UndefinedTypeVariableInTypeApplicationError -> String)
+undefinedTypeVariableInTypeApplicationError :: TypedTermDefinition (UndefinedTypeVariableInTypeApplicationError -> String)
 undefinedTypeVariableInTypeApplicationError = define "undefinedTypeVariableInTypeApplicationError" $
   doc "Show an undefined type variable in type application error as a string" $
   "e" ~> Strings.cat $ list [
     string "undefined type variable in type application: ",
     Core.unName $ project _UndefinedTypeVariableInTypeApplicationError _UndefinedTypeVariableInTypeApplicationError_name @@ var "e"]
 
-unexpectedTermVariantError :: TTermDefinition (UnexpectedTermVariantError -> String)
+unexpectedTermVariantError :: TypedTermDefinition (UnexpectedTermVariantError -> String)
 unexpectedTermVariantError = define "unexpectedTermVariantError" $
   doc "Show an unexpected term variant error as a string" $
   "e" ~>
@@ -402,7 +402,7 @@ unexpectedTermVariantError = define "unexpectedTermVariantError" $
     string " term but found ",
     ShowCore.term @@ var "actual"]
 
-unexpectedTypeVariantError :: TTermDefinition (UnexpectedTypeVariantError -> String)
+unexpectedTypeVariantError :: TypedTermDefinition (UnexpectedTypeVariantError -> String)
 unexpectedTypeVariantError = define "unexpectedTypeVariantError" $
   doc "Show an unexpected type variant error as a string" $
   "e" ~>
@@ -418,26 +418,26 @@ unexpectedTypeVariantError = define "unexpectedTypeVariantError" $
 -- Term validation error show functions
 -- ============================================================================
 
-unknownPrimitiveNameError :: TTermDefinition (UnknownPrimitiveNameError -> String)
+unknownPrimitiveNameError :: TypedTermDefinition (UnknownPrimitiveNameError -> String)
 unknownPrimitiveNameError = define "unknownPrimitiveNameError" $
   doc "Show an unknown primitive name error as a string" $
   "e" ~> Strings.cat $ list [
     string "unknown primitive: ",
     Core.unName $ project _UnknownPrimitiveNameError _UnknownPrimitiveNameError_name @@ var "e"]
 
-unnecessaryIdentityApplicationError :: TTermDefinition (UnnecessaryIdentityApplicationError -> String)
+unnecessaryIdentityApplicationError :: TypedTermDefinition (UnnecessaryIdentityApplicationError -> String)
 unnecessaryIdentityApplicationError = define "unnecessaryIdentityApplicationError" $
   doc "Show an unnecessary identity application error as a string" $
   "e" ~> string "unnecessary application of identity lambda"
 
-untypedTermVariableError :: TTermDefinition (UntypedTermVariableError -> String)
+untypedTermVariableError :: TypedTermDefinition (UntypedTermVariableError -> String)
 untypedTermVariableError = define "untypedTermVariableError" $
   doc "Show an untyped term variable error as a string" $
   "e" ~> Strings.cat $ list [
     string "untyped term variable: ",
     Core.unName $ project _UntypedTermVariableError _UntypedTermVariableError_name @@ var "e"]
 
-voidInNonBottomPositionError :: TTermDefinition (VoidInNonBottomPositionError -> String)
+voidInNonBottomPositionError :: TypedTermDefinition (VoidInNonBottomPositionError -> String)
 voidInNonBottomPositionError = define "voidInNonBottomPositionError" $
   doc "Show a void in non-bottom position error as a string" $
   "e" ~> string "TypeVoid in a position where no value can be constructed"

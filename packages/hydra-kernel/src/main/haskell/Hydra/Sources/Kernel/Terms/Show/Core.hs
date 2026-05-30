@@ -91,10 +91,10 @@ module_ = Module {
      toDefinition type_,
      toDefinition typeScheme]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-binding :: TTermDefinition (Binding -> String)
+binding :: TypedTermDefinition (Binding -> String)
 binding = define "binding" $
   doc "Show a binding as a string" $
   "el" ~>
@@ -110,7 +110,7 @@ binding = define "binding" $
     string " = ",
     term @@ var "t"]
 
-caseStatement :: TTermDefinition (CaseStatement -> String)
+caseStatement :: TypedTermDefinition (CaseStatement -> String)
 caseStatement = define "caseStatement" $
   doc "Show a case statement as a string" $
   "cs" ~>
@@ -118,7 +118,7 @@ caseStatement = define "caseStatement" $
   "mdef" <~ Core.caseStatementDefault (var "cs") $
   "csCases" <~ Core.caseStatementCases (var "cs") $
   "defaultField" <~ Maybes.maybe
-    (list ([] :: [TTerm Field]))
+    (list ([] :: [TypedTerm Field]))
     ("d" ~> list [Core.field (Core.name $ string "[default]") (var "d")])
     (var "mdef") $
   "allFields" <~ Lists.concat (list [var "csCases", var "defaultField"]) $
@@ -128,7 +128,7 @@ caseStatement = define "caseStatement" $
     string ")",
     fields @@ var "allFields"]
       
-either_ :: TTermDefinition ((a -> String) -> (b -> String) -> Prelude.Either a b -> String)
+either_ :: TypedTermDefinition ((a -> String) -> (b -> String) -> Prelude.Either a b -> String)
 either_ = define "either" $
   doc "Show an Either value using given functions for left and right" $
   "showA" ~> "showB" ~> "e" ~>
@@ -137,7 +137,7 @@ either_ = define "either" $
     ("b" ~> Strings.cat2 (string "right(") (Strings.cat2 (var "showB" @@ var "b") (string ")")))
     (var "e")
 
-field :: TTermDefinition (Field -> String)
+field :: TypedTermDefinition (Field -> String)
 field = define "field" $
   doc "Show a field as a string" $
   "field" ~>
@@ -145,7 +145,7 @@ field = define "field" $
   "fterm" <~ Core.fieldTerm (var "field") $
   Strings.cat $ list [var "fname", string "=", term @@ var "fterm"]
 
-fieldType :: TTermDefinition (FieldType -> String)
+fieldType :: TypedTermDefinition (FieldType -> String)
 fieldType = define "fieldType" $
   doc "Show a field type as a string" $
   "ft" ~>
@@ -156,7 +156,7 @@ fieldType = define "fieldType" $
     string ":",
     type_ @@ var "ftyp"]
 
-fields :: TTermDefinition ([Field] -> String)
+fields :: TypedTermDefinition ([Field] -> String)
 fields = define "fields" $
   doc "Show a list of fields as a string" $
   "flds" ~>
@@ -166,21 +166,21 @@ fields = define "fields" $
     Strings.intercalate (string ", ") (var "fieldStrs"),
     string "}"]
 
-floatType :: TTermDefinition (FloatType -> String)
+floatType :: TypedTermDefinition (FloatType -> String)
 floatType = define "floatType" $
   doc "Show a float type as a string" $
   "ft" ~> cases _FloatType (var "ft") Nothing [
     _FloatType_float32>>: constant $ string "float32",
     _FloatType_float64>>: constant $ string "float64"]
 
-floatValue :: TTermDefinition (FloatValue -> String)
+floatValue :: TypedTermDefinition (FloatValue -> String)
 floatValue = define "float" $
   doc "Show a float value as a string" $
   "fv" ~> cases _FloatValue (var "fv") Nothing [
     _FloatValue_float32>>: "v" ~> Literals.showFloat32 (var "v") ++ (string ":float32"),
     _FloatValue_float64>>: "v" ~> Literals.showFloat64 (var "v") ++ (string ":float64")]
 
-injection :: TTermDefinition (Injection -> String)
+injection :: TypedTermDefinition (Injection -> String)
 injection = define "injection" $
   doc "Show an injection as a string" $
   "inj" ~>
@@ -192,7 +192,7 @@ injection = define "injection" $
     string ")",
     fields @@ (list [var "f"])]
 
-integerType :: TTermDefinition (IntegerType -> String)
+integerType :: TypedTermDefinition (IntegerType -> String)
 integerType = define "integerType" $
   doc "Show an integer type as a string" $
   "it" ~> cases _IntegerType (var "it") Nothing [
@@ -206,7 +206,7 @@ integerType = define "integerType" $
     _IntegerType_uint32>>: constant $ string "uint32",
     _IntegerType_uint64>>: constant $ string "uint64"]
 
-integerValue :: TTermDefinition (IntegerValue -> String)
+integerValue :: TypedTermDefinition (IntegerValue -> String)
 integerValue = define "integer" $
   doc "Show an integer value as a string" $
   "iv" ~> cases _IntegerValue (var "iv") Nothing [
@@ -220,7 +220,7 @@ integerValue = define "integer" $
     _IntegerValue_uint32>>: "v" ~> Literals.showUint32 (var "v") ++ (string ":uint32"),
     _IntegerValue_uint64>>: "v" ~> Literals.showUint64 (var "v") ++ (string ":uint64")]
 
-lambda :: TTermDefinition (Lambda -> String)
+lambda :: TypedTermDefinition (Lambda -> String)
 lambda = define "lambda" $
   doc "Show a lambda as a string" $
   "l" ~>
@@ -238,7 +238,7 @@ lambda = define "lambda" $
     string ".",
     term @@ var "body"]
 
-let_ :: TTermDefinition (Let -> String)
+let_ :: TypedTermDefinition (Let -> String)
 let_ = define "let" $
   doc "Show a let expression as a string" $
   "l" ~>
@@ -251,7 +251,7 @@ let_ = define "let" $
     string " in ",
     term @@ var "env"]
 
-list_ :: TTermDefinition ((a -> String) -> [a] -> String)
+list_ :: TypedTermDefinition ((a -> String) -> [a] -> String)
 list_ = define "list" $
   doc "Show a list using a given function to show each element" $
   "f" ~> "xs" ~>
@@ -261,7 +261,7 @@ list_ = define "list" $
     Strings.intercalate (string ", ") (var "elementStrs"),
     string "]"]
 
-literal :: TTermDefinition (Literal -> String)
+literal :: TypedTermDefinition (Literal -> String)
 literal = define "literal" $
   doc "Show a literal as a string" $
   "l" ~> cases _Literal (var "l") Nothing [
@@ -272,7 +272,7 @@ literal = define "literal" $
     _Literal_integer>>: "iv" ~> integerValue @@ var "iv",
     _Literal_string>>: "s" ~> Literals.showString $ var "s"]
 
-literalType :: TTermDefinition (LiteralType -> String)
+literalType :: TypedTermDefinition (LiteralType -> String)
 literalType = define "literalType" $
   doc "Show a literal type as a string" $
   "lt" ~> cases _LiteralType (var "lt") Nothing [
@@ -283,7 +283,7 @@ literalType = define "literalType" $
     _LiteralType_integer>>: "it" ~> integerType @@ var "it",
     _LiteralType_string>>: constant $ string "string"]
 
-map_ :: TTermDefinition ((k -> String) -> (v -> String) -> M.Map k v -> String)
+map_ :: TypedTermDefinition ((k -> String) -> (v -> String) -> M.Map k v -> String)
 map_ = define "map" $
   doc "Show a map using given functions to show keys and values" $
   "showK" ~> "showV" ~> "m" ~>
@@ -296,13 +296,13 @@ map_ = define "map" $
     Strings.intercalate (string ", ") (var "pairStrs"),
     string "}"]
 
-maybe_ :: TTermDefinition ((a -> String) -> Maybe a -> String)
+maybe_ :: TypedTermDefinition ((a -> String) -> Maybe a -> String)
 maybe_ = define "maybe" $
   doc "Show a Maybe value using a given function to show the element" $
   "f" ~> "mx" ~>
   Maybes.maybe (string "nothing") ("x" ~> Strings.cat2 (string "just(") (Strings.cat2 (var "f" @@ var "x") (string ")"))) (var "mx")
 
-pair_ :: TTermDefinition ((a -> String) -> (b -> String) -> (a, b) -> String)
+pair_ :: TypedTermDefinition ((a -> String) -> (b -> String) -> (a, b) -> String)
 pair_ = define "pair" $
   doc "Show a pair using given functions to show each element" $
   "showA" ~> "showB" ~> "p" ~>
@@ -313,7 +313,7 @@ pair_ = define "pair" $
     var "showB" @@ (Pairs.second $ var "p"),
     string ")"]
 
-projection :: TTermDefinition (Projection -> String)
+projection :: TypedTermDefinition (Projection -> String)
 projection = define "projection" $
   doc "Show a projection as a string" $
   "proj" ~>
@@ -326,12 +326,12 @@ projection = define "projection" $
     var "fname",
     string "}"]
 
-readTerm :: TTermDefinition (String -> Maybe Term)
+readTerm :: TypedTermDefinition (String -> Maybe Term)
 readTerm = define "readTerm" $
   doc "A placeholder for reading terms from their serialized form. Not implemented." $
   "s" ~> just $ Core.termLiteral $ Core.literalString $ var "s"
 
-set_ :: TTermDefinition ((a -> String) -> S.Set a -> String)
+set_ :: TypedTermDefinition ((a -> String) -> S.Set a -> String)
 set_ = define "set" $
   doc "Show a set using a given function to show each element" $
   "f" ~> "xs" ~>
@@ -341,7 +341,7 @@ set_ = define "set" $
     Strings.intercalate (string ", ") (var "elementStrs"),
     string "}"]
 
-term :: TTermDefinition (Term -> String)
+term :: TypedTermDefinition (Term -> String)
 term = define "term" $
   doc "Show a term as a string" $
   "t" ~>
@@ -354,7 +354,7 @@ term = define "term" $
   cases _Term (var "t") Nothing [
     _Term_annotated>>: "at" ~> term @@ (Core.annotatedTermBody $ var "at"),
     _Term_application>>: "app" ~>
-      "terms" <~ var "gatherTerms" @@ (list ([] :: [TTerm Term])) @@ var "app" $
+      "terms" <~ var "gatherTerms" @@ (list ([] :: [TypedTerm Term])) @@ var "app" $
       "termStrs" <~ Lists.map term (var "terms") $
       Strings.cat $ list [
         string "(",
@@ -449,7 +449,7 @@ term = define "term" $
         term @@ var "term1",
         string "}"]]
 
-typeScheme :: TTermDefinition (TypeScheme -> String)
+typeScheme :: TypedTermDefinition (TypeScheme -> String)
 typeScheme = define "typeScheme" $
   doc "Show a type scheme as a string" $
   "ts" ~>
@@ -471,7 +471,7 @@ typeScheme = define "typeScheme" $
     (var "toConstraintPair" @@ (Pairs.first $ var "p")) $
     Core.typeVariableMetadataClasses $ Pairs.second $ var "p") $
   "tc" <~ optCases (Core.typeSchemeConstraints (var "ts"))
-    (list ([] :: [TTerm String]))
+    (list ([] :: [TypedTerm String]))
     ("m" ~> Lists.concat $ Lists.map (var "toConstraintPairs") $ Maps.toList $ var "m") $
   Strings.cat $ list [
     string "(",
@@ -485,7 +485,7 @@ typeScheme = define "typeScheme" $
     type_ @@ var "body",
     string ")"]
 
-type_ :: TTermDefinition (Type -> String)
+type_ :: TypedTermDefinition (Type -> String)
 type_ = define "type" $
   doc "Show a type as a string" $
   "typ" ~>
@@ -511,7 +511,7 @@ type_ = define "type" $
   cases _Type (var "typ") Nothing [
     _Type_annotated>>: "at" ~> type_ @@ (Core.annotatedTypeBody $ var "at"),
     _Type_application>>: "app" ~>
-      "types" <~ var "gatherTypes" @@ (list ([] :: [TTerm Type])) @@ var "app" $
+      "types" <~ var "gatherTypes" @@ (list ([] :: [TypedTerm Type])) @@ var "app" $
       "typeStrs" <~ Lists.map type_ (var "types") $
       Strings.cat $ list [
         string "(",
@@ -536,7 +536,7 @@ type_ = define "type" $
         type_ @@ var "body",
         string ")"],
     _Type_function>>: "ft" ~>
-      "types" <~ var "gatherFunctionTypes" @@ (list ([] :: [TTerm Type])) @@ var "typ" $
+      "types" <~ var "gatherFunctionTypes" @@ (list ([] :: [TypedTerm Type])) @@ var "typ" $
       "typeStrs" <~ Lists.map type_ (var "types") $
       Strings.cat $ list [
         string "(",
