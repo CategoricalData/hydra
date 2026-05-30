@@ -20,7 +20,7 @@ the source of truth for `dist/json/hydra-python/`, exported via
 
 `bin/sync.sh` runs `bin/generate-hydra-python-from-python.sh` automatically in
 Phase 5 on every invocation. The native generator owns `dist/json/hydra-python/`;
-Phase 1 (Haskell DSL → JSON) skips `hydra.python.*` namespaces by default and
+Phase 1 (Haskell DSL → JSON) skips `hydra.python.*` module names by default and
 only writes them on a cold-start bootstrap (when `dist/json/hydra-python/` is
 empty), so in any warm state the only writer is the native generator. A diff
 report against the pre-run snapshot reports the number of changed files. The
@@ -42,7 +42,7 @@ The synchronization process generates four categories of Python code:
 | Category | Source | Target | Description |
 |----------|--------|--------|-------------|
 | Kernel modules | `Hydra.Sources.All.kernelModules` | `dist/python/hydra-kernel/src/main/python/hydra/` | Core Hydra types and functions |
-| Default-impl modules | `Hydra.Sources.Kernel.Lib.Defaults.*` (per-namespace) | `dist/python/hydra-kernel/src/main/python/hydra/lib/defaults/` | Interpreter-friendly term-level reference implementations |
+| Default-impl modules | `Hydra.Sources.Kernel.Lib.Defaults.*` (per-module-name) | `dist/python/hydra-kernel/src/main/python/hydra/lib/defaults/` | Interpreter-friendly term-level reference implementations |
 | Kernel tests | `Hydra.Sources.Test.All.testModules` | `dist/python/hydra-kernel/src/test/python/hydra/test/` | Test data structures |
 | Generation tests | TestSuite + TestGroups | `dist/python/hydra-kernel/src/test/python/generation/` | Executable pytest tests |
 

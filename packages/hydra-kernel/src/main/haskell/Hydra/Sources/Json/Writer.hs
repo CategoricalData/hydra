@@ -100,7 +100,7 @@ module_ = Module {
       toDefinition printJson,
       toDefinition valueToExpr]
 
-colonOp :: TTermDefinition Op
+colonOp :: TypedTermDefinition Op
 colonOp = jsonSerdeDefinition "colonOp" $
   doc "The colon operator used to separate keys and values in JSON objects" $
   Ast.op
@@ -110,7 +110,7 @@ colonOp = jsonSerdeDefinition "colonOp" $
     Ast.associativityNone
 
 -- | ASCII codepoints for characters that need escaping
-quoteCode, backslashCode, backspaceCode, formfeedCode, newlineCode, returnCode, tabCode :: TTerm Int
+quoteCode, backslashCode, backspaceCode, formfeedCode, newlineCode, returnCode, tabCode :: TypedTerm Int
 quoteCode = int32 34      -- '"'
 backslashCode = int32 92  -- '\\'
 backspaceCode = int32 8   -- '\b'
@@ -122,7 +122,7 @@ tabCode = int32 9         -- '\t'
 -- | Encode a byte value (0..255) as a two-character lowercase hex string.
 -- For out-of-range inputs (unreachable for a real byte), substitutes "?" for
 -- each invalid nibble so output remains a valid 2-character string.
-hexByte :: TTermDefinition (Int -> String)
+hexByte :: TypedTermDefinition (Int -> String)
 hexByte = jsonSerdeDefinition "hexByte" $
   doc "Encode a byte (0..255) as a two-character lowercase hex string. Non-byte inputs yield placeholder '?' characters." $
   "c" ~>
@@ -133,13 +133,13 @@ hexByte = jsonSerdeDefinition "hexByte" $
   "lo" <~ (var "nibble" @@ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "c") (int32 16))) $
   var "hi" ++ var "lo"
 
-hexDigits :: TTerm String
+hexDigits :: TypedTerm String
 hexDigits = string "0123456789abcdef"
 
-jsonSerdeDefinition :: String -> TTerm a -> TTermDefinition a
+jsonSerdeDefinition :: String -> TypedTerm a -> TypedTermDefinition a
 jsonSerdeDefinition = definitionInModule module_
 
-jsonString :: TTermDefinition (String -> String)
+jsonString :: TypedTermDefinition (String -> String)
 jsonString = jsonSerdeDefinition "jsonString" $
   doc "Escape and quote a string for JSON output" $
   "s" ~>
@@ -169,7 +169,7 @@ jsonString = jsonSerdeDefinition "jsonString" $
   "escaped" <~ Strings.cat (Lists.map (var "escape") (Strings.toList $ var "s")) $
   string "\"" ++ var "escaped" ++ string "\""
 
-keyValueToExpr :: TTermDefinition ((String, J.Value) -> Expr)
+keyValueToExpr :: TypedTermDefinition ((String, J.Value) -> Expr)
 keyValueToExpr = jsonSerdeDefinition "keyValueToExpr" $
   doc "Convert a key-value pair to an AST expression" $
   "pair" ~>
@@ -179,12 +179,12 @@ keyValueToExpr = jsonSerdeDefinition "keyValueToExpr" $
     @@ (Serialization.cst @@ (jsonString @@ var "key"))
     @@ (valueToExpr @@ var "value")
 
-printJson :: TTermDefinition (J.Value -> String)
+printJson :: TypedTermDefinition (J.Value -> String)
 printJson = jsonSerdeDefinition "printJson" $
   doc "Serialize a JSON value to a string" $
   "value" ~> Serialization.printExpr @@ (valueToExpr @@ var "value")
 
-valueToExpr :: TTermDefinition (J.Value -> Expr)
+valueToExpr :: TypedTermDefinition (J.Value -> Expr)
 valueToExpr = jsonSerdeDefinition "valueToExpr" $
   doc "Convert a JSON value to an AST expression for serialization" $
   "value" ~>

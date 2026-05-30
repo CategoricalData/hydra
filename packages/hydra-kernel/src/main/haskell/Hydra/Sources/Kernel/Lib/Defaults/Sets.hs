@@ -56,7 +56,7 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 ns :: ModuleName
 ns = ModuleName "hydra.lib.defaults.sets"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -75,7 +75,7 @@ module_ = Module {
 
 -- | Interpreter-friendly set difference.
 -- difference s1 s2: elements in s1 that are not in s2.
-difference_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+difference_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 difference_ = define "difference" $
   doc "Interpreter-friendly set difference." $
   "cx" ~> "g" ~>
@@ -99,12 +99,12 @@ difference_ = define "difference" $
             (Core.termVariable $ encodedName _sets_insert)
             (var "el"))
           (var "acc")))
-    (Core.termSet $ Sets.fromList (list ([] :: [TTerm Term])))
+    (Core.termSet $ Sets.fromList (list ([] :: [TypedTerm Term])))
     (Sets.toList $ var "elements")
 
 -- | Interpreter-friendly set intersection.
 -- intersection s1 s2: elements in both s1 and s2.
-intersection_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+intersection_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 intersection_ = define "intersection" $
   doc "Interpreter-friendly set intersection." $
   "cx" ~> "g" ~>
@@ -128,12 +128,12 @@ intersection_ = define "intersection" $
               (var "el"))
             (var "acc")))
         (var "acc"))
-    (Core.termSet $ Sets.fromList (list ([] :: [TTerm Term])))
+    (Core.termSet $ Sets.fromList (list ([] :: [TypedTerm Term])))
     (Sets.toList $ var "elements")
 
 -- | Interpreter-friendly map for Set terms.
 -- Applies fun to each element.
-map_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+map_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for Set terms." $
   "cx" ~> "g" ~>
@@ -148,7 +148,7 @@ map_ = define "map" $
 
 -- | Interpreter-friendly set union.
 -- union s1 s2: elements in either s1 or s2.
-union_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+union_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 union_ = define "union" $
   doc "Interpreter-friendly set union." $
   "cx" ~> "g" ~>
@@ -167,7 +167,7 @@ union_ = define "union" $
 
 -- | Interpreter-friendly unions for list of Set terms.
 -- unions [s1, s2, ...]: union of all sets.
-unions_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
+unions_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 unions_ = define "unions" $
   doc "Interpreter-friendly unions for list of Set terms." $
   "cx" ~> "g" ~>
@@ -181,5 +181,5 @@ unions_ = define "unions" $
           (Core.termVariable $ encodedName _sets_union)
           (var "acc"))
         (var "s"))
-    (Core.termSet $ Sets.fromList (list ([] :: [TTerm Term])))
+    (Core.termSet $ Sets.fromList (list ([] :: [TypedTerm Term])))
     (var "elements")

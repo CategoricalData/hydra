@@ -65,7 +65,7 @@ import qualified Hydra.Sources.Kernel.Terms.Sorting as Sorting
 ns :: ModuleName
 ns = ModuleName "hydra.scoping"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -85,7 +85,7 @@ module_ = Module {
      toDefinition typeSchemeToFType,
      toDefinition typeSchemeToTermSignature]
 
-extendGraphForLambda :: TTermDefinition (Graph -> Lambda -> Graph)
+extendGraphForLambda :: TypedTermDefinition (Graph -> Lambda -> Graph)
 extendGraphForLambda = define "extendGraphForLambda" $
   doc "Extend a graph by descending into a lambda body" $
   "g" ~> "lam" ~>
@@ -102,7 +102,7 @@ extendGraphForLambda = define "extendGraphForLambda" $
     (Graph.graphSchemaTypes $ var "g")
     (Graph.graphTypeVariables $ var "g")
 
-extendGraphForLet :: TTermDefinition ((Graph -> Binding -> Maybe Term) -> Graph -> Let -> Graph)
+extendGraphForLet :: TypedTermDefinition ((Graph -> Binding -> Maybe Term) -> Graph -> Let -> Graph)
 extendGraphForLet = define "extendGraphForLet" $
   doc "Extend a graph by descending into a let body" $
   "forBinding" ~> "g" ~> "letrec" ~>
@@ -148,7 +148,7 @@ extendGraphForLet = define "extendGraphForLet" $
     (Graph.graphSchemaTypes $ var "g")
     (Graph.graphTypeVariables $ var "g")
 
-extendGraphForTypeLambda :: TTermDefinition (Graph -> TypeLambda -> Graph)
+extendGraphForTypeLambda :: TypedTermDefinition (Graph -> TypeLambda -> Graph)
 extendGraphForTypeLambda = define "extendGraphForTypeLambda" $
   doc "Extend a graph by descending into a type lambda body" $
   "g" ~> "tlam" ~>
@@ -163,7 +163,7 @@ extendGraphForTypeLambda = define "extendGraphForTypeLambda" $
     (Graph.graphSchemaTypes $ var "g")
     (Sets.insert (var "name") $ Graph.graphTypeVariables $ var "g")
 
-extendGraphWithBindings :: TTermDefinition ([Binding] -> Graph -> Graph)
+extendGraphWithBindings :: TypedTermDefinition ([Binding] -> Graph -> Graph)
 extendGraphWithBindings = define "extendGraphWithBindings" $
   doc "Add bindings to an existing graph" $
   "bindings" ~> "g" ~>
@@ -183,7 +183,7 @@ extendGraphWithBindings = define "extendGraphWithBindings" $
     (Graph.graphSchemaTypes (var "g"))
     (Graph.graphTypeVariables (var "g"))
 
-fTypeToTypeScheme :: TTermDefinition (Type -> TypeScheme)
+fTypeToTypeScheme :: TypedTermDefinition (Type -> TypeScheme)
 fTypeToTypeScheme = define "fTypeToTypeScheme" $
   doc "Convert a forall type to a type scheme" $
   "typ" ~>
@@ -195,9 +195,9 @@ fTypeToTypeScheme = define "fTypeToTypeScheme" $
      _Type_forall>>: "ft" ~> var "gatherForall" @@
        (Lists.cons (Core.forallTypeParameter $ var "ft") (var "vars")) @@
        (Core.forallTypeBody $ var "ft")]) $
-  var "gatherForall" @@ list ([] :: [TTerm Name]) @@ var "typ"
+  var "gatherForall" @@ list ([] :: [TypedTerm Name]) @@ var "typ"
 
-termSignatureToTypeScheme :: TTermDefinition (TermSignature -> TypeScheme)
+termSignatureToTypeScheme :: TypedTermDefinition (TermSignature -> TypeScheme)
 termSignatureToTypeScheme = define "termSignatureToTypeScheme" $
   doc "Convert a TermSignature to a TypeScheme, erasing parameter names, descriptions, and laziness flags." $
   "sig" ~>
@@ -224,7 +224,7 @@ termSignatureToTypeScheme = define "termSignatureToTypeScheme" $
     Phantoms.nothing $
   Core.typeScheme (var "variables") (var "body") (var "constraints")
 
-typeSchemeToFType :: TTermDefinition (TypeScheme -> Type)
+typeSchemeToFType :: TypedTermDefinition (TypeScheme -> Type)
 typeSchemeToFType = define "typeSchemeToFType" $
   doc "Convert a type scheme to a forall type" $
   "ts" ~>
@@ -235,7 +235,7 @@ typeSchemeToFType = define "typeSchemeToFType" $
     (var "body")
     (Lists.reverse $ var "vars")
 
-typeSchemeToTermSignature :: TTermDefinition (TypeScheme -> TermSignature)
+typeSchemeToTermSignature :: TypedTermDefinition (TypeScheme -> TermSignature)
 typeSchemeToTermSignature = define "typeSchemeToTermSignature" $
   doc ("Convert a TypeScheme to a TermSignature. Type variables and class constraints are preserved exactly."
     <> " Value-parameter names are synthesized as arg0, arg1, .... Per-parameter descriptions are nothing"
@@ -248,7 +248,7 @@ typeSchemeToTermSignature = define "typeSchemeToTermSignature" $
   "typeParams" <~ Lists.map
     ("v" ~> Typing.typeParameter (var "v") $ optCases
       (Maps.lookup (var "v") (var "constraintsMap"))
-      (list ([] :: [TTerm TypeClassConstraint]))
+      (list ([] :: [TypedTerm TypeClassConstraint]))
       ("tvm" ~> Core.typeVariableMetadataClasses $ var "tvm"))
     (var "variables") $
   -- Peel function arrows off the body, accumulating parameter types in reverse order.
@@ -257,7 +257,7 @@ typeSchemeToTermSignature = define "typeSchemeToTermSignature" $
     _Type_function>>: "ft" ~> var "peel" @@
       (Lists.cons (Core.functionTypeDomain $ var "ft") (var "acc")) @@
       (Core.functionTypeCodomain $ var "ft")]) $
-  "peeled" <~ (var "peel" @@ list ([] :: [TTerm Type]) @@ var "body") $
+  "peeled" <~ (var "peel" @@ list ([] :: [TypedTerm Type]) @@ var "body") $
   "paramTypes" <~ Pairs.first (var "peeled") $
   "resultType" <~ Pairs.second (var "peeled") $
   -- Build Parameters with synthetic names arg0, arg1, .... We iterate via
@@ -276,7 +276,7 @@ typeSchemeToTermSignature = define "typeSchemeToTermSignature" $
             false)
           (var "pairAcc"))
         (Math.add (var "i") (int32 1)))
-    (pair (list ([] :: [TTerm Parameter])) (int32 0))
+    (pair (list ([] :: [TypedTerm Parameter])) (int32 0))
     (var "paramTypes")) $
   "result" <~ Typing.result Phantoms.nothing (var "resultType") $
   Typing.termSignature (var "typeParams") (var "params") (var "result")

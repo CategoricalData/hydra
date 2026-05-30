@@ -28,7 +28,7 @@ Each primitive has two faces:
    `Primitive` record at host-side registration time.
 
 The kernel's `Hydra/Sources/Kernel/Lib/<sub>.hs` files **are** the primitive registry:
-they enumerate every primitive in each `hydra.lib.<sub>` namespace with its full
+they enumerate every primitive in each `hydra.lib.<sub>` module name with its full
 metadata. Host registrations look up that metadata by name and pair it with their
 native implementation.
 
@@ -37,9 +37,9 @@ constants* like `hydra.lib.math.pi` and `hydra.lib.sets.empty`.
 
 ### How the registry works
 
-For each library namespace, e.g. `hydra.lib.logic`, there is a kernel source module
+For each library module name, e.g. `hydra.lib.logic`, there is a kernel source module
 `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Logic.hs` that
-declares every primitive in that namespace as a `PrimitiveDefinition`:
+declares every primitive in that module name as a `PrimitiveDefinition`:
 
 ```haskell
 ns :: ModuleName
@@ -63,16 +63,16 @@ module_ = Module {
 andSig :: TermSignature
 andSig = sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) Nothing
 
-and_ :: TTermDefinition (Bool -> Bool -> Bool)
+and_ :: TypedTermDefinition (Bool -> Bool -> Bool)
 and_ = define "and" $
   doc "Logical AND, defined in terms of ifElse." $
-  "a" ~> "b" ~> Logic.ifElse (var "a") (var "b" :: TTerm Bool) false
+  "a" ~> "b" ~> Logic.ifElse (var "a") (var "b" :: TypedTerm Bool) false
 ```
 
 The two helpers used here:
 
 - **`toPrimitive description signature comments defaultBody`** — declares a primitive
-  whose `defaultImplementation` is a pure Hydra-term expression (the `TTermDefinition`
+  whose `defaultImplementation` is a pure Hydra-term expression (the `TypedTermDefinition`
   body). Used when the primitive can be defined in terms of other primitives.
 - **`primNoDef localName description signature comments`** — declares a primitive
   with no default implementation, for primitives that are fundamental (e.g.
@@ -89,7 +89,7 @@ and host bindings.
 
 #### Writing the `comments` field
 
-Conventions established across the 13 `hydra.lib.*` namespaces (#319):
+Conventions established across the 13 `hydra.lib.*` module names (#319):
 
 - **Pick an authoritative source.** IEEE 754-2019 for floating-point operations
   (§5 for arithmetic + rounding, §9.2 for trig / exp / log); Unicode (general
@@ -177,7 +177,7 @@ primitives and term-level constructs. For example:
 
 ```haskell
 -- maybes.fromMaybe def m = maybe def (\x -> x) m
-fromMaybe_ :: TTermDefinition (a -> Maybe a -> a)
+fromMaybe_ :: TypedTermDefinition (a -> Maybe a -> a)
 fromMaybe_ = define "fromMaybe" $
   doc "Return the contained value or a default, defined in terms of maybe." $
   "def" ~> "m" ~> Maybes.maybe (var "def") ("x" ~> var "x") (var "m")
@@ -193,7 +193,7 @@ host's native implementation.
 The order is: **kernel metadata first**, then native implementations, then host
 registrations, then DSL wrappers, then tests.
 
-### 1. Pick the namespace and add the name constant
+### 1. Pick the module name and add the name constant
 
 Open `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Names.hs`
 and add the primitive's `Name` constant in the appropriate library section
@@ -206,7 +206,7 @@ charsIsAlphaNum = qname chars "isAlphaNum"
 
 This module is a derived Haskell-side index — it has no `module_ :: Module`
 declaration and no `definitions` list to update. Each constant has type
-`Name` (not `TTermDefinition Name`), matching the type expected by
+`Name` (not `TypedTermDefinition Name`), matching the type expected by
 `prim1` / `prim2` / `prim3` and `primitive1` / `primitive2` / `primitive3`.
 
 Then add a legacy-style alias in
@@ -269,7 +269,7 @@ b → (a → b) → maybe<a> → b` lists vars as `[b, a]`, not `[a, b]`.
 
 ```haskell
 
-bimap_ :: TTermDefinition ((a -> c) -> (b -> d) -> (a, b) -> (c, d))
+bimap_ :: TypedTermDefinition ((a -> c) -> (b -> d) -> (a, b) -> (c, d))
 bimap_ = define "bimap" $
   doc "Map over both elements of a pair, defined in terms of first and second." $
   "f" ~> "g" ~> "p" ~> pair (var "f" @@ Pairs.first (var "p"))
@@ -333,17 +333,17 @@ that need to construct unevaluated `(Core.termApplication ...)` terms
 and recurse — the term-level reference is published as a separate
 "defaults" module under
 `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Defaults/<Sub>.hs`.
-These modules emit a sibling kernel namespace
-`hydra.lib.defaults.<sub>` whose `TTermDefinition`s take the standard
+These modules emit a sibling kernel module name
+`hydra.lib.defaults.<sub>` whose `TypedTermDefinition`s take the standard
 interpreter context: `InferenceContext -> Graph -> ... -> Either Error Term`.
 
-If your new primitive belongs to a namespace that already has a
+If your new primitive belongs to a module name that already has a
 `Defaults/<Sub>.hs`, add an interpreter-friendly companion there
 alongside the existing entries:
 
 ```haskell
 -- packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Defaults/Eithers.hs
-bimap_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
+bimap_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
 bimap_ = define "bimap" $
   doc "Interpreter-friendly bimap for Either terms." $
   "cx" ~> "g" ~>
@@ -364,7 +364,7 @@ locally bound to `definitionInModuleName ns` where `ns = ModuleName
 the kernel sync picks up the new entry through the
 `Defaults/<Sub>.hs` module's own `module_` declaration.
 
-If the namespace has no `Defaults/<Sub>.hs` yet, you usually don't need
+If the module name has no `Defaults/<Sub>.hs` yet, you usually don't need
 to create one — the in-line `defaultImplementation` body inside
 `Kernel/Lib/<Sub>.hs` (as shown in Step 2 with `toPrimitive`) is
 sufficient for almost all cases. The separate `Defaults/<Sub>.hs`
@@ -470,7 +470,7 @@ def is_alpha_num(value: int) -> bool:
 ```
 
 Then register it in the Python source registry at
-`heads/python/src/main/python/hydra/sources/libraries.py`. Each namespace has
+`heads/python/src/main/python/hydra/sources/libraries.py`. Each module name has
 its own `register_<sub>_primitives()` function that returns a
 `dict[Name, Primitive]`; add an entry there using `prims.prim1` /
 `prims.prim2` / `prims.prim3` to match the kernel signature:
@@ -504,15 +504,15 @@ Add typed wrappers in
 -- Hydra/Dsl/Meta/Lib/Chars.hs
 module Hydra.Dsl.Meta.Lib.Chars where
 
-import Hydra.Phantoms
+import Hydra.Typed
 import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Libraries
 
-isAlphaNum :: TTerm Int -> TTerm Bool
+isAlphaNum :: TypedTerm Int -> TypedTerm Bool
 isAlphaNum = primitive1 _chars_isAlphaNum
 
-toLower :: TTerm Int -> TTerm Int
+toLower :: TypedTerm Int -> TypedTerm Int
 toLower = primitive1 _chars_toLower
 ```
 
@@ -522,7 +522,7 @@ primitive by name. The phantom type must match the primitive's
 signature.
 
 **Guidelines:**
-- Use phantom types (`TTerm`) for type safety.
+- Use phantom types (`TypedTerm`) for type safety.
 - Use `primitive1` for unary, `primitive2` for binary, `primitive3` for ternary.
 - Reference the name constants exposed via `Hydra.Sources.Libraries`
   (`_chars_isAlphaNum`, etc.).
@@ -532,7 +532,7 @@ signature.
 Tests live in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/Lib/<Library>.hs`:
 
 ```haskell
-charsIsAlphaNum :: TTerm TestGroup
+charsIsAlphaNum :: TypedTerm TestGroup
 charsIsAlphaNum = subgroup "isAlphaNum" [
   test "lowercase letter" (ord 'a') true,
   test "uppercase letter" (ord 'Z') true,
@@ -583,7 +583,7 @@ When adding a new primitive function:
   - [ ] Name constant in `Hydra.Sources.Kernel.Lib.Names`
   - [ ] `toPrimitive` or `primNoDef` entry in `Hydra.Sources.Kernel.Lib.<Library>`
   - [ ] Signature definition (`TypeScheme` → `TermSignature` via `typeSchemeToTermSignature`)
-  - [ ] **(If applicable)** Default implementation as a `TTermDefinition`
+  - [ ] **(If applicable)** Default implementation as a `TypedTermDefinition`
 - [ ] **Haskell**
   - [ ] Native implementation in `Hydra.Haskell.Lib.<Library>`
   - [ ] Registration via `primN` in `Libraries.hs`
@@ -642,12 +642,12 @@ implementation notes:
   and `heads/java/src/main/java/hydra/lib/lists/Foldr.java` for the Java
   pattern.
 
-- **In default implementations**, the function argument is just a TTerm —
+- **In default implementations**, the function argument is just a TypedTerm —
   apply it with `@@` in Haskell DSL:
 
   ```haskell
   -- maybes.map f m = maybe Nothing (\x -> Just (f x)) m
-  map_ :: TTermDefinition ((a -> b) -> Maybe a -> Maybe b)
+  map_ :: TypedTermDefinition ((a -> b) -> Maybe a -> Maybe b)
   map_ = define "map" $
     doc "Map a function over an optional, defined in terms of maybe." $
     "f" ~> "m" ~> Maybes.maybe nothing ("x" ~> just (var "f" @@ var "x")) (var "m")
@@ -655,7 +655,7 @@ implementation notes:
 
 ## Example: studying an existing migration
 
-The `hydra.lib.maybes` namespace is a good case study: 13 primitives, 11 of
+The `hydra.lib.maybes` module name is a good case study: 13 primitives, 11 of
 which have default implementations in terms of `maybe`. See:
 
 - Metadata: [Hydra/Sources/Kernel/Lib/Maybes.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Maybes.hs)

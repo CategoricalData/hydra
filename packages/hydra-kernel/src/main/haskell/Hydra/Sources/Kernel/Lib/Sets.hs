@@ -17,7 +17,7 @@ import qualified Data.Set                    as S
 ns :: ModuleName
 ns = ModuleName "hydra.lib.sets"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -107,50 +107,50 @@ sig = typeSchemeToTermSignature
 -- Default implementations.
 
 -- difference s1 s2 = foldl (\acc el -> ifElse (member el s2) acc (insert el acc)) empty (toList s1)
-difference_ :: TTermDefinition (S.Set a -> S.Set a -> S.Set a)
+difference_ :: TypedTermDefinition (S.Set a -> S.Set a -> S.Set a)
 difference_ = define "difference" $
   doc "Set difference, defined in terms of member and insert." $
   "s1" ~> "s2" ~>
     Lists.foldl
       ("acc" ~> "el" ~> Logic.ifElse (Sets.member (var "el") (var "s2"))
-        (var "acc" :: TTerm (S.Set a))
+        (var "acc" :: TypedTerm (S.Set a))
         (Sets.insert (var "el") (var "acc")))
-      (Sets.empty :: TTerm (S.Set a))
+      (Sets.empty :: TypedTerm (S.Set a))
       (Sets.toList (var "s1"))
 
 -- intersection s1 s2 = foldl (\acc el -> ifElse (member el s2) (insert el acc) acc) empty (toList s1)
-intersection_ :: TTermDefinition (S.Set a -> S.Set a -> S.Set a)
+intersection_ :: TypedTermDefinition (S.Set a -> S.Set a -> S.Set a)
 intersection_ = define "intersection" $
   doc "Set intersection, defined in terms of member and insert." $
   "s1" ~> "s2" ~>
     Lists.foldl
       ("acc" ~> "el" ~> Logic.ifElse (Sets.member (var "el") (var "s2"))
         (Sets.insert (var "el") (var "acc"))
-        (var "acc" :: TTerm (S.Set a)))
-      (Sets.empty :: TTerm (S.Set a))
+        (var "acc" :: TypedTerm (S.Set a)))
+      (Sets.empty :: TypedTerm (S.Set a))
       (Sets.toList (var "s1"))
 
 -- map f s = fromList (Lists.map f (toList s))
-map_ :: TTermDefinition ((a -> b) -> S.Set a -> S.Set b)
+map_ :: TypedTermDefinition ((a -> b) -> S.Set a -> S.Set b)
 map_ = define "map" $
   doc "Map a function over a set, defined in terms of toList, lists.map and fromList." $
   "f" ~> "s" ~> Sets.fromList (Lists.map (var "f") (Sets.toList (var "s")))
 
 -- union s1 s2 = foldl (\acc el -> insert el acc) s2 (toList s1)
-union_ :: TTermDefinition (S.Set a -> S.Set a -> S.Set a)
+union_ :: TypedTermDefinition (S.Set a -> S.Set a -> S.Set a)
 union_ = define "union" $
   doc "Set union, defined in terms of insert and toList." $
   "s1" ~> "s2" ~>
     Lists.foldl
       ("acc" ~> "el" ~> Sets.insert (var "el") (var "acc"))
-      (var "s2" :: TTerm (S.Set a))
+      (var "s2" :: TypedTerm (S.Set a))
       (Sets.toList (var "s1"))
 
 -- unions ss = foldl union empty ss
-unions_ :: TTermDefinition ([S.Set a] -> S.Set a)
+unions_ :: TypedTermDefinition ([S.Set a] -> S.Set a)
 unions_ = define "unions" $
   doc "Union of a list of sets, defined in terms of foldl and union." $
   "ss" ~> Lists.foldl
     ("acc" ~> "s" ~> Sets.union (var "acc") (var "s"))
-    (Sets.empty :: TTerm (S.Set a))
+    (Sets.empty :: TypedTerm (S.Set a))
     (var "ss")

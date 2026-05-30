@@ -64,7 +64,7 @@ import qualified Hydra.Sources.Kernel.Lib.Defaults.Sets as DefaultSets
 ns :: ModuleName
 ns = ModuleName "hydra.lib.defaults"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 -- | All default library modules (term-level fallback implementations used by the interpreter

@@ -15,7 +15,7 @@
         (hydra arity) (hydra constants) (hydra decoding) (hydra encoding)
         (hydra grammars) (hydra languages) (hydra lexical)
         (hydra literals) (hydra module) (hydra names)
-        (hydra parsers) (hydra phantoms) (hydra query) (hydra reflect)
+        (hydra parsers) (hydra typed) (hydra query) (hydra reflect)
         (hydra relational) (hydra schemas) (hydra tabular)
         (hydra tarjan) (hydra templates) (hydra topology)
         (hydra util) (hydra variants))

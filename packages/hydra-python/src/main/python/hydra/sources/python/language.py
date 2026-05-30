@@ -26,7 +26,7 @@ from hydra.sources.python._source_dsl import KERNEL_TYPES_NAMESPACES, unqualifie
 
 
 def _python_language_term():
-    """The body of the pythonLanguage definition (a TTerm Language)."""
+    """The body of the pythonLanguage definition (a TypedTerm Language)."""
     return doc(
         "Language constraints for Python 3",
         lets(
@@ -117,7 +117,7 @@ def _python_language_term():
 
 
 def _python_reserved_words_term():
-    """The body of the pythonReservedWords definition (a TTerm (Set String))."""
+    """The body of the pythonReservedWords definition (a TypedTerm (Set String))."""
     keywords = [
         "False", "None", "True", "and", "as", "assert", "async", "await", "break",
         "class", "continue", "def", "del", "elif", "else", "except", "finally",

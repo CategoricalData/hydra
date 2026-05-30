@@ -108,11 +108,11 @@ module_ = Module {
       toDefinition encodeTermValue,
       toDefinition pgElementsToGraphson]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- | Convert a list of PG elements to vertices with adjacent edges
-elementsToVerticesWithAdjacentEdges :: TTermDefinition ([PG.Element v] -> [PG.VertexWithAdjacentEdges v])
+elementsToVerticesWithAdjacentEdges :: TypedTermDefinition ([PG.Element v] -> [PG.VertexWithAdjacentEdges v])
 elementsToVerticesWithAdjacentEdges = define "elementsToVerticesWithAdjacentEdges" $
   doc "Convert a list of property graph elements to a list of vertices with their adjacent edges" $
   "els" ~>
@@ -129,7 +129,7 @@ elementsToVerticesWithAdjacentEdges = define "elementsToVerticesWithAdjacentEdge
               (Pairs.first $ var "acc")
               (Lists.cons (var "e") (Pairs.second $ var "acc"))]
         @@ var "el")
-      (pair (list ([] :: [TTerm (PG.Vertex v)])) (list ([] :: [TTerm (PG.Edge v)])))
+      (pair (list ([] :: [TypedTerm (PG.Vertex v)])) (list ([] :: [TypedTerm (PG.Edge v)])))
       (var "els")) $
     -- Note: foldl with cons reverses the list, so we reverse back to preserve input order
     "vertices" <~ (Lists.reverse $ Pairs.first $ var "partitioned") $
@@ -141,8 +141,8 @@ elementsToVerticesWithAdjacentEdges = define "elementsToVerticesWithAdjacentEdge
           (project PG._Vertex PG._Vertex_id @@ var "v")
           (record PG._VertexWithAdjacentEdges [
             PG._VertexWithAdjacentEdges_vertex>>: var "v",
-            PG._VertexWithAdjacentEdges_ins>>: list ([] :: [TTerm (PG.AdjacentEdge v)]),
-            PG._VertexWithAdjacentEdges_outs>>: list ([] :: [TTerm (PG.AdjacentEdge v)])]))
+            PG._VertexWithAdjacentEdges_ins>>: list ([] :: [TypedTerm (PG.AdjacentEdge v)]),
+            PG._VertexWithAdjacentEdges_outs>>: list ([] :: [TypedTerm (PG.AdjacentEdge v)])]))
       (var "vertices")) $
     -- Add edges to the vertex map
     "vertexMap1" <~ (Lists.foldl
@@ -191,14 +191,14 @@ elementsToVerticesWithAdjacentEdges = define "elementsToVerticesWithAdjacentEdge
     Maps.elems (var "vertexMap1")
 
 -- | Encode a String value to GraphSON
-encodeStringValue :: TTermDefinition (String -> Either Error G.Value)
+encodeStringValue :: TypedTermDefinition (String -> Either Error G.Value)
 encodeStringValue = define "encodeStringValue" $
   doc "Encode a String value as a GraphSON Value" $
   "s" ~>
     right $ inject G._Value G._Value_string (var "s")
 
 -- | Encode a Term value to GraphSON
-encodeTermValue :: TTermDefinition (Term -> Either Error G.Value)
+encodeTermValue :: TypedTermDefinition (Term -> Either Error G.Value)
 encodeTermValue = define "encodeTermValue" $
   doc "Encode a Hydra Term as a GraphSON Value. Supports literals and unit values." $
   "term" ~>
@@ -245,7 +245,7 @@ pg :: String -> Type
 pg = Bootstrap.typeref PgModel.ns
 
 -- | Convert PG elements to GraphSON JSON values
-pgElementsToGraphson :: TTermDefinition ((v -> Either Error G.Value) -> [PG.Element v] -> Either Error [JM.Value])
+pgElementsToGraphson :: TypedTermDefinition ((v -> Either Error G.Value) -> [PG.Element v] -> Either Error [JM.Value])
 pgElementsToGraphson = define "pgElementsToGraphson" $
   doc "Convert property graph elements to a list of GraphSON JSON values" $
   "encodeValue" ~> "els" ~>

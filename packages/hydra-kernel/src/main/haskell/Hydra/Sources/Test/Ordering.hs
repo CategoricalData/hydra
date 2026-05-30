@@ -37,7 +37,7 @@ module_ = Module {
   where
     definitions = [Phantoms.toDefinition allTests]
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for Ord instance comparisons on complex Hydra types" $
     supergroup "ordering" [
@@ -50,20 +50,20 @@ allTests = definitionInModule module_ "allTests" $
       polymorphicComparisonTests,
       unionComparisonTests]
 
-compResult :: String -> TTerm Comparison
+compResult :: String -> TypedTerm Comparison
 compResult "lessThan" = Phantoms.injectUnit _Comparison _Comparison_lessThan
 compResult "equalTo" = Phantoms.injectUnit _Comparison _Comparison_equalTo
 compResult "greaterThan" = Phantoms.injectUnit _Comparison _Comparison_greaterThan
 compResult _ = error "Invalid comparison"
 
 -- Test comparing two values
-compareTest :: String -> TTerm a -> TTerm a -> String -> TTerm TestCaseWithMetadata
+compareTest :: String -> TypedTerm a -> TypedTerm a -> String -> TypedTerm TestCaseWithMetadata
 compareTest testName x y resultField = evalPair testName (asTerm ShowUtil.comparison)
   (Equality.compare x y)
   (compResult resultField)
 
 -- Test equality
-equalTest :: String -> TTerm a -> TTerm a -> Bool -> TTerm TestCaseWithMetadata
+equalTest :: String -> TypedTerm a -> TypedTerm a -> Bool -> TypedTerm TestCaseWithMetadata
 equalTest testName x y result = evalPair testName showBool
   (Equality.equal x y)
   (Phantoms.boolean result)
@@ -73,14 +73,14 @@ equalTest testName x y result = evalPair testName showBool
 -- ============================================================
 
 -- Helper to build a LatLonPoly record term with type application
-latLonPolyInt32Term :: Int -> Int -> TTerm Term
+latLonPolyInt32Term :: Int -> Int -> TypedTerm Term
 latLonPolyInt32Term lat lon = tyapp
   (record TestTypes.testTypeLatLonPolyName [
     "lat" >: int32 (fromIntegral lat),
     "lon" >: int32 (fromIntegral lon)])
   T.int32
 
-latLonPolyStringTerm :: String -> String -> TTerm Term
+latLonPolyStringTerm :: String -> String -> TypedTerm Term
 latLonPolyStringTerm lat lon = tyapp
   (record TestTypes.testTypeLatLonPolyName [
     "lat" >: string lat,
@@ -88,12 +88,12 @@ latLonPolyStringTerm lat lon = tyapp
   T.string
 
 -- Helper to build a LatLon record term
-latLonTerm :: Float -> Float -> TTerm Term
+latLonTerm :: Float -> Float -> TypedTerm Term
 latLonTerm lat lon = record TestTypes.testTypeLatLonName [
   "lat" >: float32 (realToFrac lat),
   "lon" >: float32 (realToFrac lon)]
 
-literalComparisonTests :: TTerm TestGroup
+literalComparisonTests :: TypedTerm TestGroup
 literalComparisonTests = subgroup "Literal comparison" [
   -- Integer literals
   compareTest "int32 literal less than"
@@ -123,7 +123,7 @@ literalComparisonTests = subgroup "Literal comparison" [
 -- Type comparison tests
 -- ============================================================
 
-nameComparisonTests :: TTerm TestGroup
+nameComparisonTests :: TypedTerm TestGroup
 nameComparisonTests = subgroup "Name comparison" [
   -- Compare two names (using nameTerm which creates a Name wrapped term)
   compareTest "name less than (alphabetic)"
@@ -161,32 +161,32 @@ nameComparisonTests = subgroup "Name comparison" [
 -- Literal comparison tests
 -- ============================================================
 
-numberFloatTerm :: Float -> TTerm Term
+numberFloatTerm :: Float -> TypedTerm Term
 numberFloatTerm f = inject TestTypes.testTypeNumberName "float" (float32 (realToFrac f))
 
 -- Helper for Number union (int vs float)
-numberIntTerm :: Int -> TTerm Term
+numberIntTerm :: Int -> TypedTerm Term
 numberIntTerm n = inject TestTypes.testTypeNumberName "int" (int32 (fromIntegral n))
 
-personOrSomethingOtherListTerm :: [TTerm Term] -> TTerm Term
+personOrSomethingOtherListTerm :: [TypedTerm Term] -> TypedTerm Term
 personOrSomethingOtherListTerm persons = tyapp
   (inject TestTypes.testTypePersonOrSomethingName "other" (list persons))
   (T.list $ Core.typeVariable TestTypes.testTypePersonName)
 
 -- Helper to build a PersonOrSomething union term
-personOrSomethingPersonTerm :: String -> String -> Int -> TTerm Term
+personOrSomethingPersonTerm :: String -> String -> Int -> TypedTerm Term
 personOrSomethingPersonTerm firstName lastName age = tyapp
   (inject TestTypes.testTypePersonOrSomethingName "person" (personTerm firstName lastName age))
   (T.list $ Core.typeVariable TestTypes.testTypePersonName)
 
 -- Helper to build a Person record term
-personTerm :: String -> String -> Int -> TTerm Term
+personTerm :: String -> String -> Int -> TypedTerm Term
 personTerm firstName lastName age = record TestTypes.testTypePersonName [
   "firstName" >: string firstName,
   "lastName" >: string lastName,
   "age" >: int32 (fromIntegral age)]
 
-polymorphicComparisonTests :: TTerm TestGroup
+polymorphicComparisonTests :: TypedTerm TestGroup
 polymorphicComparisonTests = subgroup "Polymorphic type comparison" [
   -- LatLonPoly Int32
   compareTest "LatLonPoly Int32 less than by lat"
@@ -233,7 +233,7 @@ polymorphicComparisonTests = subgroup "Polymorphic type comparison" [
 -- Union type comparison tests
 -- ============================================================
 
-recordComparisonTests :: TTerm TestGroup
+recordComparisonTests :: TypedTerm TestGroup
 recordComparisonTests = subgroup "Record comparison (monomorphic)" [
   -- Person records - compared field by field
   compareTest "person less than by firstName"
@@ -279,10 +279,10 @@ recordComparisonTests = subgroup "Record comparison (monomorphic)" [
 -- Polymorphic type comparison tests
 -- ============================================================
 
-showBool :: TTerm (Bool -> String)
+showBool :: TypedTerm (Bool -> String)
 showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
 
-termComparisonTests :: TTerm TestGroup
+termComparisonTests :: TypedTerm TestGroup
 termComparisonTests = subgroup "Term comparison" [
   -- Integer term literals
   compareTest "term int32 42 vs 43"
@@ -312,7 +312,7 @@ termComparisonTests = subgroup "Term comparison" [
 -- Custom record type comparison tests (monomorphic)
 -- ============================================================
 
-typeComparisonTests :: TTerm TestGroup
+typeComparisonTests :: TypedTerm TestGroup
 typeComparisonTests = subgroup "Type comparison" [
   -- Primitive types
   compareTest "type int32 vs string"
@@ -346,7 +346,7 @@ typeComparisonTests = subgroup "Type comparison" [
 -- Term comparison tests
 -- ============================================================
 
-unionComparisonTests :: TTerm TestGroup
+unionComparisonTests :: TypedTerm TestGroup
 unionComparisonTests = subgroup "Union comparison" [
   -- Same variant, different values
   compareTest "Number int variant less than"

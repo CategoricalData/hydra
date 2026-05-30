@@ -40,10 +40,10 @@ module_ = Module {
     definitions = [
         Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for JSON serialization (writer)" $
     supergroup "JSON serialization" [
@@ -56,10 +56,10 @@ allTests = define "allTests" $
 
 -- Local alias for polymorphic application
 
-arraysGroup :: TTerm TestGroup
+arraysGroup :: TypedTerm TestGroup
 arraysGroup = subgroup "arrays" [
     -- Empty and single element
-    writerCase "empty array" (Json.valueArray $ Phantoms.list ([] :: [TTerm Value])) "[]",
+    writerCase "empty array" (Json.valueArray $ Phantoms.list ([] :: [TypedTerm Value])) "[]",
     writerCase "single element" (Json.valueArray $ Phantoms.list [Json.valueNumber $ Phantoms.decimal 1.0]) "[1]",
 
     -- Multiple elements
@@ -86,7 +86,7 @@ arraysGroup = subgroup "arrays" [
 -- several Hydra hosts emit decimal literals as host-native Double, which loses precision
 -- before the writer even sees the value. Those cases are exercised only via the decimal
 -- type coder, which goes through BigDecimal/Scientific without the lossy emission step.
-decimalPrecisionGroup :: TTerm TestGroup
+decimalPrecisionGroup :: TypedTerm TestGroup
 decimalPrecisionGroup = subgroup "decimal precision" [
     -- Tiny and huge exponents stay in scientific notation (plain would be 20+ digits
     -- of zeroes, which no human can parse reliably).
@@ -97,7 +97,7 @@ decimalPrecisionGroup = subgroup "decimal precision" [
       (Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 20))
       "1.0e20"]
 
-nestedGroup :: TTerm TestGroup
+nestedGroup :: TypedTerm TestGroup
 nestedGroup = subgroup "nested structures" [
     -- Array of arrays
     writerCase "nested arrays" (Json.valueArray $ Phantoms.list [
@@ -120,7 +120,7 @@ nestedGroup = subgroup "nested structures" [
         (Phantoms.string "user", Json.valueObject $ Phantoms.map $ M.fromList [
             (Phantoms.string "name", Json.valueString $ Phantoms.string "Bob")])]) "{\"user\": {\"name\": \"Bob\"}}"]
 
-objectsGroup :: TTerm TestGroup
+objectsGroup :: TypedTerm TestGroup
 objectsGroup = subgroup "objects" [
     -- Empty and single key
     writerCase "empty object" (Json.valueObject $ Phantoms.map M.empty) "{}",
@@ -138,7 +138,7 @@ objectsGroup = subgroup "objects" [
         (Phantoms.string "name", Json.valueString $ Phantoms.string "test"),
         (Phantoms.string "active", Json.valueBoolean $ Phantoms.boolean True)]) "{\"active\": true, \"count\": 42, \"name\": \"test\"}"]
 
-primitivesGroup :: TTerm TestGroup
+primitivesGroup :: TypedTerm TestGroup
 primitivesGroup = subgroup "primitives" [
     -- Null
     writerCase "null" Json.valueNull "null",
@@ -162,7 +162,7 @@ primitivesGroup = subgroup "primitives" [
     writerCase "hundredth" (Json.valueNumber $ Phantoms.decimal 0.01) "1.0e-2",
     writerCase "small decimal" (Json.valueNumber $ Phantoms.decimal 0.001) "1.0e-3"]
 
-stringsGroup :: TTerm TestGroup
+stringsGroup :: TypedTerm TestGroup
 stringsGroup = subgroup "strings" [
     -- Basic strings
     writerCase "empty string" (Json.valueString $ Phantoms.string "") "\"\"",
@@ -178,7 +178,7 @@ stringsGroup = subgroup "strings" [
     writerCase "string with mixed escapes" (Json.valueString $ Phantoms.string "a\"b\\c\nd") "\"a\\\"b\\\\c\\nd\""]
 
 -- Helper for creating JSON writer test cases (universal)
-writerCase :: String -> TTerm Value -> String -> TTerm TestCaseWithMetadata
+writerCase :: String -> TypedTerm Value -> String -> TypedTerm TestCaseWithMetadata
 writerCase name jsonValue expectedStr = universalCase name
   (JsonWriter.printJson @@ jsonValue)
   (Phantoms.string expectedStr)

@@ -208,7 +208,7 @@ module_ = Module {
       toDefinition toPythonComments]
 
 
-annotatedRhsToExpr :: TTermDefinition (Py.AnnotatedRhs -> Expr)
+annotatedRhsToExpr :: TypedTermDefinition (Py.AnnotatedRhs -> Expr)
 annotatedRhsToExpr = def "annotatedRhsToExpr" $
   doc "Serialize an annotated RHS" $
   lambda "arhs" $
@@ -220,7 +220,7 @@ annotatedRhsToExpr = def "annotatedRhsToExpr" $
             Lists.map starExpressionToExpr (var "ses"),
         Py._AnnotatedRhs_yield>>: lambda "_" $ Serialization.cst @@ string "yield ..."]]
 
-annotatedStatementToExpr :: TTermDefinition (Py.AnnotatedStatement -> Expr)
+annotatedStatementToExpr :: TypedTermDefinition (Py.AnnotatedStatement -> Expr)
 annotatedStatementToExpr = def "annotatedStatementToExpr" $
   doc "Serialize an annotated statement (with optional doc comment)" $
   lambda "as_" $ lets [
@@ -230,7 +230,7 @@ annotatedStatementToExpr = def "annotatedStatementToExpr" $
       Serialization.cst @@ (toPythonComments @@ var "doc_"),
       statementToExpr @@ var "stmt"]
 
-annotationToExpr :: TTermDefinition (Py.Annotation -> Expr)
+annotationToExpr :: TypedTermDefinition (Py.Annotation -> Expr)
 annotationToExpr = def "annotationToExpr" $
   doc "Serialize a type annotation" $
   lambda "ann" $
@@ -238,7 +238,7 @@ annotationToExpr = def "annotationToExpr" $
       Serialization.cst @@ string ":",
       expressionToExpr @@ (unwrap Py._Annotation @@ var "ann")]
 
-argsToExpr :: TTermDefinition (Py.Args -> Expr)
+argsToExpr :: TypedTermDefinition (Py.Args -> Expr)
 argsToExpr = def "argsToExpr" $
   doc "Serialize function arguments" $
   lambda "args" $ lets [
@@ -250,7 +250,7 @@ argsToExpr = def "argsToExpr" $
       Lists.map kwargOrStarredToExpr (var "ks"),
       Lists.map kwargOrDoubleStarredToExpr (var "kss")])
 
-assignmentExpressionToExpr :: TTermDefinition (Py.AssignmentExpression -> Expr)
+assignmentExpressionToExpr :: TypedTermDefinition (Py.AssignmentExpression -> Expr)
 assignmentExpressionToExpr = def "assignmentExpressionToExpr" $
   doc "Serialize an assignment expression (walrus operator)" $
   lambda "ae" $ lets [
@@ -261,7 +261,7 @@ assignmentExpressionToExpr = def "assignmentExpressionToExpr" $
       Serialization.cst @@ string ":=",
       expressionToExpr @@ var "expr"]
 
-assignmentToExpr :: TTermDefinition (Py.Assignment -> Expr)
+assignmentToExpr :: TypedTermDefinition (Py.Assignment -> Expr)
 assignmentToExpr = def "assignmentToExpr" $
   doc "Serialize an assignment" $
   lambda "a" $
@@ -270,7 +270,7 @@ assignmentToExpr = def "assignmentToExpr" $
       Py._Assignment_untyped>>: lambda "u" $ untypedAssignmentToExpr @@ var "u",
       Py._Assignment_aug>>: lambda "_" $ Serialization.cst @@ string "... += ..."]
 
-atomToExpr :: TTermDefinition (Py.Atom -> Expr)
+atomToExpr :: TypedTermDefinition (Py.Atom -> Expr)
 atomToExpr = def "atomToExpr" $
   doc "Serialize a Python atom (literal or basic expression)" $
   lambda "atom" $
@@ -292,13 +292,13 @@ atomToExpr = def "atomToExpr" $
       Py._Atom_true>>: constant $ Serialization.cst @@ string "True",
       Py._Atom_tuple>>: lambda "t" $ tupleToExpr @@ var "t"]
 
-attributeToExpr :: TTermDefinition (Py.Attribute -> Expr)
+attributeToExpr :: TypedTermDefinition (Py.Attribute -> Expr)
 attributeToExpr = def "attributeToExpr" $
   doc "Serialize an attribute access" $
   lambda "attr" $
     Serialization.dotSep @@ Lists.map nameToExpr (unwrap Py._Attribute @@ var "attr")
 
-awaitPrimaryToExpr :: TTermDefinition (Py.AwaitPrimary -> Expr)
+awaitPrimaryToExpr :: TypedTermDefinition (Py.AwaitPrimary -> Expr)
 awaitPrimaryToExpr = def "awaitPrimaryToExpr" $
   doc "Serialize an await primary expression" $
   lambda "ap" $ lets [
@@ -308,7 +308,7 @@ awaitPrimaryToExpr = def "awaitPrimaryToExpr" $
       (Serialization.spaceSep @@ list [Serialization.cst @@ string "await", primaryToExpr @@ var "primary"])
       (primaryToExpr @@ var "primary")
 
-bitwiseAndToExpr :: TTermDefinition (Py.BitwiseAnd -> Expr)
+bitwiseAndToExpr :: TypedTermDefinition (Py.BitwiseAnd -> Expr)
 bitwiseAndToExpr = def "bitwiseAndToExpr" $
   doc "Serialize a bitwise AND expression" $
   lambda "band" $ lets [
@@ -320,7 +320,7 @@ bitwiseAndToExpr = def "bitwiseAndToExpr" $
         (var "lhs"),
       just $ shiftExpressionToExpr @@ var "rhs"])
 
-bitwiseOrToExpr :: TTermDefinition (Py.BitwiseOr -> Expr)
+bitwiseOrToExpr :: TypedTermDefinition (Py.BitwiseOr -> Expr)
 bitwiseOrToExpr = def "bitwiseOrToExpr" $
   doc "Serialize a bitwise OR expression" $
   lambda "bor" $ lets [
@@ -332,7 +332,7 @@ bitwiseOrToExpr = def "bitwiseOrToExpr" $
         (var "lhs"),
       just $ bitwiseXorToExpr @@ var "rhs"])
 
-bitwiseXorToExpr :: TTermDefinition (Py.BitwiseXor -> Expr)
+bitwiseXorToExpr :: TypedTermDefinition (Py.BitwiseXor -> Expr)
 bitwiseXorToExpr = def "bitwiseXorToExpr" $
   doc "Serialize a bitwise XOR expression" $
   lambda "bxor" $ lets [
@@ -344,7 +344,7 @@ bitwiseXorToExpr = def "bitwiseXorToExpr" $
         (var "lhs"),
       just $ bitwiseAndToExpr @@ var "rhs"])
 
-blockToExpr :: TTermDefinition (Py.Block -> Expr)
+blockToExpr :: TypedTermDefinition (Py.Block -> Expr)
 blockToExpr = def "blockToExpr" $
   doc "Serialize a block" $
   lambda "b" $
@@ -356,13 +356,13 @@ blockToExpr = def "blockToExpr" $
       Py._Block_simple>>: lambda "ss" $
         Serialization.semicolonSep @@ Lists.map simpleStatementToExpr (var "ss")]
 
-capturePatternToExpr :: TTermDefinition (Py.CapturePattern -> Expr)
+capturePatternToExpr :: TypedTermDefinition (Py.CapturePattern -> Expr)
 capturePatternToExpr = def "capturePatternToExpr" $
   doc "Serialize a capture pattern" $
   lambda "cp" $
     patternCaptureTargetToExpr @@ (unwrap Py._CapturePattern @@ var "cp")
 
-caseBlockToExpr :: TTermDefinition (Py.CaseBlock -> Expr)
+caseBlockToExpr :: TypedTermDefinition (Py.CaseBlock -> Expr)
 caseBlockToExpr = def "caseBlockToExpr" $
   doc "Serialize a case block" $
   lambda "cb" $ lets [
@@ -378,7 +378,7 @@ caseBlockToExpr = def "caseBlockToExpr" $
         Serialization.cst @@ string ":"],
       blockToExpr @@ var "body"]
 
-classDefinitionToExpr :: TTermDefinition (Py.ClassDefinition -> Expr)
+classDefinitionToExpr :: TypedTermDefinition (Py.ClassDefinition -> Expr)
 classDefinitionToExpr = def "classDefinitionToExpr" $
   doc "Serialize a class definition" $
   lambda "cd" $ lets [
@@ -398,7 +398,7 @@ classDefinitionToExpr = def "classDefinitionToExpr" $
         just $ Serialization.cst @@ string ":"]),
       just $ blockToExpr @@ var "body"])
 
-classPatternToExpr :: TTermDefinition (Py.ClassPattern -> Expr)
+classPatternToExpr :: TypedTermDefinition (Py.ClassPattern -> Expr)
 classPatternToExpr = def "classPatternToExpr" $
   doc "Serialize a class pattern" $
   lambda "cp" $ lets [
@@ -412,7 +412,7 @@ classPatternToExpr = def "classPatternToExpr" $
       Maybes.map keywordPatternsToExpr (var "kw"),
       just $ Serialization.cst @@ string ")"])
 
-closedPatternToExpr :: TTermDefinition (Py.ClosedPattern -> Expr)
+closedPatternToExpr :: TypedTermDefinition (Py.ClosedPattern -> Expr)
 closedPatternToExpr = def "closedPatternToExpr" $
   doc "Serialize a closed pattern" $
   lambda "cp" $
@@ -426,7 +426,7 @@ closedPatternToExpr = def "closedPatternToExpr" $
       Py._ClosedPattern_mapping>>: lambda "_" $ Serialization.cst @@ string "{...}",
       Py._ClosedPattern_class>>: lambda "c" $ classPatternToExpr @@ var "c"]
 
-compareOpBitwiseOrPairToExpr :: TTermDefinition (Py.CompareOpBitwiseOrPair -> Expr)
+compareOpBitwiseOrPairToExpr :: TypedTermDefinition (Py.CompareOpBitwiseOrPair -> Expr)
 compareOpBitwiseOrPairToExpr = def "compareOpBitwiseOrPairToExpr" $
   doc "Serialize a (compare-op, bitwise-or) pair as `<op> <rhs>`" $
   lambda "pair" $
@@ -434,7 +434,7 @@ compareOpBitwiseOrPairToExpr = def "compareOpBitwiseOrPairToExpr" $
       Serialization.cst @@ (compareOpToString @@ (project Py._CompareOpBitwiseOrPair Py._CompareOpBitwiseOrPair_operator @@ var "pair")),
       bitwiseOrToExpr @@ (project Py._CompareOpBitwiseOrPair Py._CompareOpBitwiseOrPair_rhs @@ var "pair")]
 
-compareOpToString :: TTermDefinition (Py.CompareOp -> String)
+compareOpToString :: TypedTermDefinition (Py.CompareOp -> String)
 compareOpToString = def "compareOpToString" $
   doc "Render a Python comparison operator to its source-code form" $
   lambda "op" $
@@ -450,7 +450,7 @@ compareOpToString = def "compareOpToString" $
       Py._CompareOp_isnot>>: constant $ string "is not",
       Py._CompareOp_is>>: constant $ string "is"]
 
-comparisonToExpr :: TTermDefinition (Py.Comparison -> Expr)
+comparisonToExpr :: TypedTermDefinition (Py.Comparison -> Expr)
 comparisonToExpr = def "comparisonToExpr" $
   doc "Serialize a comparison expression: `<lhs>` if rhs is empty, otherwise `<lhs> <op1> <rhs1> <op2> <rhs2> ...`" $
   lambda "cmp" $ lets [
@@ -462,7 +462,7 @@ comparisonToExpr = def "comparisonToExpr" $
           (bitwiseOrToExpr @@ var "lhs")
           (Lists.map compareOpBitwiseOrPairToExpr (var "rhs")))
 
-compoundStatementToExpr :: TTermDefinition (Py.CompoundStatement -> Expr)
+compoundStatementToExpr :: TypedTermDefinition (Py.CompoundStatement -> Expr)
 compoundStatementToExpr = def "compoundStatementToExpr" $
   doc "Serialize a compound (multi-line) Python statement" $
   lambda "cs" $
@@ -477,7 +477,7 @@ compoundStatementToExpr = def "compoundStatementToExpr" $
       Py._CompoundStatement_match>>: lambda "m" $ matchStatementToExpr @@ var "m"]
 
 -- | Serialize a conditional expression: body if condition else elseExpr
-conditionalToExpr :: TTermDefinition (Py.Conditional -> Expr)
+conditionalToExpr :: TypedTermDefinition (Py.Conditional -> Expr)
 conditionalToExpr = def "conditionalToExpr" $
   doc "Serialize a conditional expression (ternary)" $
   lambda "c" $ lets [
@@ -491,14 +491,14 @@ conditionalToExpr = def "conditionalToExpr" $
       Serialization.cst @@ string "else",
       expressionToExpr @@ var "elseExpr"]
 
-conjunctionToExpr :: TTermDefinition (Py.Conjunction -> Expr)
+conjunctionToExpr :: TypedTermDefinition (Py.Conjunction -> Expr)
 conjunctionToExpr = def "conjunctionToExpr" $
   doc "Serialize a conjunction (and expression)" $
   lambda "c" $
     Serialization.symbolSep @@ string "and" @@ Serialization.inlineStyle @@
       Lists.map inversionToExpr (unwrap Py._Conjunction @@ var "c")
 
-decoratorsToExpr :: TTermDefinition (Py.Decorators -> Expr)
+decoratorsToExpr :: TypedTermDefinition (Py.Decorators -> Expr)
 decoratorsToExpr = def "decoratorsToExpr" $
   doc "Serialize decorators" $
   lambda "decs" $
@@ -506,24 +506,24 @@ decoratorsToExpr = def "decoratorsToExpr" $
       (lambda "ne" $ Serialization.noSep @@ list [Serialization.cst @@ string "@", namedExpressionToExpr @@ var "ne"])
       (unwrap Py._Decorators @@ var "decs")
 
-def :: String -> TTerm a -> TTermDefinition a
+def :: String -> TypedTerm a -> TypedTermDefinition a
 def = definitionInModule module_
 
-dictToExpr :: TTermDefinition (Py.Dict -> Expr)
+dictToExpr :: TypedTermDefinition (Py.Dict -> Expr)
 dictToExpr = def "dictToExpr" $
   doc "Serialize a Python dictionary" $
   lambda "d" $
     Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@
       Lists.map doubleStarredKvpairToExpr (unwrap Py._Dict @@ var "d")
 
-disjunctionToExpr :: TTermDefinition (Py.Disjunction -> Expr)
+disjunctionToExpr :: TypedTermDefinition (Py.Disjunction -> Expr)
 disjunctionToExpr = def "disjunctionToExpr" $
   doc "Serialize a disjunction (or expression)" $
   lambda "d" $
     Serialization.symbolSep @@ string "or" @@ Serialization.inlineStyle @@
       Lists.map conjunctionToExpr (unwrap Py._Disjunction @@ var "d")
 
-dottedAsNameToExpr :: TTermDefinition (Py.DottedAsName -> Expr)
+dottedAsNameToExpr :: TypedTermDefinition (Py.DottedAsName -> Expr)
 dottedAsNameToExpr = def "dottedAsNameToExpr" $
   doc "Serialize a dotted as name" $
   lambda "dan" $ lets [
@@ -533,13 +533,13 @@ dottedAsNameToExpr = def "dottedAsNameToExpr" $
       just $ dottedNameToExpr @@ var "name",
       Maybes.map (lambda "a" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "as", nameToExpr @@ var "a"]) (var "alias")])
 
-dottedNameToExpr :: TTermDefinition (Py.DottedName -> Expr)
+dottedNameToExpr :: TypedTermDefinition (Py.DottedName -> Expr)
 dottedNameToExpr = def "dottedNameToExpr" $
   doc "Serialize a dotted name (e.g., module.submodule)" $
   lambda "dn" $
     Serialization.cst @@ Strings.intercalate (string ".") (Lists.map (lambda "n" $ unwrap Py._Name @@ var "n") (unwrap Py._DottedName @@ var "dn"))
 
-doubleStarredKvpairToExpr :: TTermDefinition (Py.DoubleStarredKvpair -> Expr)
+doubleStarredKvpairToExpr :: TypedTermDefinition (Py.DoubleStarredKvpair -> Expr)
 doubleStarredKvpairToExpr = def "doubleStarredKvpairToExpr" $
   doc "Serialize a double-starred key-value pair" $
   lambda "dskv" $
@@ -548,7 +548,7 @@ doubleStarredKvpairToExpr = def "doubleStarredKvpairToExpr" $
       Py._DoubleStarredKvpair_starred>>: lambda "e" $
         Serialization.noSep @@ list [Serialization.cst @@ string "**", bitwiseOrToExpr @@ var "e"]]
 
-escapePythonString :: TTermDefinition (Bool -> String -> String)
+escapePythonString :: TypedTermDefinition (Bool -> String -> String)
 escapePythonString = def "escapePythonString" $
   doc "Escape special characters in a Python string and wrap in quotes" $
   lambda "doubleQuoted" $ lambda "s" $ lets [
@@ -573,7 +573,7 @@ escapePythonString = def "escapePythonString" $
     "quote">: Logic.ifElse (var "doubleQuoted") (string "\"") (string "'")] $
     Strings.cat2 (var "quote") (Strings.cat2 (var "escaped") (var "quote"))
 
-expressionToExpr :: TTermDefinition (Py.Expression -> Expr)
+expressionToExpr :: TypedTermDefinition (Py.Expression -> Expr)
 expressionToExpr = def "expressionToExpr" $
   doc "Serialize a Python expression" $
   lambda "expr" $
@@ -582,7 +582,7 @@ expressionToExpr = def "expressionToExpr" $
       Py._Expression_conditional>>: lambda "c" $ conditionalToExpr @@ var "c",
       Py._Expression_lambda>>: lambda "l" $ lambdaToExpr @@ var "l"]
 
-factorToExpr :: TTermDefinition (Py.Factor -> Expr)
+factorToExpr :: TypedTermDefinition (Py.Factor -> Expr)
 factorToExpr = def "factorToExpr" $
   doc "Serialize a factor expression" $
   lambda "f" $
@@ -595,7 +595,7 @@ factorToExpr = def "factorToExpr" $
         Serialization.noSep @@ list [Serialization.cst @@ string "~", factorToExpr @@ var "inner"],
       Py._Factor_simple>>: lambda "p" $ powerToExpr @@ var "p"]
 
-functionDefRawToExpr :: TTermDefinition (Py.FunctionDefRaw -> Expr)
+functionDefRawToExpr :: TypedTermDefinition (Py.FunctionDefRaw -> Expr)
 functionDefRawToExpr = def "functionDefRawToExpr" $
   doc "Serialize a raw function definition" $
   lambda "fdr" $ lets [
@@ -626,7 +626,7 @@ functionDefRawToExpr = def "functionDefRawToExpr" $
         Serialization.cst @@ string ":"],
       blockToExpr @@ var "block"]
 
-functionDefinitionToExpr :: TTermDefinition (Py.FunctionDefinition -> Expr)
+functionDefinitionToExpr :: TypedTermDefinition (Py.FunctionDefinition -> Expr)
 functionDefinitionToExpr = def "functionDefinitionToExpr" $
   doc "Serialize a function definition" $
   lambda "fd" $ lets [
@@ -636,7 +636,7 @@ functionDefinitionToExpr = def "functionDefinitionToExpr" $
       Maybes.map decoratorsToExpr (var "decs"),
       just $ functionDefRawToExpr @@ var "raw"])
 
-groupToExpr :: TTermDefinition (Py.Group -> Expr)
+groupToExpr :: TypedTermDefinition (Py.Group -> Expr)
 groupToExpr = def "groupToExpr" $
   doc "Serialize a parenthesized group" $
   lambda "g" $
@@ -644,7 +644,7 @@ groupToExpr = def "groupToExpr" $
       Py._Group_expression>>: lambda "ne" $ namedExpressionToExpr @@ var "ne",
       Py._Group_yield>>: lambda "_" $ Serialization.cst @@ string "(yield ...)"]
 
-guardToExpr :: TTermDefinition (Py.Guard -> Expr)
+guardToExpr :: TypedTermDefinition (Py.Guard -> Expr)
 guardToExpr = def "guardToExpr" $
   doc "Serialize a guard clause" $
   lambda "g" $
@@ -652,7 +652,7 @@ guardToExpr = def "guardToExpr" $
       Serialization.cst @@ string "if",
       namedExpressionToExpr @@ (unwrap Py._Guard @@ var "g")]
 
-importFromAsNameToExpr :: TTermDefinition (Py.ImportFromAsName -> Expr)
+importFromAsNameToExpr :: TypedTermDefinition (Py.ImportFromAsName -> Expr)
 importFromAsNameToExpr = def "importFromAsNameToExpr" $
   doc "Serialize an import from as name" $
   lambda "ifan" $ lets [
@@ -666,7 +666,7 @@ importFromAsNameToExpr = def "importFromAsNameToExpr" $
         nameToExpr @@ var "a"])
       (var "alias")
 
-importFromTargetsToExpr :: TTermDefinition (Py.ImportFromTargets -> Expr)
+importFromTargetsToExpr :: TypedTermDefinition (Py.ImportFromTargets -> Expr)
 importFromTargetsToExpr = def "importFromTargetsToExpr" $
   doc "Serialize import from targets" $
   lambda "t" $
@@ -682,7 +682,7 @@ importFromTargetsToExpr = def "importFromTargetsToExpr" $
           Serialization.cst @@ string ")"],
       Py._ImportFromTargets_star>>: constant $ Serialization.cst @@ string "*"]
 
-importFromToExpr :: TTermDefinition (Py.ImportFrom -> Expr)
+importFromToExpr :: TypedTermDefinition (Py.ImportFrom -> Expr)
 importFromToExpr = def "importFromToExpr" $
   doc "Serialize an import from statement" $
   lambda "if_" $ lets [
@@ -699,7 +699,7 @@ importFromToExpr = def "importFromToExpr" $
       Serialization.cst @@ string "import",
       importFromTargetsToExpr @@ var "targets"]
 
-importNameToExpr :: TTermDefinition (Py.ImportName -> Expr)
+importNameToExpr :: TypedTermDefinition (Py.ImportName -> Expr)
 importNameToExpr = def "importNameToExpr" $
   doc "Serialize an import name" $
   lambda "in_" $
@@ -708,7 +708,7 @@ importNameToExpr = def "importNameToExpr" $
       Serialization.commaSep @@ Serialization.inlineStyle @@
         Lists.map dottedAsNameToExpr (unwrap Py._ImportName @@ var "in_")]
 
-importStatementToExpr :: TTermDefinition (Py.ImportStatement -> Expr)
+importStatementToExpr :: TypedTermDefinition (Py.ImportStatement -> Expr)
 importStatementToExpr = def "importStatementToExpr" $
   doc "Serialize an import statement" $
   lambda "is_" $
@@ -716,7 +716,7 @@ importStatementToExpr = def "importStatementToExpr" $
       Py._ImportStatement_name>>: lambda "n" $ importNameToExpr @@ var "n",
       Py._ImportStatement_from>>: lambda "f" $ importFromToExpr @@ var "f"]
 
-inversionToExpr :: TTermDefinition (Py.Inversion -> Expr)
+inversionToExpr :: TypedTermDefinition (Py.Inversion -> Expr)
 inversionToExpr = def "inversionToExpr" $
   doc "Serialize an inversion (not expression)" $
   lambda "i" $
@@ -725,7 +725,7 @@ inversionToExpr = def "inversionToExpr" $
         Serialization.spaceSep @@ list [Serialization.cst @@ string "not", inversionToExpr @@ var "other"],
       Py._Inversion_simple>>: lambda "c" $ comparisonToExpr @@ var "c"]
 
-keywordPatternToExpr :: TTermDefinition (Py.KeywordPattern -> Expr)
+keywordPatternToExpr :: TypedTermDefinition (Py.KeywordPattern -> Expr)
 keywordPatternToExpr = def "keywordPatternToExpr" $
   doc "Serialize a keyword pattern" $
   lambda "kp" $ lets [
@@ -736,14 +736,14 @@ keywordPatternToExpr = def "keywordPatternToExpr" $
       Serialization.cst @@ string "=",
       patternToExpr @@ var "pat"]
 
-keywordPatternsToExpr :: TTermDefinition (Py.KeywordPatterns -> Expr)
+keywordPatternsToExpr :: TypedTermDefinition (Py.KeywordPatterns -> Expr)
 keywordPatternsToExpr = def "keywordPatternsToExpr" $
   doc "Serialize keyword patterns" $
   lambda "kp" $
     Serialization.commaSep @@ Serialization.inlineStyle @@
       Lists.map keywordPatternToExpr (unwrap Py._KeywordPatterns @@ var "kp")
 
-kvpairToExpr :: TTermDefinition (Py.Kvpair -> Expr)
+kvpairToExpr :: TypedTermDefinition (Py.Kvpair -> Expr)
 kvpairToExpr = def "kvpairToExpr" $
   doc "Serialize a key-value pair" $
   lambda "kv" $ lets [
@@ -753,7 +753,7 @@ kvpairToExpr = def "kvpairToExpr" $
       Serialization.noSep @@ list [expressionToExpr @@ var "k", Serialization.cst @@ string ":"],
       expressionToExpr @@ var "v"]
 
-kwargOrDoubleStarredToExpr :: TTermDefinition (Py.KwargOrDoubleStarred -> Expr)
+kwargOrDoubleStarredToExpr :: TypedTermDefinition (Py.KwargOrDoubleStarred -> Expr)
 kwargOrDoubleStarredToExpr = def "kwargOrDoubleStarredToExpr" $
   doc "Serialize a kwarg or double starred" $
   lambda "kds" $
@@ -762,7 +762,7 @@ kwargOrDoubleStarredToExpr = def "kwargOrDoubleStarredToExpr" $
       Py._KwargOrDoubleStarred_doubleStarred>>: lambda "e" $
         Serialization.noSep @@ list [Serialization.cst @@ string "**", expressionToExpr @@ var "e"]]
 
-kwargOrStarredToExpr :: TTermDefinition (Py.KwargOrStarred -> Expr)
+kwargOrStarredToExpr :: TypedTermDefinition (Py.KwargOrStarred -> Expr)
 kwargOrStarredToExpr = def "kwargOrStarredToExpr" $
   doc "Serialize a kwarg or starred" $
   lambda "ks" $
@@ -770,7 +770,7 @@ kwargOrStarredToExpr = def "kwargOrStarredToExpr" $
       Py._KwargOrStarred_kwarg>>: lambda "k" $ kwargToExpr @@ var "k",
       Py._KwargOrStarred_starred>>: lambda "se" $ starredExpressionToExpr @@ var "se"]
 
-kwargToExpr :: TTermDefinition (Py.Kwarg -> Expr)
+kwargToExpr :: TypedTermDefinition (Py.Kwarg -> Expr)
 kwargToExpr = def "kwargToExpr" $
   doc "Serialize a keyword argument" $
   lambda "k" $ lets [
@@ -781,13 +781,13 @@ kwargToExpr = def "kwargToExpr" $
       Serialization.cst @@ string "=",
       expressionToExpr @@ var "expr"]
 
-lambdaParamNoDefaultToExpr :: TTermDefinition (Py.LambdaParamNoDefault -> Expr)
+lambdaParamNoDefaultToExpr :: TypedTermDefinition (Py.LambdaParamNoDefault -> Expr)
 lambdaParamNoDefaultToExpr = def "lambdaParamNoDefaultToExpr" $
   doc "Serialize a lambda parameter without default" $
   lambda "p" $
     nameToExpr @@ (unwrap Py._LambdaParamNoDefault @@ var "p")
 
-lambdaParametersToExpr :: TTermDefinition (Py.LambdaParameters -> Expr)
+lambdaParametersToExpr :: TypedTermDefinition (Py.LambdaParameters -> Expr)
 lambdaParametersToExpr = def "lambdaParametersToExpr" $
   doc "Serialize lambda parameters" $
   lambda "lp" $ lets [
@@ -795,7 +795,7 @@ lambdaParametersToExpr = def "lambdaParametersToExpr" $
     Serialization.commaSep @@ Serialization.inlineStyle @@
       Lists.map lambdaParamNoDefaultToExpr (var "nodef")
 
-lambdaStarEtcToExpr :: TTermDefinition (Py.LambdaStarEtc -> Expr)
+lambdaStarEtcToExpr :: TypedTermDefinition (Py.LambdaStarEtc -> Expr)
 lambdaStarEtcToExpr = def "lambdaStarEtcToExpr" $
   doc "Serialize lambda star etc" $
   lambda "lse" $
@@ -805,7 +805,7 @@ lambdaStarEtcToExpr = def "lambdaStarEtcToExpr" $
       Py._LambdaStarEtc_paramMaybeDefault>>: lambda "_" $ Serialization.cst @@ string "...",
       Py._LambdaStarEtc_kwds>>: lambda "_" $ Serialization.cst @@ string "**..."]
 
-lambdaToExpr :: TTermDefinition (Py.Lambda -> Expr)
+lambdaToExpr :: TypedTermDefinition (Py.Lambda -> Expr)
 lambdaToExpr = def "lambdaToExpr" $
   doc "Serialize a lambda expression" $
   lambda "l" $ lets [
@@ -816,13 +816,13 @@ lambdaToExpr = def "lambdaToExpr" $
       Serialization.noSep @@ list [lambdaParametersToExpr @@ var "params", Serialization.cst @@ string ":"],
       expressionToExpr @@ var "body"])
 
-listToExpr :: TTermDefinition (Py.List -> Expr)
+listToExpr :: TypedTermDefinition (Py.List -> Expr)
 listToExpr = def "listToExpr" $
   doc "Serialize a Python list" $
   lambda "l" $
     Serialization.bracketListAdaptive @@ Lists.map starNamedExpressionToExpr (unwrap Py._List @@ var "l")
 
-matchStatementToExpr :: TTermDefinition (Py.MatchStatement -> Expr)
+matchStatementToExpr :: TypedTermDefinition (Py.MatchStatement -> Expr)
 matchStatementToExpr = def "matchStatementToExpr" $
   doc "Serialize a match statement" $
   lambda "ms" $ lets [
@@ -834,7 +834,7 @@ matchStatementToExpr = def "matchStatementToExpr" $
         Serialization.noSep @@ list [subjectExpressionToExpr @@ var "subj", Serialization.cst @@ string ":"]],
       Serialization.tabIndentDoubleSpace @@ Lists.map caseBlockToExpr (var "cases")]
 
-moduleToExpr :: TTermDefinition (Py.Module -> Expr)
+moduleToExpr :: TypedTermDefinition (Py.Module -> Expr)
 moduleToExpr = def "moduleToExpr" $
   doc "Serialize a Python module to an AST expression" $
   lambda "mod" $ lets [
@@ -844,19 +844,19 @@ moduleToExpr = def "moduleToExpr" $
       (unwrap Py._Module @@ var "mod")] $
     Serialization.doubleNewlineSep @@ Lists.cons (var "warning") (var "groups")
 
-nameOrAttributeToExpr :: TTermDefinition (Py.NameOrAttribute -> Expr)
+nameOrAttributeToExpr :: TypedTermDefinition (Py.NameOrAttribute -> Expr)
 nameOrAttributeToExpr = def "nameOrAttributeToExpr" $
   doc "Serialize a name or attribute" $
   lambda "noa" $
     Serialization.dotSep @@ Lists.map nameToExpr (unwrap Py._NameOrAttribute @@ var "noa")
 
-nameToExpr :: TTermDefinition (Py.Name -> Expr)
+nameToExpr :: TypedTermDefinition (Py.Name -> Expr)
 nameToExpr = def "nameToExpr" $
   doc "Serialize a Python name/identifier" $
   lambda "n" $
     Serialization.cst @@ (unwrap Py._Name @@ var "n")
 
-namedExpressionToExpr :: TTermDefinition (Py.NamedExpression -> Expr)
+namedExpressionToExpr :: TypedTermDefinition (Py.NamedExpression -> Expr)
 namedExpressionToExpr = def "namedExpressionToExpr" $
   doc "Serialize a named expression" $
   lambda "ne" $
@@ -864,7 +864,7 @@ namedExpressionToExpr = def "namedExpressionToExpr" $
       Py._NamedExpression_simple>>: lambda "e" $ expressionToExpr @@ var "e",
       Py._NamedExpression_assignment>>: lambda "ae" $ assignmentExpressionToExpr @@ var "ae"]
 
-numberToExpr :: TTermDefinition (Py.Number -> Expr)
+numberToExpr :: TypedTermDefinition (Py.Number -> Expr)
 numberToExpr = def "numberToExpr" $
   doc "Serialize a Python number literal" $
   lambda "num" $
@@ -875,27 +875,27 @@ numberToExpr = def "numberToExpr" $
         Serialization.cst @@ (Strings.cat2 (pythonFloatLiteralText @@ Literals.showFloat64 (var "f")) (string "j")),
       Py._Number_integer>>: lambda "i" $ Serialization.cst @@ Literals.showBigint (var "i")]
 
-orPatternToExpr :: TTermDefinition (Py.OrPattern -> Expr)
+orPatternToExpr :: TypedTermDefinition (Py.OrPattern -> Expr)
 orPatternToExpr = def "orPatternToExpr" $
   doc "Serialize an or pattern" $
   lambda "op" $
     Serialization.symbolSep @@ string "|" @@ Serialization.inlineStyle @@
       Lists.map closedPatternToExpr (unwrap Py._OrPattern @@ var "op")
 
-paramNoDefaultParametersToExpr :: TTermDefinition (Py.ParamNoDefaultParameters -> Expr)
+paramNoDefaultParametersToExpr :: TypedTermDefinition (Py.ParamNoDefaultParameters -> Expr)
 paramNoDefaultParametersToExpr = def "paramNoDefaultParametersToExpr" $
   doc "Serialize parameters without defaults" $
   lambda "pndp" $ lets [
     "nodef">: project Py._ParamNoDefaultParameters Py._ParamNoDefaultParameters_paramNoDefault @@ var "pndp"] $
     Serialization.commaSepAdaptive @@ Lists.map paramNoDefaultToExpr (var "nodef")
 
-paramNoDefaultToExpr :: TTermDefinition (Py.ParamNoDefault -> Expr)
+paramNoDefaultToExpr :: TypedTermDefinition (Py.ParamNoDefault -> Expr)
 paramNoDefaultToExpr = def "paramNoDefaultToExpr" $
   doc "Serialize a parameter without default" $
   lambda "pnd" $
     paramToExpr @@ (project Py._ParamNoDefault Py._ParamNoDefault_param @@ var "pnd")
 
-paramToExpr :: TTermDefinition (Py.Param -> Expr)
+paramToExpr :: TypedTermDefinition (Py.Param -> Expr)
 paramToExpr = def "paramToExpr" $
   doc "Serialize a parameter" $
   lambda "p" $ lets [
@@ -905,7 +905,7 @@ paramToExpr = def "paramToExpr" $
       just $ nameToExpr @@ var "name",
       Maybes.map annotationToExpr (var "ann")])
 
-parametersToExpr :: TTermDefinition (Py.Parameters -> Expr)
+parametersToExpr :: TypedTermDefinition (Py.Parameters -> Expr)
 parametersToExpr = def "parametersToExpr" $
   doc "Serialize function parameters" $
   lambda "p" $
@@ -914,13 +914,13 @@ parametersToExpr = def "parametersToExpr" $
       Py._Parameters_slashNoDefault>>: lambda "_" $ Serialization.cst @@ string "...",
       Py._Parameters_slashWithDefault>>: lambda "_" $ Serialization.cst @@ string "..."]
 
-patternCaptureTargetToExpr :: TTermDefinition (Py.PatternCaptureTarget -> Expr)
+patternCaptureTargetToExpr :: TypedTermDefinition (Py.PatternCaptureTarget -> Expr)
 patternCaptureTargetToExpr = def "patternCaptureTargetToExpr" $
   doc "Serialize a pattern capture target" $
   lambda "pct" $
     nameToExpr @@ (unwrap Py._PatternCaptureTarget @@ var "pct")
 
-patternToExpr :: TTermDefinition (Py.Pattern -> Expr)
+patternToExpr :: TypedTermDefinition (Py.Pattern -> Expr)
 patternToExpr = def "patternToExpr" $
   doc "Serialize a pattern" $
   lambda "p" $
@@ -928,7 +928,7 @@ patternToExpr = def "patternToExpr" $
       Py._Pattern_or>>: lambda "op" $ orPatternToExpr @@ var "op",
       Py._Pattern_as>>: lambda "_" $ Serialization.cst @@ string "... as ..."]
 
-patternsToExpr :: TTermDefinition (Py.Patterns -> Expr)
+patternsToExpr :: TypedTermDefinition (Py.Patterns -> Expr)
 patternsToExpr = def "patternsToExpr" $
   doc "Serialize patterns" $
   lambda "ps" $
@@ -936,7 +936,7 @@ patternsToExpr = def "patternsToExpr" $
       Py._Patterns_pattern>>: lambda "p" $ patternToExpr @@ var "p",
       Py._Patterns_sequence>>: lambda "_" $ Serialization.cst @@ string "..."]
 
-posArgToExpr :: TTermDefinition (Py.PosArg -> Expr)
+posArgToExpr :: TypedTermDefinition (Py.PosArg -> Expr)
 posArgToExpr = def "posArgToExpr" $
   doc "Serialize a positional argument" $
   lambda "pa" $
@@ -945,14 +945,14 @@ posArgToExpr = def "posArgToExpr" $
       Py._PosArg_assignment>>: lambda "ae" $ assignmentExpressionToExpr @@ var "ae",
       Py._PosArg_expression>>: lambda "e" $ expressionToExpr @@ var "e"]
 
-positionalPatternsToExpr :: TTermDefinition (Py.PositionalPatterns -> Expr)
+positionalPatternsToExpr :: TypedTermDefinition (Py.PositionalPatterns -> Expr)
 positionalPatternsToExpr = def "positionalPatternsToExpr" $
   doc "Serialize positional patterns" $
   lambda "pp" $
     Serialization.commaSep @@ Serialization.inlineStyle @@
       Lists.map patternToExpr (unwrap Py._PositionalPatterns @@ var "pp")
 
-powerToExpr :: TTermDefinition (Py.Power -> Expr)
+powerToExpr :: TypedTermDefinition (Py.Power -> Expr)
 powerToExpr = def "powerToExpr" $
   doc "Serialize a power expression" $
   lambda "p" $ lets [
@@ -964,7 +964,7 @@ powerToExpr = def "powerToExpr" $
         Serialization.spaceSep @@ list [Serialization.cst @@ string "**", factorToExpr @@ var "r"])
         (var "rhs")])
 
-primaryRhsToExpr :: TTermDefinition (Py.PrimaryRhs -> Expr)
+primaryRhsToExpr :: TypedTermDefinition (Py.PrimaryRhs -> Expr)
 primaryRhsToExpr = def "primaryRhsToExpr" $
   doc "Serialize a primary RHS" $
   lambda "rhs" $
@@ -977,7 +977,7 @@ primaryRhsToExpr = def "primaryRhsToExpr" $
         Serialization.noSep @@ list [Serialization.cst @@ string "[", slicesToExpr @@ var "slices", Serialization.cst @@ string "]"],
       Py._PrimaryRhs_genexp>>: lambda "_" $ Serialization.cst @@ string "[...]"]
 
-primaryToExpr :: TTermDefinition (Py.Primary -> Expr)
+primaryToExpr :: TypedTermDefinition (Py.Primary -> Expr)
 primaryToExpr = def "primaryToExpr" $
   doc "Serialize a primary expression" $
   lambda "p" $
@@ -985,7 +985,7 @@ primaryToExpr = def "primaryToExpr" $
       Py._Primary_simple>>: lambda "a" $ atomToExpr @@ var "a",
       Py._Primary_compound>>: lambda "pwr" $ primaryWithRhsToExpr @@ var "pwr"]
 
-primaryWithRhsToExpr :: TTermDefinition (Py.PrimaryWithRhs -> Expr)
+primaryWithRhsToExpr :: TypedTermDefinition (Py.PrimaryWithRhs -> Expr)
 primaryWithRhsToExpr = def "primaryWithRhsToExpr" $
   doc "Serialize a primary with RHS" $
   lambda "pwr" $ lets [
@@ -995,7 +995,7 @@ primaryWithRhsToExpr = def "primaryWithRhsToExpr" $
 
 -- | Convert a showFloat64 result into valid Python source syntax, mapping
 -- NaN and ±Infinity to float() constructor calls.
-pythonFloatLiteralText :: TTermDefinition (String -> String)
+pythonFloatLiteralText :: TypedTermDefinition (String -> String)
 pythonFloatLiteralText = def "pythonFloatLiteralText" $
   lambda "s" $
     Logic.ifElse (Equality.equal (var "s") (string "NaN")) (string "float('nan')") $
@@ -1003,7 +1003,7 @@ pythonFloatLiteralText = def "pythonFloatLiteralText" $
     Logic.ifElse (Equality.equal (var "s") (string "-Infinity")) (string "float('-inf')")
       (var "s")
 
-raiseExpressionToExpr :: TTermDefinition (Py.RaiseExpression -> Expr)
+raiseExpressionToExpr :: TypedTermDefinition (Py.RaiseExpression -> Expr)
 raiseExpressionToExpr = def "raiseExpressionToExpr" $
   doc "Serialize a raise expression" $
   lambda "re" $ lets [
@@ -1015,7 +1015,7 @@ raiseExpressionToExpr = def "raiseExpressionToExpr" $
         Serialization.spaceSep @@ list [Serialization.cst @@ string "from", expressionToExpr @@ var "f"])
         (var "from_")])
 
-raiseStatementToExpr :: TTermDefinition (Py.RaiseStatement -> Expr)
+raiseStatementToExpr :: TypedTermDefinition (Py.RaiseStatement -> Expr)
 raiseStatementToExpr = def "raiseStatementToExpr" $
   doc "Serialize a raise statement" $
   lambda "rs" $
@@ -1023,7 +1023,7 @@ raiseStatementToExpr = def "raiseStatementToExpr" $
       just $ Serialization.cst @@ string "raise",
       Maybes.map raiseExpressionToExpr (unwrap Py._RaiseStatement @@ var "rs")])
 
-relativeImportPrefixToExpr :: TTermDefinition (Py.RelativeImportPrefix -> Expr)
+relativeImportPrefixToExpr :: TypedTermDefinition (Py.RelativeImportPrefix -> Expr)
 relativeImportPrefixToExpr = def "relativeImportPrefixToExpr" $
   doc "Serialize a relative import prefix" $
   lambda "p" $
@@ -1031,7 +1031,7 @@ relativeImportPrefixToExpr = def "relativeImportPrefixToExpr" $
       Py._RelativeImportPrefix_dot>>: constant $ Serialization.cst @@ string ".",
       Py._RelativeImportPrefix_ellipsis>>: constant $ Serialization.cst @@ string "..."]
 
-returnStatementToExpr :: TTermDefinition (Py.ReturnStatement -> Expr)
+returnStatementToExpr :: TypedTermDefinition (Py.ReturnStatement -> Expr)
 returnStatementToExpr = def "returnStatementToExpr" $
   doc "Serialize a return statement" $
   lambda "rs" $
@@ -1040,20 +1040,20 @@ returnStatementToExpr = def "returnStatementToExpr" $
       Serialization.commaSep @@ Serialization.inlineStyle @@
         Lists.map starExpressionToExpr (unwrap Py._ReturnStatement @@ var "rs")]
 
-setToExpr :: TTermDefinition (Py.Set -> Expr)
+setToExpr :: TypedTermDefinition (Py.Set -> Expr)
 setToExpr = def "setToExpr" $
   doc "Serialize a Python set" $
   lambda "s" $
     Serialization.bracesListAdaptive @@ Lists.map starNamedExpressionToExpr (unwrap Py._Set @@ var "s")
 
-shiftExpressionToExpr :: TTermDefinition (Py.ShiftExpression -> Expr)
+shiftExpressionToExpr :: TypedTermDefinition (Py.ShiftExpression -> Expr)
 shiftExpressionToExpr = def "shiftExpressionToExpr" $
   doc "Serialize a shift expression" $
   lambda "se" $
     -- Shift operators are rarely used; just encode the sum
     sumToExpr @@ (project Py._ShiftExpression Py._ShiftExpression_rhs @@ var "se")
 
-simpleStatementToExpr :: TTermDefinition (Py.SimpleStatement -> Expr)
+simpleStatementToExpr :: TypedTermDefinition (Py.SimpleStatement -> Expr)
 simpleStatementToExpr = def "simpleStatementToExpr" $
   doc "Serialize a simple (single-line) Python statement" $
   lambda "ss" $
@@ -1073,13 +1073,13 @@ simpleStatementToExpr = def "simpleStatementToExpr" $
       Py._SimpleStatement_nonlocal>>: lambda "_" $ Serialization.cst @@ string "nonlocal ...",
       Py._SimpleStatement_del>>: lambda "_" $ Serialization.cst @@ string "del ..."]
 
-simpleTypeParameterToExpr :: TTermDefinition (Py.SimpleTypeParameter -> Expr)
+simpleTypeParameterToExpr :: TypedTermDefinition (Py.SimpleTypeParameter -> Expr)
 simpleTypeParameterToExpr = def "simpleTypeParameterToExpr" $
   doc "Serialize a simple type parameter" $
   lambda "stp" $
     nameToExpr @@ (project Py._SimpleTypeParameter Py._SimpleTypeParameter_name @@ var "stp")
 
-singleTargetToExpr :: TTermDefinition (Py.SingleTarget -> Expr)
+singleTargetToExpr :: TypedTermDefinition (Py.SingleTarget -> Expr)
 singleTargetToExpr = def "singleTargetToExpr" $
   doc "Serialize a single target" $
   lambda "st" $
@@ -1088,7 +1088,7 @@ singleTargetToExpr = def "singleTargetToExpr" $
       Py._SingleTarget_parens>>: lambda "_" $ Serialization.cst @@ string "(...)",
       Py._SingleTarget_subscriptAttributeTarget>>: lambda "_" $ Serialization.cst @@ string "..."]
 
-sliceOrStarredExpressionToExpr :: TTermDefinition (Py.SliceOrStarredExpression -> Expr)
+sliceOrStarredExpressionToExpr :: TypedTermDefinition (Py.SliceOrStarredExpression -> Expr)
 sliceOrStarredExpressionToExpr = def "sliceOrStarredExpressionToExpr" $
   doc "Serialize a slice or starred expression" $
   lambda "s" $
@@ -1096,7 +1096,7 @@ sliceOrStarredExpressionToExpr = def "sliceOrStarredExpressionToExpr" $
       Py._SliceOrStarredExpression_slice>>: lambda "sl" $ sliceToExpr @@ var "sl",
       Py._SliceOrStarredExpression_starred>>: lambda "se" $ starredExpressionToExpr @@ var "se"]
 
-sliceToExpr :: TTermDefinition (Py.Slice -> Expr)
+sliceToExpr :: TypedTermDefinition (Py.Slice -> Expr)
 sliceToExpr = def "sliceToExpr" $
   doc "Serialize a slice" $
   lambda "s" $
@@ -1104,7 +1104,7 @@ sliceToExpr = def "sliceToExpr" $
       Py._Slice_named>>: lambda "ne" $ namedExpressionToExpr @@ var "ne",
       Py._Slice_slice_>>: lambda "_" $ Serialization.cst @@ string ":"]
 
-slicesToExpr :: TTermDefinition (Py.Slices -> Expr)
+slicesToExpr :: TypedTermDefinition (Py.Slices -> Expr)
 slicesToExpr = def "slicesToExpr" $
   doc "Serialize slices" $
   lambda "s" $ lets [
@@ -1113,7 +1113,7 @@ slicesToExpr = def "slicesToExpr" $
     Serialization.commaSep @@ Serialization.inlineStyle @@
       Lists.cons (sliceToExpr @@ var "hd") (Lists.map sliceOrStarredExpressionToExpr (var "tl"))
 
-starAtomToExpr :: TTermDefinition (Py.StarAtom -> Expr)
+starAtomToExpr :: TypedTermDefinition (Py.StarAtom -> Expr)
 starAtomToExpr = def "starAtomToExpr" $
   doc "Serialize a star atom" $
   lambda "sa" $
@@ -1123,7 +1123,7 @@ starAtomToExpr = def "starAtomToExpr" $
       Py._StarAtom_starTargetsTupleSeq>>: lambda "_" $ Serialization.cst @@ string "(...)",
       Py._StarAtom_starTargetsListSeq>>: lambda "_" $ Serialization.cst @@ string "[...]"]
 
-starExpressionToExpr :: TTermDefinition (Py.StarExpression -> Expr)
+starExpressionToExpr :: TypedTermDefinition (Py.StarExpression -> Expr)
 starExpressionToExpr = def "starExpressionToExpr" $
   doc "Serialize a star expression" $
   lambda "se" $
@@ -1132,7 +1132,7 @@ starExpressionToExpr = def "starExpressionToExpr" $
         Serialization.noSep @@ list [Serialization.cst @@ string "*", bitwiseOrToExpr @@ var "bor"],
       Py._StarExpression_simple>>: lambda "e" $ expressionToExpr @@ var "e"]
 
-starNamedExpressionToExpr :: TTermDefinition (Py.StarNamedExpression -> Expr)
+starNamedExpressionToExpr :: TypedTermDefinition (Py.StarNamedExpression -> Expr)
 starNamedExpressionToExpr = def "starNamedExpressionToExpr" $
   doc "Serialize a star named expression" $
   lambda "sne" $
@@ -1141,7 +1141,7 @@ starNamedExpressionToExpr = def "starNamedExpressionToExpr" $
         Serialization.noSep @@ list [Serialization.cst @@ string "*", bitwiseOrToExpr @@ var "bor"],
       Py._StarNamedExpression_simple>>: lambda "ne" $ namedExpressionToExpr @@ var "ne"]
 
-starTargetToExpr :: TTermDefinition (Py.StarTarget -> Expr)
+starTargetToExpr :: TypedTermDefinition (Py.StarTarget -> Expr)
 starTargetToExpr = def "starTargetToExpr" $
   doc "Serialize a star target" $
   lambda "st" $
@@ -1150,7 +1150,7 @@ starTargetToExpr = def "starTargetToExpr" $
       Py._StarTarget_starred>>: lambda "inner" $
         Serialization.noSep @@ list [Serialization.cst @@ string "*", starTargetToExpr @@ var "inner"]]
 
-starredExpressionToExpr :: TTermDefinition (Py.StarredExpression -> Expr)
+starredExpressionToExpr :: TypedTermDefinition (Py.StarredExpression -> Expr)
 starredExpressionToExpr = def "starredExpressionToExpr" $
   doc "Serialize a starred expression" $
   lambda "se" $
@@ -1158,7 +1158,7 @@ starredExpressionToExpr = def "starredExpressionToExpr" $
       Serialization.cst @@ string "*",
       expressionToExpr @@ (unwrap Py._StarredExpression @@ var "se")]
 
-statementToExpr :: TTermDefinition (Py.Statement -> Expr)
+statementToExpr :: TypedTermDefinition (Py.Statement -> Expr)
 statementToExpr = def "statementToExpr" $
   doc "Serialize a Python statement" $
   lambda "stmt" $
@@ -1168,7 +1168,7 @@ statementToExpr = def "statementToExpr" $
         Serialization.newlineSep @@ Lists.map simpleStatementToExpr (var "ss"),
       Py._Statement_compound>>: lambda "c" $ compoundStatementToExpr @@ var "c"]
 
-stringPrefixToText :: TTermDefinition (Py.StringPrefix -> String)
+stringPrefixToText :: TypedTermDefinition (Py.StringPrefix -> String)
 stringPrefixToText = def "stringPrefixToText" $
   doc "Serialize a Python string prefix to its source-form characters" $
   lambda "p" $
@@ -1178,7 +1178,7 @@ stringPrefixToText = def "stringPrefixToText" $
       Py._StringPrefix_rawBytes>>: constant $ string "rb",
       Py._StringPrefix_unicode>>: constant $ string "u"]
 
-stringToExpr :: TTermDefinition (Py.String_ -> Expr)
+stringToExpr :: TypedTermDefinition (Py.String_ -> Expr)
 stringToExpr = def "stringToExpr" $
   doc "Serialize a Python string literal" $
   lambda "s" $ lets [
@@ -1197,7 +1197,7 @@ stringToExpr = def "stringToExpr" $
         Serialization.cst @@ var "content",
         Serialization.cst @@ string "\"\"\""]]
 
-subjectExpressionToExpr :: TTermDefinition (Py.SubjectExpression -> Expr)
+subjectExpressionToExpr :: TypedTermDefinition (Py.SubjectExpression -> Expr)
 subjectExpressionToExpr = def "subjectExpressionToExpr" $
   doc "Serialize a subject expression" $
   lambda "se" $
@@ -1205,7 +1205,7 @@ subjectExpressionToExpr = def "subjectExpressionToExpr" $
       Py._SubjectExpression_simple>>: lambda "ne" $ namedExpressionToExpr @@ var "ne",
       Py._SubjectExpression_tuple>>: lambda "_" $ Serialization.cst @@ string "*..."]
 
-sumToExpr :: TTermDefinition (Py.Sum -> Expr)
+sumToExpr :: TypedTermDefinition (Py.Sum -> Expr)
 sumToExpr = def "sumToExpr" $
   doc "Serialize a sum expression" $
   lambda "s" $
@@ -1213,7 +1213,7 @@ sumToExpr = def "sumToExpr" $
     termToExpr @@ (project Py._Sum Py._Sum_rhs @@ var "s")
 
 -- | Serialize a TPrimaryAndName (e.g., obj.attr)
-tPrimaryAndNameToExpr :: TTermDefinition (Py.TPrimaryAndName -> Expr)
+tPrimaryAndNameToExpr :: TypedTermDefinition (Py.TPrimaryAndName -> Expr)
 tPrimaryAndNameToExpr = def "tPrimaryAndNameToExpr" $
   doc "Serialize a TPrimaryAndName as primary.name" $
   lambda "pn" $ lets [
@@ -1222,7 +1222,7 @@ tPrimaryAndNameToExpr = def "tPrimaryAndNameToExpr" $
     Serialization.noSep @@ list [tPrimaryToExpr @@ var "prim", Serialization.cst @@ string ".", nameToExpr @@ var "name_"]
 
 -- | Serialize a TPrimary (target-side primary expression)
-tPrimaryToExpr :: TTermDefinition (Py.TPrimary -> Expr)
+tPrimaryToExpr :: TypedTermDefinition (Py.TPrimary -> Expr)
 tPrimaryToExpr = def "tPrimaryToExpr" $
   doc "Serialize a target-side primary expression" $
   lambda "tp" $
@@ -1233,7 +1233,7 @@ tPrimaryToExpr = def "tPrimaryToExpr" $
       Py._TPrimary_primaryAndGenexp>>: lambda "_" $ Serialization.cst @@ string "...",
       Py._TPrimary_primaryAndArguments>>: lambda "_" $ Serialization.cst @@ string "..."]
 
-targetWithStarAtomToExpr :: TTermDefinition (Py.TargetWithStarAtom -> Expr)
+targetWithStarAtomToExpr :: TypedTermDefinition (Py.TargetWithStarAtom -> Expr)
 targetWithStarAtomToExpr = def "targetWithStarAtomToExpr" $
   doc "Serialize a target with star atom" $
   lambda "t" $
@@ -1242,14 +1242,14 @@ targetWithStarAtomToExpr = def "targetWithStarAtomToExpr" $
       Py._TargetWithStarAtom_project>>: lambda "pn" $ tPrimaryAndNameToExpr @@ var "pn",
       Py._TargetWithStarAtom_slices>>: lambda "_" $ Serialization.cst @@ string "..."]
 
-termToExpr :: TTermDefinition (Py.Term -> Expr)
+termToExpr :: TypedTermDefinition (Py.Term -> Expr)
 termToExpr = def "termToExpr" $
   doc "Serialize a term expression" $
   lambda "t" $
     -- Just encode the factor; multiplication rarely used in generated code
     factorToExpr @@ (project Py._Term Py._Term_rhs @@ var "t")
 
-toPythonComments :: TTermDefinition (String -> String)
+toPythonComments :: TypedTermDefinition (String -> String)
 toPythonComments = def "toPythonComments" $
   doc ("Convert a doc string to Python comment format. Empty source lines"
     <> " emit `#` (no trailing space) so blank comment lines don't carry"
@@ -1263,7 +1263,7 @@ toPythonComments = def "toPythonComments" $
             (Strings.cat2 (string "# ") (var "line")))
         (Strings.lines (var "doc_"))))
 
-tupleToExpr :: TTermDefinition (Py.Tuple -> Expr)
+tupleToExpr :: TypedTermDefinition (Py.Tuple -> Expr)
 tupleToExpr = def "tupleToExpr" $
   doc "Serialize a Python tuple" $
   lambda "t" $ lets [
@@ -1279,7 +1279,7 @@ tupleToExpr = def "tupleToExpr" $
             (Serialization.parenListAdaptive @@ Lists.map starNamedExpressionToExpr (var "es")))
         (Lists.maybeHead (var "es")))
 
-typeAliasToExpr :: TTermDefinition (Py.TypeAlias -> Expr)
+typeAliasToExpr :: TypedTermDefinition (Py.TypeAlias -> Expr)
 typeAliasToExpr = def "typeAliasToExpr" $
   doc "Serialize a type alias" $
   lambda "ta" $ lets [
@@ -1297,7 +1297,7 @@ typeAliasToExpr = def "typeAliasToExpr" $
       Serialization.cst @@ string "=",
       expressionToExpr @@ var "expr"]
 
-typeParameterToExpr :: TTermDefinition (Py.TypeParameter -> Expr)
+typeParameterToExpr :: TypedTermDefinition (Py.TypeParameter -> Expr)
 typeParameterToExpr = def "typeParameterToExpr" $
   doc "Serialize a type parameter" $
   lambda "tp" $
@@ -1306,7 +1306,7 @@ typeParameterToExpr = def "typeParameterToExpr" $
       Py._TypeParameter_star>>: lambda "_" $ Serialization.cst @@ string "*...",
       Py._TypeParameter_doubleStar>>: lambda "_" $ Serialization.cst @@ string "**..."]
 
-typedAssignmentToExpr :: TTermDefinition (Py.TypedAssignment -> Expr)
+typedAssignmentToExpr :: TypedTermDefinition (Py.TypedAssignment -> Expr)
 typedAssignmentToExpr = def "typedAssignmentToExpr" $
   doc "Serialize a typed assignment" $
   lambda "ta" $ lets [
@@ -1318,7 +1318,7 @@ typedAssignmentToExpr = def "typedAssignmentToExpr" $
       just $ expressionToExpr @@ var "typ",
       Maybes.map annotatedRhsToExpr (var "rhs")])
 
-untypedAssignmentToExpr :: TTermDefinition (Py.UntypedAssignment -> Expr)
+untypedAssignmentToExpr :: TypedTermDefinition (Py.UntypedAssignment -> Expr)
 untypedAssignmentToExpr = def "untypedAssignmentToExpr" $
   doc "Serialize an untyped assignment" $
   lambda "ua" $ lets [
@@ -1328,13 +1328,13 @@ untypedAssignmentToExpr = def "untypedAssignmentToExpr" $
       Lists.map starTargetToExpr (var "targets"),
       list [annotatedRhsToExpr @@ var "rhs"]])
 
-valuePatternToExpr :: TTermDefinition (Py.ValuePattern -> Expr)
+valuePatternToExpr :: TypedTermDefinition (Py.ValuePattern -> Expr)
 valuePatternToExpr = def "valuePatternToExpr" $
   doc "Serialize a value pattern" $
   lambda "vp" $
     attributeToExpr @@ (unwrap Py._ValuePattern @@ var "vp")
 
-whileStatementToExpr :: TTermDefinition (Py.WhileStatement -> Expr)
+whileStatementToExpr :: TypedTermDefinition (Py.WhileStatement -> Expr)
 whileStatementToExpr = def "whileStatementToExpr" $
   doc "Serialize a while statement" $
   lambda "ws" $ lets [

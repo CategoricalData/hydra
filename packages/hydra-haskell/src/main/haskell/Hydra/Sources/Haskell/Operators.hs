@@ -128,17 +128,17 @@ module_ = Module {
       toDefinition remOp,
       toDefinition typeOp]
 
-andOp :: TTermDefinition Op
+andOp :: TypedTermDefinition Op
 andOp = haskellOperatorsDefinition "andOp" $
   doc "Logical AND operator (&&)" $
   Serialization.op @@ string "&&" @@ int32 3 @@ Ast.associativityRight
 
-apOp :: TTermDefinition Op
+apOp :: TypedTermDefinition Op
 apOp = haskellOperatorsDefinition "apOp" $
   doc "Applicative apply operator (<*>)" $
   Serialization.op @@ string "<*>" @@ int32 4 @@ Ast.associativityLeft
 
-appOp :: TTermDefinition Op
+appOp :: TypedTermDefinition Op
 appOp = haskellOperatorsDefinition "appOp" $
   doc "Function application operator (whitespace)" $
   Ast.op
@@ -147,160 +147,160 @@ appOp = haskellOperatorsDefinition "appOp" $
     (Ast.precedence $ int32 0)
     Ast.associativityLeft
 
-applyOp :: TTermDefinition Op
+applyOp :: TypedTermDefinition Op
 applyOp = haskellOperatorsDefinition "applyOp" $
   doc "Low-precedence function application ($)" $
   Serialization.op @@ string "$" @@ int32 0 @@ Ast.associativityRight
 
-arrowOp :: TTermDefinition Op
+arrowOp :: TypedTermDefinition Op
 arrowOp = haskellOperatorsDefinition "arrowOp" $
   doc "Function type arrow (->)" $
   Serialization.op @@ string "->" @@ (Math.negate $ int32 1) @@ Ast.associativityRight
 
-assertOp :: TTermDefinition Op
+assertOp :: TypedTermDefinition Op
 assertOp = haskellOperatorsDefinition "assertOp" $
   doc "Type class constraint arrow (=>)" $
   Serialization.op @@ string "=>" @@ int32 0 @@ Ast.associativityNone
 
-bindOp :: TTermDefinition Op
+bindOp :: TypedTermDefinition Op
 bindOp = haskellOperatorsDefinition "bindOp" $
   doc "Monadic bind operator (>>=)" $
   Serialization.op @@ string ">>=" @@ int32 1 @@ Ast.associativityLeft
 
-caseOp :: TTermDefinition Op
+caseOp :: TypedTermDefinition Op
 caseOp = haskellOperatorsDefinition "caseOp" $
   doc "Case alternative arrow (->)" $
   Serialization.op @@ string "->" @@ int32 0 @@ Ast.associativityNone
 
-composeOp :: TTermDefinition Op
+composeOp :: TypedTermDefinition Op
 composeOp = haskellOperatorsDefinition "composeOp" $
   doc "Function composition (.)" $
   Serialization.op @@ string "." @@ int32 9 @@ Ast.associativityLeft
 
-concatOp :: TTermDefinition Op
+concatOp :: TypedTermDefinition Op
 concatOp = haskellOperatorsDefinition "concatOp" $
   doc "List concatenation (++)" $
   Serialization.op @@ string "++" @@ int32 5 @@ Ast.associativityRight
 
-consOp :: TTermDefinition Op
+consOp :: TypedTermDefinition Op
 consOp = haskellOperatorsDefinition "consOp" $
   doc "List cons (:)" $
   Serialization.op @@ string ":" @@ int32 5 @@ Ast.associativityRight
 
-defineOp :: TTermDefinition Op
+defineOp :: TypedTermDefinition Op
 defineOp = haskellOperatorsDefinition "defineOp" $
   doc "Definition operator (=)" $
   Serialization.op @@ string "=" @@ int32 0 @@ Ast.associativityNone
 
-diamondOp :: TTermDefinition Op
+diamondOp :: TypedTermDefinition Op
 diamondOp = haskellOperatorsDefinition "diamondOp" $
   doc "Semigroup append (<>)" $
   Serialization.op @@ string "<>" @@ int32 6 @@ Ast.associativityRight
 
-divOp :: TTermDefinition Op
+divOp :: TypedTermDefinition Op
 divOp = haskellOperatorsDefinition "divOp" $
   doc "Integer division (`div`)" $
   Serialization.op @@ string "`div`" @@ int32 7 @@ Ast.associativityLeft
 
-divideOp :: TTermDefinition Op
+divideOp :: TypedTermDefinition Op
 divideOp = haskellOperatorsDefinition "divideOp" $
   doc "Fractional division (/)" $
   Serialization.op @@ string "/" @@ int32 7 @@ Ast.associativityLeft
 
-elemOp :: TTermDefinition Op
+elemOp :: TypedTermDefinition Op
 elemOp = haskellOperatorsDefinition "elemOp" $
   doc "List membership (`elem`)" $
   Serialization.op @@ string "`elem`" @@ int32 4 @@ Ast.associativityNone
 
-equalOp :: TTermDefinition Op
+equalOp :: TypedTermDefinition Op
 equalOp = haskellOperatorsDefinition "equalOp" $
   doc "Equality comparison (==)" $
   Serialization.op @@ string "==" @@ int32 4 @@ Ast.associativityNone
 
-fmapOp :: TTermDefinition Op
+fmapOp :: TypedTermDefinition Op
 fmapOp = haskellOperatorsDefinition "fmapOp" $
   doc "Functor map (<$>)" $
   Serialization.op @@ string "<$>" @@ int32 4 @@ Ast.associativityLeft
 
-gtOp :: TTermDefinition Op
+gtOp :: TypedTermDefinition Op
 gtOp = haskellOperatorsDefinition "gtOp" $
   doc "Greater than (>)" $
   Serialization.op @@ string ">" @@ int32 4 @@ Ast.associativityNone
 
-gteOp :: TTermDefinition Op
+gteOp :: TypedTermDefinition Op
 gteOp = haskellOperatorsDefinition "gteOp" $
   doc "Greater than or equal (>=)" $
   Serialization.op @@ string ">=" @@ int32 4 @@ Ast.associativityNone
 
-haskellOperatorsDefinition :: String -> TTerm a -> TTermDefinition a
+haskellOperatorsDefinition :: String -> TypedTerm a -> TypedTermDefinition a
 haskellOperatorsDefinition = definitionInModule module_
 
-indexOp :: TTermDefinition Op
+indexOp :: TypedTermDefinition Op
 indexOp = haskellOperatorsDefinition "indexOp" $
   doc "List indexing (!!)" $
   Serialization.op @@ string "!!" @@ int32 9 @@ Ast.associativityLeft
 
-lambdaOp :: TTermDefinition Op
+lambdaOp :: TypedTermDefinition Op
 lambdaOp = haskellOperatorsDefinition "lambdaOp" $
   doc "Lambda body arrow (->)" $
   Serialization.op @@ string "->" @@ (Math.negate $ int32 1) @@ Ast.associativityRight
 
-ltOp :: TTermDefinition Op
+ltOp :: TypedTermDefinition Op
 ltOp = haskellOperatorsDefinition "ltOp" $
   doc "Less than (<)" $
   Serialization.op @@ string "<" @@ int32 4 @@ Ast.associativityNone
 
-lteOp :: TTermDefinition Op
+lteOp :: TypedTermDefinition Op
 lteOp = haskellOperatorsDefinition "lteOp" $
   doc "Less than or equal (<=)" $
   Serialization.op @@ string ">=" @@ int32 4 @@ Ast.associativityNone
 
-minusOp :: TTermDefinition Op
+minusOp :: TypedTermDefinition Op
 minusOp = haskellOperatorsDefinition "minusOp" $
   doc "Subtraction (-). Originally: associativityLeft" $
   Serialization.op @@ string "-" @@ int32 6 @@ Ast.associativityBoth
 
-modOp :: TTermDefinition Op
+modOp :: TypedTermDefinition Op
 modOp = haskellOperatorsDefinition "modOp" $
   doc "Modulo (`mod`)" $
   Serialization.op @@ string "`mod`" @@ int32 7 @@ Ast.associativityLeft
 
-multOp :: TTermDefinition Op
+multOp :: TypedTermDefinition Op
 multOp = haskellOperatorsDefinition "multOp" $
   doc "Multiplication (*). Originally: associativityLeft" $
   Serialization.op @@ string "*" @@ int32 7 @@ Ast.associativityBoth
 
-neqOp :: TTermDefinition Op
+neqOp :: TypedTermDefinition Op
 neqOp = haskellOperatorsDefinition "neqOp" $
   doc "Not equal (/=)" $
   Serialization.op @@ string "/=" @@ int32 4 @@ Ast.associativityNone
 
-notElemOp :: TTermDefinition Op
+notElemOp :: TypedTermDefinition Op
 notElemOp = haskellOperatorsDefinition "notElemOp" $
   doc "List non-membership (`notElem`)" $
   Serialization.op @@ string "`notElem`" @@ int32 4 @@ Ast.associativityNone
 
-orOp :: TTermDefinition Op
+orOp :: TypedTermDefinition Op
 orOp = haskellOperatorsDefinition "orOp" $
   doc "Logical OR (||)" $
   Serialization.op @@ string "||" @@ int32 2 @@ Ast.associativityRight
 
-plusOp :: TTermDefinition Op
+plusOp :: TypedTermDefinition Op
 plusOp = haskellOperatorsDefinition "plusOp" $
   doc "Addition (+). Originally: associativityLeft" $
   Serialization.op @@ string "+" @@ int32 6 @@ Ast.associativityBoth
 
-quotOp :: TTermDefinition Op
+quotOp :: TypedTermDefinition Op
 quotOp = haskellOperatorsDefinition "quotOp" $
   doc "Integer quotient (`quot`)" $
   Serialization.op @@ string "`quot`" @@ int32 7 @@ Ast.associativityLeft
 
-remOp :: TTermDefinition Op
+remOp :: TypedTermDefinition Op
 remOp = haskellOperatorsDefinition "remOp" $
   doc "Integer remainder (`rem`)" $
   Serialization.op @@ string "`rem`" @@ int32 7 @@ Ast.associativityLeft
 
-typeOp :: TTermDefinition Op
+typeOp :: TypedTermDefinition Op
 typeOp = haskellOperatorsDefinition "typeOp" $
   doc "Type annotation (::)" $
   Serialization.op @@ string "::" @@ int32 0 @@ Ast.associativityNone

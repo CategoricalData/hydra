@@ -35,15 +35,15 @@ module_ = Module {
       toDefinition equality,
       toDefinition ordering]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-equality :: TTermDefinition TypeClass
+equality :: TypedTermDefinition TypeClass
 equality = define "equality" $
   doc "The equality type class: instances support structural equality." $
   Typing.typeClass (string "Equality: instances support structural equality.")
 
-ordering :: TTermDefinition TypeClass
+ordering :: TypedTermDefinition TypeClass
 ordering = define "ordering" $
   doc "The ordering type class: instances support total ordering (and equality)." $
   Typing.typeClass (string "Ordering: instances support total ordering (and equality).")

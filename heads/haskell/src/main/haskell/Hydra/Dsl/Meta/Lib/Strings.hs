@@ -2,66 +2,66 @@
 
 module Hydra.Dsl.Meta.Lib.Strings where
 
-import Hydra.Phantoms
+import Hydra.Typed
 import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Libraries
 
 
 -- | Concatenate a list of strings into a single string.
-cat :: TTerm [String] -> TTerm String
+cat :: TypedTerm [String] -> TypedTerm String
 cat = primitive1 _strings_cat
 
 -- | Concatenate two strings.
-cat2 :: TTerm String -> TTerm String -> TTerm String
+cat2 :: TypedTerm String -> TypedTerm String -> TypedTerm String
 cat2 = primitive2 _strings_cat2
 
 -- | Convert a list of Unicode code points to a string.
-fromList :: TTerm [Int] -> TTerm String
+fromList :: TypedTerm [Int] -> TypedTerm String
 fromList = primitive1 _strings_fromList
 
 -- | Join a list of strings with a separator between each element.
-intercalate :: TTerm String -> TTerm [String] -> TTerm String
+intercalate :: TypedTerm String -> TypedTerm [String] -> TypedTerm String
 intercalate = primitive2 _strings_intercalate
 
 -- | Return the length of a string.
-length :: TTerm String -> TTerm Int
+length :: TypedTerm String -> TypedTerm Int
 length = primitive1 _strings_length
 
 -- | Split a string into lines.
-lines :: TTerm String -> TTerm [String]
+lines :: TypedTerm String -> TypedTerm [String]
 lines = primitive1 _strings_lines
 
 -- | Get the Unicode code point of the character at a specific index, returning Nothing if out of bounds.
-maybeCharAt :: TTerm Int -> TTerm String -> TTerm (Maybe Int)
+maybeCharAt :: TypedTerm Int -> TypedTerm String -> TypedTerm (Maybe Int)
 maybeCharAt = primitive2 _strings_maybeCharAt
 
 -- | Check whether a string is empty.
-null :: TTerm String -> TTerm Bool
+null :: TypedTerm String -> TypedTerm Bool
 null = primitive1 _strings_null
 
 -- | Split a string on a delimiter string.
-splitOn :: TTerm String -> TTerm String -> TTerm [String]
+splitOn :: TypedTerm String -> TypedTerm String -> TypedTerm [String]
 splitOn = primitive2 _strings_splitOn
 
 -- | Convert a string to a list of Unicode code points.
-toList :: TTerm String -> TTerm [Int]
+toList :: TypedTerm String -> TypedTerm [Int]
 toList = primitive1 _strings_toList
 
 -- | Convert a string to lowercase.
-toLower :: TTerm String -> TTerm String
+toLower :: TypedTerm String -> TypedTerm String
 toLower = primitive1 _strings_toLower
 
 -- | Convert a string to uppercase.
-toUpper :: TTerm String -> TTerm String
+toUpper :: TypedTerm String -> TypedTerm String
 toUpper = primitive1 _strings_toUpper
 
 -- | Join a list of strings with newlines, appending a trailing newline.
-unlines :: TTerm [String] -> TTerm String
+unlines :: TypedTerm [String] -> TypedTerm String
 unlines = primitive1 _strings_unlines
 
 -- Helpers
 
 -- | Concatenate a Haskell list of string terms into a single string.
-concat :: [TTerm String] -> TTerm String
+concat :: [TypedTerm String] -> TypedTerm String
 concat strings = primitive _strings_cat @@ list strings

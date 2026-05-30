@@ -6,57 +6,57 @@ module Hydra.Dsl.Cypher.OpenCypher where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Cypher.OpenCypher as OpenCypher
-import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Typed as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 
-addOrSubtractExpression :: Phantoms.TTerm OpenCypher.MultiplyDivideModuloExpression -> Phantoms.TTerm [OpenCypher.AddOrSubtractRightHandSide] -> Phantoms.TTerm OpenCypher.AddOrSubtractExpression
+addOrSubtractExpression :: Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloExpression -> Phantoms.TypedTerm [OpenCypher.AddOrSubtractRightHandSide] -> Phantoms.TypedTerm OpenCypher.AddOrSubtractExpression
 addOrSubtractExpression left right =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.AddOrSubtractExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Phantoms.unTTerm left)},
+          Core.fieldTerm = (Phantoms.unTypedTerm left)},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm right)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm right)}]}))
 
-addOrSubtractExpressionLeft :: Phantoms.TTerm OpenCypher.AddOrSubtractExpression -> Phantoms.TTerm OpenCypher.MultiplyDivideModuloExpression
+addOrSubtractExpressionLeft :: Phantoms.TypedTerm OpenCypher.AddOrSubtractExpression -> Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloExpression
 addOrSubtractExpressionLeft x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.AddOrSubtractExpression"),
         Core.projectionFieldName = (Core.Name "left")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-addOrSubtractExpressionRight :: Phantoms.TTerm OpenCypher.AddOrSubtractExpression -> Phantoms.TTerm [OpenCypher.AddOrSubtractRightHandSide]
+addOrSubtractExpressionRight :: Phantoms.TypedTerm OpenCypher.AddOrSubtractExpression -> Phantoms.TypedTerm [OpenCypher.AddOrSubtractRightHandSide]
 addOrSubtractExpressionRight x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.AddOrSubtractExpression"),
         Core.projectionFieldName = (Core.Name "right")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-addOrSubtractExpressionWithLeft :: Phantoms.TTerm OpenCypher.AddOrSubtractExpression -> Phantoms.TTerm OpenCypher.MultiplyDivideModuloExpression -> Phantoms.TTerm OpenCypher.AddOrSubtractExpression
+addOrSubtractExpressionWithLeft :: Phantoms.TypedTerm OpenCypher.AddOrSubtractExpression -> Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloExpression -> Phantoms.TypedTerm OpenCypher.AddOrSubtractExpression
 addOrSubtractExpressionWithLeft original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.AddOrSubtractExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.AddOrSubtractExpression"),
               Core.projectionFieldName = (Core.Name "right")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-addOrSubtractExpressionWithRight :: Phantoms.TTerm OpenCypher.AddOrSubtractExpression -> Phantoms.TTerm [OpenCypher.AddOrSubtractRightHandSide] -> Phantoms.TTerm OpenCypher.AddOrSubtractExpression
+addOrSubtractExpressionWithRight :: Phantoms.TypedTerm OpenCypher.AddOrSubtractExpression -> Phantoms.TypedTerm [OpenCypher.AddOrSubtractRightHandSide] -> Phantoms.TypedTerm OpenCypher.AddOrSubtractExpression
 addOrSubtractExpressionWithRight original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.AddOrSubtractExpression"),
       Core.recordFields = [
         Core.Field {
@@ -65,58 +65,58 @@ addOrSubtractExpressionWithRight original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.AddOrSubtractExpression"),
               Core.projectionFieldName = (Core.Name "left")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-addOrSubtractOperatorAdd :: Phantoms.TTerm OpenCypher.AddOrSubtractOperator
+addOrSubtractOperatorAdd :: Phantoms.TypedTerm OpenCypher.AddOrSubtractOperator
 addOrSubtractOperatorAdd =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.AddOrSubtractOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "add"),
         Core.fieldTerm = Core.TermUnit}}))
 
-addOrSubtractOperatorSubtract :: Phantoms.TTerm OpenCypher.AddOrSubtractOperator
+addOrSubtractOperatorSubtract :: Phantoms.TypedTerm OpenCypher.AddOrSubtractOperator
 addOrSubtractOperatorSubtract =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.AddOrSubtractOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "subtract"),
         Core.fieldTerm = Core.TermUnit}}))
 
-addOrSubtractRightHandSide :: Phantoms.TTerm OpenCypher.AddOrSubtractOperator -> Phantoms.TTerm OpenCypher.MultiplyDivideModuloExpression -> Phantoms.TTerm OpenCypher.AddOrSubtractRightHandSide
+addOrSubtractRightHandSide :: Phantoms.TypedTerm OpenCypher.AddOrSubtractOperator -> Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloExpression -> Phantoms.TypedTerm OpenCypher.AddOrSubtractRightHandSide
 addOrSubtractRightHandSide operator expression =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.AddOrSubtractRightHandSide"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
-          Core.fieldTerm = (Phantoms.unTTerm operator)},
+          Core.fieldTerm = (Phantoms.unTypedTerm operator)},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm expression)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm expression)}]}))
 
-addOrSubtractRightHandSideExpression :: Phantoms.TTerm OpenCypher.AddOrSubtractRightHandSide -> Phantoms.TTerm OpenCypher.MultiplyDivideModuloExpression
+addOrSubtractRightHandSideExpression :: Phantoms.TypedTerm OpenCypher.AddOrSubtractRightHandSide -> Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloExpression
 addOrSubtractRightHandSideExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.AddOrSubtractRightHandSide"),
         Core.projectionFieldName = (Core.Name "expression")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-addOrSubtractRightHandSideOperator :: Phantoms.TTerm OpenCypher.AddOrSubtractRightHandSide -> Phantoms.TTerm OpenCypher.AddOrSubtractOperator
+addOrSubtractRightHandSideOperator :: Phantoms.TypedTerm OpenCypher.AddOrSubtractRightHandSide -> Phantoms.TypedTerm OpenCypher.AddOrSubtractOperator
 addOrSubtractRightHandSideOperator x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.AddOrSubtractRightHandSide"),
         Core.projectionFieldName = (Core.Name "operator")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-addOrSubtractRightHandSideWithExpression :: Phantoms.TTerm OpenCypher.AddOrSubtractRightHandSide -> Phantoms.TTerm OpenCypher.MultiplyDivideModuloExpression -> Phantoms.TTerm OpenCypher.AddOrSubtractRightHandSide
+addOrSubtractRightHandSideWithExpression :: Phantoms.TypedTerm OpenCypher.AddOrSubtractRightHandSide -> Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloExpression -> Phantoms.TypedTerm OpenCypher.AddOrSubtractRightHandSide
 addOrSubtractRightHandSideWithExpression original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.AddOrSubtractRightHandSide"),
       Core.recordFields = [
         Core.Field {
@@ -125,182 +125,182 @@ addOrSubtractRightHandSideWithExpression original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.AddOrSubtractRightHandSide"),
               Core.projectionFieldName = (Core.Name "operator")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-addOrSubtractRightHandSideWithOperator :: Phantoms.TTerm OpenCypher.AddOrSubtractRightHandSide -> Phantoms.TTerm OpenCypher.AddOrSubtractOperator -> Phantoms.TTerm OpenCypher.AddOrSubtractRightHandSide
+addOrSubtractRightHandSideWithOperator :: Phantoms.TypedTerm OpenCypher.AddOrSubtractRightHandSide -> Phantoms.TypedTerm OpenCypher.AddOrSubtractOperator -> Phantoms.TypedTerm OpenCypher.AddOrSubtractRightHandSide
 addOrSubtractRightHandSideWithOperator original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.AddOrSubtractRightHandSide"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.AddOrSubtractRightHandSide"),
               Core.projectionFieldName = (Core.Name "expression")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-andExpression :: Phantoms.TTerm [OpenCypher.NotExpression] -> Phantoms.TTerm OpenCypher.AndExpression
+andExpression :: Phantoms.TypedTerm [OpenCypher.NotExpression] -> Phantoms.TypedTerm OpenCypher.AndExpression
 andExpression x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.AndExpression"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-anonymousPatternPart :: Phantoms.TTerm OpenCypher.PatternElement -> Phantoms.TTerm OpenCypher.AnonymousPatternPart
+anonymousPatternPart :: Phantoms.TypedTerm OpenCypher.PatternElement -> Phantoms.TypedTerm OpenCypher.AnonymousPatternPart
 anonymousPatternPart x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.AnonymousPatternPart"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-atomCase :: Phantoms.TTerm OpenCypher.CaseExpression -> Phantoms.TTerm OpenCypher.Atom
+atomCase :: Phantoms.TypedTerm OpenCypher.CaseExpression -> Phantoms.TypedTerm OpenCypher.Atom
 atomCase x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "case"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-atomCountStar :: Phantoms.TTerm OpenCypher.Atom
+atomCountStar :: Phantoms.TypedTerm OpenCypher.Atom
 atomCountStar =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "countStar"),
         Core.fieldTerm = Core.TermUnit}}))
 
-atomExistentialSubquery :: Phantoms.TTerm OpenCypher.ExistentialSubquery -> Phantoms.TTerm OpenCypher.Atom
+atomExistentialSubquery :: Phantoms.TypedTerm OpenCypher.ExistentialSubquery -> Phantoms.TypedTerm OpenCypher.Atom
 atomExistentialSubquery x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "existentialSubquery"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-atomFunctionInvocation :: Phantoms.TTerm OpenCypher.FunctionInvocation -> Phantoms.TTerm OpenCypher.Atom
+atomFunctionInvocation :: Phantoms.TypedTerm OpenCypher.FunctionInvocation -> Phantoms.TypedTerm OpenCypher.Atom
 atomFunctionInvocation x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "functionInvocation"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-atomListComprehension :: Phantoms.TTerm OpenCypher.ListComprehension -> Phantoms.TTerm OpenCypher.Atom
+atomListComprehension :: Phantoms.TypedTerm OpenCypher.ListComprehension -> Phantoms.TypedTerm OpenCypher.Atom
 atomListComprehension x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "listComprehension"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-atomLiteral :: Phantoms.TTerm OpenCypher.Literal -> Phantoms.TTerm OpenCypher.Atom
+atomLiteral :: Phantoms.TypedTerm OpenCypher.Literal -> Phantoms.TypedTerm OpenCypher.Atom
 atomLiteral x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-atomParameter :: Phantoms.TTerm OpenCypher.Parameter -> Phantoms.TTerm OpenCypher.Atom
+atomParameter :: Phantoms.TypedTerm OpenCypher.Parameter -> Phantoms.TypedTerm OpenCypher.Atom
 atomParameter x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parameter"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-atomParenthesized :: Phantoms.TTerm OpenCypher.ParenthesizedExpression -> Phantoms.TTerm OpenCypher.Atom
+atomParenthesized :: Phantoms.TypedTerm OpenCypher.ParenthesizedExpression -> Phantoms.TypedTerm OpenCypher.Atom
 atomParenthesized x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parenthesized"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-atomPatternComprehension :: Phantoms.TTerm OpenCypher.PatternComprehension -> Phantoms.TTerm OpenCypher.Atom
+atomPatternComprehension :: Phantoms.TypedTerm OpenCypher.PatternComprehension -> Phantoms.TypedTerm OpenCypher.Atom
 atomPatternComprehension x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "patternComprehension"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-atomPatternPredicate :: Phantoms.TTerm OpenCypher.PatternPredicate -> Phantoms.TTerm OpenCypher.Atom
+atomPatternPredicate :: Phantoms.TypedTerm OpenCypher.PatternPredicate -> Phantoms.TypedTerm OpenCypher.Atom
 atomPatternPredicate x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "patternPredicate"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-atomQuantifier :: Phantoms.TTerm OpenCypher.Quantifier -> Phantoms.TTerm OpenCypher.Atom
+atomQuantifier :: Phantoms.TypedTerm OpenCypher.Quantifier -> Phantoms.TypedTerm OpenCypher.Atom
 atomQuantifier x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "quantifier"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-atomVariable :: Phantoms.TTerm OpenCypher.Variable -> Phantoms.TTerm OpenCypher.Atom
+atomVariable :: Phantoms.TypedTerm OpenCypher.Variable -> Phantoms.TypedTerm OpenCypher.Atom
 atomVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-caseAlternative :: Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.CaseAlternative
+caseAlternative :: Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.CaseAlternative
 caseAlternative condition result =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.CaseAlternative"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "condition"),
-          Core.fieldTerm = (Phantoms.unTTerm condition)},
+          Core.fieldTerm = (Phantoms.unTypedTerm condition)},
         Core.Field {
           Core.fieldName = (Core.Name "result"),
-          Core.fieldTerm = (Phantoms.unTTerm result)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm result)}]}))
 
-caseAlternativeCondition :: Phantoms.TTerm OpenCypher.CaseAlternative -> Phantoms.TTerm OpenCypher.Expression
+caseAlternativeCondition :: Phantoms.TypedTerm OpenCypher.CaseAlternative -> Phantoms.TypedTerm OpenCypher.Expression
 caseAlternativeCondition x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.CaseAlternative"),
         Core.projectionFieldName = (Core.Name "condition")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-caseAlternativeResult :: Phantoms.TTerm OpenCypher.CaseAlternative -> Phantoms.TTerm OpenCypher.Expression
+caseAlternativeResult :: Phantoms.TypedTerm OpenCypher.CaseAlternative -> Phantoms.TypedTerm OpenCypher.Expression
 caseAlternativeResult x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.CaseAlternative"),
         Core.projectionFieldName = (Core.Name "result")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-caseAlternativeWithCondition :: Phantoms.TTerm OpenCypher.CaseAlternative -> Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.CaseAlternative
+caseAlternativeWithCondition :: Phantoms.TypedTerm OpenCypher.CaseAlternative -> Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.CaseAlternative
 caseAlternativeWithCondition original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.CaseAlternative"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "condition"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "result"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.CaseAlternative"),
               Core.projectionFieldName = (Core.Name "result")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-caseAlternativeWithResult :: Phantoms.TTerm OpenCypher.CaseAlternative -> Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.CaseAlternative
+caseAlternativeWithResult :: Phantoms.TypedTerm OpenCypher.CaseAlternative -> Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.CaseAlternative
 caseAlternativeWithResult original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.CaseAlternative"),
       Core.recordFields = [
         Core.Field {
@@ -309,53 +309,53 @@ caseAlternativeWithResult original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.CaseAlternative"),
               Core.projectionFieldName = (Core.Name "condition")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "result"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-caseExpression :: Phantoms.TTerm (Maybe OpenCypher.Expression) -> Phantoms.TTerm [OpenCypher.CaseAlternative] -> Phantoms.TTerm (Maybe OpenCypher.Expression) -> Phantoms.TTerm OpenCypher.CaseExpression
+caseExpression :: Phantoms.TypedTerm (Maybe OpenCypher.Expression) -> Phantoms.TypedTerm [OpenCypher.CaseAlternative] -> Phantoms.TypedTerm (Maybe OpenCypher.Expression) -> Phantoms.TypedTerm OpenCypher.CaseExpression
 caseExpression expression alternatives else_ =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.CaseExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm expression)},
+          Core.fieldTerm = (Phantoms.unTypedTerm expression)},
         Core.Field {
           Core.fieldName = (Core.Name "alternatives"),
-          Core.fieldTerm = (Phantoms.unTTerm alternatives)},
+          Core.fieldTerm = (Phantoms.unTypedTerm alternatives)},
         Core.Field {
           Core.fieldName = (Core.Name "else"),
-          Core.fieldTerm = (Phantoms.unTTerm else_)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm else_)}]}))
 
-caseExpressionAlternatives :: Phantoms.TTerm OpenCypher.CaseExpression -> Phantoms.TTerm [OpenCypher.CaseAlternative]
+caseExpressionAlternatives :: Phantoms.TypedTerm OpenCypher.CaseExpression -> Phantoms.TypedTerm [OpenCypher.CaseAlternative]
 caseExpressionAlternatives x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.CaseExpression"),
         Core.projectionFieldName = (Core.Name "alternatives")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-caseExpressionElse :: Phantoms.TTerm OpenCypher.CaseExpression -> Phantoms.TTerm (Maybe OpenCypher.Expression)
+caseExpressionElse :: Phantoms.TypedTerm OpenCypher.CaseExpression -> Phantoms.TypedTerm (Maybe OpenCypher.Expression)
 caseExpressionElse x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.CaseExpression"),
         Core.projectionFieldName = (Core.Name "else")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-caseExpressionExpression :: Phantoms.TTerm OpenCypher.CaseExpression -> Phantoms.TTerm (Maybe OpenCypher.Expression)
+caseExpressionExpression :: Phantoms.TypedTerm OpenCypher.CaseExpression -> Phantoms.TypedTerm (Maybe OpenCypher.Expression)
 caseExpressionExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.CaseExpression"),
         Core.projectionFieldName = (Core.Name "expression")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-caseExpressionWithAlternatives :: Phantoms.TTerm OpenCypher.CaseExpression -> Phantoms.TTerm [OpenCypher.CaseAlternative] -> Phantoms.TTerm OpenCypher.CaseExpression
+caseExpressionWithAlternatives :: Phantoms.TypedTerm OpenCypher.CaseExpression -> Phantoms.TypedTerm [OpenCypher.CaseAlternative] -> Phantoms.TypedTerm OpenCypher.CaseExpression
 caseExpressionWithAlternatives original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.CaseExpression"),
       Core.recordFields = [
         Core.Field {
@@ -364,21 +364,21 @@ caseExpressionWithAlternatives original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.CaseExpression"),
               Core.projectionFieldName = (Core.Name "expression")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "alternatives"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "else"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.CaseExpression"),
               Core.projectionFieldName = (Core.Name "else")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-caseExpressionWithElse :: Phantoms.TTerm OpenCypher.CaseExpression -> Phantoms.TTerm (Maybe OpenCypher.Expression) -> Phantoms.TTerm OpenCypher.CaseExpression
+caseExpressionWithElse :: Phantoms.TypedTerm OpenCypher.CaseExpression -> Phantoms.TypedTerm (Maybe OpenCypher.Expression) -> Phantoms.TypedTerm OpenCypher.CaseExpression
 caseExpressionWithElse original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.CaseExpression"),
       Core.recordFields = [
         Core.Field {
@@ -387,88 +387,88 @@ caseExpressionWithElse original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.CaseExpression"),
               Core.projectionFieldName = (Core.Name "expression")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "alternatives"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.CaseExpression"),
               Core.projectionFieldName = (Core.Name "alternatives")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "else"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-caseExpressionWithExpression :: Phantoms.TTerm OpenCypher.CaseExpression -> Phantoms.TTerm (Maybe OpenCypher.Expression) -> Phantoms.TTerm OpenCypher.CaseExpression
+caseExpressionWithExpression :: Phantoms.TypedTerm OpenCypher.CaseExpression -> Phantoms.TypedTerm (Maybe OpenCypher.Expression) -> Phantoms.TypedTerm OpenCypher.CaseExpression
 caseExpressionWithExpression original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.CaseExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "alternatives"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.CaseExpression"),
               Core.projectionFieldName = (Core.Name "alternatives")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "else"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.CaseExpression"),
               Core.projectionFieldName = (Core.Name "else")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-comparisonExpression :: Phantoms.TTerm OpenCypher.StringListNullPredicateExpression -> Phantoms.TTerm [OpenCypher.PartialComparisonExpression] -> Phantoms.TTerm OpenCypher.ComparisonExpression
+comparisonExpression :: Phantoms.TypedTerm OpenCypher.StringListNullPredicateExpression -> Phantoms.TypedTerm [OpenCypher.PartialComparisonExpression] -> Phantoms.TypedTerm OpenCypher.ComparisonExpression
 comparisonExpression left right =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ComparisonExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Phantoms.unTTerm left)},
+          Core.fieldTerm = (Phantoms.unTypedTerm left)},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm right)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm right)}]}))
 
-comparisonExpressionLeft :: Phantoms.TTerm OpenCypher.ComparisonExpression -> Phantoms.TTerm OpenCypher.StringListNullPredicateExpression
+comparisonExpressionLeft :: Phantoms.TypedTerm OpenCypher.ComparisonExpression -> Phantoms.TypedTerm OpenCypher.StringListNullPredicateExpression
 comparisonExpressionLeft x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ComparisonExpression"),
         Core.projectionFieldName = (Core.Name "left")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-comparisonExpressionRight :: Phantoms.TTerm OpenCypher.ComparisonExpression -> Phantoms.TTerm [OpenCypher.PartialComparisonExpression]
+comparisonExpressionRight :: Phantoms.TypedTerm OpenCypher.ComparisonExpression -> Phantoms.TypedTerm [OpenCypher.PartialComparisonExpression]
 comparisonExpressionRight x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ComparisonExpression"),
         Core.projectionFieldName = (Core.Name "right")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-comparisonExpressionWithLeft :: Phantoms.TTerm OpenCypher.ComparisonExpression -> Phantoms.TTerm OpenCypher.StringListNullPredicateExpression -> Phantoms.TTerm OpenCypher.ComparisonExpression
+comparisonExpressionWithLeft :: Phantoms.TypedTerm OpenCypher.ComparisonExpression -> Phantoms.TypedTerm OpenCypher.StringListNullPredicateExpression -> Phantoms.TypedTerm OpenCypher.ComparisonExpression
 comparisonExpressionWithLeft original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ComparisonExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ComparisonExpression"),
               Core.projectionFieldName = (Core.Name "right")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-comparisonExpressionWithRight :: Phantoms.TTerm OpenCypher.ComparisonExpression -> Phantoms.TTerm [OpenCypher.PartialComparisonExpression] -> Phantoms.TTerm OpenCypher.ComparisonExpression
+comparisonExpressionWithRight :: Phantoms.TypedTerm OpenCypher.ComparisonExpression -> Phantoms.TypedTerm [OpenCypher.PartialComparisonExpression] -> Phantoms.TypedTerm OpenCypher.ComparisonExpression
 comparisonExpressionWithRight original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ComparisonExpression"),
       Core.recordFields = [
         Core.Field {
@@ -477,112 +477,112 @@ comparisonExpressionWithRight original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ComparisonExpression"),
               Core.projectionFieldName = (Core.Name "left")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-comparisonOperatorEq :: Phantoms.TTerm OpenCypher.ComparisonOperator
+comparisonOperatorEq :: Phantoms.TypedTerm OpenCypher.ComparisonOperator
 comparisonOperatorEq =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "eq"),
         Core.fieldTerm = Core.TermUnit}}))
 
-comparisonOperatorGt :: Phantoms.TTerm OpenCypher.ComparisonOperator
+comparisonOperatorGt :: Phantoms.TypedTerm OpenCypher.ComparisonOperator
 comparisonOperatorGt =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "gt"),
         Core.fieldTerm = Core.TermUnit}}))
 
-comparisonOperatorGte :: Phantoms.TTerm OpenCypher.ComparisonOperator
+comparisonOperatorGte :: Phantoms.TypedTerm OpenCypher.ComparisonOperator
 comparisonOperatorGte =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "gte"),
         Core.fieldTerm = Core.TermUnit}}))
 
-comparisonOperatorLt :: Phantoms.TTerm OpenCypher.ComparisonOperator
+comparisonOperatorLt :: Phantoms.TypedTerm OpenCypher.ComparisonOperator
 comparisonOperatorLt =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lt"),
         Core.fieldTerm = Core.TermUnit}}))
 
-comparisonOperatorLte :: Phantoms.TTerm OpenCypher.ComparisonOperator
+comparisonOperatorLte :: Phantoms.TypedTerm OpenCypher.ComparisonOperator
 comparisonOperatorLte =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lte"),
         Core.fieldTerm = Core.TermUnit}}))
 
-comparisonOperatorNeq :: Phantoms.TTerm OpenCypher.ComparisonOperator
+comparisonOperatorNeq :: Phantoms.TypedTerm OpenCypher.ComparisonOperator
 comparisonOperatorNeq =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "neq"),
         Core.fieldTerm = Core.TermUnit}}))
 
-create :: Phantoms.TTerm OpenCypher.Pattern -> Phantoms.TTerm OpenCypher.Create
+create :: Phantoms.TypedTerm OpenCypher.Pattern -> Phantoms.TypedTerm OpenCypher.Create
 create x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.Create"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-delete :: Phantoms.TTerm Bool -> Phantoms.TTerm [OpenCypher.Expression] -> Phantoms.TTerm OpenCypher.Delete
+delete :: Phantoms.TypedTerm Bool -> Phantoms.TypedTerm [OpenCypher.Expression] -> Phantoms.TypedTerm OpenCypher.Delete
 delete detach expressions =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.Delete"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "detach"),
-          Core.fieldTerm = (Phantoms.unTTerm detach)},
+          Core.fieldTerm = (Phantoms.unTypedTerm detach)},
         Core.Field {
           Core.fieldName = (Core.Name "expressions"),
-          Core.fieldTerm = (Phantoms.unTTerm expressions)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm expressions)}]}))
 
-deleteDetach :: Phantoms.TTerm OpenCypher.Delete -> Phantoms.TTerm Bool
+deleteDetach :: Phantoms.TypedTerm OpenCypher.Delete -> Phantoms.TypedTerm Bool
 deleteDetach x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Delete"),
         Core.projectionFieldName = (Core.Name "detach")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-deleteExpressions :: Phantoms.TTerm OpenCypher.Delete -> Phantoms.TTerm [OpenCypher.Expression]
+deleteExpressions :: Phantoms.TypedTerm OpenCypher.Delete -> Phantoms.TypedTerm [OpenCypher.Expression]
 deleteExpressions x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Delete"),
         Core.projectionFieldName = (Core.Name "expressions")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-deleteWithDetach :: Phantoms.TTerm OpenCypher.Delete -> Phantoms.TTerm Bool -> Phantoms.TTerm OpenCypher.Delete
+deleteWithDetach :: Phantoms.TypedTerm OpenCypher.Delete -> Phantoms.TypedTerm Bool -> Phantoms.TypedTerm OpenCypher.Delete
 deleteWithDetach original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.Delete"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "detach"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "expressions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Delete"),
               Core.projectionFieldName = (Core.Name "expressions")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-deleteWithExpressions :: Phantoms.TTerm OpenCypher.Delete -> Phantoms.TTerm [OpenCypher.Expression] -> Phantoms.TTerm OpenCypher.Delete
+deleteWithExpressions :: Phantoms.TypedTerm OpenCypher.Delete -> Phantoms.TypedTerm [OpenCypher.Expression] -> Phantoms.TypedTerm OpenCypher.Delete
 deleteWithExpressions original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.Delete"),
       Core.recordFields = [
         Core.Field {
@@ -591,58 +591,58 @@ deleteWithExpressions original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Delete"),
               Core.projectionFieldName = (Core.Name "detach")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expressions"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-existentialSubqueryPattern :: Phantoms.TTerm OpenCypher.PatternWhere -> Phantoms.TTerm OpenCypher.ExistentialSubquery
+existentialSubqueryPattern :: Phantoms.TypedTerm OpenCypher.PatternWhere -> Phantoms.TypedTerm OpenCypher.ExistentialSubquery
 existentialSubqueryPattern x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ExistentialSubquery"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pattern"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-existentialSubqueryRegular :: Phantoms.TTerm OpenCypher.RegularQuery -> Phantoms.TTerm OpenCypher.ExistentialSubquery
+existentialSubqueryRegular :: Phantoms.TypedTerm OpenCypher.RegularQuery -> Phantoms.TypedTerm OpenCypher.ExistentialSubquery
 existentialSubqueryRegular x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ExistentialSubquery"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "regular"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-explicitProcedureInvocation :: Phantoms.TTerm OpenCypher.QualifiedName -> Phantoms.TTerm [OpenCypher.Expression] -> Phantoms.TTerm OpenCypher.ExplicitProcedureInvocation
+explicitProcedureInvocation :: Phantoms.TypedTerm OpenCypher.QualifiedName -> Phantoms.TypedTerm [OpenCypher.Expression] -> Phantoms.TypedTerm OpenCypher.ExplicitProcedureInvocation
 explicitProcedureInvocation name arguments =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ExplicitProcedureInvocation"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
+          Core.fieldTerm = (Phantoms.unTypedTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
-          Core.fieldTerm = (Phantoms.unTTerm arguments)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm arguments)}]}))
 
-explicitProcedureInvocationArguments :: Phantoms.TTerm OpenCypher.ExplicitProcedureInvocation -> Phantoms.TTerm [OpenCypher.Expression]
+explicitProcedureInvocationArguments :: Phantoms.TypedTerm OpenCypher.ExplicitProcedureInvocation -> Phantoms.TypedTerm [OpenCypher.Expression]
 explicitProcedureInvocationArguments x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ExplicitProcedureInvocation"),
         Core.projectionFieldName = (Core.Name "arguments")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-explicitProcedureInvocationName :: Phantoms.TTerm OpenCypher.ExplicitProcedureInvocation -> Phantoms.TTerm OpenCypher.QualifiedName
+explicitProcedureInvocationName :: Phantoms.TypedTerm OpenCypher.ExplicitProcedureInvocation -> Phantoms.TypedTerm OpenCypher.QualifiedName
 explicitProcedureInvocationName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ExplicitProcedureInvocation"),
         Core.projectionFieldName = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-explicitProcedureInvocationWithArguments :: Phantoms.TTerm OpenCypher.ExplicitProcedureInvocation -> Phantoms.TTerm [OpenCypher.Expression] -> Phantoms.TTerm OpenCypher.ExplicitProcedureInvocation
+explicitProcedureInvocationWithArguments :: Phantoms.TypedTerm OpenCypher.ExplicitProcedureInvocation -> Phantoms.TypedTerm [OpenCypher.Expression] -> Phantoms.TypedTerm OpenCypher.ExplicitProcedureInvocation
 explicitProcedureInvocationWithArguments original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ExplicitProcedureInvocation"),
       Core.recordFields = [
         Core.Field {
@@ -651,80 +651,80 @@ explicitProcedureInvocationWithArguments original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ExplicitProcedureInvocation"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-explicitProcedureInvocationWithName :: Phantoms.TTerm OpenCypher.ExplicitProcedureInvocation -> Phantoms.TTerm OpenCypher.QualifiedName -> Phantoms.TTerm OpenCypher.ExplicitProcedureInvocation
+explicitProcedureInvocationWithName :: Phantoms.TypedTerm OpenCypher.ExplicitProcedureInvocation -> Phantoms.TypedTerm OpenCypher.QualifiedName -> Phantoms.TypedTerm OpenCypher.ExplicitProcedureInvocation
 explicitProcedureInvocationWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ExplicitProcedureInvocation"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ExplicitProcedureInvocation"),
               Core.projectionFieldName = (Core.Name "arguments")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-expression :: Phantoms.TTerm OpenCypher.OrExpression -> Phantoms.TTerm OpenCypher.Expression
+expression :: Phantoms.TypedTerm OpenCypher.OrExpression -> Phantoms.TypedTerm OpenCypher.Expression
 expression x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.Expression"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-filterExpression :: Phantoms.TTerm OpenCypher.IdInColl -> Phantoms.TTerm (Maybe OpenCypher.Where) -> Phantoms.TTerm OpenCypher.FilterExpression
+filterExpression :: Phantoms.TypedTerm OpenCypher.IdInColl -> Phantoms.TypedTerm (Maybe OpenCypher.Where) -> Phantoms.TypedTerm OpenCypher.FilterExpression
 filterExpression idInColl where_ =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.FilterExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "idInColl"),
-          Core.fieldTerm = (Phantoms.unTTerm idInColl)},
+          Core.fieldTerm = (Phantoms.unTypedTerm idInColl)},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
-          Core.fieldTerm = (Phantoms.unTTerm where_)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm where_)}]}))
 
-filterExpressionIdInColl :: Phantoms.TTerm OpenCypher.FilterExpression -> Phantoms.TTerm OpenCypher.IdInColl
+filterExpressionIdInColl :: Phantoms.TypedTerm OpenCypher.FilterExpression -> Phantoms.TypedTerm OpenCypher.IdInColl
 filterExpressionIdInColl x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.FilterExpression"),
         Core.projectionFieldName = (Core.Name "idInColl")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-filterExpressionWhere :: Phantoms.TTerm OpenCypher.FilterExpression -> Phantoms.TTerm (Maybe OpenCypher.Where)
+filterExpressionWhere :: Phantoms.TypedTerm OpenCypher.FilterExpression -> Phantoms.TypedTerm (Maybe OpenCypher.Where)
 filterExpressionWhere x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.FilterExpression"),
         Core.projectionFieldName = (Core.Name "where")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-filterExpressionWithIdInColl :: Phantoms.TTerm OpenCypher.FilterExpression -> Phantoms.TTerm OpenCypher.IdInColl -> Phantoms.TTerm OpenCypher.FilterExpression
+filterExpressionWithIdInColl :: Phantoms.TypedTerm OpenCypher.FilterExpression -> Phantoms.TypedTerm OpenCypher.IdInColl -> Phantoms.TypedTerm OpenCypher.FilterExpression
 filterExpressionWithIdInColl original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.FilterExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "idInColl"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.FilterExpression"),
               Core.projectionFieldName = (Core.Name "where")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-filterExpressionWithWhere :: Phantoms.TTerm OpenCypher.FilterExpression -> Phantoms.TTerm (Maybe OpenCypher.Where) -> Phantoms.TTerm OpenCypher.FilterExpression
+filterExpressionWithWhere :: Phantoms.TypedTerm OpenCypher.FilterExpression -> Phantoms.TypedTerm (Maybe OpenCypher.Where) -> Phantoms.TypedTerm OpenCypher.FilterExpression
 filterExpressionWithWhere original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.FilterExpression"),
       Core.recordFields = [
         Core.Field {
@@ -733,53 +733,53 @@ filterExpressionWithWhere original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.FilterExpression"),
               Core.projectionFieldName = (Core.Name "idInColl")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-functionInvocation :: Phantoms.TTerm OpenCypher.QualifiedName -> Phantoms.TTerm Bool -> Phantoms.TTerm [OpenCypher.Expression] -> Phantoms.TTerm OpenCypher.FunctionInvocation
+functionInvocation :: Phantoms.TypedTerm OpenCypher.QualifiedName -> Phantoms.TypedTerm Bool -> Phantoms.TypedTerm [OpenCypher.Expression] -> Phantoms.TypedTerm OpenCypher.FunctionInvocation
 functionInvocation name distinct arguments =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.FunctionInvocation"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
+          Core.fieldTerm = (Phantoms.unTypedTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "distinct"),
-          Core.fieldTerm = (Phantoms.unTTerm distinct)},
+          Core.fieldTerm = (Phantoms.unTypedTerm distinct)},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
-          Core.fieldTerm = (Phantoms.unTTerm arguments)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm arguments)}]}))
 
-functionInvocationArguments :: Phantoms.TTerm OpenCypher.FunctionInvocation -> Phantoms.TTerm [OpenCypher.Expression]
+functionInvocationArguments :: Phantoms.TypedTerm OpenCypher.FunctionInvocation -> Phantoms.TypedTerm [OpenCypher.Expression]
 functionInvocationArguments x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.FunctionInvocation"),
         Core.projectionFieldName = (Core.Name "arguments")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-functionInvocationDistinct :: Phantoms.TTerm OpenCypher.FunctionInvocation -> Phantoms.TTerm Bool
+functionInvocationDistinct :: Phantoms.TypedTerm OpenCypher.FunctionInvocation -> Phantoms.TypedTerm Bool
 functionInvocationDistinct x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.FunctionInvocation"),
         Core.projectionFieldName = (Core.Name "distinct")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-functionInvocationName :: Phantoms.TTerm OpenCypher.FunctionInvocation -> Phantoms.TTerm OpenCypher.QualifiedName
+functionInvocationName :: Phantoms.TypedTerm OpenCypher.FunctionInvocation -> Phantoms.TypedTerm OpenCypher.QualifiedName
 functionInvocationName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.FunctionInvocation"),
         Core.projectionFieldName = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-functionInvocationWithArguments :: Phantoms.TTerm OpenCypher.FunctionInvocation -> Phantoms.TTerm [OpenCypher.Expression] -> Phantoms.TTerm OpenCypher.FunctionInvocation
+functionInvocationWithArguments :: Phantoms.TypedTerm OpenCypher.FunctionInvocation -> Phantoms.TypedTerm [OpenCypher.Expression] -> Phantoms.TypedTerm OpenCypher.FunctionInvocation
 functionInvocationWithArguments original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.FunctionInvocation"),
       Core.recordFields = [
         Core.Field {
@@ -788,21 +788,21 @@ functionInvocationWithArguments original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.FunctionInvocation"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "distinct"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.FunctionInvocation"),
               Core.projectionFieldName = (Core.Name "distinct")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-functionInvocationWithDistinct :: Phantoms.TTerm OpenCypher.FunctionInvocation -> Phantoms.TTerm Bool -> Phantoms.TTerm OpenCypher.FunctionInvocation
+functionInvocationWithDistinct :: Phantoms.TypedTerm OpenCypher.FunctionInvocation -> Phantoms.TypedTerm Bool -> Phantoms.TypedTerm OpenCypher.FunctionInvocation
 functionInvocationWithDistinct original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.FunctionInvocation"),
       Core.recordFields = [
         Core.Field {
@@ -811,72 +811,72 @@ functionInvocationWithDistinct original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.FunctionInvocation"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "distinct"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.FunctionInvocation"),
               Core.projectionFieldName = (Core.Name "arguments")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-functionInvocationWithName :: Phantoms.TTerm OpenCypher.FunctionInvocation -> Phantoms.TTerm OpenCypher.QualifiedName -> Phantoms.TTerm OpenCypher.FunctionInvocation
+functionInvocationWithName :: Phantoms.TypedTerm OpenCypher.FunctionInvocation -> Phantoms.TypedTerm OpenCypher.QualifiedName -> Phantoms.TypedTerm OpenCypher.FunctionInvocation
 functionInvocationWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.FunctionInvocation"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "distinct"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.FunctionInvocation"),
               Core.projectionFieldName = (Core.Name "distinct")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.FunctionInvocation"),
               Core.projectionFieldName = (Core.Name "arguments")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-idInColl :: Phantoms.TTerm OpenCypher.Variable -> Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.IdInColl
+idInColl :: Phantoms.TypedTerm OpenCypher.Variable -> Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.IdInColl
 idInColl variable expression =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.IdInColl"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Phantoms.unTTerm variable)},
+          Core.fieldTerm = (Phantoms.unTypedTerm variable)},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm expression)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm expression)}]}))
 
-idInCollExpression :: Phantoms.TTerm OpenCypher.IdInColl -> Phantoms.TTerm OpenCypher.Expression
+idInCollExpression :: Phantoms.TypedTerm OpenCypher.IdInColl -> Phantoms.TypedTerm OpenCypher.Expression
 idInCollExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.IdInColl"),
         Core.projectionFieldName = (Core.Name "expression")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-idInCollVariable :: Phantoms.TTerm OpenCypher.IdInColl -> Phantoms.TTerm OpenCypher.Variable
+idInCollVariable :: Phantoms.TypedTerm OpenCypher.IdInColl -> Phantoms.TypedTerm OpenCypher.Variable
 idInCollVariable x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.IdInColl"),
         Core.projectionFieldName = (Core.Name "variable")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-idInCollWithExpression :: Phantoms.TTerm OpenCypher.IdInColl -> Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.IdInColl
+idInCollWithExpression :: Phantoms.TypedTerm OpenCypher.IdInColl -> Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.IdInColl
 idInCollWithExpression original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.IdInColl"),
       Core.recordFields = [
         Core.Field {
@@ -885,72 +885,72 @@ idInCollWithExpression original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.IdInColl"),
               Core.projectionFieldName = (Core.Name "variable")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-idInCollWithVariable :: Phantoms.TTerm OpenCypher.IdInColl -> Phantoms.TTerm OpenCypher.Variable -> Phantoms.TTerm OpenCypher.IdInColl
+idInCollWithVariable :: Phantoms.TypedTerm OpenCypher.IdInColl -> Phantoms.TypedTerm OpenCypher.Variable -> Phantoms.TypedTerm OpenCypher.IdInColl
 idInCollWithVariable original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.IdInColl"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.IdInColl"),
               Core.projectionFieldName = (Core.Name "expression")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-implicitProcedureInvocation :: Phantoms.TTerm OpenCypher.QualifiedName -> Phantoms.TTerm OpenCypher.ImplicitProcedureInvocation
+implicitProcedureInvocation :: Phantoms.TypedTerm OpenCypher.QualifiedName -> Phantoms.TypedTerm OpenCypher.ImplicitProcedureInvocation
 implicitProcedureInvocation x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.ImplicitProcedureInvocation"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-inQueryCall :: Phantoms.TTerm OpenCypher.ExplicitProcedureInvocation -> Phantoms.TTerm (Maybe OpenCypher.YieldItems) -> Phantoms.TTerm OpenCypher.InQueryCall
+inQueryCall :: Phantoms.TypedTerm OpenCypher.ExplicitProcedureInvocation -> Phantoms.TypedTerm (Maybe OpenCypher.YieldItems) -> Phantoms.TypedTerm OpenCypher.InQueryCall
 inQueryCall call yieldItems =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.InQueryCall"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "call"),
-          Core.fieldTerm = (Phantoms.unTTerm call)},
+          Core.fieldTerm = (Phantoms.unTypedTerm call)},
         Core.Field {
           Core.fieldName = (Core.Name "yieldItems"),
-          Core.fieldTerm = (Phantoms.unTTerm yieldItems)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm yieldItems)}]}))
 
-inQueryCallCall :: Phantoms.TTerm OpenCypher.InQueryCall -> Phantoms.TTerm OpenCypher.ExplicitProcedureInvocation
+inQueryCallCall :: Phantoms.TypedTerm OpenCypher.InQueryCall -> Phantoms.TypedTerm OpenCypher.ExplicitProcedureInvocation
 inQueryCallCall x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.InQueryCall"),
         Core.projectionFieldName = (Core.Name "call")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-inQueryCallWithCall :: Phantoms.TTerm OpenCypher.InQueryCall -> Phantoms.TTerm OpenCypher.ExplicitProcedureInvocation -> Phantoms.TTerm OpenCypher.InQueryCall
+inQueryCallWithCall :: Phantoms.TypedTerm OpenCypher.InQueryCall -> Phantoms.TypedTerm OpenCypher.ExplicitProcedureInvocation -> Phantoms.TypedTerm OpenCypher.InQueryCall
 inQueryCallWithCall original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.InQueryCall"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "call"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "yieldItems"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.InQueryCall"),
               Core.projectionFieldName = (Core.Name "yieldItems")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-inQueryCallWithYieldItems :: Phantoms.TTerm OpenCypher.InQueryCall -> Phantoms.TTerm (Maybe OpenCypher.YieldItems) -> Phantoms.TTerm OpenCypher.InQueryCall
+inQueryCallWithYieldItems :: Phantoms.TypedTerm OpenCypher.InQueryCall -> Phantoms.TypedTerm (Maybe OpenCypher.YieldItems) -> Phantoms.TypedTerm OpenCypher.InQueryCall
 inQueryCallWithYieldItems original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.InQueryCall"),
       Core.recordFields = [
         Core.Field {
@@ -959,66 +959,66 @@ inQueryCallWithYieldItems original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.InQueryCall"),
               Core.projectionFieldName = (Core.Name "call")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "yieldItems"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-inQueryCallYieldItems :: Phantoms.TTerm OpenCypher.InQueryCall -> Phantoms.TTerm (Maybe OpenCypher.YieldItems)
+inQueryCallYieldItems :: Phantoms.TypedTerm OpenCypher.InQueryCall -> Phantoms.TypedTerm (Maybe OpenCypher.YieldItems)
 inQueryCallYieldItems x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.InQueryCall"),
         Core.projectionFieldName = (Core.Name "yieldItems")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-keyValuePair :: Phantoms.TTerm OpenCypher.PropertyKeyName -> Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.KeyValuePair
+keyValuePair :: Phantoms.TypedTerm OpenCypher.PropertyKeyName -> Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.KeyValuePair
 keyValuePair key value =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.KeyValuePair"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "key"),
-          Core.fieldTerm = (Phantoms.unTTerm key)},
+          Core.fieldTerm = (Phantoms.unTypedTerm key)},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm value)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm value)}]}))
 
-keyValuePairKey :: Phantoms.TTerm OpenCypher.KeyValuePair -> Phantoms.TTerm OpenCypher.PropertyKeyName
+keyValuePairKey :: Phantoms.TypedTerm OpenCypher.KeyValuePair -> Phantoms.TypedTerm OpenCypher.PropertyKeyName
 keyValuePairKey x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.KeyValuePair"),
         Core.projectionFieldName = (Core.Name "key")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-keyValuePairValue :: Phantoms.TTerm OpenCypher.KeyValuePair -> Phantoms.TTerm OpenCypher.Expression
+keyValuePairValue :: Phantoms.TypedTerm OpenCypher.KeyValuePair -> Phantoms.TypedTerm OpenCypher.Expression
 keyValuePairValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.KeyValuePair"),
         Core.projectionFieldName = (Core.Name "value")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-keyValuePairWithKey :: Phantoms.TTerm OpenCypher.KeyValuePair -> Phantoms.TTerm OpenCypher.PropertyKeyName -> Phantoms.TTerm OpenCypher.KeyValuePair
+keyValuePairWithKey :: Phantoms.TypedTerm OpenCypher.KeyValuePair -> Phantoms.TypedTerm OpenCypher.PropertyKeyName -> Phantoms.TypedTerm OpenCypher.KeyValuePair
 keyValuePairWithKey original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.KeyValuePair"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "key"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.KeyValuePair"),
               Core.projectionFieldName = (Core.Name "value")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-keyValuePairWithValue :: Phantoms.TTerm OpenCypher.KeyValuePair -> Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.KeyValuePair
+keyValuePairWithValue :: Phantoms.TypedTerm OpenCypher.KeyValuePair -> Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.KeyValuePair
 keyValuePairWithValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.KeyValuePair"),
       Core.recordFields = [
         Core.Field {
@@ -1027,64 +1027,64 @@ keyValuePairWithValue original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.KeyValuePair"),
               Core.projectionFieldName = (Core.Name "key")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-limit :: Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.Limit
+limit :: Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.Limit
 limit x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.Limit"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-listComprehension :: Phantoms.TTerm OpenCypher.FilterExpression -> Phantoms.TTerm (Maybe OpenCypher.Expression) -> Phantoms.TTerm OpenCypher.ListComprehension
+listComprehension :: Phantoms.TypedTerm OpenCypher.FilterExpression -> Phantoms.TypedTerm (Maybe OpenCypher.Expression) -> Phantoms.TypedTerm OpenCypher.ListComprehension
 listComprehension left right =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ListComprehension"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Phantoms.unTTerm left)},
+          Core.fieldTerm = (Phantoms.unTypedTerm left)},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm right)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm right)}]}))
 
-listComprehensionLeft :: Phantoms.TTerm OpenCypher.ListComprehension -> Phantoms.TTerm OpenCypher.FilterExpression
+listComprehensionLeft :: Phantoms.TypedTerm OpenCypher.ListComprehension -> Phantoms.TypedTerm OpenCypher.FilterExpression
 listComprehensionLeft x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ListComprehension"),
         Core.projectionFieldName = (Core.Name "left")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-listComprehensionRight :: Phantoms.TTerm OpenCypher.ListComprehension -> Phantoms.TTerm (Maybe OpenCypher.Expression)
+listComprehensionRight :: Phantoms.TypedTerm OpenCypher.ListComprehension -> Phantoms.TypedTerm (Maybe OpenCypher.Expression)
 listComprehensionRight x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ListComprehension"),
         Core.projectionFieldName = (Core.Name "right")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-listComprehensionWithLeft :: Phantoms.TTerm OpenCypher.ListComprehension -> Phantoms.TTerm OpenCypher.FilterExpression -> Phantoms.TTerm OpenCypher.ListComprehension
+listComprehensionWithLeft :: Phantoms.TypedTerm OpenCypher.ListComprehension -> Phantoms.TypedTerm OpenCypher.FilterExpression -> Phantoms.TypedTerm OpenCypher.ListComprehension
 listComprehensionWithLeft original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ListComprehension"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ListComprehension"),
               Core.projectionFieldName = (Core.Name "right")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-listComprehensionWithRight :: Phantoms.TTerm OpenCypher.ListComprehension -> Phantoms.TTerm (Maybe OpenCypher.Expression) -> Phantoms.TTerm OpenCypher.ListComprehension
+listComprehensionWithRight :: Phantoms.TypedTerm OpenCypher.ListComprehension -> Phantoms.TypedTerm (Maybe OpenCypher.Expression) -> Phantoms.TypedTerm OpenCypher.ListComprehension
 listComprehensionWithRight original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ListComprehension"),
       Core.recordFields = [
         Core.Field {
@@ -1093,190 +1093,190 @@ listComprehensionWithRight original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ListComprehension"),
               Core.projectionFieldName = (Core.Name "left")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-listLiteral :: Phantoms.TTerm [OpenCypher.Expression] -> Phantoms.TTerm OpenCypher.ListLiteral
+listLiteral :: Phantoms.TypedTerm [OpenCypher.Expression] -> Phantoms.TypedTerm OpenCypher.ListLiteral
 listLiteral x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.ListLiteral"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-listOperatorExpressionOrPropertyLookupList :: Phantoms.TTerm OpenCypher.ListOperatorExpression -> Phantoms.TTerm OpenCypher.ListOperatorExpressionOrPropertyLookup
+listOperatorExpressionOrPropertyLookupList :: Phantoms.TypedTerm OpenCypher.ListOperatorExpression -> Phantoms.TypedTerm OpenCypher.ListOperatorExpressionOrPropertyLookup
 listOperatorExpressionOrPropertyLookupList x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ListOperatorExpressionOrPropertyLookup"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-listOperatorExpressionOrPropertyLookupProperty :: Phantoms.TTerm OpenCypher.PropertyLookup -> Phantoms.TTerm OpenCypher.ListOperatorExpressionOrPropertyLookup
+listOperatorExpressionOrPropertyLookupProperty :: Phantoms.TypedTerm OpenCypher.PropertyLookup -> Phantoms.TypedTerm OpenCypher.ListOperatorExpressionOrPropertyLookup
 listOperatorExpressionOrPropertyLookupProperty x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ListOperatorExpressionOrPropertyLookup"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "property"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-listOperatorExpressionRange :: Phantoms.TTerm OpenCypher.RangeExpression -> Phantoms.TTerm OpenCypher.ListOperatorExpression
+listOperatorExpressionRange :: Phantoms.TypedTerm OpenCypher.RangeExpression -> Phantoms.TypedTerm OpenCypher.ListOperatorExpression
 listOperatorExpressionRange x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ListOperatorExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "range"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-listOperatorExpressionSingle :: Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.ListOperatorExpression
+listOperatorExpressionSingle :: Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.ListOperatorExpression
 listOperatorExpressionSingle x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ListOperatorExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "single"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-listPredicateExpression :: Phantoms.TTerm OpenCypher.AddOrSubtractExpression -> Phantoms.TTerm OpenCypher.ListPredicateExpression
+listPredicateExpression :: Phantoms.TypedTerm OpenCypher.AddOrSubtractExpression -> Phantoms.TypedTerm OpenCypher.ListPredicateExpression
 listPredicateExpression x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.ListPredicateExpression"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-literalBoolean :: Phantoms.TTerm Bool -> Phantoms.TTerm OpenCypher.Literal
+literalBoolean :: Phantoms.TypedTerm Bool -> Phantoms.TypedTerm OpenCypher.Literal
 literalBoolean x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-literalList :: Phantoms.TTerm OpenCypher.ListLiteral -> Phantoms.TTerm OpenCypher.Literal
+literalList :: Phantoms.TypedTerm OpenCypher.ListLiteral -> Phantoms.TypedTerm OpenCypher.Literal
 literalList x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-literalMap :: Phantoms.TTerm OpenCypher.MapLiteral -> Phantoms.TTerm OpenCypher.Literal
+literalMap :: Phantoms.TypedTerm OpenCypher.MapLiteral -> Phantoms.TypedTerm OpenCypher.Literal
 literalMap x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-literalNull :: Phantoms.TTerm OpenCypher.Literal
+literalNull :: Phantoms.TypedTerm OpenCypher.Literal
 literalNull =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "null"),
         Core.fieldTerm = Core.TermUnit}}))
 
-literalNumber :: Phantoms.TTerm OpenCypher.NumberLiteral -> Phantoms.TTerm OpenCypher.Literal
+literalNumber :: Phantoms.TypedTerm OpenCypher.NumberLiteral -> Phantoms.TypedTerm OpenCypher.Literal
 literalNumber x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "number"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-literalString :: Phantoms.TTerm OpenCypher.StringLiteral -> Phantoms.TTerm OpenCypher.Literal
+literalString :: Phantoms.TypedTerm OpenCypher.StringLiteral -> Phantoms.TypedTerm OpenCypher.Literal
 literalString x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-mapLiteral :: Phantoms.TTerm [OpenCypher.KeyValuePair] -> Phantoms.TTerm OpenCypher.MapLiteral
+mapLiteral :: Phantoms.TypedTerm [OpenCypher.KeyValuePair] -> Phantoms.TypedTerm OpenCypher.MapLiteral
 mapLiteral x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.MapLiteral"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-match :: Phantoms.TTerm Bool -> Phantoms.TTerm OpenCypher.Pattern -> Phantoms.TTerm (Maybe OpenCypher.Where) -> Phantoms.TTerm OpenCypher.Match
+match :: Phantoms.TypedTerm Bool -> Phantoms.TypedTerm OpenCypher.Pattern -> Phantoms.TypedTerm (Maybe OpenCypher.Where) -> Phantoms.TypedTerm OpenCypher.Match
 match optional pattern where_ =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.Match"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "optional"),
-          Core.fieldTerm = (Phantoms.unTTerm optional)},
+          Core.fieldTerm = (Phantoms.unTypedTerm optional)},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
-          Core.fieldTerm = (Phantoms.unTTerm pattern)},
+          Core.fieldTerm = (Phantoms.unTypedTerm pattern)},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
-          Core.fieldTerm = (Phantoms.unTTerm where_)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm where_)}]}))
 
-matchOptional :: Phantoms.TTerm OpenCypher.Match -> Phantoms.TTerm Bool
+matchOptional :: Phantoms.TypedTerm OpenCypher.Match -> Phantoms.TypedTerm Bool
 matchOptional x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Match"),
         Core.projectionFieldName = (Core.Name "optional")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-matchOrCreateCreate :: Phantoms.TTerm OpenCypher.MatchOrCreate
+matchOrCreateCreate :: Phantoms.TypedTerm OpenCypher.MatchOrCreate
 matchOrCreateCreate =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.MatchOrCreate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "create"),
         Core.fieldTerm = Core.TermUnit}}))
 
-matchOrCreateMatch :: Phantoms.TTerm OpenCypher.MatchOrCreate
+matchOrCreateMatch :: Phantoms.TypedTerm OpenCypher.MatchOrCreate
 matchOrCreateMatch =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.MatchOrCreate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "match"),
         Core.fieldTerm = Core.TermUnit}}))
 
-matchPattern :: Phantoms.TTerm OpenCypher.Match -> Phantoms.TTerm OpenCypher.Pattern
+matchPattern :: Phantoms.TypedTerm OpenCypher.Match -> Phantoms.TypedTerm OpenCypher.Pattern
 matchPattern x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Match"),
         Core.projectionFieldName = (Core.Name "pattern")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-matchWhere :: Phantoms.TTerm OpenCypher.Match -> Phantoms.TTerm (Maybe OpenCypher.Where)
+matchWhere :: Phantoms.TypedTerm OpenCypher.Match -> Phantoms.TypedTerm (Maybe OpenCypher.Where)
 matchWhere x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Match"),
         Core.projectionFieldName = (Core.Name "where")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-matchWithOptional :: Phantoms.TTerm OpenCypher.Match -> Phantoms.TTerm Bool -> Phantoms.TTerm OpenCypher.Match
+matchWithOptional :: Phantoms.TypedTerm OpenCypher.Match -> Phantoms.TypedTerm Bool -> Phantoms.TypedTerm OpenCypher.Match
 matchWithOptional original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.Match"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "optional"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Match"),
               Core.projectionFieldName = (Core.Name "pattern")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Match"),
               Core.projectionFieldName = (Core.Name "where")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-matchWithPattern :: Phantoms.TTerm OpenCypher.Match -> Phantoms.TTerm OpenCypher.Pattern -> Phantoms.TTerm OpenCypher.Match
+matchWithPattern :: Phantoms.TypedTerm OpenCypher.Match -> Phantoms.TypedTerm OpenCypher.Pattern -> Phantoms.TypedTerm OpenCypher.Match
 matchWithPattern original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.Match"),
       Core.recordFields = [
         Core.Field {
@@ -1285,21 +1285,21 @@ matchWithPattern original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Match"),
               Core.projectionFieldName = (Core.Name "optional")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Match"),
               Core.projectionFieldName = (Core.Name "where")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-matchWithWhere :: Phantoms.TTerm OpenCypher.Match -> Phantoms.TTerm (Maybe OpenCypher.Where) -> Phantoms.TTerm OpenCypher.Match
+matchWithWhere :: Phantoms.TypedTerm OpenCypher.Match -> Phantoms.TypedTerm (Maybe OpenCypher.Where) -> Phantoms.TypedTerm OpenCypher.Match
 matchWithWhere original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.Match"),
       Core.recordFields = [
         Core.Field {
@@ -1308,77 +1308,77 @@ matchWithWhere original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Match"),
               Core.projectionFieldName = (Core.Name "optional")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Match"),
               Core.projectionFieldName = (Core.Name "pattern")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-merge :: Phantoms.TTerm OpenCypher.PatternPart -> Phantoms.TTerm [OpenCypher.MergeAction] -> Phantoms.TTerm OpenCypher.Merge
+merge :: Phantoms.TypedTerm OpenCypher.PatternPart -> Phantoms.TypedTerm [OpenCypher.MergeAction] -> Phantoms.TypedTerm OpenCypher.Merge
 merge patternPart actions =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.Merge"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "patternPart"),
-          Core.fieldTerm = (Phantoms.unTTerm patternPart)},
+          Core.fieldTerm = (Phantoms.unTypedTerm patternPart)},
         Core.Field {
           Core.fieldName = (Core.Name "actions"),
-          Core.fieldTerm = (Phantoms.unTTerm actions)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm actions)}]}))
 
-mergeAction :: Phantoms.TTerm OpenCypher.MatchOrCreate -> Phantoms.TTerm OpenCypher.Set -> Phantoms.TTerm OpenCypher.MergeAction
+mergeAction :: Phantoms.TypedTerm OpenCypher.MatchOrCreate -> Phantoms.TypedTerm OpenCypher.Set -> Phantoms.TypedTerm OpenCypher.MergeAction
 mergeAction action set =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.MergeAction"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "action"),
-          Core.fieldTerm = (Phantoms.unTTerm action)},
+          Core.fieldTerm = (Phantoms.unTypedTerm action)},
         Core.Field {
           Core.fieldName = (Core.Name "set"),
-          Core.fieldTerm = (Phantoms.unTTerm set)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm set)}]}))
 
-mergeActionAction :: Phantoms.TTerm OpenCypher.MergeAction -> Phantoms.TTerm OpenCypher.MatchOrCreate
+mergeActionAction :: Phantoms.TypedTerm OpenCypher.MergeAction -> Phantoms.TypedTerm OpenCypher.MatchOrCreate
 mergeActionAction x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.MergeAction"),
         Core.projectionFieldName = (Core.Name "action")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-mergeActionSet :: Phantoms.TTerm OpenCypher.MergeAction -> Phantoms.TTerm OpenCypher.Set
+mergeActionSet :: Phantoms.TypedTerm OpenCypher.MergeAction -> Phantoms.TypedTerm OpenCypher.Set
 mergeActionSet x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.MergeAction"),
         Core.projectionFieldName = (Core.Name "set")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-mergeActionWithAction :: Phantoms.TTerm OpenCypher.MergeAction -> Phantoms.TTerm OpenCypher.MatchOrCreate -> Phantoms.TTerm OpenCypher.MergeAction
+mergeActionWithAction :: Phantoms.TypedTerm OpenCypher.MergeAction -> Phantoms.TypedTerm OpenCypher.MatchOrCreate -> Phantoms.TypedTerm OpenCypher.MergeAction
 mergeActionWithAction original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.MergeAction"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "action"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "set"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.MergeAction"),
               Core.projectionFieldName = (Core.Name "set")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-mergeActionWithSet :: Phantoms.TTerm OpenCypher.MergeAction -> Phantoms.TTerm OpenCypher.Set -> Phantoms.TTerm OpenCypher.MergeAction
+mergeActionWithSet :: Phantoms.TypedTerm OpenCypher.MergeAction -> Phantoms.TypedTerm OpenCypher.Set -> Phantoms.TypedTerm OpenCypher.MergeAction
 mergeActionWithSet original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.MergeAction"),
       Core.recordFields = [
         Core.Field {
@@ -1387,30 +1387,30 @@ mergeActionWithSet original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.MergeAction"),
               Core.projectionFieldName = (Core.Name "action")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "set"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-mergeActions :: Phantoms.TTerm OpenCypher.Merge -> Phantoms.TTerm [OpenCypher.MergeAction]
+mergeActions :: Phantoms.TypedTerm OpenCypher.Merge -> Phantoms.TypedTerm [OpenCypher.MergeAction]
 mergeActions x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Merge"),
         Core.projectionFieldName = (Core.Name "actions")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-mergePatternPart :: Phantoms.TTerm OpenCypher.Merge -> Phantoms.TTerm OpenCypher.PatternPart
+mergePatternPart :: Phantoms.TypedTerm OpenCypher.Merge -> Phantoms.TypedTerm OpenCypher.PatternPart
 mergePatternPart x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Merge"),
         Core.projectionFieldName = (Core.Name "patternPart")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-mergeWithActions :: Phantoms.TTerm OpenCypher.Merge -> Phantoms.TTerm [OpenCypher.MergeAction] -> Phantoms.TTerm OpenCypher.Merge
+mergeWithActions :: Phantoms.TypedTerm OpenCypher.Merge -> Phantoms.TypedTerm [OpenCypher.MergeAction] -> Phantoms.TypedTerm OpenCypher.Merge
 mergeWithActions original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.Merge"),
       Core.recordFields = [
         Core.Field {
@@ -1419,58 +1419,58 @@ mergeWithActions original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Merge"),
               Core.projectionFieldName = (Core.Name "patternPart")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "actions"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-mergeWithPatternPart :: Phantoms.TTerm OpenCypher.Merge -> Phantoms.TTerm OpenCypher.PatternPart -> Phantoms.TTerm OpenCypher.Merge
+mergeWithPatternPart :: Phantoms.TypedTerm OpenCypher.Merge -> Phantoms.TypedTerm OpenCypher.PatternPart -> Phantoms.TypedTerm OpenCypher.Merge
 mergeWithPatternPart original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.Merge"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "patternPart"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "actions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Merge"),
               Core.projectionFieldName = (Core.Name "actions")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-multiPartQuery :: Phantoms.TTerm [OpenCypher.WithClause] -> Phantoms.TTerm OpenCypher.SinglePartQuery -> Phantoms.TTerm OpenCypher.MultiPartQuery
+multiPartQuery :: Phantoms.TypedTerm [OpenCypher.WithClause] -> Phantoms.TypedTerm OpenCypher.SinglePartQuery -> Phantoms.TypedTerm OpenCypher.MultiPartQuery
 multiPartQuery with body =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.MultiPartQuery"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "with"),
-          Core.fieldTerm = (Phantoms.unTTerm with)},
+          Core.fieldTerm = (Phantoms.unTypedTerm with)},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm body)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm body)}]}))
 
-multiPartQueryBody :: Phantoms.TTerm OpenCypher.MultiPartQuery -> Phantoms.TTerm OpenCypher.SinglePartQuery
+multiPartQueryBody :: Phantoms.TypedTerm OpenCypher.MultiPartQuery -> Phantoms.TypedTerm OpenCypher.SinglePartQuery
 multiPartQueryBody x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.MultiPartQuery"),
         Core.projectionFieldName = (Core.Name "body")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-multiPartQueryWith :: Phantoms.TTerm OpenCypher.MultiPartQuery -> Phantoms.TTerm [OpenCypher.WithClause]
+multiPartQueryWith :: Phantoms.TypedTerm OpenCypher.MultiPartQuery -> Phantoms.TypedTerm [OpenCypher.WithClause]
 multiPartQueryWith x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.MultiPartQuery"),
         Core.projectionFieldName = (Core.Name "with")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-multiPartQueryWithBody :: Phantoms.TTerm OpenCypher.MultiPartQuery -> Phantoms.TTerm OpenCypher.SinglePartQuery -> Phantoms.TTerm OpenCypher.MultiPartQuery
+multiPartQueryWithBody :: Phantoms.TypedTerm OpenCypher.MultiPartQuery -> Phantoms.TypedTerm OpenCypher.SinglePartQuery -> Phantoms.TypedTerm OpenCypher.MultiPartQuery
 multiPartQueryWithBody original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.MultiPartQuery"),
       Core.recordFields = [
         Core.Field {
@@ -1479,74 +1479,74 @@ multiPartQueryWithBody original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.MultiPartQuery"),
               Core.projectionFieldName = (Core.Name "with")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-multiPartQueryWithWith :: Phantoms.TTerm OpenCypher.MultiPartQuery -> Phantoms.TTerm [OpenCypher.WithClause] -> Phantoms.TTerm OpenCypher.MultiPartQuery
+multiPartQueryWithWith :: Phantoms.TypedTerm OpenCypher.MultiPartQuery -> Phantoms.TypedTerm [OpenCypher.WithClause] -> Phantoms.TypedTerm OpenCypher.MultiPartQuery
 multiPartQueryWithWith original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.MultiPartQuery"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "with"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.MultiPartQuery"),
               Core.projectionFieldName = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-multiplyDivideModuloExpression :: Phantoms.TTerm OpenCypher.PowerOfExpression -> Phantoms.TTerm [OpenCypher.MultiplyDivideModuloRightHandSide] -> Phantoms.TTerm OpenCypher.MultiplyDivideModuloExpression
+multiplyDivideModuloExpression :: Phantoms.TypedTerm OpenCypher.PowerOfExpression -> Phantoms.TypedTerm [OpenCypher.MultiplyDivideModuloRightHandSide] -> Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloExpression
 multiplyDivideModuloExpression left right =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.MultiplyDivideModuloExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Phantoms.unTTerm left)},
+          Core.fieldTerm = (Phantoms.unTypedTerm left)},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm right)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm right)}]}))
 
-multiplyDivideModuloExpressionLeft :: Phantoms.TTerm OpenCypher.MultiplyDivideModuloExpression -> Phantoms.TTerm OpenCypher.PowerOfExpression
+multiplyDivideModuloExpressionLeft :: Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloExpression -> Phantoms.TypedTerm OpenCypher.PowerOfExpression
 multiplyDivideModuloExpressionLeft x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.MultiplyDivideModuloExpression"),
         Core.projectionFieldName = (Core.Name "left")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-multiplyDivideModuloExpressionRight :: Phantoms.TTerm OpenCypher.MultiplyDivideModuloExpression -> Phantoms.TTerm [OpenCypher.MultiplyDivideModuloRightHandSide]
+multiplyDivideModuloExpressionRight :: Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloExpression -> Phantoms.TypedTerm [OpenCypher.MultiplyDivideModuloRightHandSide]
 multiplyDivideModuloExpressionRight x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.MultiplyDivideModuloExpression"),
         Core.projectionFieldName = (Core.Name "right")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-multiplyDivideModuloExpressionWithLeft :: Phantoms.TTerm OpenCypher.MultiplyDivideModuloExpression -> Phantoms.TTerm OpenCypher.PowerOfExpression -> Phantoms.TTerm OpenCypher.MultiplyDivideModuloExpression
+multiplyDivideModuloExpressionWithLeft :: Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloExpression -> Phantoms.TypedTerm OpenCypher.PowerOfExpression -> Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloExpression
 multiplyDivideModuloExpressionWithLeft original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.MultiplyDivideModuloExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.MultiplyDivideModuloExpression"),
               Core.projectionFieldName = (Core.Name "right")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-multiplyDivideModuloExpressionWithRight :: Phantoms.TTerm OpenCypher.MultiplyDivideModuloExpression -> Phantoms.TTerm [OpenCypher.MultiplyDivideModuloRightHandSide] -> Phantoms.TTerm OpenCypher.MultiplyDivideModuloExpression
+multiplyDivideModuloExpressionWithRight :: Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloExpression -> Phantoms.TypedTerm [OpenCypher.MultiplyDivideModuloRightHandSide] -> Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloExpression
 multiplyDivideModuloExpressionWithRight original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.MultiplyDivideModuloExpression"),
       Core.recordFields = [
         Core.Field {
@@ -1555,66 +1555,66 @@ multiplyDivideModuloExpressionWithRight original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.MultiplyDivideModuloExpression"),
               Core.projectionFieldName = (Core.Name "left")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-multiplyDivideModuloOperatorDivide :: Phantoms.TTerm OpenCypher.MultiplyDivideModuloOperator
+multiplyDivideModuloOperatorDivide :: Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloOperator
 multiplyDivideModuloOperatorDivide =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.MultiplyDivideModuloOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "divide"),
         Core.fieldTerm = Core.TermUnit}}))
 
-multiplyDivideModuloOperatorModulo :: Phantoms.TTerm OpenCypher.MultiplyDivideModuloOperator
+multiplyDivideModuloOperatorModulo :: Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloOperator
 multiplyDivideModuloOperatorModulo =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.MultiplyDivideModuloOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "modulo"),
         Core.fieldTerm = Core.TermUnit}}))
 
-multiplyDivideModuloOperatorMultiply :: Phantoms.TTerm OpenCypher.MultiplyDivideModuloOperator
+multiplyDivideModuloOperatorMultiply :: Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloOperator
 multiplyDivideModuloOperatorMultiply =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.MultiplyDivideModuloOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multiply"),
         Core.fieldTerm = Core.TermUnit}}))
 
-multiplyDivideModuloRightHandSide :: Phantoms.TTerm OpenCypher.MultiplyDivideModuloOperator -> Phantoms.TTerm OpenCypher.PowerOfExpression -> Phantoms.TTerm OpenCypher.MultiplyDivideModuloRightHandSide
+multiplyDivideModuloRightHandSide :: Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloOperator -> Phantoms.TypedTerm OpenCypher.PowerOfExpression -> Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloRightHandSide
 multiplyDivideModuloRightHandSide operator expression =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.MultiplyDivideModuloRightHandSide"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
-          Core.fieldTerm = (Phantoms.unTTerm operator)},
+          Core.fieldTerm = (Phantoms.unTypedTerm operator)},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm expression)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm expression)}]}))
 
-multiplyDivideModuloRightHandSideExpression :: Phantoms.TTerm OpenCypher.MultiplyDivideModuloRightHandSide -> Phantoms.TTerm OpenCypher.PowerOfExpression
+multiplyDivideModuloRightHandSideExpression :: Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloRightHandSide -> Phantoms.TypedTerm OpenCypher.PowerOfExpression
 multiplyDivideModuloRightHandSideExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.MultiplyDivideModuloRightHandSide"),
         Core.projectionFieldName = (Core.Name "expression")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-multiplyDivideModuloRightHandSideOperator :: Phantoms.TTerm OpenCypher.MultiplyDivideModuloRightHandSide -> Phantoms.TTerm OpenCypher.MultiplyDivideModuloOperator
+multiplyDivideModuloRightHandSideOperator :: Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloRightHandSide -> Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloOperator
 multiplyDivideModuloRightHandSideOperator x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.MultiplyDivideModuloRightHandSide"),
         Core.projectionFieldName = (Core.Name "operator")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-multiplyDivideModuloRightHandSideWithExpression :: Phantoms.TTerm OpenCypher.MultiplyDivideModuloRightHandSide -> Phantoms.TTerm OpenCypher.PowerOfExpression -> Phantoms.TTerm OpenCypher.MultiplyDivideModuloRightHandSide
+multiplyDivideModuloRightHandSideWithExpression :: Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloRightHandSide -> Phantoms.TypedTerm OpenCypher.PowerOfExpression -> Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloRightHandSide
 multiplyDivideModuloRightHandSideWithExpression original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.MultiplyDivideModuloRightHandSide"),
       Core.recordFields = [
         Core.Field {
@@ -1623,85 +1623,85 @@ multiplyDivideModuloRightHandSideWithExpression original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.MultiplyDivideModuloRightHandSide"),
               Core.projectionFieldName = (Core.Name "operator")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-multiplyDivideModuloRightHandSideWithOperator :: Phantoms.TTerm OpenCypher.MultiplyDivideModuloRightHandSide -> Phantoms.TTerm OpenCypher.MultiplyDivideModuloOperator -> Phantoms.TTerm OpenCypher.MultiplyDivideModuloRightHandSide
+multiplyDivideModuloRightHandSideWithOperator :: Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloRightHandSide -> Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloOperator -> Phantoms.TypedTerm OpenCypher.MultiplyDivideModuloRightHandSide
 multiplyDivideModuloRightHandSideWithOperator original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.MultiplyDivideModuloRightHandSide"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.MultiplyDivideModuloRightHandSide"),
               Core.projectionFieldName = (Core.Name "expression")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-nodeLabel :: Phantoms.TTerm String -> Phantoms.TTerm OpenCypher.NodeLabel
+nodeLabel :: Phantoms.TypedTerm String -> Phantoms.TypedTerm OpenCypher.NodeLabel
 nodeLabel x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.NodeLabel"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-nodeLabels :: Phantoms.TTerm [OpenCypher.NodeLabel] -> Phantoms.TTerm OpenCypher.NodeLabels
+nodeLabels :: Phantoms.TypedTerm [OpenCypher.NodeLabel] -> Phantoms.TypedTerm OpenCypher.NodeLabels
 nodeLabels x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.NodeLabels"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-nodePattern :: Phantoms.TTerm (Maybe OpenCypher.Variable) -> Phantoms.TTerm (Maybe OpenCypher.NodeLabels) -> Phantoms.TTerm (Maybe OpenCypher.Properties) -> Phantoms.TTerm OpenCypher.NodePattern
+nodePattern :: Phantoms.TypedTerm (Maybe OpenCypher.Variable) -> Phantoms.TypedTerm (Maybe OpenCypher.NodeLabels) -> Phantoms.TypedTerm (Maybe OpenCypher.Properties) -> Phantoms.TypedTerm OpenCypher.NodePattern
 nodePattern variable labels properties =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.NodePattern"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Phantoms.unTTerm variable)},
+          Core.fieldTerm = (Phantoms.unTypedTerm variable)},
         Core.Field {
           Core.fieldName = (Core.Name "labels"),
-          Core.fieldTerm = (Phantoms.unTTerm labels)},
+          Core.fieldTerm = (Phantoms.unTypedTerm labels)},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
-          Core.fieldTerm = (Phantoms.unTTerm properties)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm properties)}]}))
 
-nodePatternChain :: Phantoms.TTerm OpenCypher.NodePattern -> Phantoms.TTerm [OpenCypher.PatternElementChain] -> Phantoms.TTerm OpenCypher.NodePatternChain
+nodePatternChain :: Phantoms.TypedTerm OpenCypher.NodePattern -> Phantoms.TypedTerm [OpenCypher.PatternElementChain] -> Phantoms.TypedTerm OpenCypher.NodePatternChain
 nodePatternChain nodePattern chain =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.NodePatternChain"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "nodePattern"),
-          Core.fieldTerm = (Phantoms.unTTerm nodePattern)},
+          Core.fieldTerm = (Phantoms.unTypedTerm nodePattern)},
         Core.Field {
           Core.fieldName = (Core.Name "chain"),
-          Core.fieldTerm = (Phantoms.unTTerm chain)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm chain)}]}))
 
-nodePatternChainChain :: Phantoms.TTerm OpenCypher.NodePatternChain -> Phantoms.TTerm [OpenCypher.PatternElementChain]
+nodePatternChainChain :: Phantoms.TypedTerm OpenCypher.NodePatternChain -> Phantoms.TypedTerm [OpenCypher.PatternElementChain]
 nodePatternChainChain x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NodePatternChain"),
         Core.projectionFieldName = (Core.Name "chain")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-nodePatternChainNodePattern :: Phantoms.TTerm OpenCypher.NodePatternChain -> Phantoms.TTerm OpenCypher.NodePattern
+nodePatternChainNodePattern :: Phantoms.TypedTerm OpenCypher.NodePatternChain -> Phantoms.TypedTerm OpenCypher.NodePattern
 nodePatternChainNodePattern x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NodePatternChain"),
         Core.projectionFieldName = (Core.Name "nodePattern")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-nodePatternChainWithChain :: Phantoms.TTerm OpenCypher.NodePatternChain -> Phantoms.TTerm [OpenCypher.PatternElementChain] -> Phantoms.TTerm OpenCypher.NodePatternChain
+nodePatternChainWithChain :: Phantoms.TypedTerm OpenCypher.NodePatternChain -> Phantoms.TypedTerm [OpenCypher.PatternElementChain] -> Phantoms.TypedTerm OpenCypher.NodePatternChain
 nodePatternChainWithChain original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.NodePatternChain"),
       Core.recordFields = [
         Core.Field {
@@ -1710,54 +1710,54 @@ nodePatternChainWithChain original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NodePatternChain"),
               Core.projectionFieldName = (Core.Name "nodePattern")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "chain"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-nodePatternChainWithNodePattern :: Phantoms.TTerm OpenCypher.NodePatternChain -> Phantoms.TTerm OpenCypher.NodePattern -> Phantoms.TTerm OpenCypher.NodePatternChain
+nodePatternChainWithNodePattern :: Phantoms.TypedTerm OpenCypher.NodePatternChain -> Phantoms.TypedTerm OpenCypher.NodePattern -> Phantoms.TypedTerm OpenCypher.NodePatternChain
 nodePatternChainWithNodePattern original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.NodePatternChain"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "nodePattern"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "chain"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NodePatternChain"),
               Core.projectionFieldName = (Core.Name "chain")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-nodePatternLabels :: Phantoms.TTerm OpenCypher.NodePattern -> Phantoms.TTerm (Maybe OpenCypher.NodeLabels)
+nodePatternLabels :: Phantoms.TypedTerm OpenCypher.NodePattern -> Phantoms.TypedTerm (Maybe OpenCypher.NodeLabels)
 nodePatternLabels x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NodePattern"),
         Core.projectionFieldName = (Core.Name "labels")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-nodePatternProperties :: Phantoms.TTerm OpenCypher.NodePattern -> Phantoms.TTerm (Maybe OpenCypher.Properties)
+nodePatternProperties :: Phantoms.TypedTerm OpenCypher.NodePattern -> Phantoms.TypedTerm (Maybe OpenCypher.Properties)
 nodePatternProperties x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NodePattern"),
         Core.projectionFieldName = (Core.Name "properties")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-nodePatternVariable :: Phantoms.TTerm OpenCypher.NodePattern -> Phantoms.TTerm (Maybe OpenCypher.Variable)
+nodePatternVariable :: Phantoms.TypedTerm OpenCypher.NodePattern -> Phantoms.TypedTerm (Maybe OpenCypher.Variable)
 nodePatternVariable x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NodePattern"),
         Core.projectionFieldName = (Core.Name "variable")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-nodePatternWithLabels :: Phantoms.TTerm OpenCypher.NodePattern -> Phantoms.TTerm (Maybe OpenCypher.NodeLabels) -> Phantoms.TTerm OpenCypher.NodePattern
+nodePatternWithLabels :: Phantoms.TypedTerm OpenCypher.NodePattern -> Phantoms.TypedTerm (Maybe OpenCypher.NodeLabels) -> Phantoms.TypedTerm OpenCypher.NodePattern
 nodePatternWithLabels original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.NodePattern"),
       Core.recordFields = [
         Core.Field {
@@ -1766,21 +1766,21 @@ nodePatternWithLabels original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NodePattern"),
               Core.projectionFieldName = (Core.Name "variable")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "labels"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NodePattern"),
               Core.projectionFieldName = (Core.Name "properties")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-nodePatternWithProperties :: Phantoms.TTerm OpenCypher.NodePattern -> Phantoms.TTerm (Maybe OpenCypher.Properties) -> Phantoms.TTerm OpenCypher.NodePattern
+nodePatternWithProperties :: Phantoms.TypedTerm OpenCypher.NodePattern -> Phantoms.TypedTerm (Maybe OpenCypher.Properties) -> Phantoms.TypedTerm OpenCypher.NodePattern
 nodePatternWithProperties original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.NodePattern"),
       Core.recordFields = [
         Core.Field {
@@ -1789,106 +1789,106 @@ nodePatternWithProperties original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NodePattern"),
               Core.projectionFieldName = (Core.Name "variable")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "labels"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NodePattern"),
               Core.projectionFieldName = (Core.Name "labels")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-nodePatternWithVariable :: Phantoms.TTerm OpenCypher.NodePattern -> Phantoms.TTerm (Maybe OpenCypher.Variable) -> Phantoms.TTerm OpenCypher.NodePattern
+nodePatternWithVariable :: Phantoms.TypedTerm OpenCypher.NodePattern -> Phantoms.TypedTerm (Maybe OpenCypher.Variable) -> Phantoms.TypedTerm OpenCypher.NodePattern
 nodePatternWithVariable original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.NodePattern"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "labels"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NodePattern"),
               Core.projectionFieldName = (Core.Name "labels")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NodePattern"),
               Core.projectionFieldName = (Core.Name "properties")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-nonArithmeticOperatorExpression :: Phantoms.TTerm OpenCypher.Atom -> Phantoms.TTerm [OpenCypher.ListOperatorExpressionOrPropertyLookup] -> Phantoms.TTerm (Maybe OpenCypher.NodeLabels) -> Phantoms.TTerm OpenCypher.NonArithmeticOperatorExpression
+nonArithmeticOperatorExpression :: Phantoms.TypedTerm OpenCypher.Atom -> Phantoms.TypedTerm [OpenCypher.ListOperatorExpressionOrPropertyLookup] -> Phantoms.TypedTerm (Maybe OpenCypher.NodeLabels) -> Phantoms.TypedTerm OpenCypher.NonArithmeticOperatorExpression
 nonArithmeticOperatorExpression atom listsAndLookups labels =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.NonArithmeticOperatorExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "atom"),
-          Core.fieldTerm = (Phantoms.unTTerm atom)},
+          Core.fieldTerm = (Phantoms.unTypedTerm atom)},
         Core.Field {
           Core.fieldName = (Core.Name "listsAndLookups"),
-          Core.fieldTerm = (Phantoms.unTTerm listsAndLookups)},
+          Core.fieldTerm = (Phantoms.unTypedTerm listsAndLookups)},
         Core.Field {
           Core.fieldName = (Core.Name "labels"),
-          Core.fieldTerm = (Phantoms.unTTerm labels)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm labels)}]}))
 
-nonArithmeticOperatorExpressionAtom :: Phantoms.TTerm OpenCypher.NonArithmeticOperatorExpression -> Phantoms.TTerm OpenCypher.Atom
+nonArithmeticOperatorExpressionAtom :: Phantoms.TypedTerm OpenCypher.NonArithmeticOperatorExpression -> Phantoms.TypedTerm OpenCypher.Atom
 nonArithmeticOperatorExpressionAtom x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NonArithmeticOperatorExpression"),
         Core.projectionFieldName = (Core.Name "atom")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-nonArithmeticOperatorExpressionLabels :: Phantoms.TTerm OpenCypher.NonArithmeticOperatorExpression -> Phantoms.TTerm (Maybe OpenCypher.NodeLabels)
+nonArithmeticOperatorExpressionLabels :: Phantoms.TypedTerm OpenCypher.NonArithmeticOperatorExpression -> Phantoms.TypedTerm (Maybe OpenCypher.NodeLabels)
 nonArithmeticOperatorExpressionLabels x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NonArithmeticOperatorExpression"),
         Core.projectionFieldName = (Core.Name "labels")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-nonArithmeticOperatorExpressionListsAndLookups :: Phantoms.TTerm OpenCypher.NonArithmeticOperatorExpression -> Phantoms.TTerm [OpenCypher.ListOperatorExpressionOrPropertyLookup]
+nonArithmeticOperatorExpressionListsAndLookups :: Phantoms.TypedTerm OpenCypher.NonArithmeticOperatorExpression -> Phantoms.TypedTerm [OpenCypher.ListOperatorExpressionOrPropertyLookup]
 nonArithmeticOperatorExpressionListsAndLookups x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NonArithmeticOperatorExpression"),
         Core.projectionFieldName = (Core.Name "listsAndLookups")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-nonArithmeticOperatorExpressionWithAtom :: Phantoms.TTerm OpenCypher.NonArithmeticOperatorExpression -> Phantoms.TTerm OpenCypher.Atom -> Phantoms.TTerm OpenCypher.NonArithmeticOperatorExpression
+nonArithmeticOperatorExpressionWithAtom :: Phantoms.TypedTerm OpenCypher.NonArithmeticOperatorExpression -> Phantoms.TypedTerm OpenCypher.Atom -> Phantoms.TypedTerm OpenCypher.NonArithmeticOperatorExpression
 nonArithmeticOperatorExpressionWithAtom original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.NonArithmeticOperatorExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "atom"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "listsAndLookups"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NonArithmeticOperatorExpression"),
               Core.projectionFieldName = (Core.Name "listsAndLookups")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "labels"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NonArithmeticOperatorExpression"),
               Core.projectionFieldName = (Core.Name "labels")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-nonArithmeticOperatorExpressionWithLabels :: Phantoms.TTerm OpenCypher.NonArithmeticOperatorExpression -> Phantoms.TTerm (Maybe OpenCypher.NodeLabels) -> Phantoms.TTerm OpenCypher.NonArithmeticOperatorExpression
+nonArithmeticOperatorExpressionWithLabels :: Phantoms.TypedTerm OpenCypher.NonArithmeticOperatorExpression -> Phantoms.TypedTerm (Maybe OpenCypher.NodeLabels) -> Phantoms.TypedTerm OpenCypher.NonArithmeticOperatorExpression
 nonArithmeticOperatorExpressionWithLabels original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.NonArithmeticOperatorExpression"),
       Core.recordFields = [
         Core.Field {
@@ -1897,21 +1897,21 @@ nonArithmeticOperatorExpressionWithLabels original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NonArithmeticOperatorExpression"),
               Core.projectionFieldName = (Core.Name "atom")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listsAndLookups"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NonArithmeticOperatorExpression"),
               Core.projectionFieldName = (Core.Name "listsAndLookups")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "labels"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-nonArithmeticOperatorExpressionWithListsAndLookups :: Phantoms.TTerm OpenCypher.NonArithmeticOperatorExpression -> Phantoms.TTerm [OpenCypher.ListOperatorExpressionOrPropertyLookup] -> Phantoms.TTerm OpenCypher.NonArithmeticOperatorExpression
+nonArithmeticOperatorExpressionWithListsAndLookups :: Phantoms.TypedTerm OpenCypher.NonArithmeticOperatorExpression -> Phantoms.TypedTerm [OpenCypher.ListOperatorExpressionOrPropertyLookup] -> Phantoms.TypedTerm OpenCypher.NonArithmeticOperatorExpression
 nonArithmeticOperatorExpressionWithListsAndLookups original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.NonArithmeticOperatorExpression"),
       Core.recordFields = [
         Core.Field {
@@ -1920,49 +1920,49 @@ nonArithmeticOperatorExpressionWithListsAndLookups original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NonArithmeticOperatorExpression"),
               Core.projectionFieldName = (Core.Name "atom")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listsAndLookups"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "labels"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NonArithmeticOperatorExpression"),
               Core.projectionFieldName = (Core.Name "labels")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-notExpression :: Phantoms.TTerm Bool -> Phantoms.TTerm OpenCypher.ComparisonExpression -> Phantoms.TTerm OpenCypher.NotExpression
+notExpression :: Phantoms.TypedTerm Bool -> Phantoms.TypedTerm OpenCypher.ComparisonExpression -> Phantoms.TypedTerm OpenCypher.NotExpression
 notExpression not expression =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.NotExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "not"),
-          Core.fieldTerm = (Phantoms.unTTerm not)},
+          Core.fieldTerm = (Phantoms.unTypedTerm not)},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm expression)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm expression)}]}))
 
-notExpressionExpression :: Phantoms.TTerm OpenCypher.NotExpression -> Phantoms.TTerm OpenCypher.ComparisonExpression
+notExpressionExpression :: Phantoms.TypedTerm OpenCypher.NotExpression -> Phantoms.TypedTerm OpenCypher.ComparisonExpression
 notExpressionExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NotExpression"),
         Core.projectionFieldName = (Core.Name "expression")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-notExpressionNot :: Phantoms.TTerm OpenCypher.NotExpression -> Phantoms.TTerm Bool
+notExpressionNot :: Phantoms.TypedTerm OpenCypher.NotExpression -> Phantoms.TypedTerm Bool
 notExpressionNot x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NotExpression"),
         Core.projectionFieldName = (Core.Name "not")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-notExpressionWithExpression :: Phantoms.TTerm OpenCypher.NotExpression -> Phantoms.TTerm OpenCypher.ComparisonExpression -> Phantoms.TTerm OpenCypher.NotExpression
+notExpressionWithExpression :: Phantoms.TypedTerm OpenCypher.NotExpression -> Phantoms.TypedTerm OpenCypher.ComparisonExpression -> Phantoms.TypedTerm OpenCypher.NotExpression
 notExpressionWithExpression original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.NotExpression"),
       Core.recordFields = [
         Core.Field {
@@ -1971,130 +1971,130 @@ notExpressionWithExpression original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NotExpression"),
               Core.projectionFieldName = (Core.Name "not")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-notExpressionWithNot :: Phantoms.TTerm OpenCypher.NotExpression -> Phantoms.TTerm Bool -> Phantoms.TTerm OpenCypher.NotExpression
+notExpressionWithNot :: Phantoms.TypedTerm OpenCypher.NotExpression -> Phantoms.TypedTerm Bool -> Phantoms.TypedTerm OpenCypher.NotExpression
 notExpressionWithNot original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.NotExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "not"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.NotExpression"),
               Core.projectionFieldName = (Core.Name "expression")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-nullPredicateExpression :: Phantoms.TTerm Bool -> Phantoms.TTerm OpenCypher.NullPredicateExpression
+nullPredicateExpression :: Phantoms.TypedTerm Bool -> Phantoms.TypedTerm OpenCypher.NullPredicateExpression
 nullPredicateExpression x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.NullPredicateExpression"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-numberLiteralDouble :: Phantoms.TTerm Double -> Phantoms.TTerm OpenCypher.NumberLiteral
+numberLiteralDouble :: Phantoms.TypedTerm Double -> Phantoms.TypedTerm OpenCypher.NumberLiteral
 numberLiteralDouble x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.NumberLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "double"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-numberLiteralInteger :: Phantoms.TTerm Integer -> Phantoms.TTerm OpenCypher.NumberLiteral
+numberLiteralInteger :: Phantoms.TypedTerm Integer -> Phantoms.TypedTerm OpenCypher.NumberLiteral
 numberLiteralInteger x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.NumberLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-orExpression :: Phantoms.TTerm [OpenCypher.XorExpression] -> Phantoms.TTerm OpenCypher.OrExpression
+orExpression :: Phantoms.TypedTerm [OpenCypher.XorExpression] -> Phantoms.TypedTerm OpenCypher.OrExpression
 orExpression x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.OrExpression"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-order :: Phantoms.TTerm [OpenCypher.SortItem] -> Phantoms.TTerm OpenCypher.Order
+order :: Phantoms.TypedTerm [OpenCypher.SortItem] -> Phantoms.TypedTerm OpenCypher.Order
 order x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.Order"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-parameterInteger :: Phantoms.TTerm Integer -> Phantoms.TTerm OpenCypher.Parameter
+parameterInteger :: Phantoms.TypedTerm Integer -> Phantoms.TypedTerm OpenCypher.Parameter
 parameterInteger x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Parameter"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-parameterSymbolic :: Phantoms.TTerm String -> Phantoms.TTerm OpenCypher.Parameter
+parameterSymbolic :: Phantoms.TypedTerm String -> Phantoms.TypedTerm OpenCypher.Parameter
 parameterSymbolic x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Parameter"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "symbolic"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-parenthesizedExpression :: Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.ParenthesizedExpression
+parenthesizedExpression :: Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.ParenthesizedExpression
 parenthesizedExpression x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.ParenthesizedExpression"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-partialComparisonExpression :: Phantoms.TTerm OpenCypher.ComparisonOperator -> Phantoms.TTerm OpenCypher.StringListNullPredicateExpression -> Phantoms.TTerm OpenCypher.PartialComparisonExpression
+partialComparisonExpression :: Phantoms.TypedTerm OpenCypher.ComparisonOperator -> Phantoms.TypedTerm OpenCypher.StringListNullPredicateExpression -> Phantoms.TypedTerm OpenCypher.PartialComparisonExpression
 partialComparisonExpression operator right =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PartialComparisonExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
-          Core.fieldTerm = (Phantoms.unTTerm operator)},
+          Core.fieldTerm = (Phantoms.unTypedTerm operator)},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm right)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm right)}]}))
 
-partialComparisonExpressionOperator :: Phantoms.TTerm OpenCypher.PartialComparisonExpression -> Phantoms.TTerm OpenCypher.ComparisonOperator
+partialComparisonExpressionOperator :: Phantoms.TypedTerm OpenCypher.PartialComparisonExpression -> Phantoms.TypedTerm OpenCypher.ComparisonOperator
 partialComparisonExpressionOperator x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PartialComparisonExpression"),
         Core.projectionFieldName = (Core.Name "operator")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-partialComparisonExpressionRight :: Phantoms.TTerm OpenCypher.PartialComparisonExpression -> Phantoms.TTerm OpenCypher.StringListNullPredicateExpression
+partialComparisonExpressionRight :: Phantoms.TypedTerm OpenCypher.PartialComparisonExpression -> Phantoms.TypedTerm OpenCypher.StringListNullPredicateExpression
 partialComparisonExpressionRight x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PartialComparisonExpression"),
         Core.projectionFieldName = (Core.Name "right")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-partialComparisonExpressionWithOperator :: Phantoms.TTerm OpenCypher.PartialComparisonExpression -> Phantoms.TTerm OpenCypher.ComparisonOperator -> Phantoms.TTerm OpenCypher.PartialComparisonExpression
+partialComparisonExpressionWithOperator :: Phantoms.TypedTerm OpenCypher.PartialComparisonExpression -> Phantoms.TypedTerm OpenCypher.ComparisonOperator -> Phantoms.TypedTerm OpenCypher.PartialComparisonExpression
 partialComparisonExpressionWithOperator original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PartialComparisonExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PartialComparisonExpression"),
               Core.projectionFieldName = (Core.Name "right")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-partialComparisonExpressionWithRight :: Phantoms.TTerm OpenCypher.PartialComparisonExpression -> Phantoms.TTerm OpenCypher.StringListNullPredicateExpression -> Phantoms.TTerm OpenCypher.PartialComparisonExpression
+partialComparisonExpressionWithRight :: Phantoms.TypedTerm OpenCypher.PartialComparisonExpression -> Phantoms.TypedTerm OpenCypher.StringListNullPredicateExpression -> Phantoms.TypedTerm OpenCypher.PartialComparisonExpression
 partialComparisonExpressionWithRight original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PartialComparisonExpression"),
       Core.recordFields = [
         Core.Field {
@@ -2103,70 +2103,70 @@ partialComparisonExpressionWithRight original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PartialComparisonExpression"),
               Core.projectionFieldName = (Core.Name "operator")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-pattern :: Phantoms.TTerm [OpenCypher.PatternPart] -> Phantoms.TTerm OpenCypher.Pattern
+pattern :: Phantoms.TypedTerm [OpenCypher.PatternPart] -> Phantoms.TypedTerm OpenCypher.Pattern
 pattern x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.Pattern"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-patternComprehension :: Phantoms.TTerm (Maybe OpenCypher.Variable) -> Phantoms.TTerm OpenCypher.RelationshipsPattern -> Phantoms.TTerm (Maybe OpenCypher.Where) -> Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.PatternComprehension
+patternComprehension :: Phantoms.TypedTerm (Maybe OpenCypher.Variable) -> Phantoms.TypedTerm OpenCypher.RelationshipsPattern -> Phantoms.TypedTerm (Maybe OpenCypher.Where) -> Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.PatternComprehension
 patternComprehension variable pattern where_ right =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Phantoms.unTTerm variable)},
+          Core.fieldTerm = (Phantoms.unTypedTerm variable)},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
-          Core.fieldTerm = (Phantoms.unTTerm pattern)},
+          Core.fieldTerm = (Phantoms.unTypedTerm pattern)},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
-          Core.fieldTerm = (Phantoms.unTTerm where_)},
+          Core.fieldTerm = (Phantoms.unTypedTerm where_)},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm right)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm right)}]}))
 
-patternComprehensionPattern :: Phantoms.TTerm OpenCypher.PatternComprehension -> Phantoms.TTerm OpenCypher.RelationshipsPattern
+patternComprehensionPattern :: Phantoms.TypedTerm OpenCypher.PatternComprehension -> Phantoms.TypedTerm OpenCypher.RelationshipsPattern
 patternComprehensionPattern x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
         Core.projectionFieldName = (Core.Name "pattern")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-patternComprehensionRight :: Phantoms.TTerm OpenCypher.PatternComprehension -> Phantoms.TTerm OpenCypher.Expression
+patternComprehensionRight :: Phantoms.TypedTerm OpenCypher.PatternComprehension -> Phantoms.TypedTerm OpenCypher.Expression
 patternComprehensionRight x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
         Core.projectionFieldName = (Core.Name "right")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-patternComprehensionVariable :: Phantoms.TTerm OpenCypher.PatternComprehension -> Phantoms.TTerm (Maybe OpenCypher.Variable)
+patternComprehensionVariable :: Phantoms.TypedTerm OpenCypher.PatternComprehension -> Phantoms.TypedTerm (Maybe OpenCypher.Variable)
 patternComprehensionVariable x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
         Core.projectionFieldName = (Core.Name "variable")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-patternComprehensionWhere :: Phantoms.TTerm OpenCypher.PatternComprehension -> Phantoms.TTerm (Maybe OpenCypher.Where)
+patternComprehensionWhere :: Phantoms.TypedTerm OpenCypher.PatternComprehension -> Phantoms.TypedTerm (Maybe OpenCypher.Where)
 patternComprehensionWhere x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
         Core.projectionFieldName = (Core.Name "where")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-patternComprehensionWithPattern :: Phantoms.TTerm OpenCypher.PatternComprehension -> Phantoms.TTerm OpenCypher.RelationshipsPattern -> Phantoms.TTerm OpenCypher.PatternComprehension
+patternComprehensionWithPattern :: Phantoms.TypedTerm OpenCypher.PatternComprehension -> Phantoms.TypedTerm OpenCypher.RelationshipsPattern -> Phantoms.TypedTerm OpenCypher.PatternComprehension
 patternComprehensionWithPattern original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
       Core.recordFields = [
         Core.Field {
@@ -2175,28 +2175,28 @@ patternComprehensionWithPattern original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
               Core.projectionFieldName = (Core.Name "variable")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
               Core.projectionFieldName = (Core.Name "where")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
               Core.projectionFieldName = (Core.Name "right")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-patternComprehensionWithRight :: Phantoms.TTerm OpenCypher.PatternComprehension -> Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.PatternComprehension
+patternComprehensionWithRight :: Phantoms.TypedTerm OpenCypher.PatternComprehension -> Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.PatternComprehension
 patternComprehensionWithRight original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
       Core.recordFields = [
         Core.Field {
@@ -2205,58 +2205,58 @@ patternComprehensionWithRight original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
               Core.projectionFieldName = (Core.Name "variable")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
               Core.projectionFieldName = (Core.Name "pattern")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
               Core.projectionFieldName = (Core.Name "where")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-patternComprehensionWithVariable :: Phantoms.TTerm OpenCypher.PatternComprehension -> Phantoms.TTerm (Maybe OpenCypher.Variable) -> Phantoms.TTerm OpenCypher.PatternComprehension
+patternComprehensionWithVariable :: Phantoms.TypedTerm OpenCypher.PatternComprehension -> Phantoms.TypedTerm (Maybe OpenCypher.Variable) -> Phantoms.TypedTerm OpenCypher.PatternComprehension
 patternComprehensionWithVariable original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
               Core.projectionFieldName = (Core.Name "pattern")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
               Core.projectionFieldName = (Core.Name "where")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
               Core.projectionFieldName = (Core.Name "right")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-patternComprehensionWithWhere :: Phantoms.TTerm OpenCypher.PatternComprehension -> Phantoms.TTerm (Maybe OpenCypher.Where) -> Phantoms.TTerm OpenCypher.PatternComprehension
+patternComprehensionWithWhere :: Phantoms.TypedTerm OpenCypher.PatternComprehension -> Phantoms.TypedTerm (Maybe OpenCypher.Where) -> Phantoms.TypedTerm OpenCypher.PatternComprehension
 patternComprehensionWithWhere original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
       Core.recordFields = [
         Core.Field {
@@ -2265,56 +2265,56 @@ patternComprehensionWithWhere original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
               Core.projectionFieldName = (Core.Name "variable")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
               Core.projectionFieldName = (Core.Name "pattern")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternComprehension"),
               Core.projectionFieldName = (Core.Name "right")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-patternElementChain :: Phantoms.TTerm OpenCypher.RelationshipPattern -> Phantoms.TTerm OpenCypher.NodePattern -> Phantoms.TTerm OpenCypher.PatternElementChain
+patternElementChain :: Phantoms.TypedTerm OpenCypher.RelationshipPattern -> Phantoms.TypedTerm OpenCypher.NodePattern -> Phantoms.TypedTerm OpenCypher.PatternElementChain
 patternElementChain relationship node =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PatternElementChain"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "relationship"),
-          Core.fieldTerm = (Phantoms.unTTerm relationship)},
+          Core.fieldTerm = (Phantoms.unTypedTerm relationship)},
         Core.Field {
           Core.fieldName = (Core.Name "node"),
-          Core.fieldTerm = (Phantoms.unTTerm node)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm node)}]}))
 
-patternElementChainNode :: Phantoms.TTerm OpenCypher.PatternElementChain -> Phantoms.TTerm OpenCypher.NodePattern
+patternElementChainNode :: Phantoms.TypedTerm OpenCypher.PatternElementChain -> Phantoms.TypedTerm OpenCypher.NodePattern
 patternElementChainNode x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternElementChain"),
         Core.projectionFieldName = (Core.Name "node")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-patternElementChainRelationship :: Phantoms.TTerm OpenCypher.PatternElementChain -> Phantoms.TTerm OpenCypher.RelationshipPattern
+patternElementChainRelationship :: Phantoms.TypedTerm OpenCypher.PatternElementChain -> Phantoms.TypedTerm OpenCypher.RelationshipPattern
 patternElementChainRelationship x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternElementChain"),
         Core.projectionFieldName = (Core.Name "relationship")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-patternElementChainWithNode :: Phantoms.TTerm OpenCypher.PatternElementChain -> Phantoms.TTerm OpenCypher.NodePattern -> Phantoms.TTerm OpenCypher.PatternElementChain
+patternElementChainWithNode :: Phantoms.TypedTerm OpenCypher.PatternElementChain -> Phantoms.TypedTerm OpenCypher.NodePattern -> Phantoms.TypedTerm OpenCypher.PatternElementChain
 patternElementChainWithNode original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PatternElementChain"),
       Core.recordFields = [
         Core.Field {
@@ -2323,74 +2323,74 @@ patternElementChainWithNode original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternElementChain"),
               Core.projectionFieldName = (Core.Name "relationship")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "node"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-patternElementChainWithRelationship :: Phantoms.TTerm OpenCypher.PatternElementChain -> Phantoms.TTerm OpenCypher.RelationshipPattern -> Phantoms.TTerm OpenCypher.PatternElementChain
+patternElementChainWithRelationship :: Phantoms.TypedTerm OpenCypher.PatternElementChain -> Phantoms.TypedTerm OpenCypher.RelationshipPattern -> Phantoms.TypedTerm OpenCypher.PatternElementChain
 patternElementChainWithRelationship original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PatternElementChain"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "relationship"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "node"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternElementChain"),
               Core.projectionFieldName = (Core.Name "node")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-patternElementChained :: Phantoms.TTerm OpenCypher.NodePatternChain -> Phantoms.TTerm OpenCypher.PatternElement
+patternElementChained :: Phantoms.TypedTerm OpenCypher.NodePatternChain -> Phantoms.TypedTerm OpenCypher.PatternElement
 patternElementChained x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternElement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "chained"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-patternElementParenthesized :: Phantoms.TTerm OpenCypher.PatternElement -> Phantoms.TTerm OpenCypher.PatternElement
+patternElementParenthesized :: Phantoms.TypedTerm OpenCypher.PatternElement -> Phantoms.TypedTerm OpenCypher.PatternElement
 patternElementParenthesized x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternElement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parenthesized"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-patternPart :: Phantoms.TTerm (Maybe OpenCypher.Variable) -> Phantoms.TTerm OpenCypher.AnonymousPatternPart -> Phantoms.TTerm OpenCypher.PatternPart
+patternPart :: Phantoms.TypedTerm (Maybe OpenCypher.Variable) -> Phantoms.TypedTerm OpenCypher.AnonymousPatternPart -> Phantoms.TypedTerm OpenCypher.PatternPart
 patternPart variable pattern =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PatternPart"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Phantoms.unTTerm variable)},
+          Core.fieldTerm = (Phantoms.unTypedTerm variable)},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
-          Core.fieldTerm = (Phantoms.unTTerm pattern)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm pattern)}]}))
 
-patternPartPattern :: Phantoms.TTerm OpenCypher.PatternPart -> Phantoms.TTerm OpenCypher.AnonymousPatternPart
+patternPartPattern :: Phantoms.TypedTerm OpenCypher.PatternPart -> Phantoms.TypedTerm OpenCypher.AnonymousPatternPart
 patternPartPattern x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternPart"),
         Core.projectionFieldName = (Core.Name "pattern")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-patternPartVariable :: Phantoms.TTerm OpenCypher.PatternPart -> Phantoms.TTerm (Maybe OpenCypher.Variable)
+patternPartVariable :: Phantoms.TypedTerm OpenCypher.PatternPart -> Phantoms.TypedTerm (Maybe OpenCypher.Variable)
 patternPartVariable x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternPart"),
         Core.projectionFieldName = (Core.Name "variable")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-patternPartWithPattern :: Phantoms.TTerm OpenCypher.PatternPart -> Phantoms.TTerm OpenCypher.AnonymousPatternPart -> Phantoms.TTerm OpenCypher.PatternPart
+patternPartWithPattern :: Phantoms.TypedTerm OpenCypher.PatternPart -> Phantoms.TypedTerm OpenCypher.AnonymousPatternPart -> Phantoms.TypedTerm OpenCypher.PatternPart
 patternPartWithPattern original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PatternPart"),
       Core.recordFields = [
         Core.Field {
@@ -2399,80 +2399,80 @@ patternPartWithPattern original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternPart"),
               Core.projectionFieldName = (Core.Name "variable")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-patternPartWithVariable :: Phantoms.TTerm OpenCypher.PatternPart -> Phantoms.TTerm (Maybe OpenCypher.Variable) -> Phantoms.TTerm OpenCypher.PatternPart
+patternPartWithVariable :: Phantoms.TypedTerm OpenCypher.PatternPart -> Phantoms.TypedTerm (Maybe OpenCypher.Variable) -> Phantoms.TypedTerm OpenCypher.PatternPart
 patternPartWithVariable original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PatternPart"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternPart"),
               Core.projectionFieldName = (Core.Name "pattern")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-patternPredicate :: Phantoms.TTerm OpenCypher.RelationshipsPattern -> Phantoms.TTerm OpenCypher.PatternPredicate
+patternPredicate :: Phantoms.TypedTerm OpenCypher.RelationshipsPattern -> Phantoms.TypedTerm OpenCypher.PatternPredicate
 patternPredicate x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.PatternPredicate"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-patternWhere :: Phantoms.TTerm OpenCypher.Pattern -> Phantoms.TTerm (Maybe OpenCypher.Where) -> Phantoms.TTerm OpenCypher.PatternWhere
+patternWhere :: Phantoms.TypedTerm OpenCypher.Pattern -> Phantoms.TypedTerm (Maybe OpenCypher.Where) -> Phantoms.TypedTerm OpenCypher.PatternWhere
 patternWhere pattern where_ =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PatternWhere"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
-          Core.fieldTerm = (Phantoms.unTTerm pattern)},
+          Core.fieldTerm = (Phantoms.unTypedTerm pattern)},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
-          Core.fieldTerm = (Phantoms.unTTerm where_)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm where_)}]}))
 
-patternWherePattern :: Phantoms.TTerm OpenCypher.PatternWhere -> Phantoms.TTerm OpenCypher.Pattern
+patternWherePattern :: Phantoms.TypedTerm OpenCypher.PatternWhere -> Phantoms.TypedTerm OpenCypher.Pattern
 patternWherePattern x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternWhere"),
         Core.projectionFieldName = (Core.Name "pattern")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-patternWhereWhere :: Phantoms.TTerm OpenCypher.PatternWhere -> Phantoms.TTerm (Maybe OpenCypher.Where)
+patternWhereWhere :: Phantoms.TypedTerm OpenCypher.PatternWhere -> Phantoms.TypedTerm (Maybe OpenCypher.Where)
 patternWhereWhere x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternWhere"),
         Core.projectionFieldName = (Core.Name "where")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-patternWhereWithPattern :: Phantoms.TTerm OpenCypher.PatternWhere -> Phantoms.TTerm OpenCypher.Pattern -> Phantoms.TTerm OpenCypher.PatternWhere
+patternWhereWithPattern :: Phantoms.TypedTerm OpenCypher.PatternWhere -> Phantoms.TypedTerm OpenCypher.Pattern -> Phantoms.TypedTerm OpenCypher.PatternWhere
 patternWhereWithPattern original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PatternWhere"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternWhere"),
               Core.projectionFieldName = (Core.Name "where")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-patternWhereWithWhere :: Phantoms.TTerm OpenCypher.PatternWhere -> Phantoms.TTerm (Maybe OpenCypher.Where) -> Phantoms.TTerm OpenCypher.PatternWhere
+patternWhereWithWhere :: Phantoms.TypedTerm OpenCypher.PatternWhere -> Phantoms.TypedTerm (Maybe OpenCypher.Where) -> Phantoms.TypedTerm OpenCypher.PatternWhere
 patternWhereWithWhere original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PatternWhere"),
       Core.recordFields = [
         Core.Field {
@@ -2481,140 +2481,140 @@ patternWhereWithWhere original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternWhere"),
               Core.projectionFieldName = (Core.Name "pattern")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-powerOfExpression :: Phantoms.TTerm [OpenCypher.UnaryAddOrSubtractExpression] -> Phantoms.TTerm OpenCypher.PowerOfExpression
+powerOfExpression :: Phantoms.TypedTerm [OpenCypher.UnaryAddOrSubtractExpression] -> Phantoms.TypedTerm OpenCypher.PowerOfExpression
 powerOfExpression x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.PowerOfExpression"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-procedureInvocationExplicit :: Phantoms.TTerm OpenCypher.ExplicitProcedureInvocation -> Phantoms.TTerm OpenCypher.ProcedureInvocation
+procedureInvocationExplicit :: Phantoms.TypedTerm OpenCypher.ExplicitProcedureInvocation -> Phantoms.TypedTerm OpenCypher.ProcedureInvocation
 procedureInvocationExplicit x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ProcedureInvocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "explicit"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-procedureInvocationImplicit :: Phantoms.TTerm OpenCypher.ImplicitProcedureInvocation -> Phantoms.TTerm OpenCypher.ProcedureInvocation
+procedureInvocationImplicit :: Phantoms.TypedTerm OpenCypher.ImplicitProcedureInvocation -> Phantoms.TypedTerm OpenCypher.ProcedureInvocation
 procedureInvocationImplicit x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ProcedureInvocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "implicit"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-procedureResultField :: Phantoms.TTerm String -> Phantoms.TTerm OpenCypher.ProcedureResultField
+procedureResultField :: Phantoms.TypedTerm String -> Phantoms.TypedTerm OpenCypher.ProcedureResultField
 procedureResultField x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.ProcedureResultField"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-projectionBody :: Phantoms.TTerm Bool -> Phantoms.TTerm OpenCypher.ProjectionItems -> Phantoms.TTerm (Maybe OpenCypher.Order) -> Phantoms.TTerm (Maybe OpenCypher.Skip) -> Phantoms.TTerm (Maybe OpenCypher.Limit) -> Phantoms.TTerm OpenCypher.ProjectionBody
+projectionBody :: Phantoms.TypedTerm Bool -> Phantoms.TypedTerm OpenCypher.ProjectionItems -> Phantoms.TypedTerm (Maybe OpenCypher.Order) -> Phantoms.TypedTerm (Maybe OpenCypher.Skip) -> Phantoms.TypedTerm (Maybe OpenCypher.Limit) -> Phantoms.TypedTerm OpenCypher.ProjectionBody
 projectionBody distinct projectionItems order skip limit =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "distinct"),
-          Core.fieldTerm = (Phantoms.unTTerm distinct)},
+          Core.fieldTerm = (Phantoms.unTypedTerm distinct)},
         Core.Field {
           Core.fieldName = (Core.Name "projectionItems"),
-          Core.fieldTerm = (Phantoms.unTTerm projectionItems)},
+          Core.fieldTerm = (Phantoms.unTypedTerm projectionItems)},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
-          Core.fieldTerm = (Phantoms.unTTerm order)},
+          Core.fieldTerm = (Phantoms.unTypedTerm order)},
         Core.Field {
           Core.fieldName = (Core.Name "skip"),
-          Core.fieldTerm = (Phantoms.unTTerm skip)},
+          Core.fieldTerm = (Phantoms.unTypedTerm skip)},
         Core.Field {
           Core.fieldName = (Core.Name "limit"),
-          Core.fieldTerm = (Phantoms.unTTerm limit)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm limit)}]}))
 
-projectionBodyDistinct :: Phantoms.TTerm OpenCypher.ProjectionBody -> Phantoms.TTerm Bool
+projectionBodyDistinct :: Phantoms.TypedTerm OpenCypher.ProjectionBody -> Phantoms.TypedTerm Bool
 projectionBodyDistinct x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
         Core.projectionFieldName = (Core.Name "distinct")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-projectionBodyLimit :: Phantoms.TTerm OpenCypher.ProjectionBody -> Phantoms.TTerm (Maybe OpenCypher.Limit)
+projectionBodyLimit :: Phantoms.TypedTerm OpenCypher.ProjectionBody -> Phantoms.TypedTerm (Maybe OpenCypher.Limit)
 projectionBodyLimit x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
         Core.projectionFieldName = (Core.Name "limit")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-projectionBodyOrder :: Phantoms.TTerm OpenCypher.ProjectionBody -> Phantoms.TTerm (Maybe OpenCypher.Order)
+projectionBodyOrder :: Phantoms.TypedTerm OpenCypher.ProjectionBody -> Phantoms.TypedTerm (Maybe OpenCypher.Order)
 projectionBodyOrder x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
         Core.projectionFieldName = (Core.Name "order")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-projectionBodyProjectionItems :: Phantoms.TTerm OpenCypher.ProjectionBody -> Phantoms.TTerm OpenCypher.ProjectionItems
+projectionBodyProjectionItems :: Phantoms.TypedTerm OpenCypher.ProjectionBody -> Phantoms.TypedTerm OpenCypher.ProjectionItems
 projectionBodyProjectionItems x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
         Core.projectionFieldName = (Core.Name "projectionItems")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-projectionBodySkip :: Phantoms.TTerm OpenCypher.ProjectionBody -> Phantoms.TTerm (Maybe OpenCypher.Skip)
+projectionBodySkip :: Phantoms.TypedTerm OpenCypher.ProjectionBody -> Phantoms.TypedTerm (Maybe OpenCypher.Skip)
 projectionBodySkip x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
         Core.projectionFieldName = (Core.Name "skip")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-projectionBodyWithDistinct :: Phantoms.TTerm OpenCypher.ProjectionBody -> Phantoms.TTerm Bool -> Phantoms.TTerm OpenCypher.ProjectionBody
+projectionBodyWithDistinct :: Phantoms.TypedTerm OpenCypher.ProjectionBody -> Phantoms.TypedTerm Bool -> Phantoms.TypedTerm OpenCypher.ProjectionBody
 projectionBodyWithDistinct original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "distinct"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "projectionItems"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
               Core.projectionFieldName = (Core.Name "projectionItems")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
               Core.projectionFieldName = (Core.Name "order")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "skip"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
               Core.projectionFieldName = (Core.Name "skip")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "limit"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
               Core.projectionFieldName = (Core.Name "limit")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-projectionBodyWithLimit :: Phantoms.TTerm OpenCypher.ProjectionBody -> Phantoms.TTerm (Maybe OpenCypher.Limit) -> Phantoms.TTerm OpenCypher.ProjectionBody
+projectionBodyWithLimit :: Phantoms.TypedTerm OpenCypher.ProjectionBody -> Phantoms.TypedTerm (Maybe OpenCypher.Limit) -> Phantoms.TypedTerm OpenCypher.ProjectionBody
 projectionBodyWithLimit original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
       Core.recordFields = [
         Core.Field {
@@ -2623,35 +2623,35 @@ projectionBodyWithLimit original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
               Core.projectionFieldName = (Core.Name "distinct")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "projectionItems"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
               Core.projectionFieldName = (Core.Name "projectionItems")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
               Core.projectionFieldName = (Core.Name "order")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "skip"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
               Core.projectionFieldName = (Core.Name "skip")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "limit"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-projectionBodyWithOrder :: Phantoms.TTerm OpenCypher.ProjectionBody -> Phantoms.TTerm (Maybe OpenCypher.Order) -> Phantoms.TTerm OpenCypher.ProjectionBody
+projectionBodyWithOrder :: Phantoms.TypedTerm OpenCypher.ProjectionBody -> Phantoms.TypedTerm (Maybe OpenCypher.Order) -> Phantoms.TypedTerm OpenCypher.ProjectionBody
 projectionBodyWithOrder original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
       Core.recordFields = [
         Core.Field {
@@ -2660,35 +2660,35 @@ projectionBodyWithOrder original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
               Core.projectionFieldName = (Core.Name "distinct")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "projectionItems"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
               Core.projectionFieldName = (Core.Name "projectionItems")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "skip"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
               Core.projectionFieldName = (Core.Name "skip")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "limit"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
               Core.projectionFieldName = (Core.Name "limit")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-projectionBodyWithProjectionItems :: Phantoms.TTerm OpenCypher.ProjectionBody -> Phantoms.TTerm OpenCypher.ProjectionItems -> Phantoms.TTerm OpenCypher.ProjectionBody
+projectionBodyWithProjectionItems :: Phantoms.TypedTerm OpenCypher.ProjectionBody -> Phantoms.TypedTerm OpenCypher.ProjectionItems -> Phantoms.TypedTerm OpenCypher.ProjectionBody
 projectionBodyWithProjectionItems original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
       Core.recordFields = [
         Core.Field {
@@ -2697,35 +2697,35 @@ projectionBodyWithProjectionItems original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
               Core.projectionFieldName = (Core.Name "distinct")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "projectionItems"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
               Core.projectionFieldName = (Core.Name "order")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "skip"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
               Core.projectionFieldName = (Core.Name "skip")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "limit"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
               Core.projectionFieldName = (Core.Name "limit")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-projectionBodyWithSkip :: Phantoms.TTerm OpenCypher.ProjectionBody -> Phantoms.TTerm (Maybe OpenCypher.Skip) -> Phantoms.TTerm OpenCypher.ProjectionBody
+projectionBodyWithSkip :: Phantoms.TypedTerm OpenCypher.ProjectionBody -> Phantoms.TypedTerm (Maybe OpenCypher.Skip) -> Phantoms.TypedTerm OpenCypher.ProjectionBody
 projectionBodyWithSkip original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
       Core.recordFields = [
         Core.Field {
@@ -2734,79 +2734,79 @@ projectionBodyWithSkip original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
               Core.projectionFieldName = (Core.Name "distinct")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "projectionItems"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
               Core.projectionFieldName = (Core.Name "projectionItems")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
               Core.projectionFieldName = (Core.Name "order")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "skip"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "limit"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionBody"),
               Core.projectionFieldName = (Core.Name "limit")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-projectionItem :: Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm (Maybe OpenCypher.Variable) -> Phantoms.TTerm OpenCypher.ProjectionItem
+projectionItem :: Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm (Maybe OpenCypher.Variable) -> Phantoms.TypedTerm OpenCypher.ProjectionItem
 projectionItem expression variable =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionItem"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm expression)},
+          Core.fieldTerm = (Phantoms.unTypedTerm expression)},
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Phantoms.unTTerm variable)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm variable)}]}))
 
-projectionItemExpression :: Phantoms.TTerm OpenCypher.ProjectionItem -> Phantoms.TTerm OpenCypher.Expression
+projectionItemExpression :: Phantoms.TypedTerm OpenCypher.ProjectionItem -> Phantoms.TypedTerm OpenCypher.Expression
 projectionItemExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionItem"),
         Core.projectionFieldName = (Core.Name "expression")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-projectionItemVariable :: Phantoms.TTerm OpenCypher.ProjectionItem -> Phantoms.TTerm (Maybe OpenCypher.Variable)
+projectionItemVariable :: Phantoms.TypedTerm OpenCypher.ProjectionItem -> Phantoms.TypedTerm (Maybe OpenCypher.Variable)
 projectionItemVariable x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionItem"),
         Core.projectionFieldName = (Core.Name "variable")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-projectionItemWithExpression :: Phantoms.TTerm OpenCypher.ProjectionItem -> Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.ProjectionItem
+projectionItemWithExpression :: Phantoms.TypedTerm OpenCypher.ProjectionItem -> Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.ProjectionItem
 projectionItemWithExpression original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionItem"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionItem"),
               Core.projectionFieldName = (Core.Name "variable")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-projectionItemWithVariable :: Phantoms.TTerm OpenCypher.ProjectionItem -> Phantoms.TTerm (Maybe OpenCypher.Variable) -> Phantoms.TTerm OpenCypher.ProjectionItem
+projectionItemWithVariable :: Phantoms.TypedTerm OpenCypher.ProjectionItem -> Phantoms.TypedTerm (Maybe OpenCypher.Variable) -> Phantoms.TypedTerm OpenCypher.ProjectionItem
 projectionItemWithVariable original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionItem"),
       Core.recordFields = [
         Core.Field {
@@ -2815,42 +2815,42 @@ projectionItemWithVariable original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionItem"),
               Core.projectionFieldName = (Core.Name "expression")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-projectionItems :: Phantoms.TTerm Bool -> Phantoms.TTerm [OpenCypher.ProjectionItem] -> Phantoms.TTerm OpenCypher.ProjectionItems
+projectionItems :: Phantoms.TypedTerm Bool -> Phantoms.TypedTerm [OpenCypher.ProjectionItem] -> Phantoms.TypedTerm OpenCypher.ProjectionItems
 projectionItems star explicit =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionItems"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "star"),
-          Core.fieldTerm = (Phantoms.unTTerm star)},
+          Core.fieldTerm = (Phantoms.unTypedTerm star)},
         Core.Field {
           Core.fieldName = (Core.Name "explicit"),
-          Core.fieldTerm = (Phantoms.unTTerm explicit)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm explicit)}]}))
 
-projectionItemsExplicit :: Phantoms.TTerm OpenCypher.ProjectionItems -> Phantoms.TTerm [OpenCypher.ProjectionItem]
+projectionItemsExplicit :: Phantoms.TypedTerm OpenCypher.ProjectionItems -> Phantoms.TypedTerm [OpenCypher.ProjectionItem]
 projectionItemsExplicit x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionItems"),
         Core.projectionFieldName = (Core.Name "explicit")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-projectionItemsStar :: Phantoms.TTerm OpenCypher.ProjectionItems -> Phantoms.TTerm Bool
+projectionItemsStar :: Phantoms.TypedTerm OpenCypher.ProjectionItems -> Phantoms.TypedTerm Bool
 projectionItemsStar x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionItems"),
         Core.projectionFieldName = (Core.Name "star")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-projectionItemsWithExplicit :: Phantoms.TTerm OpenCypher.ProjectionItems -> Phantoms.TTerm [OpenCypher.ProjectionItem] -> Phantoms.TTerm OpenCypher.ProjectionItems
+projectionItemsWithExplicit :: Phantoms.TypedTerm OpenCypher.ProjectionItems -> Phantoms.TypedTerm [OpenCypher.ProjectionItem] -> Phantoms.TypedTerm OpenCypher.ProjectionItems
 projectionItemsWithExplicit original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionItems"),
       Core.recordFields = [
         Core.Field {
@@ -2859,90 +2859,90 @@ projectionItemsWithExplicit original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionItems"),
               Core.projectionFieldName = (Core.Name "star")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "explicit"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-projectionItemsWithStar :: Phantoms.TTerm OpenCypher.ProjectionItems -> Phantoms.TTerm Bool -> Phantoms.TTerm OpenCypher.ProjectionItems
+projectionItemsWithStar :: Phantoms.TypedTerm OpenCypher.ProjectionItems -> Phantoms.TypedTerm Bool -> Phantoms.TypedTerm OpenCypher.ProjectionItems
 projectionItemsWithStar original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionItems"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "star"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "explicit"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.ProjectionItems"),
               Core.projectionFieldName = (Core.Name "explicit")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-propertiesMap :: Phantoms.TTerm OpenCypher.MapLiteral -> Phantoms.TTerm OpenCypher.Properties
+propertiesMap :: Phantoms.TypedTerm OpenCypher.MapLiteral -> Phantoms.TypedTerm OpenCypher.Properties
 propertiesMap x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Properties"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-propertiesParameter :: Phantoms.TTerm OpenCypher.Parameter -> Phantoms.TTerm OpenCypher.Properties
+propertiesParameter :: Phantoms.TypedTerm OpenCypher.Parameter -> Phantoms.TypedTerm OpenCypher.Properties
 propertiesParameter x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Properties"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parameter"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-propertyEquals :: Phantoms.TTerm OpenCypher.PropertyExpression -> Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.PropertyEquals
+propertyEquals :: Phantoms.TypedTerm OpenCypher.PropertyExpression -> Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.PropertyEquals
 propertyEquals lhs rhs =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PropertyEquals"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "lhs"),
-          Core.fieldTerm = (Phantoms.unTTerm lhs)},
+          Core.fieldTerm = (Phantoms.unTypedTerm lhs)},
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
-          Core.fieldTerm = (Phantoms.unTTerm rhs)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm rhs)}]}))
 
-propertyEqualsLhs :: Phantoms.TTerm OpenCypher.PropertyEquals -> Phantoms.TTerm OpenCypher.PropertyExpression
+propertyEqualsLhs :: Phantoms.TypedTerm OpenCypher.PropertyEquals -> Phantoms.TypedTerm OpenCypher.PropertyExpression
 propertyEqualsLhs x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PropertyEquals"),
         Core.projectionFieldName = (Core.Name "lhs")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-propertyEqualsRhs :: Phantoms.TTerm OpenCypher.PropertyEquals -> Phantoms.TTerm OpenCypher.Expression
+propertyEqualsRhs :: Phantoms.TypedTerm OpenCypher.PropertyEquals -> Phantoms.TypedTerm OpenCypher.Expression
 propertyEqualsRhs x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PropertyEquals"),
         Core.projectionFieldName = (Core.Name "rhs")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-propertyEqualsWithLhs :: Phantoms.TTerm OpenCypher.PropertyEquals -> Phantoms.TTerm OpenCypher.PropertyExpression -> Phantoms.TTerm OpenCypher.PropertyEquals
+propertyEqualsWithLhs :: Phantoms.TypedTerm OpenCypher.PropertyEquals -> Phantoms.TypedTerm OpenCypher.PropertyExpression -> Phantoms.TypedTerm OpenCypher.PropertyEquals
 propertyEqualsWithLhs original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PropertyEquals"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "lhs"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PropertyEquals"),
               Core.projectionFieldName = (Core.Name "rhs")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-propertyEqualsWithRhs :: Phantoms.TTerm OpenCypher.PropertyEquals -> Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.PropertyEquals
+propertyEqualsWithRhs :: Phantoms.TypedTerm OpenCypher.PropertyEquals -> Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.PropertyEquals
 propertyEqualsWithRhs original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PropertyEquals"),
       Core.recordFields = [
         Core.Field {
@@ -2951,58 +2951,58 @@ propertyEqualsWithRhs original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PropertyEquals"),
               Core.projectionFieldName = (Core.Name "lhs")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-propertyExpression :: Phantoms.TTerm OpenCypher.Atom -> Phantoms.TTerm [OpenCypher.PropertyLookup] -> Phantoms.TTerm OpenCypher.PropertyExpression
+propertyExpression :: Phantoms.TypedTerm OpenCypher.Atom -> Phantoms.TypedTerm [OpenCypher.PropertyLookup] -> Phantoms.TypedTerm OpenCypher.PropertyExpression
 propertyExpression atom lookups =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PropertyExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "atom"),
-          Core.fieldTerm = (Phantoms.unTTerm atom)},
+          Core.fieldTerm = (Phantoms.unTypedTerm atom)},
         Core.Field {
           Core.fieldName = (Core.Name "lookups"),
-          Core.fieldTerm = (Phantoms.unTTerm lookups)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm lookups)}]}))
 
-propertyExpressionAtom :: Phantoms.TTerm OpenCypher.PropertyExpression -> Phantoms.TTerm OpenCypher.Atom
+propertyExpressionAtom :: Phantoms.TypedTerm OpenCypher.PropertyExpression -> Phantoms.TypedTerm OpenCypher.Atom
 propertyExpressionAtom x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PropertyExpression"),
         Core.projectionFieldName = (Core.Name "atom")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-propertyExpressionLookups :: Phantoms.TTerm OpenCypher.PropertyExpression -> Phantoms.TTerm [OpenCypher.PropertyLookup]
+propertyExpressionLookups :: Phantoms.TypedTerm OpenCypher.PropertyExpression -> Phantoms.TypedTerm [OpenCypher.PropertyLookup]
 propertyExpressionLookups x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PropertyExpression"),
         Core.projectionFieldName = (Core.Name "lookups")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-propertyExpressionWithAtom :: Phantoms.TTerm OpenCypher.PropertyExpression -> Phantoms.TTerm OpenCypher.Atom -> Phantoms.TTerm OpenCypher.PropertyExpression
+propertyExpressionWithAtom :: Phantoms.TypedTerm OpenCypher.PropertyExpression -> Phantoms.TypedTerm OpenCypher.Atom -> Phantoms.TypedTerm OpenCypher.PropertyExpression
 propertyExpressionWithAtom original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PropertyExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "atom"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "lookups"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PropertyExpression"),
               Core.projectionFieldName = (Core.Name "lookups")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-propertyExpressionWithLookups :: Phantoms.TTerm OpenCypher.PropertyExpression -> Phantoms.TTerm [OpenCypher.PropertyLookup] -> Phantoms.TTerm OpenCypher.PropertyExpression
+propertyExpressionWithLookups :: Phantoms.TypedTerm OpenCypher.PropertyExpression -> Phantoms.TypedTerm [OpenCypher.PropertyLookup] -> Phantoms.TypedTerm OpenCypher.PropertyExpression
 propertyExpressionWithLookups original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.PropertyExpression"),
       Core.recordFields = [
         Core.Field {
@@ -3011,54 +3011,54 @@ propertyExpressionWithLookups original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.PropertyExpression"),
               Core.projectionFieldName = (Core.Name "atom")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lookups"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-propertyKeyName :: Phantoms.TTerm String -> Phantoms.TTerm OpenCypher.PropertyKeyName
+propertyKeyName :: Phantoms.TypedTerm String -> Phantoms.TypedTerm OpenCypher.PropertyKeyName
 propertyKeyName x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.PropertyKeyName"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-propertyLookup :: Phantoms.TTerm OpenCypher.PropertyKeyName -> Phantoms.TTerm OpenCypher.PropertyLookup
+propertyLookup :: Phantoms.TypedTerm OpenCypher.PropertyKeyName -> Phantoms.TypedTerm OpenCypher.PropertyLookup
 propertyLookup x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.PropertyLookup"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-qualifiedName :: Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm OpenCypher.QualifiedName
+qualifiedName :: Phantoms.TypedTerm String -> Phantoms.TypedTerm String -> Phantoms.TypedTerm OpenCypher.QualifiedName
 qualifiedName namespace local =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.QualifiedName"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "namespace"),
-          Core.fieldTerm = (Phantoms.unTTerm namespace)},
+          Core.fieldTerm = (Phantoms.unTypedTerm namespace)},
         Core.Field {
           Core.fieldName = (Core.Name "local"),
-          Core.fieldTerm = (Phantoms.unTTerm local)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm local)}]}))
 
-qualifiedNameLocal :: Phantoms.TTerm OpenCypher.QualifiedName -> Phantoms.TTerm String
+qualifiedNameLocal :: Phantoms.TypedTerm OpenCypher.QualifiedName -> Phantoms.TypedTerm String
 qualifiedNameLocal x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.QualifiedName"),
         Core.projectionFieldName = (Core.Name "local")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-qualifiedNameNamespace :: Phantoms.TTerm OpenCypher.QualifiedName -> Phantoms.TTerm String
+qualifiedNameNamespace :: Phantoms.TypedTerm OpenCypher.QualifiedName -> Phantoms.TypedTerm String
 qualifiedNameNamespace x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.QualifiedName"),
         Core.projectionFieldName = (Core.Name "namespace")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-qualifiedNameWithLocal :: Phantoms.TTerm OpenCypher.QualifiedName -> Phantoms.TTerm String -> Phantoms.TTerm OpenCypher.QualifiedName
+qualifiedNameWithLocal :: Phantoms.TypedTerm OpenCypher.QualifiedName -> Phantoms.TypedTerm String -> Phantoms.TypedTerm OpenCypher.QualifiedName
 qualifiedNameWithLocal original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.QualifiedName"),
       Core.recordFields = [
         Core.Field {
@@ -3067,90 +3067,90 @@ qualifiedNameWithLocal original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.QualifiedName"),
               Core.projectionFieldName = (Core.Name "namespace")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "local"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-qualifiedNameWithNamespace :: Phantoms.TTerm OpenCypher.QualifiedName -> Phantoms.TTerm String -> Phantoms.TTerm OpenCypher.QualifiedName
+qualifiedNameWithNamespace :: Phantoms.TypedTerm OpenCypher.QualifiedName -> Phantoms.TypedTerm String -> Phantoms.TypedTerm OpenCypher.QualifiedName
 qualifiedNameWithNamespace original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.QualifiedName"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "namespace"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "local"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.QualifiedName"),
               Core.projectionFieldName = (Core.Name "local")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-quantifier :: Phantoms.TTerm OpenCypher.QuantifierOperator -> Phantoms.TTerm OpenCypher.FilterExpression -> Phantoms.TTerm OpenCypher.Quantifier
+quantifier :: Phantoms.TypedTerm OpenCypher.QuantifierOperator -> Phantoms.TypedTerm OpenCypher.FilterExpression -> Phantoms.TypedTerm OpenCypher.Quantifier
 quantifier operator expression =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.Quantifier"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
-          Core.fieldTerm = (Phantoms.unTTerm operator)},
+          Core.fieldTerm = (Phantoms.unTypedTerm operator)},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm expression)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm expression)}]}))
 
-quantifierExpression :: Phantoms.TTerm OpenCypher.Quantifier -> Phantoms.TTerm OpenCypher.FilterExpression
+quantifierExpression :: Phantoms.TypedTerm OpenCypher.Quantifier -> Phantoms.TypedTerm OpenCypher.FilterExpression
 quantifierExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Quantifier"),
         Core.projectionFieldName = (Core.Name "expression")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-quantifierOperator :: Phantoms.TTerm OpenCypher.Quantifier -> Phantoms.TTerm OpenCypher.QuantifierOperator
+quantifierOperator :: Phantoms.TypedTerm OpenCypher.Quantifier -> Phantoms.TypedTerm OpenCypher.QuantifierOperator
 quantifierOperator x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Quantifier"),
         Core.projectionFieldName = (Core.Name "operator")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-quantifierOperatorAll :: Phantoms.TTerm OpenCypher.QuantifierOperator
+quantifierOperatorAll :: Phantoms.TypedTerm OpenCypher.QuantifierOperator
 quantifierOperatorAll =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.QuantifierOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "all"),
         Core.fieldTerm = Core.TermUnit}}))
 
-quantifierOperatorAny :: Phantoms.TTerm OpenCypher.QuantifierOperator
+quantifierOperatorAny :: Phantoms.TypedTerm OpenCypher.QuantifierOperator
 quantifierOperatorAny =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.QuantifierOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "any"),
         Core.fieldTerm = Core.TermUnit}}))
 
-quantifierOperatorNone :: Phantoms.TTerm OpenCypher.QuantifierOperator
+quantifierOperatorNone :: Phantoms.TypedTerm OpenCypher.QuantifierOperator
 quantifierOperatorNone =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.QuantifierOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "none"),
         Core.fieldTerm = Core.TermUnit}}))
 
-quantifierOperatorSingle :: Phantoms.TTerm OpenCypher.QuantifierOperator
+quantifierOperatorSingle :: Phantoms.TypedTerm OpenCypher.QuantifierOperator
 quantifierOperatorSingle =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.QuantifierOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "single"),
         Core.fieldTerm = Core.TermUnit}}))
 
-quantifierWithExpression :: Phantoms.TTerm OpenCypher.Quantifier -> Phantoms.TTerm OpenCypher.FilterExpression -> Phantoms.TTerm OpenCypher.Quantifier
+quantifierWithExpression :: Phantoms.TypedTerm OpenCypher.Quantifier -> Phantoms.TypedTerm OpenCypher.FilterExpression -> Phantoms.TypedTerm OpenCypher.Quantifier
 quantifierWithExpression original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.Quantifier"),
       Core.recordFields = [
         Core.Field {
@@ -3159,74 +3159,74 @@ quantifierWithExpression original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Quantifier"),
               Core.projectionFieldName = (Core.Name "operator")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-quantifierWithOperator :: Phantoms.TTerm OpenCypher.Quantifier -> Phantoms.TTerm OpenCypher.QuantifierOperator -> Phantoms.TTerm OpenCypher.Quantifier
+quantifierWithOperator :: Phantoms.TypedTerm OpenCypher.Quantifier -> Phantoms.TypedTerm OpenCypher.QuantifierOperator -> Phantoms.TypedTerm OpenCypher.Quantifier
 quantifierWithOperator original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.Quantifier"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Quantifier"),
               Core.projectionFieldName = (Core.Name "expression")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-queryRegular :: Phantoms.TTerm OpenCypher.RegularQuery -> Phantoms.TTerm OpenCypher.Query
+queryRegular :: Phantoms.TypedTerm OpenCypher.RegularQuery -> Phantoms.TypedTerm OpenCypher.Query
 queryRegular x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Query"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "regular"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-queryStandalone :: Phantoms.TTerm OpenCypher.StandaloneCall -> Phantoms.TTerm OpenCypher.Query
+queryStandalone :: Phantoms.TypedTerm OpenCypher.StandaloneCall -> Phantoms.TypedTerm OpenCypher.Query
 queryStandalone x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Query"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "standalone"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-rangeExpression :: Phantoms.TTerm (Maybe OpenCypher.Expression) -> Phantoms.TTerm (Maybe OpenCypher.Expression) -> Phantoms.TTerm OpenCypher.RangeExpression
+rangeExpression :: Phantoms.TypedTerm (Maybe OpenCypher.Expression) -> Phantoms.TypedTerm (Maybe OpenCypher.Expression) -> Phantoms.TypedTerm OpenCypher.RangeExpression
 rangeExpression start end =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RangeExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "start"),
-          Core.fieldTerm = (Phantoms.unTTerm start)},
+          Core.fieldTerm = (Phantoms.unTypedTerm start)},
         Core.Field {
           Core.fieldName = (Core.Name "end"),
-          Core.fieldTerm = (Phantoms.unTTerm end)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm end)}]}))
 
-rangeExpressionEnd :: Phantoms.TTerm OpenCypher.RangeExpression -> Phantoms.TTerm (Maybe OpenCypher.Expression)
+rangeExpressionEnd :: Phantoms.TypedTerm OpenCypher.RangeExpression -> Phantoms.TypedTerm (Maybe OpenCypher.Expression)
 rangeExpressionEnd x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RangeExpression"),
         Core.projectionFieldName = (Core.Name "end")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-rangeExpressionStart :: Phantoms.TTerm OpenCypher.RangeExpression -> Phantoms.TTerm (Maybe OpenCypher.Expression)
+rangeExpressionStart :: Phantoms.TypedTerm OpenCypher.RangeExpression -> Phantoms.TypedTerm (Maybe OpenCypher.Expression)
 rangeExpressionStart x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RangeExpression"),
         Core.projectionFieldName = (Core.Name "start")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-rangeExpressionWithEnd :: Phantoms.TTerm OpenCypher.RangeExpression -> Phantoms.TTerm (Maybe OpenCypher.Expression) -> Phantoms.TTerm OpenCypher.RangeExpression
+rangeExpressionWithEnd :: Phantoms.TypedTerm OpenCypher.RangeExpression -> Phantoms.TypedTerm (Maybe OpenCypher.Expression) -> Phantoms.TypedTerm OpenCypher.RangeExpression
 rangeExpressionWithEnd original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RangeExpression"),
       Core.recordFields = [
         Core.Field {
@@ -3235,58 +3235,58 @@ rangeExpressionWithEnd original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RangeExpression"),
               Core.projectionFieldName = (Core.Name "start")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "end"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-rangeExpressionWithStart :: Phantoms.TTerm OpenCypher.RangeExpression -> Phantoms.TTerm (Maybe OpenCypher.Expression) -> Phantoms.TTerm OpenCypher.RangeExpression
+rangeExpressionWithStart :: Phantoms.TypedTerm OpenCypher.RangeExpression -> Phantoms.TypedTerm (Maybe OpenCypher.Expression) -> Phantoms.TypedTerm OpenCypher.RangeExpression
 rangeExpressionWithStart original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RangeExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "start"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "end"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RangeExpression"),
               Core.projectionFieldName = (Core.Name "end")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-rangeLiteral :: Phantoms.TTerm (Maybe Integer) -> Phantoms.TTerm (Maybe Integer) -> Phantoms.TTerm OpenCypher.RangeLiteral
+rangeLiteral :: Phantoms.TypedTerm (Maybe Integer) -> Phantoms.TypedTerm (Maybe Integer) -> Phantoms.TypedTerm OpenCypher.RangeLiteral
 rangeLiteral start end =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RangeLiteral"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "start"),
-          Core.fieldTerm = (Phantoms.unTTerm start)},
+          Core.fieldTerm = (Phantoms.unTypedTerm start)},
         Core.Field {
           Core.fieldName = (Core.Name "end"),
-          Core.fieldTerm = (Phantoms.unTTerm end)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm end)}]}))
 
-rangeLiteralEnd :: Phantoms.TTerm OpenCypher.RangeLiteral -> Phantoms.TTerm (Maybe Integer)
+rangeLiteralEnd :: Phantoms.TypedTerm OpenCypher.RangeLiteral -> Phantoms.TypedTerm (Maybe Integer)
 rangeLiteralEnd x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RangeLiteral"),
         Core.projectionFieldName = (Core.Name "end")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-rangeLiteralStart :: Phantoms.TTerm OpenCypher.RangeLiteral -> Phantoms.TTerm (Maybe Integer)
+rangeLiteralStart :: Phantoms.TypedTerm OpenCypher.RangeLiteral -> Phantoms.TypedTerm (Maybe Integer)
 rangeLiteralStart x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RangeLiteral"),
         Core.projectionFieldName = (Core.Name "start")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-rangeLiteralWithEnd :: Phantoms.TTerm OpenCypher.RangeLiteral -> Phantoms.TTerm (Maybe Integer) -> Phantoms.TTerm OpenCypher.RangeLiteral
+rangeLiteralWithEnd :: Phantoms.TypedTerm OpenCypher.RangeLiteral -> Phantoms.TypedTerm (Maybe Integer) -> Phantoms.TypedTerm OpenCypher.RangeLiteral
 rangeLiteralWithEnd original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RangeLiteral"),
       Core.recordFields = [
         Core.Field {
@@ -3295,98 +3295,98 @@ rangeLiteralWithEnd original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RangeLiteral"),
               Core.projectionFieldName = (Core.Name "start")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "end"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-rangeLiteralWithStart :: Phantoms.TTerm OpenCypher.RangeLiteral -> Phantoms.TTerm (Maybe Integer) -> Phantoms.TTerm OpenCypher.RangeLiteral
+rangeLiteralWithStart :: Phantoms.TypedTerm OpenCypher.RangeLiteral -> Phantoms.TypedTerm (Maybe Integer) -> Phantoms.TypedTerm OpenCypher.RangeLiteral
 rangeLiteralWithStart original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RangeLiteral"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "start"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "end"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RangeLiteral"),
               Core.projectionFieldName = (Core.Name "end")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-readingClauseInQueryCall :: Phantoms.TTerm OpenCypher.InQueryCall -> Phantoms.TTerm OpenCypher.ReadingClause
+readingClauseInQueryCall :: Phantoms.TypedTerm OpenCypher.InQueryCall -> Phantoms.TypedTerm OpenCypher.ReadingClause
 readingClauseInQueryCall x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ReadingClause"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inQueryCall"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-readingClauseMatch :: Phantoms.TTerm OpenCypher.Match -> Phantoms.TTerm OpenCypher.ReadingClause
+readingClauseMatch :: Phantoms.TypedTerm OpenCypher.Match -> Phantoms.TypedTerm OpenCypher.ReadingClause
 readingClauseMatch x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ReadingClause"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "match"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-readingClauseUnwind :: Phantoms.TTerm OpenCypher.Unwind -> Phantoms.TTerm OpenCypher.ReadingClause
+readingClauseUnwind :: Phantoms.TypedTerm OpenCypher.Unwind -> Phantoms.TypedTerm OpenCypher.ReadingClause
 readingClauseUnwind x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ReadingClause"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unwind"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-regularQuery :: Phantoms.TTerm OpenCypher.SingleQuery -> Phantoms.TTerm [OpenCypher.Union] -> Phantoms.TTerm OpenCypher.RegularQuery
+regularQuery :: Phantoms.TypedTerm OpenCypher.SingleQuery -> Phantoms.TypedTerm [OpenCypher.Union] -> Phantoms.TypedTerm OpenCypher.RegularQuery
 regularQuery head rest =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RegularQuery"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "head"),
-          Core.fieldTerm = (Phantoms.unTTerm head)},
+          Core.fieldTerm = (Phantoms.unTypedTerm head)},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
-          Core.fieldTerm = (Phantoms.unTTerm rest)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm rest)}]}))
 
-regularQueryHead :: Phantoms.TTerm OpenCypher.RegularQuery -> Phantoms.TTerm OpenCypher.SingleQuery
+regularQueryHead :: Phantoms.TypedTerm OpenCypher.RegularQuery -> Phantoms.TypedTerm OpenCypher.SingleQuery
 regularQueryHead x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RegularQuery"),
         Core.projectionFieldName = (Core.Name "head")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-regularQueryRest :: Phantoms.TTerm OpenCypher.RegularQuery -> Phantoms.TTerm [OpenCypher.Union]
+regularQueryRest :: Phantoms.TypedTerm OpenCypher.RegularQuery -> Phantoms.TypedTerm [OpenCypher.Union]
 regularQueryRest x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RegularQuery"),
         Core.projectionFieldName = (Core.Name "rest")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-regularQueryWithHead :: Phantoms.TTerm OpenCypher.RegularQuery -> Phantoms.TTerm OpenCypher.SingleQuery -> Phantoms.TTerm OpenCypher.RegularQuery
+regularQueryWithHead :: Phantoms.TypedTerm OpenCypher.RegularQuery -> Phantoms.TypedTerm OpenCypher.SingleQuery -> Phantoms.TypedTerm OpenCypher.RegularQuery
 regularQueryWithHead original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RegularQuery"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "head"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RegularQuery"),
               Core.projectionFieldName = (Core.Name "rest")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-regularQueryWithRest :: Phantoms.TTerm OpenCypher.RegularQuery -> Phantoms.TTerm [OpenCypher.Union] -> Phantoms.TTerm OpenCypher.RegularQuery
+regularQueryWithRest :: Phantoms.TypedTerm OpenCypher.RegularQuery -> Phantoms.TypedTerm [OpenCypher.Union] -> Phantoms.TypedTerm OpenCypher.RegularQuery
 regularQueryWithRest original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RegularQuery"),
       Core.recordFields = [
         Core.Field {
@@ -3395,70 +3395,70 @@ regularQueryWithRest original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RegularQuery"),
               Core.projectionFieldName = (Core.Name "head")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-relTypeName :: Phantoms.TTerm String -> Phantoms.TTerm OpenCypher.RelTypeName
+relTypeName :: Phantoms.TypedTerm String -> Phantoms.TypedTerm OpenCypher.RelTypeName
 relTypeName x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.RelTypeName"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-relationshipDetail :: Phantoms.TTerm (Maybe OpenCypher.Variable) -> Phantoms.TTerm (Maybe OpenCypher.RelationshipTypes) -> Phantoms.TTerm (Maybe OpenCypher.RangeLiteral) -> Phantoms.TTerm (Maybe OpenCypher.Properties) -> Phantoms.TTerm OpenCypher.RelationshipDetail
+relationshipDetail :: Phantoms.TypedTerm (Maybe OpenCypher.Variable) -> Phantoms.TypedTerm (Maybe OpenCypher.RelationshipTypes) -> Phantoms.TypedTerm (Maybe OpenCypher.RangeLiteral) -> Phantoms.TypedTerm (Maybe OpenCypher.Properties) -> Phantoms.TypedTerm OpenCypher.RelationshipDetail
 relationshipDetail variable types range properties =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Phantoms.unTTerm variable)},
+          Core.fieldTerm = (Phantoms.unTypedTerm variable)},
         Core.Field {
           Core.fieldName = (Core.Name "types"),
-          Core.fieldTerm = (Phantoms.unTTerm types)},
+          Core.fieldTerm = (Phantoms.unTypedTerm types)},
         Core.Field {
           Core.fieldName = (Core.Name "range"),
-          Core.fieldTerm = (Phantoms.unTTerm range)},
+          Core.fieldTerm = (Phantoms.unTypedTerm range)},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
-          Core.fieldTerm = (Phantoms.unTTerm properties)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm properties)}]}))
 
-relationshipDetailProperties :: Phantoms.TTerm OpenCypher.RelationshipDetail -> Phantoms.TTerm (Maybe OpenCypher.Properties)
+relationshipDetailProperties :: Phantoms.TypedTerm OpenCypher.RelationshipDetail -> Phantoms.TypedTerm (Maybe OpenCypher.Properties)
 relationshipDetailProperties x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
         Core.projectionFieldName = (Core.Name "properties")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-relationshipDetailRange :: Phantoms.TTerm OpenCypher.RelationshipDetail -> Phantoms.TTerm (Maybe OpenCypher.RangeLiteral)
+relationshipDetailRange :: Phantoms.TypedTerm OpenCypher.RelationshipDetail -> Phantoms.TypedTerm (Maybe OpenCypher.RangeLiteral)
 relationshipDetailRange x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
         Core.projectionFieldName = (Core.Name "range")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-relationshipDetailTypes :: Phantoms.TTerm OpenCypher.RelationshipDetail -> Phantoms.TTerm (Maybe OpenCypher.RelationshipTypes)
+relationshipDetailTypes :: Phantoms.TypedTerm OpenCypher.RelationshipDetail -> Phantoms.TypedTerm (Maybe OpenCypher.RelationshipTypes)
 relationshipDetailTypes x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
         Core.projectionFieldName = (Core.Name "types")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-relationshipDetailVariable :: Phantoms.TTerm OpenCypher.RelationshipDetail -> Phantoms.TTerm (Maybe OpenCypher.Variable)
+relationshipDetailVariable :: Phantoms.TypedTerm OpenCypher.RelationshipDetail -> Phantoms.TypedTerm (Maybe OpenCypher.Variable)
 relationshipDetailVariable x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
         Core.projectionFieldName = (Core.Name "variable")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-relationshipDetailWithProperties :: Phantoms.TTerm OpenCypher.RelationshipDetail -> Phantoms.TTerm (Maybe OpenCypher.Properties) -> Phantoms.TTerm OpenCypher.RelationshipDetail
+relationshipDetailWithProperties :: Phantoms.TypedTerm OpenCypher.RelationshipDetail -> Phantoms.TypedTerm (Maybe OpenCypher.Properties) -> Phantoms.TypedTerm OpenCypher.RelationshipDetail
 relationshipDetailWithProperties original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
       Core.recordFields = [
         Core.Field {
@@ -3467,28 +3467,28 @@ relationshipDetailWithProperties original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
               Core.projectionFieldName = (Core.Name "variable")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "types"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
               Core.projectionFieldName = (Core.Name "types")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
               Core.projectionFieldName = (Core.Name "range")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-relationshipDetailWithRange :: Phantoms.TTerm OpenCypher.RelationshipDetail -> Phantoms.TTerm (Maybe OpenCypher.RangeLiteral) -> Phantoms.TTerm OpenCypher.RelationshipDetail
+relationshipDetailWithRange :: Phantoms.TypedTerm OpenCypher.RelationshipDetail -> Phantoms.TypedTerm (Maybe OpenCypher.RangeLiteral) -> Phantoms.TypedTerm OpenCypher.RelationshipDetail
 relationshipDetailWithRange original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
       Core.recordFields = [
         Core.Field {
@@ -3497,28 +3497,28 @@ relationshipDetailWithRange original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
               Core.projectionFieldName = (Core.Name "variable")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "types"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
               Core.projectionFieldName = (Core.Name "types")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "range"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
               Core.projectionFieldName = (Core.Name "properties")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-relationshipDetailWithTypes :: Phantoms.TTerm OpenCypher.RelationshipDetail -> Phantoms.TTerm (Maybe OpenCypher.RelationshipTypes) -> Phantoms.TTerm OpenCypher.RelationshipDetail
+relationshipDetailWithTypes :: Phantoms.TypedTerm OpenCypher.RelationshipDetail -> Phantoms.TypedTerm (Maybe OpenCypher.RelationshipTypes) -> Phantoms.TypedTerm OpenCypher.RelationshipDetail
 relationshipDetailWithTypes original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
       Core.recordFields = [
         Core.Field {
@@ -3527,97 +3527,97 @@ relationshipDetailWithTypes original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
               Core.projectionFieldName = (Core.Name "variable")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "types"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
               Core.projectionFieldName = (Core.Name "range")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
               Core.projectionFieldName = (Core.Name "properties")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-relationshipDetailWithVariable :: Phantoms.TTerm OpenCypher.RelationshipDetail -> Phantoms.TTerm (Maybe OpenCypher.Variable) -> Phantoms.TTerm OpenCypher.RelationshipDetail
+relationshipDetailWithVariable :: Phantoms.TypedTerm OpenCypher.RelationshipDetail -> Phantoms.TypedTerm (Maybe OpenCypher.Variable) -> Phantoms.TypedTerm OpenCypher.RelationshipDetail
 relationshipDetailWithVariable original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "types"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
               Core.projectionFieldName = (Core.Name "types")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
               Core.projectionFieldName = (Core.Name "range")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipDetail"),
               Core.projectionFieldName = (Core.Name "properties")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-relationshipPattern :: Phantoms.TTerm Bool -> Phantoms.TTerm (Maybe OpenCypher.RelationshipDetail) -> Phantoms.TTerm Bool -> Phantoms.TTerm OpenCypher.RelationshipPattern
+relationshipPattern :: Phantoms.TypedTerm Bool -> Phantoms.TypedTerm (Maybe OpenCypher.RelationshipDetail) -> Phantoms.TypedTerm Bool -> Phantoms.TypedTerm OpenCypher.RelationshipPattern
 relationshipPattern leftArrow detail rightArrow =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipPattern"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "leftArrow"),
-          Core.fieldTerm = (Phantoms.unTTerm leftArrow)},
+          Core.fieldTerm = (Phantoms.unTypedTerm leftArrow)},
         Core.Field {
           Core.fieldName = (Core.Name "detail"),
-          Core.fieldTerm = (Phantoms.unTTerm detail)},
+          Core.fieldTerm = (Phantoms.unTypedTerm detail)},
         Core.Field {
           Core.fieldName = (Core.Name "rightArrow"),
-          Core.fieldTerm = (Phantoms.unTTerm rightArrow)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm rightArrow)}]}))
 
-relationshipPatternDetail :: Phantoms.TTerm OpenCypher.RelationshipPattern -> Phantoms.TTerm (Maybe OpenCypher.RelationshipDetail)
+relationshipPatternDetail :: Phantoms.TypedTerm OpenCypher.RelationshipPattern -> Phantoms.TypedTerm (Maybe OpenCypher.RelationshipDetail)
 relationshipPatternDetail x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipPattern"),
         Core.projectionFieldName = (Core.Name "detail")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-relationshipPatternLeftArrow :: Phantoms.TTerm OpenCypher.RelationshipPattern -> Phantoms.TTerm Bool
+relationshipPatternLeftArrow :: Phantoms.TypedTerm OpenCypher.RelationshipPattern -> Phantoms.TypedTerm Bool
 relationshipPatternLeftArrow x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipPattern"),
         Core.projectionFieldName = (Core.Name "leftArrow")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-relationshipPatternRightArrow :: Phantoms.TTerm OpenCypher.RelationshipPattern -> Phantoms.TTerm Bool
+relationshipPatternRightArrow :: Phantoms.TypedTerm OpenCypher.RelationshipPattern -> Phantoms.TypedTerm Bool
 relationshipPatternRightArrow x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipPattern"),
         Core.projectionFieldName = (Core.Name "rightArrow")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-relationshipPatternWithDetail :: Phantoms.TTerm OpenCypher.RelationshipPattern -> Phantoms.TTerm (Maybe OpenCypher.RelationshipDetail) -> Phantoms.TTerm OpenCypher.RelationshipPattern
+relationshipPatternWithDetail :: Phantoms.TypedTerm OpenCypher.RelationshipPattern -> Phantoms.TypedTerm (Maybe OpenCypher.RelationshipDetail) -> Phantoms.TypedTerm OpenCypher.RelationshipPattern
 relationshipPatternWithDetail original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipPattern"),
       Core.recordFields = [
         Core.Field {
@@ -3626,44 +3626,44 @@ relationshipPatternWithDetail original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipPattern"),
               Core.projectionFieldName = (Core.Name "leftArrow")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "detail"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "rightArrow"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipPattern"),
               Core.projectionFieldName = (Core.Name "rightArrow")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-relationshipPatternWithLeftArrow :: Phantoms.TTerm OpenCypher.RelationshipPattern -> Phantoms.TTerm Bool -> Phantoms.TTerm OpenCypher.RelationshipPattern
+relationshipPatternWithLeftArrow :: Phantoms.TypedTerm OpenCypher.RelationshipPattern -> Phantoms.TypedTerm Bool -> Phantoms.TypedTerm OpenCypher.RelationshipPattern
 relationshipPatternWithLeftArrow original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipPattern"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "leftArrow"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "detail"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipPattern"),
               Core.projectionFieldName = (Core.Name "detail")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rightArrow"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipPattern"),
               Core.projectionFieldName = (Core.Name "rightArrow")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-relationshipPatternWithRightArrow :: Phantoms.TTerm OpenCypher.RelationshipPattern -> Phantoms.TTerm Bool -> Phantoms.TTerm OpenCypher.RelationshipPattern
+relationshipPatternWithRightArrow :: Phantoms.TypedTerm OpenCypher.RelationshipPattern -> Phantoms.TypedTerm Bool -> Phantoms.TypedTerm OpenCypher.RelationshipPattern
 relationshipPatternWithRightArrow original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipPattern"),
       Core.recordFields = [
         Core.Field {
@@ -3672,55 +3672,55 @@ relationshipPatternWithRightArrow original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipPattern"),
               Core.projectionFieldName = (Core.Name "leftArrow")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "detail"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipPattern"),
               Core.projectionFieldName = (Core.Name "detail")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rightArrow"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-relationshipTypes :: Phantoms.TTerm [OpenCypher.RelTypeName] -> Phantoms.TTerm OpenCypher.RelationshipTypes
+relationshipTypes :: Phantoms.TypedTerm [OpenCypher.RelTypeName] -> Phantoms.TypedTerm OpenCypher.RelationshipTypes
 relationshipTypes x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipTypes"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-relationshipsPattern :: Phantoms.TTerm OpenCypher.NodePattern -> Phantoms.TTerm [OpenCypher.PatternElementChain] -> Phantoms.TTerm OpenCypher.RelationshipsPattern
+relationshipsPattern :: Phantoms.TypedTerm OpenCypher.NodePattern -> Phantoms.TypedTerm [OpenCypher.PatternElementChain] -> Phantoms.TypedTerm OpenCypher.RelationshipsPattern
 relationshipsPattern nodePattern chain =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipsPattern"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "nodePattern"),
-          Core.fieldTerm = (Phantoms.unTTerm nodePattern)},
+          Core.fieldTerm = (Phantoms.unTypedTerm nodePattern)},
         Core.Field {
           Core.fieldName = (Core.Name "chain"),
-          Core.fieldTerm = (Phantoms.unTTerm chain)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm chain)}]}))
 
-relationshipsPatternChain :: Phantoms.TTerm OpenCypher.RelationshipsPattern -> Phantoms.TTerm [OpenCypher.PatternElementChain]
+relationshipsPatternChain :: Phantoms.TypedTerm OpenCypher.RelationshipsPattern -> Phantoms.TypedTerm [OpenCypher.PatternElementChain]
 relationshipsPatternChain x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipsPattern"),
         Core.projectionFieldName = (Core.Name "chain")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-relationshipsPatternNodePattern :: Phantoms.TTerm OpenCypher.RelationshipsPattern -> Phantoms.TTerm OpenCypher.NodePattern
+relationshipsPatternNodePattern :: Phantoms.TypedTerm OpenCypher.RelationshipsPattern -> Phantoms.TypedTerm OpenCypher.NodePattern
 relationshipsPatternNodePattern x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipsPattern"),
         Core.projectionFieldName = (Core.Name "nodePattern")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-relationshipsPatternWithChain :: Phantoms.TTerm OpenCypher.RelationshipsPattern -> Phantoms.TTerm [OpenCypher.PatternElementChain] -> Phantoms.TTerm OpenCypher.RelationshipsPattern
+relationshipsPatternWithChain :: Phantoms.TypedTerm OpenCypher.RelationshipsPattern -> Phantoms.TypedTerm [OpenCypher.PatternElementChain] -> Phantoms.TypedTerm OpenCypher.RelationshipsPattern
 relationshipsPatternWithChain original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipsPattern"),
       Core.recordFields = [
         Core.Field {
@@ -3729,158 +3729,158 @@ relationshipsPatternWithChain original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipsPattern"),
               Core.projectionFieldName = (Core.Name "nodePattern")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "chain"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-relationshipsPatternWithNodePattern :: Phantoms.TTerm OpenCypher.RelationshipsPattern -> Phantoms.TTerm OpenCypher.NodePattern -> Phantoms.TTerm OpenCypher.RelationshipsPattern
+relationshipsPatternWithNodePattern :: Phantoms.TypedTerm OpenCypher.RelationshipsPattern -> Phantoms.TypedTerm OpenCypher.NodePattern -> Phantoms.TypedTerm OpenCypher.RelationshipsPattern
 relationshipsPatternWithNodePattern original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipsPattern"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "nodePattern"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "chain"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.RelationshipsPattern"),
               Core.projectionFieldName = (Core.Name "chain")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-remove :: Phantoms.TTerm [OpenCypher.RemoveItem] -> Phantoms.TTerm OpenCypher.Remove
+remove :: Phantoms.TypedTerm [OpenCypher.RemoveItem] -> Phantoms.TypedTerm OpenCypher.Remove
 remove x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.Remove"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-removeItemProperty :: Phantoms.TTerm OpenCypher.PropertyExpression -> Phantoms.TTerm OpenCypher.RemoveItem
+removeItemProperty :: Phantoms.TypedTerm OpenCypher.PropertyExpression -> Phantoms.TypedTerm OpenCypher.RemoveItem
 removeItemProperty x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.RemoveItem"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "property"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-removeItemVariableLabels :: Phantoms.TTerm OpenCypher.VariableAndNodeLabels -> Phantoms.TTerm OpenCypher.RemoveItem
+removeItemVariableLabels :: Phantoms.TypedTerm OpenCypher.VariableAndNodeLabels -> Phantoms.TypedTerm OpenCypher.RemoveItem
 removeItemVariableLabels x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.RemoveItem"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variableLabels"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-return :: Phantoms.TTerm OpenCypher.ProjectionBody -> Phantoms.TTerm OpenCypher.Return
+return :: Phantoms.TypedTerm OpenCypher.ProjectionBody -> Phantoms.TypedTerm OpenCypher.Return
 return x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.Return"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-set :: Phantoms.TTerm [OpenCypher.SetItem] -> Phantoms.TTerm OpenCypher.Set
+set :: Phantoms.TypedTerm [OpenCypher.SetItem] -> Phantoms.TypedTerm OpenCypher.Set
 set x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.Set"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-setItemProperty :: Phantoms.TTerm OpenCypher.PropertyEquals -> Phantoms.TTerm OpenCypher.SetItem
+setItemProperty :: Phantoms.TypedTerm OpenCypher.PropertyEquals -> Phantoms.TypedTerm OpenCypher.SetItem
 setItemProperty x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.SetItem"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "property"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-setItemVariableEqual :: Phantoms.TTerm OpenCypher.VariableEquals -> Phantoms.TTerm OpenCypher.SetItem
+setItemVariableEqual :: Phantoms.TypedTerm OpenCypher.VariableEquals -> Phantoms.TypedTerm OpenCypher.SetItem
 setItemVariableEqual x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.SetItem"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variableEqual"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-setItemVariableLabels :: Phantoms.TTerm OpenCypher.VariableAndNodeLabels -> Phantoms.TTerm OpenCypher.SetItem
+setItemVariableLabels :: Phantoms.TypedTerm OpenCypher.VariableAndNodeLabels -> Phantoms.TypedTerm OpenCypher.SetItem
 setItemVariableLabels x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.SetItem"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variableLabels"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-setItemVariablePlusEqual :: Phantoms.TTerm OpenCypher.VariablePlusEquals -> Phantoms.TTerm OpenCypher.SetItem
+setItemVariablePlusEqual :: Phantoms.TypedTerm OpenCypher.VariablePlusEquals -> Phantoms.TypedTerm OpenCypher.SetItem
 setItemVariablePlusEqual x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.SetItem"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variablePlusEqual"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-singlePartQuery :: Phantoms.TTerm [OpenCypher.ReadingClause] -> Phantoms.TTerm [OpenCypher.UpdatingClause] -> Phantoms.TTerm (Maybe OpenCypher.Return) -> Phantoms.TTerm OpenCypher.SinglePartQuery
+singlePartQuery :: Phantoms.TypedTerm [OpenCypher.ReadingClause] -> Phantoms.TypedTerm [OpenCypher.UpdatingClause] -> Phantoms.TypedTerm (Maybe OpenCypher.Return) -> Phantoms.TypedTerm OpenCypher.SinglePartQuery
 singlePartQuery reading updating return =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.SinglePartQuery"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "reading"),
-          Core.fieldTerm = (Phantoms.unTTerm reading)},
+          Core.fieldTerm = (Phantoms.unTypedTerm reading)},
         Core.Field {
           Core.fieldName = (Core.Name "updating"),
-          Core.fieldTerm = (Phantoms.unTTerm updating)},
+          Core.fieldTerm = (Phantoms.unTypedTerm updating)},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
-          Core.fieldTerm = (Phantoms.unTTerm return)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm return)}]}))
 
-singlePartQueryReading :: Phantoms.TTerm OpenCypher.SinglePartQuery -> Phantoms.TTerm [OpenCypher.ReadingClause]
+singlePartQueryReading :: Phantoms.TypedTerm OpenCypher.SinglePartQuery -> Phantoms.TypedTerm [OpenCypher.ReadingClause]
 singlePartQueryReading x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.SinglePartQuery"),
         Core.projectionFieldName = (Core.Name "reading")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-singlePartQueryReturn :: Phantoms.TTerm OpenCypher.SinglePartQuery -> Phantoms.TTerm (Maybe OpenCypher.Return)
+singlePartQueryReturn :: Phantoms.TypedTerm OpenCypher.SinglePartQuery -> Phantoms.TypedTerm (Maybe OpenCypher.Return)
 singlePartQueryReturn x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.SinglePartQuery"),
         Core.projectionFieldName = (Core.Name "return")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-singlePartQueryUpdating :: Phantoms.TTerm OpenCypher.SinglePartQuery -> Phantoms.TTerm [OpenCypher.UpdatingClause]
+singlePartQueryUpdating :: Phantoms.TypedTerm OpenCypher.SinglePartQuery -> Phantoms.TypedTerm [OpenCypher.UpdatingClause]
 singlePartQueryUpdating x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.SinglePartQuery"),
         Core.projectionFieldName = (Core.Name "updating")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-singlePartQueryWithReading :: Phantoms.TTerm OpenCypher.SinglePartQuery -> Phantoms.TTerm [OpenCypher.ReadingClause] -> Phantoms.TTerm OpenCypher.SinglePartQuery
+singlePartQueryWithReading :: Phantoms.TypedTerm OpenCypher.SinglePartQuery -> Phantoms.TypedTerm [OpenCypher.ReadingClause] -> Phantoms.TypedTerm OpenCypher.SinglePartQuery
 singlePartQueryWithReading original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.SinglePartQuery"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "reading"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "updating"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.SinglePartQuery"),
               Core.projectionFieldName = (Core.Name "updating")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.SinglePartQuery"),
               Core.projectionFieldName = (Core.Name "return")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-singlePartQueryWithReturn :: Phantoms.TTerm OpenCypher.SinglePartQuery -> Phantoms.TTerm (Maybe OpenCypher.Return) -> Phantoms.TTerm OpenCypher.SinglePartQuery
+singlePartQueryWithReturn :: Phantoms.TypedTerm OpenCypher.SinglePartQuery -> Phantoms.TypedTerm (Maybe OpenCypher.Return) -> Phantoms.TypedTerm OpenCypher.SinglePartQuery
 singlePartQueryWithReturn original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.SinglePartQuery"),
       Core.recordFields = [
         Core.Field {
@@ -3889,21 +3889,21 @@ singlePartQueryWithReturn original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.SinglePartQuery"),
               Core.projectionFieldName = (Core.Name "reading")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updating"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.SinglePartQuery"),
               Core.projectionFieldName = (Core.Name "updating")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-singlePartQueryWithUpdating :: Phantoms.TTerm OpenCypher.SinglePartQuery -> Phantoms.TTerm [OpenCypher.UpdatingClause] -> Phantoms.TTerm OpenCypher.SinglePartQuery
+singlePartQueryWithUpdating :: Phantoms.TypedTerm OpenCypher.SinglePartQuery -> Phantoms.TypedTerm [OpenCypher.UpdatingClause] -> Phantoms.TypedTerm OpenCypher.SinglePartQuery
 singlePartQueryWithUpdating original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.SinglePartQuery"),
       Core.recordFields = [
         Core.Field {
@@ -3912,87 +3912,87 @@ singlePartQueryWithUpdating original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.SinglePartQuery"),
               Core.projectionFieldName = (Core.Name "reading")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updating"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.SinglePartQuery"),
               Core.projectionFieldName = (Core.Name "return")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-singleQueryMultiPart :: Phantoms.TTerm OpenCypher.MultiPartQuery -> Phantoms.TTerm OpenCypher.SingleQuery
+singleQueryMultiPart :: Phantoms.TypedTerm OpenCypher.MultiPartQuery -> Phantoms.TypedTerm OpenCypher.SingleQuery
 singleQueryMultiPart x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.SingleQuery"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multiPart"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-singleQuerySinglePart :: Phantoms.TTerm OpenCypher.SinglePartQuery -> Phantoms.TTerm OpenCypher.SingleQuery
+singleQuerySinglePart :: Phantoms.TypedTerm OpenCypher.SinglePartQuery -> Phantoms.TypedTerm OpenCypher.SingleQuery
 singleQuerySinglePart x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.SingleQuery"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "singlePart"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-skip :: Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.Skip
+skip :: Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.Skip
 skip x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.Skip"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-sortItem :: Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm (Maybe OpenCypher.SortOrder) -> Phantoms.TTerm OpenCypher.SortItem
+sortItem :: Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm (Maybe OpenCypher.SortOrder) -> Phantoms.TypedTerm OpenCypher.SortItem
 sortItem expression order =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.SortItem"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm expression)},
+          Core.fieldTerm = (Phantoms.unTypedTerm expression)},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
-          Core.fieldTerm = (Phantoms.unTTerm order)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm order)}]}))
 
-sortItemExpression :: Phantoms.TTerm OpenCypher.SortItem -> Phantoms.TTerm OpenCypher.Expression
+sortItemExpression :: Phantoms.TypedTerm OpenCypher.SortItem -> Phantoms.TypedTerm OpenCypher.Expression
 sortItemExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.SortItem"),
         Core.projectionFieldName = (Core.Name "expression")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-sortItemOrder :: Phantoms.TTerm OpenCypher.SortItem -> Phantoms.TTerm (Maybe OpenCypher.SortOrder)
+sortItemOrder :: Phantoms.TypedTerm OpenCypher.SortItem -> Phantoms.TypedTerm (Maybe OpenCypher.SortOrder)
 sortItemOrder x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.SortItem"),
         Core.projectionFieldName = (Core.Name "order")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-sortItemWithExpression :: Phantoms.TTerm OpenCypher.SortItem -> Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.SortItem
+sortItemWithExpression :: Phantoms.TypedTerm OpenCypher.SortItem -> Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.SortItem
 sortItemWithExpression original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.SortItem"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.SortItem"),
               Core.projectionFieldName = (Core.Name "order")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-sortItemWithOrder :: Phantoms.TTerm OpenCypher.SortItem -> Phantoms.TTerm (Maybe OpenCypher.SortOrder) -> Phantoms.TTerm OpenCypher.SortItem
+sortItemWithOrder :: Phantoms.TypedTerm OpenCypher.SortItem -> Phantoms.TypedTerm (Maybe OpenCypher.SortOrder) -> Phantoms.TypedTerm OpenCypher.SortItem
 sortItemWithOrder original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.SortItem"),
       Core.recordFields = [
         Core.Field {
@@ -4001,66 +4001,66 @@ sortItemWithOrder original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.SortItem"),
               Core.projectionFieldName = (Core.Name "expression")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-sortOrderAscending :: Phantoms.TTerm OpenCypher.SortOrder
+sortOrderAscending :: Phantoms.TypedTerm OpenCypher.SortOrder
 sortOrderAscending =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.SortOrder"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ascending"),
         Core.fieldTerm = Core.TermUnit}}))
 
-sortOrderDescending :: Phantoms.TTerm OpenCypher.SortOrder
+sortOrderDescending :: Phantoms.TypedTerm OpenCypher.SortOrder
 sortOrderDescending =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.SortOrder"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "descending"),
         Core.fieldTerm = Core.TermUnit}}))
 
-standaloneCall :: Phantoms.TTerm OpenCypher.ProcedureInvocation -> Phantoms.TTerm (Maybe OpenCypher.StarOrYieldItems) -> Phantoms.TTerm OpenCypher.StandaloneCall
+standaloneCall :: Phantoms.TypedTerm OpenCypher.ProcedureInvocation -> Phantoms.TypedTerm (Maybe OpenCypher.StarOrYieldItems) -> Phantoms.TypedTerm OpenCypher.StandaloneCall
 standaloneCall call yieldItems =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.StandaloneCall"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "call"),
-          Core.fieldTerm = (Phantoms.unTTerm call)},
+          Core.fieldTerm = (Phantoms.unTypedTerm call)},
         Core.Field {
           Core.fieldName = (Core.Name "yieldItems"),
-          Core.fieldTerm = (Phantoms.unTTerm yieldItems)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm yieldItems)}]}))
 
-standaloneCallCall :: Phantoms.TTerm OpenCypher.StandaloneCall -> Phantoms.TTerm OpenCypher.ProcedureInvocation
+standaloneCallCall :: Phantoms.TypedTerm OpenCypher.StandaloneCall -> Phantoms.TypedTerm OpenCypher.ProcedureInvocation
 standaloneCallCall x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.StandaloneCall"),
         Core.projectionFieldName = (Core.Name "call")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-standaloneCallWithCall :: Phantoms.TTerm OpenCypher.StandaloneCall -> Phantoms.TTerm OpenCypher.ProcedureInvocation -> Phantoms.TTerm OpenCypher.StandaloneCall
+standaloneCallWithCall :: Phantoms.TypedTerm OpenCypher.StandaloneCall -> Phantoms.TypedTerm OpenCypher.ProcedureInvocation -> Phantoms.TypedTerm OpenCypher.StandaloneCall
 standaloneCallWithCall original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.StandaloneCall"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "call"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "yieldItems"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.StandaloneCall"),
               Core.projectionFieldName = (Core.Name "yieldItems")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-standaloneCallWithYieldItems :: Phantoms.TTerm OpenCypher.StandaloneCall -> Phantoms.TTerm (Maybe OpenCypher.StarOrYieldItems) -> Phantoms.TTerm OpenCypher.StandaloneCall
+standaloneCallWithYieldItems :: Phantoms.TypedTerm OpenCypher.StandaloneCall -> Phantoms.TypedTerm (Maybe OpenCypher.StarOrYieldItems) -> Phantoms.TypedTerm OpenCypher.StandaloneCall
 standaloneCallWithYieldItems original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.StandaloneCall"),
       Core.recordFields = [
         Core.Field {
@@ -4069,82 +4069,82 @@ standaloneCallWithYieldItems original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.StandaloneCall"),
               Core.projectionFieldName = (Core.Name "call")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "yieldItems"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-standaloneCallYieldItems :: Phantoms.TTerm OpenCypher.StandaloneCall -> Phantoms.TTerm (Maybe OpenCypher.StarOrYieldItems)
+standaloneCallYieldItems :: Phantoms.TypedTerm OpenCypher.StandaloneCall -> Phantoms.TypedTerm (Maybe OpenCypher.StarOrYieldItems)
 standaloneCallYieldItems x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.StandaloneCall"),
         Core.projectionFieldName = (Core.Name "yieldItems")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-starOrYieldItemsItems :: Phantoms.TTerm OpenCypher.YieldItems -> Phantoms.TTerm OpenCypher.StarOrYieldItems
+starOrYieldItemsItems :: Phantoms.TypedTerm OpenCypher.YieldItems -> Phantoms.TypedTerm OpenCypher.StarOrYieldItems
 starOrYieldItemsItems x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.StarOrYieldItems"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "items"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-starOrYieldItemsStar :: Phantoms.TTerm OpenCypher.StarOrYieldItems
+starOrYieldItemsStar :: Phantoms.TypedTerm OpenCypher.StarOrYieldItems
 starOrYieldItemsStar =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.StarOrYieldItems"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "star"),
         Core.fieldTerm = Core.TermUnit}}))
 
-stringListNullPredicateExpression :: Phantoms.TTerm OpenCypher.AddOrSubtractExpression -> Phantoms.TTerm [OpenCypher.StringListNullPredicateRightHandSide] -> Phantoms.TTerm OpenCypher.StringListNullPredicateExpression
+stringListNullPredicateExpression :: Phantoms.TypedTerm OpenCypher.AddOrSubtractExpression -> Phantoms.TypedTerm [OpenCypher.StringListNullPredicateRightHandSide] -> Phantoms.TypedTerm OpenCypher.StringListNullPredicateExpression
 stringListNullPredicateExpression left right =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.StringListNullPredicateExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Phantoms.unTTerm left)},
+          Core.fieldTerm = (Phantoms.unTypedTerm left)},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm right)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm right)}]}))
 
-stringListNullPredicateExpressionLeft :: Phantoms.TTerm OpenCypher.StringListNullPredicateExpression -> Phantoms.TTerm OpenCypher.AddOrSubtractExpression
+stringListNullPredicateExpressionLeft :: Phantoms.TypedTerm OpenCypher.StringListNullPredicateExpression -> Phantoms.TypedTerm OpenCypher.AddOrSubtractExpression
 stringListNullPredicateExpressionLeft x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.StringListNullPredicateExpression"),
         Core.projectionFieldName = (Core.Name "left")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-stringListNullPredicateExpressionRight :: Phantoms.TTerm OpenCypher.StringListNullPredicateExpression -> Phantoms.TTerm [OpenCypher.StringListNullPredicateRightHandSide]
+stringListNullPredicateExpressionRight :: Phantoms.TypedTerm OpenCypher.StringListNullPredicateExpression -> Phantoms.TypedTerm [OpenCypher.StringListNullPredicateRightHandSide]
 stringListNullPredicateExpressionRight x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.StringListNullPredicateExpression"),
         Core.projectionFieldName = (Core.Name "right")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-stringListNullPredicateExpressionWithLeft :: Phantoms.TTerm OpenCypher.StringListNullPredicateExpression -> Phantoms.TTerm OpenCypher.AddOrSubtractExpression -> Phantoms.TTerm OpenCypher.StringListNullPredicateExpression
+stringListNullPredicateExpressionWithLeft :: Phantoms.TypedTerm OpenCypher.StringListNullPredicateExpression -> Phantoms.TypedTerm OpenCypher.AddOrSubtractExpression -> Phantoms.TypedTerm OpenCypher.StringListNullPredicateExpression
 stringListNullPredicateExpressionWithLeft original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.StringListNullPredicateExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.StringListNullPredicateExpression"),
               Core.projectionFieldName = (Core.Name "right")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-stringListNullPredicateExpressionWithRight :: Phantoms.TTerm OpenCypher.StringListNullPredicateExpression -> Phantoms.TTerm [OpenCypher.StringListNullPredicateRightHandSide] -> Phantoms.TTerm OpenCypher.StringListNullPredicateExpression
+stringListNullPredicateExpressionWithRight :: Phantoms.TypedTerm OpenCypher.StringListNullPredicateExpression -> Phantoms.TypedTerm [OpenCypher.StringListNullPredicateRightHandSide] -> Phantoms.TypedTerm OpenCypher.StringListNullPredicateExpression
 stringListNullPredicateExpressionWithRight original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.StringListNullPredicateExpression"),
       Core.recordFields = [
         Core.Field {
@@ -4153,72 +4153,72 @@ stringListNullPredicateExpressionWithRight original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.StringListNullPredicateExpression"),
               Core.projectionFieldName = (Core.Name "left")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-stringListNullPredicateRightHandSideList :: Phantoms.TTerm OpenCypher.ListPredicateExpression -> Phantoms.TTerm OpenCypher.StringListNullPredicateRightHandSide
+stringListNullPredicateRightHandSideList :: Phantoms.TypedTerm OpenCypher.ListPredicateExpression -> Phantoms.TypedTerm OpenCypher.StringListNullPredicateRightHandSide
 stringListNullPredicateRightHandSideList x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.StringListNullPredicateRightHandSide"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-stringListNullPredicateRightHandSideNull :: Phantoms.TTerm OpenCypher.NullPredicateExpression -> Phantoms.TTerm OpenCypher.StringListNullPredicateRightHandSide
+stringListNullPredicateRightHandSideNull :: Phantoms.TypedTerm OpenCypher.NullPredicateExpression -> Phantoms.TypedTerm OpenCypher.StringListNullPredicateRightHandSide
 stringListNullPredicateRightHandSideNull x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.StringListNullPredicateRightHandSide"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "null"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-stringListNullPredicateRightHandSideString :: Phantoms.TTerm OpenCypher.StringPredicateExpression -> Phantoms.TTerm OpenCypher.StringListNullPredicateRightHandSide
+stringListNullPredicateRightHandSideString :: Phantoms.TypedTerm OpenCypher.StringPredicateExpression -> Phantoms.TypedTerm OpenCypher.StringListNullPredicateRightHandSide
 stringListNullPredicateRightHandSideString x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.StringListNullPredicateRightHandSide"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-stringLiteral :: Phantoms.TTerm String -> Phantoms.TTerm OpenCypher.StringLiteral
+stringLiteral :: Phantoms.TypedTerm String -> Phantoms.TypedTerm OpenCypher.StringLiteral
 stringLiteral x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.StringLiteral"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-stringPredicateExpression :: Phantoms.TTerm OpenCypher.StringPredicateOperator -> Phantoms.TTerm OpenCypher.AddOrSubtractExpression -> Phantoms.TTerm OpenCypher.StringPredicateExpression
+stringPredicateExpression :: Phantoms.TypedTerm OpenCypher.StringPredicateOperator -> Phantoms.TypedTerm OpenCypher.AddOrSubtractExpression -> Phantoms.TypedTerm OpenCypher.StringPredicateExpression
 stringPredicateExpression operator expression =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.StringPredicateExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
-          Core.fieldTerm = (Phantoms.unTTerm operator)},
+          Core.fieldTerm = (Phantoms.unTypedTerm operator)},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm expression)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm expression)}]}))
 
-stringPredicateExpressionExpression :: Phantoms.TTerm OpenCypher.StringPredicateExpression -> Phantoms.TTerm OpenCypher.AddOrSubtractExpression
+stringPredicateExpressionExpression :: Phantoms.TypedTerm OpenCypher.StringPredicateExpression -> Phantoms.TypedTerm OpenCypher.AddOrSubtractExpression
 stringPredicateExpressionExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.StringPredicateExpression"),
         Core.projectionFieldName = (Core.Name "expression")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-stringPredicateExpressionOperator :: Phantoms.TTerm OpenCypher.StringPredicateExpression -> Phantoms.TTerm OpenCypher.StringPredicateOperator
+stringPredicateExpressionOperator :: Phantoms.TypedTerm OpenCypher.StringPredicateExpression -> Phantoms.TypedTerm OpenCypher.StringPredicateOperator
 stringPredicateExpressionOperator x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.StringPredicateExpression"),
         Core.projectionFieldName = (Core.Name "operator")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-stringPredicateExpressionWithExpression :: Phantoms.TTerm OpenCypher.StringPredicateExpression -> Phantoms.TTerm OpenCypher.AddOrSubtractExpression -> Phantoms.TTerm OpenCypher.StringPredicateExpression
+stringPredicateExpressionWithExpression :: Phantoms.TypedTerm OpenCypher.StringPredicateExpression -> Phantoms.TypedTerm OpenCypher.AddOrSubtractExpression -> Phantoms.TypedTerm OpenCypher.StringPredicateExpression
 stringPredicateExpressionWithExpression original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.StringPredicateExpression"),
       Core.recordFields = [
         Core.Field {
@@ -4227,268 +4227,268 @@ stringPredicateExpressionWithExpression original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.StringPredicateExpression"),
               Core.projectionFieldName = (Core.Name "operator")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-stringPredicateExpressionWithOperator :: Phantoms.TTerm OpenCypher.StringPredicateExpression -> Phantoms.TTerm OpenCypher.StringPredicateOperator -> Phantoms.TTerm OpenCypher.StringPredicateExpression
+stringPredicateExpressionWithOperator :: Phantoms.TypedTerm OpenCypher.StringPredicateExpression -> Phantoms.TypedTerm OpenCypher.StringPredicateOperator -> Phantoms.TypedTerm OpenCypher.StringPredicateExpression
 stringPredicateExpressionWithOperator original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.StringPredicateExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.StringPredicateExpression"),
               Core.projectionFieldName = (Core.Name "expression")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-stringPredicateOperatorContains :: Phantoms.TTerm OpenCypher.StringPredicateOperator
+stringPredicateOperatorContains :: Phantoms.TypedTerm OpenCypher.StringPredicateOperator
 stringPredicateOperatorContains =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.StringPredicateOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "contains"),
         Core.fieldTerm = Core.TermUnit}}))
 
-stringPredicateOperatorEndsWith :: Phantoms.TTerm OpenCypher.StringPredicateOperator
+stringPredicateOperatorEndsWith :: Phantoms.TypedTerm OpenCypher.StringPredicateOperator
 stringPredicateOperatorEndsWith =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.StringPredicateOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "endsWith"),
         Core.fieldTerm = Core.TermUnit}}))
 
-stringPredicateOperatorStartsWith :: Phantoms.TTerm OpenCypher.StringPredicateOperator
+stringPredicateOperatorStartsWith :: Phantoms.TypedTerm OpenCypher.StringPredicateOperator
 stringPredicateOperatorStartsWith =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.StringPredicateOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "startsWith"),
         Core.fieldTerm = Core.TermUnit}}))
 
-unAndExpression :: Phantoms.TTerm OpenCypher.AndExpression -> Phantoms.TTerm [OpenCypher.NotExpression]
+unAndExpression :: Phantoms.TypedTerm OpenCypher.AndExpression -> Phantoms.TypedTerm [OpenCypher.NotExpression]
 unAndExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.AndExpression")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unAnonymousPatternPart :: Phantoms.TTerm OpenCypher.AnonymousPatternPart -> Phantoms.TTerm OpenCypher.PatternElement
+unAnonymousPatternPart :: Phantoms.TypedTerm OpenCypher.AnonymousPatternPart -> Phantoms.TypedTerm OpenCypher.PatternElement
 unAnonymousPatternPart x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.AnonymousPatternPart")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unCreate :: Phantoms.TTerm OpenCypher.Create -> Phantoms.TTerm OpenCypher.Pattern
+unCreate :: Phantoms.TypedTerm OpenCypher.Create -> Phantoms.TypedTerm OpenCypher.Pattern
 unCreate x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.Create")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unExpression :: Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.OrExpression
+unExpression :: Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.OrExpression
 unExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.Expression")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unImplicitProcedureInvocation :: Phantoms.TTerm OpenCypher.ImplicitProcedureInvocation -> Phantoms.TTerm OpenCypher.QualifiedName
+unImplicitProcedureInvocation :: Phantoms.TypedTerm OpenCypher.ImplicitProcedureInvocation -> Phantoms.TypedTerm OpenCypher.QualifiedName
 unImplicitProcedureInvocation x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.ImplicitProcedureInvocation")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unLimit :: Phantoms.TTerm OpenCypher.Limit -> Phantoms.TTerm OpenCypher.Expression
+unLimit :: Phantoms.TypedTerm OpenCypher.Limit -> Phantoms.TypedTerm OpenCypher.Expression
 unLimit x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.Limit")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unListLiteral :: Phantoms.TTerm OpenCypher.ListLiteral -> Phantoms.TTerm [OpenCypher.Expression]
+unListLiteral :: Phantoms.TypedTerm OpenCypher.ListLiteral -> Phantoms.TypedTerm [OpenCypher.Expression]
 unListLiteral x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.ListLiteral")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unListPredicateExpression :: Phantoms.TTerm OpenCypher.ListPredicateExpression -> Phantoms.TTerm OpenCypher.AddOrSubtractExpression
+unListPredicateExpression :: Phantoms.TypedTerm OpenCypher.ListPredicateExpression -> Phantoms.TypedTerm OpenCypher.AddOrSubtractExpression
 unListPredicateExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.ListPredicateExpression")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unMapLiteral :: Phantoms.TTerm OpenCypher.MapLiteral -> Phantoms.TTerm [OpenCypher.KeyValuePair]
+unMapLiteral :: Phantoms.TypedTerm OpenCypher.MapLiteral -> Phantoms.TypedTerm [OpenCypher.KeyValuePair]
 unMapLiteral x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.MapLiteral")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unNodeLabel :: Phantoms.TTerm OpenCypher.NodeLabel -> Phantoms.TTerm String
+unNodeLabel :: Phantoms.TypedTerm OpenCypher.NodeLabel -> Phantoms.TypedTerm String
 unNodeLabel x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.NodeLabel")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unNodeLabels :: Phantoms.TTerm OpenCypher.NodeLabels -> Phantoms.TTerm [OpenCypher.NodeLabel]
+unNodeLabels :: Phantoms.TypedTerm OpenCypher.NodeLabels -> Phantoms.TypedTerm [OpenCypher.NodeLabel]
 unNodeLabels x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.NodeLabels")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unNullPredicateExpression :: Phantoms.TTerm OpenCypher.NullPredicateExpression -> Phantoms.TTerm Bool
+unNullPredicateExpression :: Phantoms.TypedTerm OpenCypher.NullPredicateExpression -> Phantoms.TypedTerm Bool
 unNullPredicateExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.NullPredicateExpression")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unOrExpression :: Phantoms.TTerm OpenCypher.OrExpression -> Phantoms.TTerm [OpenCypher.XorExpression]
+unOrExpression :: Phantoms.TypedTerm OpenCypher.OrExpression -> Phantoms.TypedTerm [OpenCypher.XorExpression]
 unOrExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.OrExpression")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unOrder :: Phantoms.TTerm OpenCypher.Order -> Phantoms.TTerm [OpenCypher.SortItem]
+unOrder :: Phantoms.TypedTerm OpenCypher.Order -> Phantoms.TypedTerm [OpenCypher.SortItem]
 unOrder x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.Order")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unParenthesizedExpression :: Phantoms.TTerm OpenCypher.ParenthesizedExpression -> Phantoms.TTerm OpenCypher.Expression
+unParenthesizedExpression :: Phantoms.TypedTerm OpenCypher.ParenthesizedExpression -> Phantoms.TypedTerm OpenCypher.Expression
 unParenthesizedExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.ParenthesizedExpression")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unPattern :: Phantoms.TTerm OpenCypher.Pattern -> Phantoms.TTerm [OpenCypher.PatternPart]
+unPattern :: Phantoms.TypedTerm OpenCypher.Pattern -> Phantoms.TypedTerm [OpenCypher.PatternPart]
 unPattern x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.Pattern")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unPatternPredicate :: Phantoms.TTerm OpenCypher.PatternPredicate -> Phantoms.TTerm OpenCypher.RelationshipsPattern
+unPatternPredicate :: Phantoms.TypedTerm OpenCypher.PatternPredicate -> Phantoms.TypedTerm OpenCypher.RelationshipsPattern
 unPatternPredicate x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.PatternPredicate")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unPowerOfExpression :: Phantoms.TTerm OpenCypher.PowerOfExpression -> Phantoms.TTerm [OpenCypher.UnaryAddOrSubtractExpression]
+unPowerOfExpression :: Phantoms.TypedTerm OpenCypher.PowerOfExpression -> Phantoms.TypedTerm [OpenCypher.UnaryAddOrSubtractExpression]
 unPowerOfExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.PowerOfExpression")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unProcedureResultField :: Phantoms.TTerm OpenCypher.ProcedureResultField -> Phantoms.TTerm String
+unProcedureResultField :: Phantoms.TypedTerm OpenCypher.ProcedureResultField -> Phantoms.TypedTerm String
 unProcedureResultField x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.ProcedureResultField")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unPropertyKeyName :: Phantoms.TTerm OpenCypher.PropertyKeyName -> Phantoms.TTerm String
+unPropertyKeyName :: Phantoms.TypedTerm OpenCypher.PropertyKeyName -> Phantoms.TypedTerm String
 unPropertyKeyName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.PropertyKeyName")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unPropertyLookup :: Phantoms.TTerm OpenCypher.PropertyLookup -> Phantoms.TTerm OpenCypher.PropertyKeyName
+unPropertyLookup :: Phantoms.TypedTerm OpenCypher.PropertyLookup -> Phantoms.TypedTerm OpenCypher.PropertyKeyName
 unPropertyLookup x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.PropertyLookup")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unRelTypeName :: Phantoms.TTerm OpenCypher.RelTypeName -> Phantoms.TTerm String
+unRelTypeName :: Phantoms.TypedTerm OpenCypher.RelTypeName -> Phantoms.TypedTerm String
 unRelTypeName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.RelTypeName")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unRelationshipTypes :: Phantoms.TTerm OpenCypher.RelationshipTypes -> Phantoms.TTerm [OpenCypher.RelTypeName]
+unRelationshipTypes :: Phantoms.TypedTerm OpenCypher.RelationshipTypes -> Phantoms.TypedTerm [OpenCypher.RelTypeName]
 unRelationshipTypes x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.RelationshipTypes")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unRemove :: Phantoms.TTerm OpenCypher.Remove -> Phantoms.TTerm [OpenCypher.RemoveItem]
+unRemove :: Phantoms.TypedTerm OpenCypher.Remove -> Phantoms.TypedTerm [OpenCypher.RemoveItem]
 unRemove x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.Remove")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unReturn :: Phantoms.TTerm OpenCypher.Return -> Phantoms.TTerm OpenCypher.ProjectionBody
+unReturn :: Phantoms.TypedTerm OpenCypher.Return -> Phantoms.TypedTerm OpenCypher.ProjectionBody
 unReturn x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.Return")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unSet :: Phantoms.TTerm OpenCypher.Set -> Phantoms.TTerm [OpenCypher.SetItem]
+unSet :: Phantoms.TypedTerm OpenCypher.Set -> Phantoms.TypedTerm [OpenCypher.SetItem]
 unSet x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.Set")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unSkip :: Phantoms.TTerm OpenCypher.Skip -> Phantoms.TTerm OpenCypher.Expression
+unSkip :: Phantoms.TypedTerm OpenCypher.Skip -> Phantoms.TypedTerm OpenCypher.Expression
 unSkip x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.Skip")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unStringLiteral :: Phantoms.TTerm OpenCypher.StringLiteral -> Phantoms.TTerm String
+unStringLiteral :: Phantoms.TypedTerm OpenCypher.StringLiteral -> Phantoms.TypedTerm String
 unStringLiteral x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.StringLiteral")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unVariable :: Phantoms.TTerm OpenCypher.Variable -> Phantoms.TTerm String
+unVariable :: Phantoms.TypedTerm OpenCypher.Variable -> Phantoms.TypedTerm String
 unVariable x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.Variable")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unWhere :: Phantoms.TTerm OpenCypher.Where -> Phantoms.TTerm OpenCypher.Expression
+unWhere :: Phantoms.TypedTerm OpenCypher.Where -> Phantoms.TypedTerm OpenCypher.Expression
 unWhere x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.Where")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unXorExpression :: Phantoms.TTerm OpenCypher.XorExpression -> Phantoms.TTerm [OpenCypher.AndExpression]
+unXorExpression :: Phantoms.TypedTerm OpenCypher.XorExpression -> Phantoms.TypedTerm [OpenCypher.AndExpression]
 unXorExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.cypher.openCypher.XorExpression")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unaryAddOrSubtractExpression :: Phantoms.TTerm (Maybe OpenCypher.AddOrSubtractOperator) -> Phantoms.TTerm OpenCypher.NonArithmeticOperatorExpression -> Phantoms.TTerm OpenCypher.UnaryAddOrSubtractExpression
+unaryAddOrSubtractExpression :: Phantoms.TypedTerm (Maybe OpenCypher.AddOrSubtractOperator) -> Phantoms.TypedTerm OpenCypher.NonArithmeticOperatorExpression -> Phantoms.TypedTerm OpenCypher.UnaryAddOrSubtractExpression
 unaryAddOrSubtractExpression operator expression =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.UnaryAddOrSubtractExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
-          Core.fieldTerm = (Phantoms.unTTerm operator)},
+          Core.fieldTerm = (Phantoms.unTypedTerm operator)},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm expression)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm expression)}]}))
 
-unaryAddOrSubtractExpressionExpression :: Phantoms.TTerm OpenCypher.UnaryAddOrSubtractExpression -> Phantoms.TTerm OpenCypher.NonArithmeticOperatorExpression
+unaryAddOrSubtractExpressionExpression :: Phantoms.TypedTerm OpenCypher.UnaryAddOrSubtractExpression -> Phantoms.TypedTerm OpenCypher.NonArithmeticOperatorExpression
 unaryAddOrSubtractExpressionExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.UnaryAddOrSubtractExpression"),
         Core.projectionFieldName = (Core.Name "expression")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unaryAddOrSubtractExpressionOperator :: Phantoms.TTerm OpenCypher.UnaryAddOrSubtractExpression -> Phantoms.TTerm (Maybe OpenCypher.AddOrSubtractOperator)
+unaryAddOrSubtractExpressionOperator :: Phantoms.TypedTerm OpenCypher.UnaryAddOrSubtractExpression -> Phantoms.TypedTerm (Maybe OpenCypher.AddOrSubtractOperator)
 unaryAddOrSubtractExpressionOperator x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.UnaryAddOrSubtractExpression"),
         Core.projectionFieldName = (Core.Name "operator")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unaryAddOrSubtractExpressionWithExpression :: Phantoms.TTerm OpenCypher.UnaryAddOrSubtractExpression -> Phantoms.TTerm OpenCypher.NonArithmeticOperatorExpression -> Phantoms.TTerm OpenCypher.UnaryAddOrSubtractExpression
+unaryAddOrSubtractExpressionWithExpression :: Phantoms.TypedTerm OpenCypher.UnaryAddOrSubtractExpression -> Phantoms.TypedTerm OpenCypher.NonArithmeticOperatorExpression -> Phantoms.TypedTerm OpenCypher.UnaryAddOrSubtractExpression
 unaryAddOrSubtractExpressionWithExpression original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.UnaryAddOrSubtractExpression"),
       Core.recordFields = [
         Core.Field {
@@ -4497,74 +4497,74 @@ unaryAddOrSubtractExpressionWithExpression original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.UnaryAddOrSubtractExpression"),
               Core.projectionFieldName = (Core.Name "operator")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-unaryAddOrSubtractExpressionWithOperator :: Phantoms.TTerm OpenCypher.UnaryAddOrSubtractExpression -> Phantoms.TTerm (Maybe OpenCypher.AddOrSubtractOperator) -> Phantoms.TTerm OpenCypher.UnaryAddOrSubtractExpression
+unaryAddOrSubtractExpressionWithOperator :: Phantoms.TypedTerm OpenCypher.UnaryAddOrSubtractExpression -> Phantoms.TypedTerm (Maybe OpenCypher.AddOrSubtractOperator) -> Phantoms.TypedTerm OpenCypher.UnaryAddOrSubtractExpression
 unaryAddOrSubtractExpressionWithOperator original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.UnaryAddOrSubtractExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.UnaryAddOrSubtractExpression"),
               Core.projectionFieldName = (Core.Name "expression")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-union :: Phantoms.TTerm Bool -> Phantoms.TTerm OpenCypher.SingleQuery -> Phantoms.TTerm OpenCypher.Union
+union :: Phantoms.TypedTerm Bool -> Phantoms.TypedTerm OpenCypher.SingleQuery -> Phantoms.TypedTerm OpenCypher.Union
 union all query =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.Union"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "all"),
-          Core.fieldTerm = (Phantoms.unTTerm all)},
+          Core.fieldTerm = (Phantoms.unTypedTerm all)},
         Core.Field {
           Core.fieldName = (Core.Name "query"),
-          Core.fieldTerm = (Phantoms.unTTerm query)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm query)}]}))
 
-unionAll :: Phantoms.TTerm OpenCypher.Union -> Phantoms.TTerm Bool
+unionAll :: Phantoms.TypedTerm OpenCypher.Union -> Phantoms.TypedTerm Bool
 unionAll x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Union"),
         Core.projectionFieldName = (Core.Name "all")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unionQuery :: Phantoms.TTerm OpenCypher.Union -> Phantoms.TTerm OpenCypher.SingleQuery
+unionQuery :: Phantoms.TypedTerm OpenCypher.Union -> Phantoms.TypedTerm OpenCypher.SingleQuery
 unionQuery x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Union"),
         Core.projectionFieldName = (Core.Name "query")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unionWithAll :: Phantoms.TTerm OpenCypher.Union -> Phantoms.TTerm Bool -> Phantoms.TTerm OpenCypher.Union
+unionWithAll :: Phantoms.TypedTerm OpenCypher.Union -> Phantoms.TypedTerm Bool -> Phantoms.TypedTerm OpenCypher.Union
 unionWithAll original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.Union"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "all"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "query"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Union"),
               Core.projectionFieldName = (Core.Name "query")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-unionWithQuery :: Phantoms.TTerm OpenCypher.Union -> Phantoms.TTerm OpenCypher.SingleQuery -> Phantoms.TTerm OpenCypher.Union
+unionWithQuery :: Phantoms.TypedTerm OpenCypher.Union -> Phantoms.TypedTerm OpenCypher.SingleQuery -> Phantoms.TypedTerm OpenCypher.Union
 unionWithQuery original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.Union"),
       Core.recordFields = [
         Core.Field {
@@ -4573,58 +4573,58 @@ unionWithQuery original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Union"),
               Core.projectionFieldName = (Core.Name "all")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "query"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-unwind :: Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.Variable -> Phantoms.TTerm OpenCypher.Unwind
+unwind :: Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.Variable -> Phantoms.TypedTerm OpenCypher.Unwind
 unwind expression variable =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.Unwind"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm expression)},
+          Core.fieldTerm = (Phantoms.unTypedTerm expression)},
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Phantoms.unTTerm variable)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm variable)}]}))
 
-unwindExpression :: Phantoms.TTerm OpenCypher.Unwind -> Phantoms.TTerm OpenCypher.Expression
+unwindExpression :: Phantoms.TypedTerm OpenCypher.Unwind -> Phantoms.TypedTerm OpenCypher.Expression
 unwindExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Unwind"),
         Core.projectionFieldName = (Core.Name "expression")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unwindVariable :: Phantoms.TTerm OpenCypher.Unwind -> Phantoms.TTerm OpenCypher.Variable
+unwindVariable :: Phantoms.TypedTerm OpenCypher.Unwind -> Phantoms.TypedTerm OpenCypher.Variable
 unwindVariable x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Unwind"),
         Core.projectionFieldName = (Core.Name "variable")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unwindWithExpression :: Phantoms.TTerm OpenCypher.Unwind -> Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.Unwind
+unwindWithExpression :: Phantoms.TypedTerm OpenCypher.Unwind -> Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.Unwind
 unwindWithExpression original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.Unwind"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Unwind"),
               Core.projectionFieldName = (Core.Name "variable")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-unwindWithVariable :: Phantoms.TTerm OpenCypher.Unwind -> Phantoms.TTerm OpenCypher.Variable -> Phantoms.TTerm OpenCypher.Unwind
+unwindWithVariable :: Phantoms.TypedTerm OpenCypher.Unwind -> Phantoms.TypedTerm OpenCypher.Variable -> Phantoms.TypedTerm OpenCypher.Unwind
 unwindWithVariable original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.Unwind"),
       Core.recordFields = [
         Core.Field {
@@ -4633,88 +4633,88 @@ unwindWithVariable original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.Unwind"),
               Core.projectionFieldName = (Core.Name "expression")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-updatingClauseCreate :: Phantoms.TTerm OpenCypher.Create -> Phantoms.TTerm OpenCypher.UpdatingClause
+updatingClauseCreate :: Phantoms.TypedTerm OpenCypher.Create -> Phantoms.TypedTerm OpenCypher.UpdatingClause
 updatingClauseCreate x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.UpdatingClause"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "create"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-updatingClauseDelete :: Phantoms.TTerm OpenCypher.Delete -> Phantoms.TTerm OpenCypher.UpdatingClause
+updatingClauseDelete :: Phantoms.TypedTerm OpenCypher.Delete -> Phantoms.TypedTerm OpenCypher.UpdatingClause
 updatingClauseDelete x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.UpdatingClause"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "delete"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-updatingClauseMerge :: Phantoms.TTerm OpenCypher.Merge -> Phantoms.TTerm OpenCypher.UpdatingClause
+updatingClauseMerge :: Phantoms.TypedTerm OpenCypher.Merge -> Phantoms.TypedTerm OpenCypher.UpdatingClause
 updatingClauseMerge x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.UpdatingClause"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "merge"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-updatingClauseRemove :: Phantoms.TTerm OpenCypher.Remove -> Phantoms.TTerm OpenCypher.UpdatingClause
+updatingClauseRemove :: Phantoms.TypedTerm OpenCypher.Remove -> Phantoms.TypedTerm OpenCypher.UpdatingClause
 updatingClauseRemove x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.UpdatingClause"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "remove"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-updatingClauseSet :: Phantoms.TTerm OpenCypher.Set -> Phantoms.TTerm OpenCypher.UpdatingClause
+updatingClauseSet :: Phantoms.TypedTerm OpenCypher.Set -> Phantoms.TypedTerm OpenCypher.UpdatingClause
 updatingClauseSet x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.UpdatingClause"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-variable :: Phantoms.TTerm String -> Phantoms.TTerm OpenCypher.Variable
+variable :: Phantoms.TypedTerm String -> Phantoms.TypedTerm OpenCypher.Variable
 variable x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.Variable"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-variableAndNodeLabels :: Phantoms.TTerm OpenCypher.Variable -> Phantoms.TTerm OpenCypher.NodeLabels -> Phantoms.TTerm OpenCypher.VariableAndNodeLabels
+variableAndNodeLabels :: Phantoms.TypedTerm OpenCypher.Variable -> Phantoms.TypedTerm OpenCypher.NodeLabels -> Phantoms.TypedTerm OpenCypher.VariableAndNodeLabels
 variableAndNodeLabels variable labels =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.VariableAndNodeLabels"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Phantoms.unTTerm variable)},
+          Core.fieldTerm = (Phantoms.unTypedTerm variable)},
         Core.Field {
           Core.fieldName = (Core.Name "labels"),
-          Core.fieldTerm = (Phantoms.unTTerm labels)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm labels)}]}))
 
-variableAndNodeLabelsLabels :: Phantoms.TTerm OpenCypher.VariableAndNodeLabels -> Phantoms.TTerm OpenCypher.NodeLabels
+variableAndNodeLabelsLabels :: Phantoms.TypedTerm OpenCypher.VariableAndNodeLabels -> Phantoms.TypedTerm OpenCypher.NodeLabels
 variableAndNodeLabelsLabels x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.VariableAndNodeLabels"),
         Core.projectionFieldName = (Core.Name "labels")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-variableAndNodeLabelsVariable :: Phantoms.TTerm OpenCypher.VariableAndNodeLabels -> Phantoms.TTerm OpenCypher.Variable
+variableAndNodeLabelsVariable :: Phantoms.TypedTerm OpenCypher.VariableAndNodeLabels -> Phantoms.TypedTerm OpenCypher.Variable
 variableAndNodeLabelsVariable x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.VariableAndNodeLabels"),
         Core.projectionFieldName = (Core.Name "variable")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-variableAndNodeLabelsWithLabels :: Phantoms.TTerm OpenCypher.VariableAndNodeLabels -> Phantoms.TTerm OpenCypher.NodeLabels -> Phantoms.TTerm OpenCypher.VariableAndNodeLabels
+variableAndNodeLabelsWithLabels :: Phantoms.TypedTerm OpenCypher.VariableAndNodeLabels -> Phantoms.TypedTerm OpenCypher.NodeLabels -> Phantoms.TypedTerm OpenCypher.VariableAndNodeLabels
 variableAndNodeLabelsWithLabels original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.VariableAndNodeLabels"),
       Core.recordFields = [
         Core.Field {
@@ -4723,74 +4723,74 @@ variableAndNodeLabelsWithLabels original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.VariableAndNodeLabels"),
               Core.projectionFieldName = (Core.Name "variable")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "labels"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-variableAndNodeLabelsWithVariable :: Phantoms.TTerm OpenCypher.VariableAndNodeLabels -> Phantoms.TTerm OpenCypher.Variable -> Phantoms.TTerm OpenCypher.VariableAndNodeLabels
+variableAndNodeLabelsWithVariable :: Phantoms.TypedTerm OpenCypher.VariableAndNodeLabels -> Phantoms.TypedTerm OpenCypher.Variable -> Phantoms.TypedTerm OpenCypher.VariableAndNodeLabels
 variableAndNodeLabelsWithVariable original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.VariableAndNodeLabels"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "labels"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.VariableAndNodeLabels"),
               Core.projectionFieldName = (Core.Name "labels")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-variableEquals :: Phantoms.TTerm OpenCypher.Variable -> Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.VariableEquals
+variableEquals :: Phantoms.TypedTerm OpenCypher.Variable -> Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.VariableEquals
 variableEquals lhs rhs =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.VariableEquals"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "lhs"),
-          Core.fieldTerm = (Phantoms.unTTerm lhs)},
+          Core.fieldTerm = (Phantoms.unTypedTerm lhs)},
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
-          Core.fieldTerm = (Phantoms.unTTerm rhs)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm rhs)}]}))
 
-variableEqualsLhs :: Phantoms.TTerm OpenCypher.VariableEquals -> Phantoms.TTerm OpenCypher.Variable
+variableEqualsLhs :: Phantoms.TypedTerm OpenCypher.VariableEquals -> Phantoms.TypedTerm OpenCypher.Variable
 variableEqualsLhs x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.VariableEquals"),
         Core.projectionFieldName = (Core.Name "lhs")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-variableEqualsRhs :: Phantoms.TTerm OpenCypher.VariableEquals -> Phantoms.TTerm OpenCypher.Expression
+variableEqualsRhs :: Phantoms.TypedTerm OpenCypher.VariableEquals -> Phantoms.TypedTerm OpenCypher.Expression
 variableEqualsRhs x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.VariableEquals"),
         Core.projectionFieldName = (Core.Name "rhs")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-variableEqualsWithLhs :: Phantoms.TTerm OpenCypher.VariableEquals -> Phantoms.TTerm OpenCypher.Variable -> Phantoms.TTerm OpenCypher.VariableEquals
+variableEqualsWithLhs :: Phantoms.TypedTerm OpenCypher.VariableEquals -> Phantoms.TypedTerm OpenCypher.Variable -> Phantoms.TypedTerm OpenCypher.VariableEquals
 variableEqualsWithLhs original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.VariableEquals"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "lhs"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.VariableEquals"),
               Core.projectionFieldName = (Core.Name "rhs")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-variableEqualsWithRhs :: Phantoms.TTerm OpenCypher.VariableEquals -> Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.VariableEquals
+variableEqualsWithRhs :: Phantoms.TypedTerm OpenCypher.VariableEquals -> Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.VariableEquals
 variableEqualsWithRhs original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.VariableEquals"),
       Core.recordFields = [
         Core.Field {
@@ -4799,58 +4799,58 @@ variableEqualsWithRhs original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.VariableEquals"),
               Core.projectionFieldName = (Core.Name "lhs")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-variablePlusEquals :: Phantoms.TTerm OpenCypher.Variable -> Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.VariablePlusEquals
+variablePlusEquals :: Phantoms.TypedTerm OpenCypher.Variable -> Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.VariablePlusEquals
 variablePlusEquals lhs rhs =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.VariablePlusEquals"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "lhs"),
-          Core.fieldTerm = (Phantoms.unTTerm lhs)},
+          Core.fieldTerm = (Phantoms.unTypedTerm lhs)},
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
-          Core.fieldTerm = (Phantoms.unTTerm rhs)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm rhs)}]}))
 
-variablePlusEqualsLhs :: Phantoms.TTerm OpenCypher.VariablePlusEquals -> Phantoms.TTerm OpenCypher.Variable
+variablePlusEqualsLhs :: Phantoms.TypedTerm OpenCypher.VariablePlusEquals -> Phantoms.TypedTerm OpenCypher.Variable
 variablePlusEqualsLhs x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.VariablePlusEquals"),
         Core.projectionFieldName = (Core.Name "lhs")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-variablePlusEqualsRhs :: Phantoms.TTerm OpenCypher.VariablePlusEquals -> Phantoms.TTerm OpenCypher.Expression
+variablePlusEqualsRhs :: Phantoms.TypedTerm OpenCypher.VariablePlusEquals -> Phantoms.TypedTerm OpenCypher.Expression
 variablePlusEqualsRhs x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.VariablePlusEquals"),
         Core.projectionFieldName = (Core.Name "rhs")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-variablePlusEqualsWithLhs :: Phantoms.TTerm OpenCypher.VariablePlusEquals -> Phantoms.TTerm OpenCypher.Variable -> Phantoms.TTerm OpenCypher.VariablePlusEquals
+variablePlusEqualsWithLhs :: Phantoms.TypedTerm OpenCypher.VariablePlusEquals -> Phantoms.TypedTerm OpenCypher.Variable -> Phantoms.TypedTerm OpenCypher.VariablePlusEquals
 variablePlusEqualsWithLhs original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.VariablePlusEquals"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "lhs"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.VariablePlusEquals"),
               Core.projectionFieldName = (Core.Name "rhs")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-variablePlusEqualsWithRhs :: Phantoms.TTerm OpenCypher.VariablePlusEquals -> Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.VariablePlusEquals
+variablePlusEqualsWithRhs :: Phantoms.TypedTerm OpenCypher.VariablePlusEquals -> Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.VariablePlusEquals
 variablePlusEqualsWithRhs original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.VariablePlusEquals"),
       Core.recordFields = [
         Core.Field {
@@ -4859,94 +4859,94 @@ variablePlusEqualsWithRhs original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.VariablePlusEquals"),
               Core.projectionFieldName = (Core.Name "lhs")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-where_ :: Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.Where
+where_ :: Phantoms.TypedTerm OpenCypher.Expression -> Phantoms.TypedTerm OpenCypher.Where
 where_ x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.Where"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-with :: Phantoms.TTerm OpenCypher.ProjectionBody -> Phantoms.TTerm (Maybe OpenCypher.Where) -> Phantoms.TTerm OpenCypher.With
+with :: Phantoms.TypedTerm OpenCypher.ProjectionBody -> Phantoms.TypedTerm (Maybe OpenCypher.Where) -> Phantoms.TypedTerm OpenCypher.With
 with projection where_ =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.With"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "projection"),
-          Core.fieldTerm = (Phantoms.unTTerm projection)},
+          Core.fieldTerm = (Phantoms.unTypedTerm projection)},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
-          Core.fieldTerm = (Phantoms.unTTerm where_)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm where_)}]}))
 
-withClause :: Phantoms.TTerm [OpenCypher.ReadingClause] -> Phantoms.TTerm [OpenCypher.UpdatingClause] -> Phantoms.TTerm OpenCypher.With -> Phantoms.TTerm OpenCypher.WithClause
+withClause :: Phantoms.TypedTerm [OpenCypher.ReadingClause] -> Phantoms.TypedTerm [OpenCypher.UpdatingClause] -> Phantoms.TypedTerm OpenCypher.With -> Phantoms.TypedTerm OpenCypher.WithClause
 withClause reading updating with =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.WithClause"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "reading"),
-          Core.fieldTerm = (Phantoms.unTTerm reading)},
+          Core.fieldTerm = (Phantoms.unTypedTerm reading)},
         Core.Field {
           Core.fieldName = (Core.Name "updating"),
-          Core.fieldTerm = (Phantoms.unTTerm updating)},
+          Core.fieldTerm = (Phantoms.unTypedTerm updating)},
         Core.Field {
           Core.fieldName = (Core.Name "with"),
-          Core.fieldTerm = (Phantoms.unTTerm with)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm with)}]}))
 
-withClauseReading :: Phantoms.TTerm OpenCypher.WithClause -> Phantoms.TTerm [OpenCypher.ReadingClause]
+withClauseReading :: Phantoms.TypedTerm OpenCypher.WithClause -> Phantoms.TypedTerm [OpenCypher.ReadingClause]
 withClauseReading x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.WithClause"),
         Core.projectionFieldName = (Core.Name "reading")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-withClauseUpdating :: Phantoms.TTerm OpenCypher.WithClause -> Phantoms.TTerm [OpenCypher.UpdatingClause]
+withClauseUpdating :: Phantoms.TypedTerm OpenCypher.WithClause -> Phantoms.TypedTerm [OpenCypher.UpdatingClause]
 withClauseUpdating x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.WithClause"),
         Core.projectionFieldName = (Core.Name "updating")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-withClauseWith :: Phantoms.TTerm OpenCypher.WithClause -> Phantoms.TTerm OpenCypher.With
+withClauseWith :: Phantoms.TypedTerm OpenCypher.WithClause -> Phantoms.TypedTerm OpenCypher.With
 withClauseWith x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.WithClause"),
         Core.projectionFieldName = (Core.Name "with")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-withClauseWithReading :: Phantoms.TTerm OpenCypher.WithClause -> Phantoms.TTerm [OpenCypher.ReadingClause] -> Phantoms.TTerm OpenCypher.WithClause
+withClauseWithReading :: Phantoms.TypedTerm OpenCypher.WithClause -> Phantoms.TypedTerm [OpenCypher.ReadingClause] -> Phantoms.TypedTerm OpenCypher.WithClause
 withClauseWithReading original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.WithClause"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "reading"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "updating"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.WithClause"),
               Core.projectionFieldName = (Core.Name "updating")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "with"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.WithClause"),
               Core.projectionFieldName = (Core.Name "with")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-withClauseWithUpdating :: Phantoms.TTerm OpenCypher.WithClause -> Phantoms.TTerm [OpenCypher.UpdatingClause] -> Phantoms.TTerm OpenCypher.WithClause
+withClauseWithUpdating :: Phantoms.TypedTerm OpenCypher.WithClause -> Phantoms.TypedTerm [OpenCypher.UpdatingClause] -> Phantoms.TypedTerm OpenCypher.WithClause
 withClauseWithUpdating original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.WithClause"),
       Core.recordFields = [
         Core.Field {
@@ -4955,21 +4955,21 @@ withClauseWithUpdating original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.WithClause"),
               Core.projectionFieldName = (Core.Name "reading")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updating"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "with"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.WithClause"),
               Core.projectionFieldName = (Core.Name "with")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-withClauseWithWith :: Phantoms.TTerm OpenCypher.WithClause -> Phantoms.TTerm OpenCypher.With -> Phantoms.TTerm OpenCypher.WithClause
+withClauseWithWith :: Phantoms.TypedTerm OpenCypher.WithClause -> Phantoms.TypedTerm OpenCypher.With -> Phantoms.TypedTerm OpenCypher.WithClause
 withClauseWithWith original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.WithClause"),
       Core.recordFields = [
         Core.Field {
@@ -4978,53 +4978,53 @@ withClauseWithWith original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.WithClause"),
               Core.projectionFieldName = (Core.Name "reading")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updating"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.WithClause"),
               Core.projectionFieldName = (Core.Name "updating")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "with"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-withProjection :: Phantoms.TTerm OpenCypher.With -> Phantoms.TTerm OpenCypher.ProjectionBody
+withProjection :: Phantoms.TypedTerm OpenCypher.With -> Phantoms.TypedTerm OpenCypher.ProjectionBody
 withProjection x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.With"),
         Core.projectionFieldName = (Core.Name "projection")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-withWhere :: Phantoms.TTerm OpenCypher.With -> Phantoms.TTerm (Maybe OpenCypher.Where)
+withWhere :: Phantoms.TypedTerm OpenCypher.With -> Phantoms.TypedTerm (Maybe OpenCypher.Where)
 withWhere x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.With"),
         Core.projectionFieldName = (Core.Name "where")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-withWithProjection :: Phantoms.TTerm OpenCypher.With -> Phantoms.TTerm OpenCypher.ProjectionBody -> Phantoms.TTerm OpenCypher.With
+withWithProjection :: Phantoms.TypedTerm OpenCypher.With -> Phantoms.TypedTerm OpenCypher.ProjectionBody -> Phantoms.TypedTerm OpenCypher.With
 withWithProjection original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.With"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "projection"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.With"),
               Core.projectionFieldName = (Core.Name "where")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-withWithWhere :: Phantoms.TTerm OpenCypher.With -> Phantoms.TTerm (Maybe OpenCypher.Where) -> Phantoms.TTerm OpenCypher.With
+withWithWhere :: Phantoms.TypedTerm OpenCypher.With -> Phantoms.TypedTerm (Maybe OpenCypher.Where) -> Phantoms.TypedTerm OpenCypher.With
 withWithWhere original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.With"),
       Core.recordFields = [
         Core.Field {
@@ -5033,64 +5033,64 @@ withWithWhere original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.With"),
               Core.projectionFieldName = (Core.Name "projection")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-xorExpression :: Phantoms.TTerm [OpenCypher.AndExpression] -> Phantoms.TTerm OpenCypher.XorExpression
+xorExpression :: Phantoms.TypedTerm [OpenCypher.AndExpression] -> Phantoms.TypedTerm OpenCypher.XorExpression
 xorExpression x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.cypher.openCypher.XorExpression"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-yieldItem :: Phantoms.TTerm (Maybe OpenCypher.ProcedureResultField) -> Phantoms.TTerm OpenCypher.Variable -> Phantoms.TTerm OpenCypher.YieldItem
+yieldItem :: Phantoms.TypedTerm (Maybe OpenCypher.ProcedureResultField) -> Phantoms.TypedTerm OpenCypher.Variable -> Phantoms.TypedTerm OpenCypher.YieldItem
 yieldItem field variable =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.YieldItem"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "field"),
-          Core.fieldTerm = (Phantoms.unTTerm field)},
+          Core.fieldTerm = (Phantoms.unTypedTerm field)},
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Phantoms.unTTerm variable)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm variable)}]}))
 
-yieldItemField :: Phantoms.TTerm OpenCypher.YieldItem -> Phantoms.TTerm (Maybe OpenCypher.ProcedureResultField)
+yieldItemField :: Phantoms.TypedTerm OpenCypher.YieldItem -> Phantoms.TypedTerm (Maybe OpenCypher.ProcedureResultField)
 yieldItemField x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.YieldItem"),
         Core.projectionFieldName = (Core.Name "field")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-yieldItemVariable :: Phantoms.TTerm OpenCypher.YieldItem -> Phantoms.TTerm OpenCypher.Variable
+yieldItemVariable :: Phantoms.TypedTerm OpenCypher.YieldItem -> Phantoms.TypedTerm OpenCypher.Variable
 yieldItemVariable x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.YieldItem"),
         Core.projectionFieldName = (Core.Name "variable")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-yieldItemWithField :: Phantoms.TTerm OpenCypher.YieldItem -> Phantoms.TTerm (Maybe OpenCypher.ProcedureResultField) -> Phantoms.TTerm OpenCypher.YieldItem
+yieldItemWithField :: Phantoms.TypedTerm OpenCypher.YieldItem -> Phantoms.TypedTerm (Maybe OpenCypher.ProcedureResultField) -> Phantoms.TypedTerm OpenCypher.YieldItem
 yieldItemWithField original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.YieldItem"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "field"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.YieldItem"),
               Core.projectionFieldName = (Core.Name "variable")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-yieldItemWithVariable :: Phantoms.TTerm OpenCypher.YieldItem -> Phantoms.TTerm OpenCypher.Variable -> Phantoms.TTerm OpenCypher.YieldItem
+yieldItemWithVariable :: Phantoms.TypedTerm OpenCypher.YieldItem -> Phantoms.TypedTerm OpenCypher.Variable -> Phantoms.TypedTerm OpenCypher.YieldItem
 yieldItemWithVariable original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.YieldItem"),
       Core.recordFields = [
         Core.Field {
@@ -5099,58 +5099,58 @@ yieldItemWithVariable original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.YieldItem"),
               Core.projectionFieldName = (Core.Name "field")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-yieldItems :: Phantoms.TTerm [OpenCypher.YieldItem] -> Phantoms.TTerm (Maybe OpenCypher.Where) -> Phantoms.TTerm OpenCypher.YieldItems
+yieldItems :: Phantoms.TypedTerm [OpenCypher.YieldItem] -> Phantoms.TypedTerm (Maybe OpenCypher.Where) -> Phantoms.TypedTerm OpenCypher.YieldItems
 yieldItems items where_ =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.YieldItems"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "items"),
-          Core.fieldTerm = (Phantoms.unTTerm items)},
+          Core.fieldTerm = (Phantoms.unTypedTerm items)},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
-          Core.fieldTerm = (Phantoms.unTTerm where_)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm where_)}]}))
 
-yieldItemsItems :: Phantoms.TTerm OpenCypher.YieldItems -> Phantoms.TTerm [OpenCypher.YieldItem]
+yieldItemsItems :: Phantoms.TypedTerm OpenCypher.YieldItems -> Phantoms.TypedTerm [OpenCypher.YieldItem]
 yieldItemsItems x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.YieldItems"),
         Core.projectionFieldName = (Core.Name "items")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-yieldItemsWhere :: Phantoms.TTerm OpenCypher.YieldItems -> Phantoms.TTerm (Maybe OpenCypher.Where)
+yieldItemsWhere :: Phantoms.TypedTerm OpenCypher.YieldItems -> Phantoms.TypedTerm (Maybe OpenCypher.Where)
 yieldItemsWhere x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.YieldItems"),
         Core.projectionFieldName = (Core.Name "where")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-yieldItemsWithItems :: Phantoms.TTerm OpenCypher.YieldItems -> Phantoms.TTerm [OpenCypher.YieldItem] -> Phantoms.TTerm OpenCypher.YieldItems
+yieldItemsWithItems :: Phantoms.TypedTerm OpenCypher.YieldItems -> Phantoms.TypedTerm [OpenCypher.YieldItem] -> Phantoms.TypedTerm OpenCypher.YieldItems
 yieldItemsWithItems original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.YieldItems"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "items"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.YieldItems"),
               Core.projectionFieldName = (Core.Name "where")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-yieldItemsWithWhere :: Phantoms.TTerm OpenCypher.YieldItems -> Phantoms.TTerm (Maybe OpenCypher.Where) -> Phantoms.TTerm OpenCypher.YieldItems
+yieldItemsWithWhere :: Phantoms.TypedTerm OpenCypher.YieldItems -> Phantoms.TypedTerm (Maybe OpenCypher.Where) -> Phantoms.TypedTerm OpenCypher.YieldItems
 yieldItemsWithWhere original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.cypher.openCypher.YieldItems"),
       Core.recordFields = [
         Core.Field {
@@ -5159,7 +5159,7 @@ yieldItemsWithWhere original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cypher.openCypher.YieldItems"),
               Core.projectionFieldName = (Core.Name "items")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))

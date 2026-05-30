@@ -34,7 +34,7 @@ module_ = Module {
 
 -- Test groups for hydra.lib.logic primitives
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.logic primitives" $
     supergroup "hydra.lib.logic primitives" [
@@ -43,7 +43,7 @@ allTests = definitionInModule module_ "allTests" $
       logicNot,
       logicOr]
 
-logicAnd :: TTerm TestGroup
+logicAnd :: TypedTerm TestGroup
 logicAnd = subgroup "and" [
   test "true and true" true true true,
   test "true and false" true false false,
@@ -52,7 +52,7 @@ logicAnd = subgroup "and" [
   where
     test name x y result = primCase name _logic_and [x, y] (result)
 
-logicIfElse :: TTerm TestGroup
+logicIfElse :: TypedTerm TestGroup
 logicIfElse = supergroup "ifElse" [
   subgroup "boolean values" [
     testBool "true condition returns then" true true false true,
@@ -71,14 +71,14 @@ logicIfElse = supergroup "ifElse" [
     testStr name cond thenVal elseVal result =
       primCase name _logic_ifElse [cond, string thenVal, string elseVal] (string result)
 
-logicNot :: TTerm TestGroup
+logicNot :: TypedTerm TestGroup
 logicNot = subgroup "not" [
   test "not true" true false,
   test "not false" false true]
   where
     test name x result = primCase name _logic_not [x] (result)
 
-logicOr :: TTerm TestGroup
+logicOr :: TypedTerm TestGroup
 logicOr = subgroup "or" [
   test "true or true" true true true,
   test "true or false" true false true,

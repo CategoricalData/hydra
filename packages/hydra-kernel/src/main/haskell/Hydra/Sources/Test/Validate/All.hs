@@ -31,9 +31,9 @@ module_ = Module {
     definitions = [Phantoms.toDefinition allTests]
     namespaces = [ValidateCore.ns, ValidatePackaging.ns]
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     doc "The group of all validation tests" $
-    Testing.testGroup (string "validation") nothing (list subgroups) (list ([] :: [TTerm TestCaseWithMetadata]))
+    Testing.testGroup (string "validation") nothing (list subgroups) (list ([] :: [TypedTerm TestCaseWithMetadata]))
   where
     subgroups = [ValidateCore.allTests, ValidatePackaging.allTests]
