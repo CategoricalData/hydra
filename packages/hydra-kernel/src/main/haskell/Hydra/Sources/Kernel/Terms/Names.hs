@@ -3,7 +3,7 @@ module Hydra.Sources.Kernel.Terms.Names where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  compactName, freshName, freshNames, localNameOf, nameToFilePath, namespaceOf, namespaceToFilePath,
+  compactName, freshName, freshNames, localNameOf, moduleNameOf, moduleNameToFilePath, nameToFilePath,
   normalTypeVariable, pushSubtermStep, qname, qualifyName, restoreTrace,
   uniqueLabel, unqualifyName)
 import Hydra.Sources.Libraries
@@ -74,9 +74,9 @@ module_ = Module {
      toDefinition freshName,
      toDefinition freshNames,
      toDefinition localNameOf,
+     toDefinition moduleNameOf,
+     toDefinition moduleNameToFilePath,
      toDefinition nameToFilePath,
-     toDefinition namespaceOf,
-     toDefinition namespaceToFilePath,
      toDefinition normalTypeVariable,
      toDefinition pushSubtermStep,
      toDefinition qname,
@@ -131,6 +131,20 @@ localNameOf = define "localNameOf" $
   doc "Extract the local part of a name" $
   reify Packaging.qualifiedNameLocal <.> qualifyName
 
+moduleNameOf :: TypedTermDefinition (Name -> Maybe ModuleName)
+moduleNameOf = define "moduleNameOf" $
+  doc "Extract the module name of a name, if any" $
+  reify Packaging.qualifiedNameModuleName <.> qualifyName
+
+moduleNameToFilePath :: TypedTermDefinition (CaseConvention -> FileExtension -> ModuleName -> String)
+moduleNameToFilePath = define "moduleNameToFilePath" $
+  doc "Convert a module name to a file path with the given case convention and file extension" $
+  lambda "caseConv" $ lambda "ext" $ lambda "ns" $ lets [
+    "parts">: Lists.map
+      (Formatting.convertCase @@ Util.caseConventionCamel @@ var "caseConv")
+      (Strings.splitOn (string ".") (Packaging.unModuleName $ var "ns"))]
+    $ (Strings.intercalate (string "/") $ var "parts") ++ string "." ++ (Packaging.unFileExtension $ var "ext")
+
 nameToFilePath :: TypedTermDefinition (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
 nameToFilePath = define "nameToFilePath" $
   doc "Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator" $
@@ -147,20 +161,6 @@ nameToFilePath = define "nameToFilePath" $
     (var "ns") $
   "suffix" <~ Formatting.convertCase @@ Util.caseConventionPascal @@ var "localConv" @@ var "local" $
   Strings.cat (list [var "prefix", var "suffix", string ".", Packaging.unFileExtension (var "ext")])
-
-namespaceOf :: TypedTermDefinition (Name -> Maybe ModuleName)
-namespaceOf = define "namespaceOf" $
-  doc "Extract the namespace of a name, if any" $
-  reify Packaging.qualifiedNameModuleName <.> qualifyName
-
-namespaceToFilePath :: TypedTermDefinition (CaseConvention -> FileExtension -> ModuleName -> String)
-namespaceToFilePath = define "namespaceToFilePath" $
-  doc "Convert a namespace to a file path with the given case convention and file extension" $
-  lambda "caseConv" $ lambda "ext" $ lambda "ns" $ lets [
-    "parts">: Lists.map
-      (Formatting.convertCase @@ Util.caseConventionCamel @@ var "caseConv")
-      (Strings.splitOn (string ".") (Packaging.unModuleName $ var "ns"))]
-    $ (Strings.intercalate (string "/") $ var "parts") ++ string "." ++ (Packaging.unFileExtension $ var "ext")
 
 normalTypeVariable :: TypedTermDefinition (Int -> Name)
 normalTypeVariable = define "normalTypeVariable" $

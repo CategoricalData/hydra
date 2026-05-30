@@ -38,8 +38,8 @@ module_ = Module {
    definitions = [
      toDefinition testTermsDef,
      toDefinition testTypesDef,
-     toDefinition testNamespaceDef,
-     toDefinition testSchemaNamespaceDef]
+     toDefinition testModuleNameDef,
+     toDefinition testSchemaModuleNameDef]
 
 testTypesDef :: TypedTermDefinition (M.Map Name Type)
 testTypesDef = define "testTypes" $

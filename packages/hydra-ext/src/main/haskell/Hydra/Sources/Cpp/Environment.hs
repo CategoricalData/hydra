@@ -38,7 +38,7 @@ cppEnvironmentType = define "CppEnvironment" $
   T.record [
     "namespaces" >:
       doc "ModuleName mapping for code generation" $
-      T.apply (utilType "Namespaces") T.string,
+      T.apply (utilType "ModuleNames") T.string,
     "boundTypeVariables" >:
       doc "Type variables in scope, with their C++ names" $
       T.pair (T.list (coreType "Name")) (T.map (coreType "Name") T.string)]

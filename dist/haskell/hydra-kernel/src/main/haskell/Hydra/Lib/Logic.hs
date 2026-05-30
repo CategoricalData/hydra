@@ -1,5 +1,5 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | Primitives in the hydra.lib.logic namespace.
+-- | Primitives in the hydra.lib.logic module.
 
 module Hydra.Lib.Logic where
 import qualified Hydra.Ast as Ast

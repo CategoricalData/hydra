@@ -7296,7 +7296,7 @@
                                                                             "type": {"variable": "hydra.packaging.ModuleName"}}}}}}},
                                                                 "function": {
                                                                   "application": {
-                                                                    "argument": {"variable": "hydra.decoding.decodeNamespace"},
+                                                                    "argument": {"variable": "hydra.decoding.decodeModuleName"},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
@@ -7333,7 +7333,7 @@
                                                                             "application": {
                                                                               "argument": {
                                                                                 "application": {"argument": {"variable": "mod"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
-                                                                              "function": {"variable": "hydra.decoding.decodeNamespace"}}}},
+                                                                              "function": {"variable": "hydra.decoding.decodeModuleName"}}}},
                                                                         {
                                                                           "name": "dependencies",
                                                                           "term": {
@@ -7662,17 +7662,14 @@
             "parameter": "t0"}}}},
     {
       "term": {
-        "name": "hydra.decoding.decodeNamespace",
+        "name": "hydra.decoding.decodeModuleName",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.ModuleName"}}],
           "result": {"type": {"variable": "hydra.packaging.ModuleName"}},
           "typeParameters": []},
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Generate a decoder module namespace from a source module namespace"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a decoder module name from a source module name"}}}],
             "body": {
               "lambda": {
                 "body": {

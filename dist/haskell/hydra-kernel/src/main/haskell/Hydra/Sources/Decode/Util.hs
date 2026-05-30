@@ -498,7 +498,7 @@ module_ =
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                 Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.util.Comparison"))}))}}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.decode.util.namespaces"),
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.util.moduleNames"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "n"),
@@ -579,7 +579,7 @@ module_ =
                                             Core.lambdaParameter = (Core.Name "field_mapping"),
                                             Core.lambdaDomain = Nothing,
                                             Core.lambdaBody = (Core.TermEither (Right (Core.TermRecord (Core.Record {
-                                              Core.recordTypeName = (Core.Name "hydra.util.Namespaces"),
+                                              Core.recordTypeName = (Core.Name "hydra.util.ModuleNames"),
                                               Core.recordFields = [
                                                 Core.Field {
                                                   Core.fieldName = (Core.Name "focus"),
@@ -594,7 +594,7 @@ module_ =
                         Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.util.Namespaces")))])})),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.util.ModuleNames")))])})),
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [
               Typing.TypeParameter {
@@ -627,7 +627,7 @@ module_ =
               Typing.resultType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                 Core.eitherTypeRight = (Core.TypeApplication (Core.ApplicationType {
-                  Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.util.Namespaces")),
+                  Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.util.ModuleNames")),
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "n"))}))}))}}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.util.precision"),

@@ -23,7 +23,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleDescription = Just "Primitives in the hydra.lib.logic namespace."}
+            moduleDescription = Just "Primitives in the hydra.lib.logic module."}
   where
     definitions = [
       toPrimitive "Compute the logical AND of two boolean values." andSig (Just

@@ -497,7 +497,7 @@ remains:
 - `dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestEnv.hs` —
   the Haskell-level runtime counterpart of the DSL stub
   `Hydra.Sources.Test.TestEnv`. The kernel filters `hydra.test.testEnv`
-  from emitted output (via `testSkipEmitNamespaces` in
+  from emitted output (via `testSkipEmitModuleNames` in
   `Hydra.Sources.Test.All`), so this file is left alone by regeneration.
   Tolerated for now because the Haskell test build's source set spans
   `dist/haskell/.../src/test/haskell/`, and moving the file to `heads/`

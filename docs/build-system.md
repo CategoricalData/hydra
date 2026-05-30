@@ -208,7 +208,7 @@ The self-hosted coders used to have an incomplete input digest: it hashed only t
 `hydra.dsl.<lang>.*` modules, not the native-generator-owned `hydra.<lang>.*` modules
 (including `hydra.<lang>.coder`), so a change confined to the native coder was *invisible*
 to the freshness gate ([#400](https://github.com/CategoricalData/hydra/issues/400)). Fixed:
-`Hydra.Digest.discoverNamespaceFiles` now also scans the native `.java`/`.py` sources, and
+`Hydra.Digest.discoverModuleNameFiles` now also scans the native `.java`/`.py` sources, and
 the per-package input digest hashes the unfiltered universe, so
 `dist/json/hydra-{java,python}/build/main/digest.json` includes every native module. A
 native coder edit now invalidates that digest like any other source change — Phase 5's
