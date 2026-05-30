@@ -116,10 +116,10 @@ module_ = Module {
       toDefinition typeToString]
 
 
-def :: String -> TTerm a -> TTermDefinition a
+def :: String -> TypedTerm a -> TypedTermDefinition a
 def = definitionInModule module_
 
-nameOfType :: TTermDefinition (Graph -> Type -> Y.Maybe Name)
+nameOfType :: TypedTermDefinition (Graph -> Type -> Y.Maybe Name)
 nameOfType = def "nameOfType" $
   doc "Extract the name from a type, if it is a named type" $
   lambda "cx" $ lambda "t" $
@@ -128,7 +128,7 @@ nameOfType = def "nameOfType" $
       _Type_variable>>: ("name" ~> just (var "name")),
       _Type_forall>>: ("ft" ~> nameOfType @@ var "cx" @@ (project _ForallType _ForallType_body @@ var "ft"))])
 
-qualifyUnionFieldName :: TTermDefinition (String -> Y.Maybe Name -> Name -> String)
+qualifyUnionFieldName :: TypedTermDefinition (String -> Y.Maybe Name -> Name -> String)
 qualifyUnionFieldName = def "qualifyUnionFieldName" $
   doc "Qualify a union field name, optionally prefixing with the Scala type name" $
   lambda "dlft" $ lambda "sname" $ lambda "fname" $
@@ -138,7 +138,7 @@ qualifyUnionFieldName = def "qualifyUnionFieldName" $
       (var "sname")
     ++ (scalaEscapeName @@ (Core.unName $ var "fname"))
 
-sapply :: TTermDefinition (Scala.Data -> [Scala.Data] -> Scala.Data)
+sapply :: TypedTermDefinition (Scala.Data -> [Scala.Data] -> Scala.Data)
 sapply = def "sapply" $
   doc "Apply a Scala data expression to a list of arguments" $
   lambda "fun" $ lambda "args" $
@@ -147,7 +147,7 @@ sapply = def "sapply" $
         _ApplyData_fun>>: var "fun",
         _ApplyData_args>>: var "args"])
 
-sapplyTypes :: TTermDefinition (Scala.Data -> [Scala.Type] -> Scala.Data)
+sapplyTypes :: TypedTermDefinition (Scala.Data -> [Scala.Type] -> Scala.Data)
 sapplyTypes = def "sapplyTypes" $
   doc "Apply explicit type parameters to a Scala expression (e.g. f[A, B])" $
   lambda "fun" $ lambda "typeArgs" $ lets [
@@ -165,7 +165,7 @@ sapplyTypes = def "sapplyTypes" $
           "rawName">: unwrap Scala._PredefString @@ var "nameStr"] $
           sname @@ (var "rawName" ++ var "typeArgStr"))])]
 
-sassign :: TTermDefinition (Scala.Data -> Scala.Data -> Scala.Data)
+sassign :: TypedTermDefinition (Scala.Data -> Scala.Data -> Scala.Data)
 sassign = def "sassign" $
   doc "Create a Scala assignment expression" $
   lambda "lhs" $ lambda "rhs" $
@@ -174,7 +174,7 @@ sassign = def "sassign" $
         _AssignData_lhs>>: var "lhs",
         _AssignData_rhs>>: var "rhs"])
 
-scalaEscapeName :: TTermDefinition (String -> String)
+scalaEscapeName :: TypedTermDefinition (String -> String)
 scalaEscapeName = def "scalaEscapeName" $
   doc "Sanitize a name for Scala: escape reserved words, replace invalid characters" $
   lambda "s" $ lets [
@@ -203,12 +203,12 @@ scalaEscapeName = def "scalaEscapeName" $
 scalaLanguageNs :: ModuleName
 scalaLanguageNs = moduleName ScalaLanguageSource.module_
 
-scalaReservedWordsRef :: TTermDefinition (S.Set String)
+scalaReservedWordsRef :: TypedTermDefinition (S.Set String)
 scalaReservedWordsRef = def "scalaReservedWords" $
   doc "Reference to scalaReservedWords from the language module" $
-  TTerm $ TermVariable $ Name "hydra.scala.language.scalaReservedWords"
+  TypedTerm $ TermVariable $ Name "hydra.scala.language.scalaReservedWords"
 
-scalaTypeName :: TTermDefinition (Bool -> Name -> String)
+scalaTypeName :: TypedTermDefinition (Bool -> Name -> String)
 scalaTypeName = def "scalaTypeName" $
   doc "Convert a Hydra name to a Scala type name" $
   lambda "qualify" $ lambda "name" $
@@ -217,7 +217,7 @@ scalaTypeName = def "scalaTypeName" $
       (Core.unName $ var "name")
       (Names.localNameOf @@ var "name")
 
-slambda :: TTermDefinition (String -> Scala.Data -> Y.Maybe Scala.Type -> Scala.Data)
+slambda :: TypedTermDefinition (String -> Scala.Data -> Y.Maybe Scala.Type -> Scala.Data)
 slambda = def "slambda" $
   doc "Create a Scala lambda (function) expression" $
   lambda "v" $ lambda "body" $ lambda "sdom" $
@@ -225,13 +225,13 @@ slambda = def "slambda" $
       record _FunctionData [
         _FunctionData_params>>: list [
           record _ParamData [
-            _ParamData_mods>>: list ([] :: [TTerm Scala.Mod]),
+            _ParamData_mods>>: list ([] :: [TypedTerm Scala.Mod]),
             _ParamData_name>>: inject Scala._Name Scala._Name_value (var "v"),
             _ParamData_decltpe>>: var "sdom",
             _ParamData_default>>: nothing]],
         _FunctionData_body>>: var "body"])
 
-sname :: TTermDefinition (String -> Scala.Data)
+sname :: TypedTermDefinition (String -> Scala.Data)
 sname = def "sname" $
   doc "Create a Scala name reference" $
   lambda "s" $
@@ -240,7 +240,7 @@ sname = def "sname" $
         record _NameData [
           _NameData_value>>: wrap _PredefString (var "s")]))
 
-sprim :: TTermDefinition (Name -> Scala.Data)
+sprim :: TypedTermDefinition (Name -> Scala.Data)
 sprim = def "sprim" $
   doc "Create a Scala primitive reference from a Hydra name" $
   lambda "name" $ lets [
@@ -249,7 +249,7 @@ sprim = def "sprim" $
     "local">: scalaEscapeName @@ (Packaging.qualifiedNameLocal $ var "qname")] $
     sname @@ (var "prefix" ++ string "." ++ var "local")
 
-stapply :: TTermDefinition (Scala.Type -> [Scala.Type] -> Scala.Type)
+stapply :: TypedTermDefinition (Scala.Type -> [Scala.Type] -> Scala.Type)
 stapply = def "stapply" $
   doc "Apply a Scala type to a list of type arguments" $
   lambda "t" $ lambda "args" $
@@ -258,32 +258,32 @@ stapply = def "stapply" $
         _ApplyType_tpe>>: var "t",
         _ApplyType_args>>: var "args"])
 
-stapply1 :: TTermDefinition (Scala.Type -> Scala.Type -> Scala.Type)
+stapply1 :: TypedTermDefinition (Scala.Type -> Scala.Type -> Scala.Type)
 stapply1 = def "stapply1" $
   doc "Apply a Scala type to one type argument" $
   lambda "t1" $ lambda "t2" $
     stapply @@ var "t1" @@ list [var "t2"]
 
-stapply2 :: TTermDefinition (Scala.Type -> Scala.Type -> Scala.Type -> Scala.Type)
+stapply2 :: TypedTermDefinition (Scala.Type -> Scala.Type -> Scala.Type -> Scala.Type)
 stapply2 = def "stapply2" $
   doc "Apply a Scala type to two type arguments" $
   lambda "t1" $ lambda "t2" $ lambda "t3" $
     stapply @@ var "t1" @@ list [var "t2", var "t3"]
 
-stparam :: TTermDefinition (Name -> Scala.ParamType)
+stparam :: TypedTermDefinition (Name -> Scala.ParamType)
 stparam = def "stparam" $
   doc "Create a Scala type parameter from a Hydra name, capitalizing to avoid collision with value params" $
   lambda "name" $ lets [
     "v">: Formatting.capitalize @@ (Core.unName $ var "name")] $
     record _ParamType [
-      _ParamType_mods>>: list ([] :: [TTerm Scala.Mod]),
+      _ParamType_mods>>: list ([] :: [TypedTerm Scala.Mod]),
       _ParamType_name>>: inject Scala._Name Scala._Name_value (var "v"),
-      _ParamType_tparams>>: list ([] :: [TTerm Scala.ParamType]),
-      _ParamType_tbounds>>: list ([] :: [TTerm Scala.TypeBounds]),
-      _ParamType_vbounds>>: list ([] :: [TTerm Scala.Type]),
-      _ParamType_cbounds>>: list ([] :: [TTerm Scala.Type])]
+      _ParamType_tparams>>: list ([] :: [TypedTerm Scala.ParamType]),
+      _ParamType_tbounds>>: list ([] :: [TypedTerm Scala.TypeBounds]),
+      _ParamType_vbounds>>: list ([] :: [TypedTerm Scala.Type]),
+      _ParamType_cbounds>>: list ([] :: [TypedTerm Scala.Type])]
 
-stref :: TTermDefinition (String -> Scala.Type)
+stref :: TypedTermDefinition (String -> Scala.Type)
 stref = def "stref" $
   doc "Create a Scala type reference by name" $
   lambda "s" $
@@ -292,7 +292,7 @@ stref = def "stref" $
         record _NameType [
           _NameType_value>>: var "s"]))
 
-svar :: TTermDefinition (Name -> Scala.Pat)
+svar :: TypedTermDefinition (Name -> Scala.Pat)
 svar = def "svar" $
   doc "Create a Scala pattern variable" $
   lambda "name" $ lets [
@@ -302,7 +302,7 @@ svar = def "svar" $
         _VarPat_name>>: record _NameData [
           _NameData_value>>: wrap _PredefString (var "v")]])
 
-typeToString :: TTermDefinition (Scala.Type -> String)
+typeToString :: TypedTermDefinition (Scala.Type -> String)
 typeToString = def "typeToString" $
   doc "Convert a Scala type to its string representation" $
   lambda "t" $

@@ -91,7 +91,7 @@ import qualified Hydra.Sources.Pg.Coder as PgCoder
 import qualified Hydra.Sources.Json.Model as JsonModel
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 ns :: ModuleName
@@ -115,7 +115,7 @@ module_ = Module {
       toDefinition typeApplicationTermToPropertyGraph]
 
 -- | Default Tinkerpop annotation schema
-defaultTinkerpopAnnotations :: TTermDefinition PGM.AnnotationSchema
+defaultTinkerpopAnnotations :: TypedTermDefinition PGM.AnnotationSchema
 defaultTinkerpopAnnotations = define "defaultTinkerpopAnnotations" $
   doc "Default Tinkerpop annotation schema" $
   record PGM._AnnotationSchema [
@@ -136,7 +136,7 @@ defaultTinkerpopAnnotations = define "defaultTinkerpopAnnotations" $
     PGM._AnnotationSchema_ignore>>: string "ignore"]
 
 -- | Example property graph schema with string values
-examplePgSchema :: TTermDefinition (PGM.Schema Graph () String)
+examplePgSchema :: TypedTermDefinition (PGM.Schema Graph () String)
 examplePgSchema = define "examplePgSchema" $
   doc "Example property graph schema with string values" $
   record PGM._Schema [
@@ -151,14 +151,14 @@ examplePgSchema = define "examplePgSchema" $
     PGM._Schema_defaultEdgeId>>: string "defaultEdgeId"]
 
 -- | Extract a string from a term using the empty graph
-expString :: TTermDefinition (InferenceContext -> Term -> Either Error String)
+expString :: TypedTermDefinition (InferenceContext -> Term -> Either Error String)
 expString = define "expString" $
   doc "Extract a string from a term using the empty graph" $
   "cx" ~> "term" ~>
     ExtractCore.string @@ Graph.emptyGraph @@ var "term"
 
 -- | Get all elements from a lazy graph
-lazyGraphToElements :: TTermDefinition (PG.LazyGraph v -> [PG.Element v])
+lazyGraphToElements :: TypedTermDefinition (PG.LazyGraph v -> [PG.Element v])
 lazyGraphToElements = define "lazyGraphToElements" $
   doc "Get all elements from a lazy graph" $
   "lg" ~>
@@ -167,7 +167,7 @@ lazyGraphToElements = define "lazyGraphToElements" $
       (Lists.map ("x" ~> inject PG._Element PG._Element_edge (var "x")) (project PG._LazyGraph PG._LazyGraph_edges @@ var "lg"))
 
 -- | Convert a property graph element to JSON
-pgElementToJson :: TTermDefinition (PGM.Schema Graph t v -> PG.Element v -> InferenceContext -> Either Error JM.Value)
+pgElementToJson :: TypedTermDefinition (PGM.Schema Graph t v -> PG.Element v -> InferenceContext -> Either Error JM.Value)
 pgElementToJson = define "pgElementToJson" $
   doc "Convert a property graph element to JSON" $
   "schema" ~> "el" ~> "cx" ~>
@@ -201,14 +201,14 @@ pgElementToJson = define "pgElementToJson" $
     @@ var "el"
 
 -- | Convert a list of property graph elements to JSON
-pgElementsToJson :: TTermDefinition (PGM.Schema Graph t v -> [PG.Element v] -> InferenceContext -> Either Error JM.Value)
+pgElementsToJson :: TypedTermDefinition (PGM.Schema Graph t v -> [PG.Element v] -> InferenceContext -> Either Error JM.Value)
 pgElementsToJson = define "pgElementsToJson" $
   doc "Convert a list of property graph elements to JSON" $
   "schema" ~> "els" ~> "cx" ~>
     Eithers.map ("els'" ~> Json.valueArray (var "els'")) (Eithers.mapList ("el" ~> pgElementToJson @@ var "schema" @@ var "el" @@ var "cx") (var "els"))
 
 -- | Get all elements from a property graph
-propertyGraphElements :: TTermDefinition (PG.Graph v -> [PG.Element v])
+propertyGraphElements :: TypedTermDefinition (PG.Graph v -> [PG.Element v])
 propertyGraphElements = define "propertyGraphElements" $
   doc "Get all elements from a property graph" $
   "g" ~>
@@ -217,7 +217,7 @@ propertyGraphElements = define "propertyGraphElements" $
       (Lists.map ("x" ~> inject PG._Element PG._Element_edge (var "x")) (Maps.elems $ project PG._Graph PG._Graph_edges @@ var "g"))
 
 -- Internal helper (not exported as a binding)
-propsToJson :: TTerm (PGM.Schema Graph t v -> InferenceContext -> M.Map PG.PropertyKey v -> Either Error (Y.Maybe (String, JM.Value)))
+propsToJson :: TypedTerm (PGM.Schema Graph t v -> InferenceContext -> M.Map PG.PropertyKey v -> Either Error (Y.Maybe (String, JM.Value)))
 propsToJson = "schema" ~> "cx" ~> "pairs" ~>
   Logic.ifElse (Maps.null $ var "pairs")
     (right nothing)
@@ -232,7 +232,7 @@ propsToJson = "schema" ~> "cx" ~> "pairs" ~>
         (Maps.toList $ var "pairs")))
 
 -- | Convert a type-annotated term to property graph elements
-typeApplicationTermToPropertyGraph :: TTermDefinition (PGM.Schema Graph t v -> Type -> t -> t -> InferenceContext -> Graph
+typeApplicationTermToPropertyGraph :: TypedTermDefinition (PGM.Schema Graph t v -> Type -> t -> t -> InferenceContext -> Graph
   -> Either Error (Term -> InferenceContext -> Either Error [PG.Element v]))
 typeApplicationTermToPropertyGraph = define "typeApplicationTermToPropertyGraph" $
   doc "Convert a type-annotated term to property graph elements" $

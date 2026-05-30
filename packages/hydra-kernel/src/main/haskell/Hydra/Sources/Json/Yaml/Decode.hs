@@ -89,7 +89,7 @@ import qualified Hydra.Sources.Yaml.Model as YamlModel
 ns :: ModuleName
 ns = ModuleName "hydra.json.yaml.decode"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -104,7 +104,7 @@ module_ = Module {
       toDefinition yamlToJson]
 
 -- | Decode a YAML Node to a Hydra Term via JSON.
-fromYaml :: TTermDefinition (M.Map Name Type -> Name -> Type -> YM.Node -> Either String Term)
+fromYaml :: TypedTermDefinition (M.Map Name Type -> Name -> Type -> YM.Node -> Either String Term)
 fromYaml = define "fromYaml" $
   doc "Decode a YAML node to a Hydra term via JSON decoding." $
   "types" ~> "tname" ~> "typ" ~> "node" ~>
@@ -115,7 +115,7 @@ fromYaml = define "fromYaml" $
     (var "jsonResult")
 -- | Convert a YAML Node to a JSON Value. Fails if the YAML uses non-JSON features
 -- (e.g. non-string mapping keys, integer scalars without a JSON number equivalent).
-yamlToJson :: TTermDefinition (YM.Node -> Either String Value)
+yamlToJson :: TypedTermDefinition (YM.Node -> Either String Value)
 yamlToJson = define "yamlToJson" $
   doc "Convert a YAML node to a JSON value. Fails for non-JSON YAML features (e.g. non-string mapping keys)." $
   "node" ~>

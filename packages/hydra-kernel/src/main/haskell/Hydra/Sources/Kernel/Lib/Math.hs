@@ -18,7 +18,7 @@ import qualified Data.Int                    as I
 ns :: ModuleName
 ns = ModuleName "hydra.lib.math"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -305,7 +305,7 @@ int32ToMaybe = sig $ TypeScheme [] (Types.int32 Types.~> Types.optional Types.in
 -- Default implementations.
 
 -- even x = equal (fromMaybe 0 (maybeMod x 2)) 0
-even_ :: TTermDefinition (I.Int32 -> Bool)
+even_ :: TypedTermDefinition (I.Int32 -> Bool)
 even_ = define "even" $
   doc "Test whether an integer is even, defined via maybeMod and equality." $
   "x" ~> Equality.equal
@@ -313,7 +313,7 @@ even_ = define "even" $
     (int32 0)
 
 -- odd x = not (even x)
-odd_ :: TTermDefinition (I.Int32 -> Bool)
+odd_ :: TypedTermDefinition (I.Int32 -> Bool)
 odd_ = define "odd" $
   doc "Test whether an integer is odd, defined as the negation of even." $
   "x" ~> Logic.not (Math.even (var "x"))

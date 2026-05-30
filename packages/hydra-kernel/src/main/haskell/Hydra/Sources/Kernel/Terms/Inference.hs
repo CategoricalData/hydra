@@ -153,22 +153,22 @@ module_ = Module {
       toDefinition yieldCheckedWithConstraints,
       toDefinition yieldWithConstraints]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- | Format an Error as a string
-formatError :: TTerm (Error -> String)
+formatError :: TypedTerm (Error -> String)
 formatError = "e" ~> ShowError.error_ @@ var "e"
 
 -- | Format a UnificationError as a string
-formatUnifError :: TTerm (UnificationError -> String)
+formatUnifError :: TypedTerm (UnificationError -> String)
 formatUnifError = "e" ~> Error.unificationErrorMessage (var "e")
 
 -- | Lift a UnificationError to an Error, stamping the current trace from
 -- the InferenceContext (reversed: trace is accumulated leaf-to-root; the
 -- SubtermPath we attach is root-to-leaf, matching the natural reading order
 -- of "from the term root, the failure happened at <path>").
-wrapUnifError :: TTerm InferenceContext -> TTerm UnificationError -> TTerm Error
+wrapUnifError :: TypedTerm InferenceContext -> TypedTerm UnificationError -> TypedTerm Error
 wrapUnifError cx e = Error.errorInference (Error.inferenceErrorUnification
   (Error.unificationInferenceError
     (Paths.subtermPath (Lists.reverse (Typing.inferenceContextTrace cx)))
@@ -179,7 +179,7 @@ wrapUnifError cx e = Error.errorInference (Error.inferenceErrorUnification
 -- | Return the element at the given index, or Left(Other) with the given
 -- description if the index is out of range. Used to destructure lists of
 -- statically known length in Either-returning contexts.
-atOrFail :: TTermDefinition (Int -> String -> [a] -> Prelude.Either Error a)
+atOrFail :: TypedTermDefinition (Int -> String -> [a] -> Prelude.Either Error a)
 atOrFail = define "atOrFail" $
   doc "Return the element at the given index, or Left(Other) with the given description if out of range" $
   "i" ~> "desc" ~> "xs" ~>
@@ -188,7 +188,7 @@ atOrFail = define "atOrFail" $
     (reify right)
     (Lists.maybeAt (var "i") (var "xs"))
 
-bindConstraints :: TTermDefinition (InferenceContext -> Graph -> [TypeConstraint] -> Either Error TypeSubst)
+bindConstraints :: TypedTermDefinition (InferenceContext -> Graph -> [TypeConstraint] -> Either Error TypeSubst)
 bindConstraints = define "bindConstraints" $
   doc "Unify type constraints and check the substitution" $
   "flowCx" ~> "cx" ~> "constraints" ~>
@@ -199,7 +199,7 @@ bindConstraints = define "bindConstraints" $
   Eithers.bind (Checking.checkTypeSubst @@ var "flowCx" @@ var "cx" @@ var "s") (
     "_" ~> right (var "s"))
 
-bindUnboundTypeVariables :: TTermDefinition (Graph -> Term -> Term)
+bindUnboundTypeVariables :: TypedTermDefinition (Graph -> Term -> Term)
 bindUnboundTypeVariables = define "bindUnboundTypeVariables" $
   doc ("Handle unbound type variables under a typed let binding."
     <> " Variables appearing free in the binding's declared type (but not in schema types or the scheme's own"
@@ -253,7 +253,7 @@ bindUnboundTypeVariables = define "bindUnboundTypeVariables" $
         (bindUnboundTypeVariables @@ var "cx" @@ (Core.letBody $ var "l"))]) $
   Rewriting.rewriteTerm @@ var "rewrite" @@ var "term0"
 
-buildTypeApplicationTerm :: TTermDefinition ([Name] -> Term -> Term)
+buildTypeApplicationTerm :: TypedTermDefinition ([Name] -> Term -> Term)
 buildTypeApplicationTerm = define "buildTypeApplicationTerm" $
   doc "Fold a list of type variables over a term to build a type application term" $
   "tvars" ~> "body" ~> Lists.foldl
@@ -261,7 +261,7 @@ buildTypeApplicationTerm = define "buildTypeApplicationTerm" $
     (var "body")
     (var "tvars")
 
-extendContext :: TTermDefinition ([(Name, TypeScheme)] -> Graph -> Graph)
+extendContext :: TypedTermDefinition ([(Name, TypeScheme)] -> Graph -> Graph)
 extendContext = define "extendContext" $
   doc "Add (term variable, type scheme) pairs to the graph's bound types" $
   "pairs" ~> "cx" ~>
@@ -269,7 +269,7 @@ extendContext = define "extendContext" $
     (Maps.fromList $ var "pairs")
     (Graph.graphBoundTypes $ var "cx")
 
-finalizeInferredTerm :: TTermDefinition (InferenceContext -> Graph -> Term -> Prelude.Either Error Term)
+finalizeInferredTerm :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Prelude.Either Error Term)
 finalizeInferredTerm = define "finalizeInferredTerm" $
   doc "Finalize an inferred term by checking for unbound type variables, then normalizing type variables" $
   "flowCx" ~> "cx" ~> "term" ~>
@@ -277,14 +277,14 @@ finalizeInferredTerm = define "finalizeInferredTerm" $
   "_" <<~ Checking.checkForUnboundTypeVariables @@ var "flowCx" @@ var "cx" @@ var "term2" $
   right (Variables.normalizeTypeVariablesInTerm @@ var "term2")
 
-forInferredTerm :: TTermDefinition (InferenceContext -> Graph -> Term -> String -> (InferenceResult -> a) -> Prelude.Either Error (a, InferenceContext))
+forInferredTerm :: TypedTermDefinition (InferenceContext -> Graph -> Term -> String -> (InferenceResult -> a) -> Prelude.Either Error (a, InferenceContext))
 forInferredTerm = define "forInferredTerm" $
   doc "Infer a term's type and map over the result" $
   "fcx" ~> "cx" ~> "term" ~> "desc" ~> "f" ~>
   "rp" <<~ inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ var "term" @@ var "desc" $
   right $ pair (var "f" @@ var "rp") (Typing.inferenceResultContext (var "rp"))
 
-freeVariablesInContext :: TTermDefinition (Graph -> S.Set Name)
+freeVariablesInContext :: TypedTermDefinition (Graph -> S.Set Name)
 freeVariablesInContext = define "freeVariablesInContext" $
   doc "Get all free variables in a graph's bound types" $
   "cx" ~>
@@ -292,7 +292,7 @@ freeVariablesInContext = define "freeVariablesInContext" $
       Lists.map (Variables.freeVariablesInTypeSchemeSimple) $
         Maps.elems $ Graph.graphBoundTypes $ var "cx"
 
-freshVariableType :: TTermDefinition (InferenceContext -> (Type, InferenceContext))
+freshVariableType :: TypedTermDefinition (InferenceContext -> (Type, InferenceContext))
 freshVariableType = define "freshVariableType" $
   doc "Generate a fresh type variable" $
   "cx" ~>
@@ -301,7 +301,7 @@ freshVariableType = define "freshVariableType" $
   "cx2" <~ Pairs.second (var "result") $
   pair (Core.typeVariable (var "name")) (var "cx2")
 
-generalize :: TTermDefinition (Graph -> Type -> TypeScheme)
+generalize :: TypedTermDefinition (Graph -> Type -> TypeScheme)
 generalize = define "generalize" $
   doc "Generalize a type to a type scheme" $
   "cx" ~> "typ" ~>
@@ -329,7 +329,7 @@ generalize = define "generalize" $
 -- | Extract the first element of a list, or fail with a descriptive error if
 -- the list is empty. Used to destructure lists whose non-emptiness is
 -- structurally guaranteed by the caller but not expressible in the type.
-headOrFail :: TTermDefinition (String -> [a] -> Prelude.Either Error a)
+headOrFail :: TypedTermDefinition (String -> [a] -> Prelude.Either Error a)
 headOrFail = define "headOrFail" $
   doc "Return the first element of a list, or Left(Other) with the given description if the list is empty" $
   "desc" ~> "xs" ~>
@@ -337,7 +337,7 @@ headOrFail = define "headOrFail" $
     (left $ Error.errorOther $ Error.otherError $ (string "headOrFail: ") ++ var "desc")
     (reify right)
     (Lists.maybeHead $ var "xs")
-inferGraphTypes :: TTermDefinition (InferenceContext -> [Binding] -> Graph -> Prelude.Either Error ((Graph, [Binding]), InferenceContext))
+inferGraphTypes :: TypedTermDefinition (InferenceContext -> [Binding] -> Graph -> Prelude.Either Error ((Graph, [Binding]), InferenceContext))
 inferGraphTypes = define "inferGraphTypes" $
   doc ("Infer types for all elements in a graph, using the provided ordered bindings."
     <> " Returns both the inferred graph and the ordered inferred bindings.") $
@@ -363,17 +363,17 @@ inferGraphTypes = define "inferGraphTypes" $
       (Paths.subtermPath (Lists.reverse $ Typing.inferenceContextTrace (var "fcx2")))
       (string "Expected inferred graph as let term"))]
 
-inferInGraphContext :: TTermDefinition (InferenceContext -> Graph -> Term -> Prelude.Either Error InferenceResult)
+inferInGraphContext :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Prelude.Either Error InferenceResult)
 inferInGraphContext = define "inferInGraphContext" $
   doc "Infer the type of a term in a given inference context" $
   "fcx" ~> "cx" ~> "term" ~>
   inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ var "term" @@ (string "single term")
 
-inferMany :: TTermDefinition (InferenceContext -> Graph -> [(Term, String)] -> Prelude.Either Error (([Term], ([Type], (TypeSubst, M.Map Name TypeVariableMetadata))), InferenceContext))
+inferMany :: TypedTermDefinition (InferenceContext -> Graph -> [(Term, String)] -> Prelude.Either Error (([Term], ([Type], (TypeSubst, M.Map Name TypeVariableMetadata))), InferenceContext))
 inferMany = define "inferMany" $
   doc "Infer types for multiple terms, propagating class constraints from sub-expressions" $
   "fcx" ~> "cx" ~> "pairs" ~>
-  "emptyResult" <~ (right $ pair (pair (list ([] :: [TTerm Term])) $ pair (list ([] :: [TTerm Type])) (pair Substitution.idTypeSubst Maps.empty)) (var "fcx")) $
+  "emptyResult" <~ (right $ pair (pair (list ([] :: [TypedTerm Term])) $ pair (list ([] :: [TypedTerm Type])) (pair Substitution.idTypeSubst Maps.empty)) (var "fcx")) $
   Maybes.maybe (var "emptyResult")
     ("pairsUc" ~>
     "headPair" <~ Pairs.first (var "pairsUc") $
@@ -403,7 +403,7 @@ inferMany = define "inferMany" $
     (Lists.uncons (var "pairs"))
 
 
-inferTypeOf :: TTermDefinition (InferenceContext -> Graph -> Term -> Prelude.Either Error ((Term, TypeScheme), InferenceContext))
+inferTypeOf :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Prelude.Either Error ((Term, TypeScheme), InferenceContext))
 inferTypeOf = define "inferTypeOf" $
   doc "Map a possibly untyped term to a fully typed term and its type" $
   "fcx" ~> "cx" ~> "term" ~>
@@ -434,7 +434,7 @@ inferTypeOf = define "inferTypeOf" $
         (string " bindings")])))
 
 
-inferTypeOfAnnotatedTerm :: TTermDefinition (InferenceContext -> Graph -> AnnotatedTerm -> Prelude.Either Error InferenceResult)
+inferTypeOfAnnotatedTerm :: TypedTermDefinition (InferenceContext -> Graph -> AnnotatedTerm -> Prelude.Either Error InferenceResult)
 inferTypeOfAnnotatedTerm = define "inferTypeOfAnnotatedTerm" $
   doc "Infer the type of an annotated term (Either version)" $
   "fcx" ~> "cx" ~> "at" ~>
@@ -457,7 +457,7 @@ inferTypeOfAnnotatedTerm = define "inferTypeOfAnnotatedTerm" $
     (var "fcx2")
 
 
-inferTypeOfApplication :: TTermDefinition (InferenceContext -> Graph -> Application -> Prelude.Either Error InferenceResult)
+inferTypeOfApplication :: TypedTermDefinition (InferenceContext -> Graph -> Application -> Prelude.Either Error InferenceResult)
 inferTypeOfApplication = define "inferTypeOfApplication" $
   doc "Infer the type of a function application (Either version)" $
   "fcx0" ~> "cx" ~> "app" ~>
@@ -508,7 +508,7 @@ inferTypeOfApplication = define "inferTypeOfApplication" $
   "rConstraints" <~ mergeClassConstraints @@ var "c0Subst" @@ var "c1Subst" $
   right $ Typing.inferenceResult (var "rExpr") (var "rType") (var "rSubst") (var "rConstraints") (var "fcx4")
 
-inferTypeOfCaseStatement :: TTermDefinition (InferenceContext -> Graph -> CaseStatement -> Prelude.Either Error InferenceResult)
+inferTypeOfCaseStatement :: TypedTermDefinition (InferenceContext -> Graph -> CaseStatement -> Prelude.Either Error InferenceResult)
 inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
   doc "Infer the type of a case statement (Either version)" $
   "fcx" ~> "cx" ~> "caseStmt" ~>
@@ -580,7 +580,7 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
     @@ (Lists.concat $ list [var "dfltConstraints", var "caseConstraints"]) $
   right (var "mcResult")
 
-inferTypeOfCollection :: TTermDefinition (InferenceContext -> Graph -> (Type -> Type) -> ([Term] -> Term) -> String -> S.Set Name -> [Term] -> Prelude.Either Error InferenceResult)
+inferTypeOfCollection :: TypedTermDefinition (InferenceContext -> Graph -> (Type -> Type) -> ([Term] -> Term) -> String -> S.Set Name -> [Term] -> Prelude.Either Error InferenceResult)
 inferTypeOfCollection = define "inferTypeOfCollection" $
   doc "Infer the type of a collection. The classNames parameter specifies type classes (e.g. ordering) that the element type variable must satisfy." $
   "fcx" ~> "cx" ~> "typCons" ~> "trmCons" ~> "desc" ~> "classNames" ~> "els" ~>
@@ -595,7 +595,7 @@ inferTypeOfCollection = define "inferTypeOfCollection" $
       @@ var "fcx2"
       @@ (buildTypeApplicationTerm
         @@ list [var "var"]
-        @@ (var "trmCons" @@ list ([] :: [TTerm Term])))
+        @@ (var "trmCons" @@ list ([] :: [TypedTerm Term])))
       @@ (var "typCons" @@ (Core.typeVariable $ var "var"))
       @@ (Substitution.idTypeSubst)
       @@ var "classConstraints"))
@@ -619,7 +619,7 @@ inferTypeOfCollection = define "inferTypeOfCollection" $
       var "constraints" $
     right (var "mcResult"))
 
-inferTypeOfEither :: TTermDefinition (InferenceContext -> Graph -> Prelude.Either Term Term -> Prelude.Either Error InferenceResult)
+inferTypeOfEither :: TypedTermDefinition (InferenceContext -> Graph -> Prelude.Either Term Term -> Prelude.Either Error InferenceResult)
 inferTypeOfEither = define "inferTypeOfEither" $
   doc "Infer the type of an either value (Either version)" $
   "fcx" ~> "cx" ~> "e" ~>
@@ -654,7 +654,7 @@ inferTypeOfEither = define "inferTypeOfEither" $
       right (yieldChecked @@ var "fcx3" @@ var "termWithBothTypes" @@ var "eitherType" @@ var "subst"))
     (var "e")
 
-inferTypeOfInjection :: TTermDefinition (InferenceContext -> Graph -> Injection -> Prelude.Either Error InferenceResult)
+inferTypeOfInjection :: TypedTermDefinition (InferenceContext -> Graph -> Injection -> Prelude.Either Error InferenceResult)
 inferTypeOfInjection = define "inferTypeOfInjection" $
   doc "Infer the type of a union injection (Either version)" $
   "fcx" ~> "cx" ~> "injection" ~>
@@ -687,7 +687,7 @@ inferTypeOfInjection = define "inferTypeOfInjection" $
     list [Typing.typeConstraint (var "ftyp") (var "ityp") (string "schema type of injected field")] $
   right (var "mcResult")
 
-inferTypeOfLambda :: TTermDefinition (InferenceContext -> Graph -> Lambda -> Prelude.Either Error InferenceResult)
+inferTypeOfLambda :: TypedTermDefinition (InferenceContext -> Graph -> Lambda -> Prelude.Either Error InferenceResult)
 inferTypeOfLambda = define "inferTypeOfLambda" $
   doc "Infer the type of a lambda function (Either version)" $
   "fcx" ~> "cx" ~> "lambda" ~>
@@ -697,7 +697,7 @@ inferTypeOfLambda = define "inferTypeOfLambda" $
   "vdom" <~ Pairs.first (var "vdomResult") $
   "fcx2" <~ Pairs.second (var "vdomResult") $
   "dom" <~ Core.typeVariable (var "vdom") $
-  "cx2" <~ (extendContext @@ list [pair (var "var") (Core.typeScheme (list ([] :: [TTerm Name])) (var "dom") Phantoms.nothing)] @@ var "cx") $
+  "cx2" <~ (extendContext @@ list [pair (var "var") (Core.typeScheme (list ([] :: [TypedTerm Name])) (var "dom") Phantoms.nothing)] @@ var "cx") $
   -- Descend into the lambda body with lambdaBody step on the trace
   "fcxBody" <~ Names.pushSubtermStep @@ Paths.subtermStepLambdaBody @@ var "fcx2" $
   "result" <<~ inferTypeOfTerm @@ var "fcxBody" @@ var "cx2" @@ var "body" @@ (string "lambda body") $
@@ -716,7 +716,7 @@ inferTypeOfLambda = define "inferTypeOfLambda" $
   "cx3" <~ Substitution.substInContext @@ var "isubst" @@ var "cx" $
   "iconstraints" <~ Substitution.substInClassConstraints @@ var "isubst" @@ (Typing.inferenceResultClassConstraints $ var "result") $
   right (Typing.inferenceResult (var "rterm") (var "rtype") (var "isubst") (var "iconstraints") (var "fcx3"))
-inferTypeOfLet :: TTermDefinition (InferenceContext -> Graph -> Let -> Prelude.Either Error InferenceResult)
+inferTypeOfLet :: TypedTermDefinition (InferenceContext -> Graph -> Let -> Prelude.Either Error InferenceResult)
 inferTypeOfLet = define "inferTypeOfLet" $
   doc "Normalize a let term before inferring its type (Either version)" $
   "fcx0" ~> "cx" ~> "let0" ~>
@@ -750,7 +750,7 @@ inferTypeOfLet = define "inferTypeOfLet" $
       Logic.ifElse (Equality.equal (var "level") (int32 0))
         (pair (var "bins") (var "term"))
         (var "nonzero" @@ var "term")) $
-    "result" <~ var "helper" @@ (Lists.length $ var "groups") @@ list ([] :: [TTerm Binding]) @@ var "iterm" $
+    "result" <~ var "helper" @@ (Lists.length $ var "groups") @@ list ([] :: [TypedTerm Binding]) @@ var "iterm" $
     "bindingList" <~ Pairs.first (var "result") $
     "e" <~ Pairs.second (var "result") $
     "bindingMap2" <~ Maps.fromList (Lists.map ("b" ~> pair (Core.bindingName $ var "b") (var "b")) (var "bindingList")) $
@@ -769,7 +769,7 @@ inferTypeOfLet = define "inferTypeOfLet" $
      _Term_let>>: "l" ~> inferTypeOfLetNormalized @@ var "fcx" @@ var "cx" @@ var "l"]) $
   Eithers.map (var "rewriteResult") (var "res")
 
-inferTypeOfLetNormalized :: TTermDefinition (InferenceContext -> Graph -> Let -> Prelude.Either Error InferenceResult)
+inferTypeOfLetNormalized :: TypedTermDefinition (InferenceContext -> Graph -> Let -> Prelude.Either Error InferenceResult)
 inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
   doc "Infer the type of a let (letrec) term which is already in a normal form (Either version)" $
   "fcx0" ~> "cx0" ~> "letTerm" ~>
@@ -785,7 +785,7 @@ inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
   "tbins0" <~ Lists.map (reify Core.typeVariable) (var "bvars") $
 
   "cx1" <~ (extendContext
-    @@ (Lists.zip (var "bnames") $ Lists.map ("t" ~> Core.typeScheme (list ([] :: [TTerm Name])) (var "t") Phantoms.nothing) (var "tbins0"))
+    @@ (Lists.zip (var "bnames") $ Lists.map ("t" ~> Core.typeScheme (list ([] :: [TypedTerm Name])) (var "t") Phantoms.nothing) (var "tbins0"))
     @@ (var "cx0")) $
 
   -- Phase 2: Infer actual types
@@ -897,7 +897,7 @@ inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
     (var "allConstraints")
     (var "fcx4"))
 
-inferTypeOfList :: TTermDefinition (InferenceContext -> Graph -> [Term] -> Prelude.Either Error InferenceResult)
+inferTypeOfList :: TypedTermDefinition (InferenceContext -> Graph -> [Term] -> Prelude.Either Error InferenceResult)
 inferTypeOfList = define "inferTypeOfList" $
   doc "Infer the type of a list (Either version)" $
   "fcx" ~> "cx" ~> inferTypeOfCollection
@@ -906,9 +906,9 @@ inferTypeOfList = define "inferTypeOfList" $
     @@ (reify Core.typeList)
     @@ (reify Core.termList)
     @@ (string "list element")
-    @@ (Sets.empty :: TTerm (S.Set Name))
+    @@ (Sets.empty :: TypedTerm (S.Set Name))
 
-inferTypeOfLiteral :: TTermDefinition (InferenceContext -> Literal -> InferenceResult)
+inferTypeOfLiteral :: TypedTermDefinition (InferenceContext -> Literal -> InferenceResult)
 inferTypeOfLiteral = define "inferTypeOfLiteral" $
   doc "Infer the type of a literal" $
   "fcx" ~> "lit" ~>
@@ -919,7 +919,7 @@ inferTypeOfLiteral = define "inferTypeOfLiteral" $
     Maps.empty
     (var "fcx")
 
-inferTypeOfMap :: TTermDefinition (InferenceContext -> Graph -> M.Map Term Term -> Prelude.Either Error InferenceResult)
+inferTypeOfMap :: TypedTermDefinition (InferenceContext -> Graph -> M.Map Term Term -> Prelude.Either Error InferenceResult)
 inferTypeOfMap = define "inferTypeOfMap" $
   doc "Infer the type of a map (Either version)" $
   "fcx" ~> "cx" ~> "m" ~>
@@ -968,7 +968,7 @@ inferTypeOfMap = define "inferTypeOfMap" $
       (Lists.concat $ list [var "kcons", var "vcons"]) $
     right (var "mcResult"))
 
-inferTypeOfOptional :: TTermDefinition (InferenceContext -> Graph -> Maybe Term -> Prelude.Either Error InferenceResult)
+inferTypeOfOptional :: TypedTermDefinition (InferenceContext -> Graph -> Maybe Term -> Prelude.Either Error InferenceResult)
 inferTypeOfOptional = define "inferTypeOfOptional" $
   doc "Infer the type of a Maybe value" $
   "fcx" ~> "cx" ~> "m" ~>
@@ -979,10 +979,10 @@ inferTypeOfOptional = define "inferTypeOfOptional" $
     @@ (reify Core.typeMaybe)
     @@ var "trmCons"
     @@ (string "optional element")
-    @@ (Sets.empty :: TTerm (S.Set Name))
-    @@ (Maybes.maybe (list ([] :: [TTerm Term])) (reify Lists.singleton) $ var "m")
+    @@ (Sets.empty :: TypedTerm (S.Set Name))
+    @@ (Maybes.maybe (list ([] :: [TypedTerm Term])) (reify Lists.singleton) $ var "m")
 
-inferTypeOfPair :: TTermDefinition (InferenceContext -> Graph -> (Term, Term) -> Prelude.Either Error InferenceResult)
+inferTypeOfPair :: TypedTermDefinition (InferenceContext -> Graph -> (Term, Term) -> Prelude.Either Error InferenceResult)
 inferTypeOfPair = define "inferTypeOfPair" $
   doc "Infer the type of a pair (Either version)" $
   "fcx" ~> "cx" ~> "p" ~>
@@ -1011,7 +1011,7 @@ inferTypeOfPair = define "inferTypeOfPair" $
     @@ var "isubst"
     @@ var "pairElemConstraints")
 
-inferTypeOfPrimitive :: TTermDefinition (InferenceContext -> Graph -> Name -> Prelude.Either Error InferenceResult)
+inferTypeOfPrimitive :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Prelude.Either Error InferenceResult)
 inferTypeOfPrimitive = define "inferTypeOfPrimitive" $
   doc "Infer the type of a primitive function (Either version)" $
   "fcx" ~> "cx" ~> "name" ~>
@@ -1032,7 +1032,7 @@ inferTypeOfPrimitive = define "inferTypeOfPrimitive" $
         @@ var "constraints"))
     (Maybes.map ("_p" ~> Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "_p"))) $ Maps.lookup (var "name") (Graph.graphPrimitives $ var "cx"))
 
-inferTypeOfProjection :: TTermDefinition (InferenceContext -> Graph -> Projection -> Prelude.Either Error InferenceResult)
+inferTypeOfProjection :: TypedTermDefinition (InferenceContext -> Graph -> Projection -> Prelude.Either Error InferenceResult)
 inferTypeOfProjection = define "inferTypeOfProjection" $
   doc "Infer the type of a record projection (Either version)" $
   "fcx" ~> "cx" ~> "proj" ~>
@@ -1054,7 +1054,7 @@ inferTypeOfProjection = define "inferTypeOfProjection" $
       (var "ftyp"))
     @@ Substitution.idTypeSubst)
 
-inferTypeOfRecord :: TTermDefinition (InferenceContext -> Graph -> Record -> Prelude.Either Error InferenceResult)
+inferTypeOfRecord :: TypedTermDefinition (InferenceContext -> Graph -> Record -> Prelude.Either Error InferenceResult)
 inferTypeOfRecord = define "inferTypeOfRecord" $
   doc "Infer the type of a record (Either version)" $
   "fcx" ~> "cx" ~> "record" ~>
@@ -1093,7 +1093,7 @@ inferTypeOfRecord = define "inferTypeOfRecord" $
     list [Typing.typeConstraint (var "stype") (var "ityp") (string "schema type of record")] $
   right (var "mcResult")
 
-inferTypeOfSet :: TTermDefinition (InferenceContext -> Graph -> S.Set Term -> Prelude.Either Error InferenceResult)
+inferTypeOfSet :: TypedTermDefinition (InferenceContext -> Graph -> S.Set Term -> Prelude.Either Error InferenceResult)
 inferTypeOfSet = define "inferTypeOfSet" $
   doc "Infer the type of a set (Either version)" $
   "fcx" ~> "cx" ~>
@@ -1107,7 +1107,7 @@ inferTypeOfSet = define "inferTypeOfSet" $
     @@ (Sets.singleton $ Core.name (string "ordering"))
     @@ (Sets.toList $ var "s")
 
-inferTypeOfTerm :: TTermDefinition (InferenceContext -> Graph -> Term -> String -> Prelude.Either Error InferenceResult)
+inferTypeOfTerm :: TypedTermDefinition (InferenceContext -> Graph -> Term -> String -> Prelude.Either Error InferenceResult)
 inferTypeOfTerm = define "inferTypeOfTerm" $
   doc "Infer the type of a given term (Either version)" $
   "fcx" ~> "cx" ~> "term" ~> "desc" ~>
@@ -1135,7 +1135,7 @@ inferTypeOfTerm = define "inferTypeOfTerm" $
     _Term_variable>>: "name" ~> inferTypeOfVariable @@ var "fcx2" @@ var "cx" @@ var "name",
     _Term_wrap>>: "w" ~> inferTypeOfWrappedTerm @@ var "fcx2" @@ var "cx" @@ var "w"]
 
-inferTypeOfTypeApplication :: TTermDefinition (InferenceContext -> Graph -> TypeApplicationTerm -> Prelude.Either Error InferenceResult)
+inferTypeOfTypeApplication :: TypedTermDefinition (InferenceContext -> Graph -> TypeApplicationTerm -> Prelude.Either Error InferenceResult)
 inferTypeOfTypeApplication = define "inferTypeOfTypeApplication" $
   doc "Infer the type of a type application (Either version)" $
   "fcx" ~> "cx" ~> "tt" ~>
@@ -1151,7 +1151,7 @@ inferTypeOfTypeApplication = define "inferTypeOfTypeApplication" $
     (Typing.inferenceResultClassConstraints $ var "result")
     (var "fcx2")
 
-inferTypeOfTypeLambda :: TTermDefinition (InferenceContext -> Graph -> TypeLambda -> Prelude.Either Error InferenceResult)
+inferTypeOfTypeLambda :: TypedTermDefinition (InferenceContext -> Graph -> TypeLambda -> Prelude.Either Error InferenceResult)
 inferTypeOfTypeLambda = define "inferTypeOfTypeLambda" $
   doc "Infer the type of a type abstraction (Either version)" $
   "fcx" ~> "cx" ~> "ta" ~>
@@ -1167,7 +1167,7 @@ inferTypeOfTypeLambda = define "inferTypeOfTypeLambda" $
     (Typing.inferenceResultClassConstraints $ var "result")
     (var "fcx2")
 
-inferTypeOfUnit :: TTermDefinition (InferenceContext -> InferenceResult)
+inferTypeOfUnit :: TypedTermDefinition (InferenceContext -> InferenceResult)
 inferTypeOfUnit = define "inferTypeOfUnit" $
   doc "The trivial inference rule for the unit term" $
   "fcx" ~>
@@ -1178,7 +1178,7 @@ inferTypeOfUnit = define "inferTypeOfUnit" $
     Maps.empty
     (var "fcx")
 
-inferTypeOfUnwrap :: TTermDefinition (InferenceContext -> Graph -> Name -> Prelude.Either Error InferenceResult)
+inferTypeOfUnwrap :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Prelude.Either Error InferenceResult)
 inferTypeOfUnwrap = define "inferTypeOfUnwrap" $
   doc "Infer the type of an unwrap operation (Either version)" $
   "fcx" ~> "cx" ~> "tname" ~>
@@ -1197,7 +1197,7 @@ inferTypeOfUnwrap = define "inferTypeOfUnwrap" $
       (var "wtyp"))
     @@ Substitution.idTypeSubst)
 
-inferTypeOfVariable :: TTermDefinition (InferenceContext -> Graph -> Name -> Prelude.Either Error InferenceResult)
+inferTypeOfVariable :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Prelude.Either Error InferenceResult)
 inferTypeOfVariable = define "inferTypeOfVariable" $
   doc "Infer the type of a variable (Either version)" $
   "fcx" ~> "cx" ~> "name" ~>
@@ -1235,7 +1235,7 @@ inferTypeOfVariable = define "inferTypeOfVariable" $
         (var "fcx2")))
     (Maps.lookup (var "name") (Graph.graphBoundTypes $ var "cx"))
 
-inferTypeOfWrappedTerm :: TTermDefinition (InferenceContext -> Graph -> WrappedTerm -> Prelude.Either Error InferenceResult)
+inferTypeOfWrappedTerm :: TypedTermDefinition (InferenceContext -> Graph -> WrappedTerm -> Prelude.Either Error InferenceResult)
 inferTypeOfWrappedTerm = define "inferTypeOfWrappedTerm" $
   doc "Infer the type of a wrapped term (Either version)" $
   "fcx" ~> "cx" ~> "wt" ~>
@@ -1264,11 +1264,11 @@ inferTypeOfWrappedTerm = define "inferTypeOfWrappedTerm" $
     @@ list [Typing.typeConstraint (var "stype") (var "ityp") (string "schema type of wrapper")] $
   right (var "mcResult")
 
-inferTypesOfTemporaryBindings :: TTermDefinition (InferenceContext -> Graph -> [Binding] -> Prelude.Either Error (([Term], ([Type], (TypeSubst, M.Map Name TypeVariableMetadata))), InferenceContext))
+inferTypesOfTemporaryBindings :: TypedTermDefinition (InferenceContext -> Graph -> [Binding] -> Prelude.Either Error (([Term], ([Type], (TypeSubst, M.Map Name TypeVariableMetadata))), InferenceContext))
 inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
   doc "Infer types for temporary let bindings (Either version)" $
   "fcx" ~> "cx" ~> "bins" ~>
-  "emptyResult" <~ (right $ pair (pair (list ([] :: [TTerm Term])) (pair (list ([] :: [TTerm Type])) (pair (Substitution.idTypeSubst) Maps.empty))) (var "fcx")) $
+  "emptyResult" <~ (right $ pair (pair (list ([] :: [TypedTerm Term])) (pair (list ([] :: [TypedTerm Type])) (pair (Substitution.idTypeSubst) Maps.empty))) (var "fcx")) $
   Maybes.maybe (var "emptyResult")
     ("binsUc" ~>
     "binding" <~ Pairs.first (var "binsUc") $
@@ -1330,7 +1330,7 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
         (pair (Substitution.composeTypeSubst @@ var "u" @@ var "r") (var "mergedConstraints")))) (var "fcx3"))
     (Lists.uncons (var "bins"))
 
-isUnbound :: TTermDefinition (Graph -> Name -> Bool)
+isUnbound :: TypedTermDefinition (Graph -> Name -> Bool)
 isUnbound = define "isUnbound" $
   doc "Check if a variable is unbound in context" $
   "cx" ~> "v" ~>
@@ -1338,7 +1338,7 @@ isUnbound = define "isUnbound" $
     (Logic.not $ Sets.member (var "v") $ freeVariablesInContext @@ var "cx")
     (Logic.not $ Maps.member (var "v") $ Graph.graphSchemaTypes $ var "cx")
 
-mapConstraints :: TTermDefinition (InferenceContext -> Graph -> (TypeSubst -> a) -> [TypeConstraint] -> Either Error a)
+mapConstraints :: TypedTermDefinition (InferenceContext -> Graph -> (TypeSubst -> a) -> [TypeConstraint] -> Either Error a)
 mapConstraints = define "mapConstraints" $
   doc "Map over type constraints after unification" $
   "flowCx" ~> "cx" ~> "f" ~> "constraints" ~>
@@ -1349,7 +1349,7 @@ mapConstraints = define "mapConstraints" $
   Eithers.bind (Checking.checkTypeSubst @@ var "flowCx" @@ var "cx" @@ var "s") (
     "_" ~> right (var "f" @@ var "s"))
 
-mergeClassConstraints :: TTermDefinition (M.Map Name TypeVariableMetadata -> M.Map Name TypeVariableMetadata -> M.Map Name TypeVariableMetadata)
+mergeClassConstraints :: TypedTermDefinition (M.Map Name TypeVariableMetadata -> M.Map Name TypeVariableMetadata -> M.Map Name TypeVariableMetadata)
 mergeClassConstraints = define "mergeClassConstraints" $
   doc "Merge two maps of class constraints. When both maps have constraints for the same variable, union the class sets." $
   "m1" ~> "m2" ~>
@@ -1366,7 +1366,7 @@ mergeClassConstraints = define "mergeClassConstraints" $
     (var "m1")
     (Maps.toList $ var "m2")
 
-showInferenceResult :: TTermDefinition (InferenceResult -> String)
+showInferenceResult :: TypedTermDefinition (InferenceResult -> String)
 showInferenceResult = define "showInferenceResult" $
   doc "Show an inference result for debugging" $
   "result" ~>
@@ -1382,7 +1382,7 @@ showInferenceResult = define "showInferenceResult" $
     ShowTyping.typeSubst @@ var "subst",
     (string "}")]
 
-yield :: TTermDefinition (InferenceContext -> Term -> Type -> TypeSubst -> InferenceResult)
+yield :: TypedTermDefinition (InferenceContext -> Term -> Type -> TypeSubst -> InferenceResult)
 yield = define "yield" $
   doc "Create an inference result with no class constraints" $
   "fcx" ~> "term" ~> "typ" ~> "subst" ~>
@@ -1394,7 +1394,7 @@ yield = define "yield" $
     (var "fcx")
 
 -- TODO: pass context and variables, and actually check types
-yieldChecked :: TTermDefinition (InferenceContext -> Term -> Type -> TypeSubst -> InferenceResult)
+yieldChecked :: TypedTermDefinition (InferenceContext -> Term -> Type -> TypeSubst -> InferenceResult)
 yieldChecked = define "yieldChecked" $
   doc "Create a checked inference result" $
   "fcx" ~> "term" ~> "typ" ~> "subst" ~>
@@ -1402,7 +1402,7 @@ yieldChecked = define "yieldChecked" $
   "itype" <~ Substitution.substInType @@ var "subst" @@ var "typ" $
   Typing.inferenceResult (var "iterm") (var "itype") (var "subst") Maps.empty (var "fcx")
 
-yieldCheckedWithConstraints :: TTermDefinition (InferenceContext -> Term -> Type -> TypeSubst -> M.Map Name TypeVariableMetadata -> InferenceResult)
+yieldCheckedWithConstraints :: TypedTermDefinition (InferenceContext -> Term -> Type -> TypeSubst -> M.Map Name TypeVariableMetadata -> InferenceResult)
 yieldCheckedWithConstraints = define "yieldCheckedWithConstraints" $
   doc "Create a checked inference result with class constraints" $
   "fcx" ~> "term" ~> "typ" ~> "subst" ~> "constraints" ~>
@@ -1418,7 +1418,7 @@ yieldCheckedWithConstraints = define "yieldCheckedWithConstraints" $
 -- and return InferenceResult (which contains the updated InferenceContext).
 -- ============================================================================
 
-yieldWithConstraints :: TTermDefinition (InferenceContext -> Term -> Type -> TypeSubst -> M.Map Name TypeVariableMetadata -> InferenceResult)
+yieldWithConstraints :: TypedTermDefinition (InferenceContext -> Term -> Type -> TypeSubst -> M.Map Name TypeVariableMetadata -> InferenceResult)
 yieldWithConstraints = define "yieldWithConstraints" $
   doc "Create an inference result with class constraints" $
   "fcx" ~> "term" ~> "typ" ~> "subst" ~> "constraints" ~>

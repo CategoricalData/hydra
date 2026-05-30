@@ -41,24 +41,24 @@ module_ = Module {
 
 
 -- Phantom-typed helper for int sets
-pIntSet :: [Int] -> TTerm (S.Set Int)
+pIntSet :: [Int] -> TypedTerm (S.Set Int)
 pIntSet xs = Phantoms.set (Phantoms.int32 <$> xs)
 
-showBool :: TTerm (Bool -> String)
+showBool :: TypedTerm (Bool -> String)
 showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
 
-showInt32 :: TTerm (Int -> String)
+showInt32 :: TypedTerm (Int -> String)
 showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
 
-showIntList :: TTerm ([Int] -> String)
+showIntList :: TypedTerm ([Int] -> String)
 showIntList = Phantoms.lambda "xs" $ ShowCore.list_ @@ showInt32 @@ Phantoms.var "xs"
 
-showIntSet :: TTerm (S.Set Int -> String)
+showIntSet :: TypedTerm (S.Set Int -> String)
 showIntSet = Phantoms.lambda "s" $ ShowCore.set_ @@ showInt32 @@ Phantoms.var "s"
 
 -- Test groups for hydra.lib.sets primitives
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.sets primitives" $
     supergroup "hydra.lib.sets primitives" [
@@ -77,7 +77,7 @@ allTests = definitionInModule module_ "allTests" $
       setsDifference,
       setsMap]
 
-setsDelete :: TTerm TestGroup
+setsDelete :: TypedTerm TestGroup
 setsDelete = subgroup "delete" [
   test "delete existing" 2 [1, 2, 3] [1, 3],
   test "delete non-existing" 4 [1, 2, 3] [1, 2, 3],
@@ -87,7 +87,7 @@ setsDelete = subgroup "delete" [
       (Sets.delete (Phantoms.int32 x) (pIntSet s))
       (pIntSet result)
 
-setsDifference :: TTerm TestGroup
+setsDifference :: TypedTerm TestGroup
 setsDifference = subgroup "difference" [
   test "remove elements" [1, 2, 3] [2, 4] [1, 3],
   test "no overlap" [1, 2] [3, 4] [1, 2],
@@ -97,15 +97,15 @@ setsDifference = subgroup "difference" [
       (Sets.difference (pIntSet s1) (pIntSet s2))
       (pIntSet result)
 
-setsEmpty :: TTerm TestGroup
+setsEmpty :: TypedTerm TestGroup
 setsEmpty = subgroup "empty" [
   test "empty set" []]
   where
     test name expected = evalPair name showIntSet
-      (Sets.empty :: TTerm (S.Set Int))
+      (Sets.empty :: TypedTerm (S.Set Int))
       (pIntSet expected)
 
-setsFromList :: TTerm TestGroup
+setsFromList :: TypedTerm TestGroup
 setsFromList = subgroup "fromList" [
   test "create from list" [1, 2, 3] [1, 2, 3],
   test "duplicates removed" [1, 2, 1, 3] [1, 2, 3],
@@ -115,7 +115,7 @@ setsFromList = subgroup "fromList" [
       (Sets.fromList (Phantoms.list $ Phantoms.int32 <$> input))
       (pIntSet expected)
 
-setsInsert :: TTerm TestGroup
+setsInsert :: TypedTerm TestGroup
 setsInsert = subgroup "insert" [
   test "insert new element" 4 [1, 2, 3] [1, 2, 3, 4],
   test "insert existing element" 2 [1, 2, 3] [1, 2, 3],
@@ -125,7 +125,7 @@ setsInsert = subgroup "insert" [
       (Sets.insert (Phantoms.int32 x) (pIntSet s))
       (pIntSet result)
 
-setsIntersection :: TTerm TestGroup
+setsIntersection :: TypedTerm TestGroup
 setsIntersection = subgroup "intersection" [
   test "common elements" [1, 2, 3] [2, 3, 4] [2, 3],
   test "no common elements" [1, 2] [3, 4] [],
@@ -135,7 +135,7 @@ setsIntersection = subgroup "intersection" [
       (Sets.intersection (pIntSet s1) (pIntSet s2))
       (pIntSet result)
 
-setsMap :: TTerm TestGroup
+setsMap :: TypedTerm TestGroup
 setsMap = subgroup "map" [
   test "map function" [1, 2, 3] [2, 4, 6],
   test "map on empty" [] []]
@@ -144,7 +144,7 @@ setsMap = subgroup "map" [
       (Sets.map (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2)) (pIntSet s))
       (pIntSet result)
 
-setsMember :: TTerm TestGroup
+setsMember :: TypedTerm TestGroup
 setsMember = subgroup "member" [
   test "element exists" 2 [1, 2, 3] True,
   test "element missing" 4 [1, 2, 3] False,
@@ -154,7 +154,7 @@ setsMember = subgroup "member" [
       (Sets.member (Phantoms.int32 x) (pIntSet s))
       (Phantoms.boolean result)
 
-setsNull :: TTerm TestGroup
+setsNull :: TypedTerm TestGroup
 setsNull = subgroup "null" [
   test "empty set" [] True,
   test "non-empty set" [1, 2] False]
@@ -163,7 +163,7 @@ setsNull = subgroup "null" [
       (Sets.null (pIntSet s))
       (Phantoms.boolean result)
 
-setsSingleton :: TTerm TestGroup
+setsSingleton :: TypedTerm TestGroup
 setsSingleton = subgroup "singleton" [
   test "single element" 42 [42]]
   where
@@ -171,7 +171,7 @@ setsSingleton = subgroup "singleton" [
       (Sets.singleton (Phantoms.int32 x))
       (pIntSet result)
 
-setsSize :: TTerm TestGroup
+setsSize :: TypedTerm TestGroup
 setsSize = subgroup "size" [
   test "three elements" [1, 2, 3] 3,
   test "single element" [42] 1,
@@ -181,7 +181,7 @@ setsSize = subgroup "size" [
       (Sets.size (pIntSet s))
       (Phantoms.int32 result)
 
-setsToList :: TTerm TestGroup
+setsToList :: TypedTerm TestGroup
 setsToList = subgroup "toList" [
   test "convert to list" [1, 2, 3] [1, 2, 3],
   test "unsorted input" [3, 1, 2] [1, 2, 3],
@@ -191,7 +191,7 @@ setsToList = subgroup "toList" [
       (Sets.toList (pIntSet input))
       (Phantoms.list $ Phantoms.int32 <$> expected)
 
-setsUnion :: TTerm TestGroup
+setsUnion :: TypedTerm TestGroup
 setsUnion = subgroup "union" [
   test "union two sets" [1, 2] [2, 3] [1, 2, 3],
   test "union with empty" [1, 2] [] [1, 2],
@@ -201,7 +201,7 @@ setsUnion = subgroup "union" [
       (Sets.union (pIntSet s1) (pIntSet s2))
       (pIntSet result)
 
-setsUnions :: TTerm TestGroup
+setsUnions :: TypedTerm TestGroup
 setsUnions = subgroup "unions" [
   test "union of multiple sets" [[1, 2], [2, 3], [3, 4]] [1, 2, 3, 4],
   test "union with empty sets" [[1, 2], [], [3]] [1, 2, 3],

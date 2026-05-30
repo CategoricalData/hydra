@@ -15,7 +15,7 @@ import           Prelude hiding ((++))
 ns :: ModuleName
 ns = ModuleName "hydra.lib.equality"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -121,19 +121,19 @@ minSig = sig $ Types.polyConstrained [("x", [Name "ordering"])]
 -- Default implementations.
 
 -- identity x = x
-identity_ :: TTermDefinition (a -> a)
+identity_ :: TypedTermDefinition (a -> a)
 identity_ = define "identity" $
   doc "Return a value unchanged." $
   "x" ~> var "x"
 
 -- max x y = ifElse (gte x y) x y
-max_ :: TTermDefinition (a -> a -> a)
+max_ :: TypedTermDefinition (a -> a -> a)
 max_ = define "max" $
   doc "Return the maximum of two values, defined in terms of gte and ifElse." $
-  "x" ~> "y" ~> Logic.ifElse (Equality.gte (var "x") (var "y")) (var "x" :: TTerm a) (var "y")
+  "x" ~> "y" ~> Logic.ifElse (Equality.gte (var "x") (var "y")) (var "x" :: TypedTerm a) (var "y")
 
 -- min x y = ifElse (lte x y) x y
-min_ :: TTermDefinition (a -> a -> a)
+min_ :: TypedTermDefinition (a -> a -> a)
 min_ = define "min" $
   doc "Return the minimum of two values, defined in terms of lte and ifElse." $
-  "x" ~> "y" ~> Logic.ifElse (Equality.lte (var "x") (var "y")) (var "x" :: TTerm a) (var "y")
+  "x" ~> "y" ~> Logic.ifElse (Equality.lte (var "x") (var "y")) (var "x" :: TypedTerm a) (var "y")

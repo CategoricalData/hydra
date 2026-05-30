@@ -35,21 +35,21 @@ module_ = Module {
       Phantoms.toDefinition allTests,
       Phantoms.toDefinition caseConversionTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     doc "Test cases for hydra.formatting" $
-    Testing.testGroup (string "formatting") nothing (list subgroups) (list ([] :: [TTerm TestCaseWithMetadata]))
+    Testing.testGroup (string "formatting") nothing (list subgroups) (list ([] :: [TypedTerm TestCaseWithMetadata]))
   where
     subgroups = [
       caseConversionTests]
 
-caseConversionTests :: TTermDefinition TestGroup
+caseConversionTests :: TypedTermDefinition TestGroup
 caseConversionTests = define "caseConversionTests" $
   doc "Test cases for case conversion" $
-  Testing.testGroup (string "case conversion") nothing (list ([] :: [TTerm TestGroup])) (list cases)
+  Testing.testGroup (string "case conversion") nothing (list ([] :: [TypedTerm TestGroup])) (list cases)
   where
     cases = [
       -- from lower_snake_case
@@ -78,7 +78,7 @@ caseConversionTests = define "caseConversionTests" $
 
 -- Helpers
 
-testCase :: Int -> CaseConvention -> CaseConvention -> String -> String -> TTerm TestCaseWithMetadata
+testCase :: Int -> CaseConvention -> CaseConvention -> String -> String -> TypedTerm TestCaseWithMetadata
 testCase i fromConvention toConvention fromString toString =
     universalCase name actual expected
   where

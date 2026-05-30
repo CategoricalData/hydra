@@ -91,9 +91,9 @@
 (register-make 'hydra.ast "Precedence" 'make-precedence)
 (register-make 'hydra.ast "Symbol" 'make-symbol)
 
-;; ---- hydra.phantoms ----
-(register-make 'hydra.phantoms "TBinding" 'make-tBinding)
-(register-make 'hydra.phantoms "TTerm" 'make-tTerm)
+;; ---- hydra.typed ----
+(register-make 'hydra.typed "TypedBinding" 'make-typedBinding)
+(register-make 'hydra.typed "TypedTerm" 'make-typedTerm)
 
 ;; ---- hydra.topology ----
 (register-make 'hydra.topology "OrderingIsomorphism" 'make-orderingIsomorphism)

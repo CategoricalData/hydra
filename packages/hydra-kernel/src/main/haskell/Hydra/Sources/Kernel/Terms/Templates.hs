@@ -70,10 +70,10 @@ module_ = Module {
      toDefinition graphToSchema,
      toDefinition instantiateTemplate]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-graphToSchema :: TTermDefinition (InferenceContext -> Graph -> [Binding] -> Either DecodingError (M.Map Name Type))
+graphToSchema :: TypedTermDefinition (InferenceContext -> Graph -> [Binding] -> Either DecodingError (M.Map Name Type))
 graphToSchema = define "graphToSchema" $
   doc "Decode a list of type-encoding bindings into a map of named types" $
   "cx" ~> "graph" ~> "els" ~>
@@ -84,7 +84,7 @@ graphToSchema = define "graphToSchema" $
   Eithers.bind (Eithers.mapList (var "toPair") (var "els")) (
     "pairs" ~> right (Maps.fromList (var "pairs")))
 
-instantiateTemplate :: TTermDefinition (InferenceContext -> Bool -> M.Map Name Type -> Name -> Type -> Either Error Term)
+instantiateTemplate :: TypedTermDefinition (InferenceContext -> Bool -> M.Map Name Type -> Name -> Type -> Either Error Term)
 instantiateTemplate = define "instantiateTemplate" $
   doc ("Given a graph schema and a nonrecursive type, instantiate it with default values."
     <> " If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm"
@@ -123,7 +123,7 @@ instantiateTemplate = define "instantiateTemplate" $
     _Type_function>>: constant (var "noPoly"),
     _Type_forall>>: constant (var "noPoly"),
     _Type_list>>: "et" ~> Logic.ifElse (var "minimal")
-      (right (Core.termList (list ([] :: [TTerm Term]))))
+      (right (Core.termList (list ([] :: [TypedTerm Term]))))
       (Eithers.bind (var "inst" @@ var "tname" @@ var "et") (
         "e" ~> right (Core.termList (list [var "e"])))),
     _Type_literal>>: "lt" ~> right (Core.termLiteral (var "forLiteral" @@ var "lt")),

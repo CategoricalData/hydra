@@ -57,7 +57,7 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 ns :: ModuleName
 ns = ModuleName "hydra.lib.defaults.maps"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -78,7 +78,7 @@ module_ = Module {
 
 -- | Interpreter-friendly alter for Map terms.
 -- Applies funTerm to the current value (or Nothing) and updates accordingly.
-alter_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
+alter_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
 alter_ = define "alter" $
   doc "Interpreter-friendly alter for Map terms." $
   "cx" ~> "g" ~>
@@ -118,7 +118,7 @@ alter_ = define "alter" $
 
 -- | Interpreter-friendly bimap for Map terms.
 -- Applies keyFun to each key and valFun to each value.
-bimap_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
+bimap_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
 bimap_ = define "bimap" $
   doc "Interpreter-friendly bimap for Map terms." $
   "cx" ~> "g" ~>
@@ -140,7 +140,7 @@ bimap_ = define "bimap" $
 
 -- | Interpreter-friendly filterWithKey for Map terms.
 -- Keeps entries where pred returns true for the key and value.
-filterWithKey_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+filterWithKey_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 filterWithKey_ = define "filterWithKey" $
   doc "Interpreter-friendly filterWithKey for Map terms." $
   "cx" ~> "g" ~>
@@ -166,12 +166,12 @@ filterWithKey_ = define "filterWithKey" $
                       (Core.termApplication $ Core.application (var "pred") (var "k"))
                       (var "v")))
                   (Core.termList $ Lists.pure $ Core.termPair $ pair (var "k") (var "v")))
-                (Core.termList $ list ([] :: [TTerm Term])))
+                (Core.termList $ list ([] :: [TypedTerm Term])))
             (var "pairs")))]
 
 -- | Interpreter-friendly filter for Map terms.
 -- Keeps entries where valPred returns true for the value.
-filter_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+filter_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 filter_ = define "filter" $
   doc "Interpreter-friendly filter for Map terms." $
   "cx" ~> "g" ~>
@@ -194,12 +194,12 @@ filter_ = define "filter" $
                     (Core.termVariable $ encodedName _logic_ifElse)
                     (Core.termApplication $ Core.application (var "valPred") (var "v")))
                   (Core.termList $ Lists.pure $ Core.termPair $ pair (Pairs.first $ var "p") (var "v")))
-                (Core.termList $ list ([] :: [TTerm Term])))
+                (Core.termList $ list ([] :: [TypedTerm Term])))
             (var "pairs")))]
 
 -- | Interpreter-friendly findWithDefault for Map terms.
 -- findWithDefault default key map: returns the value at key, or default if not found.
-findWithDefault_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
+findWithDefault_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
 findWithDefault_ = define "findWithDefault" $
   doc "Interpreter-friendly findWithDefault for Map terms." $
   "cx" ~> "g" ~>
@@ -217,7 +217,7 @@ findWithDefault_ = define "findWithDefault" $
 
 -- | Interpreter-friendly mapKeys for Map terms.
 -- Applies keyFun to each key.
-mapKeys_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+mapKeys_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 mapKeys_ = define "mapKeys" $
   doc "Interpreter-friendly mapKeys for Map terms." $
   "cx" ~> "g" ~>
@@ -236,7 +236,7 @@ mapKeys_ = define "mapKeys" $
 
 -- | Interpreter-friendly map for Map terms.
 -- Applies valFun to each value.
-map_ :: TTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+map_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for Map terms." $
   "cx" ~> "g" ~>

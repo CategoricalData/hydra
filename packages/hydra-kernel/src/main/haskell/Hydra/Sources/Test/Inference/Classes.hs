@@ -36,10 +36,10 @@ module_ = Module {
       Phantoms.toDefinition testGroupForNestedContainers,
       Phantoms.toDefinition testGroupForCollectionTerms]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Type class constraint inference tests" $
   supergroup "Type classes" [
@@ -52,7 +52,7 @@ allTests = define "allTests" $
     testGroupForCollectionTerms]
 
 -- | Constraints derived from collection term literals (set and map syntax).
-testGroupForCollectionTerms :: TTermDefinition TestGroup
+testGroupForCollectionTerms :: TypedTermDefinition TestGroup
 testGroupForCollectionTerms = define "testGroupForCollectionTerms" $
   supergroup "Collection term constraints" [
 
@@ -121,7 +121,7 @@ testGroupForCollectionTerms = define "testGroupForCollectionTerms" $
         ["t0"] [("t0", ["ordering"])] (T.function (T.list $ T.var "t0") (T.set $ T.set $ T.var "t0"))]]
 
 -- | Constraint propagation through function composition.
-testGroupForComposition :: TTermDefinition TestGroup
+testGroupForComposition :: TypedTermDefinition TestGroup
 testGroupForComposition = define "testGroupForComposition" $
   supergroup "Composition and constraint merging" [
 
@@ -148,7 +148,7 @@ testGroupForComposition = define "testGroupForComposition" $
         (T.function (T.map (T.var "t0") (T.list $ T.var "t1")) (T.map (T.var "t0") (T.list $ T.var "t1")))]]
 
 -- | Constraints should propagate through let-bound generalizations.
-testGroupForLetBindings :: TTermDefinition TestGroup
+testGroupForLetBindings :: TypedTermDefinition TestGroup
 testGroupForLetBindings = define "testGroupForLetBindings" $
   supergroup "Let binding constraint propagation" [
 
@@ -202,7 +202,7 @@ testGroupForLetBindings = define "testGroupForLetBindings" $
         (T.pair (T.map T.string T.int32) (T.map T.boolean T.string))]]
 
 -- | When all type variables are instantiated to concrete types, constraints vanish.
-testGroupForMonomorphicConstraints :: TTermDefinition TestGroup
+testGroupForMonomorphicConstraints :: TypedTermDefinition TestGroup
 testGroupForMonomorphicConstraints = define "testGroupForMonomorphicConstraints" $
   supergroup "Monomorphic (constraints vanish)" [
 
@@ -247,7 +247,7 @@ testGroupForMonomorphicConstraints = define "testGroupForMonomorphicConstraints"
         (T.list T.int32)]]
 
 -- | Nested container types where constraints apply at multiple levels.
-testGroupForNestedContainers :: TTermDefinition TestGroup
+testGroupForNestedContainers :: TypedTermDefinition TestGroup
 testGroupForNestedContainers = define "testGroupForNestedContainers" $
   supergroup "Nested containers" [
 
@@ -278,7 +278,7 @@ testGroupForNestedContainers = define "testGroupForNestedContainers" $
         (T.function (T.list $ T.var "t0") (T.map (T.var "t0") (T.set $ T.var "t0")))]]
 
 -- | Partial application where the constrained variable is not yet fixed.
-testGroupForPartialApplication :: TTermDefinition TestGroup
+testGroupForPartialApplication :: TypedTermDefinition TestGroup
 testGroupForPartialApplication = define "testGroupForPartialApplication" $
   supergroup "Partial application preserving constraints" [
 
@@ -315,7 +315,7 @@ testGroupForPartialApplication = define "testGroupForPartialApplication" $
         ["t0"] (T.function (T.var "t0") (T.map T.string (T.var "t0")))]]
 
 -- | Bare primitive references should retain constraints on type variables.
-testGroupForPrimitiveReferences :: TTermDefinition TestGroup
+testGroupForPrimitiveReferences :: TypedTermDefinition TestGroup
 testGroupForPrimitiveReferences = define "testGroupForPrimitiveReferences" $
   supergroup "Primitive references with constraints" [
 
