@@ -1,7 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | Source module for hydra.decode.phantoms
+-- | Source module for hydra.decode.typed
 
-module Hydra.Sources.Decode.Phantoms where
+module Hydra.Sources.Decode.Typed where
 import qualified Hydra.Core as Core
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Typing as Typing
@@ -11,8 +11,8 @@ import qualified Data.Map as M
 module_ :: Packaging.Module
 module_ =
     Packaging.Module {
-      Packaging.moduleDescription = (Just "Term decoders for hydra.phantoms"),
-      Packaging.moduleName = (Packaging.ModuleName "hydra.decode.phantoms"),
+      Packaging.moduleDescription = (Just "Term decoders for hydra.typed"),
+      Packaging.moduleName = (Packaging.ModuleName "hydra.decode.typed"),
       Packaging.moduleDependencies = [
         Packaging.ModuleDependency {
           Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.extract.core"),
@@ -24,7 +24,7 @@ module_ =
           Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.rewriting"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.phantoms"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.typed"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
           Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.util"),
@@ -34,7 +34,7 @@ module_ =
           Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.decode.phantoms.tBinding"),
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.typed.typedBinding"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "a"),
@@ -101,7 +101,7 @@ module_ =
                                                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.requireField")),
                                                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "term"))})),
                                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.phantoms.tTerm")),
+                                                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.typed.typedTerm")),
                                                     Core.applicationArgument = (Core.TermVariable (Core.Name "a"))}))})),
                                                 Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
                                               Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
@@ -109,7 +109,7 @@ module_ =
                                             Core.lambdaParameter = (Core.Name "field_term"),
                                             Core.lambdaDomain = Nothing,
                                             Core.lambdaBody = (Core.TermEither (Right (Core.TermRecord (Core.Record {
-                                              Core.recordTypeName = (Core.Name "hydra.phantoms.TBinding"),
+                                              Core.recordTypeName = (Core.Name "hydra.typed.TypedBinding"),
                                               Core.recordFields = [
                                                 Core.Field {
                                                   Core.fieldName = (Core.Name "name"),
@@ -124,7 +124,7 @@ module_ =
                         Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.phantoms.TBinding")))])})),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.typed.TypedBinding")))])})),
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [
               Typing.TypeParameter {
@@ -157,10 +157,10 @@ module_ =
               Typing.resultType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                 Core.eitherTypeRight = (Core.TypeApplication (Core.ApplicationType {
-                  Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TBinding")),
+                  Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.typed.TypedBinding")),
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))}))}))}}))}),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.decode.phantoms.tTerm"),
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.typed.typedTerm"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "a"),
@@ -201,7 +201,7 @@ module_ =
                                         Core.lambdaParameter = (Core.Name "b"),
                                         Core.lambdaDomain = Nothing,
                                         Core.lambdaBody = (Core.TermWrap (Core.WrappedTerm {
-                                          Core.wrappedTermTypeName = (Core.Name "hydra.phantoms.TTerm"),
+                                          Core.wrappedTermTypeName = (Core.Name "hydra.typed.TypedTerm"),
                                           Core.wrappedTermBody = (Core.TermVariable (Core.Name "b"))}))}))})),
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -219,7 +219,7 @@ module_ =
                         Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.phantoms.TTerm")))])})),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.typed.TypedTerm")))])})),
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [
               Typing.TypeParameter {
@@ -252,10 +252,10 @@ module_ =
               Typing.resultType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                 Core.eitherTypeRight = (Core.TypeApplication (Core.ApplicationType {
-                  Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
+                  Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.typed.TypedTerm")),
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))}))}))}}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.decode.phantoms.tTermDefinition"),
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.typed.typedTermDefinition"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "a"),
@@ -322,7 +322,7 @@ module_ =
                                                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.requireField")),
                                                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "term"))})),
                                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.phantoms.tTerm")),
+                                                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.typed.typedTerm")),
                                                     Core.applicationArgument = (Core.TermVariable (Core.Name "a"))}))})),
                                                 Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
                                               Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
@@ -330,7 +330,7 @@ module_ =
                                             Core.lambdaParameter = (Core.Name "field_term"),
                                             Core.lambdaDomain = Nothing,
                                             Core.lambdaBody = (Core.TermEither (Right (Core.TermRecord (Core.Record {
-                                              Core.recordTypeName = (Core.Name "hydra.phantoms.TTermDefinition"),
+                                              Core.recordTypeName = (Core.Name "hydra.typed.TypedTermDefinition"),
                                               Core.recordFields = [
                                                 Core.Field {
                                                   Core.fieldName = (Core.Name "name"),
@@ -345,7 +345,7 @@ module_ =
                         Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.phantoms.TTermDefinition")))])})),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.typed.TypedTermDefinition")))])})),
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [
               Typing.TypeParameter {
@@ -378,5 +378,5 @@ module_ =
               Typing.resultType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                 Core.eitherTypeRight = (Core.TypeApplication (Core.ApplicationType {
-                  Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTermDefinition")),
+                  Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.typed.TypedTermDefinition")),
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))}))}))}}))}))]}

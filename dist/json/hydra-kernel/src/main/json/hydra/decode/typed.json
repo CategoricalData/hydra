@@ -2,7 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.decode.phantoms.tBinding",
+        "name": "hydra.decode.typed.typedBinding",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
@@ -12,7 +12,7 @@
             "type": {
               "either": {
                 "left": {"variable": "hydra.errors.DecodingError"},
-                "right": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TBinding"}}}}}},
+                "right": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedBinding"}}}}}},
           "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
@@ -20,7 +20,7 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.phantoms.TBinding"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.typed.TypedBinding"}}}],
                     "body": {
                       "lambda": {
                         "body": {
@@ -73,11 +73,11 @@
                                                                                                 "body": {
                                                                                                   "record": {
                                                                                                     "fields": [{"name": "name", "term": {"variable": "field_name"}}, {"name": "term", "term": {"variable": "field_term"}}],
-                                                                                                    "typeName": "hydra.phantoms.TBinding"}},
+                                                                                                    "typeName": "hydra.typed.TypedBinding"}},
                                                                                                 "type": {"variable": "t1"}}}}},
                                                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                    "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TBinding"}}}}},
-                                                                                "domain": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                                                                                    "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedBinding"}}}}},
+                                                                                "domain": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                                                                                 "parameter": "field_term"}},
                                                                             "function": {
                                                                               "application": {
@@ -94,7 +94,7 @@
                                                                                                 "argument": {"variable": "a"},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.decode.phantoms.tTerm"}, "type": {"variable": "t0"}}},
+                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.decode.typed.typedTerm"}, "type": {"variable": "t0"}}},
                                                                                                     "type": {"variable": "t1"}}}}},
                                                                                             "function": {
                                                                                               "application": {
@@ -106,15 +106,15 @@
                                                                                                         "body": {
                                                                                                           "typeApplication": {"body": {"variable": "hydra.extract.core.requireField"}, "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                         "type": {"variable": "hydra.core.Term"}}},
-                                                                                                    "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}}}}}}}}}},
+                                                                                                    "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}}}}}}}}}},
                                                                                 "function": {
                                                                                   "typeApplication": {
                                                                                     "body": {
                                                                                       "typeApplication": {
                                                                                         "body": {
                                                                                           "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                        "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                                                                    "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TBinding"}}}}}}}}},
+                                                                                        "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}},
+                                                                                    "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedBinding"}}}}}}}}},
                                                                         "domain": {"variable": "hydra.core.Name"},
                                                                         "parameter": "field_name"}},
                                                                     "function": {
@@ -146,7 +146,7 @@
                                                                                 "body": {
                                                                                   "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                 "type": {"variable": "hydra.core.Name"}}},
-                                                                            "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TBinding"}}}}}}}}}}},
+                                                                            "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedBinding"}}}}}}}}}}},
                                                             "domain": {"variable": "hydra.core.Record"},
                                                             "parameter": "record"}}}],
                                                     "default": {
@@ -156,7 +156,7 @@
                                                             "body": {
                                                               "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
                                                             "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                        "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TBinding"}}}}},
+                                                        "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedBinding"}}}}},
                                                     "typeName": "hydra.core.Term"}}}},
                                             "domain": {"variable": "hydra.core.Term"},
                                             "parameter": "stripped"}},
@@ -168,7 +168,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {"body": {"either": {"left": {"variable": "err"}}}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                    "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TBinding"}}}}},
+                                                    "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedBinding"}}}}},
                                                 "domain": {"variable": "hydra.errors.DecodingError"},
                                                 "parameter": "err"}},
                                             "function": {
@@ -181,7 +181,7 @@
                                                 "type": {
                                                   "either": {
                                                     "left": {"variable": "hydra.errors.DecodingError"},
-                                                    "right": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TBinding"}}}}}}}}}}}}},
+                                                    "right": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedBinding"}}}}}}}}}}}}},
                                 "domain": {"variable": "hydra.core.Term"},
                                 "parameter": "raw"}},
                             "domain": {"variable": "hydra.graph.Graph"},
@@ -192,7 +192,7 @@
             "parameter": "t0"}}}},
     {
       "term": {
-        "name": "hydra.decode.phantoms.tTerm",
+        "name": "hydra.decode.typed.typedTerm",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
@@ -202,7 +202,7 @@
             "type": {
               "either": {
                 "left": {"variable": "hydra.errors.DecodingError"},
-                "right": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}}},
+                "right": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}}},
           "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
@@ -210,7 +210,7 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.phantoms.TTerm"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.typed.TypedTerm"}}}],
                     "body": {
                       "lambda": {
                         "body": {
@@ -251,7 +251,7 @@
                                                                     "argument": {
                                                                       "lambda": {
                                                                         "body": {
-                                                                          "typeApplication": {"body": {"wrap": {"body": {"variable": "b"}, "typeName": "hydra.phantoms.TTerm"}}, "type": {"variable": "t1"}}},
+                                                                          "typeApplication": {"body": {"wrap": {"body": {"variable": "b"}, "typeName": "hydra.typed.TypedTerm"}}, "type": {"variable": "t1"}}},
                                                                         "domain": {"variable": "hydra.core.Term"},
                                                                         "parameter": "b"}},
                                                                     "function": {
@@ -259,7 +259,7 @@
                                                                         "body": {
                                                                           "typeApplication": {
                                                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"variable": "hydra.core.Term"}}},
-                                                                            "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+                                                                            "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}},
                                                                         "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                             "domain": {"variable": "hydra.core.WrappedTerm"},
                                                             "parameter": "wrappedTerm"}}}],
@@ -270,7 +270,7 @@
                                                             "body": {
                                                               "either": {"left": {"wrap": {"body": {"literal": {"string": "expected wrapped type"}}, "typeName": "hydra.errors.DecodingError"}}}},
                                                             "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                        "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+                                                        "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}},
                                                     "typeName": "hydra.core.Term"}}}},
                                             "domain": {"variable": "hydra.core.Term"},
                                             "parameter": "stripped"}},
@@ -282,7 +282,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {"body": {"either": {"left": {"variable": "err"}}}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                    "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+                                                    "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}},
                                                 "domain": {"variable": "hydra.errors.DecodingError"},
                                                 "parameter": "err"}},
                                             "function": {
@@ -295,7 +295,7 @@
                                                 "type": {
                                                   "either": {
                                                     "left": {"variable": "hydra.errors.DecodingError"},
-                                                    "right": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}}}}}}}}}},
+                                                    "right": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}}}}}}}}}},
                                 "domain": {"variable": "hydra.core.Term"},
                                 "parameter": "raw"}},
                             "domain": {"variable": "hydra.graph.Graph"},
@@ -306,7 +306,7 @@
             "parameter": "t0"}}}},
     {
       "term": {
-        "name": "hydra.decode.phantoms.tTermDefinition",
+        "name": "hydra.decode.typed.typedTermDefinition",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
@@ -316,7 +316,7 @@
             "type": {
               "either": {
                 "left": {"variable": "hydra.errors.DecodingError"},
-                "right": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTermDefinition"}}}}}},
+                "right": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTermDefinition"}}}}}},
           "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
@@ -324,7 +324,7 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.phantoms.TTermDefinition"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.typed.TypedTermDefinition"}}}],
                     "body": {
                       "lambda": {
                         "body": {
@@ -377,11 +377,11 @@
                                                                                                 "body": {
                                                                                                   "record": {
                                                                                                     "fields": [{"name": "name", "term": {"variable": "field_name"}}, {"name": "term", "term": {"variable": "field_term"}}],
-                                                                                                    "typeName": "hydra.phantoms.TTermDefinition"}},
+                                                                                                    "typeName": "hydra.typed.TypedTermDefinition"}},
                                                                                                 "type": {"variable": "t1"}}}}},
                                                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                    "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTermDefinition"}}}}},
-                                                                                "domain": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                                                                                    "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTermDefinition"}}}}},
+                                                                                "domain": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                                                                                 "parameter": "field_term"}},
                                                                             "function": {
                                                                               "application": {
@@ -398,7 +398,7 @@
                                                                                                 "argument": {"variable": "a"},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.decode.phantoms.tTerm"}, "type": {"variable": "t0"}}},
+                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.decode.typed.typedTerm"}, "type": {"variable": "t0"}}},
                                                                                                     "type": {"variable": "t1"}}}}},
                                                                                             "function": {
                                                                                               "application": {
@@ -410,15 +410,15 @@
                                                                                                         "body": {
                                                                                                           "typeApplication": {"body": {"variable": "hydra.extract.core.requireField"}, "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                         "type": {"variable": "hydra.core.Term"}}},
-                                                                                                    "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}}}}}}}}}},
+                                                                                                    "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}}}}}}}}}},
                                                                                 "function": {
                                                                                   "typeApplication": {
                                                                                     "body": {
                                                                                       "typeApplication": {
                                                                                         "body": {
                                                                                           "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                        "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                                                                                    "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTermDefinition"}}}}}}}}},
+                                                                                        "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}},
+                                                                                    "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTermDefinition"}}}}}}}}},
                                                                         "domain": {"variable": "hydra.core.Name"},
                                                                         "parameter": "field_name"}},
                                                                     "function": {
@@ -450,7 +450,7 @@
                                                                                 "body": {
                                                                                   "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                 "type": {"variable": "hydra.core.Name"}}},
-                                                                            "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTermDefinition"}}}}}}}}}}},
+                                                                            "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTermDefinition"}}}}}}}}}}},
                                                             "domain": {"variable": "hydra.core.Record"},
                                                             "parameter": "record"}}}],
                                                     "default": {
@@ -460,7 +460,7 @@
                                                             "body": {
                                                               "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
                                                             "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                        "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTermDefinition"}}}}},
+                                                        "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTermDefinition"}}}}},
                                                     "typeName": "hydra.core.Term"}}}},
                                             "domain": {"variable": "hydra.core.Term"},
                                             "parameter": "stripped"}},
@@ -472,7 +472,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {"body": {"either": {"left": {"variable": "err"}}}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                    "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTermDefinition"}}}}},
+                                                    "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTermDefinition"}}}}},
                                                 "domain": {"variable": "hydra.errors.DecodingError"},
                                                 "parameter": "err"}},
                                             "function": {
@@ -485,7 +485,7 @@
                                                 "type": {
                                                   "either": {
                                                     "left": {"variable": "hydra.errors.DecodingError"},
-                                                    "right": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTermDefinition"}}}}}}}}}}}}},
+                                                    "right": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTermDefinition"}}}}}}}}}}}}},
                                 "domain": {"variable": "hydra.core.Term"},
                                 "parameter": "raw"}},
                             "domain": {"variable": "hydra.graph.Graph"},
@@ -498,8 +498,8 @@
     {"module": "hydra.extract.core"},
     {"module": "hydra.lexical"},
     {"module": "hydra.rewriting"},
-    {"module": "hydra.phantoms"},
+    {"module": "hydra.typed"},
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
-  "description": "Term decoders for hydra.phantoms",
-  "name": "hydra.decode.phantoms"}
+  "description": "Term decoders for hydra.typed",
+  "name": "hydra.decode.typed"}

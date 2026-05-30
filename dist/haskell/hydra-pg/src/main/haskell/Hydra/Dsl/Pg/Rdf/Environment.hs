@@ -7,86 +7,86 @@ module Hydra.Dsl.Pg.Rdf.Environment where
 import qualified Hydra.Core as Core
 import qualified Hydra.Pg.Model as Model
 import qualified Hydra.Pg.Rdf.Environment as Environment
-import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Typed as Phantoms
 import qualified Hydra.Rdf.Syntax as Syntax
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 
-pgRdfEnvironment :: Phantoms.TTerm (v -> Syntax.Iri) -> Phantoms.TTerm (Model.VertexLabel -> Syntax.Iri) -> Phantoms.TTerm (v -> Syntax.Iri) -> Phantoms.TTerm (Model.EdgeLabel -> Syntax.Iri) -> Phantoms.TTerm (Model.PropertyKey -> Syntax.Iri) -> Phantoms.TTerm (v -> Syntax.Literal) -> Phantoms.TTerm (Environment.PgRdfEnvironment v)
+pgRdfEnvironment :: Phantoms.TypedTerm (v -> Syntax.Iri) -> Phantoms.TypedTerm (Model.VertexLabel -> Syntax.Iri) -> Phantoms.TypedTerm (v -> Syntax.Iri) -> Phantoms.TypedTerm (Model.EdgeLabel -> Syntax.Iri) -> Phantoms.TypedTerm (Model.PropertyKey -> Syntax.Iri) -> Phantoms.TypedTerm (v -> Syntax.Literal) -> Phantoms.TypedTerm (Environment.PgRdfEnvironment v)
 pgRdfEnvironment encodeVertexId encodeVertexLabel encodeEdgeId encodeEdgeLabel encodePropertyKey encodePropertyValue =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "encodeVertexId"),
-          Core.fieldTerm = (Phantoms.unTTerm encodeVertexId)},
+          Core.fieldTerm = (Phantoms.unTypedTerm encodeVertexId)},
         Core.Field {
           Core.fieldName = (Core.Name "encodeVertexLabel"),
-          Core.fieldTerm = (Phantoms.unTTerm encodeVertexLabel)},
+          Core.fieldTerm = (Phantoms.unTypedTerm encodeVertexLabel)},
         Core.Field {
           Core.fieldName = (Core.Name "encodeEdgeId"),
-          Core.fieldTerm = (Phantoms.unTTerm encodeEdgeId)},
+          Core.fieldTerm = (Phantoms.unTypedTerm encodeEdgeId)},
         Core.Field {
           Core.fieldName = (Core.Name "encodeEdgeLabel"),
-          Core.fieldTerm = (Phantoms.unTTerm encodeEdgeLabel)},
+          Core.fieldTerm = (Phantoms.unTypedTerm encodeEdgeLabel)},
         Core.Field {
           Core.fieldName = (Core.Name "encodePropertyKey"),
-          Core.fieldTerm = (Phantoms.unTTerm encodePropertyKey)},
+          Core.fieldTerm = (Phantoms.unTypedTerm encodePropertyKey)},
         Core.Field {
           Core.fieldName = (Core.Name "encodePropertyValue"),
-          Core.fieldTerm = (Phantoms.unTTerm encodePropertyValue)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm encodePropertyValue)}]}))
 
-pgRdfEnvironmentEncodeEdgeId :: Phantoms.TTerm (Environment.PgRdfEnvironment v) -> Phantoms.TTerm (v -> Syntax.Iri)
+pgRdfEnvironmentEncodeEdgeId :: Phantoms.TypedTerm (Environment.PgRdfEnvironment v) -> Phantoms.TypedTerm (v -> Syntax.Iri)
 pgRdfEnvironmentEncodeEdgeId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
         Core.projectionFieldName = (Core.Name "encodeEdgeId")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-pgRdfEnvironmentEncodeEdgeLabel :: Phantoms.TTerm (Environment.PgRdfEnvironment v) -> Phantoms.TTerm (Model.EdgeLabel -> Syntax.Iri)
+pgRdfEnvironmentEncodeEdgeLabel :: Phantoms.TypedTerm (Environment.PgRdfEnvironment v) -> Phantoms.TypedTerm (Model.EdgeLabel -> Syntax.Iri)
 pgRdfEnvironmentEncodeEdgeLabel x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
         Core.projectionFieldName = (Core.Name "encodeEdgeLabel")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-pgRdfEnvironmentEncodePropertyKey :: Phantoms.TTerm (Environment.PgRdfEnvironment v) -> Phantoms.TTerm (Model.PropertyKey -> Syntax.Iri)
+pgRdfEnvironmentEncodePropertyKey :: Phantoms.TypedTerm (Environment.PgRdfEnvironment v) -> Phantoms.TypedTerm (Model.PropertyKey -> Syntax.Iri)
 pgRdfEnvironmentEncodePropertyKey x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
         Core.projectionFieldName = (Core.Name "encodePropertyKey")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-pgRdfEnvironmentEncodePropertyValue :: Phantoms.TTerm (Environment.PgRdfEnvironment v) -> Phantoms.TTerm (v -> Syntax.Literal)
+pgRdfEnvironmentEncodePropertyValue :: Phantoms.TypedTerm (Environment.PgRdfEnvironment v) -> Phantoms.TypedTerm (v -> Syntax.Literal)
 pgRdfEnvironmentEncodePropertyValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
         Core.projectionFieldName = (Core.Name "encodePropertyValue")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-pgRdfEnvironmentEncodeVertexId :: Phantoms.TTerm (Environment.PgRdfEnvironment v) -> Phantoms.TTerm (v -> Syntax.Iri)
+pgRdfEnvironmentEncodeVertexId :: Phantoms.TypedTerm (Environment.PgRdfEnvironment v) -> Phantoms.TypedTerm (v -> Syntax.Iri)
 pgRdfEnvironmentEncodeVertexId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
         Core.projectionFieldName = (Core.Name "encodeVertexId")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-pgRdfEnvironmentEncodeVertexLabel :: Phantoms.TTerm (Environment.PgRdfEnvironment v) -> Phantoms.TTerm (Model.VertexLabel -> Syntax.Iri)
+pgRdfEnvironmentEncodeVertexLabel :: Phantoms.TypedTerm (Environment.PgRdfEnvironment v) -> Phantoms.TypedTerm (Model.VertexLabel -> Syntax.Iri)
 pgRdfEnvironmentEncodeVertexLabel x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
         Core.projectionFieldName = (Core.Name "encodeVertexLabel")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-pgRdfEnvironmentWithEncodeEdgeId :: Phantoms.TTerm (Environment.PgRdfEnvironment v) -> Phantoms.TTerm (v -> Syntax.Iri) -> Phantoms.TTerm (Environment.PgRdfEnvironment v)
+pgRdfEnvironmentWithEncodeEdgeId :: Phantoms.TypedTerm (Environment.PgRdfEnvironment v) -> Phantoms.TypedTerm (v -> Syntax.Iri) -> Phantoms.TypedTerm (Environment.PgRdfEnvironment v)
 pgRdfEnvironmentWithEncodeEdgeId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
       Core.recordFields = [
         Core.Field {
@@ -95,42 +95,42 @@ pgRdfEnvironmentWithEncodeEdgeId original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodeVertexId")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodeVertexLabel"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodeVertexLabel")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodeEdgeId"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "encodeEdgeLabel"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodeEdgeLabel")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodePropertyKey"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodePropertyKey")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodePropertyValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodePropertyValue")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-pgRdfEnvironmentWithEncodeEdgeLabel :: Phantoms.TTerm (Environment.PgRdfEnvironment v) -> Phantoms.TTerm (Model.EdgeLabel -> Syntax.Iri) -> Phantoms.TTerm (Environment.PgRdfEnvironment v)
+pgRdfEnvironmentWithEncodeEdgeLabel :: Phantoms.TypedTerm (Environment.PgRdfEnvironment v) -> Phantoms.TypedTerm (Model.EdgeLabel -> Syntax.Iri) -> Phantoms.TypedTerm (Environment.PgRdfEnvironment v)
 pgRdfEnvironmentWithEncodeEdgeLabel original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
       Core.recordFields = [
         Core.Field {
@@ -139,42 +139,42 @@ pgRdfEnvironmentWithEncodeEdgeLabel original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodeVertexId")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodeVertexLabel"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodeVertexLabel")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodeEdgeId"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodeEdgeId")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodeEdgeLabel"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "encodePropertyKey"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodePropertyKey")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodePropertyValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodePropertyValue")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-pgRdfEnvironmentWithEncodePropertyKey :: Phantoms.TTerm (Environment.PgRdfEnvironment v) -> Phantoms.TTerm (Model.PropertyKey -> Syntax.Iri) -> Phantoms.TTerm (Environment.PgRdfEnvironment v)
+pgRdfEnvironmentWithEncodePropertyKey :: Phantoms.TypedTerm (Environment.PgRdfEnvironment v) -> Phantoms.TypedTerm (Model.PropertyKey -> Syntax.Iri) -> Phantoms.TypedTerm (Environment.PgRdfEnvironment v)
 pgRdfEnvironmentWithEncodePropertyKey original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
       Core.recordFields = [
         Core.Field {
@@ -183,42 +183,42 @@ pgRdfEnvironmentWithEncodePropertyKey original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodeVertexId")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodeVertexLabel"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodeVertexLabel")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodeEdgeId"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodeEdgeId")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodeEdgeLabel"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodeEdgeLabel")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodePropertyKey"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "encodePropertyValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodePropertyValue")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-pgRdfEnvironmentWithEncodePropertyValue :: Phantoms.TTerm (Environment.PgRdfEnvironment v) -> Phantoms.TTerm (v -> Syntax.Literal) -> Phantoms.TTerm (Environment.PgRdfEnvironment v)
+pgRdfEnvironmentWithEncodePropertyValue :: Phantoms.TypedTerm (Environment.PgRdfEnvironment v) -> Phantoms.TypedTerm (v -> Syntax.Literal) -> Phantoms.TypedTerm (Environment.PgRdfEnvironment v)
 pgRdfEnvironmentWithEncodePropertyValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
       Core.recordFields = [
         Core.Field {
@@ -227,86 +227,86 @@ pgRdfEnvironmentWithEncodePropertyValue original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodeVertexId")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodeVertexLabel"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodeVertexLabel")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodeEdgeId"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodeEdgeId")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodeEdgeLabel"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodeEdgeLabel")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodePropertyKey"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodePropertyKey")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodePropertyValue"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-pgRdfEnvironmentWithEncodeVertexId :: Phantoms.TTerm (Environment.PgRdfEnvironment v) -> Phantoms.TTerm (v -> Syntax.Iri) -> Phantoms.TTerm (Environment.PgRdfEnvironment v)
+pgRdfEnvironmentWithEncodeVertexId :: Phantoms.TypedTerm (Environment.PgRdfEnvironment v) -> Phantoms.TypedTerm (v -> Syntax.Iri) -> Phantoms.TypedTerm (Environment.PgRdfEnvironment v)
 pgRdfEnvironmentWithEncodeVertexId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "encodeVertexId"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "encodeVertexLabel"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodeVertexLabel")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodeEdgeId"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodeEdgeId")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodeEdgeLabel"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodeEdgeLabel")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodePropertyKey"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodePropertyKey")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodePropertyValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodePropertyValue")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-pgRdfEnvironmentWithEncodeVertexLabel :: Phantoms.TTerm (Environment.PgRdfEnvironment v) -> Phantoms.TTerm (Model.VertexLabel -> Syntax.Iri) -> Phantoms.TTerm (Environment.PgRdfEnvironment v)
+pgRdfEnvironmentWithEncodeVertexLabel :: Phantoms.TypedTerm (Environment.PgRdfEnvironment v) -> Phantoms.TypedTerm (Model.VertexLabel -> Syntax.Iri) -> Phantoms.TypedTerm (Environment.PgRdfEnvironment v)
 pgRdfEnvironmentWithEncodeVertexLabel original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
       Core.recordFields = [
         Core.Field {
@@ -315,35 +315,35 @@ pgRdfEnvironmentWithEncodeVertexLabel original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodeVertexId")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodeVertexLabel"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "encodeEdgeId"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodeEdgeId")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodeEdgeLabel"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodeEdgeLabel")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodePropertyKey"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodePropertyKey")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "encodePropertyValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.rdf.environment.PgRdfEnvironment"),
               Core.projectionFieldName = (Core.Name "encodePropertyValue")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))

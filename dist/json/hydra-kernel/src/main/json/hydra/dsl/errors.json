@@ -8,10 +8,10 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.DecodingError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.DecodingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -32,11 +32,11 @@
                                   "term": {"wrap": {"body": {"literal": {"string": "hydra.errors.DecodingError"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "body",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.WrappedTerm"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -47,8 +47,8 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.DecodingError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
-          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.errors.DecodingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -74,12 +74,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.DecodingError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.DecodingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -95,9 +95,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A type checking error"}}}],
                       "body": {"variable": "hydra.error.checking.CheckingError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -125,18 +125,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "checking"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A type checking error"}}}],
                         "body": {"variable": "hydra.error.checking.CheckingError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -152,9 +152,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "An error that occurred during decoding of a term"}}}],
                       "body": {"variable": "hydra.errors.DecodingError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -182,18 +182,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "decoding"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An error that occurred during decoding of a term"}}}],
                         "body": {"variable": "hydra.errors.DecodingError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -209,9 +209,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A duplicate binding name error"}}}],
                       "body": {"variable": "hydra.error.core.DuplicateBindingError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -241,18 +241,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "duplicateBinding"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A duplicate binding name error"}}}],
                         "body": {"variable": "hydra.error.core.DuplicateBindingError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -268,9 +268,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A duplicate field name error"}}}],
                       "body": {"variable": "hydra.error.core.DuplicateFieldError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -300,18 +300,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "duplicateField"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A duplicate field name error"}}}],
                         "body": {"variable": "hydra.error.core.DuplicateFieldError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -328,9 +328,9 @@
                       "annotation": [
                         {"key": "description", "value": {"literal": {"string": "An error that occurred while extracting a value from a term"}}}],
                       "body": {"variable": "hydra.errors.ExtractionError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -360,11 +360,11 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "extraction"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
@@ -372,7 +372,7 @@
                         "annotation": [
                           {"key": "description", "value": {"literal": {"string": "An error that occurred while extracting a value from a term"}}}],
                         "body": {"variable": "hydra.errors.ExtractionError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -388,9 +388,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A type inference error"}}}],
                       "body": {"variable": "hydra.errors.InferenceError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -420,18 +420,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "inference"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A type inference error"}}}],
                         "body": {"variable": "hydra.errors.InferenceError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -447,9 +447,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A literal value validation error"}}}],
                       "body": {"variable": "hydra.error.core.InvalidLiteralError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -479,18 +479,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "invalidLiteral"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A literal value validation error"}}}],
                         "body": {"variable": "hydra.error.core.InvalidLiteralError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -506,9 +506,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Any other error"}}}],
                       "body": {"variable": "hydra.errors.OtherError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -535,18 +535,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "other"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Any other error"}}}],
                         "body": {"variable": "hydra.errors.OtherError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -562,9 +562,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A name-resolution error"}}}],
                       "body": {"variable": "hydra.errors.ResolutionError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -594,18 +594,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "resolution"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A name-resolution error"}}}],
                         "body": {"variable": "hydra.errors.ResolutionError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -621,9 +621,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to an undefined field"}}}],
                       "body": {"variable": "hydra.error.core.UndefinedFieldError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -653,18 +653,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "undefinedField"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to an undefined field"}}}],
                         "body": {"variable": "hydra.error.core.UndefinedFieldError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -680,9 +680,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to an undefined term variable"}}}],
                       "body": {"variable": "hydra.error.core.UndefinedTermVariableError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -714,18 +714,18 @@
                                           "term": {"wrap": {"body": {"literal": {"string": "undefinedTermVariable"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to an undefined term variable"}}}],
                         "body": {"variable": "hydra.error.core.UndefinedTermVariableError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -741,9 +741,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A term variable whose type is not known"}}}],
                       "body": {"variable": "hydra.error.core.UntypedTermVariableError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -775,18 +775,18 @@
                                           "term": {"wrap": {"body": {"literal": {"string": "untypedTermVariable"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A term variable whose type is not known"}}}],
                         "body": {"variable": "hydra.error.core.UntypedTermVariableError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -802,9 +802,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "An unexpected term variant"}}}],
                       "body": {"variable": "hydra.error.core.UnexpectedTermVariantError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -836,18 +836,18 @@
                                           "term": {"wrap": {"body": {"literal": {"string": "unexpectedTermVariant"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An unexpected term variant"}}}],
                         "body": {"variable": "hydra.error.core.UnexpectedTermVariantError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -863,9 +863,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "An unexpected type variant"}}}],
                       "body": {"variable": "hydra.error.core.UnexpectedTypeVariantError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -897,18 +897,18 @@
                                           "term": {"wrap": {"body": {"literal": {"string": "unexpectedTypeVariant"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An unexpected type variant"}}}],
                         "body": {"variable": "hydra.error.core.UnexpectedTypeVariantError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -924,9 +924,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A type unification error"}}}],
                       "body": {"variable": "hydra.errors.UnificationError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.errors.Error"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -956,18 +956,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "unification"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A type unification error"}}}],
                         "body": {"variable": "hydra.errors.UnificationError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -986,10 +986,10 @@
                           "key": "description",
                           "value": {"literal": {"string": "An empty list was encountered where a non-empty list was required"}}}],
                       "body": {"variable": "hydra.errors.EmptyListError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.ExtractionError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.ExtractionError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1019,11 +1019,11 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "emptyList"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
@@ -1033,7 +1033,7 @@
                             "key": "description",
                             "value": {"literal": {"string": "An empty list was encountered where a non-empty list was required"}}}],
                         "body": {"variable": "hydra.errors.EmptyListError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -1049,10 +1049,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Multiple let bindings were found with the same name"}}}],
                       "body": {"variable": "hydra.errors.MultipleBindingsError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.ExtractionError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.ExtractionError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1082,18 +1082,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "multipleBindings"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Multiple let bindings were found with the same name"}}}],
                         "body": {"variable": "hydra.errors.MultipleBindingsError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -1109,10 +1109,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Multiple record fields were found with the same field name"}}}],
                       "body": {"variable": "hydra.errors.MultipleFieldsError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.ExtractionError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.ExtractionError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1142,18 +1142,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "multipleFields"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Multiple record fields were found with the same field name"}}}],
                         "body": {"variable": "hydra.errors.MultipleFieldsError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -1169,10 +1169,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "No field with the expected name was found in a record"}}}],
                       "body": {"variable": "hydra.errors.NoMatchingFieldError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.ExtractionError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.ExtractionError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1202,18 +1202,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "noMatchingField"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "No field with the expected name was found in a record"}}}],
                         "body": {"variable": "hydra.errors.NoMatchingFieldError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -1229,10 +1229,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "No let binding with the expected name was found"}}}],
                       "body": {"variable": "hydra.errors.NoSuchBindingError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.ExtractionError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.ExtractionError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1262,18 +1262,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "noSuchBinding"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "No let binding with the expected name was found"}}}],
                         "body": {"variable": "hydra.errors.NoSuchBindingError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -1292,10 +1292,10 @@
                           "key": "description",
                           "value": {"literal": {"string": "A case statement did not contain enough cases to match the target"}}}],
                       "body": {"variable": "hydra.errors.NotEnoughCasesError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.ExtractionError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.ExtractionError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1325,11 +1325,11 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "notEnoughCases"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
@@ -1339,7 +1339,7 @@
                             "key": "description",
                             "value": {"literal": {"string": "A case statement did not contain enough cases to match the target"}}}],
                         "body": {"variable": "hydra.errors.NotEnoughCasesError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -1358,10 +1358,10 @@
                           "key": "description",
                           "value": {"literal": {"string": "A term, type, literal, or other value had an unexpected shape"}}}],
                       "body": {"variable": "hydra.errors.UnexpectedShapeError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.ExtractionError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.ExtractionError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1391,11 +1391,11 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "unexpectedShape"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
@@ -1405,7 +1405,7 @@
                             "key": "description",
                             "value": {"literal": {"string": "A term, type, literal, or other value had an unexpected shape"}}}],
                         "body": {"variable": "hydra.errors.UnexpectedShapeError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -1421,10 +1421,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A type checking error encountered during inference"}}}],
                       "body": {"variable": "hydra.error.checking.CheckingError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.InferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.InferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1454,18 +1454,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "checking"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A type checking error encountered during inference"}}}],
                         "body": {"variable": "hydra.error.checking.CheckingError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -1486,10 +1486,10 @@
                             "literal": {
                               "string": "A generic inference error carrying a message and a subterm path. Placeholder arm; sites should migrate to typed variants."}}}],
                       "body": {"variable": "hydra.errors.OtherInferenceError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.InferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.InferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1519,11 +1519,11 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "other"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
@@ -1535,7 +1535,7 @@
                               "literal": {
                                 "string": "A generic inference error carrying a message and a subterm path. Placeholder arm; sites should migrate to typed variants."}}}],
                         "body": {"variable": "hydra.errors.OtherInferenceError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -1551,10 +1551,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A unification failure encountered while inferring types"}}}],
                       "body": {"variable": "hydra.errors.UnificationInferenceError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.InferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.InferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1584,18 +1584,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "unification"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A unification failure encountered while inferring types"}}}],
                         "body": {"variable": "hydra.errors.UnificationInferenceError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -1611,10 +1611,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The binding name which was duplicated"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.MultipleBindingsError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.MultipleBindingsError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1643,18 +1643,18 @@
                                             {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
                                             {
                                               "name": "term",
-                                              "term": {"application": {"argument": {"variable": "name"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "term": {"application": {"argument": {"variable": "name"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                           "typeName": "hydra.core.Field"}}]}}],
                               "typeName": "hydra.core.Record"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The binding name which was duplicated"}}}],
                         "body": {"variable": "hydra.core.Name"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "name"}}}}}},
     {
       "term": {
@@ -1665,7 +1665,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.MultipleBindingsError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.errors.MultipleBindingsError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -1673,7 +1673,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "The binding name which was duplicated"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1709,12 +1709,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.MultipleBindingsError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.MultipleBindingsError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -1725,7 +1725,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.MultipleBindingsError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.errors.MultipleBindingsError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -1735,10 +1735,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The binding name which was duplicated"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.MultipleBindingsError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.MultipleBindingsError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1772,21 +1772,21 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The binding name which was duplicated"}}}],
                             "body": {"variable": "hydra.core.Name"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.MultipleBindingsError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.MultipleBindingsError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -1802,10 +1802,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The field name which appeared more than once"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.MultipleFieldsError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.MultipleFieldsError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1834,18 +1834,18 @@
                                             {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "fieldName"}}, "typeName": "hydra.core.Name"}}},
                                             {
                                               "name": "term",
-                                              "term": {"application": {"argument": {"variable": "fieldName"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "term": {"application": {"argument": {"variable": "fieldName"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                           "typeName": "hydra.core.Field"}}]}}],
                               "typeName": "hydra.core.Record"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The field name which appeared more than once"}}}],
                         "body": {"variable": "hydra.core.Name"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "fieldName"}}}}}},
     {
       "term": {
@@ -1856,7 +1856,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.MultipleFieldsError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.errors.MultipleFieldsError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -1864,7 +1864,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "The field name which appeared more than once"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1900,12 +1900,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.MultipleFieldsError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.MultipleFieldsError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -1916,7 +1916,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.MultipleFieldsError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.errors.MultipleFieldsError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -1926,10 +1926,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The field name which appeared more than once"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.MultipleFieldsError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.MultipleFieldsError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1963,21 +1963,21 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "fieldName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The field name which appeared more than once"}}}],
                             "body": {"variable": "hydra.core.Name"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.MultipleFieldsError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.MultipleFieldsError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -1993,10 +1993,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The field name which was not found"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.NoMatchingFieldError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.NoMatchingFieldError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -2025,18 +2025,18 @@
                                             {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "fieldName"}}, "typeName": "hydra.core.Name"}}},
                                             {
                                               "name": "term",
-                                              "term": {"application": {"argument": {"variable": "fieldName"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "term": {"application": {"argument": {"variable": "fieldName"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                           "typeName": "hydra.core.Field"}}]}}],
                               "typeName": "hydra.core.Record"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The field name which was not found"}}}],
                         "body": {"variable": "hydra.core.Name"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "fieldName"}}}}}},
     {
       "term": {
@@ -2047,7 +2047,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.NoMatchingFieldError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.errors.NoMatchingFieldError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -2055,7 +2055,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "The field name which was not found"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -2091,12 +2091,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.NoMatchingFieldError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.NoMatchingFieldError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -2107,7 +2107,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.NoMatchingFieldError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.errors.NoMatchingFieldError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -2117,10 +2117,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The field name which was not found"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.NoMatchingFieldError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.NoMatchingFieldError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -2154,21 +2154,21 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "fieldName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The field name which was not found"}}}],
                             "body": {"variable": "hydra.core.Name"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.NoMatchingFieldError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.NoMatchingFieldError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -2184,10 +2184,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The binding name which was not found"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.NoSuchBindingError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.NoSuchBindingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -2216,18 +2216,18 @@
                                             {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
                                             {
                                               "name": "term",
-                                              "term": {"application": {"argument": {"variable": "name"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "term": {"application": {"argument": {"variable": "name"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                           "typeName": "hydra.core.Field"}}]}}],
                               "typeName": "hydra.core.Record"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The binding name which was not found"}}}],
                         "body": {"variable": "hydra.core.Name"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "name"}}}}}},
     {
       "term": {
@@ -2238,7 +2238,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.NoSuchBindingError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.errors.NoSuchBindingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -2246,7 +2246,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "The binding name which was not found"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -2282,12 +2282,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.NoSuchBindingError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.NoSuchBindingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -2298,7 +2298,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.NoSuchBindingError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.errors.NoSuchBindingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -2308,10 +2308,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The binding name which was not found"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.NoSuchBindingError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.NoSuchBindingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -2345,21 +2345,21 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The binding name which was not found"}}}],
                             "body": {"variable": "hydra.core.Name"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.NoSuchBindingError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.NoSuchBindingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -2375,10 +2375,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The primitive name which was not found"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.NoSuchPrimitiveError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.NoSuchPrimitiveError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -2407,18 +2407,18 @@
                                             {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
                                             {
                                               "name": "term",
-                                              "term": {"application": {"argument": {"variable": "name"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "term": {"application": {"argument": {"variable": "name"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                           "typeName": "hydra.core.Field"}}]}}],
                               "typeName": "hydra.core.Record"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The primitive name which was not found"}}}],
                         "body": {"variable": "hydra.core.Name"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "name"}}}}}},
     {
       "term": {
@@ -2429,7 +2429,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.NoSuchPrimitiveError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.errors.NoSuchPrimitiveError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -2437,7 +2437,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "The primitive name which was not found"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -2473,12 +2473,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.NoSuchPrimitiveError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.NoSuchPrimitiveError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -2489,7 +2489,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.NoSuchPrimitiveError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.errors.NoSuchPrimitiveError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -2499,10 +2499,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The primitive name which was not found"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.NoSuchPrimitiveError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.NoSuchPrimitiveError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -2536,21 +2536,21 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The primitive name which was not found"}}}],
                             "body": {"variable": "hydra.core.Name"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.NoSuchPrimitiveError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.NoSuchPrimitiveError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -2560,9 +2560,10 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.errors.OtherError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {
+              "application": {"argument": {"variable": "hydra.errors.OtherError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -2583,11 +2584,11 @@
                                   "term": {"wrap": {"body": {"literal": {"string": "hydra.errors.OtherError"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "body",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.WrappedTerm"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -2597,8 +2598,9 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.errors.OtherError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
-          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "type": {
+                "application": {"argument": {"variable": "hydra.errors.OtherError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -2624,11 +2626,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"variable": "hydra.errors.OtherError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {
+                  "application": {"argument": {"variable": "hydra.errors.OtherError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -2644,7 +2647,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the error was observed"}}}],
                       "body": {"variable": "hydra.paths.SubtermPath"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -2654,10 +2657,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable error message"}}}],
                       "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -2688,7 +2691,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "path"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "path"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "path"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -2696,18 +2699,18 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "message"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "message"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "message"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable error message"}}}],
                             "body": {"literal": {"string": {}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "message"}},
                 "domain": {
                   "application": {
@@ -2715,7 +2718,7 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the error was observed"}}}],
                         "body": {"variable": "hydra.paths.SubtermPath"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "path"}}}}}},
     {
       "term": {
@@ -2726,7 +2729,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -2734,7 +2737,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the error was observed"}}}],
                     "body": {"variable": "hydra.paths.SubtermPath"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -2770,12 +2773,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -2786,7 +2789,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -2794,7 +2797,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable error message"}}}],
                     "body": {"literal": {"string": {}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -2830,12 +2833,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -2846,7 +2849,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -2856,10 +2859,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the error was observed"}}}],
                       "body": {"variable": "hydra.paths.SubtermPath"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -2893,7 +2896,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "path"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -2925,23 +2928,23 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the error was observed"}}}],
                             "body": {"variable": "hydra.paths.SubtermPath"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -2952,7 +2955,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -2962,10 +2965,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable error message"}}}],
                       "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3023,7 +3026,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -3033,21 +3036,21 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "message"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable error message"}}}],
                             "body": {"literal": {"string": {}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.OtherInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -3057,10 +3060,10 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.OtherResolutionError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.OtherResolutionError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3084,11 +3087,11 @@
                                   "term": {"wrap": {"body": {"literal": {"string": "hydra.errors.OtherResolutionError"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "body",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.WrappedTerm"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -3099,8 +3102,8 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.OtherResolutionError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
-          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.errors.OtherResolutionError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3129,12 +3132,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.OtherResolutionError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.OtherResolutionError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -3150,10 +3153,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "No binding with the expected name was found in the graph"}}}],
                       "body": {"variable": "hydra.errors.NoSuchBindingError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.ResolutionError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.ResolutionError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3183,18 +3186,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "noSuchBinding"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "No binding with the expected name was found in the graph"}}}],
                         "body": {"variable": "hydra.errors.NoSuchBindingError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -3213,10 +3216,10 @@
                           "key": "description",
                           "value": {"literal": {"string": "No primitive function with the expected name was found in the graph"}}}],
                       "body": {"variable": "hydra.errors.NoSuchPrimitiveError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.ResolutionError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.ResolutionError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3246,11 +3249,11 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "noSuchPrimitive"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
@@ -3260,7 +3263,7 @@
                             "key": "description",
                             "value": {"literal": {"string": "No primitive function with the expected name was found in the graph"}}}],
                         "body": {"variable": "hydra.errors.NoSuchPrimitiveError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -3279,10 +3282,10 @@
                           "key": "description",
                           "value": {"literal": {"string": "No field with the expected name was present in a record or case statement"}}}],
                       "body": {"variable": "hydra.errors.NoMatchingFieldError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.ResolutionError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.ResolutionError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3312,11 +3315,11 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "noMatchingField"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
@@ -3326,7 +3329,7 @@
                             "key": "description",
                             "value": {"literal": {"string": "No field with the expected name was present in a record or case statement"}}}],
                         "body": {"variable": "hydra.errors.NoMatchingFieldError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -3342,10 +3345,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A generic resolution error carrying a message"}}}],
                       "body": {"variable": "hydra.errors.OtherResolutionError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.ResolutionError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.ResolutionError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3375,18 +3378,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "other"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A generic resolution error carrying a message"}}}],
                         "body": {"variable": "hydra.errors.OtherResolutionError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -3405,10 +3408,10 @@
                           "key": "description",
                           "value": {"literal": {"string": "A term had a shape other than the one expected (e.g. a record, an injection)"}}}],
                       "body": {"variable": "hydra.errors.UnexpectedShapeError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.ResolutionError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.ResolutionError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3438,11 +3441,11 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "unexpectedShape"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {
@@ -3452,7 +3455,7 @@
                             "key": "description",
                             "value": {"literal": {"string": "A term had a shape other than the one expected (e.g. a record, an injection)"}}}],
                         "body": {"variable": "hydra.errors.UnexpectedShapeError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -3468,7 +3471,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A description of the expected shape"}}}],
                       "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -3478,10 +3481,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A description of the shape actually encountered"}}}],
                       "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3512,7 +3515,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "expected"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "expected"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "expected"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -3520,18 +3523,18 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "actual"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "actual"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "actual"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "A description of the shape actually encountered"}}}],
                             "body": {"literal": {"string": {}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "actual"}},
                 "domain": {
                   "application": {
@@ -3539,7 +3542,7 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A description of the expected shape"}}}],
                         "body": {"literal": {"string": {}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "expected"}}}}}},
     {
       "term": {
@@ -3550,7 +3553,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -3558,7 +3561,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "A description of the expected shape"}}}],
                     "body": {"literal": {"string": {}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3594,12 +3597,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -3610,7 +3613,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -3618,7 +3621,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "A description of the shape actually encountered"}}}],
                     "body": {"literal": {"string": {}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3654,12 +3657,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -3670,7 +3673,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -3680,10 +3683,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A description of the expected shape"}}}],
                       "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3717,7 +3720,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "expected"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -3749,23 +3752,23 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "A description of the expected shape"}}}],
                             "body": {"literal": {"string": {}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -3776,7 +3779,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -3786,10 +3789,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A description of the shape actually encountered"}}}],
                       "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3847,7 +3850,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -3857,21 +3860,21 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "actual"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "A description of the shape actually encountered"}}}],
                             "body": {"literal": {"string": {}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.UnexpectedShapeError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -3887,7 +3890,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand type in the unification"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -3897,7 +3900,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand type in the unification"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg2",
@@ -3907,10 +3910,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable error message"}}}],
                       "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3943,7 +3946,7 @@
                                                     {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "leftType"}}, "typeName": "hydra.core.Name"}}},
                                                     {
                                                       "name": "term",
-                                                      "term": {"application": {"argument": {"variable": "leftType"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                      "term": {"application": {"argument": {"variable": "leftType"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                   "typeName": "hydra.core.Field"}},
                                               {
                                                 "record": {
@@ -3951,7 +3954,7 @@
                                                     {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "rightType"}}, "typeName": "hydra.core.Name"}}},
                                                     {
                                                       "name": "term",
-                                                      "term": {"application": {"argument": {"variable": "rightType"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                      "term": {"application": {"argument": {"variable": "rightType"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                   "typeName": "hydra.core.Field"}},
                                               {
                                                 "record": {
@@ -3959,18 +3962,18 @@
                                                     {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "message"}}, "typeName": "hydra.core.Name"}}},
                                                     {
                                                       "name": "term",
-                                                      "term": {"application": {"argument": {"variable": "message"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                      "term": {"application": {"argument": {"variable": "message"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                   "typeName": "hydra.core.Field"}}]}}],
                                       "typeName": "hydra.core.Record"}}},
                                 "typeName": "hydra.core.Term"}},
-                            "typeName": "hydra.phantoms.TTerm"}},
+                            "typeName": "hydra.typed.TypedTerm"}},
                         "domain": {
                           "application": {
                             "argument": {
                               "annotated": {
                                 "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable error message"}}}],
                                 "body": {"literal": {"string": {}}}}},
-                            "function": {"variable": "hydra.phantoms.TTerm"}}},
+                            "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "message"}},
                     "domain": {
                       "application": {
@@ -3978,7 +3981,7 @@
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand type in the unification"}}}],
                             "body": {"variable": "hydra.core.Type"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "rightType"}},
                 "domain": {
                   "application": {
@@ -3986,7 +3989,7 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand type in the unification"}}}],
                         "body": {"variable": "hydra.core.Type"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "leftType"}}}}}},
     {
       "term": {
@@ -3997,7 +4000,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -4005,7 +4008,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand type in the unification"}}}],
                     "body": {"variable": "hydra.core.Type"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -4041,12 +4044,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -4057,7 +4060,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -4065,7 +4068,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand type in the unification"}}}],
                     "body": {"variable": "hydra.core.Type"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -4101,12 +4104,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -4117,7 +4120,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -4125,7 +4128,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable error message"}}}],
                     "body": {"literal": {"string": {}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -4161,12 +4164,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -4177,7 +4180,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -4187,10 +4190,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand type in the unification"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -4224,7 +4227,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "leftType"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -4256,7 +4259,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -4290,23 +4293,23 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand type in the unification"}}}],
                             "body": {"variable": "hydra.core.Type"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -4317,7 +4320,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -4327,10 +4330,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand type in the unification"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -4388,7 +4391,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -4398,7 +4401,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "rightType"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -4430,23 +4433,23 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand type in the unification"}}}],
                             "body": {"variable": "hydra.core.Type"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -4457,7 +4460,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -4467,10 +4470,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable error message"}}}],
                       "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -4528,7 +4531,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -4562,7 +4565,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -4572,21 +4575,21 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "message"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable error message"}}}],
                             "body": {"literal": {"string": {}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.UnificationError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -4605,7 +4608,7 @@
                           "key": "description",
                           "value": {"literal": {"string": "The subterm path at which the unification failure was observed"}}}],
                       "body": {"variable": "hydra.paths.SubtermPath"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -4615,10 +4618,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying unification error"}}}],
                       "body": {"variable": "hydra.errors.UnificationError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -4649,7 +4652,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "path"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "path"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "path"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -4657,18 +4660,18 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "cause"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "cause"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "cause"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying unification error"}}}],
                             "body": {"variable": "hydra.errors.UnificationError"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "cause"}},
                 "domain": {
                   "application": {
@@ -4679,7 +4682,7 @@
                             "key": "description",
                             "value": {"literal": {"string": "The subterm path at which the unification failure was observed"}}}],
                         "body": {"variable": "hydra.paths.SubtermPath"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "path"}}}}}},
     {
       "term": {
@@ -4690,7 +4693,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -4701,7 +4704,7 @@
                         "key": "description",
                         "value": {"literal": {"string": "The subterm path at which the unification failure was observed"}}}],
                     "body": {"variable": "hydra.paths.SubtermPath"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -4737,12 +4740,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -4753,7 +4756,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -4761,7 +4764,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying unification error"}}}],
                     "body": {"variable": "hydra.errors.UnificationError"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -4797,12 +4800,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -4813,7 +4816,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -4826,10 +4829,10 @@
                           "key": "description",
                           "value": {"literal": {"string": "The subterm path at which the unification failure was observed"}}}],
                       "body": {"variable": "hydra.paths.SubtermPath"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -4863,7 +4866,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "path"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -4895,13 +4898,13 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -4911,10 +4914,10 @@
                                 "key": "description",
                                 "value": {"literal": {"string": "The subterm path at which the unification failure was observed"}}}],
                             "body": {"variable": "hydra.paths.SubtermPath"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -4925,7 +4928,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -4935,10 +4938,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying unification error"}}}],
                       "body": {"variable": "hydra.errors.UnificationError"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -4996,7 +4999,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -5006,25 +5009,25 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "cause"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying unification error"}}}],
                             "body": {"variable": "hydra.errors.UnificationError"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}}],
   "dependencies": [
     {"module": "hydra.errors"},
-    {"module": "hydra.phantoms"},
+    {"module": "hydra.typed"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},

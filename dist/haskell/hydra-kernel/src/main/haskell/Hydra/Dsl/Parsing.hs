@@ -5,57 +5,57 @@ module Hydra.Dsl.Parsing where
 import qualified Hydra.Core as Core
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Parsing as Parsing
-import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Typed as Typed
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | DSL constructor for hydra.parsing.ParseError
-parseError :: Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm Parsing.ParseError
+parseError :: Typed.TypedTerm String -> Typed.TypedTerm String -> Typed.TypedTerm Parsing.ParseError
 parseError message remainder =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.parsing.ParseError"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "message"),
-          Core.fieldTerm = (Phantoms.unTTerm message)},
+          Core.fieldTerm = (Typed.unTypedTerm message)},
         Core.Field {
           Core.fieldName = (Core.Name "remainder"),
-          Core.fieldTerm = (Phantoms.unTTerm remainder)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm remainder)}]}))
 -- | DSL accessor for the message field of hydra.parsing.ParseError
-parseErrorMessage :: Phantoms.TTerm Parsing.ParseError -> Phantoms.TTerm String
+parseErrorMessage :: Typed.TypedTerm Parsing.ParseError -> Typed.TypedTerm String
 parseErrorMessage x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.parsing.ParseError"),
         Core.projectionFieldName = (Core.Name "message")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the remainder field of hydra.parsing.ParseError
-parseErrorRemainder :: Phantoms.TTerm Parsing.ParseError -> Phantoms.TTerm String
+parseErrorRemainder :: Typed.TypedTerm Parsing.ParseError -> Typed.TypedTerm String
 parseErrorRemainder x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.parsing.ParseError"),
         Core.projectionFieldName = (Core.Name "remainder")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the message field of hydra.parsing.ParseError
-parseErrorWithMessage :: Phantoms.TTerm Parsing.ParseError -> Phantoms.TTerm String -> Phantoms.TTerm Parsing.ParseError
+parseErrorWithMessage :: Typed.TypedTerm Parsing.ParseError -> Typed.TypedTerm String -> Typed.TypedTerm Parsing.ParseError
 parseErrorWithMessage original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.parsing.ParseError"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "message"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "remainder"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.parsing.ParseError"),
               Core.projectionFieldName = (Core.Name "remainder")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the remainder field of hydra.parsing.ParseError
-parseErrorWithRemainder :: Phantoms.TTerm Parsing.ParseError -> Phantoms.TTerm String -> Phantoms.TTerm Parsing.ParseError
+parseErrorWithRemainder :: Typed.TypedTerm Parsing.ParseError -> Typed.TypedTerm String -> Typed.TypedTerm Parsing.ParseError
 parseErrorWithRemainder original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.parsing.ParseError"),
       Core.recordFields = [
         Core.Field {
@@ -64,58 +64,58 @@ parseErrorWithRemainder original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.parsing.ParseError"),
               Core.projectionFieldName = (Core.Name "message")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "remainder"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL injection for the failure variant of hydra.parsing.ParseResult
-parseResultFailure :: Phantoms.TTerm Parsing.ParseError -> Phantoms.TTerm (Parsing.ParseResult a)
+parseResultFailure :: Typed.TypedTerm Parsing.ParseError -> Typed.TypedTerm (Parsing.ParseResult a)
 parseResultFailure x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parsing.ParseResult"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "failure"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the success variant of hydra.parsing.ParseResult
-parseResultSuccess :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm (Parsing.ParseResult a)
+parseResultSuccess :: Typed.TypedTerm (Parsing.ParseSuccess a) -> Typed.TypedTerm (Parsing.ParseResult a)
 parseResultSuccess x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parsing.ParseResult"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "success"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL constructor for hydra.parsing.ParseSuccess
-parseSuccess :: Phantoms.TTerm a -> Phantoms.TTerm String -> Phantoms.TTerm (Parsing.ParseSuccess a)
+parseSuccess :: Typed.TypedTerm a -> Typed.TypedTerm String -> Typed.TypedTerm (Parsing.ParseSuccess a)
 parseSuccess value remainder =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm value)},
+          Core.fieldTerm = (Typed.unTypedTerm value)},
         Core.Field {
           Core.fieldName = (Core.Name "remainder"),
-          Core.fieldTerm = (Phantoms.unTTerm remainder)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm remainder)}]}))
 -- | DSL accessor for the remainder field of hydra.parsing.ParseSuccess
-parseSuccessRemainder :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm String
+parseSuccessRemainder :: Typed.TypedTerm (Parsing.ParseSuccess a) -> Typed.TypedTerm String
 parseSuccessRemainder x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
         Core.projectionFieldName = (Core.Name "remainder")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the value field of hydra.parsing.ParseSuccess
-parseSuccessValue :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm a
+parseSuccessValue :: Typed.TypedTerm (Parsing.ParseSuccess a) -> Typed.TypedTerm a
 parseSuccessValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
         Core.projectionFieldName = (Core.Name "value")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the remainder field of hydra.parsing.ParseSuccess
-parseSuccessWithRemainder :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm String -> Phantoms.TTerm (Parsing.ParseSuccess a)
+parseSuccessWithRemainder :: Typed.TypedTerm (Parsing.ParseSuccess a) -> Typed.TypedTerm String -> Typed.TypedTerm (Parsing.ParseSuccess a)
 parseSuccessWithRemainder original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
       Core.recordFields = [
         Core.Field {
@@ -124,35 +124,35 @@ parseSuccessWithRemainder original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
               Core.projectionFieldName = (Core.Name "value")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "remainder"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the value field of hydra.parsing.ParseSuccess
-parseSuccessWithValue :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm a -> Phantoms.TTerm (Parsing.ParseSuccess a)
+parseSuccessWithValue :: Typed.TypedTerm (Parsing.ParseSuccess a) -> Typed.TypedTerm a -> Typed.TypedTerm (Parsing.ParseSuccess a)
 parseSuccessWithValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "remainder"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
               Core.projectionFieldName = (Core.Name "remainder")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for the hydra.parsing.Parser wrapper
-parser :: Phantoms.TTerm (String -> Parsing.ParseResult a) -> Phantoms.TTerm (Parsing.Parser a)
+parser :: Typed.TypedTerm (String -> Parsing.ParseResult a) -> Typed.TypedTerm (Parsing.Parser a)
 parser x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.parsing.Parser"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the body of hydra.parsing.Parser
-unParser :: Phantoms.TTerm (Parsing.Parser a) -> Phantoms.TTerm (String -> Parsing.ParseResult a)
+unParser :: Typed.TypedTerm (Parsing.Parser a) -> Typed.TypedTerm (String -> Parsing.ParseResult a)
 unParser x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.parsing.Parser")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))

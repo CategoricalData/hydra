@@ -2,7 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.phantoms.TBinding",
+        "name": "hydra.typed.TypedBinding",
         "typeScheme": {
           "body": {
             "annotated": {
@@ -23,12 +23,12 @@
                         "type": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The term with its phantom type"}}}],
-                            "body": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}}}]},
+                            "body": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}}}]},
                   "parameter": "a"}}}},
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.phantoms.TTerm",
+        "name": "hydra.typed.TypedTerm",
         "typeScheme": {
           "body": {
             "annotated": {
@@ -37,7 +37,7 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.phantoms.TTermDefinition",
+        "name": "hydra.typed.TypedTermDefinition",
         "typeScheme": {
           "body": {
             "annotated": {
@@ -57,9 +57,9 @@
                         "type": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The term with its phantom type"}}}],
-                            "body": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}}}]},
+                            "body": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}}}]},
                   "parameter": "a"}}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "Phantom types for use with Hydra DSLs",
-  "name": "hydra.phantoms"}
+  "description": "Typed (phantom) wrappers for use with Hydra DSLs",
+  "name": "hydra.typed"}

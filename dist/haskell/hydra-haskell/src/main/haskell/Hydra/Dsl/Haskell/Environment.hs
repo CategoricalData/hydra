@@ -4,93 +4,93 @@
 module Hydra.Dsl.Haskell.Environment where
 import qualified Hydra.Core as Core
 import qualified Hydra.Haskell.Environment as Environment
-import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Typed as Typed
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | DSL constructor for hydra.haskell.environment.HaskellModuleMetadata
-haskellModuleMetadata :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.HaskellModuleMetadata
+haskellModuleMetadata :: Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.HaskellModuleMetadata
 haskellModuleMetadata usesByteString usesInt usesMap usesSet =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "usesByteString"),
-          Core.fieldTerm = (Phantoms.unTTerm usesByteString)},
+          Core.fieldTerm = (Typed.unTypedTerm usesByteString)},
         Core.Field {
           Core.fieldName = (Core.Name "usesInt"),
-          Core.fieldTerm = (Phantoms.unTTerm usesInt)},
+          Core.fieldTerm = (Typed.unTypedTerm usesInt)},
         Core.Field {
           Core.fieldName = (Core.Name "usesMap"),
-          Core.fieldTerm = (Phantoms.unTTerm usesMap)},
+          Core.fieldTerm = (Typed.unTypedTerm usesMap)},
         Core.Field {
           Core.fieldName = (Core.Name "usesSet"),
-          Core.fieldTerm = (Phantoms.unTTerm usesSet)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm usesSet)}]}))
 -- | DSL accessor for the usesByteString field of hydra.haskell.environment.HaskellModuleMetadata
-haskellModuleMetadataUsesByteString :: Phantoms.TTerm Environment.HaskellModuleMetadata -> Phantoms.TTerm Bool
+haskellModuleMetadataUsesByteString :: Typed.TypedTerm Environment.HaskellModuleMetadata -> Typed.TypedTerm Bool
 haskellModuleMetadataUsesByteString x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesByteString")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the usesInt field of hydra.haskell.environment.HaskellModuleMetadata
-haskellModuleMetadataUsesInt :: Phantoms.TTerm Environment.HaskellModuleMetadata -> Phantoms.TTerm Bool
+haskellModuleMetadataUsesInt :: Typed.TypedTerm Environment.HaskellModuleMetadata -> Typed.TypedTerm Bool
 haskellModuleMetadataUsesInt x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesInt")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the usesMap field of hydra.haskell.environment.HaskellModuleMetadata
-haskellModuleMetadataUsesMap :: Phantoms.TTerm Environment.HaskellModuleMetadata -> Phantoms.TTerm Bool
+haskellModuleMetadataUsesMap :: Typed.TypedTerm Environment.HaskellModuleMetadata -> Typed.TypedTerm Bool
 haskellModuleMetadataUsesMap x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesMap")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the usesSet field of hydra.haskell.environment.HaskellModuleMetadata
-haskellModuleMetadataUsesSet :: Phantoms.TTerm Environment.HaskellModuleMetadata -> Phantoms.TTerm Bool
+haskellModuleMetadataUsesSet :: Typed.TypedTerm Environment.HaskellModuleMetadata -> Typed.TypedTerm Bool
 haskellModuleMetadataUsesSet x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesSet")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the usesByteString field of hydra.haskell.environment.HaskellModuleMetadata
-haskellModuleMetadataWithUsesByteString :: Phantoms.TTerm Environment.HaskellModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.HaskellModuleMetadata
+haskellModuleMetadataWithUsesByteString :: Typed.TypedTerm Environment.HaskellModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.HaskellModuleMetadata
 haskellModuleMetadataWithUsesByteString original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "usesByteString"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "usesInt"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesInt")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMap"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesMap")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesSet"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesSet")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the usesInt field of hydra.haskell.environment.HaskellModuleMetadata
-haskellModuleMetadataWithUsesInt :: Phantoms.TTerm Environment.HaskellModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.HaskellModuleMetadata
+haskellModuleMetadataWithUsesInt :: Typed.TypedTerm Environment.HaskellModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.HaskellModuleMetadata
 haskellModuleMetadataWithUsesInt original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
       Core.recordFields = [
         Core.Field {
@@ -99,28 +99,28 @@ haskellModuleMetadataWithUsesInt original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesByteString")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesInt"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "usesMap"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesMap")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesSet"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesSet")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the usesMap field of hydra.haskell.environment.HaskellModuleMetadata
-haskellModuleMetadataWithUsesMap :: Phantoms.TTerm Environment.HaskellModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.HaskellModuleMetadata
+haskellModuleMetadataWithUsesMap :: Typed.TypedTerm Environment.HaskellModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.HaskellModuleMetadata
 haskellModuleMetadataWithUsesMap original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
       Core.recordFields = [
         Core.Field {
@@ -129,28 +129,28 @@ haskellModuleMetadataWithUsesMap original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesByteString")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesInt"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesInt")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMap"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "usesSet"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesSet")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the usesSet field of hydra.haskell.environment.HaskellModuleMetadata
-haskellModuleMetadataWithUsesSet :: Phantoms.TTerm Environment.HaskellModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.HaskellModuleMetadata
+haskellModuleMetadataWithUsesSet :: Typed.TypedTerm Environment.HaskellModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.HaskellModuleMetadata
 haskellModuleMetadataWithUsesSet original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
       Core.recordFields = [
         Core.Field {
@@ -159,21 +159,21 @@ haskellModuleMetadataWithUsesSet original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesByteString")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesInt"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesInt")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMap"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesMap")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesSet"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))

@@ -9,14 +9,14 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.relational.ColumnName"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.relational.ColumnName"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
-              "type": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -47,7 +47,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "name"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "name"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -55,15 +55,15 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "type"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "type"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "type"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "typeName": "hydra.typed.TypedTerm"}},
+                    "domain": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "type"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.relational.ColumnName"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.relational.ColumnName"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "name"}}}}}},
     {
       "term": {
@@ -74,10 +74,10 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.relational.ColumnName"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.relational.ColumnName"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -111,12 +111,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -127,9 +127,9 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -163,12 +163,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -179,15 +179,15 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
               "type": {
-                "application": {"argument": {"variable": "hydra.relational.ColumnName"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.relational.ColumnName"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -218,7 +218,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -250,18 +250,18 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
-                      "application": {"argument": {"variable": "hydra.relational.ColumnName"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                      "application": {"argument": {"variable": "hydra.relational.ColumnName"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -272,14 +272,14 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
-              "type": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -334,7 +334,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -344,15 +344,15 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "type"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "typeName": "hydra.typed.TypedTerm"}},
+                    "domain": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.tabular.ColumnType"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -362,12 +362,12 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"list": {"maybe": {"variable": "v"}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {"application": {"argument": {"list": {"maybe": {"variable": "v"}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.DataRow"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]},
         "term": {
           "annotated": {
@@ -388,11 +388,11 @@
                                   "term": {"wrap": {"body": {"literal": {"string": "hydra.tabular.DataRow"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "body",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.WrappedTerm"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"list": {"maybe": {"variable": "v"}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {"application": {"argument": {"list": {"maybe": {"variable": "v"}}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -405,9 +405,9 @@
               "type": {
                 "application": {
                   "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.DataRow"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"list": {"maybe": {"variable": "v"}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"list": {"maybe": {"variable": "v"}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]},
         "term": {
           "annotated": {
@@ -433,14 +433,14 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.DataRow"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -450,9 +450,10 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"list": {"literal": {"string": {}}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {"application": {"argument": {"list": {"literal": {"string": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.tabular.HeaderRow"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {
+              "application": {"argument": {"variable": "hydra.tabular.HeaderRow"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -473,11 +474,11 @@
                                   "term": {"wrap": {"body": {"literal": {"string": "hydra.tabular.HeaderRow"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "body",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.WrappedTerm"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"list": {"literal": {"string": {}}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {"application": {"argument": {"list": {"literal": {"string": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -487,9 +488,10 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.tabular.HeaderRow"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {
+                "application": {"argument": {"variable": "hydra.tabular.HeaderRow"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"list": {"literal": {"string": {}}}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"list": {"literal": {"string": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -515,11 +517,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"variable": "hydra.tabular.HeaderRow"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {
+                  "application": {"argument": {"variable": "hydra.tabular.HeaderRow"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -540,7 +543,7 @@
                             "literal": {
                               "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
                       "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -553,12 +556,12 @@
                           "key": "description",
                           "value": {"literal": {"string": "The data rows of the table. Each row must have the same number of cells."}}}],
                       "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.DataRow"}}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.Table"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]},
         "term": {
           "annotated": {
@@ -589,7 +592,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "header"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "header"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "header"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -597,11 +600,11 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "data"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "data"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "data"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -611,7 +614,7 @@
                                 "key": "description",
                                 "value": {"literal": {"string": "The data rows of the table. Each row must have the same number of cells."}}}],
                             "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.DataRow"}}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "data"}},
                 "domain": {
                   "application": {
@@ -624,7 +627,7 @@
                               "literal": {
                                 "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
                         "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "header"}}}}}},
     {
       "term": {
@@ -637,7 +640,7 @@
               "type": {
                 "application": {
                   "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.Table"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -650,7 +653,7 @@
                           "literal": {
                             "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
                     "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]},
         "term": {
           "annotated": {
@@ -683,14 +686,14 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.Table"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -703,7 +706,7 @@
               "type": {
                 "application": {
                   "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.Table"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -714,7 +717,7 @@
                         "key": "description",
                         "value": {"literal": {"string": "The data rows of the table. Each row must have the same number of cells."}}}],
                     "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.DataRow"}}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]},
         "term": {
           "annotated": {
@@ -747,14 +750,14 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.Table"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -767,7 +770,7 @@
               "type": {
                 "application": {
                   "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.Table"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -782,12 +785,12 @@
                             "literal": {
                               "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
                       "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.Table"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]},
         "term": {
           "annotated": {
@@ -818,7 +821,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "header"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -850,13 +853,13 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -868,12 +871,12 @@
                                   "literal": {
                                     "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
                             "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {
                     "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.Table"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -886,7 +889,7 @@
               "type": {
                 "application": {
                   "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.Table"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -899,12 +902,12 @@
                           "key": "description",
                           "value": {"literal": {"string": "The data rows of the table. Each row must have the same number of cells."}}}],
                       "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.DataRow"}}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.Table"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]},
         "term": {
           "annotated": {
@@ -959,7 +962,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -969,11 +972,11 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "data"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -983,12 +986,12 @@
                                 "key": "description",
                                 "value": {"literal": {"string": "The data rows of the table. Each row must have the same number of cells."}}}],
                             "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.DataRow"}}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {
                     "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.Table"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -999,14 +1002,15 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.relational.RelationName"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.relational.RelationName"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
               "type": {
-                "application": {"argument": {"list": {"variable": "hydra.tabular.ColumnType"}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"list": {"variable": "hydra.tabular.ColumnType"}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {
+              "application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1037,7 +1041,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "name"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "name"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -1045,16 +1049,16 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "columns"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "columns"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "columns"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
-                      "application": {"argument": {"list": {"variable": "hydra.tabular.ColumnType"}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                      "application": {"argument": {"list": {"variable": "hydra.tabular.ColumnType"}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "columns"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.relational.RelationName"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.relational.RelationName"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "name"}}}}}},
     {
       "term": {
@@ -1064,10 +1068,11 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {
+                "application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.relational.RelationName"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.relational.RelationName"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1100,11 +1105,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {
+                  "application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -1114,10 +1120,11 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {
+                "application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"list": {"variable": "hydra.tabular.ColumnType"}}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"list": {"variable": "hydra.tabular.ColumnType"}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1153,11 +1160,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {
+                  "application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -1167,14 +1175,16 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "type": {
+                "application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
               "type": {
-                "application": {"argument": {"variable": "hydra.relational.RelationName"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.relational.RelationName"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {
+              "application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1205,7 +1215,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -1237,17 +1247,18 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
-                      "application": {"argument": {"variable": "hydra.relational.RelationName"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                      "application": {"argument": {"variable": "hydra.relational.RelationName"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
-                "domain": {"application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "domain": {
+                  "application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -1257,14 +1268,16 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "type": {
+                "application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
               "type": {
-                "application": {"argument": {"list": {"variable": "hydra.tabular.ColumnType"}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"list": {"variable": "hydra.tabular.ColumnType"}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {
+              "application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1320,7 +1333,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1330,19 +1343,20 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "columns"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
-                      "application": {"argument": {"list": {"variable": "hydra.tabular.ColumnType"}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                      "application": {"argument": {"list": {"variable": "hydra.tabular.ColumnType"}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
-                "domain": {"application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "domain": {
+                  "application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}}],
   "dependencies": [
     {"module": "hydra.tabular"},
-    {"module": "hydra.phantoms"},
+    {"module": "hydra.typed"},
     {"module": "hydra.core"},
     {"module": "hydra.relational"},
     {"module": "hydra.dsl.core"},

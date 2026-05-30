@@ -14,7 +14,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Mapping from source ordering to target ordering"}}}],
                       "body": {"function": {"codomain": {"list": {"variable": "a"}}, "domain": {"list": {"variable": "a"}}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -24,12 +24,12 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Mapping from target ordering to source ordering"}}}],
                       "body": {"function": {"codomain": {"list": {"variable": "a"}}, "domain": {"list": {"variable": "a"}}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.topology.OrderingIsomorphism"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
           "annotated": {
@@ -60,7 +60,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "encode"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "encode"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "encode"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -68,18 +68,18 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "decode"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "decode"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "decode"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "Mapping from target ordering to source ordering"}}}],
                             "body": {"function": {"codomain": {"list": {"variable": "a"}}, "domain": {"list": {"variable": "a"}}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "decode"}},
                 "domain": {
                   "application": {
@@ -87,7 +87,7 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Mapping from source ordering to target ordering"}}}],
                         "body": {"function": {"codomain": {"list": {"variable": "a"}}, "domain": {"list": {"variable": "a"}}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "encode"}}}}}},
     {
       "term": {
@@ -100,7 +100,7 @@
               "type": {
                 "application": {
                   "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.topology.OrderingIsomorphism"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -108,7 +108,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "Mapping from source ordering to target ordering"}}}],
                     "body": {"function": {"codomain": {"list": {"variable": "a"}}, "domain": {"list": {"variable": "a"}}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
           "annotated": {
@@ -144,14 +144,14 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.topology.OrderingIsomorphism"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -164,7 +164,7 @@
               "type": {
                 "application": {
                   "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.topology.OrderingIsomorphism"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -172,7 +172,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "Mapping from target ordering to source ordering"}}}],
                     "body": {"function": {"codomain": {"list": {"variable": "a"}}, "domain": {"list": {"variable": "a"}}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
           "annotated": {
@@ -208,14 +208,14 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.topology.OrderingIsomorphism"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -228,7 +228,7 @@
               "type": {
                 "application": {
                   "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.topology.OrderingIsomorphism"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -238,12 +238,12 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Mapping from source ordering to target ordering"}}}],
                       "body": {"function": {"codomain": {"list": {"variable": "a"}}, "domain": {"list": {"variable": "a"}}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.topology.OrderingIsomorphism"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
           "annotated": {
@@ -277,7 +277,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "encode"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -309,25 +309,25 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "Mapping from source ordering to target ordering"}}}],
                             "body": {"function": {"codomain": {"list": {"variable": "a"}}, "domain": {"list": {"variable": "a"}}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {
                     "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.topology.OrderingIsomorphism"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -340,7 +340,7 @@
               "type": {
                 "application": {
                   "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.topology.OrderingIsomorphism"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -350,12 +350,12 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Mapping from target ordering to source ordering"}}}],
                       "body": {"function": {"codomain": {"list": {"variable": "a"}}, "domain": {"list": {"variable": "a"}}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.topology.OrderingIsomorphism"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
           "annotated": {
@@ -413,7 +413,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -423,23 +423,23 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "decode"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "Mapping from target ordering to source ordering"}}}],
                             "body": {"function": {"codomain": {"list": {"variable": "a"}}, "domain": {"list": {"variable": "a"}}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {
                     "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.topology.OrderingIsomorphism"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -455,7 +455,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Next available index for vertices in the DFS traversal"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -466,7 +466,7 @@
                       "annotation": [
                         {"key": "description", "value": {"literal": {"string": "Mapping from vertices to their indices in the DFS traversal"}}}],
                       "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg2",
@@ -479,7 +479,7 @@
                           "key": "description",
                           "value": {"literal": {"string": "Mapping from vertices to their lowest reachable index in the DFS traversal"}}}],
                       "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg3",
@@ -489,7 +489,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Current DFS stack, with vertices in reverse order"}}}],
                       "body": {"list": {"variable": "hydra.topology.Vertex"}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg4",
@@ -499,7 +499,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Set of vertices currently on the stack, for quick lookup"}}}],
                       "body": {"set": {"variable": "hydra.topology.Vertex"}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg5",
@@ -512,10 +512,10 @@
                           "key": "description",
                           "value": {"literal": {"string": "Accumulated strongly connected components, each a list of vertices"}}}],
                       "body": {"list": {"list": {"variable": "hydra.topology.Vertex"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -554,7 +554,7 @@
                                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "counter"}}, "typeName": "hydra.core.Name"}}},
                                                                 {
                                                                   "name": "term",
-                                                                  "term": {"application": {"argument": {"variable": "counter"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                  "term": {"application": {"argument": {"variable": "counter"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                               "typeName": "hydra.core.Field"}},
                                                           {
                                                             "record": {
@@ -562,7 +562,7 @@
                                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "indices"}}, "typeName": "hydra.core.Name"}}},
                                                                 {
                                                                   "name": "term",
-                                                                  "term": {"application": {"argument": {"variable": "indices"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                  "term": {"application": {"argument": {"variable": "indices"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                               "typeName": "hydra.core.Field"}},
                                                           {
                                                             "record": {
@@ -570,7 +570,7 @@
                                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "lowLinks"}}, "typeName": "hydra.core.Name"}}},
                                                                 {
                                                                   "name": "term",
-                                                                  "term": {"application": {"argument": {"variable": "lowLinks"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                  "term": {"application": {"argument": {"variable": "lowLinks"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                               "typeName": "hydra.core.Field"}},
                                                           {
                                                             "record": {
@@ -578,7 +578,7 @@
                                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "stack"}}, "typeName": "hydra.core.Name"}}},
                                                                 {
                                                                   "name": "term",
-                                                                  "term": {"application": {"argument": {"variable": "stack"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                  "term": {"application": {"argument": {"variable": "stack"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                               "typeName": "hydra.core.Field"}},
                                                           {
                                                             "record": {
@@ -586,7 +586,7 @@
                                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "onStack"}}, "typeName": "hydra.core.Name"}}},
                                                                 {
                                                                   "name": "term",
-                                                                  "term": {"application": {"argument": {"variable": "onStack"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                  "term": {"application": {"argument": {"variable": "onStack"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                               "typeName": "hydra.core.Field"}},
                                                           {
                                                             "record": {
@@ -594,11 +594,11 @@
                                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "sccs"}}, "typeName": "hydra.core.Name"}}},
                                                                 {
                                                                   "name": "term",
-                                                                  "term": {"application": {"argument": {"variable": "sccs"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                  "term": {"application": {"argument": {"variable": "sccs"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                               "typeName": "hydra.core.Field"}}]}}],
                                                   "typeName": "hydra.core.Record"}}},
                                             "typeName": "hydra.core.Term"}},
-                                        "typeName": "hydra.phantoms.TTerm"}},
+                                        "typeName": "hydra.typed.TypedTerm"}},
                                     "domain": {
                                       "application": {
                                         "argument": {
@@ -608,7 +608,7 @@
                                                 "key": "description",
                                                 "value": {"literal": {"string": "Accumulated strongly connected components, each a list of vertices"}}}],
                                             "body": {"list": {"list": {"variable": "hydra.topology.Vertex"}}}}},
-                                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                                     "parameter": "sccs"}},
                                 "domain": {
                                   "application": {
@@ -616,7 +616,7 @@
                                       "annotated": {
                                         "annotation": [{"key": "description", "value": {"literal": {"string": "Set of vertices currently on the stack, for quick lookup"}}}],
                                         "body": {"set": {"variable": "hydra.topology.Vertex"}}}},
-                                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                                 "parameter": "onStack"}},
                             "domain": {
                               "application": {
@@ -624,7 +624,7 @@
                                   "annotated": {
                                     "annotation": [{"key": "description", "value": {"literal": {"string": "Current DFS stack, with vertices in reverse order"}}}],
                                     "body": {"list": {"variable": "hydra.topology.Vertex"}}}},
-                                "function": {"variable": "hydra.phantoms.TTerm"}}},
+                                "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "stack"}},
                         "domain": {
                           "application": {
@@ -635,7 +635,7 @@
                                     "key": "description",
                                     "value": {"literal": {"string": "Mapping from vertices to their lowest reachable index in the DFS traversal"}}}],
                                 "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
-                            "function": {"variable": "hydra.phantoms.TTerm"}}},
+                            "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "lowLinks"}},
                     "domain": {
                       "application": {
@@ -644,7 +644,7 @@
                             "annotation": [
                               {"key": "description", "value": {"literal": {"string": "Mapping from vertices to their indices in the DFS traversal"}}}],
                             "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "indices"}},
                 "domain": {
                   "application": {
@@ -652,7 +652,7 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Next available index for vertices in the DFS traversal"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "counter"}}}}}},
     {
       "term": {
@@ -663,7 +663,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -671,7 +671,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "Next available index for vertices in the DFS traversal"}}}],
                     "body": {"literal": {"integer": {"int32": {}}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -707,12 +707,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -723,7 +723,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -732,7 +732,7 @@
                     "annotation": [
                       {"key": "description", "value": {"literal": {"string": "Mapping from vertices to their indices in the DFS traversal"}}}],
                     "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -768,12 +768,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -784,7 +784,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -795,7 +795,7 @@
                         "key": "description",
                         "value": {"literal": {"string": "Mapping from vertices to their lowest reachable index in the DFS traversal"}}}],
                     "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -831,12 +831,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -847,7 +847,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -855,7 +855,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "Current DFS stack, with vertices in reverse order"}}}],
                     "body": {"list": {"variable": "hydra.topology.Vertex"}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -891,12 +891,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -907,7 +907,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -915,7 +915,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "Set of vertices currently on the stack, for quick lookup"}}}],
                     "body": {"set": {"variable": "hydra.topology.Vertex"}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -951,12 +951,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -967,7 +967,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -978,7 +978,7 @@
                         "key": "description",
                         "value": {"literal": {"string": "Accumulated strongly connected components, each a list of vertices"}}}],
                     "body": {"list": {"list": {"variable": "hydra.topology.Vertex"}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1014,12 +1014,12 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -1030,7 +1030,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -1040,10 +1040,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Next available index for vertices in the DFS traversal"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1077,7 +1077,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "counter"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -1109,7 +1109,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1143,7 +1143,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1177,7 +1177,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1211,7 +1211,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1245,23 +1245,23 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "Next available index for vertices in the DFS traversal"}}}],
                             "body": {"literal": {"integer": {"int32": {}}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -1272,7 +1272,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -1283,10 +1283,10 @@
                       "annotation": [
                         {"key": "description", "value": {"literal": {"string": "Mapping from vertices to their indices in the DFS traversal"}}}],
                       "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1344,7 +1344,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1354,7 +1354,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "indices"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -1386,7 +1386,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1420,7 +1420,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1454,7 +1454,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1488,13 +1488,13 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -1502,10 +1502,10 @@
                             "annotation": [
                               {"key": "description", "value": {"literal": {"string": "Mapping from vertices to their indices in the DFS traversal"}}}],
                             "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -1516,7 +1516,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -1529,10 +1529,10 @@
                           "key": "description",
                           "value": {"literal": {"string": "Mapping from vertices to their lowest reachable index in the DFS traversal"}}}],
                       "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1590,7 +1590,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1624,7 +1624,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1634,7 +1634,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "lowLinks"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -1666,7 +1666,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1700,7 +1700,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1734,13 +1734,13 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -1750,10 +1750,10 @@
                                 "key": "description",
                                 "value": {"literal": {"string": "Mapping from vertices to their lowest reachable index in the DFS traversal"}}}],
                             "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -1764,7 +1764,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -1774,10 +1774,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Current DFS stack, with vertices in reverse order"}}}],
                       "body": {"list": {"variable": "hydra.topology.Vertex"}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1835,7 +1835,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1869,7 +1869,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1903,7 +1903,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1913,7 +1913,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "stack"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -1945,7 +1945,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1979,23 +1979,23 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "Current DFS stack, with vertices in reverse order"}}}],
                             "body": {"list": {"variable": "hydra.topology.Vertex"}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -2006,7 +2006,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -2016,10 +2016,10 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Set of vertices currently on the stack, for quick lookup"}}}],
                       "body": {"set": {"variable": "hydra.topology.Vertex"}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -2077,7 +2077,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2111,7 +2111,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2145,7 +2145,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2179,7 +2179,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2189,7 +2189,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "onStack"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -2221,23 +2221,23 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "Set of vertices currently on the stack, for quick lookup"}}}],
                             "body": {"set": {"variable": "hydra.topology.Vertex"}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -2248,7 +2248,7 @@
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -2261,10 +2261,10 @@
                           "key": "description",
                           "value": {"literal": {"string": "Accumulated strongly connected components, each a list of vertices"}}}],
                       "body": {"list": {"list": {"variable": "hydra.topology.Vertex"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -2320,7 +2320,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2354,7 +2354,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2388,7 +2388,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2422,7 +2422,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2456,7 +2456,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2466,11 +2466,11 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "sccs"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -2480,11 +2480,11 @@
                                 "key": "description",
                                 "value": {"literal": {"string": "Accumulated strongly connected components, each a list of vertices"}}}],
                             "body": {"list": {"list": {"variable": "hydra.topology.Vertex"}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
-                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}}],
-  "dependencies": [{"module": "hydra.topology"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
+  "dependencies": [{"module": "hydra.topology"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.topology",
   "name": "hydra.dsl.topology"}

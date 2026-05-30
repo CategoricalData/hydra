@@ -7,97 +7,97 @@ module Hydra.Dsl.Error.Pg where
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Pg as Pg
 import qualified Hydra.Pg.Model as Model
-import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Typed as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 
-invalidEdgeErrorId :: Phantoms.TTerm Pg.InvalidValueError -> Phantoms.TTerm Pg.InvalidEdgeError
+invalidEdgeErrorId :: Phantoms.TypedTerm Pg.InvalidValueError -> Phantoms.TypedTerm Pg.InvalidEdgeError
 invalidEdgeErrorId x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidEdgeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "id"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-invalidEdgeErrorInVertexLabel :: Phantoms.TTerm Pg.WrongVertexLabelError -> Phantoms.TTerm Pg.InvalidEdgeError
+invalidEdgeErrorInVertexLabel :: Phantoms.TypedTerm Pg.WrongVertexLabelError -> Phantoms.TypedTerm Pg.InvalidEdgeError
 invalidEdgeErrorInVertexLabel x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidEdgeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inVertexLabel"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-invalidEdgeErrorInVertexNotFound :: Phantoms.TTerm Pg.InvalidEdgeError
+invalidEdgeErrorInVertexNotFound :: Phantoms.TypedTerm Pg.InvalidEdgeError
 invalidEdgeErrorInVertexNotFound =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidEdgeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inVertexNotFound"),
         Core.fieldTerm = Core.TermUnit}}))
 
-invalidEdgeErrorLabel :: Phantoms.TTerm Pg.NoSuchEdgeLabelError -> Phantoms.TTerm Pg.InvalidEdgeError
+invalidEdgeErrorLabel :: Phantoms.TypedTerm Pg.NoSuchEdgeLabelError -> Phantoms.TypedTerm Pg.InvalidEdgeError
 invalidEdgeErrorLabel x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidEdgeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "label"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-invalidEdgeErrorOutVertexLabel :: Phantoms.TTerm Pg.WrongVertexLabelError -> Phantoms.TTerm Pg.InvalidEdgeError
+invalidEdgeErrorOutVertexLabel :: Phantoms.TypedTerm Pg.WrongVertexLabelError -> Phantoms.TypedTerm Pg.InvalidEdgeError
 invalidEdgeErrorOutVertexLabel x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidEdgeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "outVertexLabel"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-invalidEdgeErrorOutVertexNotFound :: Phantoms.TTerm Pg.InvalidEdgeError
+invalidEdgeErrorOutVertexNotFound :: Phantoms.TypedTerm Pg.InvalidEdgeError
 invalidEdgeErrorOutVertexNotFound =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidEdgeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "outVertexNotFound"),
         Core.fieldTerm = Core.TermUnit}}))
 
-invalidEdgeErrorProperty :: Phantoms.TTerm Pg.InvalidElementPropertyError -> Phantoms.TTerm Pg.InvalidEdgeError
+invalidEdgeErrorProperty :: Phantoms.TypedTerm Pg.InvalidElementPropertyError -> Phantoms.TypedTerm Pg.InvalidEdgeError
 invalidEdgeErrorProperty x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidEdgeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "property"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-invalidElementPropertyError :: Phantoms.TTerm Model.PropertyKey -> Phantoms.TTerm Pg.InvalidPropertyError -> Phantoms.TTerm Pg.InvalidElementPropertyError
+invalidElementPropertyError :: Phantoms.TypedTerm Model.PropertyKey -> Phantoms.TypedTerm Pg.InvalidPropertyError -> Phantoms.TypedTerm Pg.InvalidElementPropertyError
 invalidElementPropertyError key error =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.pg.InvalidElementPropertyError"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "key"),
-          Core.fieldTerm = (Phantoms.unTTerm key)},
+          Core.fieldTerm = (Phantoms.unTypedTerm key)},
         Core.Field {
           Core.fieldName = (Core.Name "error"),
-          Core.fieldTerm = (Phantoms.unTTerm error)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm error)}]}))
 
-invalidElementPropertyErrorError :: Phantoms.TTerm Pg.InvalidElementPropertyError -> Phantoms.TTerm Pg.InvalidPropertyError
+invalidElementPropertyErrorError :: Phantoms.TypedTerm Pg.InvalidElementPropertyError -> Phantoms.TypedTerm Pg.InvalidPropertyError
 invalidElementPropertyErrorError x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.pg.InvalidElementPropertyError"),
         Core.projectionFieldName = (Core.Name "error")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-invalidElementPropertyErrorKey :: Phantoms.TTerm Pg.InvalidElementPropertyError -> Phantoms.TTerm Model.PropertyKey
+invalidElementPropertyErrorKey :: Phantoms.TypedTerm Pg.InvalidElementPropertyError -> Phantoms.TypedTerm Model.PropertyKey
 invalidElementPropertyErrorKey x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.pg.InvalidElementPropertyError"),
         Core.projectionFieldName = (Core.Name "key")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-invalidElementPropertyErrorWithError :: Phantoms.TTerm Pg.InvalidElementPropertyError -> Phantoms.TTerm Pg.InvalidPropertyError -> Phantoms.TTerm Pg.InvalidElementPropertyError
+invalidElementPropertyErrorWithError :: Phantoms.TypedTerm Pg.InvalidElementPropertyError -> Phantoms.TypedTerm Pg.InvalidPropertyError -> Phantoms.TypedTerm Pg.InvalidElementPropertyError
 invalidElementPropertyErrorWithError original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.pg.InvalidElementPropertyError"),
       Core.recordFields = [
         Core.Field {
@@ -106,58 +106,58 @@ invalidElementPropertyErrorWithError original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.pg.InvalidElementPropertyError"),
               Core.projectionFieldName = (Core.Name "key")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "error"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-invalidElementPropertyErrorWithKey :: Phantoms.TTerm Pg.InvalidElementPropertyError -> Phantoms.TTerm Model.PropertyKey -> Phantoms.TTerm Pg.InvalidElementPropertyError
+invalidElementPropertyErrorWithKey :: Phantoms.TypedTerm Pg.InvalidElementPropertyError -> Phantoms.TypedTerm Model.PropertyKey -> Phantoms.TypedTerm Pg.InvalidElementPropertyError
 invalidElementPropertyErrorWithKey original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.pg.InvalidElementPropertyError"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "key"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "error"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.pg.InvalidElementPropertyError"),
               Core.projectionFieldName = (Core.Name "error")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-invalidGraphEdgeError :: Phantoms.TTerm v -> Phantoms.TTerm Pg.InvalidEdgeError -> Phantoms.TTerm (Pg.InvalidGraphEdgeError v)
+invalidGraphEdgeError :: Phantoms.TypedTerm v -> Phantoms.TypedTerm Pg.InvalidEdgeError -> Phantoms.TypedTerm (Pg.InvalidGraphEdgeError v)
 invalidGraphEdgeError id error =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.pg.InvalidGraphEdgeError"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm id)},
+          Core.fieldTerm = (Phantoms.unTypedTerm id)},
         Core.Field {
           Core.fieldName = (Core.Name "error"),
-          Core.fieldTerm = (Phantoms.unTTerm error)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm error)}]}))
 
-invalidGraphEdgeErrorError :: Phantoms.TTerm (Pg.InvalidGraphEdgeError v) -> Phantoms.TTerm Pg.InvalidEdgeError
+invalidGraphEdgeErrorError :: Phantoms.TypedTerm (Pg.InvalidGraphEdgeError v) -> Phantoms.TypedTerm Pg.InvalidEdgeError
 invalidGraphEdgeErrorError x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.pg.InvalidGraphEdgeError"),
         Core.projectionFieldName = (Core.Name "error")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-invalidGraphEdgeErrorId :: Phantoms.TTerm (Pg.InvalidGraphEdgeError v) -> Phantoms.TTerm v
+invalidGraphEdgeErrorId :: Phantoms.TypedTerm (Pg.InvalidGraphEdgeError v) -> Phantoms.TypedTerm v
 invalidGraphEdgeErrorId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.pg.InvalidGraphEdgeError"),
         Core.projectionFieldName = (Core.Name "id")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-invalidGraphEdgeErrorWithError :: Phantoms.TTerm (Pg.InvalidGraphEdgeError v) -> Phantoms.TTerm Pg.InvalidEdgeError -> Phantoms.TTerm (Pg.InvalidGraphEdgeError v)
+invalidGraphEdgeErrorWithError :: Phantoms.TypedTerm (Pg.InvalidGraphEdgeError v) -> Phantoms.TypedTerm Pg.InvalidEdgeError -> Phantoms.TypedTerm (Pg.InvalidGraphEdgeError v)
 invalidGraphEdgeErrorWithError original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.pg.InvalidGraphEdgeError"),
       Core.recordFields = [
         Core.Field {
@@ -166,74 +166,74 @@ invalidGraphEdgeErrorWithError original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.pg.InvalidGraphEdgeError"),
               Core.projectionFieldName = (Core.Name "id")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "error"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-invalidGraphEdgeErrorWithId :: Phantoms.TTerm (Pg.InvalidGraphEdgeError v) -> Phantoms.TTerm v -> Phantoms.TTerm (Pg.InvalidGraphEdgeError v)
+invalidGraphEdgeErrorWithId :: Phantoms.TypedTerm (Pg.InvalidGraphEdgeError v) -> Phantoms.TypedTerm v -> Phantoms.TypedTerm (Pg.InvalidGraphEdgeError v)
 invalidGraphEdgeErrorWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.pg.InvalidGraphEdgeError"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "error"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.pg.InvalidGraphEdgeError"),
               Core.projectionFieldName = (Core.Name "error")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-invalidGraphErrorEdge :: Phantoms.TTerm (Pg.InvalidGraphEdgeError v) -> Phantoms.TTerm (Pg.InvalidGraphError v)
+invalidGraphErrorEdge :: Phantoms.TypedTerm (Pg.InvalidGraphEdgeError v) -> Phantoms.TypedTerm (Pg.InvalidGraphError v)
 invalidGraphErrorEdge x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidGraphError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edge"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-invalidGraphErrorVertex :: Phantoms.TTerm (Pg.InvalidGraphVertexError v) -> Phantoms.TTerm (Pg.InvalidGraphError v)
+invalidGraphErrorVertex :: Phantoms.TypedTerm (Pg.InvalidGraphVertexError v) -> Phantoms.TypedTerm (Pg.InvalidGraphError v)
 invalidGraphErrorVertex x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidGraphError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "vertex"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-invalidGraphVertexError :: Phantoms.TTerm v -> Phantoms.TTerm Pg.InvalidVertexError -> Phantoms.TTerm (Pg.InvalidGraphVertexError v)
+invalidGraphVertexError :: Phantoms.TypedTerm v -> Phantoms.TypedTerm Pg.InvalidVertexError -> Phantoms.TypedTerm (Pg.InvalidGraphVertexError v)
 invalidGraphVertexError id error =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.pg.InvalidGraphVertexError"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm id)},
+          Core.fieldTerm = (Phantoms.unTypedTerm id)},
         Core.Field {
           Core.fieldName = (Core.Name "error"),
-          Core.fieldTerm = (Phantoms.unTTerm error)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm error)}]}))
 
-invalidGraphVertexErrorError :: Phantoms.TTerm (Pg.InvalidGraphVertexError v) -> Phantoms.TTerm Pg.InvalidVertexError
+invalidGraphVertexErrorError :: Phantoms.TypedTerm (Pg.InvalidGraphVertexError v) -> Phantoms.TypedTerm Pg.InvalidVertexError
 invalidGraphVertexErrorError x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.pg.InvalidGraphVertexError"),
         Core.projectionFieldName = (Core.Name "error")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-invalidGraphVertexErrorId :: Phantoms.TTerm (Pg.InvalidGraphVertexError v) -> Phantoms.TTerm v
+invalidGraphVertexErrorId :: Phantoms.TypedTerm (Pg.InvalidGraphVertexError v) -> Phantoms.TypedTerm v
 invalidGraphVertexErrorId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.pg.InvalidGraphVertexError"),
         Core.projectionFieldName = (Core.Name "id")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-invalidGraphVertexErrorWithError :: Phantoms.TTerm (Pg.InvalidGraphVertexError v) -> Phantoms.TTerm Pg.InvalidVertexError -> Phantoms.TTerm (Pg.InvalidGraphVertexError v)
+invalidGraphVertexErrorWithError :: Phantoms.TypedTerm (Pg.InvalidGraphVertexError v) -> Phantoms.TypedTerm Pg.InvalidVertexError -> Phantoms.TypedTerm (Pg.InvalidGraphVertexError v)
 invalidGraphVertexErrorWithError original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.pg.InvalidGraphVertexError"),
       Core.recordFields = [
         Core.Field {
@@ -242,98 +242,98 @@ invalidGraphVertexErrorWithError original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.pg.InvalidGraphVertexError"),
               Core.projectionFieldName = (Core.Name "id")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "error"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-invalidGraphVertexErrorWithId :: Phantoms.TTerm (Pg.InvalidGraphVertexError v) -> Phantoms.TTerm v -> Phantoms.TTerm (Pg.InvalidGraphVertexError v)
+invalidGraphVertexErrorWithId :: Phantoms.TypedTerm (Pg.InvalidGraphVertexError v) -> Phantoms.TypedTerm v -> Phantoms.TypedTerm (Pg.InvalidGraphVertexError v)
 invalidGraphVertexErrorWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.pg.InvalidGraphVertexError"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "error"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.pg.InvalidGraphVertexError"),
               Core.projectionFieldName = (Core.Name "error")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-invalidPropertyErrorInvalidValue :: Phantoms.TTerm Pg.InvalidValueError -> Phantoms.TTerm Pg.InvalidPropertyError
+invalidPropertyErrorInvalidValue :: Phantoms.TypedTerm Pg.InvalidValueError -> Phantoms.TypedTerm Pg.InvalidPropertyError
 invalidPropertyErrorInvalidValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidPropertyError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "invalidValue"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-invalidPropertyErrorMissingRequired :: Phantoms.TTerm Model.PropertyKey -> Phantoms.TTerm Pg.InvalidPropertyError
+invalidPropertyErrorMissingRequired :: Phantoms.TypedTerm Model.PropertyKey -> Phantoms.TypedTerm Pg.InvalidPropertyError
 invalidPropertyErrorMissingRequired x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidPropertyError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "missingRequired"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-invalidPropertyErrorUnexpectedKey :: Phantoms.TTerm Model.PropertyKey -> Phantoms.TTerm Pg.InvalidPropertyError
+invalidPropertyErrorUnexpectedKey :: Phantoms.TypedTerm Model.PropertyKey -> Phantoms.TypedTerm Pg.InvalidPropertyError
 invalidPropertyErrorUnexpectedKey x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidPropertyError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unexpectedKey"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-invalidValueError :: Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm Pg.InvalidValueError
+invalidValueError :: Phantoms.TypedTerm String -> Phantoms.TypedTerm String -> Phantoms.TypedTerm Pg.InvalidValueError
 invalidValueError expectedType value =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.pg.InvalidValueError"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expectedType"),
-          Core.fieldTerm = (Phantoms.unTTerm expectedType)},
+          Core.fieldTerm = (Phantoms.unTypedTerm expectedType)},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm value)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm value)}]}))
 
-invalidValueErrorExpectedType :: Phantoms.TTerm Pg.InvalidValueError -> Phantoms.TTerm String
+invalidValueErrorExpectedType :: Phantoms.TypedTerm Pg.InvalidValueError -> Phantoms.TypedTerm String
 invalidValueErrorExpectedType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.pg.InvalidValueError"),
         Core.projectionFieldName = (Core.Name "expectedType")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-invalidValueErrorValue :: Phantoms.TTerm Pg.InvalidValueError -> Phantoms.TTerm String
+invalidValueErrorValue :: Phantoms.TypedTerm Pg.InvalidValueError -> Phantoms.TypedTerm String
 invalidValueErrorValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.pg.InvalidValueError"),
         Core.projectionFieldName = (Core.Name "value")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-invalidValueErrorWithExpectedType :: Phantoms.TTerm Pg.InvalidValueError -> Phantoms.TTerm String -> Phantoms.TTerm Pg.InvalidValueError
+invalidValueErrorWithExpectedType :: Phantoms.TypedTerm Pg.InvalidValueError -> Phantoms.TypedTerm String -> Phantoms.TypedTerm Pg.InvalidValueError
 invalidValueErrorWithExpectedType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.pg.InvalidValueError"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expectedType"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.pg.InvalidValueError"),
               Core.projectionFieldName = (Core.Name "value")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-invalidValueErrorWithValue :: Phantoms.TTerm Pg.InvalidValueError -> Phantoms.TTerm String -> Phantoms.TTerm Pg.InvalidValueError
+invalidValueErrorWithValue :: Phantoms.TypedTerm Pg.InvalidValueError -> Phantoms.TypedTerm String -> Phantoms.TypedTerm Pg.InvalidValueError
 invalidValueErrorWithValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.pg.InvalidValueError"),
       Core.recordFields = [
         Core.Field {
@@ -342,118 +342,118 @@ invalidValueErrorWithValue original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.pg.InvalidValueError"),
               Core.projectionFieldName = (Core.Name "expectedType")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-invalidVertexErrorId :: Phantoms.TTerm Pg.InvalidValueError -> Phantoms.TTerm Pg.InvalidVertexError
+invalidVertexErrorId :: Phantoms.TypedTerm Pg.InvalidValueError -> Phantoms.TypedTerm Pg.InvalidVertexError
 invalidVertexErrorId x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidVertexError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "id"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-invalidVertexErrorLabel :: Phantoms.TTerm Pg.NoSuchVertexLabelError -> Phantoms.TTerm Pg.InvalidVertexError
+invalidVertexErrorLabel :: Phantoms.TypedTerm Pg.NoSuchVertexLabelError -> Phantoms.TypedTerm Pg.InvalidVertexError
 invalidVertexErrorLabel x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidVertexError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "label"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-invalidVertexErrorProperty :: Phantoms.TTerm Pg.InvalidElementPropertyError -> Phantoms.TTerm Pg.InvalidVertexError
+invalidVertexErrorProperty :: Phantoms.TypedTerm Pg.InvalidElementPropertyError -> Phantoms.TypedTerm Pg.InvalidVertexError
 invalidVertexErrorProperty x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidVertexError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "property"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-noSuchEdgeLabelError :: Phantoms.TTerm Model.EdgeLabel -> Phantoms.TTerm Pg.NoSuchEdgeLabelError
+noSuchEdgeLabelError :: Phantoms.TypedTerm Model.EdgeLabel -> Phantoms.TypedTerm Pg.NoSuchEdgeLabelError
 noSuchEdgeLabelError label =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.pg.NoSuchEdgeLabelError"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "label"),
-          Core.fieldTerm = (Phantoms.unTTerm label)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm label)}]}))
 
-noSuchEdgeLabelErrorLabel :: Phantoms.TTerm Pg.NoSuchEdgeLabelError -> Phantoms.TTerm Model.EdgeLabel
+noSuchEdgeLabelErrorLabel :: Phantoms.TypedTerm Pg.NoSuchEdgeLabelError -> Phantoms.TypedTerm Model.EdgeLabel
 noSuchEdgeLabelErrorLabel x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.pg.NoSuchEdgeLabelError"),
         Core.projectionFieldName = (Core.Name "label")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-noSuchEdgeLabelErrorWithLabel :: Phantoms.TTerm Pg.NoSuchEdgeLabelError -> Phantoms.TTerm Model.EdgeLabel -> Phantoms.TTerm Pg.NoSuchEdgeLabelError
+noSuchEdgeLabelErrorWithLabel :: Phantoms.TypedTerm Pg.NoSuchEdgeLabelError -> Phantoms.TypedTerm Model.EdgeLabel -> Phantoms.TypedTerm Pg.NoSuchEdgeLabelError
 noSuchEdgeLabelErrorWithLabel original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.pg.NoSuchEdgeLabelError"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "label"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-noSuchVertexLabelError :: Phantoms.TTerm Model.VertexLabel -> Phantoms.TTerm Pg.NoSuchVertexLabelError
+noSuchVertexLabelError :: Phantoms.TypedTerm Model.VertexLabel -> Phantoms.TypedTerm Pg.NoSuchVertexLabelError
 noSuchVertexLabelError label =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.pg.NoSuchVertexLabelError"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "label"),
-          Core.fieldTerm = (Phantoms.unTTerm label)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm label)}]}))
 
-noSuchVertexLabelErrorLabel :: Phantoms.TTerm Pg.NoSuchVertexLabelError -> Phantoms.TTerm Model.VertexLabel
+noSuchVertexLabelErrorLabel :: Phantoms.TypedTerm Pg.NoSuchVertexLabelError -> Phantoms.TypedTerm Model.VertexLabel
 noSuchVertexLabelErrorLabel x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.pg.NoSuchVertexLabelError"),
         Core.projectionFieldName = (Core.Name "label")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-noSuchVertexLabelErrorWithLabel :: Phantoms.TTerm Pg.NoSuchVertexLabelError -> Phantoms.TTerm Model.VertexLabel -> Phantoms.TTerm Pg.NoSuchVertexLabelError
+noSuchVertexLabelErrorWithLabel :: Phantoms.TypedTerm Pg.NoSuchVertexLabelError -> Phantoms.TypedTerm Model.VertexLabel -> Phantoms.TypedTerm Pg.NoSuchVertexLabelError
 noSuchVertexLabelErrorWithLabel original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.pg.NoSuchVertexLabelError"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "label"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-wrongVertexLabelError :: Phantoms.TTerm Model.VertexLabel -> Phantoms.TTerm Model.VertexLabel -> Phantoms.TTerm Pg.WrongVertexLabelError
+wrongVertexLabelError :: Phantoms.TypedTerm Model.VertexLabel -> Phantoms.TypedTerm Model.VertexLabel -> Phantoms.TypedTerm Pg.WrongVertexLabelError
 wrongVertexLabelError expected actual =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.pg.WrongVertexLabelError"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expected"),
-          Core.fieldTerm = (Phantoms.unTTerm expected)},
+          Core.fieldTerm = (Phantoms.unTypedTerm expected)},
         Core.Field {
           Core.fieldName = (Core.Name "actual"),
-          Core.fieldTerm = (Phantoms.unTTerm actual)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm actual)}]}))
 
-wrongVertexLabelErrorActual :: Phantoms.TTerm Pg.WrongVertexLabelError -> Phantoms.TTerm Model.VertexLabel
+wrongVertexLabelErrorActual :: Phantoms.TypedTerm Pg.WrongVertexLabelError -> Phantoms.TypedTerm Model.VertexLabel
 wrongVertexLabelErrorActual x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.pg.WrongVertexLabelError"),
         Core.projectionFieldName = (Core.Name "actual")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-wrongVertexLabelErrorExpected :: Phantoms.TTerm Pg.WrongVertexLabelError -> Phantoms.TTerm Model.VertexLabel
+wrongVertexLabelErrorExpected :: Phantoms.TypedTerm Pg.WrongVertexLabelError -> Phantoms.TypedTerm Model.VertexLabel
 wrongVertexLabelErrorExpected x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.pg.WrongVertexLabelError"),
         Core.projectionFieldName = (Core.Name "expected")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-wrongVertexLabelErrorWithActual :: Phantoms.TTerm Pg.WrongVertexLabelError -> Phantoms.TTerm Model.VertexLabel -> Phantoms.TTerm Pg.WrongVertexLabelError
+wrongVertexLabelErrorWithActual :: Phantoms.TypedTerm Pg.WrongVertexLabelError -> Phantoms.TypedTerm Model.VertexLabel -> Phantoms.TypedTerm Pg.WrongVertexLabelError
 wrongVertexLabelErrorWithActual original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.pg.WrongVertexLabelError"),
       Core.recordFields = [
         Core.Field {
@@ -462,23 +462,23 @@ wrongVertexLabelErrorWithActual original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.pg.WrongVertexLabelError"),
               Core.projectionFieldName = (Core.Name "expected")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "actual"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-wrongVertexLabelErrorWithExpected :: Phantoms.TTerm Pg.WrongVertexLabelError -> Phantoms.TTerm Model.VertexLabel -> Phantoms.TTerm Pg.WrongVertexLabelError
+wrongVertexLabelErrorWithExpected :: Phantoms.TypedTerm Pg.WrongVertexLabelError -> Phantoms.TypedTerm Model.VertexLabel -> Phantoms.TypedTerm Pg.WrongVertexLabelError
 wrongVertexLabelErrorWithExpected original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.pg.WrongVertexLabelError"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expected"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "actual"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.pg.WrongVertexLabelError"),
               Core.projectionFieldName = (Core.Name "actual")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))

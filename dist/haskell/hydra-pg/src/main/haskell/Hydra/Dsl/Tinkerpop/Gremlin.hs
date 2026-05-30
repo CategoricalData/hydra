@@ -5,130 +5,130 @@
 module Hydra.Dsl.Tinkerpop.Gremlin where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Typed as Phantoms
 import qualified Hydra.Tinkerpop.Gremlin as Gremlin
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 
-booleanArgumentValue :: Phantoms.TTerm Bool -> Phantoms.TTerm Gremlin.BooleanArgument
+booleanArgumentValue :: Phantoms.TypedTerm Bool -> Phantoms.TypedTerm Gremlin.BooleanArgument
 booleanArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.BooleanArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-booleanArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.BooleanArgument
+booleanArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.BooleanArgument
 booleanArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.BooleanArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-byArgsOrder :: Phantoms.TTerm Gremlin.TraversalOrderArgument -> Phantoms.TTerm Gremlin.ByArgs
+byArgsOrder :: Phantoms.TypedTerm Gremlin.TraversalOrderArgument -> Phantoms.TypedTerm Gremlin.ByArgs
 byArgsOrder x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ByArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "order"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-byArgsOther :: Phantoms.TTerm Gremlin.ByOtherArgs -> Phantoms.TTerm Gremlin.ByArgs
+byArgsOther :: Phantoms.TypedTerm Gremlin.ByOtherArgs -> Phantoms.TypedTerm Gremlin.ByArgs
 byArgsOther x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ByArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "other"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-byArgsToken :: Phantoms.TTerm Gremlin.TraversalTokenArgument -> Phantoms.TTerm Gremlin.ByArgs
+byArgsToken :: Phantoms.TypedTerm Gremlin.TraversalTokenArgument -> Phantoms.TypedTerm Gremlin.ByArgs
 byArgsToken x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ByArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "token"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-byOtherArgsComparator :: Phantoms.TTerm (Maybe Gremlin.TraversalComparatorArgument) -> Phantoms.TTerm Gremlin.ByOtherArgs
+byOtherArgsComparator :: Phantoms.TypedTerm (Maybe Gremlin.TraversalComparatorArgument) -> Phantoms.TypedTerm Gremlin.ByOtherArgs
 byOtherArgsComparator x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ByOtherArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "comparator"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-byOtherArgsOther :: Phantoms.TTerm (Maybe Gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal) -> Phantoms.TTerm Gremlin.ByOtherArgs
+byOtherArgsOther :: Phantoms.TypedTerm (Maybe Gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal) -> Phantoms.TypedTerm Gremlin.ByOtherArgs
 byOtherArgsOther x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ByOtherArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "other"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-chainedTraversal :: Phantoms.TTerm Gremlin.TraversalMethod -> Phantoms.TTerm Gremlin.ChainedTraversalElement -> Phantoms.TTerm Gremlin.ChainedTraversal
+chainedTraversal :: Phantoms.TypedTerm Gremlin.TraversalMethod -> Phantoms.TypedTerm Gremlin.ChainedTraversalElement -> Phantoms.TypedTerm Gremlin.ChainedTraversal
 chainedTraversal first rest =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.ChainedTraversal"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "first"),
-          Core.fieldTerm = (Phantoms.unTTerm first)},
+          Core.fieldTerm = (Phantoms.unTypedTerm first)},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
-          Core.fieldTerm = (Phantoms.unTTerm rest)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm rest)}]}))
 
-chainedTraversalElementMethod :: Phantoms.TTerm Gremlin.TraversalMethod -> Phantoms.TTerm Gremlin.ChainedTraversalElement
+chainedTraversalElementMethod :: Phantoms.TypedTerm Gremlin.TraversalMethod -> Phantoms.TypedTerm Gremlin.ChainedTraversalElement
 chainedTraversalElementMethod x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ChainedTraversalElement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "method"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-chainedTraversalElementSelf :: Phantoms.TTerm Gremlin.TraversalSelfMethod -> Phantoms.TTerm Gremlin.ChainedTraversalElement
+chainedTraversalElementSelf :: Phantoms.TypedTerm Gremlin.TraversalSelfMethod -> Phantoms.TypedTerm Gremlin.ChainedTraversalElement
 chainedTraversalElementSelf x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ChainedTraversalElement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "self"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-chainedTraversalFirst :: Phantoms.TTerm Gremlin.ChainedTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
+chainedTraversalFirst :: Phantoms.TypedTerm Gremlin.ChainedTraversal -> Phantoms.TypedTerm Gremlin.TraversalMethod
 chainedTraversalFirst x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ChainedTraversal"),
         Core.projectionFieldName = (Core.Name "first")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-chainedTraversalRest :: Phantoms.TTerm Gremlin.ChainedTraversal -> Phantoms.TTerm Gremlin.ChainedTraversalElement
+chainedTraversalRest :: Phantoms.TypedTerm Gremlin.ChainedTraversal -> Phantoms.TypedTerm Gremlin.ChainedTraversalElement
 chainedTraversalRest x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ChainedTraversal"),
         Core.projectionFieldName = (Core.Name "rest")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-chainedTraversalWithFirst :: Phantoms.TTerm Gremlin.ChainedTraversal -> Phantoms.TTerm Gremlin.TraversalMethod -> Phantoms.TTerm Gremlin.ChainedTraversal
+chainedTraversalWithFirst :: Phantoms.TypedTerm Gremlin.ChainedTraversal -> Phantoms.TypedTerm Gremlin.TraversalMethod -> Phantoms.TypedTerm Gremlin.ChainedTraversal
 chainedTraversalWithFirst original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.ChainedTraversal"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "first"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ChainedTraversal"),
               Core.projectionFieldName = (Core.Name "rest")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-chainedTraversalWithRest :: Phantoms.TTerm Gremlin.ChainedTraversal -> Phantoms.TTerm Gremlin.ChainedTraversalElement -> Phantoms.TTerm Gremlin.ChainedTraversal
+chainedTraversalWithRest :: Phantoms.TypedTerm Gremlin.ChainedTraversal -> Phantoms.TypedTerm Gremlin.ChainedTraversalElement -> Phantoms.TypedTerm Gremlin.ChainedTraversal
 chainedTraversalWithRest original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.ChainedTraversal"),
       Core.recordFields = [
         Core.Field {
@@ -137,98 +137,98 @@ chainedTraversalWithRest original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ChainedTraversal"),
               Core.projectionFieldName = (Core.Name "first")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-chooseArgsFunction :: Phantoms.TTerm Gremlin.TraversalFunctionArgument -> Phantoms.TTerm Gremlin.ChooseArgs
+chooseArgsFunction :: Phantoms.TypedTerm Gremlin.TraversalFunctionArgument -> Phantoms.TypedTerm Gremlin.ChooseArgs
 chooseArgsFunction x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ChooseArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "function"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-chooseArgsPredicateTraversal :: Phantoms.TTerm Gremlin.PredicateTraversalArgument -> Phantoms.TTerm Gremlin.ChooseArgs
+chooseArgsPredicateTraversal :: Phantoms.TypedTerm Gremlin.PredicateTraversalArgument -> Phantoms.TypedTerm Gremlin.ChooseArgs
 chooseArgsPredicateTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ChooseArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predicateTraversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-chooseArgsTraversal :: Phantoms.TTerm Gremlin.NestedTraversalArgument -> Phantoms.TTerm Gremlin.ChooseArgs
+chooseArgsTraversal :: Phantoms.TypedTerm Gremlin.NestedTraversalArgument -> Phantoms.TypedTerm Gremlin.ChooseArgs
 chooseArgsTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ChooseArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-concatArgsString :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.ConcatArgs
+concatArgsString :: Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.ConcatArgs
 concatArgsString x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ConcatArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-concatArgsTraversal :: Phantoms.TTerm [Gremlin.NestedTraversal] -> Phantoms.TTerm Gremlin.ConcatArgs
+concatArgsTraversal :: Phantoms.TypedTerm [Gremlin.NestedTraversal] -> Phantoms.TypedTerm Gremlin.ConcatArgs
 concatArgsTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ConcatArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-configuration :: Phantoms.TTerm Gremlin.KeywordOrIdentifier -> Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.Configuration
+configuration :: Phantoms.TypedTerm Gremlin.KeywordOrIdentifier -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.Configuration
 configuration key value =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.Configuration"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "key"),
-          Core.fieldTerm = (Phantoms.unTTerm key)},
+          Core.fieldTerm = (Phantoms.unTypedTerm key)},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm value)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm value)}]}))
 
-configurationKey :: Phantoms.TTerm Gremlin.Configuration -> Phantoms.TTerm Gremlin.KeywordOrIdentifier
+configurationKey :: Phantoms.TypedTerm Gremlin.Configuration -> Phantoms.TypedTerm Gremlin.KeywordOrIdentifier
 configurationKey x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.Configuration"),
         Core.projectionFieldName = (Core.Name "key")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-configurationValue :: Phantoms.TTerm Gremlin.Configuration -> Phantoms.TTerm Gremlin.GenericLiteralArgument
+configurationValue :: Phantoms.TypedTerm Gremlin.Configuration -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument
 configurationValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.Configuration"),
         Core.projectionFieldName = (Core.Name "value")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-configurationWithKey :: Phantoms.TTerm Gremlin.Configuration -> Phantoms.TTerm Gremlin.KeywordOrIdentifier -> Phantoms.TTerm Gremlin.Configuration
+configurationWithKey :: Phantoms.TypedTerm Gremlin.Configuration -> Phantoms.TypedTerm Gremlin.KeywordOrIdentifier -> Phantoms.TypedTerm Gremlin.Configuration
 configurationWithKey original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.Configuration"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "key"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.Configuration"),
               Core.projectionFieldName = (Core.Name "value")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-configurationWithValue :: Phantoms.TTerm Gremlin.Configuration -> Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.Configuration
+configurationWithValue :: Phantoms.TypedTerm Gremlin.Configuration -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.Configuration
 configurationWithValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.Configuration"),
       Core.recordFields = [
         Core.Field {
@@ -237,66 +237,66 @@ configurationWithValue original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.Configuration"),
               Core.projectionFieldName = (Core.Name "key")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-connectedComponentConstantsComponent :: Phantoms.TTerm Gremlin.ConnectedComponentConstants
+connectedComponentConstantsComponent :: Phantoms.TypedTerm Gremlin.ConnectedComponentConstants
 connectedComponentConstantsComponent =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ConnectedComponentConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "component"),
         Core.fieldTerm = Core.TermUnit}}))
 
-connectedComponentConstantsEdges :: Phantoms.TTerm Gremlin.ConnectedComponentConstants
+connectedComponentConstantsEdges :: Phantoms.TypedTerm Gremlin.ConnectedComponentConstants
 connectedComponentConstantsEdges =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ConnectedComponentConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edges"),
         Core.fieldTerm = Core.TermUnit}}))
 
-connectedComponentConstantsPropertyName :: Phantoms.TTerm Gremlin.ConnectedComponentConstants
+connectedComponentConstantsPropertyName :: Phantoms.TypedTerm Gremlin.ConnectedComponentConstants
 connectedComponentConstantsPropertyName =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ConnectedComponentConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "propertyName"),
         Core.fieldTerm = Core.TermUnit}}))
 
-dateAddArgs :: Phantoms.TTerm Gremlin.TraversalDTArgument -> Phantoms.TTerm Gremlin.IntegerArgument -> Phantoms.TTerm Gremlin.DateAddArgs
+dateAddArgs :: Phantoms.TypedTerm Gremlin.TraversalDTArgument -> Phantoms.TypedTerm Gremlin.IntegerArgument -> Phantoms.TypedTerm Gremlin.DateAddArgs
 dateAddArgs unit duration =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.DateAddArgs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "unit"),
-          Core.fieldTerm = (Phantoms.unTTerm unit)},
+          Core.fieldTerm = (Phantoms.unTypedTerm unit)},
         Core.Field {
           Core.fieldName = (Core.Name "duration"),
-          Core.fieldTerm = (Phantoms.unTTerm duration)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm duration)}]}))
 
-dateAddArgsDuration :: Phantoms.TTerm Gremlin.DateAddArgs -> Phantoms.TTerm Gremlin.IntegerArgument
+dateAddArgsDuration :: Phantoms.TypedTerm Gremlin.DateAddArgs -> Phantoms.TypedTerm Gremlin.IntegerArgument
 dateAddArgsDuration x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.DateAddArgs"),
         Core.projectionFieldName = (Core.Name "duration")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-dateAddArgsUnit :: Phantoms.TTerm Gremlin.DateAddArgs -> Phantoms.TTerm Gremlin.TraversalDTArgument
+dateAddArgsUnit :: Phantoms.TypedTerm Gremlin.DateAddArgs -> Phantoms.TypedTerm Gremlin.TraversalDTArgument
 dateAddArgsUnit x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.DateAddArgs"),
         Core.projectionFieldName = (Core.Name "unit")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-dateAddArgsWithDuration :: Phantoms.TTerm Gremlin.DateAddArgs -> Phantoms.TTerm Gremlin.IntegerArgument -> Phantoms.TTerm Gremlin.DateAddArgs
+dateAddArgsWithDuration :: Phantoms.TypedTerm Gremlin.DateAddArgs -> Phantoms.TypedTerm Gremlin.IntegerArgument -> Phantoms.TypedTerm Gremlin.DateAddArgs
 dateAddArgsWithDuration original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.DateAddArgs"),
       Core.recordFields = [
         Core.Field {
@@ -305,128 +305,128 @@ dateAddArgsWithDuration original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.DateAddArgs"),
               Core.projectionFieldName = (Core.Name "unit")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "duration"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-dateAddArgsWithUnit :: Phantoms.TTerm Gremlin.DateAddArgs -> Phantoms.TTerm Gremlin.TraversalDTArgument -> Phantoms.TTerm Gremlin.DateAddArgs
+dateAddArgsWithUnit :: Phantoms.TypedTerm Gremlin.DateAddArgs -> Phantoms.TypedTerm Gremlin.TraversalDTArgument -> Phantoms.TypedTerm Gremlin.DateAddArgs
 dateAddArgsWithUnit original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.DateAddArgs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "unit"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "duration"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.DateAddArgs"),
               Core.projectionFieldName = (Core.Name "duration")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-dateArgumentValue :: Phantoms.TTerm Gremlin.DateLiteral -> Phantoms.TTerm Gremlin.DateArgument
+dateArgumentValue :: Phantoms.TypedTerm Gremlin.DateLiteral -> Phantoms.TypedTerm Gremlin.DateArgument
 dateArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.DateArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-dateArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.DateArgument
+dateArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.DateArgument
 dateArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.DateArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-dateDiffArgsDate :: Phantoms.TTerm Gremlin.DateArgument -> Phantoms.TTerm Gremlin.DateDiffArgs
+dateDiffArgsDate :: Phantoms.TypedTerm Gremlin.DateArgument -> Phantoms.TypedTerm Gremlin.DateDiffArgs
 dateDiffArgsDate x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.DateDiffArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "date"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-dateDiffArgsTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.DateDiffArgs
+dateDiffArgsTraversal :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.DateDiffArgs
 dateDiffArgsTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.DateDiffArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-dateLiteral :: Phantoms.TTerm (Maybe Gremlin.StringArgument) -> Phantoms.TTerm Gremlin.DateLiteral
+dateLiteral :: Phantoms.TypedTerm (Maybe Gremlin.StringArgument) -> Phantoms.TypedTerm Gremlin.DateLiteral
 dateLiteral x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.tinkerpop.gremlin.DateLiteral"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-dedupArgsScopeString :: Phantoms.TTerm Gremlin.ScopeStringArgument -> Phantoms.TTerm Gremlin.DedupArgs
+dedupArgsScopeString :: Phantoms.TypedTerm Gremlin.ScopeStringArgument -> Phantoms.TypedTerm Gremlin.DedupArgs
 dedupArgsScopeString x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.DedupArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "scopeString"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-dedupArgsString :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.DedupArgs
+dedupArgsString :: Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.DedupArgs
 dedupArgsString x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.DedupArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-directionAndVarargs :: Phantoms.TTerm Gremlin.TraversalDirectionArgument -> Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.DirectionAndVarargs
+directionAndVarargs :: Phantoms.TypedTerm Gremlin.TraversalDirectionArgument -> Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.DirectionAndVarargs
 directionAndVarargs direction varargs =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.DirectionAndVarargs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "direction"),
-          Core.fieldTerm = (Phantoms.unTTerm direction)},
+          Core.fieldTerm = (Phantoms.unTypedTerm direction)},
         Core.Field {
           Core.fieldName = (Core.Name "varargs"),
-          Core.fieldTerm = (Phantoms.unTTerm varargs)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm varargs)}]}))
 
-directionAndVarargsDirection :: Phantoms.TTerm Gremlin.DirectionAndVarargs -> Phantoms.TTerm Gremlin.TraversalDirectionArgument
+directionAndVarargsDirection :: Phantoms.TypedTerm Gremlin.DirectionAndVarargs -> Phantoms.TypedTerm Gremlin.TraversalDirectionArgument
 directionAndVarargsDirection x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.DirectionAndVarargs"),
         Core.projectionFieldName = (Core.Name "direction")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-directionAndVarargsVarargs :: Phantoms.TTerm Gremlin.DirectionAndVarargs -> Phantoms.TTerm [Gremlin.StringNullableArgument]
+directionAndVarargsVarargs :: Phantoms.TypedTerm Gremlin.DirectionAndVarargs -> Phantoms.TypedTerm [Gremlin.StringNullableArgument]
 directionAndVarargsVarargs x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.DirectionAndVarargs"),
         Core.projectionFieldName = (Core.Name "varargs")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-directionAndVarargsWithDirection :: Phantoms.TTerm Gremlin.DirectionAndVarargs -> Phantoms.TTerm Gremlin.TraversalDirectionArgument -> Phantoms.TTerm Gremlin.DirectionAndVarargs
+directionAndVarargsWithDirection :: Phantoms.TypedTerm Gremlin.DirectionAndVarargs -> Phantoms.TypedTerm Gremlin.TraversalDirectionArgument -> Phantoms.TypedTerm Gremlin.DirectionAndVarargs
 directionAndVarargsWithDirection original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.DirectionAndVarargs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "direction"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "varargs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.DirectionAndVarargs"),
               Core.projectionFieldName = (Core.Name "varargs")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-directionAndVarargsWithVarargs :: Phantoms.TTerm Gremlin.DirectionAndVarargs -> Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.DirectionAndVarargs
+directionAndVarargsWithVarargs :: Phantoms.TypedTerm Gremlin.DirectionAndVarargs -> Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.DirectionAndVarargs
 directionAndVarargsWithVarargs original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.DirectionAndVarargs"),
       Core.recordFields = [
         Core.Field {
@@ -435,104 +435,104 @@ directionAndVarargsWithVarargs original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.DirectionAndVarargs"),
               Core.projectionFieldName = (Core.Name "direction")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "varargs"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-floatArgumentValue :: Phantoms.TTerm Gremlin.FloatLiteral -> Phantoms.TTerm Gremlin.FloatArgument
+floatArgumentValue :: Phantoms.TypedTerm Gremlin.FloatLiteral -> Phantoms.TypedTerm Gremlin.FloatArgument
 floatArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.FloatArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-floatArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.FloatArgument
+floatArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.FloatArgument
 floatArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.FloatArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-floatLiteral :: Phantoms.TTerm Double -> Phantoms.TTerm Gremlin.FloatLiteral
+floatLiteral :: Phantoms.TypedTerm Double -> Phantoms.TypedTerm Gremlin.FloatLiteral
 floatLiteral x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.tinkerpop.gremlin.FloatLiteral"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-fromArgsString :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.FromArgs
+fromArgsString :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.FromArgs
 fromArgsString x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.FromArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-fromArgsTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.FromArgs
+fromArgsTraversal :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.FromArgs
 fromArgsTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.FromArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-fromArgsVertex :: Phantoms.TTerm Gremlin.StructureVertexArgument -> Phantoms.TTerm Gremlin.FromArgs
+fromArgsVertex :: Phantoms.TypedTerm Gremlin.StructureVertexArgument -> Phantoms.TypedTerm Gremlin.FromArgs
 fromArgsVertex x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.FromArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "vertex"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralArgumentAndNestedTraversal :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.GenericLiteralArgumentAndNestedTraversal
+genericLiteralArgumentAndNestedTraversal :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndNestedTraversal
 genericLiteralArgumentAndNestedTraversal object traversal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndNestedTraversal"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "object"),
-          Core.fieldTerm = (Phantoms.unTTerm object)},
+          Core.fieldTerm = (Phantoms.unTypedTerm object)},
         Core.Field {
           Core.fieldName = (Core.Name "traversal"),
-          Core.fieldTerm = (Phantoms.unTTerm traversal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm traversal)}]}))
 
-genericLiteralArgumentAndNestedTraversalObject :: Phantoms.TTerm Gremlin.GenericLiteralArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.GenericLiteralArgument
+genericLiteralArgumentAndNestedTraversalObject :: Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndNestedTraversal -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument
 genericLiteralArgumentAndNestedTraversalObject x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndNestedTraversal"),
         Core.projectionFieldName = (Core.Name "object")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-genericLiteralArgumentAndNestedTraversalTraversal :: Phantoms.TTerm Gremlin.GenericLiteralArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.NestedTraversal
+genericLiteralArgumentAndNestedTraversalTraversal :: Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndNestedTraversal -> Phantoms.TypedTerm Gremlin.NestedTraversal
 genericLiteralArgumentAndNestedTraversalTraversal x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndNestedTraversal"),
         Core.projectionFieldName = (Core.Name "traversal")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-genericLiteralArgumentAndNestedTraversalWithObject :: Phantoms.TTerm Gremlin.GenericLiteralArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgumentAndNestedTraversal
+genericLiteralArgumentAndNestedTraversalWithObject :: Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndNestedTraversal -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndNestedTraversal
 genericLiteralArgumentAndNestedTraversalWithObject original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndNestedTraversal"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "object"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "traversal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndNestedTraversal"),
               Core.projectionFieldName = (Core.Name "traversal")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-genericLiteralArgumentAndNestedTraversalWithTraversal :: Phantoms.TTerm Gremlin.GenericLiteralArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.GenericLiteralArgumentAndNestedTraversal
+genericLiteralArgumentAndNestedTraversalWithTraversal :: Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndNestedTraversal -> Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndNestedTraversal
 genericLiteralArgumentAndNestedTraversalWithTraversal original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndNestedTraversal"),
       Core.recordFields = [
         Core.Field {
@@ -541,42 +541,42 @@ genericLiteralArgumentAndNestedTraversalWithTraversal original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndNestedTraversal"),
               Core.projectionFieldName = (Core.Name "object")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "traversal"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-genericLiteralArgumentAndOptionalTraversalBiFunctionArgument :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm (Maybe Gremlin.TraversalBiFunctionArgument) -> Phantoms.TTerm Gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument
+genericLiteralArgumentAndOptionalTraversalBiFunctionArgument :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm (Maybe Gremlin.TraversalBiFunctionArgument) -> Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument
 genericLiteralArgumentAndOptionalTraversalBiFunctionArgument literal biFunction =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "literal"),
-          Core.fieldTerm = (Phantoms.unTTerm literal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm literal)},
         Core.Field {
           Core.fieldName = (Core.Name "biFunction"),
-          Core.fieldTerm = (Phantoms.unTTerm biFunction)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm biFunction)}]}))
 
-genericLiteralArgumentAndOptionalTraversalBiFunctionArgumentBiFunction :: Phantoms.TTerm Gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument -> Phantoms.TTerm (Maybe Gremlin.TraversalBiFunctionArgument)
+genericLiteralArgumentAndOptionalTraversalBiFunctionArgumentBiFunction :: Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument -> Phantoms.TypedTerm (Maybe Gremlin.TraversalBiFunctionArgument)
 genericLiteralArgumentAndOptionalTraversalBiFunctionArgumentBiFunction x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument"),
         Core.projectionFieldName = (Core.Name "biFunction")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-genericLiteralArgumentAndOptionalTraversalBiFunctionArgumentLiteral :: Phantoms.TTerm Gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgument
+genericLiteralArgumentAndOptionalTraversalBiFunctionArgumentLiteral :: Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument
 genericLiteralArgumentAndOptionalTraversalBiFunctionArgumentLiteral x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument"),
         Core.projectionFieldName = (Core.Name "literal")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-genericLiteralArgumentAndOptionalTraversalBiFunctionArgumentWithBiFunction :: Phantoms.TTerm Gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument -> Phantoms.TTerm (Maybe Gremlin.TraversalBiFunctionArgument) -> Phantoms.TTerm Gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument
+genericLiteralArgumentAndOptionalTraversalBiFunctionArgumentWithBiFunction :: Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument -> Phantoms.TypedTerm (Maybe Gremlin.TraversalBiFunctionArgument) -> Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument
 genericLiteralArgumentAndOptionalTraversalBiFunctionArgumentWithBiFunction original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument"),
       Core.recordFields = [
         Core.Field {
@@ -585,58 +585,58 @@ genericLiteralArgumentAndOptionalTraversalBiFunctionArgumentWithBiFunction origi
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument"),
               Core.projectionFieldName = (Core.Name "literal")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "biFunction"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-genericLiteralArgumentAndOptionalTraversalBiFunctionArgumentWithLiteral :: Phantoms.TTerm Gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument
+genericLiteralArgumentAndOptionalTraversalBiFunctionArgumentWithLiteral :: Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument
 genericLiteralArgumentAndOptionalTraversalBiFunctionArgumentWithLiteral original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "literal"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "biFunction"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument"),
               Core.projectionFieldName = (Core.Name "biFunction")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-genericLiteralArgumentAndTraversalBiFunctionArgument :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalBiFunctionArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument
+genericLiteralArgumentAndTraversalBiFunctionArgument :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.TraversalBiFunctionArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument
 genericLiteralArgumentAndTraversalBiFunctionArgument literal biFunction =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "literal"),
-          Core.fieldTerm = (Phantoms.unTTerm literal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm literal)},
         Core.Field {
           Core.fieldName = (Core.Name "biFunction"),
-          Core.fieldTerm = (Phantoms.unTTerm biFunction)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm biFunction)}]}))
 
-genericLiteralArgumentAndTraversalBiFunctionArgumentBiFunction :: Phantoms.TTerm Gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument -> Phantoms.TTerm Gremlin.TraversalBiFunctionArgument
+genericLiteralArgumentAndTraversalBiFunctionArgumentBiFunction :: Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument -> Phantoms.TypedTerm Gremlin.TraversalBiFunctionArgument
 genericLiteralArgumentAndTraversalBiFunctionArgumentBiFunction x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument"),
         Core.projectionFieldName = (Core.Name "biFunction")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-genericLiteralArgumentAndTraversalBiFunctionArgumentLiteral :: Phantoms.TTerm Gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgument
+genericLiteralArgumentAndTraversalBiFunctionArgumentLiteral :: Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument
 genericLiteralArgumentAndTraversalBiFunctionArgumentLiteral x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument"),
         Core.projectionFieldName = (Core.Name "literal")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-genericLiteralArgumentAndTraversalBiFunctionArgumentWithBiFunction :: Phantoms.TTerm Gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument -> Phantoms.TTerm Gremlin.TraversalBiFunctionArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument
+genericLiteralArgumentAndTraversalBiFunctionArgumentWithBiFunction :: Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument -> Phantoms.TypedTerm Gremlin.TraversalBiFunctionArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument
 genericLiteralArgumentAndTraversalBiFunctionArgumentWithBiFunction original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument"),
       Core.recordFields = [
         Core.Field {
@@ -645,212 +645,212 @@ genericLiteralArgumentAndTraversalBiFunctionArgumentWithBiFunction original newV
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument"),
               Core.projectionFieldName = (Core.Name "literal")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "biFunction"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-genericLiteralArgumentAndTraversalBiFunctionArgumentWithLiteral :: Phantoms.TTerm Gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument
+genericLiteralArgumentAndTraversalBiFunctionArgumentWithLiteral :: Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument
 genericLiteralArgumentAndTraversalBiFunctionArgumentWithLiteral original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "literal"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "biFunction"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument"),
               Core.projectionFieldName = (Core.Name "biFunction")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-genericLiteralArgumentAndTraversalPredicateLiteral :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgumentAndTraversalPredicate
+genericLiteralArgumentAndTraversalPredicateLiteral :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndTraversalPredicate
 genericLiteralArgumentAndTraversalPredicateLiteral x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralArgumentAndTraversalPredicatePredicate :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.GenericLiteralArgumentAndTraversalPredicate
+genericLiteralArgumentAndTraversalPredicatePredicate :: Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndTraversalPredicate
 genericLiteralArgumentAndTraversalPredicatePredicate x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predicate"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralArgumentValue :: Phantoms.TTerm Gremlin.GenericLiteral -> Phantoms.TTerm Gremlin.GenericLiteralArgument
+genericLiteralArgumentValue :: Phantoms.TypedTerm Gremlin.GenericLiteral -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument
 genericLiteralArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.GenericLiteralArgument
+genericLiteralArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument
 genericLiteralArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralBoolean :: Phantoms.TTerm Bool -> Phantoms.TTerm Gremlin.GenericLiteral
+genericLiteralBoolean :: Phantoms.TypedTerm Bool -> Phantoms.TypedTerm Gremlin.GenericLiteral
 genericLiteralBoolean x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralCollection :: Phantoms.TTerm [Gremlin.GenericLiteral] -> Phantoms.TTerm Gremlin.GenericLiteralCollection
+genericLiteralCollection :: Phantoms.TypedTerm [Gremlin.GenericLiteral] -> Phantoms.TypedTerm Gremlin.GenericLiteralCollection
 genericLiteralCollection x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralCollection"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-genericLiteralDate :: Phantoms.TTerm Gremlin.DateLiteral -> Phantoms.TTerm Gremlin.GenericLiteral
+genericLiteralDate :: Phantoms.TypedTerm Gremlin.DateLiteral -> Phantoms.TypedTerm Gremlin.GenericLiteral
 genericLiteralDate x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "date"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralGenericLiteralCollection :: Phantoms.TTerm Gremlin.GenericLiteralCollection -> Phantoms.TTerm Gremlin.GenericLiteral
+genericLiteralGenericLiteralCollection :: Phantoms.TypedTerm Gremlin.GenericLiteralCollection -> Phantoms.TypedTerm Gremlin.GenericLiteral
 genericLiteralGenericLiteralCollection x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "genericLiteralCollection"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralGenericLiteralMap :: Phantoms.TTerm Gremlin.GenericLiteralMap -> Phantoms.TTerm Gremlin.GenericLiteral
+genericLiteralGenericLiteralMap :: Phantoms.TypedTerm Gremlin.GenericLiteralMap -> Phantoms.TypedTerm Gremlin.GenericLiteral
 genericLiteralGenericLiteralMap x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "genericLiteralMap"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralGenericLiteralRange :: Phantoms.TTerm Gremlin.GenericLiteralRange -> Phantoms.TTerm Gremlin.GenericLiteral
+genericLiteralGenericLiteralRange :: Phantoms.TypedTerm Gremlin.GenericLiteralRange -> Phantoms.TypedTerm Gremlin.GenericLiteral
 genericLiteralGenericLiteralRange x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "genericLiteralRange"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralGenericLiteralSet :: Phantoms.TTerm Gremlin.GenericLiteralSet -> Phantoms.TTerm Gremlin.GenericLiteral
+genericLiteralGenericLiteralSet :: Phantoms.TypedTerm Gremlin.GenericLiteralSet -> Phantoms.TypedTerm Gremlin.GenericLiteral
 genericLiteralGenericLiteralSet x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "genericLiteralSet"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralInf :: Phantoms.TTerm Gremlin.GenericLiteral
+genericLiteralInf :: Phantoms.TypedTerm Gremlin.GenericLiteral
 genericLiteralInf =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inf"),
         Core.fieldTerm = Core.TermUnit}}))
 
-genericLiteralList :: Phantoms.TTerm [Gremlin.GenericLiteral] -> Phantoms.TTerm Gremlin.GenericLiteralList
+genericLiteralList :: Phantoms.TypedTerm [Gremlin.GenericLiteral] -> Phantoms.TypedTerm Gremlin.GenericLiteralList
 genericLiteralList x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralList"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-genericLiteralListArgumentValue :: Phantoms.TTerm Gremlin.GenericLiteralList -> Phantoms.TTerm Gremlin.GenericLiteralListArgument
+genericLiteralListArgumentValue :: Phantoms.TypedTerm Gremlin.GenericLiteralList -> Phantoms.TypedTerm Gremlin.GenericLiteralListArgument
 genericLiteralListArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralListArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralListArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.GenericLiteralListArgument
+genericLiteralListArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.GenericLiteralListArgument
 genericLiteralListArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralListArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralMap :: Phantoms.TTerm [Gremlin.MapEntry] -> Phantoms.TTerm Gremlin.GenericLiteralMap
+genericLiteralMap :: Phantoms.TypedTerm [Gremlin.MapEntry] -> Phantoms.TypedTerm Gremlin.GenericLiteralMap
 genericLiteralMap x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMap"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-genericLiteralMapArgumentValue :: Phantoms.TTerm Gremlin.GenericLiteralMap -> Phantoms.TTerm Gremlin.GenericLiteralMapArgument
+genericLiteralMapArgumentValue :: Phantoms.TypedTerm Gremlin.GenericLiteralMap -> Phantoms.TypedTerm Gremlin.GenericLiteralMapArgument
 genericLiteralMapArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMapArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralMapArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.GenericLiteralMapArgument
+genericLiteralMapArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.GenericLiteralMapArgument
 genericLiteralMapArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMapArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralMapNullableArgumentAndTraversalCardinalityArgument :: Phantoms.TTerm Gremlin.TraversalCardinalityArgument -> Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgument -> Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument
+genericLiteralMapNullableArgumentAndTraversalCardinalityArgument :: Phantoms.TypedTerm Gremlin.TraversalCardinalityArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument
 genericLiteralMapNullableArgumentAndTraversalCardinalityArgument cardinality object =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
-          Core.fieldTerm = (Phantoms.unTTerm cardinality)},
+          Core.fieldTerm = (Phantoms.unTypedTerm cardinality)},
         Core.Field {
           Core.fieldName = (Core.Name "object"),
-          Core.fieldTerm = (Phantoms.unTTerm object)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm object)}]}))
 
-genericLiteralMapNullableArgumentAndTraversalCardinalityArgumentCardinality :: Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument -> Phantoms.TTerm Gremlin.TraversalCardinalityArgument
+genericLiteralMapNullableArgumentAndTraversalCardinalityArgumentCardinality :: Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument -> Phantoms.TypedTerm Gremlin.TraversalCardinalityArgument
 genericLiteralMapNullableArgumentAndTraversalCardinalityArgumentCardinality x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument"),
         Core.projectionFieldName = (Core.Name "cardinality")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-genericLiteralMapNullableArgumentAndTraversalCardinalityArgumentObject :: Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument -> Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgument
+genericLiteralMapNullableArgumentAndTraversalCardinalityArgumentObject :: Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgument
 genericLiteralMapNullableArgumentAndTraversalCardinalityArgumentObject x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument"),
         Core.projectionFieldName = (Core.Name "object")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-genericLiteralMapNullableArgumentAndTraversalCardinalityArgumentWithCardinality :: Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument -> Phantoms.TTerm Gremlin.TraversalCardinalityArgument -> Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument
+genericLiteralMapNullableArgumentAndTraversalCardinalityArgumentWithCardinality :: Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument -> Phantoms.TypedTerm Gremlin.TraversalCardinalityArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument
 genericLiteralMapNullableArgumentAndTraversalCardinalityArgumentWithCardinality original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "object"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument"),
               Core.projectionFieldName = (Core.Name "object")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-genericLiteralMapNullableArgumentAndTraversalCardinalityArgumentWithObject :: Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument -> Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgument -> Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument
+genericLiteralMapNullableArgumentAndTraversalCardinalityArgumentWithObject :: Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument
 genericLiteralMapNullableArgumentAndTraversalCardinalityArgumentWithObject original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument"),
       Core.recordFields = [
         Core.Field {
@@ -859,256 +859,256 @@ genericLiteralMapNullableArgumentAndTraversalCardinalityArgumentWithObject origi
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument"),
               Core.projectionFieldName = (Core.Name "cardinality")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "object"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-genericLiteralMapNullableArgumentOrNestedTraversalMap :: Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgument -> Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal
+genericLiteralMapNullableArgumentOrNestedTraversalMap :: Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal
 genericLiteralMapNullableArgumentOrNestedTraversalMap x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralMapNullableArgumentOrNestedTraversalTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal
+genericLiteralMapNullableArgumentOrNestedTraversalTraversal :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal
 genericLiteralMapNullableArgumentOrNestedTraversalTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralMapNullableArgumentValue :: Phantoms.TTerm (Maybe Gremlin.GenericLiteralMap) -> Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgument
+genericLiteralMapNullableArgumentValue :: Phantoms.TypedTerm (Maybe Gremlin.GenericLiteralMap) -> Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgument
 genericLiteralMapNullableArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralMapNullableArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgument
+genericLiteralMapNullableArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgument
 genericLiteralMapNullableArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralNan :: Phantoms.TTerm Gremlin.GenericLiteral
+genericLiteralNan :: Phantoms.TypedTerm Gremlin.GenericLiteral
 genericLiteralNan =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nan"),
         Core.fieldTerm = Core.TermUnit}}))
 
-genericLiteralNestedTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.GenericLiteral
+genericLiteralNestedTraversal :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.GenericLiteral
 genericLiteralNestedTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nestedTraversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralNull :: Phantoms.TTerm Gremlin.GenericLiteral
+genericLiteralNull :: Phantoms.TypedTerm Gremlin.GenericLiteral
 genericLiteralNull =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "null"),
         Core.fieldTerm = Core.TermUnit}}))
 
-genericLiteralNumeric :: Phantoms.TTerm Gremlin.NumericLiteral -> Phantoms.TTerm Gremlin.GenericLiteral
+genericLiteralNumeric :: Phantoms.TypedTerm Gremlin.NumericLiteral -> Phantoms.TypedTerm Gremlin.GenericLiteral
 genericLiteralNumeric x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "numeric"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralRangeInteger :: Phantoms.TTerm Gremlin.IntegerRange -> Phantoms.TTerm Gremlin.GenericLiteralRange
+genericLiteralRangeInteger :: Phantoms.TypedTerm Gremlin.IntegerRange -> Phantoms.TypedTerm Gremlin.GenericLiteralRange
 genericLiteralRangeInteger x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralRange"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralRangeString :: Phantoms.TTerm Gremlin.StringRange -> Phantoms.TTerm Gremlin.GenericLiteralRange
+genericLiteralRangeString :: Phantoms.TypedTerm Gremlin.StringRange -> Phantoms.TypedTerm Gremlin.GenericLiteralRange
 genericLiteralRangeString x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralRange"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralSet :: Phantoms.TTerm [Gremlin.GenericLiteral] -> Phantoms.TTerm Gremlin.GenericLiteralSet
+genericLiteralSet :: Phantoms.TypedTerm [Gremlin.GenericLiteral] -> Phantoms.TypedTerm Gremlin.GenericLiteralSet
 genericLiteralSet x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralSet"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-genericLiteralString :: Phantoms.TTerm String -> Phantoms.TTerm Gremlin.GenericLiteral
+genericLiteralString :: Phantoms.TypedTerm String -> Phantoms.TypedTerm Gremlin.GenericLiteral
 genericLiteralString x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralStructureVertex :: Phantoms.TTerm Gremlin.StructureVertex -> Phantoms.TTerm Gremlin.GenericLiteral
+genericLiteralStructureVertex :: Phantoms.TypedTerm Gremlin.StructureVertex -> Phantoms.TypedTerm Gremlin.GenericLiteral
 genericLiteralStructureVertex x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "structureVertex"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralTerminatedTraversal :: Phantoms.TTerm Gremlin.TerminatedTraversal -> Phantoms.TTerm Gremlin.GenericLiteral
+genericLiteralTerminatedTraversal :: Phantoms.TypedTerm Gremlin.TerminatedTraversal -> Phantoms.TypedTerm Gremlin.GenericLiteral
 genericLiteralTerminatedTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "terminatedTraversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralTraversalCardinality :: Phantoms.TTerm Gremlin.TraversalCardinality -> Phantoms.TTerm Gremlin.GenericLiteral
+genericLiteralTraversalCardinality :: Phantoms.TypedTerm Gremlin.TraversalCardinality -> Phantoms.TypedTerm Gremlin.GenericLiteral
 genericLiteralTraversalCardinality x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversalCardinality"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralTraversalDT :: Phantoms.TTerm Gremlin.TraversalDT -> Phantoms.TTerm Gremlin.GenericLiteral
+genericLiteralTraversalDT :: Phantoms.TypedTerm Gremlin.TraversalDT -> Phantoms.TypedTerm Gremlin.GenericLiteral
 genericLiteralTraversalDT x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversalDT"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralTraversalDirection :: Phantoms.TTerm Gremlin.TraversalDirection -> Phantoms.TTerm Gremlin.GenericLiteral
+genericLiteralTraversalDirection :: Phantoms.TypedTerm Gremlin.TraversalDirection -> Phantoms.TypedTerm Gremlin.GenericLiteral
 genericLiteralTraversalDirection x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversalDirection"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralTraversalMerge :: Phantoms.TTerm Gremlin.TraversalMerge -> Phantoms.TTerm Gremlin.GenericLiteral
+genericLiteralTraversalMerge :: Phantoms.TypedTerm Gremlin.TraversalMerge -> Phantoms.TypedTerm Gremlin.GenericLiteral
 genericLiteralTraversalMerge x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversalMerge"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralTraversalPick :: Phantoms.TTerm Gremlin.TraversalPick -> Phantoms.TTerm Gremlin.GenericLiteral
+genericLiteralTraversalPick :: Phantoms.TypedTerm Gremlin.TraversalPick -> Phantoms.TypedTerm Gremlin.GenericLiteral
 genericLiteralTraversalPick x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversalPick"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-genericLiteralTraversalToken :: Phantoms.TTerm Gremlin.TraversalToken -> Phantoms.TTerm Gremlin.GenericLiteral
+genericLiteralTraversalToken :: Phantoms.TypedTerm Gremlin.TraversalToken -> Phantoms.TypedTerm Gremlin.GenericLiteral
 genericLiteralTraversalToken x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversalToken"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-hasArgsString :: Phantoms.TTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TTerm Gremlin.HasArgs
+hasArgsString :: Phantoms.TypedTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TypedTerm Gremlin.HasArgs
 hasArgsString x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-hasArgsTraversalToken :: Phantoms.TTerm Gremlin.HasTraversalTokenArgs -> Phantoms.TTerm Gremlin.HasArgs
+hasArgsTraversalToken :: Phantoms.TypedTerm Gremlin.HasTraversalTokenArgs -> Phantoms.TypedTerm Gremlin.HasArgs
 hasArgsTraversalToken x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversalToken"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-hasStringArgumentAndOptionalStringLiteralVarargs :: Phantoms.TTerm Gremlin.StringNullableArgument -> Phantoms.TTerm (Maybe Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest) -> Phantoms.TTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargs
+hasStringArgumentAndOptionalStringLiteralVarargs :: Phantoms.TypedTerm Gremlin.StringNullableArgument -> Phantoms.TypedTerm (Maybe Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest) -> Phantoms.TypedTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargs
 hasStringArgumentAndOptionalStringLiteralVarargs string rest =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Phantoms.unTTerm string)},
+          Core.fieldTerm = (Phantoms.unTypedTerm string)},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
-          Core.fieldTerm = (Phantoms.unTTerm rest)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm rest)}]}))
 
-hasStringArgumentAndOptionalStringLiteralVarargsRest :: Phantoms.TTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TTerm (Maybe Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest)
+hasStringArgumentAndOptionalStringLiteralVarargsRest :: Phantoms.TypedTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TypedTerm (Maybe Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest)
 hasStringArgumentAndOptionalStringLiteralVarargsRest x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargs"),
         Core.projectionFieldName = (Core.Name "rest")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-hasStringArgumentAndOptionalStringLiteralVarargsRestObject :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest
+hasStringArgumentAndOptionalStringLiteralVarargsRestObject :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest
 hasStringArgumentAndOptionalStringLiteralVarargsRestObject x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "object"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-hasStringArgumentAndOptionalStringLiteralVarargsRestPredicate :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest
+hasStringArgumentAndOptionalStringLiteralVarargsRestPredicate :: Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest
 hasStringArgumentAndOptionalStringLiteralVarargsRestPredicate x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predicate"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-hasStringArgumentAndOptionalStringLiteralVarargsRestStringObject :: Phantoms.TTerm Gremlin.StringNullableArgumentAndGenericLiteralArgument -> Phantoms.TTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest
+hasStringArgumentAndOptionalStringLiteralVarargsRestStringObject :: Phantoms.TypedTerm Gremlin.StringNullableArgumentAndGenericLiteralArgument -> Phantoms.TypedTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest
 hasStringArgumentAndOptionalStringLiteralVarargsRestStringObject x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "stringObject"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-hasStringArgumentAndOptionalStringLiteralVarargsRestStringPredicate :: Phantoms.TTerm Gremlin.StringNullableArgumentAndTraversalPredicate -> Phantoms.TTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest
+hasStringArgumentAndOptionalStringLiteralVarargsRestStringPredicate :: Phantoms.TypedTerm Gremlin.StringNullableArgumentAndTraversalPredicate -> Phantoms.TypedTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest
 hasStringArgumentAndOptionalStringLiteralVarargsRestStringPredicate x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "stringPredicate"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-hasStringArgumentAndOptionalStringLiteralVarargsRestTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest
+hasStringArgumentAndOptionalStringLiteralVarargsRestTraversal :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest
 hasStringArgumentAndOptionalStringLiteralVarargsRestTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-hasStringArgumentAndOptionalStringLiteralVarargsString :: Phantoms.TTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TTerm Gremlin.StringNullableArgument
+hasStringArgumentAndOptionalStringLiteralVarargsString :: Phantoms.TypedTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TypedTerm Gremlin.StringNullableArgument
 hasStringArgumentAndOptionalStringLiteralVarargsString x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargs"),
         Core.projectionFieldName = (Core.Name "string")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-hasStringArgumentAndOptionalStringLiteralVarargsWithRest :: Phantoms.TTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TTerm (Maybe Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest) -> Phantoms.TTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargs
+hasStringArgumentAndOptionalStringLiteralVarargsWithRest :: Phantoms.TypedTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TypedTerm (Maybe Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest) -> Phantoms.TypedTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargs
 hasStringArgumentAndOptionalStringLiteralVarargsWithRest original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargs"),
       Core.recordFields = [
         Core.Field {
@@ -1117,82 +1117,82 @@ hasStringArgumentAndOptionalStringLiteralVarargsWithRest original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargs"),
               Core.projectionFieldName = (Core.Name "string")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-hasStringArgumentAndOptionalStringLiteralVarargsWithString :: Phantoms.TTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TTerm Gremlin.StringNullableArgument -> Phantoms.TTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargs
+hasStringArgumentAndOptionalStringLiteralVarargsWithString :: Phantoms.TypedTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TypedTerm Gremlin.StringNullableArgument -> Phantoms.TypedTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargs
 hasStringArgumentAndOptionalStringLiteralVarargsWithString original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargs"),
               Core.projectionFieldName = (Core.Name "rest")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-hasTraversalTokenArgs :: Phantoms.TTerm Gremlin.TraversalTokenArgument -> Phantoms.TTerm Gremlin.HasTraversalTokenArgsRest -> Phantoms.TTerm Gremlin.HasTraversalTokenArgs
+hasTraversalTokenArgs :: Phantoms.TypedTerm Gremlin.TraversalTokenArgument -> Phantoms.TypedTerm Gremlin.HasTraversalTokenArgsRest -> Phantoms.TypedTerm Gremlin.HasTraversalTokenArgs
 hasTraversalTokenArgs traversalToken rest =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasTraversalTokenArgs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "traversalToken"),
-          Core.fieldTerm = (Phantoms.unTTerm traversalToken)},
+          Core.fieldTerm = (Phantoms.unTypedTerm traversalToken)},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
-          Core.fieldTerm = (Phantoms.unTTerm rest)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm rest)}]}))
 
-hasTraversalTokenArgsRest :: Phantoms.TTerm Gremlin.HasTraversalTokenArgs -> Phantoms.TTerm Gremlin.HasTraversalTokenArgsRest
+hasTraversalTokenArgsRest :: Phantoms.TypedTerm Gremlin.HasTraversalTokenArgs -> Phantoms.TypedTerm Gremlin.HasTraversalTokenArgsRest
 hasTraversalTokenArgsRest x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasTraversalTokenArgs"),
         Core.projectionFieldName = (Core.Name "rest")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-hasTraversalTokenArgsRestLiteral :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.HasTraversalTokenArgsRest
+hasTraversalTokenArgsRestLiteral :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.HasTraversalTokenArgsRest
 hasTraversalTokenArgsRestLiteral x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasTraversalTokenArgsRest"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-hasTraversalTokenArgsRestPredicate :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.HasTraversalTokenArgsRest
+hasTraversalTokenArgsRestPredicate :: Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.HasTraversalTokenArgsRest
 hasTraversalTokenArgsRestPredicate x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasTraversalTokenArgsRest"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predicate"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-hasTraversalTokenArgsRestTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.HasTraversalTokenArgsRest
+hasTraversalTokenArgsRestTraversal :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.HasTraversalTokenArgsRest
 hasTraversalTokenArgsRestTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasTraversalTokenArgsRest"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-hasTraversalTokenArgsTraversalToken :: Phantoms.TTerm Gremlin.HasTraversalTokenArgs -> Phantoms.TTerm Gremlin.TraversalTokenArgument
+hasTraversalTokenArgsTraversalToken :: Phantoms.TypedTerm Gremlin.HasTraversalTokenArgs -> Phantoms.TypedTerm Gremlin.TraversalTokenArgument
 hasTraversalTokenArgsTraversalToken x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasTraversalTokenArgs"),
         Core.projectionFieldName = (Core.Name "traversalToken")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-hasTraversalTokenArgsWithRest :: Phantoms.TTerm Gremlin.HasTraversalTokenArgs -> Phantoms.TTerm Gremlin.HasTraversalTokenArgsRest -> Phantoms.TTerm Gremlin.HasTraversalTokenArgs
+hasTraversalTokenArgsWithRest :: Phantoms.TypedTerm Gremlin.HasTraversalTokenArgs -> Phantoms.TypedTerm Gremlin.HasTraversalTokenArgsRest -> Phantoms.TypedTerm Gremlin.HasTraversalTokenArgs
 hasTraversalTokenArgsWithRest original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasTraversalTokenArgs"),
       Core.recordFields = [
         Core.Field {
@@ -1201,102 +1201,102 @@ hasTraversalTokenArgsWithRest original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasTraversalTokenArgs"),
               Core.projectionFieldName = (Core.Name "traversalToken")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-hasTraversalTokenArgsWithTraversalToken :: Phantoms.TTerm Gremlin.HasTraversalTokenArgs -> Phantoms.TTerm Gremlin.TraversalTokenArgument -> Phantoms.TTerm Gremlin.HasTraversalTokenArgs
+hasTraversalTokenArgsWithTraversalToken :: Phantoms.TypedTerm Gremlin.HasTraversalTokenArgs -> Phantoms.TypedTerm Gremlin.TraversalTokenArgument -> Phantoms.TypedTerm Gremlin.HasTraversalTokenArgs
 hasTraversalTokenArgsWithTraversalToken original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasTraversalTokenArgs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "traversalToken"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasTraversalTokenArgs"),
               Core.projectionFieldName = (Core.Name "rest")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-identifier :: Phantoms.TTerm String -> Phantoms.TTerm Gremlin.Identifier
+identifier :: Phantoms.TypedTerm String -> Phantoms.TypedTerm Gremlin.Identifier
 identifier x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.tinkerpop.gremlin.Identifier"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-integerArgumentValue :: Phantoms.TTerm Gremlin.IntegerLiteral -> Phantoms.TTerm Gremlin.IntegerArgument
+integerArgumentValue :: Phantoms.TypedTerm Gremlin.IntegerLiteral -> Phantoms.TypedTerm Gremlin.IntegerArgument
 integerArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.IntegerArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-integerArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.IntegerArgument
+integerArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.IntegerArgument
 integerArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.IntegerArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-integerLiteral :: Phantoms.TTerm Integer -> Phantoms.TTerm Gremlin.IntegerLiteral
+integerLiteral :: Phantoms.TypedTerm Integer -> Phantoms.TypedTerm Gremlin.IntegerLiteral
 integerLiteral x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.tinkerpop.gremlin.IntegerLiteral"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-integerRange :: Phantoms.TTerm Gremlin.IntegerLiteral -> Phantoms.TTerm Gremlin.IntegerLiteral -> Phantoms.TTerm Gremlin.IntegerRange
+integerRange :: Phantoms.TypedTerm Gremlin.IntegerLiteral -> Phantoms.TypedTerm Gremlin.IntegerLiteral -> Phantoms.TypedTerm Gremlin.IntegerRange
 integerRange left right =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.IntegerRange"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Phantoms.unTTerm left)},
+          Core.fieldTerm = (Phantoms.unTypedTerm left)},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm right)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm right)}]}))
 
-integerRangeLeft :: Phantoms.TTerm Gremlin.IntegerRange -> Phantoms.TTerm Gremlin.IntegerLiteral
+integerRangeLeft :: Phantoms.TypedTerm Gremlin.IntegerRange -> Phantoms.TypedTerm Gremlin.IntegerLiteral
 integerRangeLeft x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.IntegerRange"),
         Core.projectionFieldName = (Core.Name "left")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-integerRangeRight :: Phantoms.TTerm Gremlin.IntegerRange -> Phantoms.TTerm Gremlin.IntegerLiteral
+integerRangeRight :: Phantoms.TypedTerm Gremlin.IntegerRange -> Phantoms.TypedTerm Gremlin.IntegerLiteral
 integerRangeRight x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.IntegerRange"),
         Core.projectionFieldName = (Core.Name "right")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-integerRangeWithLeft :: Phantoms.TTerm Gremlin.IntegerRange -> Phantoms.TTerm Gremlin.IntegerLiteral -> Phantoms.TTerm Gremlin.IntegerRange
+integerRangeWithLeft :: Phantoms.TypedTerm Gremlin.IntegerRange -> Phantoms.TypedTerm Gremlin.IntegerLiteral -> Phantoms.TypedTerm Gremlin.IntegerRange
 integerRangeWithLeft original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.IntegerRange"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.IntegerRange"),
               Core.projectionFieldName = (Core.Name "right")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-integerRangeWithRight :: Phantoms.TTerm Gremlin.IntegerRange -> Phantoms.TTerm Gremlin.IntegerLiteral -> Phantoms.TTerm Gremlin.IntegerRange
+integerRangeWithRight :: Phantoms.TypedTerm Gremlin.IntegerRange -> Phantoms.TypedTerm Gremlin.IntegerLiteral -> Phantoms.TypedTerm Gremlin.IntegerRange
 integerRangeWithRight original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.IntegerRange"),
       Core.recordFields = [
         Core.Field {
@@ -1305,260 +1305,260 @@ integerRangeWithRight original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.IntegerRange"),
               Core.projectionFieldName = (Core.Name "left")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-ioOptionsKeysReader :: Phantoms.TTerm Gremlin.IoOptionsKeys
+ioOptionsKeysReader :: Phantoms.TypedTerm Gremlin.IoOptionsKeys
 ioOptionsKeysReader =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.IoOptionsKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "reader"),
         Core.fieldTerm = Core.TermUnit}}))
 
-ioOptionsKeysWriter :: Phantoms.TTerm Gremlin.IoOptionsKeys
+ioOptionsKeysWriter :: Phantoms.TypedTerm Gremlin.IoOptionsKeys
 ioOptionsKeysWriter =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.IoOptionsKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "writer"),
         Core.fieldTerm = Core.TermUnit}}))
 
-ioOptionsValuesGraphml :: Phantoms.TTerm Gremlin.IoOptionsValues
+ioOptionsValuesGraphml :: Phantoms.TypedTerm Gremlin.IoOptionsValues
 ioOptionsValuesGraphml =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.IoOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "graphml"),
         Core.fieldTerm = Core.TermUnit}}))
 
-ioOptionsValuesGraphson :: Phantoms.TTerm Gremlin.IoOptionsValues
+ioOptionsValuesGraphson :: Phantoms.TypedTerm Gremlin.IoOptionsValues
 ioOptionsValuesGraphson =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.IoOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "graphson"),
         Core.fieldTerm = Core.TermUnit}}))
 
-ioOptionsValuesGryo :: Phantoms.TTerm Gremlin.IoOptionsValues
+ioOptionsValuesGryo :: Phantoms.TypedTerm Gremlin.IoOptionsValues
 ioOptionsValuesGryo =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.IoOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "gryo"),
         Core.fieldTerm = Core.TermUnit}}))
 
-keywordEdges :: Phantoms.TTerm Gremlin.Keyword
+keywordEdges :: Phantoms.TypedTerm Gremlin.Keyword
 keywordEdges =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.Keyword"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edges"),
         Core.fieldTerm = Core.TermUnit}}))
 
-keywordKeys :: Phantoms.TTerm Gremlin.Keyword
+keywordKeys :: Phantoms.TypedTerm Gremlin.Keyword
 keywordKeys =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.Keyword"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "keys"),
         Core.fieldTerm = Core.TermUnit}}))
 
-keywordNew :: Phantoms.TTerm Gremlin.Keyword
+keywordNew :: Phantoms.TypedTerm Gremlin.Keyword
 keywordNew =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.Keyword"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "new"),
         Core.fieldTerm = Core.TermUnit}}))
 
-keywordOrIdentifierIdentifier :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.KeywordOrIdentifier
+keywordOrIdentifierIdentifier :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.KeywordOrIdentifier
 keywordOrIdentifierIdentifier x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.KeywordOrIdentifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "identifier"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-keywordOrIdentifierKeyword :: Phantoms.TTerm Gremlin.Keyword -> Phantoms.TTerm Gremlin.KeywordOrIdentifier
+keywordOrIdentifierKeyword :: Phantoms.TypedTerm Gremlin.Keyword -> Phantoms.TypedTerm Gremlin.KeywordOrIdentifier
 keywordOrIdentifierKeyword x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.KeywordOrIdentifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "keyword"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-keywordValues :: Phantoms.TTerm Gremlin.Keyword
+keywordValues :: Phantoms.TypedTerm Gremlin.Keyword
 keywordValues =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.Keyword"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "values"),
         Core.fieldTerm = Core.TermUnit}}))
 
-mapEntryKey :: Phantoms.TTerm Gremlin.MapKey -> Phantoms.TTerm Gremlin.MapEntry
+mapEntryKey :: Phantoms.TypedTerm Gremlin.MapKey -> Phantoms.TypedTerm Gremlin.MapEntry
 mapEntryKey x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapEntry"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "key"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-mapEntryValue :: Phantoms.TTerm Gremlin.GenericLiteral -> Phantoms.TTerm Gremlin.MapEntry
+mapEntryValue :: Phantoms.TypedTerm Gremlin.GenericLiteral -> Phantoms.TypedTerm Gremlin.MapEntry
 mapEntryValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapEntry"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-mapKeyCollection :: Phantoms.TTerm Gremlin.GenericLiteralCollection -> Phantoms.TTerm Gremlin.MapKey
+mapKeyCollection :: Phantoms.TypedTerm Gremlin.GenericLiteralCollection -> Phantoms.TypedTerm Gremlin.MapKey
 mapKeyCollection x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapKey"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "collection"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-mapKeyIdentifier :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.MapKey
+mapKeyIdentifier :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.MapKey
 mapKeyIdentifier x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapKey"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "identifier"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-mapKeyKeyword :: Phantoms.TTerm Gremlin.Keyword -> Phantoms.TTerm Gremlin.MapKey
+mapKeyKeyword :: Phantoms.TypedTerm Gremlin.Keyword -> Phantoms.TypedTerm Gremlin.MapKey
 mapKeyKeyword x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapKey"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "keyword"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-mapKeyMap :: Phantoms.TTerm Gremlin.GenericLiteralMap -> Phantoms.TTerm Gremlin.MapKey
+mapKeyMap :: Phantoms.TypedTerm Gremlin.GenericLiteralMap -> Phantoms.TypedTerm Gremlin.MapKey
 mapKeyMap x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapKey"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-mapKeyNumeric :: Phantoms.TTerm Gremlin.NumericLiteral -> Phantoms.TTerm Gremlin.MapKey
+mapKeyNumeric :: Phantoms.TypedTerm Gremlin.NumericLiteral -> Phantoms.TypedTerm Gremlin.MapKey
 mapKeyNumeric x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapKey"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "numeric"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-mapKeySet :: Phantoms.TTerm Gremlin.GenericLiteralSet -> Phantoms.TTerm Gremlin.MapKey
+mapKeySet :: Phantoms.TypedTerm Gremlin.GenericLiteralSet -> Phantoms.TypedTerm Gremlin.MapKey
 mapKeySet x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapKey"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-mapKeyString :: Phantoms.TTerm String -> Phantoms.TTerm Gremlin.MapKey
+mapKeyString :: Phantoms.TypedTerm String -> Phantoms.TypedTerm Gremlin.MapKey
 mapKeyString x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapKey"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-mapKeyTraversalDirection :: Phantoms.TTerm Gremlin.TraversalDirection -> Phantoms.TTerm Gremlin.MapKey
+mapKeyTraversalDirection :: Phantoms.TypedTerm Gremlin.TraversalDirection -> Phantoms.TypedTerm Gremlin.MapKey
 mapKeyTraversalDirection x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapKey"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversalDirection"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-mapKeyTraversalToken :: Phantoms.TTerm Gremlin.TraversalToken -> Phantoms.TTerm Gremlin.MapKey
+mapKeyTraversalToken :: Phantoms.TypedTerm Gremlin.TraversalToken -> Phantoms.TypedTerm Gremlin.MapKey
 mapKeyTraversalToken x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapKey"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversalToken"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-nestedTraversalAnonymous :: Phantoms.TTerm Gremlin.ChainedTraversal -> Phantoms.TTerm Gremlin.NestedTraversal
+nestedTraversalAnonymous :: Phantoms.TypedTerm Gremlin.ChainedTraversal -> Phantoms.TypedTerm Gremlin.NestedTraversal
 nestedTraversalAnonymous x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.NestedTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "anonymous"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-nestedTraversalArgument :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm (Maybe Gremlin.NestedTraversal) -> Phantoms.TTerm (Maybe Gremlin.NestedTraversal) -> Phantoms.TTerm Gremlin.NestedTraversalArgument
+nestedTraversalArgument :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm (Maybe Gremlin.NestedTraversal) -> Phantoms.TypedTerm (Maybe Gremlin.NestedTraversal) -> Phantoms.TypedTerm Gremlin.NestedTraversalArgument
 nestedTraversalArgument traversal1 traversal2 traversal3 =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.NestedTraversalArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "traversal1"),
-          Core.fieldTerm = (Phantoms.unTTerm traversal1)},
+          Core.fieldTerm = (Phantoms.unTypedTerm traversal1)},
         Core.Field {
           Core.fieldName = (Core.Name "traversal2"),
-          Core.fieldTerm = (Phantoms.unTTerm traversal2)},
+          Core.fieldTerm = (Phantoms.unTypedTerm traversal2)},
         Core.Field {
           Core.fieldName = (Core.Name "traversal3"),
-          Core.fieldTerm = (Phantoms.unTTerm traversal3)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm traversal3)}]}))
 
-nestedTraversalArgumentTraversal1 :: Phantoms.TTerm Gremlin.NestedTraversalArgument -> Phantoms.TTerm Gremlin.NestedTraversal
+nestedTraversalArgumentTraversal1 :: Phantoms.TypedTerm Gremlin.NestedTraversalArgument -> Phantoms.TypedTerm Gremlin.NestedTraversal
 nestedTraversalArgumentTraversal1 x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.NestedTraversalArgument"),
         Core.projectionFieldName = (Core.Name "traversal1")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-nestedTraversalArgumentTraversal2 :: Phantoms.TTerm Gremlin.NestedTraversalArgument -> Phantoms.TTerm (Maybe Gremlin.NestedTraversal)
+nestedTraversalArgumentTraversal2 :: Phantoms.TypedTerm Gremlin.NestedTraversalArgument -> Phantoms.TypedTerm (Maybe Gremlin.NestedTraversal)
 nestedTraversalArgumentTraversal2 x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.NestedTraversalArgument"),
         Core.projectionFieldName = (Core.Name "traversal2")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-nestedTraversalArgumentTraversal3 :: Phantoms.TTerm Gremlin.NestedTraversalArgument -> Phantoms.TTerm (Maybe Gremlin.NestedTraversal)
+nestedTraversalArgumentTraversal3 :: Phantoms.TypedTerm Gremlin.NestedTraversalArgument -> Phantoms.TypedTerm (Maybe Gremlin.NestedTraversal)
 nestedTraversalArgumentTraversal3 x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.NestedTraversalArgument"),
         Core.projectionFieldName = (Core.Name "traversal3")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-nestedTraversalArgumentWithTraversal1 :: Phantoms.TTerm Gremlin.NestedTraversalArgument -> Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.NestedTraversalArgument
+nestedTraversalArgumentWithTraversal1 :: Phantoms.TypedTerm Gremlin.NestedTraversalArgument -> Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.NestedTraversalArgument
 nestedTraversalArgumentWithTraversal1 original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.NestedTraversalArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "traversal1"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "traversal2"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.NestedTraversalArgument"),
               Core.projectionFieldName = (Core.Name "traversal2")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "traversal3"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.NestedTraversalArgument"),
               Core.projectionFieldName = (Core.Name "traversal3")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-nestedTraversalArgumentWithTraversal2 :: Phantoms.TTerm Gremlin.NestedTraversalArgument -> Phantoms.TTerm (Maybe Gremlin.NestedTraversal) -> Phantoms.TTerm Gremlin.NestedTraversalArgument
+nestedTraversalArgumentWithTraversal2 :: Phantoms.TypedTerm Gremlin.NestedTraversalArgument -> Phantoms.TypedTerm (Maybe Gremlin.NestedTraversal) -> Phantoms.TypedTerm Gremlin.NestedTraversalArgument
 nestedTraversalArgumentWithTraversal2 original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.NestedTraversalArgument"),
       Core.recordFields = [
         Core.Field {
@@ -1567,21 +1567,21 @@ nestedTraversalArgumentWithTraversal2 original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.NestedTraversalArgument"),
               Core.projectionFieldName = (Core.Name "traversal1")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "traversal2"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "traversal3"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.NestedTraversalArgument"),
               Core.projectionFieldName = (Core.Name "traversal3")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-nestedTraversalArgumentWithTraversal3 :: Phantoms.TTerm Gremlin.NestedTraversalArgument -> Phantoms.TTerm (Maybe Gremlin.NestedTraversal) -> Phantoms.TTerm Gremlin.NestedTraversalArgument
+nestedTraversalArgumentWithTraversal3 :: Phantoms.TypedTerm Gremlin.NestedTraversalArgument -> Phantoms.TypedTerm (Maybe Gremlin.NestedTraversal) -> Phantoms.TypedTerm Gremlin.NestedTraversalArgument
 nestedTraversalArgumentWithTraversal3 original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.NestedTraversalArgument"),
       Core.recordFields = [
         Core.Field {
@@ -1590,137 +1590,137 @@ nestedTraversalArgumentWithTraversal3 original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.NestedTraversalArgument"),
               Core.projectionFieldName = (Core.Name "traversal1")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "traversal2"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.NestedTraversalArgument"),
               Core.projectionFieldName = (Core.Name "traversal2")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "traversal3"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-nestedTraversalChained :: Phantoms.TTerm Gremlin.ChainedTraversal -> Phantoms.TTerm Gremlin.NestedTraversal
+nestedTraversalChained :: Phantoms.TypedTerm Gremlin.ChainedTraversal -> Phantoms.TypedTerm Gremlin.NestedTraversal
 nestedTraversalChained x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.NestedTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "chained"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-nestedTraversalRoot :: Phantoms.TTerm Gremlin.RootTraversal -> Phantoms.TTerm Gremlin.NestedTraversal
+nestedTraversalRoot :: Phantoms.TypedTerm Gremlin.RootTraversal -> Phantoms.TypedTerm Gremlin.NestedTraversal
 nestedTraversalRoot x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.NestedTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "root"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-numericLiteralFloat :: Phantoms.TTerm Gremlin.FloatLiteral -> Phantoms.TTerm Gremlin.NumericLiteral
+numericLiteralFloat :: Phantoms.TypedTerm Gremlin.FloatLiteral -> Phantoms.TypedTerm Gremlin.NumericLiteral
 numericLiteralFloat x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.NumericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-numericLiteralInteger :: Phantoms.TTerm Gremlin.IntegerLiteral -> Phantoms.TTerm Gremlin.NumericLiteral
+numericLiteralInteger :: Phantoms.TypedTerm Gremlin.IntegerLiteral -> Phantoms.TypedTerm Gremlin.NumericLiteral
 numericLiteralInteger x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.NumericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-optionArgsMergeMap :: Phantoms.TTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument -> Phantoms.TTerm Gremlin.OptionArgs
+optionArgsMergeMap :: Phantoms.TypedTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument -> Phantoms.TypedTerm Gremlin.OptionArgs
 optionArgsMergeMap x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mergeMap"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-optionArgsMergeTraversal :: Phantoms.TTerm Gremlin.TraversalMergeArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.OptionArgs
+optionArgsMergeTraversal :: Phantoms.TypedTerm Gremlin.TraversalMergeArgumentAndNestedTraversal -> Phantoms.TypedTerm Gremlin.OptionArgs
 optionArgsMergeTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mergeTraversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-optionArgsObjectTraversal :: Phantoms.TTerm Gremlin.GenericLiteralArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.OptionArgs
+optionArgsObjectTraversal :: Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndNestedTraversal -> Phantoms.TypedTerm Gremlin.OptionArgs
 optionArgsObjectTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objectTraversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-optionArgsPredicateTraversal :: Phantoms.TTerm Gremlin.TraversalPredicateAndNestedTraversal -> Phantoms.TTerm Gremlin.OptionArgs
+optionArgsPredicateTraversal :: Phantoms.TypedTerm Gremlin.TraversalPredicateAndNestedTraversal -> Phantoms.TypedTerm Gremlin.OptionArgs
 optionArgsPredicateTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predicateTraversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-optionArgsTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.OptionArgs
+optionArgsTraversal :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.OptionArgs
 optionArgsTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-optionalStringArgumentAndNestedTraversal :: Phantoms.TTerm (Maybe Gremlin.StringArgument) -> Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.OptionalStringArgumentAndNestedTraversal
+optionalStringArgumentAndNestedTraversal :: Phantoms.TypedTerm (Maybe Gremlin.StringArgument) -> Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.OptionalStringArgumentAndNestedTraversal
 optionalStringArgumentAndNestedTraversal string traversal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalStringArgumentAndNestedTraversal"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Phantoms.unTTerm string)},
+          Core.fieldTerm = (Phantoms.unTypedTerm string)},
         Core.Field {
           Core.fieldName = (Core.Name "traversal"),
-          Core.fieldTerm = (Phantoms.unTTerm traversal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm traversal)}]}))
 
-optionalStringArgumentAndNestedTraversalString :: Phantoms.TTerm Gremlin.OptionalStringArgumentAndNestedTraversal -> Phantoms.TTerm (Maybe Gremlin.StringArgument)
+optionalStringArgumentAndNestedTraversalString :: Phantoms.TypedTerm Gremlin.OptionalStringArgumentAndNestedTraversal -> Phantoms.TypedTerm (Maybe Gremlin.StringArgument)
 optionalStringArgumentAndNestedTraversalString x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalStringArgumentAndNestedTraversal"),
         Core.projectionFieldName = (Core.Name "string")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-optionalStringArgumentAndNestedTraversalTraversal :: Phantoms.TTerm Gremlin.OptionalStringArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.NestedTraversal
+optionalStringArgumentAndNestedTraversalTraversal :: Phantoms.TypedTerm Gremlin.OptionalStringArgumentAndNestedTraversal -> Phantoms.TypedTerm Gremlin.NestedTraversal
 optionalStringArgumentAndNestedTraversalTraversal x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalStringArgumentAndNestedTraversal"),
         Core.projectionFieldName = (Core.Name "traversal")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-optionalStringArgumentAndNestedTraversalWithString :: Phantoms.TTerm Gremlin.OptionalStringArgumentAndNestedTraversal -> Phantoms.TTerm (Maybe Gremlin.StringArgument) -> Phantoms.TTerm Gremlin.OptionalStringArgumentAndNestedTraversal
+optionalStringArgumentAndNestedTraversalWithString :: Phantoms.TypedTerm Gremlin.OptionalStringArgumentAndNestedTraversal -> Phantoms.TypedTerm (Maybe Gremlin.StringArgument) -> Phantoms.TypedTerm Gremlin.OptionalStringArgumentAndNestedTraversal
 optionalStringArgumentAndNestedTraversalWithString original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalStringArgumentAndNestedTraversal"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "traversal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalStringArgumentAndNestedTraversal"),
               Core.projectionFieldName = (Core.Name "traversal")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-optionalStringArgumentAndNestedTraversalWithTraversal :: Phantoms.TTerm Gremlin.OptionalStringArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.OptionalStringArgumentAndNestedTraversal
+optionalStringArgumentAndNestedTraversalWithTraversal :: Phantoms.TypedTerm Gremlin.OptionalStringArgumentAndNestedTraversal -> Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.OptionalStringArgumentAndNestedTraversal
 optionalStringArgumentAndNestedTraversalWithTraversal original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalStringArgumentAndNestedTraversal"),
       Core.recordFields = [
         Core.Field {
@@ -1729,42 +1729,42 @@ optionalStringArgumentAndNestedTraversalWithTraversal original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalStringArgumentAndNestedTraversal"),
               Core.projectionFieldName = (Core.Name "string")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "traversal"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-optionalTraversalScopeArgumentAndIntegerArgument :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.IntegerArgument -> Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument
+optionalTraversalScopeArgumentAndIntegerArgument :: Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.IntegerArgument -> Phantoms.TypedTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument
 optionalTraversalScopeArgumentAndIntegerArgument scope long =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndIntegerArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "scope"),
-          Core.fieldTerm = (Phantoms.unTTerm scope)},
+          Core.fieldTerm = (Phantoms.unTypedTerm scope)},
         Core.Field {
           Core.fieldName = (Core.Name "long"),
-          Core.fieldTerm = (Phantoms.unTTerm long)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm long)}]}))
 
-optionalTraversalScopeArgumentAndIntegerArgumentLong :: Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument -> Phantoms.TTerm Gremlin.IntegerArgument
+optionalTraversalScopeArgumentAndIntegerArgumentLong :: Phantoms.TypedTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument -> Phantoms.TypedTerm Gremlin.IntegerArgument
 optionalTraversalScopeArgumentAndIntegerArgumentLong x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndIntegerArgument"),
         Core.projectionFieldName = (Core.Name "long")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-optionalTraversalScopeArgumentAndIntegerArgumentScope :: Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument -> Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument)
+optionalTraversalScopeArgumentAndIntegerArgumentScope :: Phantoms.TypedTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument -> Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument)
 optionalTraversalScopeArgumentAndIntegerArgumentScope x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndIntegerArgument"),
         Core.projectionFieldName = (Core.Name "scope")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-optionalTraversalScopeArgumentAndIntegerArgumentWithLong :: Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument -> Phantoms.TTerm Gremlin.IntegerArgument -> Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument
+optionalTraversalScopeArgumentAndIntegerArgumentWithLong :: Phantoms.TypedTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument -> Phantoms.TypedTerm Gremlin.IntegerArgument -> Phantoms.TypedTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument
 optionalTraversalScopeArgumentAndIntegerArgumentWithLong original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndIntegerArgument"),
       Core.recordFields = [
         Core.Field {
@@ -1773,74 +1773,74 @@ optionalTraversalScopeArgumentAndIntegerArgumentWithLong original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndIntegerArgument"),
               Core.projectionFieldName = (Core.Name "scope")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "long"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-optionalTraversalScopeArgumentAndIntegerArgumentWithScope :: Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument -> Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument
+optionalTraversalScopeArgumentAndIntegerArgumentWithScope :: Phantoms.TypedTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument -> Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument
 optionalTraversalScopeArgumentAndIntegerArgumentWithScope original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndIntegerArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "scope"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "long"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndIntegerArgument"),
               Core.projectionFieldName = (Core.Name "long")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-optionalTraversalScopeArgumentAndStringArgument :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndStringArgument
+optionalTraversalScopeArgumentAndStringArgument :: Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.OptionalTraversalScopeArgumentAndStringArgument
 optionalTraversalScopeArgumentAndStringArgument scope string =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndStringArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "scope"),
-          Core.fieldTerm = (Phantoms.unTTerm scope)},
+          Core.fieldTerm = (Phantoms.unTypedTerm scope)},
         Core.Field {
           Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Phantoms.unTTerm string)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm string)}]}))
 
-optionalTraversalScopeArgumentAndStringArgumentScope :: Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndStringArgument -> Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument)
+optionalTraversalScopeArgumentAndStringArgumentScope :: Phantoms.TypedTerm Gremlin.OptionalTraversalScopeArgumentAndStringArgument -> Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument)
 optionalTraversalScopeArgumentAndStringArgumentScope x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndStringArgument"),
         Core.projectionFieldName = (Core.Name "scope")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-optionalTraversalScopeArgumentAndStringArgumentString :: Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndStringArgument -> Phantoms.TTerm Gremlin.StringArgument
+optionalTraversalScopeArgumentAndStringArgumentString :: Phantoms.TypedTerm Gremlin.OptionalTraversalScopeArgumentAndStringArgument -> Phantoms.TypedTerm Gremlin.StringArgument
 optionalTraversalScopeArgumentAndStringArgumentString x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndStringArgument"),
         Core.projectionFieldName = (Core.Name "string")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-optionalTraversalScopeArgumentAndStringArgumentWithScope :: Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndStringArgument -> Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndStringArgument
+optionalTraversalScopeArgumentAndStringArgumentWithScope :: Phantoms.TypedTerm Gremlin.OptionalTraversalScopeArgumentAndStringArgument -> Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.OptionalTraversalScopeArgumentAndStringArgument
 optionalTraversalScopeArgumentAndStringArgumentWithScope original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndStringArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "scope"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "string"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndStringArgument"),
               Core.projectionFieldName = (Core.Name "string")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-optionalTraversalScopeArgumentAndStringArgumentWithString :: Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndStringArgument -> Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndStringArgument
+optionalTraversalScopeArgumentAndStringArgumentWithString :: Phantoms.TypedTerm Gremlin.OptionalTraversalScopeArgumentAndStringArgument -> Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.OptionalTraversalScopeArgumentAndStringArgument
 optionalTraversalScopeArgumentAndStringArgumentWithString original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndStringArgument"),
       Core.recordFields = [
         Core.Field {
@@ -1849,106 +1849,106 @@ optionalTraversalScopeArgumentAndStringArgumentWithString original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndStringArgument"),
               Core.projectionFieldName = (Core.Name "scope")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-pageRankConstantsEdges :: Phantoms.TTerm Gremlin.PageRankConstants
+pageRankConstantsEdges :: Phantoms.TypedTerm Gremlin.PageRankConstants
 pageRankConstantsEdges =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PageRankConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edges"),
         Core.fieldTerm = Core.TermUnit}}))
 
-pageRankConstantsPropertyName :: Phantoms.TTerm Gremlin.PageRankConstants
+pageRankConstantsPropertyName :: Phantoms.TypedTerm Gremlin.PageRankConstants
 pageRankConstantsPropertyName =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PageRankConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "propertyName"),
         Core.fieldTerm = Core.TermUnit}}))
 
-pageRankConstantsTimes :: Phantoms.TTerm Gremlin.PageRankConstants
+pageRankConstantsTimes :: Phantoms.TypedTerm Gremlin.PageRankConstants
 pageRankConstantsTimes =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PageRankConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "times"),
         Core.fieldTerm = Core.TermUnit}}))
 
-peerPressureConstantsEdges :: Phantoms.TTerm Gremlin.PeerPressureConstants
+peerPressureConstantsEdges :: Phantoms.TypedTerm Gremlin.PeerPressureConstants
 peerPressureConstantsEdges =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PeerPressureConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edges"),
         Core.fieldTerm = Core.TermUnit}}))
 
-peerPressureConstantsPropertyName :: Phantoms.TTerm Gremlin.PeerPressureConstants
+peerPressureConstantsPropertyName :: Phantoms.TypedTerm Gremlin.PeerPressureConstants
 peerPressureConstantsPropertyName =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PeerPressureConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "propertyName"),
         Core.fieldTerm = Core.TermUnit}}))
 
-peerPressureConstantsTimes :: Phantoms.TTerm Gremlin.PeerPressureConstants
+peerPressureConstantsTimes :: Phantoms.TypedTerm Gremlin.PeerPressureConstants
 peerPressureConstantsTimes =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PeerPressureConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "times"),
         Core.fieldTerm = Core.TermUnit}}))
 
-popStringsArgument :: Phantoms.TTerm Gremlin.TraversalPopArgument -> Phantoms.TTerm [Gremlin.StringArgument] -> Phantoms.TTerm Gremlin.PopStringsArgument
+popStringsArgument :: Phantoms.TypedTerm Gremlin.TraversalPopArgument -> Phantoms.TypedTerm [Gremlin.StringArgument] -> Phantoms.TypedTerm Gremlin.PopStringsArgument
 popStringsArgument pop string =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.PopStringsArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "pop"),
-          Core.fieldTerm = (Phantoms.unTTerm pop)},
+          Core.fieldTerm = (Phantoms.unTypedTerm pop)},
         Core.Field {
           Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Phantoms.unTTerm string)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm string)}]}))
 
-popStringsArgumentPop :: Phantoms.TTerm Gremlin.PopStringsArgument -> Phantoms.TTerm Gremlin.TraversalPopArgument
+popStringsArgumentPop :: Phantoms.TypedTerm Gremlin.PopStringsArgument -> Phantoms.TypedTerm Gremlin.TraversalPopArgument
 popStringsArgumentPop x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PopStringsArgument"),
         Core.projectionFieldName = (Core.Name "pop")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-popStringsArgumentString :: Phantoms.TTerm Gremlin.PopStringsArgument -> Phantoms.TTerm [Gremlin.StringArgument]
+popStringsArgumentString :: Phantoms.TypedTerm Gremlin.PopStringsArgument -> Phantoms.TypedTerm [Gremlin.StringArgument]
 popStringsArgumentString x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PopStringsArgument"),
         Core.projectionFieldName = (Core.Name "string")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-popStringsArgumentWithPop :: Phantoms.TTerm Gremlin.PopStringsArgument -> Phantoms.TTerm Gremlin.TraversalPopArgument -> Phantoms.TTerm Gremlin.PopStringsArgument
+popStringsArgumentWithPop :: Phantoms.TypedTerm Gremlin.PopStringsArgument -> Phantoms.TypedTerm Gremlin.TraversalPopArgument -> Phantoms.TypedTerm Gremlin.PopStringsArgument
 popStringsArgumentWithPop original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.PopStringsArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "pop"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "string"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PopStringsArgument"),
               Core.projectionFieldName = (Core.Name "string")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-popStringsArgumentWithString :: Phantoms.TTerm Gremlin.PopStringsArgument -> Phantoms.TTerm [Gremlin.StringArgument] -> Phantoms.TTerm Gremlin.PopStringsArgument
+popStringsArgumentWithString :: Phantoms.TypedTerm Gremlin.PopStringsArgument -> Phantoms.TypedTerm [Gremlin.StringArgument] -> Phantoms.TypedTerm Gremlin.PopStringsArgument
 popStringsArgumentWithString original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.PopStringsArgument"),
       Core.recordFields = [
         Core.Field {
@@ -1957,92 +1957,92 @@ popStringsArgumentWithString original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PopStringsArgument"),
               Core.projectionFieldName = (Core.Name "pop")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-predicateOrTraversalPredicate :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.PredicateOrTraversal
+predicateOrTraversalPredicate :: Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.PredicateOrTraversal
 predicateOrTraversalPredicate x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PredicateOrTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predicate"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-predicateOrTraversalTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.PredicateOrTraversal
+predicateOrTraversalTraversal :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.PredicateOrTraversal
 predicateOrTraversalTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PredicateOrTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-predicateTraversalArgument :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm (Maybe Gremlin.NestedTraversal) -> Phantoms.TTerm Gremlin.PredicateTraversalArgument
+predicateTraversalArgument :: Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm (Maybe Gremlin.NestedTraversal) -> Phantoms.TypedTerm Gremlin.PredicateTraversalArgument
 predicateTraversalArgument predicate traversal1 traversal2 =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.PredicateTraversalArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
-          Core.fieldTerm = (Phantoms.unTTerm predicate)},
+          Core.fieldTerm = (Phantoms.unTypedTerm predicate)},
         Core.Field {
           Core.fieldName = (Core.Name "traversal1"),
-          Core.fieldTerm = (Phantoms.unTTerm traversal1)},
+          Core.fieldTerm = (Phantoms.unTypedTerm traversal1)},
         Core.Field {
           Core.fieldName = (Core.Name "traversal2"),
-          Core.fieldTerm = (Phantoms.unTTerm traversal2)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm traversal2)}]}))
 
-predicateTraversalArgumentPredicate :: Phantoms.TTerm Gremlin.PredicateTraversalArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
+predicateTraversalArgumentPredicate :: Phantoms.TypedTerm Gremlin.PredicateTraversalArgument -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 predicateTraversalArgumentPredicate x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PredicateTraversalArgument"),
         Core.projectionFieldName = (Core.Name "predicate")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-predicateTraversalArgumentTraversal1 :: Phantoms.TTerm Gremlin.PredicateTraversalArgument -> Phantoms.TTerm Gremlin.NestedTraversal
+predicateTraversalArgumentTraversal1 :: Phantoms.TypedTerm Gremlin.PredicateTraversalArgument -> Phantoms.TypedTerm Gremlin.NestedTraversal
 predicateTraversalArgumentTraversal1 x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PredicateTraversalArgument"),
         Core.projectionFieldName = (Core.Name "traversal1")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-predicateTraversalArgumentTraversal2 :: Phantoms.TTerm Gremlin.PredicateTraversalArgument -> Phantoms.TTerm (Maybe Gremlin.NestedTraversal)
+predicateTraversalArgumentTraversal2 :: Phantoms.TypedTerm Gremlin.PredicateTraversalArgument -> Phantoms.TypedTerm (Maybe Gremlin.NestedTraversal)
 predicateTraversalArgumentTraversal2 x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PredicateTraversalArgument"),
         Core.projectionFieldName = (Core.Name "traversal2")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-predicateTraversalArgumentWithPredicate :: Phantoms.TTerm Gremlin.PredicateTraversalArgument -> Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.PredicateTraversalArgument
+predicateTraversalArgumentWithPredicate :: Phantoms.TypedTerm Gremlin.PredicateTraversalArgument -> Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.PredicateTraversalArgument
 predicateTraversalArgumentWithPredicate original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.PredicateTraversalArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "traversal1"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PredicateTraversalArgument"),
               Core.projectionFieldName = (Core.Name "traversal1")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "traversal2"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PredicateTraversalArgument"),
               Core.projectionFieldName = (Core.Name "traversal2")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-predicateTraversalArgumentWithTraversal1 :: Phantoms.TTerm Gremlin.PredicateTraversalArgument -> Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.PredicateTraversalArgument
+predicateTraversalArgumentWithTraversal1 :: Phantoms.TypedTerm Gremlin.PredicateTraversalArgument -> Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.PredicateTraversalArgument
 predicateTraversalArgumentWithTraversal1 original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.PredicateTraversalArgument"),
       Core.recordFields = [
         Core.Field {
@@ -2051,21 +2051,21 @@ predicateTraversalArgumentWithTraversal1 original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PredicateTraversalArgument"),
               Core.projectionFieldName = (Core.Name "predicate")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "traversal1"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "traversal2"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PredicateTraversalArgument"),
               Core.projectionFieldName = (Core.Name "traversal2")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-predicateTraversalArgumentWithTraversal2 :: Phantoms.TTerm Gremlin.PredicateTraversalArgument -> Phantoms.TTerm (Maybe Gremlin.NestedTraversal) -> Phantoms.TTerm Gremlin.PredicateTraversalArgument
+predicateTraversalArgumentWithTraversal2 :: Phantoms.TypedTerm Gremlin.PredicateTraversalArgument -> Phantoms.TypedTerm (Maybe Gremlin.NestedTraversal) -> Phantoms.TypedTerm Gremlin.PredicateTraversalArgument
 predicateTraversalArgumentWithTraversal2 original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.PredicateTraversalArgument"),
       Core.recordFields = [
         Core.Field {
@@ -2074,130 +2074,130 @@ predicateTraversalArgumentWithTraversal2 original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PredicateTraversalArgument"),
               Core.projectionFieldName = (Core.Name "predicate")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "traversal1"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PredicateTraversalArgument"),
               Core.projectionFieldName = (Core.Name "traversal1")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "traversal2"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-propertyArgsCardinalityObject :: Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument -> Phantoms.TTerm Gremlin.PropertyArgs
+propertyArgsCardinalityObject :: Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument -> Phantoms.TypedTerm Gremlin.PropertyArgs
 propertyArgsCardinalityObject x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PropertyArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cardinalityObject"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-propertyArgsCardinalityObjects :: Phantoms.TTerm Gremlin.TraversalCardinalityArgumentAndObjects -> Phantoms.TTerm Gremlin.PropertyArgs
+propertyArgsCardinalityObjects :: Phantoms.TypedTerm Gremlin.TraversalCardinalityArgumentAndObjects -> Phantoms.TypedTerm Gremlin.PropertyArgs
 propertyArgsCardinalityObjects x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PropertyArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cardinalityObjects"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-propertyArgsObject :: Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgument -> Phantoms.TTerm Gremlin.PropertyArgs
+propertyArgsObject :: Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgument -> Phantoms.TypedTerm Gremlin.PropertyArgs
 propertyArgsObject x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PropertyArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "object"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-propertyArgsObjects :: Phantoms.TTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TTerm Gremlin.PropertyArgs
+propertyArgsObjects :: Phantoms.TypedTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TypedTerm Gremlin.PropertyArgs
 propertyArgsObjects x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PropertyArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objects"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-queryEmpty :: Phantoms.TTerm Gremlin.Query
+queryEmpty :: Phantoms.TypedTerm Gremlin.Query
 queryEmpty =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.Query"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "empty"),
         Core.fieldTerm = Core.TermUnit}}))
 
-queryList :: Phantoms.TTerm [Gremlin.Query] -> Phantoms.TTerm Gremlin.QueryList
+queryList :: Phantoms.TypedTerm [Gremlin.Query] -> Phantoms.TypedTerm Gremlin.QueryList
 queryList x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.tinkerpop.gremlin.QueryList"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-queryRootTraversal :: Phantoms.TTerm Gremlin.RootTraversalQuery -> Phantoms.TTerm Gremlin.Query
+queryRootTraversal :: Phantoms.TypedTerm Gremlin.RootTraversalQuery -> Phantoms.TypedTerm Gremlin.Query
 queryRootTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.Query"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rootTraversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-queryToString :: Phantoms.TTerm Gremlin.Query
+queryToString :: Phantoms.TypedTerm Gremlin.Query
 queryToString =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.Query"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "toString"),
         Core.fieldTerm = Core.TermUnit}}))
 
-queryTraversalSource :: Phantoms.TTerm Gremlin.TraversalSourceQuery -> Phantoms.TTerm Gremlin.Query
+queryTraversalSource :: Phantoms.TypedTerm Gremlin.TraversalSourceQuery -> Phantoms.TypedTerm Gremlin.Query
 queryTraversalSource x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.Query"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversalSource"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-rangeArgs :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.IntegerArgument -> Phantoms.TTerm Gremlin.IntegerArgument -> Phantoms.TTerm Gremlin.RangeArgs
+rangeArgs :: Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.IntegerArgument -> Phantoms.TypedTerm Gremlin.IntegerArgument -> Phantoms.TypedTerm Gremlin.RangeArgs
 rangeArgs scope min max =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.RangeArgs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "scope"),
-          Core.fieldTerm = (Phantoms.unTTerm scope)},
+          Core.fieldTerm = (Phantoms.unTypedTerm scope)},
         Core.Field {
           Core.fieldName = (Core.Name "min"),
-          Core.fieldTerm = (Phantoms.unTTerm min)},
+          Core.fieldTerm = (Phantoms.unTypedTerm min)},
         Core.Field {
           Core.fieldName = (Core.Name "max"),
-          Core.fieldTerm = (Phantoms.unTTerm max)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm max)}]}))
 
-rangeArgsMax :: Phantoms.TTerm Gremlin.RangeArgs -> Phantoms.TTerm Gremlin.IntegerArgument
+rangeArgsMax :: Phantoms.TypedTerm Gremlin.RangeArgs -> Phantoms.TypedTerm Gremlin.IntegerArgument
 rangeArgsMax x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RangeArgs"),
         Core.projectionFieldName = (Core.Name "max")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-rangeArgsMin :: Phantoms.TTerm Gremlin.RangeArgs -> Phantoms.TTerm Gremlin.IntegerArgument
+rangeArgsMin :: Phantoms.TypedTerm Gremlin.RangeArgs -> Phantoms.TypedTerm Gremlin.IntegerArgument
 rangeArgsMin x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RangeArgs"),
         Core.projectionFieldName = (Core.Name "min")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-rangeArgsScope :: Phantoms.TTerm Gremlin.RangeArgs -> Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument)
+rangeArgsScope :: Phantoms.TypedTerm Gremlin.RangeArgs -> Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument)
 rangeArgsScope x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RangeArgs"),
         Core.projectionFieldName = (Core.Name "scope")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-rangeArgsWithMax :: Phantoms.TTerm Gremlin.RangeArgs -> Phantoms.TTerm Gremlin.IntegerArgument -> Phantoms.TTerm Gremlin.RangeArgs
+rangeArgsWithMax :: Phantoms.TypedTerm Gremlin.RangeArgs -> Phantoms.TypedTerm Gremlin.IntegerArgument -> Phantoms.TypedTerm Gremlin.RangeArgs
 rangeArgsWithMax original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.RangeArgs"),
       Core.recordFields = [
         Core.Field {
@@ -2206,21 +2206,21 @@ rangeArgsWithMax original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RangeArgs"),
               Core.projectionFieldName = (Core.Name "scope")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "min"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RangeArgs"),
               Core.projectionFieldName = (Core.Name "min")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "max"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-rangeArgsWithMin :: Phantoms.TTerm Gremlin.RangeArgs -> Phantoms.TTerm Gremlin.IntegerArgument -> Phantoms.TTerm Gremlin.RangeArgs
+rangeArgsWithMin :: Phantoms.TypedTerm Gremlin.RangeArgs -> Phantoms.TypedTerm Gremlin.IntegerArgument -> Phantoms.TypedTerm Gremlin.RangeArgs
 rangeArgsWithMin original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.RangeArgs"),
       Core.recordFields = [
         Core.Field {
@@ -2229,72 +2229,72 @@ rangeArgsWithMin original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RangeArgs"),
               Core.projectionFieldName = (Core.Name "scope")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "min"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "max"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RangeArgs"),
               Core.projectionFieldName = (Core.Name "max")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-rangeArgsWithScope :: Phantoms.TTerm Gremlin.RangeArgs -> Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.RangeArgs
+rangeArgsWithScope :: Phantoms.TypedTerm Gremlin.RangeArgs -> Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.RangeArgs
 rangeArgsWithScope original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.RangeArgs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "scope"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "min"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RangeArgs"),
               Core.projectionFieldName = (Core.Name "min")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "max"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RangeArgs"),
               Core.projectionFieldName = (Core.Name "max")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-rangeArgument :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.RangeArgument
+rangeArgument :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.RangeArgument
 rangeArgument min max =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.RangeArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "min"),
-          Core.fieldTerm = (Phantoms.unTTerm min)},
+          Core.fieldTerm = (Phantoms.unTypedTerm min)},
         Core.Field {
           Core.fieldName = (Core.Name "max"),
-          Core.fieldTerm = (Phantoms.unTTerm max)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm max)}]}))
 
-rangeArgumentMax :: Phantoms.TTerm Gremlin.RangeArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgument
+rangeArgumentMax :: Phantoms.TypedTerm Gremlin.RangeArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument
 rangeArgumentMax x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RangeArgument"),
         Core.projectionFieldName = (Core.Name "max")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-rangeArgumentMin :: Phantoms.TTerm Gremlin.RangeArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgument
+rangeArgumentMin :: Phantoms.TypedTerm Gremlin.RangeArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument
 rangeArgumentMin x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RangeArgument"),
         Core.projectionFieldName = (Core.Name "min")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-rangeArgumentWithMax :: Phantoms.TTerm Gremlin.RangeArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.RangeArgument
+rangeArgumentWithMax :: Phantoms.TypedTerm Gremlin.RangeArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.RangeArgument
 rangeArgumentWithMax original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.RangeArgument"),
       Core.recordFields = [
         Core.Field {
@@ -2303,69 +2303,69 @@ rangeArgumentWithMax original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RangeArgument"),
               Core.projectionFieldName = (Core.Name "min")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "max"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-rangeArgumentWithMin :: Phantoms.TTerm Gremlin.RangeArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.RangeArgument
+rangeArgumentWithMin :: Phantoms.TypedTerm Gremlin.RangeArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.RangeArgument
 rangeArgumentWithMin original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.RangeArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "min"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "max"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RangeArgument"),
               Core.projectionFieldName = (Core.Name "max")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-replaceArgs :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.StringNullableArgument -> Phantoms.TTerm Gremlin.StringNullableArgument -> Phantoms.TTerm Gremlin.ReplaceArgs
+replaceArgs :: Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.StringNullableArgument -> Phantoms.TypedTerm Gremlin.StringNullableArgument -> Phantoms.TypedTerm Gremlin.ReplaceArgs
 replaceArgs scope from to =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.ReplaceArgs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "scope"),
-          Core.fieldTerm = (Phantoms.unTTerm scope)},
+          Core.fieldTerm = (Phantoms.unTypedTerm scope)},
         Core.Field {
           Core.fieldName = (Core.Name "from"),
-          Core.fieldTerm = (Phantoms.unTTerm from)},
+          Core.fieldTerm = (Phantoms.unTypedTerm from)},
         Core.Field {
           Core.fieldName = (Core.Name "to"),
-          Core.fieldTerm = (Phantoms.unTTerm to)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm to)}]}))
 
-replaceArgsFrom :: Phantoms.TTerm Gremlin.ReplaceArgs -> Phantoms.TTerm Gremlin.StringNullableArgument
+replaceArgsFrom :: Phantoms.TypedTerm Gremlin.ReplaceArgs -> Phantoms.TypedTerm Gremlin.StringNullableArgument
 replaceArgsFrom x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ReplaceArgs"),
         Core.projectionFieldName = (Core.Name "from")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-replaceArgsScope :: Phantoms.TTerm Gremlin.ReplaceArgs -> Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument)
+replaceArgsScope :: Phantoms.TypedTerm Gremlin.ReplaceArgs -> Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument)
 replaceArgsScope x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ReplaceArgs"),
         Core.projectionFieldName = (Core.Name "scope")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-replaceArgsTo :: Phantoms.TTerm Gremlin.ReplaceArgs -> Phantoms.TTerm Gremlin.StringNullableArgument
+replaceArgsTo :: Phantoms.TypedTerm Gremlin.ReplaceArgs -> Phantoms.TypedTerm Gremlin.StringNullableArgument
 replaceArgsTo x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ReplaceArgs"),
         Core.projectionFieldName = (Core.Name "to")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-replaceArgsWithFrom :: Phantoms.TTerm Gremlin.ReplaceArgs -> Phantoms.TTerm Gremlin.StringNullableArgument -> Phantoms.TTerm Gremlin.ReplaceArgs
+replaceArgsWithFrom :: Phantoms.TypedTerm Gremlin.ReplaceArgs -> Phantoms.TypedTerm Gremlin.StringNullableArgument -> Phantoms.TypedTerm Gremlin.ReplaceArgs
 replaceArgsWithFrom original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.ReplaceArgs"),
       Core.recordFields = [
         Core.Field {
@@ -2374,44 +2374,44 @@ replaceArgsWithFrom original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ReplaceArgs"),
               Core.projectionFieldName = (Core.Name "scope")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "from"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "to"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ReplaceArgs"),
               Core.projectionFieldName = (Core.Name "to")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-replaceArgsWithScope :: Phantoms.TTerm Gremlin.ReplaceArgs -> Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.ReplaceArgs
+replaceArgsWithScope :: Phantoms.TypedTerm Gremlin.ReplaceArgs -> Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.ReplaceArgs
 replaceArgsWithScope original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.ReplaceArgs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "scope"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "from"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ReplaceArgs"),
               Core.projectionFieldName = (Core.Name "from")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "to"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ReplaceArgs"),
               Core.projectionFieldName = (Core.Name "to")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-replaceArgsWithTo :: Phantoms.TTerm Gremlin.ReplaceArgs -> Phantoms.TTerm Gremlin.StringNullableArgument -> Phantoms.TTerm Gremlin.ReplaceArgs
+replaceArgsWithTo :: Phantoms.TypedTerm Gremlin.ReplaceArgs -> Phantoms.TypedTerm Gremlin.StringNullableArgument -> Phantoms.TypedTerm Gremlin.ReplaceArgs
 replaceArgsWithTo original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.ReplaceArgs"),
       Core.recordFields = [
         Core.Field {
@@ -2420,88 +2420,88 @@ replaceArgsWithTo original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ReplaceArgs"),
               Core.projectionFieldName = (Core.Name "scope")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "from"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ReplaceArgs"),
               Core.projectionFieldName = (Core.Name "from")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "to"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-rootTraversal :: Phantoms.TTerm Gremlin.TraversalSource -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod -> Phantoms.TTerm [Gremlin.ChainedTraversalElement] -> Phantoms.TTerm Gremlin.RootTraversal
+rootTraversal :: Phantoms.TypedTerm Gremlin.TraversalSource -> Phantoms.TypedTerm Gremlin.TraversalSourceSpawnMethod -> Phantoms.TypedTerm [Gremlin.ChainedTraversalElement] -> Phantoms.TypedTerm Gremlin.RootTraversal
 rootTraversal source spawnMethod chained =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.RootTraversal"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "source"),
-          Core.fieldTerm = (Phantoms.unTTerm source)},
+          Core.fieldTerm = (Phantoms.unTypedTerm source)},
         Core.Field {
           Core.fieldName = (Core.Name "spawnMethod"),
-          Core.fieldTerm = (Phantoms.unTTerm spawnMethod)},
+          Core.fieldTerm = (Phantoms.unTypedTerm spawnMethod)},
         Core.Field {
           Core.fieldName = (Core.Name "chained"),
-          Core.fieldTerm = (Phantoms.unTTerm chained)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm chained)}]}))
 
-rootTraversalChained :: Phantoms.TTerm Gremlin.RootTraversal -> Phantoms.TTerm [Gremlin.ChainedTraversalElement]
+rootTraversalChained :: Phantoms.TypedTerm Gremlin.RootTraversal -> Phantoms.TypedTerm [Gremlin.ChainedTraversalElement]
 rootTraversalChained x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RootTraversal"),
         Core.projectionFieldName = (Core.Name "chained")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-rootTraversalQuery :: Phantoms.TTerm Gremlin.RootTraversal -> Phantoms.TTerm (Maybe Gremlin.TraversalTerminalMethod) -> Phantoms.TTerm Gremlin.RootTraversalQuery
+rootTraversalQuery :: Phantoms.TypedTerm Gremlin.RootTraversal -> Phantoms.TypedTerm (Maybe Gremlin.TraversalTerminalMethod) -> Phantoms.TypedTerm Gremlin.RootTraversalQuery
 rootTraversalQuery root terminalMethod =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.RootTraversalQuery"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "root"),
-          Core.fieldTerm = (Phantoms.unTTerm root)},
+          Core.fieldTerm = (Phantoms.unTypedTerm root)},
         Core.Field {
           Core.fieldName = (Core.Name "terminalMethod"),
-          Core.fieldTerm = (Phantoms.unTTerm terminalMethod)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm terminalMethod)}]}))
 
-rootTraversalQueryRoot :: Phantoms.TTerm Gremlin.RootTraversalQuery -> Phantoms.TTerm Gremlin.RootTraversal
+rootTraversalQueryRoot :: Phantoms.TypedTerm Gremlin.RootTraversalQuery -> Phantoms.TypedTerm Gremlin.RootTraversal
 rootTraversalQueryRoot x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RootTraversalQuery"),
         Core.projectionFieldName = (Core.Name "root")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-rootTraversalQueryTerminalMethod :: Phantoms.TTerm Gremlin.RootTraversalQuery -> Phantoms.TTerm (Maybe Gremlin.TraversalTerminalMethod)
+rootTraversalQueryTerminalMethod :: Phantoms.TypedTerm Gremlin.RootTraversalQuery -> Phantoms.TypedTerm (Maybe Gremlin.TraversalTerminalMethod)
 rootTraversalQueryTerminalMethod x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RootTraversalQuery"),
         Core.projectionFieldName = (Core.Name "terminalMethod")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-rootTraversalQueryWithRoot :: Phantoms.TTerm Gremlin.RootTraversalQuery -> Phantoms.TTerm Gremlin.RootTraversal -> Phantoms.TTerm Gremlin.RootTraversalQuery
+rootTraversalQueryWithRoot :: Phantoms.TypedTerm Gremlin.RootTraversalQuery -> Phantoms.TypedTerm Gremlin.RootTraversal -> Phantoms.TypedTerm Gremlin.RootTraversalQuery
 rootTraversalQueryWithRoot original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.RootTraversalQuery"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "root"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "terminalMethod"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RootTraversalQuery"),
               Core.projectionFieldName = (Core.Name "terminalMethod")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-rootTraversalQueryWithTerminalMethod :: Phantoms.TTerm Gremlin.RootTraversalQuery -> Phantoms.TTerm (Maybe Gremlin.TraversalTerminalMethod) -> Phantoms.TTerm Gremlin.RootTraversalQuery
+rootTraversalQueryWithTerminalMethod :: Phantoms.TypedTerm Gremlin.RootTraversalQuery -> Phantoms.TypedTerm (Maybe Gremlin.TraversalTerminalMethod) -> Phantoms.TypedTerm Gremlin.RootTraversalQuery
 rootTraversalQueryWithTerminalMethod original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.RootTraversalQuery"),
       Core.recordFields = [
         Core.Field {
@@ -2510,30 +2510,30 @@ rootTraversalQueryWithTerminalMethod original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RootTraversalQuery"),
               Core.projectionFieldName = (Core.Name "root")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "terminalMethod"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-rootTraversalSource :: Phantoms.TTerm Gremlin.RootTraversal -> Phantoms.TTerm Gremlin.TraversalSource
+rootTraversalSource :: Phantoms.TypedTerm Gremlin.RootTraversal -> Phantoms.TypedTerm Gremlin.TraversalSource
 rootTraversalSource x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RootTraversal"),
         Core.projectionFieldName = (Core.Name "source")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-rootTraversalSpawnMethod :: Phantoms.TTerm Gremlin.RootTraversal -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
+rootTraversalSpawnMethod :: Phantoms.TypedTerm Gremlin.RootTraversal -> Phantoms.TypedTerm Gremlin.TraversalSourceSpawnMethod
 rootTraversalSpawnMethod x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RootTraversal"),
         Core.projectionFieldName = (Core.Name "spawnMethod")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-rootTraversalWithChained :: Phantoms.TTerm Gremlin.RootTraversal -> Phantoms.TTerm [Gremlin.ChainedTraversalElement] -> Phantoms.TTerm Gremlin.RootTraversal
+rootTraversalWithChained :: Phantoms.TypedTerm Gremlin.RootTraversal -> Phantoms.TypedTerm [Gremlin.ChainedTraversalElement] -> Phantoms.TypedTerm Gremlin.RootTraversal
 rootTraversalWithChained original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.RootTraversal"),
       Core.recordFields = [
         Core.Field {
@@ -2542,44 +2542,44 @@ rootTraversalWithChained original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RootTraversal"),
               Core.projectionFieldName = (Core.Name "source")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "spawnMethod"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RootTraversal"),
               Core.projectionFieldName = (Core.Name "spawnMethod")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "chained"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-rootTraversalWithSource :: Phantoms.TTerm Gremlin.RootTraversal -> Phantoms.TTerm Gremlin.TraversalSource -> Phantoms.TTerm Gremlin.RootTraversal
+rootTraversalWithSource :: Phantoms.TypedTerm Gremlin.RootTraversal -> Phantoms.TypedTerm Gremlin.TraversalSource -> Phantoms.TypedTerm Gremlin.RootTraversal
 rootTraversalWithSource original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.RootTraversal"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "source"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "spawnMethod"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RootTraversal"),
               Core.projectionFieldName = (Core.Name "spawnMethod")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "chained"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RootTraversal"),
               Core.projectionFieldName = (Core.Name "chained")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-rootTraversalWithSpawnMethod :: Phantoms.TTerm Gremlin.RootTraversal -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod -> Phantoms.TTerm Gremlin.RootTraversal
+rootTraversalWithSpawnMethod :: Phantoms.TypedTerm Gremlin.RootTraversal -> Phantoms.TypedTerm Gremlin.TraversalSourceSpawnMethod -> Phantoms.TypedTerm Gremlin.RootTraversal
 rootTraversalWithSpawnMethod original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.RootTraversal"),
       Core.recordFields = [
         Core.Field {
@@ -2588,65 +2588,65 @@ rootTraversalWithSpawnMethod original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RootTraversal"),
               Core.projectionFieldName = (Core.Name "source")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "spawnMethod"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "chained"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.RootTraversal"),
               Core.projectionFieldName = (Core.Name "chained")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-scopeStringArgument :: Phantoms.TTerm Gremlin.TraversalScopeArgument -> Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.ScopeStringArgument
+scopeStringArgument :: Phantoms.TypedTerm Gremlin.TraversalScopeArgument -> Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.ScopeStringArgument
 scopeStringArgument scope strings =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.ScopeStringArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "scope"),
-          Core.fieldTerm = (Phantoms.unTTerm scope)},
+          Core.fieldTerm = (Phantoms.unTypedTerm scope)},
         Core.Field {
           Core.fieldName = (Core.Name "strings"),
-          Core.fieldTerm = (Phantoms.unTTerm strings)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm strings)}]}))
 
-scopeStringArgumentScope :: Phantoms.TTerm Gremlin.ScopeStringArgument -> Phantoms.TTerm Gremlin.TraversalScopeArgument
+scopeStringArgumentScope :: Phantoms.TypedTerm Gremlin.ScopeStringArgument -> Phantoms.TypedTerm Gremlin.TraversalScopeArgument
 scopeStringArgumentScope x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ScopeStringArgument"),
         Core.projectionFieldName = (Core.Name "scope")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-scopeStringArgumentStrings :: Phantoms.TTerm Gremlin.ScopeStringArgument -> Phantoms.TTerm [Gremlin.StringNullableArgument]
+scopeStringArgumentStrings :: Phantoms.TypedTerm Gremlin.ScopeStringArgument -> Phantoms.TypedTerm [Gremlin.StringNullableArgument]
 scopeStringArgumentStrings x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ScopeStringArgument"),
         Core.projectionFieldName = (Core.Name "strings")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-scopeStringArgumentWithScope :: Phantoms.TTerm Gremlin.ScopeStringArgument -> Phantoms.TTerm Gremlin.TraversalScopeArgument -> Phantoms.TTerm Gremlin.ScopeStringArgument
+scopeStringArgumentWithScope :: Phantoms.TypedTerm Gremlin.ScopeStringArgument -> Phantoms.TypedTerm Gremlin.TraversalScopeArgument -> Phantoms.TypedTerm Gremlin.ScopeStringArgument
 scopeStringArgumentWithScope original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.ScopeStringArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "scope"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "strings"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ScopeStringArgument"),
               Core.projectionFieldName = (Core.Name "strings")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-scopeStringArgumentWithStrings :: Phantoms.TTerm Gremlin.ScopeStringArgument -> Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.ScopeStringArgument
+scopeStringArgumentWithStrings :: Phantoms.TypedTerm Gremlin.ScopeStringArgument -> Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.ScopeStringArgument
 scopeStringArgumentWithStrings original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.ScopeStringArgument"),
       Core.recordFields = [
         Core.Field {
@@ -2655,98 +2655,98 @@ scopeStringArgumentWithStrings original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ScopeStringArgument"),
               Core.projectionFieldName = (Core.Name "scope")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "strings"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-selectArgsColumn :: Phantoms.TTerm Gremlin.TraversalColumnArgument -> Phantoms.TTerm Gremlin.SelectArgs
+selectArgsColumn :: Phantoms.TypedTerm Gremlin.TraversalColumnArgument -> Phantoms.TypedTerm Gremlin.SelectArgs
 selectArgsColumn x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SelectArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "column"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-selectArgsPopStrings :: Phantoms.TTerm Gremlin.PopStringsArgument -> Phantoms.TTerm Gremlin.SelectArgs
+selectArgsPopStrings :: Phantoms.TypedTerm Gremlin.PopStringsArgument -> Phantoms.TypedTerm Gremlin.SelectArgs
 selectArgsPopStrings x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SelectArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "popStrings"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-selectArgsPopTraversal :: Phantoms.TTerm Gremlin.TraversalPopArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.SelectArgs
+selectArgsPopTraversal :: Phantoms.TypedTerm Gremlin.TraversalPopArgumentAndNestedTraversal -> Phantoms.TypedTerm Gremlin.SelectArgs
 selectArgsPopTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SelectArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "popTraversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-selectArgsStrings :: Phantoms.TTerm [Gremlin.StringArgument] -> Phantoms.TTerm Gremlin.SelectArgs
+selectArgsStrings :: Phantoms.TypedTerm [Gremlin.StringArgument] -> Phantoms.TypedTerm Gremlin.SelectArgs
 selectArgsStrings x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SelectArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "strings"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-selectArgsTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.SelectArgs
+selectArgsTraversal :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.SelectArgs
 selectArgsTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SelectArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-serviceArgumentsMap :: Phantoms.TTerm (Maybe Gremlin.GenericLiteralMapArgument) -> Phantoms.TTerm Gremlin.ServiceArguments
+serviceArgumentsMap :: Phantoms.TypedTerm (Maybe Gremlin.GenericLiteralMapArgument) -> Phantoms.TypedTerm Gremlin.ServiceArguments
 serviceArgumentsMap x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ServiceArguments"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-serviceArgumentsTraversal :: Phantoms.TTerm (Maybe Gremlin.NestedTraversal) -> Phantoms.TTerm Gremlin.ServiceArguments
+serviceArgumentsTraversal :: Phantoms.TypedTerm (Maybe Gremlin.NestedTraversal) -> Phantoms.TypedTerm Gremlin.ServiceArguments
 serviceArgumentsTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ServiceArguments"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-serviceCall :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.ServiceArguments -> Phantoms.TTerm Gremlin.ServiceCall
+serviceCall :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.ServiceArguments -> Phantoms.TypedTerm Gremlin.ServiceCall
 serviceCall service arguments =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.ServiceCall"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "service"),
-          Core.fieldTerm = (Phantoms.unTTerm service)},
+          Core.fieldTerm = (Phantoms.unTypedTerm service)},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
-          Core.fieldTerm = (Phantoms.unTTerm arguments)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm arguments)}]}))
 
-serviceCallArguments :: Phantoms.TTerm Gremlin.ServiceCall -> Phantoms.TTerm Gremlin.ServiceArguments
+serviceCallArguments :: Phantoms.TypedTerm Gremlin.ServiceCall -> Phantoms.TypedTerm Gremlin.ServiceArguments
 serviceCallArguments x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ServiceCall"),
         Core.projectionFieldName = (Core.Name "arguments")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-serviceCallService :: Phantoms.TTerm Gremlin.ServiceCall -> Phantoms.TTerm Gremlin.StringArgument
+serviceCallService :: Phantoms.TypedTerm Gremlin.ServiceCall -> Phantoms.TypedTerm Gremlin.StringArgument
 serviceCallService x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ServiceCall"),
         Core.projectionFieldName = (Core.Name "service")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-serviceCallWithArguments :: Phantoms.TTerm Gremlin.ServiceCall -> Phantoms.TTerm Gremlin.ServiceArguments -> Phantoms.TTerm Gremlin.ServiceCall
+serviceCallWithArguments :: Phantoms.TypedTerm Gremlin.ServiceCall -> Phantoms.TypedTerm Gremlin.ServiceArguments -> Phantoms.TypedTerm Gremlin.ServiceCall
 serviceCallWithArguments original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.ServiceCall"),
       Core.recordFields = [
         Core.Field {
@@ -2755,98 +2755,98 @@ serviceCallWithArguments original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ServiceCall"),
               Core.projectionFieldName = (Core.Name "service")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-serviceCallWithService :: Phantoms.TTerm Gremlin.ServiceCall -> Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.ServiceCall
+serviceCallWithService :: Phantoms.TypedTerm Gremlin.ServiceCall -> Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.ServiceCall
 serviceCallWithService original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.ServiceCall"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "service"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ServiceCall"),
               Core.projectionFieldName = (Core.Name "arguments")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-shortestPathConstantsDistance :: Phantoms.TTerm Gremlin.ShortestPathConstants
+shortestPathConstantsDistance :: Phantoms.TypedTerm Gremlin.ShortestPathConstants
 shortestPathConstantsDistance =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ShortestPathConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "distance"),
         Core.fieldTerm = Core.TermUnit}}))
 
-shortestPathConstantsEdges :: Phantoms.TTerm Gremlin.ShortestPathConstants
+shortestPathConstantsEdges :: Phantoms.TypedTerm Gremlin.ShortestPathConstants
 shortestPathConstantsEdges =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ShortestPathConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edges"),
         Core.fieldTerm = Core.TermUnit}}))
 
-shortestPathConstantsIncludeEdges :: Phantoms.TTerm Gremlin.ShortestPathConstants
+shortestPathConstantsIncludeEdges :: Phantoms.TypedTerm Gremlin.ShortestPathConstants
 shortestPathConstantsIncludeEdges =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ShortestPathConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "includeEdges"),
         Core.fieldTerm = Core.TermUnit}}))
 
-shortestPathConstantsMaxDistance :: Phantoms.TTerm Gremlin.ShortestPathConstants
+shortestPathConstantsMaxDistance :: Phantoms.TypedTerm Gremlin.ShortestPathConstants
 shortestPathConstantsMaxDistance =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ShortestPathConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "maxDistance"),
         Core.fieldTerm = Core.TermUnit}}))
 
-shortestPathConstantsTarget :: Phantoms.TTerm Gremlin.ShortestPathConstants
+shortestPathConstantsTarget :: Phantoms.TypedTerm Gremlin.ShortestPathConstants
 shortestPathConstantsTarget =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ShortestPathConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "target"),
         Core.fieldTerm = Core.TermUnit}}))
 
-splitArgs :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.StringNullableArgument -> Phantoms.TTerm Gremlin.SplitArgs
+splitArgs :: Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.StringNullableArgument -> Phantoms.TypedTerm Gremlin.SplitArgs
 splitArgs scope delimiter =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.SplitArgs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "scope"),
-          Core.fieldTerm = (Phantoms.unTTerm scope)},
+          Core.fieldTerm = (Phantoms.unTypedTerm scope)},
         Core.Field {
           Core.fieldName = (Core.Name "delimiter"),
-          Core.fieldTerm = (Phantoms.unTTerm delimiter)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm delimiter)}]}))
 
-splitArgsDelimiter :: Phantoms.TTerm Gremlin.SplitArgs -> Phantoms.TTerm Gremlin.StringNullableArgument
+splitArgsDelimiter :: Phantoms.TypedTerm Gremlin.SplitArgs -> Phantoms.TypedTerm Gremlin.StringNullableArgument
 splitArgsDelimiter x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SplitArgs"),
         Core.projectionFieldName = (Core.Name "delimiter")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-splitArgsScope :: Phantoms.TTerm Gremlin.SplitArgs -> Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument)
+splitArgsScope :: Phantoms.TypedTerm Gremlin.SplitArgs -> Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument)
 splitArgsScope x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SplitArgs"),
         Core.projectionFieldName = (Core.Name "scope")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-splitArgsWithDelimiter :: Phantoms.TTerm Gremlin.SplitArgs -> Phantoms.TTerm Gremlin.StringNullableArgument -> Phantoms.TTerm Gremlin.SplitArgs
+splitArgsWithDelimiter :: Phantoms.TypedTerm Gremlin.SplitArgs -> Phantoms.TypedTerm Gremlin.StringNullableArgument -> Phantoms.TypedTerm Gremlin.SplitArgs
 splitArgsWithDelimiter original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.SplitArgs"),
       Core.recordFields = [
         Core.Field {
@@ -2855,58 +2855,58 @@ splitArgsWithDelimiter original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SplitArgs"),
               Core.projectionFieldName = (Core.Name "scope")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "delimiter"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-splitArgsWithScope :: Phantoms.TTerm Gremlin.SplitArgs -> Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.SplitArgs
+splitArgsWithScope :: Phantoms.TypedTerm Gremlin.SplitArgs -> Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.SplitArgs
 splitArgsWithScope original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.SplitArgs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "scope"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "delimiter"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SplitArgs"),
               Core.projectionFieldName = (Core.Name "delimiter")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-stringArgumentAndGenericLiteralArgument :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.StringArgumentAndGenericLiteralArgument
+stringArgumentAndGenericLiteralArgument :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.StringArgumentAndGenericLiteralArgument
 stringArgumentAndGenericLiteralArgument string literal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndGenericLiteralArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Phantoms.unTTerm string)},
+          Core.fieldTerm = (Phantoms.unTypedTerm string)},
         Core.Field {
           Core.fieldName = (Core.Name "literal"),
-          Core.fieldTerm = (Phantoms.unTTerm literal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm literal)}]}))
 
-stringArgumentAndGenericLiteralArgumentLiteral :: Phantoms.TTerm Gremlin.StringArgumentAndGenericLiteralArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgument
+stringArgumentAndGenericLiteralArgumentLiteral :: Phantoms.TypedTerm Gremlin.StringArgumentAndGenericLiteralArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument
 stringArgumentAndGenericLiteralArgumentLiteral x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndGenericLiteralArgument"),
         Core.projectionFieldName = (Core.Name "literal")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-stringArgumentAndGenericLiteralArgumentString :: Phantoms.TTerm Gremlin.StringArgumentAndGenericLiteralArgument -> Phantoms.TTerm Gremlin.StringArgument
+stringArgumentAndGenericLiteralArgumentString :: Phantoms.TypedTerm Gremlin.StringArgumentAndGenericLiteralArgument -> Phantoms.TypedTerm Gremlin.StringArgument
 stringArgumentAndGenericLiteralArgumentString x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndGenericLiteralArgument"),
         Core.projectionFieldName = (Core.Name "string")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-stringArgumentAndGenericLiteralArgumentWithLiteral :: Phantoms.TTerm Gremlin.StringArgumentAndGenericLiteralArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.StringArgumentAndGenericLiteralArgument
+stringArgumentAndGenericLiteralArgumentWithLiteral :: Phantoms.TypedTerm Gremlin.StringArgumentAndGenericLiteralArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.StringArgumentAndGenericLiteralArgument
 stringArgumentAndGenericLiteralArgumentWithLiteral original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndGenericLiteralArgument"),
       Core.recordFields = [
         Core.Field {
@@ -2915,58 +2915,58 @@ stringArgumentAndGenericLiteralArgumentWithLiteral original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndGenericLiteralArgument"),
               Core.projectionFieldName = (Core.Name "string")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "literal"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-stringArgumentAndGenericLiteralArgumentWithString :: Phantoms.TTerm Gremlin.StringArgumentAndGenericLiteralArgument -> Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.StringArgumentAndGenericLiteralArgument
+stringArgumentAndGenericLiteralArgumentWithString :: Phantoms.TypedTerm Gremlin.StringArgumentAndGenericLiteralArgument -> Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.StringArgumentAndGenericLiteralArgument
 stringArgumentAndGenericLiteralArgumentWithString original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndGenericLiteralArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "literal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndGenericLiteralArgument"),
               Core.projectionFieldName = (Core.Name "literal")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-stringArgumentAndOptionalGenericLiteralArgument :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm (Maybe Gremlin.GenericLiteralArgument) -> Phantoms.TTerm Gremlin.StringArgumentAndOptionalGenericLiteralArgument
+stringArgumentAndOptionalGenericLiteralArgument :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm (Maybe Gremlin.GenericLiteralArgument) -> Phantoms.TypedTerm Gremlin.StringArgumentAndOptionalGenericLiteralArgument
 stringArgumentAndOptionalGenericLiteralArgument string literal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndOptionalGenericLiteralArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Phantoms.unTTerm string)},
+          Core.fieldTerm = (Phantoms.unTypedTerm string)},
         Core.Field {
           Core.fieldName = (Core.Name "literal"),
-          Core.fieldTerm = (Phantoms.unTTerm literal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm literal)}]}))
 
-stringArgumentAndOptionalGenericLiteralArgumentLiteral :: Phantoms.TTerm Gremlin.StringArgumentAndOptionalGenericLiteralArgument -> Phantoms.TTerm (Maybe Gremlin.GenericLiteralArgument)
+stringArgumentAndOptionalGenericLiteralArgumentLiteral :: Phantoms.TypedTerm Gremlin.StringArgumentAndOptionalGenericLiteralArgument -> Phantoms.TypedTerm (Maybe Gremlin.GenericLiteralArgument)
 stringArgumentAndOptionalGenericLiteralArgumentLiteral x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndOptionalGenericLiteralArgument"),
         Core.projectionFieldName = (Core.Name "literal")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-stringArgumentAndOptionalGenericLiteralArgumentString :: Phantoms.TTerm Gremlin.StringArgumentAndOptionalGenericLiteralArgument -> Phantoms.TTerm Gremlin.StringArgument
+stringArgumentAndOptionalGenericLiteralArgumentString :: Phantoms.TypedTerm Gremlin.StringArgumentAndOptionalGenericLiteralArgument -> Phantoms.TypedTerm Gremlin.StringArgument
 stringArgumentAndOptionalGenericLiteralArgumentString x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndOptionalGenericLiteralArgument"),
         Core.projectionFieldName = (Core.Name "string")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-stringArgumentAndOptionalGenericLiteralArgumentWithLiteral :: Phantoms.TTerm Gremlin.StringArgumentAndOptionalGenericLiteralArgument -> Phantoms.TTerm (Maybe Gremlin.GenericLiteralArgument) -> Phantoms.TTerm Gremlin.StringArgumentAndOptionalGenericLiteralArgument
+stringArgumentAndOptionalGenericLiteralArgumentWithLiteral :: Phantoms.TypedTerm Gremlin.StringArgumentAndOptionalGenericLiteralArgument -> Phantoms.TypedTerm (Maybe Gremlin.GenericLiteralArgument) -> Phantoms.TypedTerm Gremlin.StringArgumentAndOptionalGenericLiteralArgument
 stringArgumentAndOptionalGenericLiteralArgumentWithLiteral original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndOptionalGenericLiteralArgument"),
       Core.recordFields = [
         Core.Field {
@@ -2975,74 +2975,74 @@ stringArgumentAndOptionalGenericLiteralArgumentWithLiteral original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndOptionalGenericLiteralArgument"),
               Core.projectionFieldName = (Core.Name "string")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "literal"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-stringArgumentAndOptionalGenericLiteralArgumentWithString :: Phantoms.TTerm Gremlin.StringArgumentAndOptionalGenericLiteralArgument -> Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.StringArgumentAndOptionalGenericLiteralArgument
+stringArgumentAndOptionalGenericLiteralArgumentWithString :: Phantoms.TypedTerm Gremlin.StringArgumentAndOptionalGenericLiteralArgument -> Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.StringArgumentAndOptionalGenericLiteralArgument
 stringArgumentAndOptionalGenericLiteralArgumentWithString original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndOptionalGenericLiteralArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "literal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndOptionalGenericLiteralArgument"),
               Core.projectionFieldName = (Core.Name "literal")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-stringArgumentAndOptionalStringLiteralVarargs :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs
+stringArgumentAndOptionalStringLiteralVarargs :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs
 stringArgumentAndOptionalStringLiteralVarargs first rest =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndOptionalStringLiteralVarargs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "first"),
-          Core.fieldTerm = (Phantoms.unTTerm first)},
+          Core.fieldTerm = (Phantoms.unTypedTerm first)},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
-          Core.fieldTerm = (Phantoms.unTTerm rest)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm rest)}]}))
 
-stringArgumentAndOptionalStringLiteralVarargsFirst :: Phantoms.TTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TTerm Gremlin.StringArgument
+stringArgumentAndOptionalStringLiteralVarargsFirst :: Phantoms.TypedTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TypedTerm Gremlin.StringArgument
 stringArgumentAndOptionalStringLiteralVarargsFirst x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndOptionalStringLiteralVarargs"),
         Core.projectionFieldName = (Core.Name "first")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-stringArgumentAndOptionalStringLiteralVarargsRest :: Phantoms.TTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TTerm [Gremlin.StringNullableArgument]
+stringArgumentAndOptionalStringLiteralVarargsRest :: Phantoms.TypedTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TypedTerm [Gremlin.StringNullableArgument]
 stringArgumentAndOptionalStringLiteralVarargsRest x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndOptionalStringLiteralVarargs"),
         Core.projectionFieldName = (Core.Name "rest")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-stringArgumentAndOptionalStringLiteralVarargsWithFirst :: Phantoms.TTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs
+stringArgumentAndOptionalStringLiteralVarargsWithFirst :: Phantoms.TypedTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs
 stringArgumentAndOptionalStringLiteralVarargsWithFirst original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndOptionalStringLiteralVarargs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "first"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndOptionalStringLiteralVarargs"),
               Core.projectionFieldName = (Core.Name "rest")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-stringArgumentAndOptionalStringLiteralVarargsWithRest :: Phantoms.TTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs
+stringArgumentAndOptionalStringLiteralVarargsWithRest :: Phantoms.TypedTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs
 stringArgumentAndOptionalStringLiteralVarargsWithRest original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndOptionalStringLiteralVarargs"),
       Core.recordFields = [
         Core.Field {
@@ -3051,74 +3051,74 @@ stringArgumentAndOptionalStringLiteralVarargsWithRest original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentAndOptionalStringLiteralVarargs"),
               Core.projectionFieldName = (Core.Name "first")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-stringArgumentOrNestedTraversalString :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.StringArgumentOrNestedTraversal
+stringArgumentOrNestedTraversalString :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.StringArgumentOrNestedTraversal
 stringArgumentOrNestedTraversalString x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentOrNestedTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-stringArgumentOrNestedTraversalTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.StringArgumentOrNestedTraversal
+stringArgumentOrNestedTraversalTraversal :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.StringArgumentOrNestedTraversal
 stringArgumentOrNestedTraversalTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentOrNestedTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-stringArgumentValue :: Phantoms.TTerm String -> Phantoms.TTerm Gremlin.StringArgument
+stringArgumentValue :: Phantoms.TypedTerm String -> Phantoms.TypedTerm Gremlin.StringArgument
 stringArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-stringArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.StringArgument
+stringArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.StringArgument
 stringArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-stringNullableArgumentAndGenericLiteralArgument :: Phantoms.TTerm Gremlin.StringNullableArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.StringNullableArgumentAndGenericLiteralArgument
+stringNullableArgumentAndGenericLiteralArgument :: Phantoms.TypedTerm Gremlin.StringNullableArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.StringNullableArgumentAndGenericLiteralArgument
 stringNullableArgumentAndGenericLiteralArgument string literal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringNullableArgumentAndGenericLiteralArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Phantoms.unTTerm string)},
+          Core.fieldTerm = (Phantoms.unTypedTerm string)},
         Core.Field {
           Core.fieldName = (Core.Name "literal"),
-          Core.fieldTerm = (Phantoms.unTTerm literal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm literal)}]}))
 
-stringNullableArgumentAndGenericLiteralArgumentLiteral :: Phantoms.TTerm Gremlin.StringNullableArgumentAndGenericLiteralArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgument
+stringNullableArgumentAndGenericLiteralArgumentLiteral :: Phantoms.TypedTerm Gremlin.StringNullableArgumentAndGenericLiteralArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument
 stringNullableArgumentAndGenericLiteralArgumentLiteral x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringNullableArgumentAndGenericLiteralArgument"),
         Core.projectionFieldName = (Core.Name "literal")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-stringNullableArgumentAndGenericLiteralArgumentString :: Phantoms.TTerm Gremlin.StringNullableArgumentAndGenericLiteralArgument -> Phantoms.TTerm Gremlin.StringNullableArgument
+stringNullableArgumentAndGenericLiteralArgumentString :: Phantoms.TypedTerm Gremlin.StringNullableArgumentAndGenericLiteralArgument -> Phantoms.TypedTerm Gremlin.StringNullableArgument
 stringNullableArgumentAndGenericLiteralArgumentString x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringNullableArgumentAndGenericLiteralArgument"),
         Core.projectionFieldName = (Core.Name "string")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-stringNullableArgumentAndGenericLiteralArgumentWithLiteral :: Phantoms.TTerm Gremlin.StringNullableArgumentAndGenericLiteralArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.StringNullableArgumentAndGenericLiteralArgument
+stringNullableArgumentAndGenericLiteralArgumentWithLiteral :: Phantoms.TypedTerm Gremlin.StringNullableArgumentAndGenericLiteralArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.StringNullableArgumentAndGenericLiteralArgument
 stringNullableArgumentAndGenericLiteralArgumentWithLiteral original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringNullableArgumentAndGenericLiteralArgument"),
       Core.recordFields = [
         Core.Field {
@@ -3127,58 +3127,58 @@ stringNullableArgumentAndGenericLiteralArgumentWithLiteral original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringNullableArgumentAndGenericLiteralArgument"),
               Core.projectionFieldName = (Core.Name "string")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "literal"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-stringNullableArgumentAndGenericLiteralArgumentWithString :: Phantoms.TTerm Gremlin.StringNullableArgumentAndGenericLiteralArgument -> Phantoms.TTerm Gremlin.StringNullableArgument -> Phantoms.TTerm Gremlin.StringNullableArgumentAndGenericLiteralArgument
+stringNullableArgumentAndGenericLiteralArgumentWithString :: Phantoms.TypedTerm Gremlin.StringNullableArgumentAndGenericLiteralArgument -> Phantoms.TypedTerm Gremlin.StringNullableArgument -> Phantoms.TypedTerm Gremlin.StringNullableArgumentAndGenericLiteralArgument
 stringNullableArgumentAndGenericLiteralArgumentWithString original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringNullableArgumentAndGenericLiteralArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "literal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringNullableArgumentAndGenericLiteralArgument"),
               Core.projectionFieldName = (Core.Name "literal")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-stringNullableArgumentAndTraversalPredicate :: Phantoms.TTerm Gremlin.StringNullableArgument -> Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.StringNullableArgumentAndTraversalPredicate
+stringNullableArgumentAndTraversalPredicate :: Phantoms.TypedTerm Gremlin.StringNullableArgument -> Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.StringNullableArgumentAndTraversalPredicate
 stringNullableArgumentAndTraversalPredicate string predicate =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringNullableArgumentAndTraversalPredicate"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Phantoms.unTTerm string)},
+          Core.fieldTerm = (Phantoms.unTypedTerm string)},
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
-          Core.fieldTerm = (Phantoms.unTTerm predicate)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm predicate)}]}))
 
-stringNullableArgumentAndTraversalPredicatePredicate :: Phantoms.TTerm Gremlin.StringNullableArgumentAndTraversalPredicate -> Phantoms.TTerm Gremlin.TraversalPredicate
+stringNullableArgumentAndTraversalPredicatePredicate :: Phantoms.TypedTerm Gremlin.StringNullableArgumentAndTraversalPredicate -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 stringNullableArgumentAndTraversalPredicatePredicate x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringNullableArgumentAndTraversalPredicate"),
         Core.projectionFieldName = (Core.Name "predicate")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-stringNullableArgumentAndTraversalPredicateString :: Phantoms.TTerm Gremlin.StringNullableArgumentAndTraversalPredicate -> Phantoms.TTerm Gremlin.StringNullableArgument
+stringNullableArgumentAndTraversalPredicateString :: Phantoms.TypedTerm Gremlin.StringNullableArgumentAndTraversalPredicate -> Phantoms.TypedTerm Gremlin.StringNullableArgument
 stringNullableArgumentAndTraversalPredicateString x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringNullableArgumentAndTraversalPredicate"),
         Core.projectionFieldName = (Core.Name "string")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-stringNullableArgumentAndTraversalPredicateWithPredicate :: Phantoms.TTerm Gremlin.StringNullableArgumentAndTraversalPredicate -> Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.StringNullableArgumentAndTraversalPredicate
+stringNullableArgumentAndTraversalPredicateWithPredicate :: Phantoms.TypedTerm Gremlin.StringNullableArgumentAndTraversalPredicate -> Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.StringNullableArgumentAndTraversalPredicate
 stringNullableArgumentAndTraversalPredicateWithPredicate original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringNullableArgumentAndTraversalPredicate"),
       Core.recordFields = [
         Core.Field {
@@ -3187,90 +3187,90 @@ stringNullableArgumentAndTraversalPredicateWithPredicate original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringNullableArgumentAndTraversalPredicate"),
               Core.projectionFieldName = (Core.Name "string")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-stringNullableArgumentAndTraversalPredicateWithString :: Phantoms.TTerm Gremlin.StringNullableArgumentAndTraversalPredicate -> Phantoms.TTerm Gremlin.StringNullableArgument -> Phantoms.TTerm Gremlin.StringNullableArgumentAndTraversalPredicate
+stringNullableArgumentAndTraversalPredicateWithString :: Phantoms.TypedTerm Gremlin.StringNullableArgumentAndTraversalPredicate -> Phantoms.TypedTerm Gremlin.StringNullableArgument -> Phantoms.TypedTerm Gremlin.StringNullableArgumentAndTraversalPredicate
 stringNullableArgumentAndTraversalPredicateWithString original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringNullableArgumentAndTraversalPredicate"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "string"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringNullableArgumentAndTraversalPredicate"),
               Core.projectionFieldName = (Core.Name "predicate")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-stringNullableArgumentValue :: Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Gremlin.StringNullableArgument
+stringNullableArgumentValue :: Phantoms.TypedTerm (Maybe String) -> Phantoms.TypedTerm Gremlin.StringNullableArgument
 stringNullableArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringNullableArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-stringNullableArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.StringNullableArgument
+stringNullableArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.StringNullableArgument
 stringNullableArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringNullableArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-stringRange :: Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm Gremlin.StringRange
+stringRange :: Phantoms.TypedTerm String -> Phantoms.TypedTerm String -> Phantoms.TypedTerm Gremlin.StringRange
 stringRange left right =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringRange"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Phantoms.unTTerm left)},
+          Core.fieldTerm = (Phantoms.unTypedTerm left)},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm right)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm right)}]}))
 
-stringRangeLeft :: Phantoms.TTerm Gremlin.StringRange -> Phantoms.TTerm String
+stringRangeLeft :: Phantoms.TypedTerm Gremlin.StringRange -> Phantoms.TypedTerm String
 stringRangeLeft x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringRange"),
         Core.projectionFieldName = (Core.Name "left")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-stringRangeRight :: Phantoms.TTerm Gremlin.StringRange -> Phantoms.TTerm String
+stringRangeRight :: Phantoms.TypedTerm Gremlin.StringRange -> Phantoms.TypedTerm String
 stringRangeRight x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringRange"),
         Core.projectionFieldName = (Core.Name "right")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-stringRangeWithLeft :: Phantoms.TTerm Gremlin.StringRange -> Phantoms.TTerm String -> Phantoms.TTerm Gremlin.StringRange
+stringRangeWithLeft :: Phantoms.TypedTerm Gremlin.StringRange -> Phantoms.TypedTerm String -> Phantoms.TypedTerm Gremlin.StringRange
 stringRangeWithLeft original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringRange"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringRange"),
               Core.projectionFieldName = (Core.Name "right")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-stringRangeWithRight :: Phantoms.TTerm Gremlin.StringRange -> Phantoms.TTerm String -> Phantoms.TTerm Gremlin.StringRange
+stringRangeWithRight :: Phantoms.TypedTerm Gremlin.StringRange -> Phantoms.TypedTerm String -> Phantoms.TypedTerm Gremlin.StringRange
 stringRangeWithRight original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringRange"),
       Core.recordFields = [
         Core.Field {
@@ -3279,69 +3279,69 @@ stringRangeWithRight original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringRange"),
               Core.projectionFieldName = (Core.Name "left")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-structureVertex :: Phantoms.TTerm Bool -> Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.StructureVertex
+structureVertex :: Phantoms.TypedTerm Bool -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.StructureVertex
 structureVertex new id label =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StructureVertex"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "new"),
-          Core.fieldTerm = (Phantoms.unTTerm new)},
+          Core.fieldTerm = (Phantoms.unTypedTerm new)},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm id)},
+          Core.fieldTerm = (Phantoms.unTypedTerm id)},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
-          Core.fieldTerm = (Phantoms.unTTerm label)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm label)}]}))
 
-structureVertexArgumentValue :: Phantoms.TTerm Gremlin.StructureVertex -> Phantoms.TTerm Gremlin.StructureVertexArgument
+structureVertexArgumentValue :: Phantoms.TypedTerm Gremlin.StructureVertex -> Phantoms.TypedTerm Gremlin.StructureVertexArgument
 structureVertexArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StructureVertexArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-structureVertexArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.StructureVertexArgument
+structureVertexArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.StructureVertexArgument
 structureVertexArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StructureVertexArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-structureVertexId :: Phantoms.TTerm Gremlin.StructureVertex -> Phantoms.TTerm Gremlin.GenericLiteralArgument
+structureVertexId :: Phantoms.TypedTerm Gremlin.StructureVertex -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument
 structureVertexId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StructureVertex"),
         Core.projectionFieldName = (Core.Name "id")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-structureVertexLabel :: Phantoms.TTerm Gremlin.StructureVertex -> Phantoms.TTerm Gremlin.StringArgument
+structureVertexLabel :: Phantoms.TypedTerm Gremlin.StructureVertex -> Phantoms.TypedTerm Gremlin.StringArgument
 structureVertexLabel x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StructureVertex"),
         Core.projectionFieldName = (Core.Name "label")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-structureVertexNew :: Phantoms.TTerm Gremlin.StructureVertex -> Phantoms.TTerm Bool
+structureVertexNew :: Phantoms.TypedTerm Gremlin.StructureVertex -> Phantoms.TypedTerm Bool
 structureVertexNew x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StructureVertex"),
         Core.projectionFieldName = (Core.Name "new")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-structureVertexWithId :: Phantoms.TTerm Gremlin.StructureVertex -> Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.StructureVertex
+structureVertexWithId :: Phantoms.TypedTerm Gremlin.StructureVertex -> Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.StructureVertex
 structureVertexWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StructureVertex"),
       Core.recordFields = [
         Core.Field {
@@ -3350,21 +3350,21 @@ structureVertexWithId original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StructureVertex"),
               Core.projectionFieldName = (Core.Name "new")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StructureVertex"),
               Core.projectionFieldName = (Core.Name "label")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-structureVertexWithLabel :: Phantoms.TTerm Gremlin.StructureVertex -> Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.StructureVertex
+structureVertexWithLabel :: Phantoms.TypedTerm Gremlin.StructureVertex -> Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.StructureVertex
 structureVertexWithLabel original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StructureVertex"),
       Core.recordFields = [
         Core.Field {
@@ -3373,83 +3373,83 @@ structureVertexWithLabel original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StructureVertex"),
               Core.projectionFieldName = (Core.Name "new")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StructureVertex"),
               Core.projectionFieldName = (Core.Name "id")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-structureVertexWithNew :: Phantoms.TTerm Gremlin.StructureVertex -> Phantoms.TTerm Bool -> Phantoms.TTerm Gremlin.StructureVertex
+structureVertexWithNew :: Phantoms.TypedTerm Gremlin.StructureVertex -> Phantoms.TypedTerm Bool -> Phantoms.TypedTerm Gremlin.StructureVertex
 structureVertexWithNew original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.StructureVertex"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "new"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StructureVertex"),
               Core.projectionFieldName = (Core.Name "id")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StructureVertex"),
               Core.projectionFieldName = (Core.Name "label")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-substringArgs :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.IntegerArgument -> Phantoms.TTerm (Maybe Gremlin.IntegerArgument) -> Phantoms.TTerm Gremlin.SubstringArgs
+substringArgs :: Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.IntegerArgument -> Phantoms.TypedTerm (Maybe Gremlin.IntegerArgument) -> Phantoms.TypedTerm Gremlin.SubstringArgs
 substringArgs scope start end =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.SubstringArgs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "scope"),
-          Core.fieldTerm = (Phantoms.unTTerm scope)},
+          Core.fieldTerm = (Phantoms.unTypedTerm scope)},
         Core.Field {
           Core.fieldName = (Core.Name "start"),
-          Core.fieldTerm = (Phantoms.unTTerm start)},
+          Core.fieldTerm = (Phantoms.unTypedTerm start)},
         Core.Field {
           Core.fieldName = (Core.Name "end"),
-          Core.fieldTerm = (Phantoms.unTTerm end)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm end)}]}))
 
-substringArgsEnd :: Phantoms.TTerm Gremlin.SubstringArgs -> Phantoms.TTerm (Maybe Gremlin.IntegerArgument)
+substringArgsEnd :: Phantoms.TypedTerm Gremlin.SubstringArgs -> Phantoms.TypedTerm (Maybe Gremlin.IntegerArgument)
 substringArgsEnd x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SubstringArgs"),
         Core.projectionFieldName = (Core.Name "end")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-substringArgsScope :: Phantoms.TTerm Gremlin.SubstringArgs -> Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument)
+substringArgsScope :: Phantoms.TypedTerm Gremlin.SubstringArgs -> Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument)
 substringArgsScope x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SubstringArgs"),
         Core.projectionFieldName = (Core.Name "scope")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-substringArgsStart :: Phantoms.TTerm Gremlin.SubstringArgs -> Phantoms.TTerm Gremlin.IntegerArgument
+substringArgsStart :: Phantoms.TypedTerm Gremlin.SubstringArgs -> Phantoms.TypedTerm Gremlin.IntegerArgument
 substringArgsStart x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SubstringArgs"),
         Core.projectionFieldName = (Core.Name "start")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-substringArgsWithEnd :: Phantoms.TTerm Gremlin.SubstringArgs -> Phantoms.TTerm (Maybe Gremlin.IntegerArgument) -> Phantoms.TTerm Gremlin.SubstringArgs
+substringArgsWithEnd :: Phantoms.TypedTerm Gremlin.SubstringArgs -> Phantoms.TypedTerm (Maybe Gremlin.IntegerArgument) -> Phantoms.TypedTerm Gremlin.SubstringArgs
 substringArgsWithEnd original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.SubstringArgs"),
       Core.recordFields = [
         Core.Field {
@@ -3458,44 +3458,44 @@ substringArgsWithEnd original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SubstringArgs"),
               Core.projectionFieldName = (Core.Name "scope")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "start"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SubstringArgs"),
               Core.projectionFieldName = (Core.Name "start")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "end"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-substringArgsWithScope :: Phantoms.TTerm Gremlin.SubstringArgs -> Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.SubstringArgs
+substringArgsWithScope :: Phantoms.TypedTerm Gremlin.SubstringArgs -> Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.SubstringArgs
 substringArgsWithScope original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.SubstringArgs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "scope"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "start"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SubstringArgs"),
               Core.projectionFieldName = (Core.Name "start")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "end"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SubstringArgs"),
               Core.projectionFieldName = (Core.Name "end")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-substringArgsWithStart :: Phantoms.TTerm Gremlin.SubstringArgs -> Phantoms.TTerm Gremlin.IntegerArgument -> Phantoms.TTerm Gremlin.SubstringArgs
+substringArgsWithStart :: Phantoms.TypedTerm Gremlin.SubstringArgs -> Phantoms.TypedTerm Gremlin.IntegerArgument -> Phantoms.TypedTerm Gremlin.SubstringArgs
 substringArgsWithStart original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.SubstringArgs"),
       Core.recordFields = [
         Core.Field {
@@ -3504,49 +3504,49 @@ substringArgsWithStart original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SubstringArgs"),
               Core.projectionFieldName = (Core.Name "scope")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "start"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "end"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SubstringArgs"),
               Core.projectionFieldName = (Core.Name "end")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-tailArgs :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm (Maybe Gremlin.IntegerArgument) -> Phantoms.TTerm Gremlin.TailArgs
+tailArgs :: Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm (Maybe Gremlin.IntegerArgument) -> Phantoms.TypedTerm Gremlin.TailArgs
 tailArgs scope integer =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TailArgs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "scope"),
-          Core.fieldTerm = (Phantoms.unTTerm scope)},
+          Core.fieldTerm = (Phantoms.unTypedTerm scope)},
         Core.Field {
           Core.fieldName = (Core.Name "integer"),
-          Core.fieldTerm = (Phantoms.unTTerm integer)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm integer)}]}))
 
-tailArgsInteger :: Phantoms.TTerm Gremlin.TailArgs -> Phantoms.TTerm (Maybe Gremlin.IntegerArgument)
+tailArgsInteger :: Phantoms.TypedTerm Gremlin.TailArgs -> Phantoms.TypedTerm (Maybe Gremlin.IntegerArgument)
 tailArgsInteger x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TailArgs"),
         Core.projectionFieldName = (Core.Name "integer")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-tailArgsScope :: Phantoms.TTerm Gremlin.TailArgs -> Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument)
+tailArgsScope :: Phantoms.TypedTerm Gremlin.TailArgs -> Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument)
 tailArgsScope x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TailArgs"),
         Core.projectionFieldName = (Core.Name "scope")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-tailArgsWithInteger :: Phantoms.TTerm Gremlin.TailArgs -> Phantoms.TTerm (Maybe Gremlin.IntegerArgument) -> Phantoms.TTerm Gremlin.TailArgs
+tailArgsWithInteger :: Phantoms.TypedTerm Gremlin.TailArgs -> Phantoms.TypedTerm (Maybe Gremlin.IntegerArgument) -> Phantoms.TypedTerm Gremlin.TailArgs
 tailArgsWithInteger original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TailArgs"),
       Core.recordFields = [
         Core.Field {
@@ -3555,74 +3555,74 @@ tailArgsWithInteger original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TailArgs"),
               Core.projectionFieldName = (Core.Name "scope")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "integer"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-tailArgsWithScope :: Phantoms.TTerm Gremlin.TailArgs -> Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TailArgs
+tailArgsWithScope :: Phantoms.TypedTerm Gremlin.TailArgs -> Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.TailArgs
 tailArgsWithScope original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TailArgs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "scope"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "integer"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TailArgs"),
               Core.projectionFieldName = (Core.Name "integer")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-terminatedTraversal :: Phantoms.TTerm Gremlin.RootTraversal -> Phantoms.TTerm Gremlin.TraversalTerminalMethod -> Phantoms.TTerm Gremlin.TerminatedTraversal
+terminatedTraversal :: Phantoms.TypedTerm Gremlin.RootTraversal -> Phantoms.TypedTerm Gremlin.TraversalTerminalMethod -> Phantoms.TypedTerm Gremlin.TerminatedTraversal
 terminatedTraversal root terminal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TerminatedTraversal"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "root"),
-          Core.fieldTerm = (Phantoms.unTTerm root)},
+          Core.fieldTerm = (Phantoms.unTypedTerm root)},
         Core.Field {
           Core.fieldName = (Core.Name "terminal"),
-          Core.fieldTerm = (Phantoms.unTTerm terminal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm terminal)}]}))
 
-terminatedTraversalRoot :: Phantoms.TTerm Gremlin.TerminatedTraversal -> Phantoms.TTerm Gremlin.RootTraversal
+terminatedTraversalRoot :: Phantoms.TypedTerm Gremlin.TerminatedTraversal -> Phantoms.TypedTerm Gremlin.RootTraversal
 terminatedTraversalRoot x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TerminatedTraversal"),
         Core.projectionFieldName = (Core.Name "root")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-terminatedTraversalTerminal :: Phantoms.TTerm Gremlin.TerminatedTraversal -> Phantoms.TTerm Gremlin.TraversalTerminalMethod
+terminatedTraversalTerminal :: Phantoms.TypedTerm Gremlin.TerminatedTraversal -> Phantoms.TypedTerm Gremlin.TraversalTerminalMethod
 terminatedTraversalTerminal x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TerminatedTraversal"),
         Core.projectionFieldName = (Core.Name "terminal")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-terminatedTraversalWithRoot :: Phantoms.TTerm Gremlin.TerminatedTraversal -> Phantoms.TTerm Gremlin.RootTraversal -> Phantoms.TTerm Gremlin.TerminatedTraversal
+terminatedTraversalWithRoot :: Phantoms.TypedTerm Gremlin.TerminatedTraversal -> Phantoms.TypedTerm Gremlin.RootTraversal -> Phantoms.TypedTerm Gremlin.TerminatedTraversal
 terminatedTraversalWithRoot original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TerminatedTraversal"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "root"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "terminal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TerminatedTraversal"),
               Core.projectionFieldName = (Core.Name "terminal")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-terminatedTraversalWithTerminal :: Phantoms.TTerm Gremlin.TerminatedTraversal -> Phantoms.TTerm Gremlin.TraversalTerminalMethod -> Phantoms.TTerm Gremlin.TerminatedTraversal
+terminatedTraversalWithTerminal :: Phantoms.TypedTerm Gremlin.TerminatedTraversal -> Phantoms.TypedTerm Gremlin.TraversalTerminalMethod -> Phantoms.TypedTerm Gremlin.TerminatedTraversal
 terminatedTraversalWithTerminal original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TerminatedTraversal"),
       Core.recordFields = [
         Core.Field {
@@ -3631,130 +3631,130 @@ terminatedTraversalWithTerminal original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TerminatedTraversal"),
               Core.projectionFieldName = (Core.Name "root")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "terminal"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-toArgsDirection :: Phantoms.TTerm Gremlin.DirectionAndVarargs -> Phantoms.TTerm Gremlin.ToArgs
+toArgsDirection :: Phantoms.TypedTerm Gremlin.DirectionAndVarargs -> Phantoms.TypedTerm Gremlin.ToArgs
 toArgsDirection x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ToArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "direction"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-toArgsString :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.ToArgs
+toArgsString :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.ToArgs
 toArgsString x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ToArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-toArgsTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.ToArgs
+toArgsTraversal :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.ToArgs
 toArgsTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ToArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-toArgsVertex :: Phantoms.TTerm Gremlin.StructureVertexArgument -> Phantoms.TTerm Gremlin.ToArgs
+toArgsVertex :: Phantoms.TypedTerm Gremlin.StructureVertexArgument -> Phantoms.TypedTerm Gremlin.ToArgs
 toArgsVertex x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ToArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "vertex"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-transactionPartBegin :: Phantoms.TTerm Gremlin.TransactionPart
+transactionPartBegin :: Phantoms.TypedTerm Gremlin.TransactionPart
 transactionPartBegin =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TransactionPart"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "begin"),
         Core.fieldTerm = Core.TermUnit}}))
 
-transactionPartCommit :: Phantoms.TTerm Gremlin.TransactionPart
+transactionPartCommit :: Phantoms.TypedTerm Gremlin.TransactionPart
 transactionPartCommit =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TransactionPart"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "commit"),
         Core.fieldTerm = Core.TermUnit}}))
 
-transactionPartRollback :: Phantoms.TTerm Gremlin.TransactionPart
+transactionPartRollback :: Phantoms.TypedTerm Gremlin.TransactionPart
 transactionPartRollback =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TransactionPart"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rollback"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalBiFunctionArgumentValue :: Phantoms.TTerm Gremlin.TraversalOperator -> Phantoms.TTerm Gremlin.TraversalBiFunctionArgument
+traversalBiFunctionArgumentValue :: Phantoms.TypedTerm Gremlin.TraversalOperator -> Phantoms.TypedTerm Gremlin.TraversalBiFunctionArgument
 traversalBiFunctionArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalBiFunctionArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalBiFunctionArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalBiFunctionArgument
+traversalBiFunctionArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.TraversalBiFunctionArgument
 traversalBiFunctionArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalBiFunctionArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalCardinalityArgumentAndObjects :: Phantoms.TTerm Gremlin.TraversalCardinalityArgument -> Phantoms.TTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TTerm Gremlin.TraversalCardinalityArgumentAndObjects
+traversalCardinalityArgumentAndObjects :: Phantoms.TypedTerm Gremlin.TraversalCardinalityArgument -> Phantoms.TypedTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TypedTerm Gremlin.TraversalCardinalityArgumentAndObjects
 traversalCardinalityArgumentAndObjects cardinality objects =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalCardinalityArgumentAndObjects"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
-          Core.fieldTerm = (Phantoms.unTTerm cardinality)},
+          Core.fieldTerm = (Phantoms.unTypedTerm cardinality)},
         Core.Field {
           Core.fieldName = (Core.Name "objects"),
-          Core.fieldTerm = (Phantoms.unTTerm objects)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm objects)}]}))
 
-traversalCardinalityArgumentAndObjectsCardinality :: Phantoms.TTerm Gremlin.TraversalCardinalityArgumentAndObjects -> Phantoms.TTerm Gremlin.TraversalCardinalityArgument
+traversalCardinalityArgumentAndObjectsCardinality :: Phantoms.TypedTerm Gremlin.TraversalCardinalityArgumentAndObjects -> Phantoms.TypedTerm Gremlin.TraversalCardinalityArgument
 traversalCardinalityArgumentAndObjectsCardinality x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalCardinalityArgumentAndObjects"),
         Core.projectionFieldName = (Core.Name "cardinality")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-traversalCardinalityArgumentAndObjectsObjects :: Phantoms.TTerm Gremlin.TraversalCardinalityArgumentAndObjects -> Phantoms.TTerm [Gremlin.GenericLiteralArgument]
+traversalCardinalityArgumentAndObjectsObjects :: Phantoms.TypedTerm Gremlin.TraversalCardinalityArgumentAndObjects -> Phantoms.TypedTerm [Gremlin.GenericLiteralArgument]
 traversalCardinalityArgumentAndObjectsObjects x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalCardinalityArgumentAndObjects"),
         Core.projectionFieldName = (Core.Name "objects")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-traversalCardinalityArgumentAndObjectsWithCardinality :: Phantoms.TTerm Gremlin.TraversalCardinalityArgumentAndObjects -> Phantoms.TTerm Gremlin.TraversalCardinalityArgument -> Phantoms.TTerm Gremlin.TraversalCardinalityArgumentAndObjects
+traversalCardinalityArgumentAndObjectsWithCardinality :: Phantoms.TypedTerm Gremlin.TraversalCardinalityArgumentAndObjects -> Phantoms.TypedTerm Gremlin.TraversalCardinalityArgument -> Phantoms.TypedTerm Gremlin.TraversalCardinalityArgumentAndObjects
 traversalCardinalityArgumentAndObjectsWithCardinality original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalCardinalityArgumentAndObjects"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "objects"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalCardinalityArgumentAndObjects"),
               Core.projectionFieldName = (Core.Name "objects")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-traversalCardinalityArgumentAndObjectsWithObjects :: Phantoms.TTerm Gremlin.TraversalCardinalityArgumentAndObjects -> Phantoms.TTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TTerm Gremlin.TraversalCardinalityArgumentAndObjects
+traversalCardinalityArgumentAndObjectsWithObjects :: Phantoms.TypedTerm Gremlin.TraversalCardinalityArgumentAndObjects -> Phantoms.TypedTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TypedTerm Gremlin.TraversalCardinalityArgumentAndObjects
 traversalCardinalityArgumentAndObjectsWithObjects original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalCardinalityArgumentAndObjects"),
       Core.recordFields = [
         Core.Field {
@@ -3763,285 +3763,285 @@ traversalCardinalityArgumentAndObjectsWithObjects original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalCardinalityArgumentAndObjects"),
               Core.projectionFieldName = (Core.Name "cardinality")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "objects"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-traversalCardinalityArgumentValue :: Phantoms.TTerm Gremlin.TraversalCardinality -> Phantoms.TTerm Gremlin.TraversalCardinalityArgument
+traversalCardinalityArgumentValue :: Phantoms.TypedTerm Gremlin.TraversalCardinality -> Phantoms.TypedTerm Gremlin.TraversalCardinalityArgument
 traversalCardinalityArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalCardinalityArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalCardinalityArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalCardinalityArgument
+traversalCardinalityArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.TraversalCardinalityArgument
 traversalCardinalityArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalCardinalityArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalCardinalityList :: Phantoms.TTerm Gremlin.GenericLiteral -> Phantoms.TTerm Gremlin.TraversalCardinality
+traversalCardinalityList :: Phantoms.TypedTerm Gremlin.GenericLiteral -> Phantoms.TypedTerm Gremlin.TraversalCardinality
 traversalCardinalityList x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalCardinality"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalCardinalitySet :: Phantoms.TTerm Gremlin.GenericLiteral -> Phantoms.TTerm Gremlin.TraversalCardinality
+traversalCardinalitySet :: Phantoms.TypedTerm Gremlin.GenericLiteral -> Phantoms.TypedTerm Gremlin.TraversalCardinality
 traversalCardinalitySet x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalCardinality"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalCardinalitySingle :: Phantoms.TTerm Gremlin.GenericLiteral -> Phantoms.TTerm Gremlin.TraversalCardinality
+traversalCardinalitySingle :: Phantoms.TypedTerm Gremlin.GenericLiteral -> Phantoms.TypedTerm Gremlin.TraversalCardinality
 traversalCardinalitySingle x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalCardinality"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "single"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalColumnArgumentValue :: Phantoms.TTerm Gremlin.TraversalColumn -> Phantoms.TTerm Gremlin.TraversalColumnArgument
+traversalColumnArgumentValue :: Phantoms.TypedTerm Gremlin.TraversalColumn -> Phantoms.TypedTerm Gremlin.TraversalColumnArgument
 traversalColumnArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalColumnArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalColumnArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalColumnArgument
+traversalColumnArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.TraversalColumnArgument
 traversalColumnArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalColumnArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalColumnKeys :: Phantoms.TTerm Gremlin.TraversalColumn
+traversalColumnKeys :: Phantoms.TypedTerm Gremlin.TraversalColumn
 traversalColumnKeys =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalColumn"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "keys"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalColumnValues :: Phantoms.TTerm Gremlin.TraversalColumn
+traversalColumnValues :: Phantoms.TypedTerm Gremlin.TraversalColumn
 traversalColumnValues =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalColumn"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "values"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalComparatorArgumentValue :: Phantoms.TTerm Gremlin.TraversalOrder -> Phantoms.TTerm Gremlin.TraversalComparatorArgument
+traversalComparatorArgumentValue :: Phantoms.TypedTerm Gremlin.TraversalOrder -> Phantoms.TypedTerm Gremlin.TraversalComparatorArgument
 traversalComparatorArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalComparatorArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalComparatorArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalComparatorArgument
+traversalComparatorArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.TraversalComparatorArgument
 traversalComparatorArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalComparatorArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalDTArgumentValue :: Phantoms.TTerm Gremlin.TraversalDT -> Phantoms.TTerm Gremlin.TraversalDTArgument
+traversalDTArgumentValue :: Phantoms.TypedTerm Gremlin.TraversalDT -> Phantoms.TypedTerm Gremlin.TraversalDTArgument
 traversalDTArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDTArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalDTArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalDTArgument
+traversalDTArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.TraversalDTArgument
 traversalDTArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDTArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalDTDay :: Phantoms.TTerm Gremlin.TraversalDT
+traversalDTDay :: Phantoms.TypedTerm Gremlin.TraversalDT
 traversalDTDay =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDT"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "day"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalDTHour :: Phantoms.TTerm Gremlin.TraversalDT
+traversalDTHour :: Phantoms.TypedTerm Gremlin.TraversalDT
 traversalDTHour =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDT"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hour"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalDTMinute :: Phantoms.TTerm Gremlin.TraversalDT
+traversalDTMinute :: Phantoms.TypedTerm Gremlin.TraversalDT
 traversalDTMinute =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDT"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "minute"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalDTSecond :: Phantoms.TTerm Gremlin.TraversalDT
+traversalDTSecond :: Phantoms.TypedTerm Gremlin.TraversalDT
 traversalDTSecond =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDT"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "second"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalDirectionArgumentValue :: Phantoms.TTerm Gremlin.TraversalDirection -> Phantoms.TTerm Gremlin.TraversalDirectionArgument
+traversalDirectionArgumentValue :: Phantoms.TypedTerm Gremlin.TraversalDirection -> Phantoms.TypedTerm Gremlin.TraversalDirectionArgument
 traversalDirectionArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDirectionArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalDirectionArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalDirectionArgument
+traversalDirectionArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.TraversalDirectionArgument
 traversalDirectionArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDirectionArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalDirectionBoth :: Phantoms.TTerm Gremlin.TraversalDirection
+traversalDirectionBoth :: Phantoms.TypedTerm Gremlin.TraversalDirection
 traversalDirectionBoth =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDirection"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "both"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalDirectionIn :: Phantoms.TTerm Gremlin.TraversalDirection
+traversalDirectionIn :: Phantoms.TypedTerm Gremlin.TraversalDirection
 traversalDirectionIn =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDirection"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "in"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalDirectionOut :: Phantoms.TTerm Gremlin.TraversalDirection
+traversalDirectionOut :: Phantoms.TypedTerm Gremlin.TraversalDirection
 traversalDirectionOut =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDirection"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "out"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalFunctionArgumentOrStringArgumentOrNestedTraversalFunction :: Phantoms.TTerm Gremlin.TraversalFunctionArgument -> Phantoms.TTerm Gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal
+traversalFunctionArgumentOrStringArgumentOrNestedTraversalFunction :: Phantoms.TypedTerm Gremlin.TraversalFunctionArgument -> Phantoms.TypedTerm Gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal
 traversalFunctionArgumentOrStringArgumentOrNestedTraversalFunction x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "function"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalFunctionArgumentOrStringArgumentOrNestedTraversalString :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal
+traversalFunctionArgumentOrStringArgumentOrNestedTraversalString :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal
 traversalFunctionArgumentOrStringArgumentOrNestedTraversalString x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalFunctionArgumentOrStringArgumentOrNestedTraversalTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal
+traversalFunctionArgumentOrStringArgumentOrNestedTraversalTraversal :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal
 traversalFunctionArgumentOrStringArgumentOrNestedTraversalTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalFunctionArgumentValue :: Phantoms.TTerm Gremlin.TraversalFunction -> Phantoms.TTerm Gremlin.TraversalFunctionArgument
+traversalFunctionArgumentValue :: Phantoms.TypedTerm Gremlin.TraversalFunction -> Phantoms.TypedTerm Gremlin.TraversalFunctionArgument
 traversalFunctionArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalFunctionArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalFunctionArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalFunctionArgument
+traversalFunctionArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.TraversalFunctionArgument
 traversalFunctionArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalFunctionArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalFunctionColumn :: Phantoms.TTerm Gremlin.TraversalColumn -> Phantoms.TTerm Gremlin.TraversalFunction
+traversalFunctionColumn :: Phantoms.TypedTerm Gremlin.TraversalColumn -> Phantoms.TypedTerm Gremlin.TraversalFunction
 traversalFunctionColumn x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "column"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalFunctionToken :: Phantoms.TTerm Gremlin.TraversalToken -> Phantoms.TTerm Gremlin.TraversalFunction
+traversalFunctionToken :: Phantoms.TypedTerm Gremlin.TraversalToken -> Phantoms.TypedTerm Gremlin.TraversalFunction
 traversalFunctionToken x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "token"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMergeArgumentAndGenericLiteralMapNullableArgument :: Phantoms.TTerm Gremlin.TraversalMergeArgument -> Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgument -> Phantoms.TTerm (Maybe Gremlin.TraversalCardinality) -> Phantoms.TTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument
+traversalMergeArgumentAndGenericLiteralMapNullableArgument :: Phantoms.TypedTerm Gremlin.TraversalMergeArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgument -> Phantoms.TypedTerm (Maybe Gremlin.TraversalCardinality) -> Phantoms.TypedTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument
 traversalMergeArgumentAndGenericLiteralMapNullableArgument merge map cardinality =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "merge"),
-          Core.fieldTerm = (Phantoms.unTTerm merge)},
+          Core.fieldTerm = (Phantoms.unTypedTerm merge)},
         Core.Field {
           Core.fieldName = (Core.Name "map"),
-          Core.fieldTerm = (Phantoms.unTTerm map)},
+          Core.fieldTerm = (Phantoms.unTypedTerm map)},
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
-          Core.fieldTerm = (Phantoms.unTTerm cardinality)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm cardinality)}]}))
 
-traversalMergeArgumentAndGenericLiteralMapNullableArgumentCardinality :: Phantoms.TTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument -> Phantoms.TTerm (Maybe Gremlin.TraversalCardinality)
+traversalMergeArgumentAndGenericLiteralMapNullableArgumentCardinality :: Phantoms.TypedTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument -> Phantoms.TypedTerm (Maybe Gremlin.TraversalCardinality)
 traversalMergeArgumentAndGenericLiteralMapNullableArgumentCardinality x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument"),
         Core.projectionFieldName = (Core.Name "cardinality")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-traversalMergeArgumentAndGenericLiteralMapNullableArgumentMap :: Phantoms.TTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument -> Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgument
+traversalMergeArgumentAndGenericLiteralMapNullableArgumentMap :: Phantoms.TypedTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgument
 traversalMergeArgumentAndGenericLiteralMapNullableArgumentMap x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument"),
         Core.projectionFieldName = (Core.Name "map")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-traversalMergeArgumentAndGenericLiteralMapNullableArgumentMerge :: Phantoms.TTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument -> Phantoms.TTerm Gremlin.TraversalMergeArgument
+traversalMergeArgumentAndGenericLiteralMapNullableArgumentMerge :: Phantoms.TypedTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument -> Phantoms.TypedTerm Gremlin.TraversalMergeArgument
 traversalMergeArgumentAndGenericLiteralMapNullableArgumentMerge x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument"),
         Core.projectionFieldName = (Core.Name "merge")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-traversalMergeArgumentAndGenericLiteralMapNullableArgumentWithCardinality :: Phantoms.TTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument -> Phantoms.TTerm (Maybe Gremlin.TraversalCardinality) -> Phantoms.TTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument
+traversalMergeArgumentAndGenericLiteralMapNullableArgumentWithCardinality :: Phantoms.TypedTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument -> Phantoms.TypedTerm (Maybe Gremlin.TraversalCardinality) -> Phantoms.TypedTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument
 traversalMergeArgumentAndGenericLiteralMapNullableArgumentWithCardinality original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument"),
       Core.recordFields = [
         Core.Field {
@@ -4050,21 +4050,21 @@ traversalMergeArgumentAndGenericLiteralMapNullableArgumentWithCardinality origin
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument"),
               Core.projectionFieldName = (Core.Name "merge")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "map"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument"),
               Core.projectionFieldName = (Core.Name "map")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-traversalMergeArgumentAndGenericLiteralMapNullableArgumentWithMap :: Phantoms.TTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument -> Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgument -> Phantoms.TTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument
+traversalMergeArgumentAndGenericLiteralMapNullableArgumentWithMap :: Phantoms.TypedTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument -> Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgument -> Phantoms.TypedTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument
 traversalMergeArgumentAndGenericLiteralMapNullableArgumentWithMap original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument"),
       Core.recordFields = [
         Core.Field {
@@ -4073,88 +4073,88 @@ traversalMergeArgumentAndGenericLiteralMapNullableArgumentWithMap original newVa
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument"),
               Core.projectionFieldName = (Core.Name "merge")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "map"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument"),
               Core.projectionFieldName = (Core.Name "cardinality")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-traversalMergeArgumentAndGenericLiteralMapNullableArgumentWithMerge :: Phantoms.TTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument -> Phantoms.TTerm Gremlin.TraversalMergeArgument -> Phantoms.TTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument
+traversalMergeArgumentAndGenericLiteralMapNullableArgumentWithMerge :: Phantoms.TypedTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument -> Phantoms.TypedTerm Gremlin.TraversalMergeArgument -> Phantoms.TypedTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument
 traversalMergeArgumentAndGenericLiteralMapNullableArgumentWithMerge original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "merge"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "map"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument"),
               Core.projectionFieldName = (Core.Name "map")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument"),
               Core.projectionFieldName = (Core.Name "cardinality")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-traversalMergeArgumentAndNestedTraversal :: Phantoms.TTerm Gremlin.TraversalMergeArgument -> Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalMergeArgumentAndNestedTraversal
+traversalMergeArgumentAndNestedTraversal :: Phantoms.TypedTerm Gremlin.TraversalMergeArgument -> Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalMergeArgumentAndNestedTraversal
 traversalMergeArgumentAndNestedTraversal merge traversal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndNestedTraversal"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "merge"),
-          Core.fieldTerm = (Phantoms.unTTerm merge)},
+          Core.fieldTerm = (Phantoms.unTypedTerm merge)},
         Core.Field {
           Core.fieldName = (Core.Name "traversal"),
-          Core.fieldTerm = (Phantoms.unTTerm traversal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm traversal)}]}))
 
-traversalMergeArgumentAndNestedTraversalMerge :: Phantoms.TTerm Gremlin.TraversalMergeArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.TraversalMergeArgument
+traversalMergeArgumentAndNestedTraversalMerge :: Phantoms.TypedTerm Gremlin.TraversalMergeArgumentAndNestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalMergeArgument
 traversalMergeArgumentAndNestedTraversalMerge x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndNestedTraversal"),
         Core.projectionFieldName = (Core.Name "merge")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-traversalMergeArgumentAndNestedTraversalTraversal :: Phantoms.TTerm Gremlin.TraversalMergeArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.NestedTraversal
+traversalMergeArgumentAndNestedTraversalTraversal :: Phantoms.TypedTerm Gremlin.TraversalMergeArgumentAndNestedTraversal -> Phantoms.TypedTerm Gremlin.NestedTraversal
 traversalMergeArgumentAndNestedTraversalTraversal x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndNestedTraversal"),
         Core.projectionFieldName = (Core.Name "traversal")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-traversalMergeArgumentAndNestedTraversalWithMerge :: Phantoms.TTerm Gremlin.TraversalMergeArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.TraversalMergeArgument -> Phantoms.TTerm Gremlin.TraversalMergeArgumentAndNestedTraversal
+traversalMergeArgumentAndNestedTraversalWithMerge :: Phantoms.TypedTerm Gremlin.TraversalMergeArgumentAndNestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalMergeArgument -> Phantoms.TypedTerm Gremlin.TraversalMergeArgumentAndNestedTraversal
 traversalMergeArgumentAndNestedTraversalWithMerge original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndNestedTraversal"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "merge"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "traversal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndNestedTraversal"),
               Core.projectionFieldName = (Core.Name "traversal")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-traversalMergeArgumentAndNestedTraversalWithTraversal :: Phantoms.TTerm Gremlin.TraversalMergeArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalMergeArgumentAndNestedTraversal
+traversalMergeArgumentAndNestedTraversalWithTraversal :: Phantoms.TypedTerm Gremlin.TraversalMergeArgumentAndNestedTraversal -> Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalMergeArgumentAndNestedTraversal
 traversalMergeArgumentAndNestedTraversalWithTraversal original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndNestedTraversal"),
       Core.recordFields = [
         Core.Field {
@@ -4163,1330 +4163,1330 @@ traversalMergeArgumentAndNestedTraversalWithTraversal original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndNestedTraversal"),
               Core.projectionFieldName = (Core.Name "merge")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "traversal"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-traversalMergeArgumentValue :: Phantoms.TTerm Gremlin.TraversalMerge -> Phantoms.TTerm Gremlin.TraversalMergeArgument
+traversalMergeArgumentValue :: Phantoms.TypedTerm Gremlin.TraversalMerge -> Phantoms.TypedTerm Gremlin.TraversalMergeArgument
 traversalMergeArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMergeArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalMergeArgument
+traversalMergeArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.TraversalMergeArgument
 traversalMergeArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMergeInV :: Phantoms.TTerm Gremlin.TraversalMerge
+traversalMergeInV :: Phantoms.TypedTerm Gremlin.TraversalMerge
 traversalMergeInV =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMerge"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inV"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMergeOnCreate :: Phantoms.TTerm Gremlin.TraversalMerge
+traversalMergeOnCreate :: Phantoms.TypedTerm Gremlin.TraversalMerge
 traversalMergeOnCreate =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMerge"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "onCreate"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMergeOnMatch :: Phantoms.TTerm Gremlin.TraversalMerge
+traversalMergeOnMatch :: Phantoms.TypedTerm Gremlin.TraversalMerge
 traversalMergeOnMatch =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMerge"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "onMatch"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMergeOutV :: Phantoms.TTerm Gremlin.TraversalMerge
+traversalMergeOutV :: Phantoms.TypedTerm Gremlin.TraversalMerge
 traversalMergeOutV =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMerge"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "outV"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodAddE :: Phantoms.TTerm Gremlin.StringArgumentOrNestedTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodAddE :: Phantoms.TypedTerm Gremlin.StringArgumentOrNestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodAddE x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "addE"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodAddV :: Phantoms.TTerm (Maybe Gremlin.StringArgumentOrNestedTraversal) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodAddV :: Phantoms.TypedTerm (Maybe Gremlin.StringArgumentOrNestedTraversal) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodAddV x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "addV"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodAggregate :: Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndStringArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodAggregate :: Phantoms.TypedTerm Gremlin.OptionalTraversalScopeArgumentAndStringArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodAggregate x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "aggregate"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodAll :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodAll :: Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodAll x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "all"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodAnd :: Phantoms.TTerm [Gremlin.NestedTraversal] -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodAnd :: Phantoms.TypedTerm [Gremlin.NestedTraversal] -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodAnd x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "and"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodAny :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodAny :: Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodAny x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "any"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodAs :: Phantoms.TTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodAs :: Phantoms.TypedTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodAs x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "as"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodAsDate :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodAsDate :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodAsDate =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "asDate"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodAsString :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodAsString :: Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodAsString x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "asString"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodBarrier :: Phantoms.TTerm (Maybe Gremlin.TraversalSackMethodArgumentOrIntegerArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodBarrier :: Phantoms.TypedTerm (Maybe Gremlin.TraversalSackMethodArgumentOrIntegerArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodBarrier x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "barrier"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodBoth :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodBoth :: Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodBoth x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "both"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodBothE :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodBothE :: Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodBothE x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bothE"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodBothV :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodBothV :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodBothV =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bothV"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodBranch :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodBranch :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodBranch x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "branch"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodBy :: Phantoms.TTerm Gremlin.ByArgs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodBy :: Phantoms.TypedTerm Gremlin.ByArgs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodBy x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "by"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodCall :: Phantoms.TTerm Gremlin.ServiceCall -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodCall :: Phantoms.TypedTerm Gremlin.ServiceCall -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodCall x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "call"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodCap :: Phantoms.TTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodCap :: Phantoms.TypedTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodCap x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cap"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodChoose :: Phantoms.TTerm Gremlin.ChooseArgs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodChoose :: Phantoms.TypedTerm Gremlin.ChooseArgs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodChoose x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "choose"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodCoalesce :: Phantoms.TTerm [Gremlin.NestedTraversal] -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodCoalesce :: Phantoms.TypedTerm [Gremlin.NestedTraversal] -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodCoalesce x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "coalesce"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodCoin :: Phantoms.TTerm Gremlin.FloatArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodCoin :: Phantoms.TypedTerm Gremlin.FloatArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodCoin x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "coin"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodCombine :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodCombine :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodCombine x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "combine"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodConcat :: Phantoms.TTerm Gremlin.ConcatArgs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodConcat :: Phantoms.TypedTerm Gremlin.ConcatArgs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodConcat x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "concat"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodConjoin :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodConjoin :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodConjoin x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "conjoin"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodConnectedComponent :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodConnectedComponent :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodConnectedComponent =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "connectedComponent"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodConstant :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodConstant :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodConstant x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "constant"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodCount :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodCount :: Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodCount x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "count"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodCyclicPath :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodCyclicPath :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodCyclicPath =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cyclicPath"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodDateAdd :: Phantoms.TTerm Gremlin.DateAddArgs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodDateAdd :: Phantoms.TypedTerm Gremlin.DateAddArgs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodDateAdd x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dateAdd"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodDateDiff :: Phantoms.TTerm Gremlin.DateDiffArgs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodDateDiff :: Phantoms.TypedTerm Gremlin.DateDiffArgs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodDateDiff x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dateDiff"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodDedup :: Phantoms.TTerm Gremlin.DedupArgs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodDedup :: Phantoms.TypedTerm Gremlin.DedupArgs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodDedup x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dedup"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodDifference :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodDifference :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodDifference x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "difference"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodDisjunct :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodDisjunct :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodDisjunct x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "disjunct"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodDrop :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodDrop :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodDrop =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "drop"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodE :: Phantoms.TTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodE :: Phantoms.TypedTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodE x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "e"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodElement :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodElement :: Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodElement x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "element"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodElementMap :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodElementMap :: Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodElementMap x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "elementMap"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodEmit :: Phantoms.TTerm (Maybe Gremlin.PredicateOrTraversal) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodEmit :: Phantoms.TypedTerm (Maybe Gremlin.PredicateOrTraversal) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodEmit x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "emit"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodFail :: Phantoms.TTerm (Maybe Gremlin.StringArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodFail :: Phantoms.TypedTerm (Maybe Gremlin.StringArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodFail x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fail"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodFilter :: Phantoms.TTerm Gremlin.PredicateOrTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodFilter :: Phantoms.TypedTerm Gremlin.PredicateOrTraversal -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodFilter x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "filter"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodFlatMap :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodFlatMap :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodFlatMap x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "flatMap"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodFold :: Phantoms.TTerm (Maybe Gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodFold :: Phantoms.TypedTerm (Maybe Gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodFold x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fold"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodFormat :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodFormat :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodFormat x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "format"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodFrom :: Phantoms.TTerm Gremlin.FromArgs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodFrom :: Phantoms.TypedTerm Gremlin.FromArgs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodFrom x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "from"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodGroup :: Phantoms.TTerm (Maybe Gremlin.StringArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodGroup :: Phantoms.TypedTerm (Maybe Gremlin.StringArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodGroup x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "group"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodGroupCount :: Phantoms.TTerm (Maybe Gremlin.StringArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodGroupCount :: Phantoms.TypedTerm (Maybe Gremlin.StringArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodGroupCount x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "groupCount"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodHas :: Phantoms.TTerm Gremlin.HasArgs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodHas :: Phantoms.TypedTerm Gremlin.HasArgs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodHas x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "has"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodHasId :: Phantoms.TTerm Gremlin.GenericLiteralArgumentAndTraversalPredicate -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodHasId :: Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndTraversalPredicate -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodHasId x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hasId"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodHasKey :: Phantoms.TTerm Gremlin.TraversalPredicateOrStringLiteralVarargs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodHasKey :: Phantoms.TypedTerm Gremlin.TraversalPredicateOrStringLiteralVarargs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodHasKey x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hasKey"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodHasLabel :: Phantoms.TTerm Gremlin.TraversalPredicateOrStringLiteralVarargs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodHasLabel :: Phantoms.TypedTerm Gremlin.TraversalPredicateOrStringLiteralVarargs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodHasLabel x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hasLabel"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodHasNot :: Phantoms.TTerm Gremlin.StringNullableArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodHasNot :: Phantoms.TypedTerm Gremlin.StringNullableArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodHasNot x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hasNot"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodHasValue :: Phantoms.TTerm Gremlin.TraversalPredicateOrGenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodHasValue :: Phantoms.TypedTerm Gremlin.TraversalPredicateOrGenericLiteralArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodHasValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hasValue"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodId :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodId :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodId =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "id"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodIdentity :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodIdentity :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodIdentity =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "identity"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodIn :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodIn :: Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodIn x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "in"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodInE :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodInE :: Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodInE x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inE"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodInV :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodInV :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodInV =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inV"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodIndex :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodIndex :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodIndex =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "index"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodInject :: Phantoms.TTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodInject :: Phantoms.TypedTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodInject x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inject"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodIntersect :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodIntersect :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodIntersect x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "intersect"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodIs :: Phantoms.TTerm Gremlin.TraversalPredicateOrGenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodIs :: Phantoms.TypedTerm Gremlin.TraversalPredicateOrGenericLiteralArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodIs x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "is"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodKey :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodKey :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodKey =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "key"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodLTrim :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodLTrim :: Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodLTrim x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lTrim"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodLabel :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodLabel :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodLabel =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "label"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodLength :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodLength :: Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodLength x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "length"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodLimit :: Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodLimit :: Phantoms.TypedTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodLimit x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "limit"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodLocal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodLocal :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodLocal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "local"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodLoops :: Phantoms.TTerm (Maybe Gremlin.StringArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodLoops :: Phantoms.TypedTerm (Maybe Gremlin.StringArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodLoops x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "loops"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodMap :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodMap :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodMap x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodMatch :: Phantoms.TTerm [Gremlin.NestedTraversal] -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodMatch :: Phantoms.TypedTerm [Gremlin.NestedTraversal] -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodMatch x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "match"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodMath :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodMath :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodMath x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "math"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodMax :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodMax :: Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodMax x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "max"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodMean :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodMean :: Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodMean x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mean"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodMerge :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodMerge :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodMerge x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "merge"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodMergeE :: Phantoms.TTerm (Maybe Gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodMergeE :: Phantoms.TypedTerm (Maybe Gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodMergeE x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mergeE"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodMergeV :: Phantoms.TTerm (Maybe Gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodMergeV :: Phantoms.TypedTerm (Maybe Gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodMergeV x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mergeV"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodMin :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodMin :: Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodMin x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "min"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodNone :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodNone :: Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodNone x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "none"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodNot :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodNot :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodNot x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "not"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodOption :: Phantoms.TTerm Gremlin.OptionArgs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodOption :: Phantoms.TypedTerm Gremlin.OptionArgs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodOption x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "option"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodOptional :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodOptional :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodOptional x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "optional"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodOr :: Phantoms.TTerm [Gremlin.NestedTraversal] -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodOr :: Phantoms.TypedTerm [Gremlin.NestedTraversal] -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodOr x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "or"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodOrder :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodOrder :: Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodOrder x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "order"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodOtherV :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodOtherV :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodOtherV =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "otherV"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodOut :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodOut :: Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodOut x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "out"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodOutE :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodOutE :: Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodOutE x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "outE"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodOutV :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodOutV :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodOutV =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "outV"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodPageRank :: Phantoms.TTerm (Maybe Gremlin.FloatArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodPageRank :: Phantoms.TypedTerm (Maybe Gremlin.FloatArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodPageRank x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pageRank"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodPath :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodPath :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodPath =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "path"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodPeerPressure :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodPeerPressure :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodPeerPressure =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "peerPressure"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodProduct :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodProduct :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodProduct x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "product"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodProfile :: Phantoms.TTerm (Maybe Gremlin.StringArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodProfile :: Phantoms.TypedTerm (Maybe Gremlin.StringArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodProfile x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "profile"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodProject :: Phantoms.TTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodProject :: Phantoms.TypedTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodProject x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "project"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodProperties :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodProperties :: Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodProperties x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "properties"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodProperty :: Phantoms.TTerm Gremlin.PropertyArgs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodProperty :: Phantoms.TypedTerm Gremlin.PropertyArgs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodProperty x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "property"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodPropertyMap :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodPropertyMap :: Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodPropertyMap x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "propertyMap"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodRTrim :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodRTrim :: Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodRTrim x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rTrim"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodRange :: Phantoms.TTerm Gremlin.RangeArgs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodRange :: Phantoms.TypedTerm Gremlin.RangeArgs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodRange x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "range"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodRead :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodRead :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodRead =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "read"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodRepeat :: Phantoms.TTerm Gremlin.OptionalStringArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodRepeat :: Phantoms.TypedTerm Gremlin.OptionalStringArgumentAndNestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodRepeat x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "repeat"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodReplace :: Phantoms.TTerm Gremlin.ReplaceArgs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodReplace :: Phantoms.TypedTerm Gremlin.ReplaceArgs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodReplace x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "replace"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodReverse :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodReverse :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodReverse =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "reverse"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodSack :: Phantoms.TTerm (Maybe Gremlin.TraversalBiFunctionArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodSack :: Phantoms.TypedTerm (Maybe Gremlin.TraversalBiFunctionArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodSack x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sack"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodSample :: Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodSample :: Phantoms.TypedTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodSample x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sample"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodSelect :: Phantoms.TTerm Gremlin.SelectArgs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodSelect :: Phantoms.TypedTerm Gremlin.SelectArgs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodSelect x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "select"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodShortestPath :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodShortestPath :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodShortestPath =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "shortestPath"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodSideEffect :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodSideEffect :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodSideEffect x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sideEffect"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodSimplePath :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodSimplePath :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodSimplePath =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simplePath"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodSkip :: Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodSkip :: Phantoms.TypedTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodSkip x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "skip"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodSplit :: Phantoms.TTerm Gremlin.SplitArgs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodSplit :: Phantoms.TypedTerm Gremlin.SplitArgs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodSplit x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "split"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodStore :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodStore :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodStore x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "store"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodSubgraph :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodSubgraph :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodSubgraph x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "subgraph"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodSubstring :: Phantoms.TTerm Gremlin.SubstringArgs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodSubstring :: Phantoms.TypedTerm Gremlin.SubstringArgs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodSubstring x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "substring"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodSum :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodSum :: Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodSum x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sum"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodTail :: Phantoms.TTerm (Maybe Gremlin.TailArgs) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodTail :: Phantoms.TypedTerm (Maybe Gremlin.TailArgs) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodTail x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tail"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodTimes :: Phantoms.TTerm Gremlin.IntegerArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodTimes :: Phantoms.TypedTerm Gremlin.IntegerArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodTimes x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "times"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodTo :: Phantoms.TTerm Gremlin.ToArgs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodTo :: Phantoms.TypedTerm Gremlin.ToArgs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodTo x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "to"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodToE :: Phantoms.TTerm Gremlin.DirectionAndVarargs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodToE :: Phantoms.TypedTerm Gremlin.DirectionAndVarargs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodToE x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "toE"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodToLower :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodToLower :: Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodToLower x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "toLower"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodToUpper :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodToUpper :: Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodToUpper x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "toUpper"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodToV :: Phantoms.TTerm Gremlin.TraversalDirectionArgument -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodToV :: Phantoms.TypedTerm Gremlin.TraversalDirectionArgument -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodToV x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "toV"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodTree :: Phantoms.TTerm (Maybe Gremlin.StringArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodTree :: Phantoms.TypedTerm (Maybe Gremlin.StringArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodTree x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tree"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodTrim :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodTrim :: Phantoms.TypedTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodTrim x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "trim"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodUnfold :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodUnfold :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodUnfold =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unfold"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodUnion :: Phantoms.TTerm [Gremlin.NestedTraversal] -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodUnion :: Phantoms.TypedTerm [Gremlin.NestedTraversal] -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodUnion x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "union"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodUntil :: Phantoms.TTerm Gremlin.PredicateOrTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodUntil :: Phantoms.TypedTerm Gremlin.PredicateOrTraversal -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodUntil x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "until"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodV :: Phantoms.TTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodV :: Phantoms.TypedTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodV x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "v"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodValue :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodValue :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodValue =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalMethodValueMap :: Phantoms.TTerm Gremlin.ValueMapArgs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodValueMap :: Phantoms.TypedTerm Gremlin.ValueMapArgs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodValueMap x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "valueMap"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodValues :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodValues :: Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodValues x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "values"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodWhere :: Phantoms.TTerm Gremlin.WhereArgs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodWhere :: Phantoms.TypedTerm Gremlin.WhereArgs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodWhere x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "where"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodWith :: Phantoms.TTerm Gremlin.WithArgs -> Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodWith :: Phantoms.TypedTerm Gremlin.WithArgs -> Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodWith x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "with"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalMethodWrite :: Phantoms.TTerm Gremlin.TraversalMethod
+traversalMethodWrite :: Phantoms.TypedTerm Gremlin.TraversalMethod
 traversalMethodWrite =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "write"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalOperatorAddAll :: Phantoms.TTerm Gremlin.TraversalOperator
+traversalOperatorAddAll :: Phantoms.TypedTerm Gremlin.TraversalOperator
 traversalOperatorAddAll =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "addAll"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalOperatorAnd :: Phantoms.TTerm Gremlin.TraversalOperator
+traversalOperatorAnd :: Phantoms.TypedTerm Gremlin.TraversalOperator
 traversalOperatorAnd =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "and"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalOperatorAssign :: Phantoms.TTerm Gremlin.TraversalOperator
+traversalOperatorAssign :: Phantoms.TypedTerm Gremlin.TraversalOperator
 traversalOperatorAssign =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "assign"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalOperatorDiv :: Phantoms.TTerm Gremlin.TraversalOperator
+traversalOperatorDiv :: Phantoms.TypedTerm Gremlin.TraversalOperator
 traversalOperatorDiv =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "div"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalOperatorMax :: Phantoms.TTerm Gremlin.TraversalOperator
+traversalOperatorMax :: Phantoms.TypedTerm Gremlin.TraversalOperator
 traversalOperatorMax =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "max"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalOperatorMin :: Phantoms.TTerm Gremlin.TraversalOperator
+traversalOperatorMin :: Phantoms.TypedTerm Gremlin.TraversalOperator
 traversalOperatorMin =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "min"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalOperatorMinus :: Phantoms.TTerm Gremlin.TraversalOperator
+traversalOperatorMinus :: Phantoms.TypedTerm Gremlin.TraversalOperator
 traversalOperatorMinus =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "minus"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalOperatorMult :: Phantoms.TTerm Gremlin.TraversalOperator
+traversalOperatorMult :: Phantoms.TypedTerm Gremlin.TraversalOperator
 traversalOperatorMult =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mult"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalOperatorOr :: Phantoms.TTerm Gremlin.TraversalOperator
+traversalOperatorOr :: Phantoms.TypedTerm Gremlin.TraversalOperator
 traversalOperatorOr =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "or"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalOperatorSum :: Phantoms.TTerm Gremlin.TraversalOperator
+traversalOperatorSum :: Phantoms.TypedTerm Gremlin.TraversalOperator
 traversalOperatorSum =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sum"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalOperatorSumLong :: Phantoms.TTerm Gremlin.TraversalOperator
+traversalOperatorSumLong :: Phantoms.TypedTerm Gremlin.TraversalOperator
 traversalOperatorSumLong =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sumLong"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalOrderArgumentValue :: Phantoms.TTerm Gremlin.TraversalOrder -> Phantoms.TTerm Gremlin.TraversalOrderArgument
+traversalOrderArgumentValue :: Phantoms.TypedTerm Gremlin.TraversalOrder -> Phantoms.TypedTerm Gremlin.TraversalOrderArgument
 traversalOrderArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOrderArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalOrderArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalOrderArgument
+traversalOrderArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.TraversalOrderArgument
 traversalOrderArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOrderArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalOrderAsc :: Phantoms.TTerm Gremlin.TraversalOrder
+traversalOrderAsc :: Phantoms.TypedTerm Gremlin.TraversalOrder
 traversalOrderAsc =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOrder"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "asc"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalOrderDecr :: Phantoms.TTerm Gremlin.TraversalOrder
+traversalOrderDecr :: Phantoms.TypedTerm Gremlin.TraversalOrder
 traversalOrderDecr =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOrder"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "decr"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalOrderDesc :: Phantoms.TTerm Gremlin.TraversalOrder
+traversalOrderDesc :: Phantoms.TypedTerm Gremlin.TraversalOrder
 traversalOrderDesc =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOrder"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "desc"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalOrderIncr :: Phantoms.TTerm Gremlin.TraversalOrder
+traversalOrderIncr :: Phantoms.TypedTerm Gremlin.TraversalOrder
 traversalOrderIncr =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOrder"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "incr"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalOrderShuffle :: Phantoms.TTerm Gremlin.TraversalOrder
+traversalOrderShuffle :: Phantoms.TypedTerm Gremlin.TraversalOrder
 traversalOrderShuffle =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOrder"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "shuffle"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalPickAny :: Phantoms.TTerm Gremlin.TraversalPick
+traversalPickAny :: Phantoms.TypedTerm Gremlin.TraversalPick
 traversalPickAny =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPick"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "any"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalPickNone :: Phantoms.TTerm Gremlin.TraversalPick
+traversalPickNone :: Phantoms.TypedTerm Gremlin.TraversalPick
 traversalPickNone =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPick"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "none"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalPopAll :: Phantoms.TTerm Gremlin.TraversalPop
+traversalPopAll :: Phantoms.TypedTerm Gremlin.TraversalPop
 traversalPopAll =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPop"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "all"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalPopArgumentAndNestedTraversal :: Phantoms.TTerm Gremlin.TraversalPopArgument -> Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalPopArgumentAndNestedTraversal
+traversalPopArgumentAndNestedTraversal :: Phantoms.TypedTerm Gremlin.TraversalPopArgument -> Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalPopArgumentAndNestedTraversal
 traversalPopArgumentAndNestedTraversal pop traversal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPopArgumentAndNestedTraversal"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "pop"),
-          Core.fieldTerm = (Phantoms.unTTerm pop)},
+          Core.fieldTerm = (Phantoms.unTypedTerm pop)},
         Core.Field {
           Core.fieldName = (Core.Name "traversal"),
-          Core.fieldTerm = (Phantoms.unTTerm traversal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm traversal)}]}))
 
-traversalPopArgumentAndNestedTraversalPop :: Phantoms.TTerm Gremlin.TraversalPopArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.TraversalPopArgument
+traversalPopArgumentAndNestedTraversalPop :: Phantoms.TypedTerm Gremlin.TraversalPopArgumentAndNestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalPopArgument
 traversalPopArgumentAndNestedTraversalPop x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPopArgumentAndNestedTraversal"),
         Core.projectionFieldName = (Core.Name "pop")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-traversalPopArgumentAndNestedTraversalTraversal :: Phantoms.TTerm Gremlin.TraversalPopArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.NestedTraversal
+traversalPopArgumentAndNestedTraversalTraversal :: Phantoms.TypedTerm Gremlin.TraversalPopArgumentAndNestedTraversal -> Phantoms.TypedTerm Gremlin.NestedTraversal
 traversalPopArgumentAndNestedTraversalTraversal x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPopArgumentAndNestedTraversal"),
         Core.projectionFieldName = (Core.Name "traversal")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-traversalPopArgumentAndNestedTraversalWithPop :: Phantoms.TTerm Gremlin.TraversalPopArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.TraversalPopArgument -> Phantoms.TTerm Gremlin.TraversalPopArgumentAndNestedTraversal
+traversalPopArgumentAndNestedTraversalWithPop :: Phantoms.TypedTerm Gremlin.TraversalPopArgumentAndNestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalPopArgument -> Phantoms.TypedTerm Gremlin.TraversalPopArgumentAndNestedTraversal
 traversalPopArgumentAndNestedTraversalWithPop original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPopArgumentAndNestedTraversal"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "pop"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "traversal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPopArgumentAndNestedTraversal"),
               Core.projectionFieldName = (Core.Name "traversal")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-traversalPopArgumentAndNestedTraversalWithTraversal :: Phantoms.TTerm Gremlin.TraversalPopArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalPopArgumentAndNestedTraversal
+traversalPopArgumentAndNestedTraversalWithTraversal :: Phantoms.TypedTerm Gremlin.TraversalPopArgumentAndNestedTraversal -> Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalPopArgumentAndNestedTraversal
 traversalPopArgumentAndNestedTraversalWithTraversal original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPopArgumentAndNestedTraversal"),
       Core.recordFields = [
         Core.Field {
@@ -5495,106 +5495,106 @@ traversalPopArgumentAndNestedTraversalWithTraversal original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPopArgumentAndNestedTraversal"),
               Core.projectionFieldName = (Core.Name "pop")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "traversal"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-traversalPopArgumentValue :: Phantoms.TTerm Gremlin.TraversalPop -> Phantoms.TTerm Gremlin.TraversalPopArgument
+traversalPopArgumentValue :: Phantoms.TypedTerm Gremlin.TraversalPop -> Phantoms.TypedTerm Gremlin.TraversalPopArgument
 traversalPopArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPopArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPopArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalPopArgument
+traversalPopArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.TraversalPopArgument
 traversalPopArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPopArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPopFirst :: Phantoms.TTerm Gremlin.TraversalPop
+traversalPopFirst :: Phantoms.TypedTerm Gremlin.TraversalPop
 traversalPopFirst =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPop"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "first"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalPopLast :: Phantoms.TTerm Gremlin.TraversalPop
+traversalPopLast :: Phantoms.TypedTerm Gremlin.TraversalPop
 traversalPopLast =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPop"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "last"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalPopMixed :: Phantoms.TTerm Gremlin.TraversalPop
+traversalPopMixed :: Phantoms.TypedTerm Gremlin.TraversalPop
 traversalPopMixed =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPop"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mixed"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalPredicateAnd :: Phantoms.TTerm Gremlin.TwoTraversalPredicates -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateAnd :: Phantoms.TypedTerm Gremlin.TwoTraversalPredicates -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateAnd x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "and"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateAndNestedTraversal :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalPredicateAndNestedTraversal
+traversalPredicateAndNestedTraversal :: Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalPredicateAndNestedTraversal
 traversalPredicateAndNestedTraversal predicate traversal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicateAndNestedTraversal"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
-          Core.fieldTerm = (Phantoms.unTTerm predicate)},
+          Core.fieldTerm = (Phantoms.unTypedTerm predicate)},
         Core.Field {
           Core.fieldName = (Core.Name "traversal"),
-          Core.fieldTerm = (Phantoms.unTTerm traversal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm traversal)}]}))
 
-traversalPredicateAndNestedTraversalPredicate :: Phantoms.TTerm Gremlin.TraversalPredicateAndNestedTraversal -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateAndNestedTraversalPredicate :: Phantoms.TypedTerm Gremlin.TraversalPredicateAndNestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateAndNestedTraversalPredicate x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicateAndNestedTraversal"),
         Core.projectionFieldName = (Core.Name "predicate")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-traversalPredicateAndNestedTraversalTraversal :: Phantoms.TTerm Gremlin.TraversalPredicateAndNestedTraversal -> Phantoms.TTerm Gremlin.NestedTraversal
+traversalPredicateAndNestedTraversalTraversal :: Phantoms.TypedTerm Gremlin.TraversalPredicateAndNestedTraversal -> Phantoms.TypedTerm Gremlin.NestedTraversal
 traversalPredicateAndNestedTraversalTraversal x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicateAndNestedTraversal"),
         Core.projectionFieldName = (Core.Name "traversal")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-traversalPredicateAndNestedTraversalWithPredicate :: Phantoms.TTerm Gremlin.TraversalPredicateAndNestedTraversal -> Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.TraversalPredicateAndNestedTraversal
+traversalPredicateAndNestedTraversalWithPredicate :: Phantoms.TypedTerm Gremlin.TraversalPredicateAndNestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.TraversalPredicateAndNestedTraversal
 traversalPredicateAndNestedTraversalWithPredicate original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicateAndNestedTraversal"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "traversal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicateAndNestedTraversal"),
               Core.projectionFieldName = (Core.Name "traversal")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-traversalPredicateAndNestedTraversalWithTraversal :: Phantoms.TTerm Gremlin.TraversalPredicateAndNestedTraversal -> Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalPredicateAndNestedTraversal
+traversalPredicateAndNestedTraversalWithTraversal :: Phantoms.TypedTerm Gremlin.TraversalPredicateAndNestedTraversal -> Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalPredicateAndNestedTraversal
 traversalPredicateAndNestedTraversalWithTraversal original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicateAndNestedTraversal"),
       Core.recordFields = [
         Core.Field {
@@ -5603,344 +5603,344 @@ traversalPredicateAndNestedTraversalWithTraversal original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicateAndNestedTraversal"),
               Core.projectionFieldName = (Core.Name "predicate")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "traversal"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-traversalPredicateBetween :: Phantoms.TTerm Gremlin.RangeArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateBetween :: Phantoms.TypedTerm Gremlin.RangeArgument -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateBetween x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "between"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateContaining :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateContaining :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateContaining x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "containing"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateEndingWith :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateEndingWith :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateEndingWith x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "endingWith"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateEq :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateEq :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateEq x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "eq"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateGt :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateGt :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateGt x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "gt"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateGte :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateGte :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateGte x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "gte"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateInside :: Phantoms.TTerm Gremlin.RangeArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateInside :: Phantoms.TypedTerm Gremlin.RangeArgument -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateInside x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inside"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateLt :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateLt :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateLt x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lt"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateLte :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateLte :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateLte x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lte"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateNegate :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateNegate :: Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateNegate x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "negate"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateNeq :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateNeq :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateNeq x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "neq"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateNot :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateNot :: Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateNot x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "not"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateNotContaining :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateNotContaining :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateNotContaining x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notContaining"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateNotEndingWith :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateNotEndingWith :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateNotEndingWith x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notEndingWith"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateNotRegex :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateNotRegex :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateNotRegex x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notRegex"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateNotStartingWith :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateNotStartingWith :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateNotStartingWith x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notStartingWith"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateOr :: Phantoms.TTerm Gremlin.TwoTraversalPredicates -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateOr :: Phantoms.TypedTerm Gremlin.TwoTraversalPredicates -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateOr x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "or"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateOrGenericLiteralArgumentLiteral :: Phantoms.TTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TTerm Gremlin.TraversalPredicateOrGenericLiteralArgument
+traversalPredicateOrGenericLiteralArgumentLiteral :: Phantoms.TypedTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TypedTerm Gremlin.TraversalPredicateOrGenericLiteralArgument
 traversalPredicateOrGenericLiteralArgumentLiteral x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicateOrGenericLiteralArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateOrGenericLiteralArgumentPredicate :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.TraversalPredicateOrGenericLiteralArgument
+traversalPredicateOrGenericLiteralArgumentPredicate :: Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.TraversalPredicateOrGenericLiteralArgument
 traversalPredicateOrGenericLiteralArgumentPredicate x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicateOrGenericLiteralArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predicate"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateOrStringLiteralVarargsPredicate :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.TraversalPredicateOrStringLiteralVarargs
+traversalPredicateOrStringLiteralVarargsPredicate :: Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.TraversalPredicateOrStringLiteralVarargs
 traversalPredicateOrStringLiteralVarargsPredicate x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicateOrStringLiteralVarargs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predicate"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateOrStringLiteralVarargsString :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalPredicateOrStringLiteralVarargs
+traversalPredicateOrStringLiteralVarargsString :: Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.TraversalPredicateOrStringLiteralVarargs
 traversalPredicateOrStringLiteralVarargsString x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicateOrStringLiteralVarargs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateOutside :: Phantoms.TTerm Gremlin.RangeArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateOutside :: Phantoms.TypedTerm Gremlin.RangeArgument -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateOutside x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "outside"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateRegex :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateRegex :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateRegex x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "regex"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateStartingWith :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateStartingWith :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateStartingWith x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "startingWith"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateWithin :: Phantoms.TTerm (Maybe Gremlin.GenericLiteralArgument) -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateWithin :: Phantoms.TypedTerm (Maybe Gremlin.GenericLiteralArgument) -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateWithin x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "within"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalPredicateWithout :: Phantoms.TTerm (Maybe Gremlin.GenericLiteralArgument) -> Phantoms.TTerm Gremlin.TraversalPredicate
+traversalPredicateWithout :: Phantoms.TypedTerm (Maybe Gremlin.GenericLiteralArgument) -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 traversalPredicateWithout x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "without"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalSackMethodArgumentOrIntegerArgumentConsumer :: Phantoms.TTerm Gremlin.TraversalSackMethodArgument -> Phantoms.TTerm Gremlin.TraversalSackMethodArgumentOrIntegerArgument
+traversalSackMethodArgumentOrIntegerArgumentConsumer :: Phantoms.TypedTerm Gremlin.TraversalSackMethodArgument -> Phantoms.TypedTerm Gremlin.TraversalSackMethodArgumentOrIntegerArgument
 traversalSackMethodArgumentOrIntegerArgumentConsumer x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSackMethodArgumentOrIntegerArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "consumer"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalSackMethodArgumentOrIntegerArgumentInt :: Phantoms.TTerm Gremlin.IntegerArgument -> Phantoms.TTerm Gremlin.TraversalSackMethodArgumentOrIntegerArgument
+traversalSackMethodArgumentOrIntegerArgumentInt :: Phantoms.TypedTerm Gremlin.IntegerArgument -> Phantoms.TypedTerm Gremlin.TraversalSackMethodArgumentOrIntegerArgument
 traversalSackMethodArgumentOrIntegerArgumentInt x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSackMethodArgumentOrIntegerArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalSackMethodArgumentValue :: Phantoms.TTerm Gremlin.TraversalSackMethodArgument
+traversalSackMethodArgumentValue :: Phantoms.TypedTerm Gremlin.TraversalSackMethodArgument
 traversalSackMethodArgumentValue =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSackMethodArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalSackMethodArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalSackMethodArgument
+traversalSackMethodArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.TraversalSackMethodArgument
 traversalSackMethodArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSackMethodArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalScopeArgumentValue :: Phantoms.TTerm Gremlin.TraversalScope -> Phantoms.TTerm Gremlin.TraversalScopeArgument
+traversalScopeArgumentValue :: Phantoms.TypedTerm Gremlin.TraversalScope -> Phantoms.TypedTerm Gremlin.TraversalScopeArgument
 traversalScopeArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalScopeArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalScopeArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalScopeArgument
+traversalScopeArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.TraversalScopeArgument
 traversalScopeArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalScopeArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalScopeGlobal :: Phantoms.TTerm Gremlin.TraversalScope
+traversalScopeGlobal :: Phantoms.TypedTerm Gremlin.TraversalScope
 traversalScopeGlobal =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalScope"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "global"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalScopeLocal :: Phantoms.TTerm Gremlin.TraversalScope
+traversalScopeLocal :: Phantoms.TypedTerm Gremlin.TraversalScope
 traversalScopeLocal =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalScope"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "local"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalSelfMethodDiscard :: Phantoms.TTerm Gremlin.TraversalSelfMethod
+traversalSelfMethodDiscard :: Phantoms.TypedTerm Gremlin.TraversalSelfMethod
 traversalSelfMethodDiscard =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSelfMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "discard"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalSource :: Phantoms.TTerm [Gremlin.TraversalSourceSelfMethod] -> Phantoms.TTerm Gremlin.TraversalSource
+traversalSource :: Phantoms.TypedTerm [Gremlin.TraversalSourceSelfMethod] -> Phantoms.TypedTerm Gremlin.TraversalSource
 traversalSource x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSource"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-traversalSourceQuery :: Phantoms.TTerm Gremlin.TraversalSource -> Phantoms.TTerm (Maybe Gremlin.TransactionPart) -> Phantoms.TTerm Gremlin.TraversalSourceQuery
+traversalSourceQuery :: Phantoms.TypedTerm Gremlin.TraversalSource -> Phantoms.TypedTerm (Maybe Gremlin.TransactionPart) -> Phantoms.TypedTerm Gremlin.TraversalSourceQuery
 traversalSourceQuery source transactionPart =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceQuery"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "source"),
-          Core.fieldTerm = (Phantoms.unTTerm source)},
+          Core.fieldTerm = (Phantoms.unTypedTerm source)},
         Core.Field {
           Core.fieldName = (Core.Name "transactionPart"),
-          Core.fieldTerm = (Phantoms.unTTerm transactionPart)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm transactionPart)}]}))
 
-traversalSourceQuerySource :: Phantoms.TTerm Gremlin.TraversalSourceQuery -> Phantoms.TTerm Gremlin.TraversalSource
+traversalSourceQuerySource :: Phantoms.TypedTerm Gremlin.TraversalSourceQuery -> Phantoms.TypedTerm Gremlin.TraversalSource
 traversalSourceQuerySource x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceQuery"),
         Core.projectionFieldName = (Core.Name "source")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-traversalSourceQueryTransactionPart :: Phantoms.TTerm Gremlin.TraversalSourceQuery -> Phantoms.TTerm (Maybe Gremlin.TransactionPart)
+traversalSourceQueryTransactionPart :: Phantoms.TypedTerm Gremlin.TraversalSourceQuery -> Phantoms.TypedTerm (Maybe Gremlin.TransactionPart)
 traversalSourceQueryTransactionPart x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceQuery"),
         Core.projectionFieldName = (Core.Name "transactionPart")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-traversalSourceQueryWithSource :: Phantoms.TTerm Gremlin.TraversalSourceQuery -> Phantoms.TTerm Gremlin.TraversalSource -> Phantoms.TTerm Gremlin.TraversalSourceQuery
+traversalSourceQueryWithSource :: Phantoms.TypedTerm Gremlin.TraversalSourceQuery -> Phantoms.TypedTerm Gremlin.TraversalSource -> Phantoms.TypedTerm Gremlin.TraversalSourceQuery
 traversalSourceQueryWithSource original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceQuery"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "source"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "transactionPart"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceQuery"),
               Core.projectionFieldName = (Core.Name "transactionPart")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-traversalSourceQueryWithTransactionPart :: Phantoms.TTerm Gremlin.TraversalSourceQuery -> Phantoms.TTerm (Maybe Gremlin.TransactionPart) -> Phantoms.TTerm Gremlin.TraversalSourceQuery
+traversalSourceQueryWithTransactionPart :: Phantoms.TypedTerm Gremlin.TraversalSourceQuery -> Phantoms.TypedTerm (Maybe Gremlin.TransactionPart) -> Phantoms.TypedTerm Gremlin.TraversalSourceQuery
 traversalSourceQueryWithTransactionPart original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceQuery"),
       Core.recordFields = [
         Core.Field {
@@ -5949,189 +5949,189 @@ traversalSourceQueryWithTransactionPart original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceQuery"),
               Core.projectionFieldName = (Core.Name "source")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "transactionPart"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-traversalSourceSelfMethodWith :: Phantoms.TTerm Gremlin.StringArgumentAndOptionalGenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalSourceSelfMethod
+traversalSourceSelfMethodWith :: Phantoms.TypedTerm Gremlin.StringArgumentAndOptionalGenericLiteralArgument -> Phantoms.TypedTerm Gremlin.TraversalSourceSelfMethod
 traversalSourceSelfMethodWith x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSelfMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "with"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalSourceSelfMethodWithBulk :: Phantoms.TTerm Bool -> Phantoms.TTerm Gremlin.TraversalSourceSelfMethod
+traversalSourceSelfMethodWithBulk :: Phantoms.TypedTerm Bool -> Phantoms.TypedTerm Gremlin.TraversalSourceSelfMethod
 traversalSourceSelfMethodWithBulk x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSelfMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withBulk"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalSourceSelfMethodWithPath :: Phantoms.TTerm Gremlin.TraversalSourceSelfMethod
+traversalSourceSelfMethodWithPath :: Phantoms.TypedTerm Gremlin.TraversalSourceSelfMethod
 traversalSourceSelfMethodWithPath =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSelfMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withPath"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalSourceSelfMethodWithSack :: Phantoms.TTerm Gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument -> Phantoms.TTerm Gremlin.TraversalSourceSelfMethod
+traversalSourceSelfMethodWithSack :: Phantoms.TypedTerm Gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument -> Phantoms.TypedTerm Gremlin.TraversalSourceSelfMethod
 traversalSourceSelfMethodWithSack x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSelfMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withSack"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalSourceSelfMethodWithSideEffect :: Phantoms.TTerm Gremlin.StringArgumentAndGenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalSourceSelfMethod
+traversalSourceSelfMethodWithSideEffect :: Phantoms.TypedTerm Gremlin.StringArgumentAndGenericLiteralArgument -> Phantoms.TypedTerm Gremlin.TraversalSourceSelfMethod
 traversalSourceSelfMethodWithSideEffect x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSelfMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withSideEffect"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalSourceSelfMethodWithStrategies :: Phantoms.TTerm [Gremlin.TraversalStrategy] -> Phantoms.TTerm Gremlin.TraversalSourceSelfMethod
+traversalSourceSelfMethodWithStrategies :: Phantoms.TypedTerm [Gremlin.TraversalStrategy] -> Phantoms.TypedTerm Gremlin.TraversalSourceSelfMethod
 traversalSourceSelfMethodWithStrategies x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSelfMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withStrategies"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalSourceSelfMethodWithoutStrategies :: Phantoms.TTerm [Gremlin.Identifier] -> Phantoms.TTerm Gremlin.TraversalSourceSelfMethod
+traversalSourceSelfMethodWithoutStrategies :: Phantoms.TypedTerm [Gremlin.Identifier] -> Phantoms.TypedTerm Gremlin.TraversalSourceSelfMethod
 traversalSourceSelfMethodWithoutStrategies x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSelfMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withoutStrategies"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalSourceSpawnMethodAddE :: Phantoms.TTerm Gremlin.StringArgumentOrNestedTraversal -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
+traversalSourceSpawnMethodAddE :: Phantoms.TypedTerm Gremlin.StringArgumentOrNestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalSourceSpawnMethod
 traversalSourceSpawnMethodAddE x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "addE"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalSourceSpawnMethodAddV :: Phantoms.TTerm (Maybe Gremlin.StringArgumentOrNestedTraversal) -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
+traversalSourceSpawnMethodAddV :: Phantoms.TypedTerm (Maybe Gremlin.StringArgumentOrNestedTraversal) -> Phantoms.TypedTerm Gremlin.TraversalSourceSpawnMethod
 traversalSourceSpawnMethodAddV x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "addV"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalSourceSpawnMethodCall :: Phantoms.TTerm (Maybe Gremlin.ServiceCall) -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
+traversalSourceSpawnMethodCall :: Phantoms.TypedTerm (Maybe Gremlin.ServiceCall) -> Phantoms.TypedTerm Gremlin.TraversalSourceSpawnMethod
 traversalSourceSpawnMethodCall x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "call"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalSourceSpawnMethodE :: Phantoms.TTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
+traversalSourceSpawnMethodE :: Phantoms.TypedTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TypedTerm Gremlin.TraversalSourceSpawnMethod
 traversalSourceSpawnMethodE x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "e"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalSourceSpawnMethodInject :: Phantoms.TTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
+traversalSourceSpawnMethodInject :: Phantoms.TypedTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TypedTerm Gremlin.TraversalSourceSpawnMethod
 traversalSourceSpawnMethodInject x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inject"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalSourceSpawnMethodIo :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
+traversalSourceSpawnMethodIo :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.TraversalSourceSpawnMethod
 traversalSourceSpawnMethodIo x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "io"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalSourceSpawnMethodMergeE :: Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
+traversalSourceSpawnMethodMergeE :: Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalSourceSpawnMethod
 traversalSourceSpawnMethodMergeE x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mergeE"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalSourceSpawnMethodMergeV :: Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
+traversalSourceSpawnMethodMergeV :: Phantoms.TypedTerm Gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal -> Phantoms.TypedTerm Gremlin.TraversalSourceSpawnMethod
 traversalSourceSpawnMethodMergeV x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mergeV"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalSourceSpawnMethodUnion :: Phantoms.TTerm [Gremlin.NestedTraversal] -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
+traversalSourceSpawnMethodUnion :: Phantoms.TypedTerm [Gremlin.NestedTraversal] -> Phantoms.TypedTerm Gremlin.TraversalSourceSpawnMethod
 traversalSourceSpawnMethodUnion x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "union"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalSourceSpawnMethodV :: Phantoms.TTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
+traversalSourceSpawnMethodV :: Phantoms.TypedTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TypedTerm Gremlin.TraversalSourceSpawnMethod
 traversalSourceSpawnMethodV x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "v"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalStrategy :: Phantoms.TTerm Bool -> Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm [Gremlin.Configuration] -> Phantoms.TTerm Gremlin.TraversalStrategy
+traversalStrategy :: Phantoms.TypedTerm Bool -> Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm [Gremlin.Configuration] -> Phantoms.TypedTerm Gremlin.TraversalStrategy
 traversalStrategy new class_ configurations =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalStrategy"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "new"),
-          Core.fieldTerm = (Phantoms.unTTerm new)},
+          Core.fieldTerm = (Phantoms.unTypedTerm new)},
         Core.Field {
           Core.fieldName = (Core.Name "class"),
-          Core.fieldTerm = (Phantoms.unTTerm class_)},
+          Core.fieldTerm = (Phantoms.unTypedTerm class_)},
         Core.Field {
           Core.fieldName = (Core.Name "configurations"),
-          Core.fieldTerm = (Phantoms.unTTerm configurations)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm configurations)}]}))
 
-traversalStrategyClass :: Phantoms.TTerm Gremlin.TraversalStrategy -> Phantoms.TTerm Gremlin.Identifier
+traversalStrategyClass :: Phantoms.TypedTerm Gremlin.TraversalStrategy -> Phantoms.TypedTerm Gremlin.Identifier
 traversalStrategyClass x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalStrategy"),
         Core.projectionFieldName = (Core.Name "class")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-traversalStrategyConfigurations :: Phantoms.TTerm Gremlin.TraversalStrategy -> Phantoms.TTerm [Gremlin.Configuration]
+traversalStrategyConfigurations :: Phantoms.TypedTerm Gremlin.TraversalStrategy -> Phantoms.TypedTerm [Gremlin.Configuration]
 traversalStrategyConfigurations x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalStrategy"),
         Core.projectionFieldName = (Core.Name "configurations")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-traversalStrategyNew :: Phantoms.TTerm Gremlin.TraversalStrategy -> Phantoms.TTerm Bool
+traversalStrategyNew :: Phantoms.TypedTerm Gremlin.TraversalStrategy -> Phantoms.TypedTerm Bool
 traversalStrategyNew x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalStrategy"),
         Core.projectionFieldName = (Core.Name "new")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-traversalStrategyWithClass :: Phantoms.TTerm Gremlin.TraversalStrategy -> Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalStrategy
+traversalStrategyWithClass :: Phantoms.TypedTerm Gremlin.TraversalStrategy -> Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.TraversalStrategy
 traversalStrategyWithClass original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalStrategy"),
       Core.recordFields = [
         Core.Field {
@@ -6140,21 +6140,21 @@ traversalStrategyWithClass original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalStrategy"),
               Core.projectionFieldName = (Core.Name "new")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "class"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "configurations"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalStrategy"),
               Core.projectionFieldName = (Core.Name "configurations")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-traversalStrategyWithConfigurations :: Phantoms.TTerm Gremlin.TraversalStrategy -> Phantoms.TTerm [Gremlin.Configuration] -> Phantoms.TTerm Gremlin.TraversalStrategy
+traversalStrategyWithConfigurations :: Phantoms.TypedTerm Gremlin.TraversalStrategy -> Phantoms.TypedTerm [Gremlin.Configuration] -> Phantoms.TypedTerm Gremlin.TraversalStrategy
 traversalStrategyWithConfigurations original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalStrategy"),
       Core.recordFields = [
         Core.Field {
@@ -6163,200 +6163,200 @@ traversalStrategyWithConfigurations original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalStrategy"),
               Core.projectionFieldName = (Core.Name "new")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "class"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalStrategy"),
               Core.projectionFieldName = (Core.Name "class")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "configurations"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-traversalStrategyWithNew :: Phantoms.TTerm Gremlin.TraversalStrategy -> Phantoms.TTerm Bool -> Phantoms.TTerm Gremlin.TraversalStrategy
+traversalStrategyWithNew :: Phantoms.TypedTerm Gremlin.TraversalStrategy -> Phantoms.TypedTerm Bool -> Phantoms.TypedTerm Gremlin.TraversalStrategy
 traversalStrategyWithNew original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalStrategy"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "new"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "class"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalStrategy"),
               Core.projectionFieldName = (Core.Name "class")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "configurations"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalStrategy"),
               Core.projectionFieldName = (Core.Name "configurations")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-traversalTerminalMethodExplain :: Phantoms.TTerm Gremlin.TraversalTerminalMethod
+traversalTerminalMethodExplain :: Phantoms.TypedTerm Gremlin.TraversalTerminalMethod
 traversalTerminalMethodExplain =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalTerminalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "explain"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalTerminalMethodHasNext :: Phantoms.TTerm Gremlin.TraversalTerminalMethod
+traversalTerminalMethodHasNext :: Phantoms.TypedTerm Gremlin.TraversalTerminalMethod
 traversalTerminalMethodHasNext =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalTerminalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hasNext"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalTerminalMethodIterate :: Phantoms.TTerm Gremlin.TraversalTerminalMethod
+traversalTerminalMethodIterate :: Phantoms.TypedTerm Gremlin.TraversalTerminalMethod
 traversalTerminalMethodIterate =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalTerminalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "iterate"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalTerminalMethodNext :: Phantoms.TTerm (Maybe Gremlin.IntegerLiteral) -> Phantoms.TTerm Gremlin.TraversalTerminalMethod
+traversalTerminalMethodNext :: Phantoms.TypedTerm (Maybe Gremlin.IntegerLiteral) -> Phantoms.TypedTerm Gremlin.TraversalTerminalMethod
 traversalTerminalMethodNext x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalTerminalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "next"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalTerminalMethodToBulkSet :: Phantoms.TTerm Gremlin.TraversalTerminalMethod
+traversalTerminalMethodToBulkSet :: Phantoms.TypedTerm Gremlin.TraversalTerminalMethod
 traversalTerminalMethodToBulkSet =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalTerminalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "toBulkSet"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalTerminalMethodToList :: Phantoms.TTerm Gremlin.TraversalTerminalMethod
+traversalTerminalMethodToList :: Phantoms.TypedTerm Gremlin.TraversalTerminalMethod
 traversalTerminalMethodToList =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalTerminalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "toList"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalTerminalMethodToSet :: Phantoms.TTerm Gremlin.TraversalTerminalMethod
+traversalTerminalMethodToSet :: Phantoms.TypedTerm Gremlin.TraversalTerminalMethod
 traversalTerminalMethodToSet =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalTerminalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "toSet"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalTerminalMethodTryNext :: Phantoms.TTerm Gremlin.TraversalTerminalMethod
+traversalTerminalMethodTryNext :: Phantoms.TypedTerm Gremlin.TraversalTerminalMethod
 traversalTerminalMethodTryNext =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalTerminalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tryNext"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalTokenArgumentValue :: Phantoms.TTerm Gremlin.TraversalToken -> Phantoms.TTerm Gremlin.TraversalTokenArgument
+traversalTokenArgumentValue :: Phantoms.TypedTerm Gremlin.TraversalToken -> Phantoms.TypedTerm Gremlin.TraversalTokenArgument
 traversalTokenArgumentValue x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalTokenArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalTokenArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalTokenArgument
+traversalTokenArgumentVariable :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm Gremlin.TraversalTokenArgument
 traversalTokenArgumentVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalTokenArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-traversalTokenId :: Phantoms.TTerm Gremlin.TraversalToken
+traversalTokenId :: Phantoms.TypedTerm Gremlin.TraversalToken
 traversalTokenId =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalToken"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "id"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalTokenKey :: Phantoms.TTerm Gremlin.TraversalToken
+traversalTokenKey :: Phantoms.TypedTerm Gremlin.TraversalToken
 traversalTokenKey =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalToken"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "key"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalTokenLabel :: Phantoms.TTerm Gremlin.TraversalToken
+traversalTokenLabel :: Phantoms.TypedTerm Gremlin.TraversalToken
 traversalTokenLabel =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalToken"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "label"),
         Core.fieldTerm = Core.TermUnit}}))
 
-traversalTokenValue :: Phantoms.TTerm Gremlin.TraversalToken
+traversalTokenValue :: Phantoms.TypedTerm Gremlin.TraversalToken
 traversalTokenValue =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalToken"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
         Core.fieldTerm = Core.TermUnit}}))
 
-twoTraversalPredicates :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.TwoTraversalPredicates
+twoTraversalPredicates :: Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.TwoTraversalPredicates
 twoTraversalPredicates left right =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TwoTraversalPredicates"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Phantoms.unTTerm left)},
+          Core.fieldTerm = (Phantoms.unTypedTerm left)},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm right)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm right)}]}))
 
-twoTraversalPredicatesLeft :: Phantoms.TTerm Gremlin.TwoTraversalPredicates -> Phantoms.TTerm Gremlin.TraversalPredicate
+twoTraversalPredicatesLeft :: Phantoms.TypedTerm Gremlin.TwoTraversalPredicates -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 twoTraversalPredicatesLeft x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TwoTraversalPredicates"),
         Core.projectionFieldName = (Core.Name "left")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-twoTraversalPredicatesRight :: Phantoms.TTerm Gremlin.TwoTraversalPredicates -> Phantoms.TTerm Gremlin.TraversalPredicate
+twoTraversalPredicatesRight :: Phantoms.TypedTerm Gremlin.TwoTraversalPredicates -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 twoTraversalPredicatesRight x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TwoTraversalPredicates"),
         Core.projectionFieldName = (Core.Name "right")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-twoTraversalPredicatesWithLeft :: Phantoms.TTerm Gremlin.TwoTraversalPredicates -> Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.TwoTraversalPredicates
+twoTraversalPredicatesWithLeft :: Phantoms.TypedTerm Gremlin.TwoTraversalPredicates -> Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.TwoTraversalPredicates
 twoTraversalPredicatesWithLeft original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TwoTraversalPredicates"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "left"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TwoTraversalPredicates"),
               Core.projectionFieldName = (Core.Name "right")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-twoTraversalPredicatesWithRight :: Phantoms.TTerm Gremlin.TwoTraversalPredicates -> Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.TwoTraversalPredicates
+twoTraversalPredicatesWithRight :: Phantoms.TypedTerm Gremlin.TwoTraversalPredicates -> Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.TwoTraversalPredicates
 twoTraversalPredicatesWithRight original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.TwoTraversalPredicates"),
       Core.recordFields = [
         Core.Field {
@@ -6365,118 +6365,118 @@ twoTraversalPredicatesWithRight original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TwoTraversalPredicates"),
               Core.projectionFieldName = (Core.Name "left")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-unDateLiteral :: Phantoms.TTerm Gremlin.DateLiteral -> Phantoms.TTerm (Maybe Gremlin.StringArgument)
+unDateLiteral :: Phantoms.TypedTerm Gremlin.DateLiteral -> Phantoms.TypedTerm (Maybe Gremlin.StringArgument)
 unDateLiteral x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.tinkerpop.gremlin.DateLiteral")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unFloatLiteral :: Phantoms.TTerm Gremlin.FloatLiteral -> Phantoms.TTerm Double
+unFloatLiteral :: Phantoms.TypedTerm Gremlin.FloatLiteral -> Phantoms.TypedTerm Double
 unFloatLiteral x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.tinkerpop.gremlin.FloatLiteral")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unGenericLiteralCollection :: Phantoms.TTerm Gremlin.GenericLiteralCollection -> Phantoms.TTerm [Gremlin.GenericLiteral]
+unGenericLiteralCollection :: Phantoms.TypedTerm Gremlin.GenericLiteralCollection -> Phantoms.TypedTerm [Gremlin.GenericLiteral]
 unGenericLiteralCollection x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralCollection")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unGenericLiteralList :: Phantoms.TTerm Gremlin.GenericLiteralList -> Phantoms.TTerm [Gremlin.GenericLiteral]
+unGenericLiteralList :: Phantoms.TypedTerm Gremlin.GenericLiteralList -> Phantoms.TypedTerm [Gremlin.GenericLiteral]
 unGenericLiteralList x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralList")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unGenericLiteralMap :: Phantoms.TTerm Gremlin.GenericLiteralMap -> Phantoms.TTerm [Gremlin.MapEntry]
+unGenericLiteralMap :: Phantoms.TypedTerm Gremlin.GenericLiteralMap -> Phantoms.TypedTerm [Gremlin.MapEntry]
 unGenericLiteralMap x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMap")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unGenericLiteralSet :: Phantoms.TTerm Gremlin.GenericLiteralSet -> Phantoms.TTerm [Gremlin.GenericLiteral]
+unGenericLiteralSet :: Phantoms.TypedTerm Gremlin.GenericLiteralSet -> Phantoms.TypedTerm [Gremlin.GenericLiteral]
 unGenericLiteralSet x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralSet")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unIdentifier :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm String
+unIdentifier :: Phantoms.TypedTerm Gremlin.Identifier -> Phantoms.TypedTerm String
 unIdentifier x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.tinkerpop.gremlin.Identifier")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unIntegerLiteral :: Phantoms.TTerm Gremlin.IntegerLiteral -> Phantoms.TTerm Integer
+unIntegerLiteral :: Phantoms.TypedTerm Gremlin.IntegerLiteral -> Phantoms.TypedTerm Integer
 unIntegerLiteral x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.tinkerpop.gremlin.IntegerLiteral")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unQueryList :: Phantoms.TTerm Gremlin.QueryList -> Phantoms.TTerm [Gremlin.Query]
+unQueryList :: Phantoms.TypedTerm Gremlin.QueryList -> Phantoms.TypedTerm [Gremlin.Query]
 unQueryList x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.tinkerpop.gremlin.QueryList")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unTraversalSource :: Phantoms.TTerm Gremlin.TraversalSource -> Phantoms.TTerm [Gremlin.TraversalSourceSelfMethod]
+unTraversalSource :: Phantoms.TypedTerm Gremlin.TraversalSource -> Phantoms.TypedTerm [Gremlin.TraversalSourceSelfMethod]
 unTraversalSource x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.tinkerpop.gremlin.TraversalSource")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-valueMapArgsBoolean :: Phantoms.TTerm Gremlin.ValueMapBooleanArgs -> Phantoms.TTerm Gremlin.ValueMapArgs
+valueMapArgsBoolean :: Phantoms.TypedTerm Gremlin.ValueMapBooleanArgs -> Phantoms.TypedTerm Gremlin.ValueMapArgs
 valueMapArgsBoolean x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ValueMapArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueMapArgsString :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.ValueMapArgs
+valueMapArgsString :: Phantoms.TypedTerm [Gremlin.StringNullableArgument] -> Phantoms.TypedTerm Gremlin.ValueMapArgs
 valueMapArgsString x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ValueMapArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueMapBooleanArgs :: Phantoms.TTerm Gremlin.BooleanArgument -> Phantoms.TTerm (Maybe [Gremlin.StringNullableArgument]) -> Phantoms.TTerm Gremlin.ValueMapBooleanArgs
+valueMapBooleanArgs :: Phantoms.TypedTerm Gremlin.BooleanArgument -> Phantoms.TypedTerm (Maybe [Gremlin.StringNullableArgument]) -> Phantoms.TypedTerm Gremlin.ValueMapBooleanArgs
 valueMapBooleanArgs value keys =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.ValueMapBooleanArgs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm value)},
+          Core.fieldTerm = (Phantoms.unTypedTerm value)},
         Core.Field {
           Core.fieldName = (Core.Name "keys"),
-          Core.fieldTerm = (Phantoms.unTTerm keys)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm keys)}]}))
 
-valueMapBooleanArgsKeys :: Phantoms.TTerm Gremlin.ValueMapBooleanArgs -> Phantoms.TTerm (Maybe [Gremlin.StringNullableArgument])
+valueMapBooleanArgsKeys :: Phantoms.TypedTerm Gremlin.ValueMapBooleanArgs -> Phantoms.TypedTerm (Maybe [Gremlin.StringNullableArgument])
 valueMapBooleanArgsKeys x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ValueMapBooleanArgs"),
         Core.projectionFieldName = (Core.Name "keys")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-valueMapBooleanArgsValue :: Phantoms.TTerm Gremlin.ValueMapBooleanArgs -> Phantoms.TTerm Gremlin.BooleanArgument
+valueMapBooleanArgsValue :: Phantoms.TypedTerm Gremlin.ValueMapBooleanArgs -> Phantoms.TypedTerm Gremlin.BooleanArgument
 valueMapBooleanArgsValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ValueMapBooleanArgs"),
         Core.projectionFieldName = (Core.Name "value")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-valueMapBooleanArgsWithKeys :: Phantoms.TTerm Gremlin.ValueMapBooleanArgs -> Phantoms.TTerm (Maybe [Gremlin.StringNullableArgument]) -> Phantoms.TTerm Gremlin.ValueMapBooleanArgs
+valueMapBooleanArgsWithKeys :: Phantoms.TypedTerm Gremlin.ValueMapBooleanArgs -> Phantoms.TypedTerm (Maybe [Gremlin.StringNullableArgument]) -> Phantoms.TypedTerm Gremlin.ValueMapBooleanArgs
 valueMapBooleanArgsWithKeys original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.ValueMapBooleanArgs"),
       Core.recordFields = [
         Core.Field {
@@ -6485,98 +6485,98 @@ valueMapBooleanArgsWithKeys original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ValueMapBooleanArgs"),
               Core.projectionFieldName = (Core.Name "value")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "keys"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-valueMapBooleanArgsWithValue :: Phantoms.TTerm Gremlin.ValueMapBooleanArgs -> Phantoms.TTerm Gremlin.BooleanArgument -> Phantoms.TTerm Gremlin.ValueMapBooleanArgs
+valueMapBooleanArgsWithValue :: Phantoms.TypedTerm Gremlin.ValueMapBooleanArgs -> Phantoms.TypedTerm Gremlin.BooleanArgument -> Phantoms.TypedTerm Gremlin.ValueMapBooleanArgs
 valueMapBooleanArgsWithValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.ValueMapBooleanArgs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "keys"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ValueMapBooleanArgs"),
               Core.projectionFieldName = (Core.Name "keys")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-whereArgsPredicate :: Phantoms.TTerm Gremlin.WhereWithPredicateArgs -> Phantoms.TTerm Gremlin.WhereArgs
+whereArgsPredicate :: Phantoms.TypedTerm Gremlin.WhereWithPredicateArgs -> Phantoms.TypedTerm Gremlin.WhereArgs
 whereArgsPredicate x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WhereArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predicate"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-whereArgsString :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.WhereArgs
+whereArgsString :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.WhereArgs
 whereArgsString x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WhereArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-whereArgsTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.WhereArgs
+whereArgsTraversal :: Phantoms.TypedTerm Gremlin.NestedTraversal -> Phantoms.TypedTerm Gremlin.WhereArgs
 whereArgsTraversal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WhereArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-whereWithPredicateArgs :: Phantoms.TTerm (Maybe Gremlin.StringArgument) -> Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.WhereWithPredicateArgs
+whereWithPredicateArgs :: Phantoms.TypedTerm (Maybe Gremlin.StringArgument) -> Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.WhereWithPredicateArgs
 whereWithPredicateArgs leftArg predicate =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.WhereWithPredicateArgs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "leftArg"),
-          Core.fieldTerm = (Phantoms.unTTerm leftArg)},
+          Core.fieldTerm = (Phantoms.unTypedTerm leftArg)},
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
-          Core.fieldTerm = (Phantoms.unTTerm predicate)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm predicate)}]}))
 
-whereWithPredicateArgsLeftArg :: Phantoms.TTerm Gremlin.WhereWithPredicateArgs -> Phantoms.TTerm (Maybe Gremlin.StringArgument)
+whereWithPredicateArgsLeftArg :: Phantoms.TypedTerm Gremlin.WhereWithPredicateArgs -> Phantoms.TypedTerm (Maybe Gremlin.StringArgument)
 whereWithPredicateArgsLeftArg x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WhereWithPredicateArgs"),
         Core.projectionFieldName = (Core.Name "leftArg")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-whereWithPredicateArgsPredicate :: Phantoms.TTerm Gremlin.WhereWithPredicateArgs -> Phantoms.TTerm Gremlin.TraversalPredicate
+whereWithPredicateArgsPredicate :: Phantoms.TypedTerm Gremlin.WhereWithPredicateArgs -> Phantoms.TypedTerm Gremlin.TraversalPredicate
 whereWithPredicateArgsPredicate x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WhereWithPredicateArgs"),
         Core.projectionFieldName = (Core.Name "predicate")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-whereWithPredicateArgsWithLeftArg :: Phantoms.TTerm Gremlin.WhereWithPredicateArgs -> Phantoms.TTerm (Maybe Gremlin.StringArgument) -> Phantoms.TTerm Gremlin.WhereWithPredicateArgs
+whereWithPredicateArgsWithLeftArg :: Phantoms.TypedTerm Gremlin.WhereWithPredicateArgs -> Phantoms.TypedTerm (Maybe Gremlin.StringArgument) -> Phantoms.TypedTerm Gremlin.WhereWithPredicateArgs
 whereWithPredicateArgsWithLeftArg original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.WhereWithPredicateArgs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "leftArg"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WhereWithPredicateArgs"),
               Core.projectionFieldName = (Core.Name "predicate")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-whereWithPredicateArgsWithPredicate :: Phantoms.TTerm Gremlin.WhereWithPredicateArgs -> Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.WhereWithPredicateArgs
+whereWithPredicateArgsWithPredicate :: Phantoms.TypedTerm Gremlin.WhereWithPredicateArgs -> Phantoms.TypedTerm Gremlin.TraversalPredicate -> Phantoms.TypedTerm Gremlin.WhereWithPredicateArgs
 whereWithPredicateArgsWithPredicate original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.WhereWithPredicateArgs"),
       Core.recordFields = [
         Core.Field {
@@ -6585,98 +6585,98 @@ whereWithPredicateArgsWithPredicate original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WhereWithPredicateArgs"),
               Core.projectionFieldName = (Core.Name "leftArg")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-withArgs :: Phantoms.TTerm Gremlin.WithArgsKeys -> Phantoms.TTerm (Maybe Gremlin.WithArgsValues) -> Phantoms.TTerm Gremlin.WithArgs
+withArgs :: Phantoms.TypedTerm Gremlin.WithArgsKeys -> Phantoms.TypedTerm (Maybe Gremlin.WithArgsValues) -> Phantoms.TypedTerm Gremlin.WithArgs
 withArgs keys values =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithArgs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "keys"),
-          Core.fieldTerm = (Phantoms.unTTerm keys)},
+          Core.fieldTerm = (Phantoms.unTypedTerm keys)},
         Core.Field {
           Core.fieldName = (Core.Name "values"),
-          Core.fieldTerm = (Phantoms.unTTerm values)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm values)}]}))
 
-withArgsKeys :: Phantoms.TTerm Gremlin.WithArgs -> Phantoms.TTerm Gremlin.WithArgsKeys
+withArgsKeys :: Phantoms.TypedTerm Gremlin.WithArgs -> Phantoms.TypedTerm Gremlin.WithArgsKeys
 withArgsKeys x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithArgs"),
         Core.projectionFieldName = (Core.Name "keys")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-withArgsKeysString :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.WithArgsKeys
+withArgsKeysString :: Phantoms.TypedTerm Gremlin.StringArgument -> Phantoms.TypedTerm Gremlin.WithArgsKeys
 withArgsKeysString x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithArgsKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-withArgsKeysWithOption :: Phantoms.TTerm Gremlin.WithOptionKeys -> Phantoms.TTerm Gremlin.WithArgsKeys
+withArgsKeysWithOption :: Phantoms.TypedTerm Gremlin.WithOptionKeys -> Phantoms.TypedTerm Gremlin.WithArgsKeys
 withArgsKeysWithOption x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithArgsKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withOption"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-withArgsValues :: Phantoms.TTerm Gremlin.WithArgs -> Phantoms.TTerm (Maybe Gremlin.WithArgsValues)
+withArgsValues :: Phantoms.TypedTerm Gremlin.WithArgs -> Phantoms.TypedTerm (Maybe Gremlin.WithArgsValues)
 withArgsValues x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithArgs"),
         Core.projectionFieldName = (Core.Name "values")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-withArgsValuesIo :: Phantoms.TTerm Gremlin.IoOptionsValues -> Phantoms.TTerm Gremlin.WithArgsValues
+withArgsValuesIo :: Phantoms.TypedTerm Gremlin.IoOptionsValues -> Phantoms.TypedTerm Gremlin.WithArgsValues
 withArgsValuesIo x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithArgsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "io"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-withArgsValuesObject :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.WithArgsValues
+withArgsValuesObject :: Phantoms.TypedTerm Gremlin.GenericLiteralArgument -> Phantoms.TypedTerm Gremlin.WithArgsValues
 withArgsValuesObject x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithArgsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "object"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-withArgsValuesWithOptions :: Phantoms.TTerm Gremlin.WithOptionsValues -> Phantoms.TTerm Gremlin.WithArgsValues
+withArgsValuesWithOptions :: Phantoms.TypedTerm Gremlin.WithOptionsValues -> Phantoms.TypedTerm Gremlin.WithArgsValues
 withArgsValuesWithOptions x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithArgsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withOptions"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-withArgsWithKeys :: Phantoms.TTerm Gremlin.WithArgs -> Phantoms.TTerm Gremlin.WithArgsKeys -> Phantoms.TTerm Gremlin.WithArgs
+withArgsWithKeys :: Phantoms.TypedTerm Gremlin.WithArgs -> Phantoms.TypedTerm Gremlin.WithArgsKeys -> Phantoms.TypedTerm Gremlin.WithArgs
 withArgsWithKeys original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithArgs"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "keys"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "values"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithArgs"),
               Core.projectionFieldName = (Core.Name "values")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-withArgsWithValues :: Phantoms.TTerm Gremlin.WithArgs -> Phantoms.TTerm (Maybe Gremlin.WithArgsValues) -> Phantoms.TTerm Gremlin.WithArgs
+withArgsWithValues :: Phantoms.TypedTerm Gremlin.WithArgs -> Phantoms.TypedTerm (Maybe Gremlin.WithArgsValues) -> Phantoms.TypedTerm Gremlin.WithArgs
 withArgsWithValues original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithArgs"),
       Core.recordFields = [
         Core.Field {
@@ -6685,134 +6685,134 @@ withArgsWithValues original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithArgs"),
               Core.projectionFieldName = (Core.Name "keys")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "values"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-withOptionKeysConnectedComponent :: Phantoms.TTerm Gremlin.ConnectedComponentConstants -> Phantoms.TTerm Gremlin.WithOptionKeys
+withOptionKeysConnectedComponent :: Phantoms.TypedTerm Gremlin.ConnectedComponentConstants -> Phantoms.TypedTerm Gremlin.WithOptionKeys
 withOptionKeysConnectedComponent x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "connectedComponent"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-withOptionKeysIo :: Phantoms.TTerm Gremlin.IoOptionsKeys -> Phantoms.TTerm Gremlin.WithOptionKeys
+withOptionKeysIo :: Phantoms.TypedTerm Gremlin.IoOptionsKeys -> Phantoms.TypedTerm Gremlin.WithOptionKeys
 withOptionKeysIo x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "io"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-withOptionKeysPageRank :: Phantoms.TTerm Gremlin.PageRankConstants -> Phantoms.TTerm Gremlin.WithOptionKeys
+withOptionKeysPageRank :: Phantoms.TypedTerm Gremlin.PageRankConstants -> Phantoms.TypedTerm Gremlin.WithOptionKeys
 withOptionKeysPageRank x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pageRank"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-withOptionKeysPeerPressure :: Phantoms.TTerm Gremlin.PeerPressureConstants -> Phantoms.TTerm Gremlin.WithOptionKeys
+withOptionKeysPeerPressure :: Phantoms.TypedTerm Gremlin.PeerPressureConstants -> Phantoms.TypedTerm Gremlin.WithOptionKeys
 withOptionKeysPeerPressure x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "peerPressure"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-withOptionKeysShortestPath :: Phantoms.TTerm Gremlin.ShortestPathConstants -> Phantoms.TTerm Gremlin.WithOptionKeys
+withOptionKeysShortestPath :: Phantoms.TypedTerm Gremlin.ShortestPathConstants -> Phantoms.TypedTerm Gremlin.WithOptionKeys
 withOptionKeysShortestPath x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "shortestPath"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-withOptionKeysWithOptionsIndexer :: Phantoms.TTerm Gremlin.WithOptionKeys
+withOptionKeysWithOptionsIndexer :: Phantoms.TypedTerm Gremlin.WithOptionKeys
 withOptionKeysWithOptionsIndexer =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withOptionsIndexer"),
         Core.fieldTerm = Core.TermUnit}}))
 
-withOptionKeysWithOptionsTokens :: Phantoms.TTerm Gremlin.WithOptionKeys
+withOptionKeysWithOptionsTokens :: Phantoms.TypedTerm Gremlin.WithOptionKeys
 withOptionKeysWithOptionsTokens =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withOptionsTokens"),
         Core.fieldTerm = Core.TermUnit}}))
 
-withOptionsValuesAll :: Phantoms.TTerm Gremlin.WithOptionsValues
+withOptionsValuesAll :: Phantoms.TypedTerm Gremlin.WithOptionsValues
 withOptionsValuesAll =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "all"),
         Core.fieldTerm = Core.TermUnit}}))
 
-withOptionsValuesIds :: Phantoms.TTerm Gremlin.WithOptionsValues
+withOptionsValuesIds :: Phantoms.TypedTerm Gremlin.WithOptionsValues
 withOptionsValuesIds =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ids"),
         Core.fieldTerm = Core.TermUnit}}))
 
-withOptionsValuesKeys :: Phantoms.TTerm Gremlin.WithOptionsValues
+withOptionsValuesKeys :: Phantoms.TypedTerm Gremlin.WithOptionsValues
 withOptionsValuesKeys =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "keys"),
         Core.fieldTerm = Core.TermUnit}}))
 
-withOptionsValuesLabels :: Phantoms.TTerm Gremlin.WithOptionsValues
+withOptionsValuesLabels :: Phantoms.TypedTerm Gremlin.WithOptionsValues
 withOptionsValuesLabels =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "labels"),
         Core.fieldTerm = Core.TermUnit}}))
 
-withOptionsValuesList :: Phantoms.TTerm Gremlin.WithOptionsValues
+withOptionsValuesList :: Phantoms.TypedTerm Gremlin.WithOptionsValues
 withOptionsValuesList =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
         Core.fieldTerm = Core.TermUnit}}))
 
-withOptionsValuesMap :: Phantoms.TTerm Gremlin.WithOptionsValues
+withOptionsValuesMap :: Phantoms.TypedTerm Gremlin.WithOptionsValues
 withOptionsValuesMap =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
         Core.fieldTerm = Core.TermUnit}}))
 
-withOptionsValuesNone :: Phantoms.TTerm Gremlin.WithOptionsValues
+withOptionsValuesNone :: Phantoms.TypedTerm Gremlin.WithOptionsValues
 withOptionsValuesNone =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "none"),
         Core.fieldTerm = Core.TermUnit}}))
 
-withOptionsValuesTokens :: Phantoms.TTerm Gremlin.WithOptionsValues
+withOptionsValuesTokens :: Phantoms.TypedTerm Gremlin.WithOptionsValues
 withOptionsValuesTokens =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tokens"),
         Core.fieldTerm = Core.TermUnit}}))
 
-withOptionsValuesValues :: Phantoms.TTerm Gremlin.WithOptionsValues
+withOptionsValuesValues :: Phantoms.TypedTerm Gremlin.WithOptionsValues
 withOptionsValuesValues =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "values"),

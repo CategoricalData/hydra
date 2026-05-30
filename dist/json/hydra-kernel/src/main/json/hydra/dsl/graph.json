@@ -14,7 +14,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}],
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -24,7 +24,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}],
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg2",
@@ -39,7 +39,7 @@
                             "literal": {
                               "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg3",
@@ -52,7 +52,7 @@
                           "key": "description",
                           "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}],
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg4",
@@ -62,7 +62,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg5",
@@ -72,7 +72,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "All primitive functions and constants by name"}}}],
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.graph.Primitive"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg6",
@@ -82,7 +82,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg7",
@@ -95,9 +95,9 @@
                           "key": "description",
                           "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}],
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -140,7 +140,7 @@
                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "boundTerms"}}, "typeName": "hydra.core.Name"}}},
                                                                         {
                                                                           "name": "term",
-                                                                          "term": {"application": {"argument": {"variable": "boundTerms"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                          "term": {"application": {"argument": {"variable": "boundTerms"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                                       "typeName": "hydra.core.Field"}},
                                                                   {
                                                                     "record": {
@@ -148,7 +148,7 @@
                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "boundTypes"}}, "typeName": "hydra.core.Name"}}},
                                                                         {
                                                                           "name": "term",
-                                                                          "term": {"application": {"argument": {"variable": "boundTypes"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                          "term": {"application": {"argument": {"variable": "boundTypes"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                                       "typeName": "hydra.core.Field"}},
                                                                   {
                                                                     "record": {
@@ -156,7 +156,7 @@
                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "classConstraints"}}, "typeName": "hydra.core.Name"}}},
                                                                         {
                                                                           "name": "term",
-                                                                          "term": {"application": {"argument": {"variable": "classConstraints"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                          "term": {"application": {"argument": {"variable": "classConstraints"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                                       "typeName": "hydra.core.Field"}},
                                                                   {
                                                                     "record": {
@@ -164,7 +164,7 @@
                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "lambdaVariables"}}, "typeName": "hydra.core.Name"}}},
                                                                         {
                                                                           "name": "term",
-                                                                          "term": {"application": {"argument": {"variable": "lambdaVariables"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                          "term": {"application": {"argument": {"variable": "lambdaVariables"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                                       "typeName": "hydra.core.Field"}},
                                                                   {
                                                                     "record": {
@@ -172,7 +172,7 @@
                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "metadata"}}, "typeName": "hydra.core.Name"}}},
                                                                         {
                                                                           "name": "term",
-                                                                          "term": {"application": {"argument": {"variable": "metadata"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                          "term": {"application": {"argument": {"variable": "metadata"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                                       "typeName": "hydra.core.Field"}},
                                                                   {
                                                                     "record": {
@@ -180,7 +180,7 @@
                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "primitives"}}, "typeName": "hydra.core.Name"}}},
                                                                         {
                                                                           "name": "term",
-                                                                          "term": {"application": {"argument": {"variable": "primitives"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                          "term": {"application": {"argument": {"variable": "primitives"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                                       "typeName": "hydra.core.Field"}},
                                                                   {
                                                                     "record": {
@@ -188,7 +188,7 @@
                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "schemaTypes"}}, "typeName": "hydra.core.Name"}}},
                                                                         {
                                                                           "name": "term",
-                                                                          "term": {"application": {"argument": {"variable": "schemaTypes"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                          "term": {"application": {"argument": {"variable": "schemaTypes"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                                       "typeName": "hydra.core.Field"}},
                                                                   {
                                                                     "record": {
@@ -196,11 +196,11 @@
                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "typeVariables"}}, "typeName": "hydra.core.Name"}}},
                                                                         {
                                                                           "name": "term",
-                                                                          "term": {"application": {"argument": {"variable": "typeVariables"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                          "term": {"application": {"argument": {"variable": "typeVariables"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                                       "typeName": "hydra.core.Field"}}]}}],
                                                           "typeName": "hydra.core.Record"}}},
                                                     "typeName": "hydra.core.Term"}},
-                                                "typeName": "hydra.phantoms.TTerm"}},
+                                                "typeName": "hydra.typed.TypedTerm"}},
                                             "domain": {
                                               "application": {
                                                 "argument": {
@@ -210,7 +210,7 @@
                                                         "key": "description",
                                                         "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}],
                                                     "body": {"set": {"variable": "hydra.core.Name"}}}},
-                                                "function": {"variable": "hydra.phantoms.TTerm"}}},
+                                                "function": {"variable": "hydra.typed.TypedTerm"}}},
                                             "parameter": "typeVariables"}},
                                         "domain": {
                                           "application": {
@@ -218,7 +218,7 @@
                                               "annotated": {
                                                 "annotation": [{"key": "description", "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
                                                 "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
-                                            "function": {"variable": "hydra.phantoms.TTerm"}}},
+                                            "function": {"variable": "hydra.typed.TypedTerm"}}},
                                         "parameter": "schemaTypes"}},
                                     "domain": {
                                       "application": {
@@ -226,7 +226,7 @@
                                           "annotated": {
                                             "annotation": [{"key": "description", "value": {"literal": {"string": "All primitive functions and constants by name"}}}],
                                             "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.graph.Primitive"}}}}},
-                                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                                     "parameter": "primitives"}},
                                 "domain": {
                                   "application": {
@@ -234,7 +234,7 @@
                                       "annotated": {
                                         "annotation": [{"key": "description", "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
                                         "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
-                                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                                 "parameter": "metadata"}},
                             "domain": {
                               "application": {
@@ -245,7 +245,7 @@
                                         "key": "description",
                                         "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}],
                                     "body": {"set": {"variable": "hydra.core.Name"}}}},
-                                "function": {"variable": "hydra.phantoms.TTerm"}}},
+                                "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "lambdaVariables"}},
                         "domain": {
                           "application": {
@@ -258,7 +258,7 @@
                                       "literal": {
                                         "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
                                 "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
-                            "function": {"variable": "hydra.phantoms.TTerm"}}},
+                            "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "classConstraints"}},
                     "domain": {
                       "application": {
@@ -266,7 +266,7 @@
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}],
                             "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "boundTypes"}},
                 "domain": {
                   "application": {
@@ -274,7 +274,7 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}],
                         "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "boundTerms"}}}}}},
     {
       "term": {
@@ -284,7 +284,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -292,7 +292,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}],
                     "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -325,11 +325,11 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -339,7 +339,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -347,7 +347,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}],
                     "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -380,11 +380,11 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -394,7 +394,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -407,7 +407,7 @@
                           "literal": {
                             "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
                     "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -445,11 +445,11 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -459,7 +459,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -470,7 +470,7 @@
                         "key": "description",
                         "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}],
                     "body": {"set": {"variable": "hydra.core.Name"}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -508,11 +508,11 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -522,7 +522,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -530,7 +530,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
                     "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -563,11 +563,11 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -577,7 +577,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -585,7 +585,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "All primitive functions and constants by name"}}}],
                     "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.graph.Primitive"}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -618,11 +618,11 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -632,7 +632,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -640,7 +640,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
                     "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -674,11 +674,11 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -688,7 +688,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -699,7 +699,7 @@
                         "key": "description",
                         "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}],
                     "body": {"set": {"variable": "hydra.core.Name"}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -737,11 +737,11 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -751,7 +751,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -761,9 +761,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}],
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -794,7 +794,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "boundTerms"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -826,7 +826,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -862,7 +862,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -898,7 +898,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -932,7 +932,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -966,7 +966,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1000,7 +1000,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1036,22 +1036,22 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}],
                             "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -1061,7 +1061,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -1071,9 +1071,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}],
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1128,7 +1128,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1138,7 +1138,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "boundTypes"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -1172,7 +1172,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1208,7 +1208,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1242,7 +1242,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1276,7 +1276,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1310,7 +1310,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1346,22 +1346,22 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}],
                             "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -1371,7 +1371,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -1386,9 +1386,9 @@
                             "literal": {
                               "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1446,7 +1446,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1480,7 +1480,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1490,7 +1490,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "classConstraints"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -1524,7 +1524,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1558,7 +1558,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1592,7 +1592,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1626,7 +1626,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1662,13 +1662,13 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -1680,9 +1680,9 @@
                                   "literal": {
                                     "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
                             "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -1692,7 +1692,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -1705,9 +1705,9 @@
                           "key": "description",
                           "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}],
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -1765,7 +1765,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1799,7 +1799,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1835,7 +1835,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1845,7 +1845,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "lambdaVariables"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -1877,7 +1877,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1911,7 +1911,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1945,7 +1945,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -1981,13 +1981,13 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -1997,9 +1997,9 @@
                                 "key": "description",
                                 "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}],
                             "body": {"set": {"variable": "hydra.core.Name"}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -2009,7 +2009,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -2019,9 +2019,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -2076,7 +2076,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2110,7 +2110,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2146,7 +2146,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2182,7 +2182,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2192,7 +2192,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "metadata"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -2224,7 +2224,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2258,7 +2258,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2294,22 +2294,22 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
                             "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -2319,7 +2319,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -2329,9 +2329,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "All primitive functions and constants by name"}}}],
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.graph.Primitive"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -2386,7 +2386,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2420,7 +2420,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2456,7 +2456,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2492,7 +2492,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2526,7 +2526,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2536,7 +2536,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "primitives"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -2568,7 +2568,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2604,22 +2604,22 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "All primitive functions and constants by name"}}}],
                             "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.graph.Primitive"}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -2629,7 +2629,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -2639,9 +2639,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -2696,7 +2696,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2730,7 +2730,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2766,7 +2766,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2802,7 +2802,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2836,7 +2836,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2870,7 +2870,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -2880,7 +2880,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "schemaTypes"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -2914,22 +2914,22 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
                             "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -2939,7 +2939,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -2952,9 +2952,9 @@
                           "key": "description",
                           "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}],
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3010,7 +3010,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -3044,7 +3044,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -3080,7 +3080,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -3116,7 +3116,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -3150,7 +3150,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -3184,7 +3184,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -3218,7 +3218,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -3228,11 +3228,11 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "typeVariables"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -3242,9 +3242,9 @@
                                 "key": "description",
                                 "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}],
                             "body": {"set": {"variable": "hydra.core.Name"}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Graph"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -3263,7 +3263,7 @@
                           "key": "description",
                           "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -3276,7 +3276,7 @@
                           "key": "description",
                           "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}],
                       "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg2",
@@ -3286,9 +3286,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The primitives defined in this library"}}}],
                       "body": {"list": {"variable": "hydra.graph.Primitive"}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3321,7 +3321,7 @@
                                                     {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
                                                     {
                                                       "name": "term",
-                                                      "term": {"application": {"argument": {"variable": "namespace"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                      "term": {"application": {"argument": {"variable": "namespace"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                   "typeName": "hydra.core.Field"}},
                                               {
                                                 "record": {
@@ -3329,7 +3329,7 @@
                                                     {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "prefix"}}, "typeName": "hydra.core.Name"}}},
                                                     {
                                                       "name": "term",
-                                                      "term": {"application": {"argument": {"variable": "prefix"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                      "term": {"application": {"argument": {"variable": "prefix"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                   "typeName": "hydra.core.Field"}},
                                               {
                                                 "record": {
@@ -3337,18 +3337,18 @@
                                                     {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "primitives"}}, "typeName": "hydra.core.Name"}}},
                                                     {
                                                       "name": "term",
-                                                      "term": {"application": {"argument": {"variable": "primitives"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                      "term": {"application": {"argument": {"variable": "primitives"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                   "typeName": "hydra.core.Field"}}]}}],
                                       "typeName": "hydra.core.Record"}}},
                                 "typeName": "hydra.core.Term"}},
-                            "typeName": "hydra.phantoms.TTerm"}},
+                            "typeName": "hydra.typed.TypedTerm"}},
                         "domain": {
                           "application": {
                             "argument": {
                               "annotated": {
                                 "annotation": [{"key": "description", "value": {"literal": {"string": "The primitives defined in this library"}}}],
                                 "body": {"list": {"variable": "hydra.graph.Primitive"}}}},
-                            "function": {"variable": "hydra.phantoms.TTerm"}}},
+                            "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "primitives"}},
                     "domain": {
                       "application": {
@@ -3359,7 +3359,7 @@
                                 "key": "description",
                                 "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}],
                             "body": {"literal": {"string": {}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "prefix"}},
                 "domain": {
                   "application": {
@@ -3370,7 +3370,7 @@
                             "key": "description",
                             "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
                         "body": {"variable": "hydra.packaging.ModuleName"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "namespace"}}}}}},
     {
       "term": {
@@ -3380,7 +3380,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -3391,7 +3391,7 @@
                         "key": "description",
                         "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
                     "body": {"variable": "hydra.packaging.ModuleName"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3425,11 +3425,11 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -3439,7 +3439,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -3450,7 +3450,7 @@
                         "key": "description",
                         "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}],
                     "body": {"literal": {"string": {}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3483,11 +3483,11 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -3497,7 +3497,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -3505,7 +3505,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "The primitives defined in this library"}}}],
                     "body": {"list": {"variable": "hydra.graph.Primitive"}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3539,11 +3539,11 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -3553,7 +3553,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -3566,9 +3566,9 @@
                           "key": "description",
                           "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3599,7 +3599,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -3631,7 +3631,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -3665,13 +3665,13 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -3681,9 +3681,9 @@
                                 "key": "description",
                                 "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
                             "body": {"variable": "hydra.packaging.ModuleName"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -3693,7 +3693,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -3706,9 +3706,9 @@
                           "key": "description",
                           "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}],
                       "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3763,7 +3763,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -3773,7 +3773,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "prefix"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -3805,13 +3805,13 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -3821,9 +3821,9 @@
                                 "key": "description",
                                 "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}],
                             "body": {"literal": {"string": {}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -3833,7 +3833,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -3843,9 +3843,9 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The primitives defined in this library"}}}],
                       "body": {"list": {"variable": "hydra.graph.Primitive"}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -3901,7 +3901,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -3935,7 +3935,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -3945,20 +3945,20 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "primitives"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The primitives defined in this library"}}}],
                             "body": {"list": {"variable": "hydra.graph.Primitive"}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -3979,7 +3979,7 @@
                             "literal": {
                               "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}],
                       "body": {"variable": "hydra.packaging.PrimitiveDefinition"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -4003,9 +4003,9 @@
                                   "domain": {"list": {"variable": "hydra.core.Term"}}}},
                               "domain": {"variable": "hydra.graph.Graph"}}},
                           "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -4036,7 +4036,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "definition"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "definition"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "definition"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -4044,11 +4044,11 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "implementation"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "implementation"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "implementation"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -4069,7 +4069,7 @@
                                         "domain": {"list": {"variable": "hydra.core.Term"}}}},
                                     "domain": {"variable": "hydra.graph.Graph"}}},
                                 "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "implementation"}},
                 "domain": {
                   "application": {
@@ -4082,7 +4082,7 @@
                               "literal": {
                                 "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}],
                         "body": {"variable": "hydra.packaging.PrimitiveDefinition"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "definition"}}}}}},
     {
       "term": {
@@ -4092,7 +4092,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -4105,7 +4105,7 @@
                           "literal": {
                             "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}],
                     "body": {"variable": "hydra.packaging.PrimitiveDefinition"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -4141,11 +4141,11 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -4155,7 +4155,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -4177,7 +4177,7 @@
                                 "domain": {"list": {"variable": "hydra.core.Term"}}}},
                             "domain": {"variable": "hydra.graph.Graph"}}},
                         "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -4215,11 +4215,11 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "typeName": "hydra.typed.TypedTerm"}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -4229,7 +4229,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -4244,9 +4244,9 @@
                             "literal": {
                               "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}],
                       "body": {"variable": "hydra.packaging.PrimitiveDefinition"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -4280,7 +4280,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "definition"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -4314,13 +4314,13 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -4332,9 +4332,9 @@
                                   "literal": {
                                     "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}],
                             "body": {"variable": "hydra.packaging.PrimitiveDefinition"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -4344,7 +4344,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -4368,9 +4368,9 @@
                                   "domain": {"list": {"variable": "hydra.core.Term"}}}},
                               "domain": {"variable": "hydra.graph.Graph"}}},
                           "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}}},
+            "type": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -4428,7 +4428,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -4438,11 +4438,11 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "implementation"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -4463,9 +4463,9 @@
                                         "domain": {"list": {"variable": "hydra.core.Term"}}}},
                                     "domain": {"variable": "hydra.graph.Graph"}}},
                                 "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
-                "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "domain": {"application": {"argument": {"variable": "hydra.graph.Primitive"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -4481,7 +4481,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -4500,7 +4500,7 @@
                                   "domain": {"variable": "hydra.core.Term"}}},
                               "domain": {"variable": "hydra.graph.Graph"}}},
                           "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg2",
@@ -4516,12 +4516,12 @@
                               "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
                               "domain": {"variable": "a"}}},
                           "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
           "annotated": {
@@ -4554,7 +4554,7 @@
                                                     {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "type"}}, "typeName": "hydra.core.Name"}}},
                                                     {
                                                       "name": "term",
-                                                      "term": {"application": {"argument": {"variable": "type"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                      "term": {"application": {"argument": {"variable": "type"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                   "typeName": "hydra.core.Field"}},
                                               {
                                                 "record": {
@@ -4562,7 +4562,7 @@
                                                     {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "encode"}}, "typeName": "hydra.core.Name"}}},
                                                     {
                                                       "name": "term",
-                                                      "term": {"application": {"argument": {"variable": "encode"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                      "term": {"application": {"argument": {"variable": "encode"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                   "typeName": "hydra.core.Field"}},
                                               {
                                                 "record": {
@@ -4570,11 +4570,11 @@
                                                     {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "decode"}}, "typeName": "hydra.core.Name"}}},
                                                     {
                                                       "name": "term",
-                                                      "term": {"application": {"argument": {"variable": "decode"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                      "term": {"application": {"argument": {"variable": "decode"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                   "typeName": "hydra.core.Field"}}]}}],
                                       "typeName": "hydra.core.Record"}}},
                                 "typeName": "hydra.core.Term"}},
-                            "typeName": "hydra.phantoms.TTerm"}},
+                            "typeName": "hydra.typed.TypedTerm"}},
                         "domain": {
                           "application": {
                             "argument": {
@@ -4587,7 +4587,7 @@
                                         "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
                                         "domain": {"variable": "a"}}},
                                     "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
-                            "function": {"variable": "hydra.phantoms.TTerm"}}},
+                            "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "decode"}},
                     "domain": {
                       "application": {
@@ -4604,7 +4604,7 @@
                                         "domain": {"variable": "hydra.core.Term"}}},
                                     "domain": {"variable": "hydra.graph.Graph"}}},
                                 "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "encode"}},
                 "domain": {
                   "application": {
@@ -4612,7 +4612,7 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
                         "body": {"variable": "hydra.core.Type"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "type"}}}}}},
     {
       "term": {
@@ -4625,7 +4625,7 @@
               "type": {
                 "application": {
                   "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -4633,7 +4633,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
                     "body": {"variable": "hydra.core.Type"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
           "annotated": {
@@ -4666,14 +4666,14 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -4686,7 +4686,7 @@
               "type": {
                 "application": {
                   "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -4703,7 +4703,7 @@
                                 "domain": {"variable": "hydra.core.Term"}}},
                             "domain": {"variable": "hydra.graph.Graph"}}},
                         "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
           "annotated": {
@@ -4736,14 +4736,14 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -4756,7 +4756,7 @@
               "type": {
                 "application": {
                   "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
@@ -4770,7 +4770,7 @@
                             "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
                             "domain": {"variable": "a"}}},
                         "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
           "annotated": {
@@ -4803,14 +4803,14 @@
                                       "typeName": "hydra.core.Term"}}},
                                 {
                                   "name": "argument",
-                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                               "typeName": "hydra.core.Application"}}},
                         "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
+                    "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
                     "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}},
     {
       "term": {
@@ -4823,7 +4823,7 @@
               "type": {
                 "application": {
                   "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -4833,12 +4833,12 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
           "annotated": {
@@ -4869,7 +4869,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "type"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -4901,7 +4901,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -4935,25 +4935,25 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
                             "body": {"variable": "hydra.core.Type"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {
                     "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -4966,7 +4966,7 @@
               "type": {
                 "application": {
                   "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -4985,12 +4985,12 @@
                                   "domain": {"variable": "hydra.core.Term"}}},
                               "domain": {"variable": "hydra.graph.Graph"}}},
                           "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
           "annotated": {
@@ -5045,7 +5045,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -5055,7 +5055,7 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "encode"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -5087,13 +5087,13 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -5109,12 +5109,12 @@
                                         "domain": {"variable": "hydra.core.Term"}}},
                                     "domain": {"variable": "hydra.graph.Graph"}}},
                                 "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {
                     "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}},
     {
       "term": {
@@ -5127,7 +5127,7 @@
               "type": {
                 "application": {
                   "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -5143,12 +5143,12 @@
                               "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
                               "domain": {"variable": "a"}}},
                           "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}],
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "a"}]},
         "term": {
           "annotated": {
@@ -5203,7 +5203,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -5237,7 +5237,7 @@
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
-                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                                             "typeName": "hydra.core.Application"}}},
                                                       "typeName": "hydra.core.Term"}}}],
                                               "typeName": "hydra.core.Field"}},
@@ -5247,11 +5247,11 @@
                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "decode"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "typeName": "hydra.phantoms.TTerm"}},
+                        "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -5264,16 +5264,16 @@
                                     "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
                                     "domain": {"variable": "a"}}},
                                 "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {
                     "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}}],
   "dependencies": [
     {"module": "hydra.graph"},
-    {"module": "hydra.phantoms"},
+    {"module": "hydra.typed"},
     {"module": "hydra.core"},
     {"module": "hydra.errors"},
     {"module": "hydra.packaging"},
