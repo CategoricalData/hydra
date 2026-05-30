@@ -96,8 +96,8 @@ encodeListList lists = Core.TermList (Lists.map (\l -> encodeIntList l) lists)
 transformModule :: Packaging.Module -> Packaging.Module
 transformModule m =
     Packaging.Module {
-      Packaging.moduleDescription = (Packaging.moduleDescription m),
       Packaging.moduleName = (addGenerationPrefix (Packaging.moduleName m)),
+      Packaging.moduleDescription = (Packaging.moduleDescription m),
       Packaging.moduleDependencies = (Packaging.moduleDependencies m),
       Packaging.moduleDefinitions = (Packaging.moduleDefinitions m)}
 -- | Pass through test cases unchanged

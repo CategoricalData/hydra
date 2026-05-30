@@ -1082,10 +1082,10 @@ decodeModule cx graph mod =
       let allDecodedDeps =
               Lists.nub (Lists.map decodeNamespace (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)))
       in (Right (Just (Packaging.Module {
+        Packaging.moduleName = (decodeNamespace (Packaging.moduleName mod)),
         Packaging.moduleDescription = (Just (Strings.cat [
           "Term decoders for ",
           (Packaging.unModuleName (Packaging.moduleName mod))])),
-        Packaging.moduleName = (decodeNamespace (Packaging.moduleName mod)),
         Packaging.moduleDependencies = (Lists.map (\ns -> Packaging.ModuleDependency {
           Packaging.moduleDependencyModule = ns,
           Packaging.moduleDependencyPackage = Nothing}) (Lists.concat2 [

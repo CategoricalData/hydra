@@ -2314,15 +2314,15 @@
                                                                                                                                                                   "record": {
                                                                                                                                                                     "fields": [
                                                                                                                                                                       {
+                                                                                                                                                                        "name": "name",
+                                                                                                                                                                        "term": {
+                                                                                                                                                                          "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}}},
+                                                                                                                                                                      {
                                                                                                                                                                         "name": "description",
                                                                                                                                                                         "term": {
                                                                                                                                                                           "application": {
                                                                                                                                                                             "argument": {"variable": "m"},
                                                                                                                                                                             "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.Module"}}}}},
-                                                                                                                                                                      {
-                                                                                                                                                                        "name": "name",
-                                                                                                                                                                        "term": {
-                                                                                                                                                                          "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}}},
                                                                                                                                                                       {
                                                                                                                                                                         "name": "dependencies",
                                                                                                                                                                         "term": {
@@ -4382,15 +4382,15 @@
                                                           "record": {
                                                             "fields": [
                                                               {
+                                                                "name": "name",
+                                                                "term": {
+                                                                  "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}}},
+                                                              {
                                                                 "name": "description",
                                                                 "term": {
                                                                   "application": {
                                                                     "argument": {"variable": "m"},
                                                                     "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.Module"}}}}},
-                                                              {
-                                                                "name": "name",
-                                                                "term": {
-                                                                  "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}}},
                                                               {"name": "dependencies", "term": {"variable": "newDeps"}},
                                                               {"name": "definitions", "term": {"variable": "newDefs"}}],
                                                             "typeName": "hydra.packaging.Module"}}}}}}}}}},
@@ -4722,6 +4722,7 @@
                             "body": {
                               "record": {
                                 "fields": [
+                                  {"name": "name", "term": {"variable": "sourceNs"}},
                                   {
                                     "name": "description",
                                     "term": {
@@ -4734,7 +4735,6 @@
                                               "function": {"unwrap": "hydra.packaging.ModuleName"}}},
                                           "function": {
                                             "application": {"argument": {"literal": {"string": "Source module for "}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}}}},
-                                  {"name": "name", "term": {"variable": "sourceNs"}},
                                   {
                                     "name": "dependencies",
                                     "term": {
@@ -5384,15 +5384,15 @@
                           "record": {
                             "fields": [
                               {
+                                "name": "name",
+                                "term": {
+                                  "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}}},
+                              {
                                 "name": "description",
                                 "term": {
                                   "application": {
                                     "argument": {"variable": "m"},
                                     "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.Module"}}}}},
-                              {
-                                "name": "name",
-                                "term": {
-                                  "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}}},
                               {
                                 "name": "dependencies",
                                 "term": {

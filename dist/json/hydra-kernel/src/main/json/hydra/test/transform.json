@@ -565,18 +565,18 @@
                   "record": {
                     "fields": [
                       {
-                        "name": "description",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "m"},
-                            "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.Module"}}}}},
-                      {
                         "name": "name",
                         "term": {
                           "application": {
                             "argument": {
                               "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
                             "function": {"variable": "hydra.test.transform.addGenerationPrefix"}}}},
+                      {
+                        "name": "description",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "m"},
+                            "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.Module"}}}}},
                       {
                         "name": "dependencies",
                         "term": {
