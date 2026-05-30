@@ -11,8 +11,8 @@ import qualified Data.Map as M
 module_ :: Packaging.Module
 module_ =
     Packaging.Module {
-      Packaging.moduleDescription = (Just "Term encoders for hydra.packaging"),
       Packaging.moduleName = (Packaging.ModuleName "hydra.encode.packaging"),
+      Packaging.moduleDescription = (Just "Term encoders for hydra.packaging"),
       Packaging.moduleDependencies = [
         Packaging.ModuleDependency {
           Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.core"),
@@ -217,6 +217,23 @@ module_ =
                                 Core.fieldName = (Core.Name "name"),
                                 Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "name"))}))},
+                              Core.Field {
+                                Core.fieldName = (Core.Name "term"),
+                                Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.moduleName")),
+                                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermProject (Core.Projection {
+                                      Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
+                                      Core.projectionFieldName = (Core.Name "name")})),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                          (Core.TermRecord (Core.Record {
+                            Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                            Core.recordFields = [
+                              Core.Field {
+                                Core.fieldName = (Core.Name "name"),
+                                Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                  Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "description"))}))},
                               Core.Field {
                                 Core.fieldName = (Core.Name "term"),
@@ -248,23 +265,6 @@ module_ =
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
                                       Core.projectionFieldName = (Core.Name "description")})),
-                                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
-                          (Core.TermRecord (Core.Record {
-                            Core.recordTypeName = (Core.Name "hydra.core.Field"),
-                            Core.recordFields = [
-                              Core.Field {
-                                Core.fieldName = (Core.Name "name"),
-                                Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
-                                  Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "name"))}))},
-                              Core.Field {
-                                Core.fieldName = (Core.Name "term"),
-                                Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.moduleName")),
-                                  Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                    Core.applicationFunction = (Core.TermProject (Core.Projection {
-                                      Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-                                      Core.projectionFieldName = (Core.Name "name")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -508,26 +508,37 @@ module_ =
                                 Core.fieldName = (Core.Name "name"),
                                 Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "modules"))}))},
+                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "description"))}))},
                               Core.Field {
                                 Core.fieldName = (Core.Name "term"),
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermLambda (Core.Lambda {
-                                    Core.lambdaParameter = (Core.Name "xs"),
+                                    Core.lambdaParameter = (Core.Name "opt"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermInject (Core.Injection {
                                       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                                       Core.injectionField = Core.Field {
-                                        Core.fieldName = (Core.Name "list"),
+                                        Core.fieldName = (Core.Name "maybe"),
                                         Core.fieldTerm = (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
-                                            Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.packaging.module"))})),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}}))})),
+                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.map")),
+                                            Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                                              Core.lambdaParameter = (Core.Name "x"),
+                                              Core.lambdaDomain = Nothing,
+                                              Core.lambdaBody = (Core.TermInject (Core.Injection {
+                                                Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                                                Core.injectionField = Core.Field {
+                                                  Core.fieldName = (Core.Name "literal"),
+                                                  Core.fieldTerm = (Core.TermInject (Core.Injection {
+                                                    Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
+                                                    Core.injectionField = Core.Field {
+                                                      Core.fieldName = (Core.Name "string"),
+                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))}))})),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "opt"))}))}}))})),
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-                                      Core.projectionFieldName = (Core.Name "modules")})),
+                                      Core.projectionFieldName = (Core.Name "description")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -564,37 +575,26 @@ module_ =
                                 Core.fieldName = (Core.Name "name"),
                                 Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "description"))}))},
+                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "modules"))}))},
                               Core.Field {
                                 Core.fieldName = (Core.Name "term"),
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermLambda (Core.Lambda {
-                                    Core.lambdaParameter = (Core.Name "opt"),
+                                    Core.lambdaParameter = (Core.Name "xs"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermInject (Core.Injection {
                                       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                                       Core.injectionField = Core.Field {
-                                        Core.fieldName = (Core.Name "maybe"),
+                                        Core.fieldName = (Core.Name "list"),
                                         Core.fieldTerm = (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.map")),
-                                            Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                                              Core.lambdaParameter = (Core.Name "x"),
-                                              Core.lambdaDomain = Nothing,
-                                              Core.lambdaBody = (Core.TermInject (Core.Injection {
-                                                Core.injectionTypeName = (Core.Name "hydra.core.Term"),
-                                                Core.injectionField = Core.Field {
-                                                  Core.fieldName = (Core.Name "literal"),
-                                                  Core.fieldTerm = (Core.TermInject (Core.Injection {
-                                                    Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
-                                                    Core.injectionField = Core.Field {
-                                                      Core.fieldName = (Core.Name "string"),
-                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))}))})),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "opt"))}))}}))})),
+                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
+                                            Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.packaging.module"))})),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}}))})),
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-                                      Core.projectionFieldName = (Core.Name "description")})),
+                                      Core.projectionFieldName = (Core.Name "modules")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.packaging.Package")))])})),

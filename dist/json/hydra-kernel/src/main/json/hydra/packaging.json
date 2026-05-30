@@ -56,12 +56,6 @@
               "body": {
                 "record": [
                   {
-                    "name": "description",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the module"}}}],
-                        "body": {"maybe": {"literal": {"string": {}}}}}}},
-                  {
                     "name": "name",
                     "type": {
                       "annotated": {
@@ -70,6 +64,12 @@
                             "key": "description",
                             "value": {"literal": {"string": "The name of the module, which is also the common prefix for all element names in the module"}}}],
                         "body": {"variable": "hydra.packaging.ModuleName"}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the module"}}}],
+                        "body": {"maybe": {"literal": {"string": {}}}}}}},
                   {
                     "name": "dependencies",
                     "type": {
@@ -144,11 +144,11 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the package"}}}],
                         "body": {"variable": "hydra.packaging.PackageName"}}}},
                   {
-                    "name": "modules",
+                    "name": "description",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The modules in this package"}}}],
-                        "body": {"list": {"variable": "hydra.packaging.Module"}}}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the package"}}}],
+                        "body": {"maybe": {"literal": {"string": {}}}}}}},
                   {
                     "name": "dependencies",
                     "type": {
@@ -156,11 +156,11 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The packages which this package depends on"}}}],
                         "body": {"list": {"variable": "hydra.packaging.PackageDependency"}}}}},
                   {
-                    "name": "description",
+                    "name": "modules",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the package"}}}],
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The modules in this package"}}}],
+                        "body": {"list": {"variable": "hydra.packaging.Module"}}}}}]}}},
           "variables": []}}},
     {
       "type": {

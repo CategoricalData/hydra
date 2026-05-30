@@ -11,8 +11,8 @@ import qualified Data.Map as M
 module_ :: Packaging.Module
 module_ =
     Packaging.Module {
-      Packaging.moduleDescription = (Just "Term decoders for hydra.validation"),
       Packaging.moduleName = (Packaging.ModuleName "hydra.decode.validation"),
+      Packaging.moduleDescription = (Just "Term decoders for hydra.validation"),
       Packaging.moduleDependencies = [
         Packaging.ModuleDependency {
           Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.extract.core"),

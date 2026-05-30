@@ -70,16 +70,16 @@ idAScheme = T.poly ["a"] (T.function (T.var "a") (T.var "a"))
 
 modA :: TypedTerm Module
 modA = Packaging.module_
-  Phantoms.nothing
   nsA
+  Phantoms.nothing
   (Phantoms.list ([] :: [TypedTerm ModuleDependency]))
   (Phantoms.list [
     typedTermDef nameIdA (Terms.lambda "x" (Terms.var "x")) idAScheme])
 
 modB :: TypedTerm Module
 modB = Packaging.module_
-  Phantoms.nothing
   nsB
+  Phantoms.nothing
   (Phantoms.list [Packaging.moduleDependency nsA Phantoms.nothing])
   (Phantoms.list [
     untypedTermDef nameUseId (Terms.apply (Terms.var "hydra.testInput.a.idA") (Terms.int32 42))])
@@ -143,16 +143,16 @@ funkyTerm = Terms.lambda "x" (Terms.lambda "y" (Terms.lambda "z" (Terms.var "z")
 
 modV :: TypedTerm Module
 modV = Packaging.module_
-  Phantoms.nothing
   nsV
+  Phantoms.nothing
   (Phantoms.list ([] :: [TypedTerm ModuleDependency]))
   (Phantoms.list [typedTermDef nameFunky funkyTerm funkyScheme])
 
 -- useFunky = funky "foo" 7 100
 modW :: TypedTerm Module
 modW = Packaging.module_
-  Phantoms.nothing
   nsW
+  Phantoms.nothing
   (Phantoms.list [Packaging.moduleDependency nsV Phantoms.nothing])
   (Phantoms.list [
     untypedTermDef nameUseFunky

@@ -459,8 +459,8 @@ mkDocumentedTermDef fullName = Packaging.definitionTerm $ Packaging.termDefiniti
 -- | Build a Module with the given namespace and definitions and no dependencies.
 mkModule :: String -> [TypedTerm Definition] -> TypedTerm Module
 mkModule nsStr defs = Packaging.module_
-  (Phantoms.just $ Phantoms.string ("Test module " <> nsStr))
   (nsLit nsStr)
+  (Phantoms.just $ Phantoms.string ("Test module " <> nsStr))
   (Phantoms.list ([] :: [TypedTerm ModuleDependency]))
   (Phantoms.list defs)
 
@@ -468,9 +468,9 @@ mkModule nsStr defs = Packaging.module_
 mkPackage :: String -> [TypedTerm Module] -> TypedTerm Package
 mkPackage nameStr mods = Packaging.package
   (pn nameStr)
-  (Phantoms.list mods)
-  (Phantoms.list ([] :: [TypedTerm PackageDependency]))
   (Phantoms.just $ Phantoms.string ("Test package " <> nameStr))
+  (Phantoms.list ([] :: [TypedTerm PackageDependency]))
+  (Phantoms.list mods)
 
 -- | Build a TermDefinition without a doc annotation (top-level term is a bare
 -- literal). Used to drive checkDefinitionDocumentation failures.

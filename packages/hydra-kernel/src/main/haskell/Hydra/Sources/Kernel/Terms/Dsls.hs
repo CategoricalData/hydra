@@ -247,10 +247,10 @@ dslModule = define "dslModule" $
           ("x" ~> var "x")
           (generateBindingsForType @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
         right (just (Packaging.module_
+          (dslModuleName @@ (Packaging.moduleName (var "mod")))
           (just (Strings.cat $ list [
             string "DSL functions for ",
             Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
-          (dslModuleName @@ (Packaging.moduleName (var "mod")))
           -- DSL modules depend on:
           -- (1) the original module + its source dependencies + hydra.typed (for TypedTerm), and
           -- (2) DSL modules for the source's dependencies (to reference other types' DSL functions)
