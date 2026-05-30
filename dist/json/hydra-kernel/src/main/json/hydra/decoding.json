@@ -7314,6 +7314,13 @@
                                                                     "record": {
                                                                       "fields": [
                                                                         {
+                                                                          "name": "name",
+                                                                          "term": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {"argument": {"variable": "mod"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
+                                                                              "function": {"variable": "hydra.decoding.decodeNamespace"}}}},
+                                                                        {
                                                                           "name": "description",
                                                                           "term": {
                                                                             "maybe": {
@@ -7327,13 +7334,6 @@
                                                                                           "application": {"argument": {"variable": "mod"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
                                                                                         "function": {"unwrap": "hydra.packaging.ModuleName"}}}]},
                                                                                 "function": {"variable": "hydra.lib.strings.cat"}}}}},
-                                                                        {
-                                                                          "name": "name",
-                                                                          "term": {
-                                                                            "application": {
-                                                                              "argument": {
-                                                                                "application": {"argument": {"variable": "mod"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
-                                                                              "function": {"variable": "hydra.decoding.decodeNamespace"}}}},
                                                                         {
                                                                           "name": "dependencies",
                                                                           "term": {

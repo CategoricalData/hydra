@@ -247,15 +247,15 @@
                                   "record": {
                                     "fields": [
                                       {
+                                        "name": "name",
+                                        "term": {
+                                          "application": {"argument": {"variable": "mod"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}}},
+                                      {
                                         "name": "description",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "mod"},
                                             "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.Module"}}}}},
-                                      {
-                                        "name": "name",
-                                        "term": {
-                                          "application": {"argument": {"variable": "mod"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}}},
                                       {
                                         "name": "dependencies",
                                         "term": {

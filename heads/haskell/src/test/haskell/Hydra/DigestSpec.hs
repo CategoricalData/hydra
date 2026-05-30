@@ -24,7 +24,7 @@ import qualified Test.Hspec as H
 -- | A name-only Module. 'hashUniverse' reads only 'moduleName', so the other
 -- fields are irrelevant for digest computation.
 nameOnly :: String -> Module
-nameOnly ns = Module Nothing (ModuleName ns) [] []
+nameOnly ns = Module (ModuleName ns) Nothing [] []
 
 
 spec :: H.Spec

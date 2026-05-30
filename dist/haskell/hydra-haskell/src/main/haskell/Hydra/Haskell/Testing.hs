@@ -75,8 +75,8 @@ buildNamespacesForTestGroup mod tgroup graph_ =
                     Core.bindingTypeScheme = Nothing}) testTerms
           tempModule =
                   Packaging.Module {
-                    Packaging.moduleDescription = (Packaging.moduleDescription mod),
                     Packaging.moduleName = (Packaging.moduleName mod),
+                    Packaging.moduleDescription = (Packaging.moduleDescription mod),
                     Packaging.moduleDependencies = (Packaging.moduleDependencies mod),
                     Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
                       Packaging.termDefinitionName = (Core.bindingName b),
