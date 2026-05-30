@@ -5,67 +5,67 @@ module Hydra.Dsl.Lisp.Syntax where
 import qualified Hydra.Core as Core
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Lisp.Syntax as Syntax
-import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Typed as Typed
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | DSL constructor for hydra.lisp.syntax.AndExpression
-andExpression :: Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.AndExpression
+andExpression :: Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.AndExpression
 andExpression expressions =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.AndExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expressions"),
-          Core.fieldTerm = (Phantoms.unTTerm expressions)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm expressions)}]}))
 -- | DSL accessor for the expressions field of hydra.lisp.syntax.AndExpression
-andExpressionExpressions :: Phantoms.TTerm Syntax.AndExpression -> Phantoms.TTerm [Syntax.Expression]
+andExpressionExpressions :: Typed.TypedTerm Syntax.AndExpression -> Typed.TypedTerm [Syntax.Expression]
 andExpressionExpressions x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.AndExpression"),
         Core.projectionFieldName = (Core.Name "expressions")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the expressions field of hydra.lisp.syntax.AndExpression
-andExpressionWithExpressions :: Phantoms.TTerm Syntax.AndExpression -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.AndExpression
+andExpressionWithExpressions :: Typed.TypedTerm Syntax.AndExpression -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.AndExpression
 andExpressionWithExpressions original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.AndExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expressions"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.lisp.syntax.Application
-application :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.Application
+application :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.Application
 application function arguments =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.Application"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "function"),
-          Core.fieldTerm = (Phantoms.unTTerm function)},
+          Core.fieldTerm = (Typed.unTypedTerm function)},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
-          Core.fieldTerm = (Phantoms.unTTerm arguments)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm arguments)}]}))
 -- | DSL accessor for the arguments field of hydra.lisp.syntax.Application
-applicationArguments :: Phantoms.TTerm Syntax.Application -> Phantoms.TTerm [Syntax.Expression]
+applicationArguments :: Typed.TypedTerm Syntax.Application -> Typed.TypedTerm [Syntax.Expression]
 applicationArguments x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Application"),
         Core.projectionFieldName = (Core.Name "arguments")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the function field of hydra.lisp.syntax.Application
-applicationFunction :: Phantoms.TTerm Syntax.Application -> Phantoms.TTerm Syntax.Expression
+applicationFunction :: Typed.TypedTerm Syntax.Application -> Typed.TypedTerm Syntax.Expression
 applicationFunction x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Application"),
         Core.projectionFieldName = (Core.Name "function")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the arguments field of hydra.lisp.syntax.Application
-applicationWithArguments :: Phantoms.TTerm Syntax.Application -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.Application
+applicationWithArguments :: Typed.TypedTerm Syntax.Application -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.Application
 applicationWithArguments original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.Application"),
       Core.recordFields = [
         Core.Field {
@@ -74,108 +74,108 @@ applicationWithArguments original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Application"),
               Core.projectionFieldName = (Core.Name "function")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the function field of hydra.lisp.syntax.Application
-applicationWithFunction :: Phantoms.TTerm Syntax.Application -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.Application
+applicationWithFunction :: Typed.TypedTerm Syntax.Application -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.Application
 applicationWithFunction original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.Application"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "function"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Application"),
               Core.projectionFieldName = (Core.Name "arguments")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.lisp.syntax.BeginExpression
-beginExpression :: Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.BeginExpression
+beginExpression :: Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.BeginExpression
 beginExpression expressions =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.BeginExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expressions"),
-          Core.fieldTerm = (Phantoms.unTTerm expressions)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm expressions)}]}))
 -- | DSL accessor for the expressions field of hydra.lisp.syntax.BeginExpression
-beginExpressionExpressions :: Phantoms.TTerm Syntax.BeginExpression -> Phantoms.TTerm [Syntax.Expression]
+beginExpressionExpressions :: Typed.TypedTerm Syntax.BeginExpression -> Typed.TypedTerm [Syntax.Expression]
 beginExpressionExpressions x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.BeginExpression"),
         Core.projectionFieldName = (Core.Name "expressions")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the expressions field of hydra.lisp.syntax.BeginExpression
-beginExpressionWithExpressions :: Phantoms.TTerm Syntax.BeginExpression -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.BeginExpression
+beginExpressionWithExpressions :: Typed.TypedTerm Syntax.BeginExpression -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.BeginExpression
 beginExpressionWithExpressions original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.BeginExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expressions"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL injection for the hashTF variant of hydra.lisp.syntax.BooleanStyle
-booleanStyleHashTF :: Phantoms.TTerm Syntax.BooleanStyle
+booleanStyleHashTF :: Typed.TypedTerm Syntax.BooleanStyle
 booleanStyleHashTF =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.BooleanStyle"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hashTF"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL injection for the tNil variant of hydra.lisp.syntax.BooleanStyle
-booleanStyleTNil :: Phantoms.TTerm Syntax.BooleanStyle
+booleanStyleTNil :: Typed.TypedTerm Syntax.BooleanStyle
 booleanStyleTNil =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.BooleanStyle"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tNil"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL injection for the trueFalse variant of hydra.lisp.syntax.BooleanStyle
-booleanStyleTrueFalse :: Phantoms.TTerm Syntax.BooleanStyle
+booleanStyleTrueFalse :: Typed.TypedTerm Syntax.BooleanStyle
 booleanStyleTrueFalse =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.BooleanStyle"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "trueFalse"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL constructor for hydra.lisp.syntax.CaseClause
-caseClause :: Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.CaseClause
+caseClause :: Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.CaseClause
 caseClause keys body =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.CaseClause"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "keys"),
-          Core.fieldTerm = (Phantoms.unTTerm keys)},
+          Core.fieldTerm = (Typed.unTypedTerm keys)},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm body)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm body)}]}))
 -- | DSL accessor for the body field of hydra.lisp.syntax.CaseClause
-caseClauseBody :: Phantoms.TTerm Syntax.CaseClause -> Phantoms.TTerm Syntax.Expression
+caseClauseBody :: Typed.TypedTerm Syntax.CaseClause -> Typed.TypedTerm Syntax.Expression
 caseClauseBody x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CaseClause"),
         Core.projectionFieldName = (Core.Name "body")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the keys field of hydra.lisp.syntax.CaseClause
-caseClauseKeys :: Phantoms.TTerm Syntax.CaseClause -> Phantoms.TTerm [Syntax.Expression]
+caseClauseKeys :: Typed.TypedTerm Syntax.CaseClause -> Typed.TypedTerm [Syntax.Expression]
 caseClauseKeys x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CaseClause"),
         Core.projectionFieldName = (Core.Name "keys")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the body field of hydra.lisp.syntax.CaseClause
-caseClauseWithBody :: Phantoms.TTerm Syntax.CaseClause -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.CaseClause
+caseClauseWithBody :: Typed.TypedTerm Syntax.CaseClause -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.CaseClause
 caseClauseWithBody original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.CaseClause"),
       Core.recordFields = [
         Core.Field {
@@ -184,69 +184,69 @@ caseClauseWithBody original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CaseClause"),
               Core.projectionFieldName = (Core.Name "keys")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the keys field of hydra.lisp.syntax.CaseClause
-caseClauseWithKeys :: Phantoms.TTerm Syntax.CaseClause -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.CaseClause
+caseClauseWithKeys :: Typed.TypedTerm Syntax.CaseClause -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.CaseClause
 caseClauseWithKeys original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.CaseClause"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "keys"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CaseClause"),
               Core.projectionFieldName = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.lisp.syntax.CaseExpression
-caseExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm [Syntax.CaseClause] -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.CaseExpression
+caseExpression :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm [Syntax.CaseClause] -> Typed.TypedTerm (Maybe Syntax.Expression) -> Typed.TypedTerm Syntax.CaseExpression
 caseExpression scrutinee clauses default_ =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.CaseExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "scrutinee"),
-          Core.fieldTerm = (Phantoms.unTTerm scrutinee)},
+          Core.fieldTerm = (Typed.unTypedTerm scrutinee)},
         Core.Field {
           Core.fieldName = (Core.Name "clauses"),
-          Core.fieldTerm = (Phantoms.unTTerm clauses)},
+          Core.fieldTerm = (Typed.unTypedTerm clauses)},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
-          Core.fieldTerm = (Phantoms.unTTerm default_)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm default_)}]}))
 -- | DSL accessor for the clauses field of hydra.lisp.syntax.CaseExpression
-caseExpressionClauses :: Phantoms.TTerm Syntax.CaseExpression -> Phantoms.TTerm [Syntax.CaseClause]
+caseExpressionClauses :: Typed.TypedTerm Syntax.CaseExpression -> Typed.TypedTerm [Syntax.CaseClause]
 caseExpressionClauses x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CaseExpression"),
         Core.projectionFieldName = (Core.Name "clauses")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the default field of hydra.lisp.syntax.CaseExpression
-caseExpressionDefault :: Phantoms.TTerm Syntax.CaseExpression -> Phantoms.TTerm (Maybe Syntax.Expression)
+caseExpressionDefault :: Typed.TypedTerm Syntax.CaseExpression -> Typed.TypedTerm (Maybe Syntax.Expression)
 caseExpressionDefault x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CaseExpression"),
         Core.projectionFieldName = (Core.Name "default")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the scrutinee field of hydra.lisp.syntax.CaseExpression
-caseExpressionScrutinee :: Phantoms.TTerm Syntax.CaseExpression -> Phantoms.TTerm Syntax.Expression
+caseExpressionScrutinee :: Typed.TypedTerm Syntax.CaseExpression -> Typed.TypedTerm Syntax.Expression
 caseExpressionScrutinee x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CaseExpression"),
         Core.projectionFieldName = (Core.Name "scrutinee")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the clauses field of hydra.lisp.syntax.CaseExpression
-caseExpressionWithClauses :: Phantoms.TTerm Syntax.CaseExpression -> Phantoms.TTerm [Syntax.CaseClause] -> Phantoms.TTerm Syntax.CaseExpression
+caseExpressionWithClauses :: Typed.TypedTerm Syntax.CaseExpression -> Typed.TypedTerm [Syntax.CaseClause] -> Typed.TypedTerm Syntax.CaseExpression
 caseExpressionWithClauses original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.CaseExpression"),
       Core.recordFields = [
         Core.Field {
@@ -255,21 +255,21 @@ caseExpressionWithClauses original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CaseExpression"),
               Core.projectionFieldName = (Core.Name "scrutinee")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "clauses"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CaseExpression"),
               Core.projectionFieldName = (Core.Name "default")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the default field of hydra.lisp.syntax.CaseExpression
-caseExpressionWithDefault :: Phantoms.TTerm Syntax.CaseExpression -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.CaseExpression
+caseExpressionWithDefault :: Typed.TypedTerm Syntax.CaseExpression -> Typed.TypedTerm (Maybe Syntax.Expression) -> Typed.TypedTerm Syntax.CaseExpression
 caseExpressionWithDefault original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.CaseExpression"),
       Core.recordFields = [
         Core.Field {
@@ -278,138 +278,138 @@ caseExpressionWithDefault original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CaseExpression"),
               Core.projectionFieldName = (Core.Name "scrutinee")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "clauses"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CaseExpression"),
               Core.projectionFieldName = (Core.Name "clauses")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the scrutinee field of hydra.lisp.syntax.CaseExpression
-caseExpressionWithScrutinee :: Phantoms.TTerm Syntax.CaseExpression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.CaseExpression
+caseExpressionWithScrutinee :: Typed.TypedTerm Syntax.CaseExpression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.CaseExpression
 caseExpressionWithScrutinee original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.CaseExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "scrutinee"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "clauses"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CaseExpression"),
               Core.projectionFieldName = (Core.Name "clauses")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CaseExpression"),
               Core.projectionFieldName = (Core.Name "default")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.lisp.syntax.CharacterLiteral
-characterLiteral :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.CharacterLiteral
+characterLiteral :: Typed.TypedTerm String -> Typed.TypedTerm Syntax.CharacterLiteral
 characterLiteral value =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.CharacterLiteral"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm value)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm value)}]}))
 -- | DSL accessor for the value field of hydra.lisp.syntax.CharacterLiteral
-characterLiteralValue :: Phantoms.TTerm Syntax.CharacterLiteral -> Phantoms.TTerm String
+characterLiteralValue :: Typed.TypedTerm Syntax.CharacterLiteral -> Typed.TypedTerm String
 characterLiteralValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CharacterLiteral"),
         Core.projectionFieldName = (Core.Name "value")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the value field of hydra.lisp.syntax.CharacterLiteral
-characterLiteralWithValue :: Phantoms.TTerm Syntax.CharacterLiteral -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.CharacterLiteral
+characterLiteralWithValue :: Typed.TypedTerm Syntax.CharacterLiteral -> Typed.TypedTerm String -> Typed.TypedTerm Syntax.CharacterLiteral
 characterLiteralWithValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.CharacterLiteral"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.lisp.syntax.Comment
-comment :: Phantoms.TTerm Syntax.CommentStyle -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.Comment
+comment :: Typed.TypedTerm Syntax.CommentStyle -> Typed.TypedTerm String -> Typed.TypedTerm Syntax.Comment
 comment style text =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.Comment"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "style"),
-          Core.fieldTerm = (Phantoms.unTTerm style)},
+          Core.fieldTerm = (Typed.unTypedTerm style)},
         Core.Field {
           Core.fieldName = (Core.Name "text"),
-          Core.fieldTerm = (Phantoms.unTTerm text)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm text)}]}))
 -- | DSL accessor for the style field of hydra.lisp.syntax.Comment
-commentStyle :: Phantoms.TTerm Syntax.Comment -> Phantoms.TTerm Syntax.CommentStyle
+commentStyle :: Typed.TypedTerm Syntax.Comment -> Typed.TypedTerm Syntax.CommentStyle
 commentStyle x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Comment"),
         Core.projectionFieldName = (Core.Name "style")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL injection for the block variant of hydra.lisp.syntax.CommentStyle
-commentStyleBlock :: Phantoms.TTerm Syntax.CommentStyle
+commentStyleBlock :: Typed.TypedTerm Syntax.CommentStyle
 commentStyleBlock =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.CommentStyle"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "block"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL injection for the datum variant of hydra.lisp.syntax.CommentStyle
-commentStyleDatum :: Phantoms.TTerm Syntax.CommentStyle
+commentStyleDatum :: Typed.TypedTerm Syntax.CommentStyle
 commentStyleDatum =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.CommentStyle"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "datum"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL injection for the line variant of hydra.lisp.syntax.CommentStyle
-commentStyleLine :: Phantoms.TTerm Syntax.CommentStyle
+commentStyleLine :: Typed.TypedTerm Syntax.CommentStyle
 commentStyleLine =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.CommentStyle"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "line"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL accessor for the text field of hydra.lisp.syntax.Comment
-commentText :: Phantoms.TTerm Syntax.Comment -> Phantoms.TTerm String
+commentText :: Typed.TypedTerm Syntax.Comment -> Typed.TypedTerm String
 commentText x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Comment"),
         Core.projectionFieldName = (Core.Name "text")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the style field of hydra.lisp.syntax.Comment
-commentWithStyle :: Phantoms.TTerm Syntax.Comment -> Phantoms.TTerm Syntax.CommentStyle -> Phantoms.TTerm Syntax.Comment
+commentWithStyle :: Typed.TypedTerm Syntax.Comment -> Typed.TypedTerm Syntax.CommentStyle -> Typed.TypedTerm Syntax.Comment
 commentWithStyle original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.Comment"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "style"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "text"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Comment"),
               Core.projectionFieldName = (Core.Name "text")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the text field of hydra.lisp.syntax.Comment
-commentWithText :: Phantoms.TTerm Syntax.Comment -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.Comment
+commentWithText :: Typed.TypedTerm Syntax.Comment -> Typed.TypedTerm String -> Typed.TypedTerm Syntax.Comment
 commentWithText original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.Comment"),
       Core.recordFields = [
         Core.Field {
@@ -418,42 +418,42 @@ commentWithText original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Comment"),
               Core.projectionFieldName = (Core.Name "style")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "text"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.lisp.syntax.CondClause
-condClause :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.CondClause
+condClause :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.CondClause
 condClause condition body =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.CondClause"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "condition"),
-          Core.fieldTerm = (Phantoms.unTTerm condition)},
+          Core.fieldTerm = (Typed.unTypedTerm condition)},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm body)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm body)}]}))
 -- | DSL accessor for the body field of hydra.lisp.syntax.CondClause
-condClauseBody :: Phantoms.TTerm Syntax.CondClause -> Phantoms.TTerm Syntax.Expression
+condClauseBody :: Typed.TypedTerm Syntax.CondClause -> Typed.TypedTerm Syntax.Expression
 condClauseBody x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CondClause"),
         Core.projectionFieldName = (Core.Name "body")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the condition field of hydra.lisp.syntax.CondClause
-condClauseCondition :: Phantoms.TTerm Syntax.CondClause -> Phantoms.TTerm Syntax.Expression
+condClauseCondition :: Typed.TypedTerm Syntax.CondClause -> Typed.TypedTerm Syntax.Expression
 condClauseCondition x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CondClause"),
         Core.projectionFieldName = (Core.Name "condition")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the body field of hydra.lisp.syntax.CondClause
-condClauseWithBody :: Phantoms.TTerm Syntax.CondClause -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.CondClause
+condClauseWithBody :: Typed.TypedTerm Syntax.CondClause -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.CondClause
 condClauseWithBody original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.CondClause"),
       Core.recordFields = [
         Core.Field {
@@ -462,74 +462,74 @@ condClauseWithBody original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CondClause"),
               Core.projectionFieldName = (Core.Name "condition")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the condition field of hydra.lisp.syntax.CondClause
-condClauseWithCondition :: Phantoms.TTerm Syntax.CondClause -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.CondClause
+condClauseWithCondition :: Typed.TypedTerm Syntax.CondClause -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.CondClause
 condClauseWithCondition original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.CondClause"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "condition"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CondClause"),
               Core.projectionFieldName = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.lisp.syntax.CondExpression
-condExpression :: Phantoms.TTerm [Syntax.CondClause] -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.CondExpression
+condExpression :: Typed.TypedTerm [Syntax.CondClause] -> Typed.TypedTerm (Maybe Syntax.Expression) -> Typed.TypedTerm Syntax.CondExpression
 condExpression clauses default_ =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.CondExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "clauses"),
-          Core.fieldTerm = (Phantoms.unTTerm clauses)},
+          Core.fieldTerm = (Typed.unTypedTerm clauses)},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
-          Core.fieldTerm = (Phantoms.unTTerm default_)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm default_)}]}))
 -- | DSL accessor for the clauses field of hydra.lisp.syntax.CondExpression
-condExpressionClauses :: Phantoms.TTerm Syntax.CondExpression -> Phantoms.TTerm [Syntax.CondClause]
+condExpressionClauses :: Typed.TypedTerm Syntax.CondExpression -> Typed.TypedTerm [Syntax.CondClause]
 condExpressionClauses x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CondExpression"),
         Core.projectionFieldName = (Core.Name "clauses")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the default field of hydra.lisp.syntax.CondExpression
-condExpressionDefault :: Phantoms.TTerm Syntax.CondExpression -> Phantoms.TTerm (Maybe Syntax.Expression)
+condExpressionDefault :: Typed.TypedTerm Syntax.CondExpression -> Typed.TypedTerm (Maybe Syntax.Expression)
 condExpressionDefault x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CondExpression"),
         Core.projectionFieldName = (Core.Name "default")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the clauses field of hydra.lisp.syntax.CondExpression
-condExpressionWithClauses :: Phantoms.TTerm Syntax.CondExpression -> Phantoms.TTerm [Syntax.CondClause] -> Phantoms.TTerm Syntax.CondExpression
+condExpressionWithClauses :: Typed.TypedTerm Syntax.CondExpression -> Typed.TypedTerm [Syntax.CondClause] -> Typed.TypedTerm Syntax.CondExpression
 condExpressionWithClauses original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.CondExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "clauses"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CondExpression"),
               Core.projectionFieldName = (Core.Name "default")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the default field of hydra.lisp.syntax.CondExpression
-condExpressionWithDefault :: Phantoms.TTerm Syntax.CondExpression -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.CondExpression
+condExpressionWithDefault :: Typed.TypedTerm Syntax.CondExpression -> Typed.TypedTerm (Maybe Syntax.Expression) -> Typed.TypedTerm Syntax.CondExpression
 condExpressionWithDefault original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.CondExpression"),
       Core.recordFields = [
         Core.Field {
@@ -538,58 +538,58 @@ condExpressionWithDefault original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CondExpression"),
               Core.projectionFieldName = (Core.Name "clauses")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.lisp.syntax.ConsExpression
-consExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.ConsExpression
+consExpression :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.ConsExpression
 consExpression head tail =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ConsExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "head"),
-          Core.fieldTerm = (Phantoms.unTTerm head)},
+          Core.fieldTerm = (Typed.unTypedTerm head)},
         Core.Field {
           Core.fieldName = (Core.Name "tail"),
-          Core.fieldTerm = (Phantoms.unTTerm tail)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm tail)}]}))
 -- | DSL accessor for the head field of hydra.lisp.syntax.ConsExpression
-consExpressionHead :: Phantoms.TTerm Syntax.ConsExpression -> Phantoms.TTerm Syntax.Expression
+consExpressionHead :: Typed.TypedTerm Syntax.ConsExpression -> Typed.TypedTerm Syntax.Expression
 consExpressionHead x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ConsExpression"),
         Core.projectionFieldName = (Core.Name "head")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the tail field of hydra.lisp.syntax.ConsExpression
-consExpressionTail :: Phantoms.TTerm Syntax.ConsExpression -> Phantoms.TTerm Syntax.Expression
+consExpressionTail :: Typed.TypedTerm Syntax.ConsExpression -> Typed.TypedTerm Syntax.Expression
 consExpressionTail x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ConsExpression"),
         Core.projectionFieldName = (Core.Name "tail")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the head field of hydra.lisp.syntax.ConsExpression
-consExpressionWithHead :: Phantoms.TTerm Syntax.ConsExpression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.ConsExpression
+consExpressionWithHead :: Typed.TypedTerm Syntax.ConsExpression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.ConsExpression
 consExpressionWithHead original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ConsExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "head"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "tail"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ConsExpression"),
               Core.projectionFieldName = (Core.Name "tail")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the tail field of hydra.lisp.syntax.ConsExpression
-consExpressionWithTail :: Phantoms.TTerm Syntax.ConsExpression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.ConsExpression
+consExpressionWithTail :: Typed.TypedTerm Syntax.ConsExpression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.ConsExpression
 consExpressionWithTail original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ConsExpression"),
       Core.recordFields = [
         Core.Field {
@@ -598,53 +598,53 @@ consExpressionWithTail original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ConsExpression"),
               Core.projectionFieldName = (Core.Name "head")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "tail"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.lisp.syntax.ConstantDefinition
-constantDefinition :: Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm (Maybe Syntax.Docstring) -> Phantoms.TTerm Syntax.ConstantDefinition
+constantDefinition :: Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm (Maybe Syntax.Docstring) -> Typed.TypedTerm Syntax.ConstantDefinition
 constantDefinition name value doc =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ConstantDefinition"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
+          Core.fieldTerm = (Typed.unTypedTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm value)},
+          Core.fieldTerm = (Typed.unTypedTerm value)},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
-          Core.fieldTerm = (Phantoms.unTTerm doc)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm doc)}]}))
 -- | DSL accessor for the doc field of hydra.lisp.syntax.ConstantDefinition
-constantDefinitionDoc :: Phantoms.TTerm Syntax.ConstantDefinition -> Phantoms.TTerm (Maybe Syntax.Docstring)
+constantDefinitionDoc :: Typed.TypedTerm Syntax.ConstantDefinition -> Typed.TypedTerm (Maybe Syntax.Docstring)
 constantDefinitionDoc x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ConstantDefinition"),
         Core.projectionFieldName = (Core.Name "doc")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the name field of hydra.lisp.syntax.ConstantDefinition
-constantDefinitionName :: Phantoms.TTerm Syntax.ConstantDefinition -> Phantoms.TTerm Syntax.Symbol
+constantDefinitionName :: Typed.TypedTerm Syntax.ConstantDefinition -> Typed.TypedTerm Syntax.Symbol
 constantDefinitionName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ConstantDefinition"),
         Core.projectionFieldName = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the value field of hydra.lisp.syntax.ConstantDefinition
-constantDefinitionValue :: Phantoms.TTerm Syntax.ConstantDefinition -> Phantoms.TTerm Syntax.Expression
+constantDefinitionValue :: Typed.TypedTerm Syntax.ConstantDefinition -> Typed.TypedTerm Syntax.Expression
 constantDefinitionValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ConstantDefinition"),
         Core.projectionFieldName = (Core.Name "value")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the doc field of hydra.lisp.syntax.ConstantDefinition
-constantDefinitionWithDoc :: Phantoms.TTerm Syntax.ConstantDefinition -> Phantoms.TTerm (Maybe Syntax.Docstring) -> Phantoms.TTerm Syntax.ConstantDefinition
+constantDefinitionWithDoc :: Typed.TypedTerm Syntax.ConstantDefinition -> Typed.TypedTerm (Maybe Syntax.Docstring) -> Typed.TypedTerm Syntax.ConstantDefinition
 constantDefinitionWithDoc original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ConstantDefinition"),
       Core.recordFields = [
         Core.Field {
@@ -653,44 +653,44 @@ constantDefinitionWithDoc original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ConstantDefinition"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ConstantDefinition"),
               Core.projectionFieldName = (Core.Name "value")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the name field of hydra.lisp.syntax.ConstantDefinition
-constantDefinitionWithName :: Phantoms.TTerm Syntax.ConstantDefinition -> Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.ConstantDefinition
+constantDefinitionWithName :: Typed.TypedTerm Syntax.ConstantDefinition -> Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.ConstantDefinition
 constantDefinitionWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ConstantDefinition"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ConstantDefinition"),
               Core.projectionFieldName = (Core.Name "value")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ConstantDefinition"),
               Core.projectionFieldName = (Core.Name "doc")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the value field of hydra.lisp.syntax.ConstantDefinition
-constantDefinitionWithValue :: Phantoms.TTerm Syntax.ConstantDefinition -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.ConstantDefinition
+constantDefinitionWithValue :: Typed.TypedTerm Syntax.ConstantDefinition -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.ConstantDefinition
 constantDefinitionWithValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ConstantDefinition"),
       Core.recordFields = [
         Core.Field {
@@ -699,49 +699,49 @@ constantDefinitionWithValue original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ConstantDefinition"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ConstantDefinition"),
               Core.projectionFieldName = (Core.Name "doc")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.lisp.syntax.ConstructorPattern
-constructorPattern :: Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm [Syntax.Pattern] -> Phantoms.TTerm Syntax.ConstructorPattern
+constructorPattern :: Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm [Syntax.Pattern] -> Typed.TypedTerm Syntax.ConstructorPattern
 constructorPattern constructor arguments =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ConstructorPattern"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "constructor"),
-          Core.fieldTerm = (Phantoms.unTTerm constructor)},
+          Core.fieldTerm = (Typed.unTypedTerm constructor)},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
-          Core.fieldTerm = (Phantoms.unTTerm arguments)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm arguments)}]}))
 -- | DSL accessor for the arguments field of hydra.lisp.syntax.ConstructorPattern
-constructorPatternArguments :: Phantoms.TTerm Syntax.ConstructorPattern -> Phantoms.TTerm [Syntax.Pattern]
+constructorPatternArguments :: Typed.TypedTerm Syntax.ConstructorPattern -> Typed.TypedTerm [Syntax.Pattern]
 constructorPatternArguments x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ConstructorPattern"),
         Core.projectionFieldName = (Core.Name "arguments")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the constructor field of hydra.lisp.syntax.ConstructorPattern
-constructorPatternConstructor :: Phantoms.TTerm Syntax.ConstructorPattern -> Phantoms.TTerm Syntax.Symbol
+constructorPatternConstructor :: Typed.TypedTerm Syntax.ConstructorPattern -> Typed.TypedTerm Syntax.Symbol
 constructorPatternConstructor x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ConstructorPattern"),
         Core.projectionFieldName = (Core.Name "constructor")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the arguments field of hydra.lisp.syntax.ConstructorPattern
-constructorPatternWithArguments :: Phantoms.TTerm Syntax.ConstructorPattern -> Phantoms.TTerm [Syntax.Pattern] -> Phantoms.TTerm Syntax.ConstructorPattern
+constructorPatternWithArguments :: Typed.TypedTerm Syntax.ConstructorPattern -> Typed.TypedTerm [Syntax.Pattern] -> Typed.TypedTerm Syntax.ConstructorPattern
 constructorPatternWithArguments original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ConstructorPattern"),
       Core.recordFields = [
         Core.Field {
@@ -750,74 +750,74 @@ constructorPatternWithArguments original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ConstructorPattern"),
               Core.projectionFieldName = (Core.Name "constructor")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the constructor field of hydra.lisp.syntax.ConstructorPattern
-constructorPatternWithConstructor :: Phantoms.TTerm Syntax.ConstructorPattern -> Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.ConstructorPattern
+constructorPatternWithConstructor :: Typed.TypedTerm Syntax.ConstructorPattern -> Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.ConstructorPattern
 constructorPatternWithConstructor original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ConstructorPattern"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "constructor"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ConstructorPattern"),
               Core.projectionFieldName = (Core.Name "arguments")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.lisp.syntax.DestructuringBinding
-destructuringBinding :: Phantoms.TTerm Syntax.DestructuringPattern -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.DestructuringBinding
+destructuringBinding :: Typed.TypedTerm Syntax.DestructuringPattern -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.DestructuringBinding
 destructuringBinding pattern value =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.DestructuringBinding"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
-          Core.fieldTerm = (Phantoms.unTTerm pattern)},
+          Core.fieldTerm = (Typed.unTypedTerm pattern)},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm value)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm value)}]}))
 -- | DSL accessor for the pattern field of hydra.lisp.syntax.DestructuringBinding
-destructuringBindingPattern :: Phantoms.TTerm Syntax.DestructuringBinding -> Phantoms.TTerm Syntax.DestructuringPattern
+destructuringBindingPattern :: Typed.TypedTerm Syntax.DestructuringBinding -> Typed.TypedTerm Syntax.DestructuringPattern
 destructuringBindingPattern x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.DestructuringBinding"),
         Core.projectionFieldName = (Core.Name "pattern")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the value field of hydra.lisp.syntax.DestructuringBinding
-destructuringBindingValue :: Phantoms.TTerm Syntax.DestructuringBinding -> Phantoms.TTerm Syntax.Expression
+destructuringBindingValue :: Typed.TypedTerm Syntax.DestructuringBinding -> Typed.TypedTerm Syntax.Expression
 destructuringBindingValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.DestructuringBinding"),
         Core.projectionFieldName = (Core.Name "value")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the pattern field of hydra.lisp.syntax.DestructuringBinding
-destructuringBindingWithPattern :: Phantoms.TTerm Syntax.DestructuringBinding -> Phantoms.TTerm Syntax.DestructuringPattern -> Phantoms.TTerm Syntax.DestructuringBinding
+destructuringBindingWithPattern :: Typed.TypedTerm Syntax.DestructuringBinding -> Typed.TypedTerm Syntax.DestructuringPattern -> Typed.TypedTerm Syntax.DestructuringBinding
 destructuringBindingWithPattern original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.DestructuringBinding"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.DestructuringBinding"),
               Core.projectionFieldName = (Core.Name "value")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the value field of hydra.lisp.syntax.DestructuringBinding
-destructuringBindingWithValue :: Phantoms.TTerm Syntax.DestructuringBinding -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.DestructuringBinding
+destructuringBindingWithValue :: Typed.TypedTerm Syntax.DestructuringBinding -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.DestructuringBinding
 destructuringBindingWithValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.DestructuringBinding"),
       Core.recordFields = [
         Core.Field {
@@ -826,146 +826,146 @@ destructuringBindingWithValue original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.DestructuringBinding"),
               Core.projectionFieldName = (Core.Name "pattern")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL injection for the associative variant of hydra.lisp.syntax.DestructuringPattern
-destructuringPatternAssociative :: Phantoms.TTerm [Syntax.Symbol] -> Phantoms.TTerm Syntax.DestructuringPattern
+destructuringPatternAssociative :: Typed.TypedTerm [Syntax.Symbol] -> Typed.TypedTerm Syntax.DestructuringPattern
 destructuringPatternAssociative x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.DestructuringPattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "associative"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the rest variant of hydra.lisp.syntax.DestructuringPattern
-destructuringPatternRest :: Phantoms.TTerm [Syntax.Symbol] -> Phantoms.TTerm Syntax.DestructuringPattern
+destructuringPatternRest :: Typed.TypedTerm [Syntax.Symbol] -> Typed.TypedTerm Syntax.DestructuringPattern
 destructuringPatternRest x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.DestructuringPattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rest"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the sequential variant of hydra.lisp.syntax.DestructuringPattern
-destructuringPatternSequential :: Phantoms.TTerm [Syntax.Symbol] -> Phantoms.TTerm Syntax.DestructuringPattern
+destructuringPatternSequential :: Typed.TypedTerm [Syntax.Symbol] -> Typed.TypedTerm Syntax.DestructuringPattern
 destructuringPatternSequential x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.DestructuringPattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequential"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the clojure variant of hydra.lisp.syntax.Dialect
-dialectClojure :: Phantoms.TTerm Syntax.Dialect
+dialectClojure :: Typed.TypedTerm Syntax.Dialect
 dialectClojure =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Dialect"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "clojure"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL injection for the commonLisp variant of hydra.lisp.syntax.Dialect
-dialectCommonLisp :: Phantoms.TTerm Syntax.Dialect
+dialectCommonLisp :: Typed.TypedTerm Syntax.Dialect
 dialectCommonLisp =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Dialect"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "commonLisp"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL injection for the emacsLisp variant of hydra.lisp.syntax.Dialect
-dialectEmacsLisp :: Phantoms.TTerm Syntax.Dialect
+dialectEmacsLisp :: Typed.TypedTerm Syntax.Dialect
 dialectEmacsLisp =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Dialect"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "emacsLisp"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL injection for the scheme variant of hydra.lisp.syntax.Dialect
-dialectScheme :: Phantoms.TTerm Syntax.Dialect
+dialectScheme :: Typed.TypedTerm Syntax.Dialect
 dialectScheme =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Dialect"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "scheme"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL constructor for hydra.lisp.syntax.DoExpression
-doExpression :: Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.DoExpression
+doExpression :: Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.DoExpression
 doExpression expressions =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.DoExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expressions"),
-          Core.fieldTerm = (Phantoms.unTTerm expressions)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm expressions)}]}))
 -- | DSL accessor for the expressions field of hydra.lisp.syntax.DoExpression
-doExpressionExpressions :: Phantoms.TTerm Syntax.DoExpression -> Phantoms.TTerm [Syntax.Expression]
+doExpressionExpressions :: Typed.TypedTerm Syntax.DoExpression -> Typed.TypedTerm [Syntax.Expression]
 doExpressionExpressions x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.DoExpression"),
         Core.projectionFieldName = (Core.Name "expressions")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the expressions field of hydra.lisp.syntax.DoExpression
-doExpressionWithExpressions :: Phantoms.TTerm Syntax.DoExpression -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.DoExpression
+doExpressionWithExpressions :: Typed.TypedTerm Syntax.DoExpression -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.DoExpression
 doExpressionWithExpressions original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.DoExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expressions"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for the hydra.lisp.syntax.Docstring wrapper
-docstring :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.Docstring
+docstring :: Typed.TypedTerm String -> Typed.TypedTerm Syntax.Docstring
 docstring x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.lisp.syntax.Docstring"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 -- | DSL constructor for hydra.lisp.syntax.DottedPair
-dottedPair :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.DottedPair
+dottedPair :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.DottedPair
 dottedPair car cdr =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.DottedPair"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "car"),
-          Core.fieldTerm = (Phantoms.unTTerm car)},
+          Core.fieldTerm = (Typed.unTypedTerm car)},
         Core.Field {
           Core.fieldName = (Core.Name "cdr"),
-          Core.fieldTerm = (Phantoms.unTTerm cdr)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm cdr)}]}))
 -- | DSL accessor for the car field of hydra.lisp.syntax.DottedPair
-dottedPairCar :: Phantoms.TTerm Syntax.DottedPair -> Phantoms.TTerm Syntax.Expression
+dottedPairCar :: Typed.TypedTerm Syntax.DottedPair -> Typed.TypedTerm Syntax.Expression
 dottedPairCar x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.DottedPair"),
         Core.projectionFieldName = (Core.Name "car")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the cdr field of hydra.lisp.syntax.DottedPair
-dottedPairCdr :: Phantoms.TTerm Syntax.DottedPair -> Phantoms.TTerm Syntax.Expression
+dottedPairCdr :: Typed.TypedTerm Syntax.DottedPair -> Typed.TypedTerm Syntax.Expression
 dottedPairCdr x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.DottedPair"),
         Core.projectionFieldName = (Core.Name "cdr")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the car field of hydra.lisp.syntax.DottedPair
-dottedPairWithCar :: Phantoms.TTerm Syntax.DottedPair -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.DottedPair
+dottedPairWithCar :: Typed.TypedTerm Syntax.DottedPair -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.DottedPair
 dottedPairWithCar original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.DottedPair"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "car"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "cdr"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.DottedPair"),
               Core.projectionFieldName = (Core.Name "cdr")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the cdr field of hydra.lisp.syntax.DottedPair
-dottedPairWithCdr :: Phantoms.TTerm Syntax.DottedPair -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.DottedPair
+dottedPairWithCdr :: Typed.TypedTerm Syntax.DottedPair -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.DottedPair
 dottedPairWithCdr original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.DottedPair"),
       Core.recordFields = [
         Core.Field {
@@ -974,287 +974,287 @@ dottedPairWithCdr original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.DottedPair"),
               Core.projectionFieldName = (Core.Name "car")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cdr"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.lisp.syntax.ExportDeclaration
-exportDeclaration :: Phantoms.TTerm [Syntax.Symbol] -> Phantoms.TTerm Syntax.ExportDeclaration
+exportDeclaration :: Typed.TypedTerm [Syntax.Symbol] -> Typed.TypedTerm Syntax.ExportDeclaration
 exportDeclaration symbols =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ExportDeclaration"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "symbols"),
-          Core.fieldTerm = (Phantoms.unTTerm symbols)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm symbols)}]}))
 -- | DSL accessor for the symbols field of hydra.lisp.syntax.ExportDeclaration
-exportDeclarationSymbols :: Phantoms.TTerm Syntax.ExportDeclaration -> Phantoms.TTerm [Syntax.Symbol]
+exportDeclarationSymbols :: Typed.TypedTerm Syntax.ExportDeclaration -> Typed.TypedTerm [Syntax.Symbol]
 exportDeclarationSymbols x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ExportDeclaration"),
         Core.projectionFieldName = (Core.Name "symbols")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the symbols field of hydra.lisp.syntax.ExportDeclaration
-exportDeclarationWithSymbols :: Phantoms.TTerm Syntax.ExportDeclaration -> Phantoms.TTerm [Syntax.Symbol] -> Phantoms.TTerm Syntax.ExportDeclaration
+exportDeclarationWithSymbols :: Typed.TypedTerm Syntax.ExportDeclaration -> Typed.TypedTerm [Syntax.Symbol] -> Typed.TypedTerm Syntax.ExportDeclaration
 exportDeclarationWithSymbols original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ExportDeclaration"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "symbols"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL injection for the and variant of hydra.lisp.syntax.Expression
-expressionAnd :: Phantoms.TTerm Syntax.AndExpression -> Phantoms.TTerm Syntax.Expression
+expressionAnd :: Typed.TypedTerm Syntax.AndExpression -> Typed.TypedTerm Syntax.Expression
 expressionAnd x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "and"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the application variant of hydra.lisp.syntax.Expression
-expressionApplication :: Phantoms.TTerm Syntax.Application -> Phantoms.TTerm Syntax.Expression
+expressionApplication :: Typed.TypedTerm Syntax.Application -> Typed.TypedTerm Syntax.Expression
 expressionApplication x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "application"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the begin variant of hydra.lisp.syntax.Expression
-expressionBegin :: Phantoms.TTerm Syntax.BeginExpression -> Phantoms.TTerm Syntax.Expression
+expressionBegin :: Typed.TypedTerm Syntax.BeginExpression -> Typed.TypedTerm Syntax.Expression
 expressionBegin x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "begin"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the case variant of hydra.lisp.syntax.Expression
-expressionCase :: Phantoms.TTerm Syntax.CaseExpression -> Phantoms.TTerm Syntax.Expression
+expressionCase :: Typed.TypedTerm Syntax.CaseExpression -> Typed.TypedTerm Syntax.Expression
 expressionCase x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "case"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the cond variant of hydra.lisp.syntax.Expression
-expressionCond :: Phantoms.TTerm Syntax.CondExpression -> Phantoms.TTerm Syntax.Expression
+expressionCond :: Typed.TypedTerm Syntax.CondExpression -> Typed.TypedTerm Syntax.Expression
 expressionCond x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cond"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the cons variant of hydra.lisp.syntax.Expression
-expressionCons :: Phantoms.TTerm Syntax.ConsExpression -> Phantoms.TTerm Syntax.Expression
+expressionCons :: Typed.TypedTerm Syntax.ConsExpression -> Typed.TypedTerm Syntax.Expression
 expressionCons x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cons"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the do variant of hydra.lisp.syntax.Expression
-expressionDo :: Phantoms.TTerm Syntax.DoExpression -> Phantoms.TTerm Syntax.Expression
+expressionDo :: Typed.TypedTerm Syntax.DoExpression -> Typed.TypedTerm Syntax.Expression
 expressionDo x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "do"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the dottedPair variant of hydra.lisp.syntax.Expression
-expressionDottedPair :: Phantoms.TTerm Syntax.DottedPair -> Phantoms.TTerm Syntax.Expression
+expressionDottedPair :: Typed.TypedTerm Syntax.DottedPair -> Typed.TypedTerm Syntax.Expression
 expressionDottedPair x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dottedPair"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the fieldAccess variant of hydra.lisp.syntax.Expression
-expressionFieldAccess :: Phantoms.TTerm Syntax.FieldAccess -> Phantoms.TTerm Syntax.Expression
+expressionFieldAccess :: Typed.TypedTerm Syntax.FieldAccess -> Typed.TypedTerm Syntax.Expression
 expressionFieldAccess x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fieldAccess"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the if variant of hydra.lisp.syntax.Expression
-expressionIf :: Phantoms.TTerm Syntax.IfExpression -> Phantoms.TTerm Syntax.Expression
+expressionIf :: Typed.TypedTerm Syntax.IfExpression -> Typed.TypedTerm Syntax.Expression
 expressionIf x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "if"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the lambda variant of hydra.lisp.syntax.Expression
-expressionLambda :: Phantoms.TTerm Syntax.Lambda -> Phantoms.TTerm Syntax.Expression
+expressionLambda :: Typed.TypedTerm Syntax.Lambda -> Typed.TypedTerm Syntax.Expression
 expressionLambda x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lambda"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the let variant of hydra.lisp.syntax.Expression
-expressionLet :: Phantoms.TTerm Syntax.LetExpression -> Phantoms.TTerm Syntax.Expression
+expressionLet :: Typed.TypedTerm Syntax.LetExpression -> Typed.TypedTerm Syntax.Expression
 expressionLet x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "let"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the list variant of hydra.lisp.syntax.Expression
-expressionList :: Phantoms.TTerm Syntax.ListLiteral -> Phantoms.TTerm Syntax.Expression
+expressionList :: Typed.TypedTerm Syntax.ListLiteral -> Typed.TypedTerm Syntax.Expression
 expressionList x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the literal variant of hydra.lisp.syntax.Expression
-expressionLiteral :: Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm Syntax.Expression
+expressionLiteral :: Typed.TypedTerm Syntax.Literal -> Typed.TypedTerm Syntax.Expression
 expressionLiteral x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the map variant of hydra.lisp.syntax.Expression
-expressionMap :: Phantoms.TTerm Syntax.MapLiteral -> Phantoms.TTerm Syntax.Expression
+expressionMap :: Typed.TypedTerm Syntax.MapLiteral -> Typed.TypedTerm Syntax.Expression
 expressionMap x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the not variant of hydra.lisp.syntax.Expression
-expressionNot :: Phantoms.TTerm Syntax.NotExpression -> Phantoms.TTerm Syntax.Expression
+expressionNot :: Typed.TypedTerm Syntax.NotExpression -> Typed.TypedTerm Syntax.Expression
 expressionNot x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "not"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the or variant of hydra.lisp.syntax.Expression
-expressionOr :: Phantoms.TTerm Syntax.OrExpression -> Phantoms.TTerm Syntax.Expression
+expressionOr :: Typed.TypedTerm Syntax.OrExpression -> Typed.TypedTerm Syntax.Expression
 expressionOr x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "or"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the quasiquote variant of hydra.lisp.syntax.Expression
-expressionQuasiquote :: Phantoms.TTerm Syntax.QuasiquoteExpression -> Phantoms.TTerm Syntax.Expression
+expressionQuasiquote :: Typed.TypedTerm Syntax.QuasiquoteExpression -> Typed.TypedTerm Syntax.Expression
 expressionQuasiquote x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "quasiquote"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the quote variant of hydra.lisp.syntax.Expression
-expressionQuote :: Phantoms.TTerm Syntax.QuoteExpression -> Phantoms.TTerm Syntax.Expression
+expressionQuote :: Typed.TypedTerm Syntax.QuoteExpression -> Typed.TypedTerm Syntax.Expression
 expressionQuote x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "quote"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the sExpression variant of hydra.lisp.syntax.Expression
-expressionSExpression :: Phantoms.TTerm Syntax.SExpression -> Phantoms.TTerm Syntax.Expression
+expressionSExpression :: Typed.TypedTerm Syntax.SExpression -> Typed.TypedTerm Syntax.Expression
 expressionSExpression x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sExpression"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the set variant of hydra.lisp.syntax.Expression
-expressionSet :: Phantoms.TTerm Syntax.SetLiteral -> Phantoms.TTerm Syntax.Expression
+expressionSet :: Typed.TypedTerm Syntax.SetLiteral -> Typed.TypedTerm Syntax.Expression
 expressionSet x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the splicingUnquote variant of hydra.lisp.syntax.Expression
-expressionSplicingUnquote :: Phantoms.TTerm Syntax.SplicingUnquoteExpression -> Phantoms.TTerm Syntax.Expression
+expressionSplicingUnquote :: Typed.TypedTerm Syntax.SplicingUnquoteExpression -> Typed.TypedTerm Syntax.Expression
 expressionSplicingUnquote x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "splicingUnquote"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the typeAnnotation variant of hydra.lisp.syntax.Expression
-expressionTypeAnnotation :: Phantoms.TTerm Syntax.TypeAnnotation -> Phantoms.TTerm Syntax.Expression
+expressionTypeAnnotation :: Typed.TypedTerm Syntax.TypeAnnotation -> Typed.TypedTerm Syntax.Expression
 expressionTypeAnnotation x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeAnnotation"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the unquote variant of hydra.lisp.syntax.Expression
-expressionUnquote :: Phantoms.TTerm Syntax.UnquoteExpression -> Phantoms.TTerm Syntax.Expression
+expressionUnquote :: Typed.TypedTerm Syntax.UnquoteExpression -> Typed.TypedTerm Syntax.Expression
 expressionUnquote x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unquote"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the variable variant of hydra.lisp.syntax.Expression
-expressionVariable :: Phantoms.TTerm Syntax.VariableReference -> Phantoms.TTerm Syntax.Expression
+expressionVariable :: Typed.TypedTerm Syntax.VariableReference -> Typed.TypedTerm Syntax.Expression
 expressionVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the vector variant of hydra.lisp.syntax.Expression
-expressionVector :: Phantoms.TTerm Syntax.VectorLiteral -> Phantoms.TTerm Syntax.Expression
+expressionVector :: Typed.TypedTerm Syntax.VectorLiteral -> Typed.TypedTerm Syntax.Expression
 expressionVector x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "vector"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL constructor for hydra.lisp.syntax.FieldAccess
-fieldAccess :: Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.FieldAccess
+fieldAccess :: Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.FieldAccess
 fieldAccess recordType field target =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.FieldAccess"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "recordType"),
-          Core.fieldTerm = (Phantoms.unTTerm recordType)},
+          Core.fieldTerm = (Typed.unTypedTerm recordType)},
         Core.Field {
           Core.fieldName = (Core.Name "field"),
-          Core.fieldTerm = (Phantoms.unTTerm field)},
+          Core.fieldTerm = (Typed.unTypedTerm field)},
         Core.Field {
           Core.fieldName = (Core.Name "target"),
-          Core.fieldTerm = (Phantoms.unTTerm target)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm target)}]}))
 -- | DSL accessor for the field field of hydra.lisp.syntax.FieldAccess
-fieldAccessField :: Phantoms.TTerm Syntax.FieldAccess -> Phantoms.TTerm Syntax.Symbol
+fieldAccessField :: Typed.TypedTerm Syntax.FieldAccess -> Typed.TypedTerm Syntax.Symbol
 fieldAccessField x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FieldAccess"),
         Core.projectionFieldName = (Core.Name "field")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the recordType field of hydra.lisp.syntax.FieldAccess
-fieldAccessRecordType :: Phantoms.TTerm Syntax.FieldAccess -> Phantoms.TTerm Syntax.Symbol
+fieldAccessRecordType :: Typed.TypedTerm Syntax.FieldAccess -> Typed.TypedTerm Syntax.Symbol
 fieldAccessRecordType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FieldAccess"),
         Core.projectionFieldName = (Core.Name "recordType")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the target field of hydra.lisp.syntax.FieldAccess
-fieldAccessTarget :: Phantoms.TTerm Syntax.FieldAccess -> Phantoms.TTerm Syntax.Expression
+fieldAccessTarget :: Typed.TypedTerm Syntax.FieldAccess -> Typed.TypedTerm Syntax.Expression
 fieldAccessTarget x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FieldAccess"),
         Core.projectionFieldName = (Core.Name "target")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the field field of hydra.lisp.syntax.FieldAccess
-fieldAccessWithField :: Phantoms.TTerm Syntax.FieldAccess -> Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.FieldAccess
+fieldAccessWithField :: Typed.TypedTerm Syntax.FieldAccess -> Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.FieldAccess
 fieldAccessWithField original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.FieldAccess"),
       Core.recordFields = [
         Core.Field {
@@ -1263,44 +1263,44 @@ fieldAccessWithField original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FieldAccess"),
               Core.projectionFieldName = (Core.Name "recordType")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "field"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FieldAccess"),
               Core.projectionFieldName = (Core.Name "target")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the recordType field of hydra.lisp.syntax.FieldAccess
-fieldAccessWithRecordType :: Phantoms.TTerm Syntax.FieldAccess -> Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.FieldAccess
+fieldAccessWithRecordType :: Typed.TypedTerm Syntax.FieldAccess -> Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.FieldAccess
 fieldAccessWithRecordType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.FieldAccess"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "recordType"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "field"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FieldAccess"),
               Core.projectionFieldName = (Core.Name "field")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FieldAccess"),
               Core.projectionFieldName = (Core.Name "target")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the target field of hydra.lisp.syntax.FieldAccess
-fieldAccessWithTarget :: Phantoms.TTerm Syntax.FieldAccess -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.FieldAccess
+fieldAccessWithTarget :: Typed.TypedTerm Syntax.FieldAccess -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.FieldAccess
 fieldAccessWithTarget original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.FieldAccess"),
       Core.recordFields = [
         Core.Field {
@@ -1309,49 +1309,49 @@ fieldAccessWithTarget original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FieldAccess"),
               Core.projectionFieldName = (Core.Name "recordType")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "field"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FieldAccess"),
               Core.projectionFieldName = (Core.Name "field")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "target"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.lisp.syntax.FieldDefinition
-fieldDefinition :: Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.FieldDefinition
+fieldDefinition :: Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm (Maybe Syntax.Expression) -> Typed.TypedTerm Syntax.FieldDefinition
 fieldDefinition name defaultValue =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.FieldDefinition"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
+          Core.fieldTerm = (Typed.unTypedTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
-          Core.fieldTerm = (Phantoms.unTTerm defaultValue)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm defaultValue)}]}))
 -- | DSL accessor for the defaultValue field of hydra.lisp.syntax.FieldDefinition
-fieldDefinitionDefaultValue :: Phantoms.TTerm Syntax.FieldDefinition -> Phantoms.TTerm (Maybe Syntax.Expression)
+fieldDefinitionDefaultValue :: Typed.TypedTerm Syntax.FieldDefinition -> Typed.TypedTerm (Maybe Syntax.Expression)
 fieldDefinitionDefaultValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FieldDefinition"),
         Core.projectionFieldName = (Core.Name "defaultValue")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the name field of hydra.lisp.syntax.FieldDefinition
-fieldDefinitionName :: Phantoms.TTerm Syntax.FieldDefinition -> Phantoms.TTerm Syntax.Symbol
+fieldDefinitionName :: Typed.TypedTerm Syntax.FieldDefinition -> Typed.TypedTerm Syntax.Symbol
 fieldDefinitionName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FieldDefinition"),
         Core.projectionFieldName = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the defaultValue field of hydra.lisp.syntax.FieldDefinition
-fieldDefinitionWithDefaultValue :: Phantoms.TTerm Syntax.FieldDefinition -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.FieldDefinition
+fieldDefinitionWithDefaultValue :: Typed.TypedTerm Syntax.FieldDefinition -> Typed.TypedTerm (Maybe Syntax.Expression) -> Typed.TypedTerm Syntax.FieldDefinition
 fieldDefinitionWithDefaultValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.FieldDefinition"),
       Core.recordFields = [
         Core.Field {
@@ -1360,58 +1360,58 @@ fieldDefinitionWithDefaultValue original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FieldDefinition"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the name field of hydra.lisp.syntax.FieldDefinition
-fieldDefinitionWithName :: Phantoms.TTerm Syntax.FieldDefinition -> Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.FieldDefinition
+fieldDefinitionWithName :: Typed.TypedTerm Syntax.FieldDefinition -> Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.FieldDefinition
 fieldDefinitionWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.FieldDefinition"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FieldDefinition"),
               Core.projectionFieldName = (Core.Name "defaultValue")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.lisp.syntax.FloatLiteral
-floatLiteral :: Phantoms.TTerm Double -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.FloatLiteral
+floatLiteral :: Typed.TypedTerm Double -> Typed.TypedTerm (Maybe String) -> Typed.TypedTerm Syntax.FloatLiteral
 floatLiteral value precision =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.FloatLiteral"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm value)},
+          Core.fieldTerm = (Typed.unTypedTerm value)},
         Core.Field {
           Core.fieldName = (Core.Name "precision"),
-          Core.fieldTerm = (Phantoms.unTTerm precision)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm precision)}]}))
 -- | DSL accessor for the precision field of hydra.lisp.syntax.FloatLiteral
-floatLiteralPrecision :: Phantoms.TTerm Syntax.FloatLiteral -> Phantoms.TTerm (Maybe String)
+floatLiteralPrecision :: Typed.TypedTerm Syntax.FloatLiteral -> Typed.TypedTerm (Maybe String)
 floatLiteralPrecision x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FloatLiteral"),
         Core.projectionFieldName = (Core.Name "precision")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the value field of hydra.lisp.syntax.FloatLiteral
-floatLiteralValue :: Phantoms.TTerm Syntax.FloatLiteral -> Phantoms.TTerm Double
+floatLiteralValue :: Typed.TypedTerm Syntax.FloatLiteral -> Typed.TypedTerm Double
 floatLiteralValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FloatLiteral"),
         Core.projectionFieldName = (Core.Name "value")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the precision field of hydra.lisp.syntax.FloatLiteral
-floatLiteralWithPrecision :: Phantoms.TTerm Syntax.FloatLiteral -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.FloatLiteral
+floatLiteralWithPrecision :: Typed.TypedTerm Syntax.FloatLiteral -> Typed.TypedTerm (Maybe String) -> Typed.TypedTerm Syntax.FloatLiteral
 floatLiteralWithPrecision original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.FloatLiteral"),
       Core.recordFields = [
         Core.Field {
@@ -1420,102 +1420,102 @@ floatLiteralWithPrecision original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FloatLiteral"),
               Core.projectionFieldName = (Core.Name "value")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "precision"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the value field of hydra.lisp.syntax.FloatLiteral
-floatLiteralWithValue :: Phantoms.TTerm Syntax.FloatLiteral -> Phantoms.TTerm Double -> Phantoms.TTerm Syntax.FloatLiteral
+floatLiteralWithValue :: Typed.TypedTerm Syntax.FloatLiteral -> Typed.TypedTerm Double -> Typed.TypedTerm Syntax.FloatLiteral
 floatLiteralWithValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.FloatLiteral"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "precision"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FloatLiteral"),
               Core.projectionFieldName = (Core.Name "precision")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.lisp.syntax.FunctionDefinition
-functionDefinition :: Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm [Syntax.Symbol] -> Phantoms.TTerm (Maybe Syntax.Symbol) -> Phantoms.TTerm (Maybe Syntax.Docstring) -> Phantoms.TTerm [Syntax.TypeHint] -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.FunctionDefinition
+functionDefinition :: Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm [Syntax.Symbol] -> Typed.TypedTerm (Maybe Syntax.Symbol) -> Typed.TypedTerm (Maybe Syntax.Docstring) -> Typed.TypedTerm [Syntax.TypeHint] -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.FunctionDefinition
 functionDefinition name params restParam doc typeHints body =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
+          Core.fieldTerm = (Typed.unTypedTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
-          Core.fieldTerm = (Phantoms.unTTerm params)},
+          Core.fieldTerm = (Typed.unTypedTerm params)},
         Core.Field {
           Core.fieldName = (Core.Name "restParam"),
-          Core.fieldTerm = (Phantoms.unTTerm restParam)},
+          Core.fieldTerm = (Typed.unTypedTerm restParam)},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
-          Core.fieldTerm = (Phantoms.unTTerm doc)},
+          Core.fieldTerm = (Typed.unTypedTerm doc)},
         Core.Field {
           Core.fieldName = (Core.Name "typeHints"),
-          Core.fieldTerm = (Phantoms.unTTerm typeHints)},
+          Core.fieldTerm = (Typed.unTypedTerm typeHints)},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm body)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm body)}]}))
 -- | DSL accessor for the body field of hydra.lisp.syntax.FunctionDefinition
-functionDefinitionBody :: Phantoms.TTerm Syntax.FunctionDefinition -> Phantoms.TTerm [Syntax.Expression]
+functionDefinitionBody :: Typed.TypedTerm Syntax.FunctionDefinition -> Typed.TypedTerm [Syntax.Expression]
 functionDefinitionBody x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
         Core.projectionFieldName = (Core.Name "body")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the doc field of hydra.lisp.syntax.FunctionDefinition
-functionDefinitionDoc :: Phantoms.TTerm Syntax.FunctionDefinition -> Phantoms.TTerm (Maybe Syntax.Docstring)
+functionDefinitionDoc :: Typed.TypedTerm Syntax.FunctionDefinition -> Typed.TypedTerm (Maybe Syntax.Docstring)
 functionDefinitionDoc x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
         Core.projectionFieldName = (Core.Name "doc")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the name field of hydra.lisp.syntax.FunctionDefinition
-functionDefinitionName :: Phantoms.TTerm Syntax.FunctionDefinition -> Phantoms.TTerm Syntax.Symbol
+functionDefinitionName :: Typed.TypedTerm Syntax.FunctionDefinition -> Typed.TypedTerm Syntax.Symbol
 functionDefinitionName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
         Core.projectionFieldName = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the params field of hydra.lisp.syntax.FunctionDefinition
-functionDefinitionParams :: Phantoms.TTerm Syntax.FunctionDefinition -> Phantoms.TTerm [Syntax.Symbol]
+functionDefinitionParams :: Typed.TypedTerm Syntax.FunctionDefinition -> Typed.TypedTerm [Syntax.Symbol]
 functionDefinitionParams x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
         Core.projectionFieldName = (Core.Name "params")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the restParam field of hydra.lisp.syntax.FunctionDefinition
-functionDefinitionRestParam :: Phantoms.TTerm Syntax.FunctionDefinition -> Phantoms.TTerm (Maybe Syntax.Symbol)
+functionDefinitionRestParam :: Typed.TypedTerm Syntax.FunctionDefinition -> Typed.TypedTerm (Maybe Syntax.Symbol)
 functionDefinitionRestParam x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
         Core.projectionFieldName = (Core.Name "restParam")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the typeHints field of hydra.lisp.syntax.FunctionDefinition
-functionDefinitionTypeHints :: Phantoms.TTerm Syntax.FunctionDefinition -> Phantoms.TTerm [Syntax.TypeHint]
+functionDefinitionTypeHints :: Typed.TypedTerm Syntax.FunctionDefinition -> Typed.TypedTerm [Syntax.TypeHint]
 functionDefinitionTypeHints x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
         Core.projectionFieldName = (Core.Name "typeHints")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the body field of hydra.lisp.syntax.FunctionDefinition
-functionDefinitionWithBody :: Phantoms.TTerm Syntax.FunctionDefinition -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.FunctionDefinition
+functionDefinitionWithBody :: Typed.TypedTerm Syntax.FunctionDefinition -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.FunctionDefinition
 functionDefinitionWithBody original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
       Core.recordFields = [
         Core.Field {
@@ -1524,42 +1524,42 @@ functionDefinitionWithBody original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "params")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "restParam"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "restParam")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "doc")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeHints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "typeHints")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the doc field of hydra.lisp.syntax.FunctionDefinition
-functionDefinitionWithDoc :: Phantoms.TTerm Syntax.FunctionDefinition -> Phantoms.TTerm (Maybe Syntax.Docstring) -> Phantoms.TTerm Syntax.FunctionDefinition
+functionDefinitionWithDoc :: Typed.TypedTerm Syntax.FunctionDefinition -> Typed.TypedTerm (Maybe Syntax.Docstring) -> Typed.TypedTerm Syntax.FunctionDefinition
 functionDefinitionWithDoc original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
       Core.recordFields = [
         Core.Field {
@@ -1568,86 +1568,86 @@ functionDefinitionWithDoc original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "params")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "restParam"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "restParam")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "typeHints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "typeHints")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.lisp.syntax.FunctionDefinition
-functionDefinitionWithName :: Phantoms.TTerm Syntax.FunctionDefinition -> Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.FunctionDefinition
+functionDefinitionWithName :: Typed.TypedTerm Syntax.FunctionDefinition -> Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.FunctionDefinition
 functionDefinitionWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "params")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "restParam"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "restParam")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "doc")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeHints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "typeHints")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the params field of hydra.lisp.syntax.FunctionDefinition
-functionDefinitionWithParams :: Phantoms.TTerm Syntax.FunctionDefinition -> Phantoms.TTerm [Syntax.Symbol] -> Phantoms.TTerm Syntax.FunctionDefinition
+functionDefinitionWithParams :: Typed.TypedTerm Syntax.FunctionDefinition -> Typed.TypedTerm [Syntax.Symbol] -> Typed.TypedTerm Syntax.FunctionDefinition
 functionDefinitionWithParams original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
       Core.recordFields = [
         Core.Field {
@@ -1656,42 +1656,42 @@ functionDefinitionWithParams original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "restParam"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "restParam")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "doc")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeHints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "typeHints")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the restParam field of hydra.lisp.syntax.FunctionDefinition
-functionDefinitionWithRestParam :: Phantoms.TTerm Syntax.FunctionDefinition -> Phantoms.TTerm (Maybe Syntax.Symbol) -> Phantoms.TTerm Syntax.FunctionDefinition
+functionDefinitionWithRestParam :: Typed.TypedTerm Syntax.FunctionDefinition -> Typed.TypedTerm (Maybe Syntax.Symbol) -> Typed.TypedTerm Syntax.FunctionDefinition
 functionDefinitionWithRestParam original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
       Core.recordFields = [
         Core.Field {
@@ -1700,42 +1700,42 @@ functionDefinitionWithRestParam original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "params")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "restParam"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "doc")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeHints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "typeHints")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the typeHints field of hydra.lisp.syntax.FunctionDefinition
-functionDefinitionWithTypeHints :: Phantoms.TTerm Syntax.FunctionDefinition -> Phantoms.TTerm [Syntax.TypeHint] -> Phantoms.TTerm Syntax.FunctionDefinition
+functionDefinitionWithTypeHints :: Typed.TypedTerm Syntax.FunctionDefinition -> Typed.TypedTerm [Syntax.TypeHint] -> Typed.TypedTerm Syntax.FunctionDefinition
 functionDefinitionWithTypeHints original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
       Core.recordFields = [
         Core.Field {
@@ -1744,104 +1744,104 @@ functionDefinitionWithTypeHints original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "params")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "restParam"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "restParam")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "doc")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeHints"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
               Core.projectionFieldName = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.lisp.syntax.IfExpression
-ifExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.IfExpression
+ifExpression :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm (Maybe Syntax.Expression) -> Typed.TypedTerm Syntax.IfExpression
 ifExpression condition then_ else_ =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.IfExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "condition"),
-          Core.fieldTerm = (Phantoms.unTTerm condition)},
+          Core.fieldTerm = (Typed.unTypedTerm condition)},
         Core.Field {
           Core.fieldName = (Core.Name "then"),
-          Core.fieldTerm = (Phantoms.unTTerm then_)},
+          Core.fieldTerm = (Typed.unTypedTerm then_)},
         Core.Field {
           Core.fieldName = (Core.Name "else"),
-          Core.fieldTerm = (Phantoms.unTTerm else_)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm else_)}]}))
 -- | DSL accessor for the condition field of hydra.lisp.syntax.IfExpression
-ifExpressionCondition :: Phantoms.TTerm Syntax.IfExpression -> Phantoms.TTerm Syntax.Expression
+ifExpressionCondition :: Typed.TypedTerm Syntax.IfExpression -> Typed.TypedTerm Syntax.Expression
 ifExpressionCondition x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.IfExpression"),
         Core.projectionFieldName = (Core.Name "condition")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the else field of hydra.lisp.syntax.IfExpression
-ifExpressionElse :: Phantoms.TTerm Syntax.IfExpression -> Phantoms.TTerm (Maybe Syntax.Expression)
+ifExpressionElse :: Typed.TypedTerm Syntax.IfExpression -> Typed.TypedTerm (Maybe Syntax.Expression)
 ifExpressionElse x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.IfExpression"),
         Core.projectionFieldName = (Core.Name "else")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the then field of hydra.lisp.syntax.IfExpression
-ifExpressionThen :: Phantoms.TTerm Syntax.IfExpression -> Phantoms.TTerm Syntax.Expression
+ifExpressionThen :: Typed.TypedTerm Syntax.IfExpression -> Typed.TypedTerm Syntax.Expression
 ifExpressionThen x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.IfExpression"),
         Core.projectionFieldName = (Core.Name "then")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the condition field of hydra.lisp.syntax.IfExpression
-ifExpressionWithCondition :: Phantoms.TTerm Syntax.IfExpression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.IfExpression
+ifExpressionWithCondition :: Typed.TypedTerm Syntax.IfExpression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.IfExpression
 ifExpressionWithCondition original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.IfExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "condition"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "then"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.IfExpression"),
               Core.projectionFieldName = (Core.Name "then")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "else"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.IfExpression"),
               Core.projectionFieldName = (Core.Name "else")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the else field of hydra.lisp.syntax.IfExpression
-ifExpressionWithElse :: Phantoms.TTerm Syntax.IfExpression -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.IfExpression
+ifExpressionWithElse :: Typed.TypedTerm Syntax.IfExpression -> Typed.TypedTerm (Maybe Syntax.Expression) -> Typed.TypedTerm Syntax.IfExpression
 ifExpressionWithElse original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.IfExpression"),
       Core.recordFields = [
         Core.Field {
@@ -1850,21 +1850,21 @@ ifExpressionWithElse original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.IfExpression"),
               Core.projectionFieldName = (Core.Name "condition")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "then"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.IfExpression"),
               Core.projectionFieldName = (Core.Name "then")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "else"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the then field of hydra.lisp.syntax.IfExpression
-ifExpressionWithThen :: Phantoms.TTerm Syntax.IfExpression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.IfExpression
+ifExpressionWithThen :: Typed.TypedTerm Syntax.IfExpression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.IfExpression
 ifExpressionWithThen original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.IfExpression"),
       Core.recordFields = [
         Core.Field {
@@ -1873,65 +1873,65 @@ ifExpressionWithThen original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.IfExpression"),
               Core.projectionFieldName = (Core.Name "condition")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "then"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "else"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.IfExpression"),
               Core.projectionFieldName = (Core.Name "else")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.lisp.syntax.ImportDeclaration
-importDeclaration :: Phantoms.TTerm Syntax.NamespaceName -> Phantoms.TTerm Syntax.ImportSpec -> Phantoms.TTerm Syntax.ImportDeclaration
+importDeclaration :: Typed.TypedTerm Syntax.NamespaceName -> Typed.TypedTerm Syntax.ImportSpec -> Typed.TypedTerm Syntax.ImportDeclaration
 importDeclaration module_ spec =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ImportDeclaration"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "module"),
-          Core.fieldTerm = (Phantoms.unTTerm module_)},
+          Core.fieldTerm = (Typed.unTypedTerm module_)},
         Core.Field {
           Core.fieldName = (Core.Name "spec"),
-          Core.fieldTerm = (Phantoms.unTTerm spec)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm spec)}]}))
 -- | DSL accessor for the module field of hydra.lisp.syntax.ImportDeclaration
-importDeclarationModule :: Phantoms.TTerm Syntax.ImportDeclaration -> Phantoms.TTerm Syntax.NamespaceName
+importDeclarationModule :: Typed.TypedTerm Syntax.ImportDeclaration -> Typed.TypedTerm Syntax.NamespaceName
 importDeclarationModule x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ImportDeclaration"),
         Core.projectionFieldName = (Core.Name "module")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the spec field of hydra.lisp.syntax.ImportDeclaration
-importDeclarationSpec :: Phantoms.TTerm Syntax.ImportDeclaration -> Phantoms.TTerm Syntax.ImportSpec
+importDeclarationSpec :: Typed.TypedTerm Syntax.ImportDeclaration -> Typed.TypedTerm Syntax.ImportSpec
 importDeclarationSpec x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ImportDeclaration"),
         Core.projectionFieldName = (Core.Name "spec")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the module field of hydra.lisp.syntax.ImportDeclaration
-importDeclarationWithModule :: Phantoms.TTerm Syntax.ImportDeclaration -> Phantoms.TTerm Syntax.NamespaceName -> Phantoms.TTerm Syntax.ImportDeclaration
+importDeclarationWithModule :: Typed.TypedTerm Syntax.ImportDeclaration -> Typed.TypedTerm Syntax.NamespaceName -> Typed.TypedTerm Syntax.ImportDeclaration
 importDeclarationWithModule original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ImportDeclaration"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "module"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "spec"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ImportDeclaration"),
               Core.projectionFieldName = (Core.Name "spec")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the spec field of hydra.lisp.syntax.ImportDeclaration
-importDeclarationWithSpec :: Phantoms.TTerm Syntax.ImportDeclaration -> Phantoms.TTerm Syntax.ImportSpec -> Phantoms.TTerm Syntax.ImportDeclaration
+importDeclarationWithSpec :: Typed.TypedTerm Syntax.ImportDeclaration -> Typed.TypedTerm Syntax.ImportSpec -> Typed.TypedTerm Syntax.ImportDeclaration
 importDeclarationWithSpec original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ImportDeclaration"),
       Core.recordFields = [
         Core.Field {
@@ -1940,74 +1940,74 @@ importDeclarationWithSpec original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ImportDeclaration"),
               Core.projectionFieldName = (Core.Name "module")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "spec"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL injection for the alias variant of hydra.lisp.syntax.ImportSpec
-importSpecAlias :: Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.ImportSpec
+importSpecAlias :: Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.ImportSpec
 importSpecAlias x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.ImportSpec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "alias"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the all variant of hydra.lisp.syntax.ImportSpec
-importSpecAll :: Phantoms.TTerm Syntax.ImportSpec
+importSpecAll :: Typed.TypedTerm Syntax.ImportSpec
 importSpecAll =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.ImportSpec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "all"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL injection for the only variant of hydra.lisp.syntax.ImportSpec
-importSpecOnly :: Phantoms.TTerm [Syntax.Symbol] -> Phantoms.TTerm Syntax.ImportSpec
+importSpecOnly :: Typed.TypedTerm [Syntax.Symbol] -> Typed.TypedTerm Syntax.ImportSpec
 importSpecOnly x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.ImportSpec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "only"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the rename variant of hydra.lisp.syntax.ImportSpec
-importSpecRename :: Phantoms.TTerm [[Syntax.Symbol]] -> Phantoms.TTerm Syntax.ImportSpec
+importSpecRename :: Typed.TypedTerm [[Syntax.Symbol]] -> Typed.TypedTerm Syntax.ImportSpec
 importSpecRename x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.ImportSpec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rename"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL constructor for hydra.lisp.syntax.IntegerLiteral
-integerLiteral :: Phantoms.TTerm Integer -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.IntegerLiteral
+integerLiteral :: Typed.TypedTerm Integer -> Typed.TypedTerm Bool -> Typed.TypedTerm Syntax.IntegerLiteral
 integerLiteral value bigint =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.IntegerLiteral"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm value)},
+          Core.fieldTerm = (Typed.unTypedTerm value)},
         Core.Field {
           Core.fieldName = (Core.Name "bigint"),
-          Core.fieldTerm = (Phantoms.unTTerm bigint)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm bigint)}]}))
 -- | DSL accessor for the bigint field of hydra.lisp.syntax.IntegerLiteral
-integerLiteralBigint :: Phantoms.TTerm Syntax.IntegerLiteral -> Phantoms.TTerm Bool
+integerLiteralBigint :: Typed.TypedTerm Syntax.IntegerLiteral -> Typed.TypedTerm Bool
 integerLiteralBigint x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.IntegerLiteral"),
         Core.projectionFieldName = (Core.Name "bigint")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the value field of hydra.lisp.syntax.IntegerLiteral
-integerLiteralValue :: Phantoms.TTerm Syntax.IntegerLiteral -> Phantoms.TTerm Integer
+integerLiteralValue :: Typed.TypedTerm Syntax.IntegerLiteral -> Typed.TypedTerm Integer
 integerLiteralValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.IntegerLiteral"),
         Core.projectionFieldName = (Core.Name "value")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the bigint field of hydra.lisp.syntax.IntegerLiteral
-integerLiteralWithBigint :: Phantoms.TTerm Syntax.IntegerLiteral -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.IntegerLiteral
+integerLiteralWithBigint :: Typed.TypedTerm Syntax.IntegerLiteral -> Typed.TypedTerm Bool -> Typed.TypedTerm Syntax.IntegerLiteral
 integerLiteralWithBigint original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.IntegerLiteral"),
       Core.recordFields = [
         Core.Field {
@@ -2016,74 +2016,74 @@ integerLiteralWithBigint original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.IntegerLiteral"),
               Core.projectionFieldName = (Core.Name "value")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "bigint"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the value field of hydra.lisp.syntax.IntegerLiteral
-integerLiteralWithValue :: Phantoms.TTerm Syntax.IntegerLiteral -> Phantoms.TTerm Integer -> Phantoms.TTerm Syntax.IntegerLiteral
+integerLiteralWithValue :: Typed.TypedTerm Syntax.IntegerLiteral -> Typed.TypedTerm Integer -> Typed.TypedTerm Syntax.IntegerLiteral
 integerLiteralWithValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.IntegerLiteral"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "bigint"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.IntegerLiteral"),
               Core.projectionFieldName = (Core.Name "bigint")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.lisp.syntax.Keyword
-keyword :: Phantoms.TTerm String -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.Keyword
+keyword :: Typed.TypedTerm String -> Typed.TypedTerm (Maybe String) -> Typed.TypedTerm Syntax.Keyword
 keyword name namespace =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.Keyword"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
+          Core.fieldTerm = (Typed.unTypedTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "namespace"),
-          Core.fieldTerm = (Phantoms.unTTerm namespace)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm namespace)}]}))
 -- | DSL accessor for the name field of hydra.lisp.syntax.Keyword
-keywordName :: Phantoms.TTerm Syntax.Keyword -> Phantoms.TTerm String
+keywordName :: Typed.TypedTerm Syntax.Keyword -> Typed.TypedTerm String
 keywordName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Keyword"),
         Core.projectionFieldName = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the namespace field of hydra.lisp.syntax.Keyword
-keywordNamespace :: Phantoms.TTerm Syntax.Keyword -> Phantoms.TTerm (Maybe String)
+keywordNamespace :: Typed.TypedTerm Syntax.Keyword -> Typed.TypedTerm (Maybe String)
 keywordNamespace x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Keyword"),
         Core.projectionFieldName = (Core.Name "namespace")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the name field of hydra.lisp.syntax.Keyword
-keywordWithName :: Phantoms.TTerm Syntax.Keyword -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.Keyword
+keywordWithName :: Typed.TypedTerm Syntax.Keyword -> Typed.TypedTerm String -> Typed.TypedTerm Syntax.Keyword
 keywordWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.Keyword"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "namespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Keyword"),
               Core.projectionFieldName = (Core.Name "namespace")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the namespace field of hydra.lisp.syntax.Keyword
-keywordWithNamespace :: Phantoms.TTerm Syntax.Keyword -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.Keyword
+keywordWithNamespace :: Typed.TypedTerm Syntax.Keyword -> Typed.TypedTerm (Maybe String) -> Typed.TypedTerm Syntax.Keyword
 keywordWithNamespace original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.Keyword"),
       Core.recordFields = [
         Core.Field {
@@ -2092,64 +2092,64 @@ keywordWithNamespace original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Keyword"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "namespace"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.lisp.syntax.Lambda
-lambda :: Phantoms.TTerm (Maybe Syntax.Symbol) -> Phantoms.TTerm [Syntax.Symbol] -> Phantoms.TTerm (Maybe Syntax.Symbol) -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.Lambda
+lambda :: Typed.TypedTerm (Maybe Syntax.Symbol) -> Typed.TypedTerm [Syntax.Symbol] -> Typed.TypedTerm (Maybe Syntax.Symbol) -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.Lambda
 lambda name params restParam body =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
+          Core.fieldTerm = (Typed.unTypedTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
-          Core.fieldTerm = (Phantoms.unTTerm params)},
+          Core.fieldTerm = (Typed.unTypedTerm params)},
         Core.Field {
           Core.fieldName = (Core.Name "restParam"),
-          Core.fieldTerm = (Phantoms.unTTerm restParam)},
+          Core.fieldTerm = (Typed.unTypedTerm restParam)},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm body)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm body)}]}))
 -- | DSL accessor for the body field of hydra.lisp.syntax.Lambda
-lambdaBody :: Phantoms.TTerm Syntax.Lambda -> Phantoms.TTerm [Syntax.Expression]
+lambdaBody :: Typed.TypedTerm Syntax.Lambda -> Typed.TypedTerm [Syntax.Expression]
 lambdaBody x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
         Core.projectionFieldName = (Core.Name "body")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the name field of hydra.lisp.syntax.Lambda
-lambdaName :: Phantoms.TTerm Syntax.Lambda -> Phantoms.TTerm (Maybe Syntax.Symbol)
+lambdaName :: Typed.TypedTerm Syntax.Lambda -> Typed.TypedTerm (Maybe Syntax.Symbol)
 lambdaName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
         Core.projectionFieldName = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the params field of hydra.lisp.syntax.Lambda
-lambdaParams :: Phantoms.TTerm Syntax.Lambda -> Phantoms.TTerm [Syntax.Symbol]
+lambdaParams :: Typed.TypedTerm Syntax.Lambda -> Typed.TypedTerm [Syntax.Symbol]
 lambdaParams x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
         Core.projectionFieldName = (Core.Name "params")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the restParam field of hydra.lisp.syntax.Lambda
-lambdaRestParam :: Phantoms.TTerm Syntax.Lambda -> Phantoms.TTerm (Maybe Syntax.Symbol)
+lambdaRestParam :: Typed.TypedTerm Syntax.Lambda -> Typed.TypedTerm (Maybe Syntax.Symbol)
 lambdaRestParam x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
         Core.projectionFieldName = (Core.Name "restParam")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the body field of hydra.lisp.syntax.Lambda
-lambdaWithBody :: Phantoms.TTerm Syntax.Lambda -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.Lambda
+lambdaWithBody :: Typed.TypedTerm Syntax.Lambda -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.Lambda
 lambdaWithBody original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
       Core.recordFields = [
         Core.Field {
@@ -2158,58 +2158,58 @@ lambdaWithBody original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
               Core.projectionFieldName = (Core.Name "params")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "restParam"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
               Core.projectionFieldName = (Core.Name "restParam")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the name field of hydra.lisp.syntax.Lambda
-lambdaWithName :: Phantoms.TTerm Syntax.Lambda -> Phantoms.TTerm (Maybe Syntax.Symbol) -> Phantoms.TTerm Syntax.Lambda
+lambdaWithName :: Typed.TypedTerm Syntax.Lambda -> Typed.TypedTerm (Maybe Syntax.Symbol) -> Typed.TypedTerm Syntax.Lambda
 lambdaWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
               Core.projectionFieldName = (Core.Name "params")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "restParam"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
               Core.projectionFieldName = (Core.Name "restParam")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
               Core.projectionFieldName = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the params field of hydra.lisp.syntax.Lambda
-lambdaWithParams :: Phantoms.TTerm Syntax.Lambda -> Phantoms.TTerm [Syntax.Symbol] -> Phantoms.TTerm Syntax.Lambda
+lambdaWithParams :: Typed.TypedTerm Syntax.Lambda -> Typed.TypedTerm [Syntax.Symbol] -> Typed.TypedTerm Syntax.Lambda
 lambdaWithParams original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
       Core.recordFields = [
         Core.Field {
@@ -2218,28 +2218,28 @@ lambdaWithParams original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "restParam"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
               Core.projectionFieldName = (Core.Name "restParam")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
               Core.projectionFieldName = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the restParam field of hydra.lisp.syntax.Lambda
-lambdaWithRestParam :: Phantoms.TTerm Syntax.Lambda -> Phantoms.TTerm (Maybe Syntax.Symbol) -> Phantoms.TTerm Syntax.Lambda
+lambdaWithRestParam :: Typed.TypedTerm Syntax.Lambda -> Typed.TypedTerm (Maybe Syntax.Symbol) -> Typed.TypedTerm Syntax.Lambda
 lambdaWithRestParam original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
       Core.recordFields = [
         Core.Field {
@@ -2248,83 +2248,83 @@ lambdaWithRestParam original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
               Core.projectionFieldName = (Core.Name "params")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "restParam"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
               Core.projectionFieldName = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL injection for the destructuring variant of hydra.lisp.syntax.LetBinding
-letBindingDestructuring :: Phantoms.TTerm Syntax.DestructuringBinding -> Phantoms.TTerm Syntax.LetBinding
+letBindingDestructuring :: Typed.TypedTerm Syntax.DestructuringBinding -> Typed.TypedTerm Syntax.LetBinding
 letBindingDestructuring x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.LetBinding"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "destructuring"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the simple variant of hydra.lisp.syntax.LetBinding
-letBindingSimple :: Phantoms.TTerm Syntax.SimpleBinding -> Phantoms.TTerm Syntax.LetBinding
+letBindingSimple :: Typed.TypedTerm Syntax.SimpleBinding -> Typed.TypedTerm Syntax.LetBinding
 letBindingSimple x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.LetBinding"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL constructor for hydra.lisp.syntax.LetExpression
-letExpression :: Phantoms.TTerm Syntax.LetKind -> Phantoms.TTerm [Syntax.LetBinding] -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.LetExpression
+letExpression :: Typed.TypedTerm Syntax.LetKind -> Typed.TypedTerm [Syntax.LetBinding] -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.LetExpression
 letExpression kind bindings body =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.LetExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "kind"),
-          Core.fieldTerm = (Phantoms.unTTerm kind)},
+          Core.fieldTerm = (Typed.unTypedTerm kind)},
         Core.Field {
           Core.fieldName = (Core.Name "bindings"),
-          Core.fieldTerm = (Phantoms.unTTerm bindings)},
+          Core.fieldTerm = (Typed.unTypedTerm bindings)},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm body)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm body)}]}))
 -- | DSL accessor for the bindings field of hydra.lisp.syntax.LetExpression
-letExpressionBindings :: Phantoms.TTerm Syntax.LetExpression -> Phantoms.TTerm [Syntax.LetBinding]
+letExpressionBindings :: Typed.TypedTerm Syntax.LetExpression -> Typed.TypedTerm [Syntax.LetBinding]
 letExpressionBindings x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.LetExpression"),
         Core.projectionFieldName = (Core.Name "bindings")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the body field of hydra.lisp.syntax.LetExpression
-letExpressionBody :: Phantoms.TTerm Syntax.LetExpression -> Phantoms.TTerm [Syntax.Expression]
+letExpressionBody :: Typed.TypedTerm Syntax.LetExpression -> Typed.TypedTerm [Syntax.Expression]
 letExpressionBody x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.LetExpression"),
         Core.projectionFieldName = (Core.Name "body")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the kind field of hydra.lisp.syntax.LetExpression
-letExpressionKind :: Phantoms.TTerm Syntax.LetExpression -> Phantoms.TTerm Syntax.LetKind
+letExpressionKind :: Typed.TypedTerm Syntax.LetExpression -> Typed.TypedTerm Syntax.LetKind
 letExpressionKind x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.LetExpression"),
         Core.projectionFieldName = (Core.Name "kind")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the bindings field of hydra.lisp.syntax.LetExpression
-letExpressionWithBindings :: Phantoms.TTerm Syntax.LetExpression -> Phantoms.TTerm [Syntax.LetBinding] -> Phantoms.TTerm Syntax.LetExpression
+letExpressionWithBindings :: Typed.TypedTerm Syntax.LetExpression -> Typed.TypedTerm [Syntax.LetBinding] -> Typed.TypedTerm Syntax.LetExpression
 letExpressionWithBindings original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.LetExpression"),
       Core.recordFields = [
         Core.Field {
@@ -2333,21 +2333,21 @@ letExpressionWithBindings original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.LetExpression"),
               Core.projectionFieldName = (Core.Name "kind")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "bindings"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.LetExpression"),
               Core.projectionFieldName = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the body field of hydra.lisp.syntax.LetExpression
-letExpressionWithBody :: Phantoms.TTerm Syntax.LetExpression -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.LetExpression
+letExpressionWithBody :: Typed.TypedTerm Syntax.LetExpression -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.LetExpression
 letExpressionWithBody original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.LetExpression"),
       Core.recordFields = [
         Core.Field {
@@ -2356,112 +2356,112 @@ letExpressionWithBody original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.LetExpression"),
               Core.projectionFieldName = (Core.Name "kind")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "bindings"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.LetExpression"),
               Core.projectionFieldName = (Core.Name "bindings")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the kind field of hydra.lisp.syntax.LetExpression
-letExpressionWithKind :: Phantoms.TTerm Syntax.LetExpression -> Phantoms.TTerm Syntax.LetKind -> Phantoms.TTerm Syntax.LetExpression
+letExpressionWithKind :: Typed.TypedTerm Syntax.LetExpression -> Typed.TypedTerm Syntax.LetKind -> Typed.TypedTerm Syntax.LetExpression
 letExpressionWithKind original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.LetExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "kind"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "bindings"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.LetExpression"),
               Core.projectionFieldName = (Core.Name "bindings")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.LetExpression"),
               Core.projectionFieldName = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL injection for the parallel variant of hydra.lisp.syntax.LetKind
-letKindParallel :: Phantoms.TTerm Syntax.LetKind
+letKindParallel :: Typed.TypedTerm Syntax.LetKind
 letKindParallel =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.LetKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parallel"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL injection for the recursive variant of hydra.lisp.syntax.LetKind
-letKindRecursive :: Phantoms.TTerm Syntax.LetKind
+letKindRecursive :: Typed.TypedTerm Syntax.LetKind
 letKindRecursive =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.LetKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "recursive"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL injection for the sequential variant of hydra.lisp.syntax.LetKind
-letKindSequential :: Phantoms.TTerm Syntax.LetKind
+letKindSequential :: Typed.TypedTerm Syntax.LetKind
 letKindSequential =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.LetKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequential"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL constructor for hydra.lisp.syntax.ListLiteral
-listLiteral :: Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.ListLiteral
+listLiteral :: Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Bool -> Typed.TypedTerm Syntax.ListLiteral
 listLiteral elements quoted =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ListLiteral"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "elements"),
-          Core.fieldTerm = (Phantoms.unTTerm elements)},
+          Core.fieldTerm = (Typed.unTypedTerm elements)},
         Core.Field {
           Core.fieldName = (Core.Name "quoted"),
-          Core.fieldTerm = (Phantoms.unTTerm quoted)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm quoted)}]}))
 -- | DSL accessor for the elements field of hydra.lisp.syntax.ListLiteral
-listLiteralElements :: Phantoms.TTerm Syntax.ListLiteral -> Phantoms.TTerm [Syntax.Expression]
+listLiteralElements :: Typed.TypedTerm Syntax.ListLiteral -> Typed.TypedTerm [Syntax.Expression]
 listLiteralElements x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ListLiteral"),
         Core.projectionFieldName = (Core.Name "elements")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the quoted field of hydra.lisp.syntax.ListLiteral
-listLiteralQuoted :: Phantoms.TTerm Syntax.ListLiteral -> Phantoms.TTerm Bool
+listLiteralQuoted :: Typed.TypedTerm Syntax.ListLiteral -> Typed.TypedTerm Bool
 listLiteralQuoted x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ListLiteral"),
         Core.projectionFieldName = (Core.Name "quoted")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the elements field of hydra.lisp.syntax.ListLiteral
-listLiteralWithElements :: Phantoms.TTerm Syntax.ListLiteral -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.ListLiteral
+listLiteralWithElements :: Typed.TypedTerm Syntax.ListLiteral -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.ListLiteral
 listLiteralWithElements original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ListLiteral"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "elements"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "quoted"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ListLiteral"),
               Core.projectionFieldName = (Core.Name "quoted")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the quoted field of hydra.lisp.syntax.ListLiteral
-listLiteralWithQuoted :: Phantoms.TTerm Syntax.ListLiteral -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.ListLiteral
+listLiteralWithQuoted :: Typed.TypedTerm Syntax.ListLiteral -> Typed.TypedTerm Bool -> Typed.TypedTerm Syntax.ListLiteral
 listLiteralWithQuoted original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ListLiteral"),
       Core.recordFields = [
         Core.Field {
@@ -2470,154 +2470,154 @@ listLiteralWithQuoted original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ListLiteral"),
               Core.projectionFieldName = (Core.Name "elements")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "quoted"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL injection for the boolean variant of hydra.lisp.syntax.Literal
-literalBoolean :: Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.Literal
+literalBoolean :: Typed.TypedTerm Bool -> Typed.TypedTerm Syntax.Literal
 literalBoolean x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the character variant of hydra.lisp.syntax.Literal
-literalCharacter :: Phantoms.TTerm Syntax.CharacterLiteral -> Phantoms.TTerm Syntax.Literal
+literalCharacter :: Typed.TypedTerm Syntax.CharacterLiteral -> Typed.TypedTerm Syntax.Literal
 literalCharacter x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "character"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the float variant of hydra.lisp.syntax.Literal
-literalFloat :: Phantoms.TTerm Syntax.FloatLiteral -> Phantoms.TTerm Syntax.Literal
+literalFloat :: Typed.TypedTerm Syntax.FloatLiteral -> Typed.TypedTerm Syntax.Literal
 literalFloat x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the integer variant of hydra.lisp.syntax.Literal
-literalInteger :: Phantoms.TTerm Syntax.IntegerLiteral -> Phantoms.TTerm Syntax.Literal
+literalInteger :: Typed.TypedTerm Syntax.IntegerLiteral -> Typed.TypedTerm Syntax.Literal
 literalInteger x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the keyword variant of hydra.lisp.syntax.Literal
-literalKeyword :: Phantoms.TTerm Syntax.Keyword -> Phantoms.TTerm Syntax.Literal
+literalKeyword :: Typed.TypedTerm Syntax.Keyword -> Typed.TypedTerm Syntax.Literal
 literalKeyword x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "keyword"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the nil variant of hydra.lisp.syntax.Literal
-literalNil :: Phantoms.TTerm Syntax.Literal
+literalNil :: Typed.TypedTerm Syntax.Literal
 literalNil =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nil"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL constructor for hydra.lisp.syntax.LiteralPattern
-literalPattern :: Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm Syntax.LiteralPattern
+literalPattern :: Typed.TypedTerm Syntax.Literal -> Typed.TypedTerm Syntax.LiteralPattern
 literalPattern value =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.LiteralPattern"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm value)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm value)}]}))
 -- | DSL accessor for the value field of hydra.lisp.syntax.LiteralPattern
-literalPatternValue :: Phantoms.TTerm Syntax.LiteralPattern -> Phantoms.TTerm Syntax.Literal
+literalPatternValue :: Typed.TypedTerm Syntax.LiteralPattern -> Typed.TypedTerm Syntax.Literal
 literalPatternValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.LiteralPattern"),
         Core.projectionFieldName = (Core.Name "value")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the value field of hydra.lisp.syntax.LiteralPattern
-literalPatternWithValue :: Phantoms.TTerm Syntax.LiteralPattern -> Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm Syntax.LiteralPattern
+literalPatternWithValue :: Typed.TypedTerm Syntax.LiteralPattern -> Typed.TypedTerm Syntax.Literal -> Typed.TypedTerm Syntax.LiteralPattern
 literalPatternWithValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.LiteralPattern"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL injection for the string variant of hydra.lisp.syntax.Literal
-literalString :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.Literal
+literalString :: Typed.TypedTerm String -> Typed.TypedTerm Syntax.Literal
 literalString x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the symbol variant of hydra.lisp.syntax.Literal
-literalSymbol :: Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.Literal
+literalSymbol :: Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.Literal
 literalSymbol x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "symbol"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL constructor for hydra.lisp.syntax.MacroDefinition
-macroDefinition :: Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm [Syntax.Symbol] -> Phantoms.TTerm (Maybe Syntax.Symbol) -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.MacroDefinition
+macroDefinition :: Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm [Syntax.Symbol] -> Typed.TypedTerm (Maybe Syntax.Symbol) -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.MacroDefinition
 macroDefinition name params restParam body =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
+          Core.fieldTerm = (Typed.unTypedTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
-          Core.fieldTerm = (Phantoms.unTTerm params)},
+          Core.fieldTerm = (Typed.unTypedTerm params)},
         Core.Field {
           Core.fieldName = (Core.Name "restParam"),
-          Core.fieldTerm = (Phantoms.unTTerm restParam)},
+          Core.fieldTerm = (Typed.unTypedTerm restParam)},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm body)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm body)}]}))
 -- | DSL accessor for the body field of hydra.lisp.syntax.MacroDefinition
-macroDefinitionBody :: Phantoms.TTerm Syntax.MacroDefinition -> Phantoms.TTerm [Syntax.Expression]
+macroDefinitionBody :: Typed.TypedTerm Syntax.MacroDefinition -> Typed.TypedTerm [Syntax.Expression]
 macroDefinitionBody x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
         Core.projectionFieldName = (Core.Name "body")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the name field of hydra.lisp.syntax.MacroDefinition
-macroDefinitionName :: Phantoms.TTerm Syntax.MacroDefinition -> Phantoms.TTerm Syntax.Symbol
+macroDefinitionName :: Typed.TypedTerm Syntax.MacroDefinition -> Typed.TypedTerm Syntax.Symbol
 macroDefinitionName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
         Core.projectionFieldName = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the params field of hydra.lisp.syntax.MacroDefinition
-macroDefinitionParams :: Phantoms.TTerm Syntax.MacroDefinition -> Phantoms.TTerm [Syntax.Symbol]
+macroDefinitionParams :: Typed.TypedTerm Syntax.MacroDefinition -> Typed.TypedTerm [Syntax.Symbol]
 macroDefinitionParams x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
         Core.projectionFieldName = (Core.Name "params")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the restParam field of hydra.lisp.syntax.MacroDefinition
-macroDefinitionRestParam :: Phantoms.TTerm Syntax.MacroDefinition -> Phantoms.TTerm (Maybe Syntax.Symbol)
+macroDefinitionRestParam :: Typed.TypedTerm Syntax.MacroDefinition -> Typed.TypedTerm (Maybe Syntax.Symbol)
 macroDefinitionRestParam x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
         Core.projectionFieldName = (Core.Name "restParam")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the body field of hydra.lisp.syntax.MacroDefinition
-macroDefinitionWithBody :: Phantoms.TTerm Syntax.MacroDefinition -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.MacroDefinition
+macroDefinitionWithBody :: Typed.TypedTerm Syntax.MacroDefinition -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.MacroDefinition
 macroDefinitionWithBody original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
       Core.recordFields = [
         Core.Field {
@@ -2626,58 +2626,58 @@ macroDefinitionWithBody original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
               Core.projectionFieldName = (Core.Name "params")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "restParam"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
               Core.projectionFieldName = (Core.Name "restParam")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the name field of hydra.lisp.syntax.MacroDefinition
-macroDefinitionWithName :: Phantoms.TTerm Syntax.MacroDefinition -> Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.MacroDefinition
+macroDefinitionWithName :: Typed.TypedTerm Syntax.MacroDefinition -> Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.MacroDefinition
 macroDefinitionWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
               Core.projectionFieldName = (Core.Name "params")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "restParam"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
               Core.projectionFieldName = (Core.Name "restParam")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
               Core.projectionFieldName = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the params field of hydra.lisp.syntax.MacroDefinition
-macroDefinitionWithParams :: Phantoms.TTerm Syntax.MacroDefinition -> Phantoms.TTerm [Syntax.Symbol] -> Phantoms.TTerm Syntax.MacroDefinition
+macroDefinitionWithParams :: Typed.TypedTerm Syntax.MacroDefinition -> Typed.TypedTerm [Syntax.Symbol] -> Typed.TypedTerm Syntax.MacroDefinition
 macroDefinitionWithParams original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
       Core.recordFields = [
         Core.Field {
@@ -2686,28 +2686,28 @@ macroDefinitionWithParams original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "restParam"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
               Core.projectionFieldName = (Core.Name "restParam")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
               Core.projectionFieldName = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the restParam field of hydra.lisp.syntax.MacroDefinition
-macroDefinitionWithRestParam :: Phantoms.TTerm Syntax.MacroDefinition -> Phantoms.TTerm (Maybe Syntax.Symbol) -> Phantoms.TTerm Syntax.MacroDefinition
+macroDefinitionWithRestParam :: Typed.TypedTerm Syntax.MacroDefinition -> Typed.TypedTerm (Maybe Syntax.Symbol) -> Typed.TypedTerm Syntax.MacroDefinition
 macroDefinitionWithRestParam original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
       Core.recordFields = [
         Core.Field {
@@ -2716,72 +2716,72 @@ macroDefinitionWithRestParam original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
               Core.projectionFieldName = (Core.Name "params")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "restParam"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
               Core.projectionFieldName = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.lisp.syntax.MapEntry
-mapEntry :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.MapEntry
+mapEntry :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.MapEntry
 mapEntry key value =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.MapEntry"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "key"),
-          Core.fieldTerm = (Phantoms.unTTerm key)},
+          Core.fieldTerm = (Typed.unTypedTerm key)},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm value)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm value)}]}))
 -- | DSL accessor for the key field of hydra.lisp.syntax.MapEntry
-mapEntryKey :: Phantoms.TTerm Syntax.MapEntry -> Phantoms.TTerm Syntax.Expression
+mapEntryKey :: Typed.TypedTerm Syntax.MapEntry -> Typed.TypedTerm Syntax.Expression
 mapEntryKey x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MapEntry"),
         Core.projectionFieldName = (Core.Name "key")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the value field of hydra.lisp.syntax.MapEntry
-mapEntryValue :: Phantoms.TTerm Syntax.MapEntry -> Phantoms.TTerm Syntax.Expression
+mapEntryValue :: Typed.TypedTerm Syntax.MapEntry -> Typed.TypedTerm Syntax.Expression
 mapEntryValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MapEntry"),
         Core.projectionFieldName = (Core.Name "value")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the key field of hydra.lisp.syntax.MapEntry
-mapEntryWithKey :: Phantoms.TTerm Syntax.MapEntry -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.MapEntry
+mapEntryWithKey :: Typed.TypedTerm Syntax.MapEntry -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.MapEntry
 mapEntryWithKey original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.MapEntry"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "key"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MapEntry"),
               Core.projectionFieldName = (Core.Name "value")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the value field of hydra.lisp.syntax.MapEntry
-mapEntryWithValue :: Phantoms.TTerm Syntax.MapEntry -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.MapEntry
+mapEntryWithValue :: Typed.TypedTerm Syntax.MapEntry -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.MapEntry
 mapEntryWithValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.MapEntry"),
       Core.recordFields = [
         Core.Field {
@@ -2790,68 +2790,68 @@ mapEntryWithValue original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MapEntry"),
               Core.projectionFieldName = (Core.Name "key")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.lisp.syntax.MapLiteral
-mapLiteral :: Phantoms.TTerm [Syntax.MapEntry] -> Phantoms.TTerm Syntax.MapLiteral
+mapLiteral :: Typed.TypedTerm [Syntax.MapEntry] -> Typed.TypedTerm Syntax.MapLiteral
 mapLiteral entries =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.MapLiteral"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "entries"),
-          Core.fieldTerm = (Phantoms.unTTerm entries)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm entries)}]}))
 -- | DSL accessor for the entries field of hydra.lisp.syntax.MapLiteral
-mapLiteralEntries :: Phantoms.TTerm Syntax.MapLiteral -> Phantoms.TTerm [Syntax.MapEntry]
+mapLiteralEntries :: Typed.TypedTerm Syntax.MapLiteral -> Typed.TypedTerm [Syntax.MapEntry]
 mapLiteralEntries x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MapLiteral"),
         Core.projectionFieldName = (Core.Name "entries")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the entries field of hydra.lisp.syntax.MapLiteral
-mapLiteralWithEntries :: Phantoms.TTerm Syntax.MapLiteral -> Phantoms.TTerm [Syntax.MapEntry] -> Phantoms.TTerm Syntax.MapLiteral
+mapLiteralWithEntries :: Typed.TypedTerm Syntax.MapLiteral -> Typed.TypedTerm [Syntax.MapEntry] -> Typed.TypedTerm Syntax.MapLiteral
 mapLiteralWithEntries original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.MapLiteral"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "entries"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.lisp.syntax.ModuleDeclaration
-moduleDeclaration :: Phantoms.TTerm Syntax.NamespaceName -> Phantoms.TTerm (Maybe Syntax.Docstring) -> Phantoms.TTerm Syntax.ModuleDeclaration
+moduleDeclaration :: Typed.TypedTerm Syntax.NamespaceName -> Typed.TypedTerm (Maybe Syntax.Docstring) -> Typed.TypedTerm Syntax.ModuleDeclaration
 moduleDeclaration name doc =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ModuleDeclaration"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
+          Core.fieldTerm = (Typed.unTypedTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
-          Core.fieldTerm = (Phantoms.unTTerm doc)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm doc)}]}))
 -- | DSL accessor for the doc field of hydra.lisp.syntax.ModuleDeclaration
-moduleDeclarationDoc :: Phantoms.TTerm Syntax.ModuleDeclaration -> Phantoms.TTerm (Maybe Syntax.Docstring)
+moduleDeclarationDoc :: Typed.TypedTerm Syntax.ModuleDeclaration -> Typed.TypedTerm (Maybe Syntax.Docstring)
 moduleDeclarationDoc x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ModuleDeclaration"),
         Core.projectionFieldName = (Core.Name "doc")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the name field of hydra.lisp.syntax.ModuleDeclaration
-moduleDeclarationName :: Phantoms.TTerm Syntax.ModuleDeclaration -> Phantoms.TTerm Syntax.NamespaceName
+moduleDeclarationName :: Typed.TypedTerm Syntax.ModuleDeclaration -> Typed.TypedTerm Syntax.NamespaceName
 moduleDeclarationName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ModuleDeclaration"),
         Core.projectionFieldName = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the doc field of hydra.lisp.syntax.ModuleDeclaration
-moduleDeclarationWithDoc :: Phantoms.TTerm Syntax.ModuleDeclaration -> Phantoms.TTerm (Maybe Syntax.Docstring) -> Phantoms.TTerm Syntax.ModuleDeclaration
+moduleDeclarationWithDoc :: Typed.TypedTerm Syntax.ModuleDeclaration -> Typed.TypedTerm (Maybe Syntax.Docstring) -> Typed.TypedTerm Syntax.ModuleDeclaration
 moduleDeclarationWithDoc original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ModuleDeclaration"),
       Core.recordFields = [
         Core.Field {
@@ -2860,234 +2860,234 @@ moduleDeclarationWithDoc original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ModuleDeclaration"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the name field of hydra.lisp.syntax.ModuleDeclaration
-moduleDeclarationWithName :: Phantoms.TTerm Syntax.ModuleDeclaration -> Phantoms.TTerm Syntax.NamespaceName -> Phantoms.TTerm Syntax.ModuleDeclaration
+moduleDeclarationWithName :: Typed.TypedTerm Syntax.ModuleDeclaration -> Typed.TypedTerm Syntax.NamespaceName -> Typed.TypedTerm Syntax.ModuleDeclaration
 moduleDeclarationWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.ModuleDeclaration"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ModuleDeclaration"),
               Core.projectionFieldName = (Core.Name "doc")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for the hydra.lisp.syntax.NamespaceName wrapper
-namespaceName :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.NamespaceName
+namespaceName :: Typed.TypedTerm String -> Typed.TypedTerm Syntax.NamespaceName
 namespaceName x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.lisp.syntax.NamespaceName"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 -- | DSL injection for the emptyList variant of hydra.lisp.syntax.NilStyle
-nilStyleEmptyList :: Phantoms.TTerm Syntax.NilStyle
+nilStyleEmptyList :: Typed.TypedTerm Syntax.NilStyle
 nilStyleEmptyList =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.NilStyle"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "emptyList"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL injection for the nil variant of hydra.lisp.syntax.NilStyle
-nilStyleNil :: Phantoms.TTerm Syntax.NilStyle
+nilStyleNil :: Typed.TypedTerm Syntax.NilStyle
 nilStyleNil =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.NilStyle"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nil"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL constructor for hydra.lisp.syntax.NotExpression
-notExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.NotExpression
+notExpression :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.NotExpression
 notExpression expression =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.NotExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm expression)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm expression)}]}))
 -- | DSL accessor for the expression field of hydra.lisp.syntax.NotExpression
-notExpressionExpression :: Phantoms.TTerm Syntax.NotExpression -> Phantoms.TTerm Syntax.Expression
+notExpressionExpression :: Typed.TypedTerm Syntax.NotExpression -> Typed.TypedTerm Syntax.Expression
 notExpressionExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.NotExpression"),
         Core.projectionFieldName = (Core.Name "expression")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the expression field of hydra.lisp.syntax.NotExpression
-notExpressionWithExpression :: Phantoms.TTerm Syntax.NotExpression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.NotExpression
+notExpressionWithExpression :: Typed.TypedTerm Syntax.NotExpression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.NotExpression
 notExpressionWithExpression original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.NotExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.lisp.syntax.OrExpression
-orExpression :: Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.OrExpression
+orExpression :: Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.OrExpression
 orExpression expressions =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.OrExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expressions"),
-          Core.fieldTerm = (Phantoms.unTTerm expressions)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm expressions)}]}))
 -- | DSL accessor for the expressions field of hydra.lisp.syntax.OrExpression
-orExpressionExpressions :: Phantoms.TTerm Syntax.OrExpression -> Phantoms.TTerm [Syntax.Expression]
+orExpressionExpressions :: Typed.TypedTerm Syntax.OrExpression -> Typed.TypedTerm [Syntax.Expression]
 orExpressionExpressions x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.OrExpression"),
         Core.projectionFieldName = (Core.Name "expressions")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the expressions field of hydra.lisp.syntax.OrExpression
-orExpressionWithExpressions :: Phantoms.TTerm Syntax.OrExpression -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.OrExpression
+orExpressionWithExpressions :: Typed.TypedTerm Syntax.OrExpression -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.OrExpression
 orExpressionWithExpressions original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.OrExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expressions"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL injection for the constructor variant of hydra.lisp.syntax.Pattern
-patternConstructor :: Phantoms.TTerm Syntax.ConstructorPattern -> Phantoms.TTerm Syntax.Pattern
+patternConstructor :: Typed.TypedTerm Syntax.ConstructorPattern -> Typed.TypedTerm Syntax.Pattern
 patternConstructor x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Pattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "constructor"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the literal variant of hydra.lisp.syntax.Pattern
-patternLiteral :: Phantoms.TTerm Syntax.LiteralPattern -> Phantoms.TTerm Syntax.Pattern
+patternLiteral :: Typed.TypedTerm Syntax.LiteralPattern -> Typed.TypedTerm Syntax.Pattern
 patternLiteral x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Pattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the variable variant of hydra.lisp.syntax.Pattern
-patternVariable :: Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.Pattern
+patternVariable :: Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.Pattern
 patternVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Pattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the wildcard variant of hydra.lisp.syntax.Pattern
-patternWildcard :: Phantoms.TTerm Syntax.WildcardPattern -> Phantoms.TTerm Syntax.Pattern
+patternWildcard :: Typed.TypedTerm Syntax.WildcardPattern -> Typed.TypedTerm Syntax.Pattern
 patternWildcard x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Pattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "wildcard"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL constructor for hydra.lisp.syntax.Program
-program :: Phantoms.TTerm Syntax.Dialect -> Phantoms.TTerm (Maybe Syntax.ModuleDeclaration) -> Phantoms.TTerm [Syntax.ImportDeclaration] -> Phantoms.TTerm [Syntax.ExportDeclaration] -> Phantoms.TTerm [Syntax.TopLevelFormWithComments] -> Phantoms.TTerm Syntax.Program
+program :: Typed.TypedTerm Syntax.Dialect -> Typed.TypedTerm (Maybe Syntax.ModuleDeclaration) -> Typed.TypedTerm [Syntax.ImportDeclaration] -> Typed.TypedTerm [Syntax.ExportDeclaration] -> Typed.TypedTerm [Syntax.TopLevelFormWithComments] -> Typed.TypedTerm Syntax.Program
 program dialect module_ imports exports forms =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.Program"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "dialect"),
-          Core.fieldTerm = (Phantoms.unTTerm dialect)},
+          Core.fieldTerm = (Typed.unTypedTerm dialect)},
         Core.Field {
           Core.fieldName = (Core.Name "module"),
-          Core.fieldTerm = (Phantoms.unTTerm module_)},
+          Core.fieldTerm = (Typed.unTypedTerm module_)},
         Core.Field {
           Core.fieldName = (Core.Name "imports"),
-          Core.fieldTerm = (Phantoms.unTTerm imports)},
+          Core.fieldTerm = (Typed.unTypedTerm imports)},
         Core.Field {
           Core.fieldName = (Core.Name "exports"),
-          Core.fieldTerm = (Phantoms.unTTerm exports)},
+          Core.fieldTerm = (Typed.unTypedTerm exports)},
         Core.Field {
           Core.fieldName = (Core.Name "forms"),
-          Core.fieldTerm = (Phantoms.unTTerm forms)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm forms)}]}))
 -- | DSL accessor for the dialect field of hydra.lisp.syntax.Program
-programDialect :: Phantoms.TTerm Syntax.Program -> Phantoms.TTerm Syntax.Dialect
+programDialect :: Typed.TypedTerm Syntax.Program -> Typed.TypedTerm Syntax.Dialect
 programDialect x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
         Core.projectionFieldName = (Core.Name "dialect")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the exports field of hydra.lisp.syntax.Program
-programExports :: Phantoms.TTerm Syntax.Program -> Phantoms.TTerm [Syntax.ExportDeclaration]
+programExports :: Typed.TypedTerm Syntax.Program -> Typed.TypedTerm [Syntax.ExportDeclaration]
 programExports x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
         Core.projectionFieldName = (Core.Name "exports")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the forms field of hydra.lisp.syntax.Program
-programForms :: Phantoms.TTerm Syntax.Program -> Phantoms.TTerm [Syntax.TopLevelFormWithComments]
+programForms :: Typed.TypedTerm Syntax.Program -> Typed.TypedTerm [Syntax.TopLevelFormWithComments]
 programForms x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
         Core.projectionFieldName = (Core.Name "forms")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the imports field of hydra.lisp.syntax.Program
-programImports :: Phantoms.TTerm Syntax.Program -> Phantoms.TTerm [Syntax.ImportDeclaration]
+programImports :: Typed.TypedTerm Syntax.Program -> Typed.TypedTerm [Syntax.ImportDeclaration]
 programImports x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
         Core.projectionFieldName = (Core.Name "imports")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the module field of hydra.lisp.syntax.Program
-programModule :: Phantoms.TTerm Syntax.Program -> Phantoms.TTerm (Maybe Syntax.ModuleDeclaration)
+programModule :: Typed.TypedTerm Syntax.Program -> Typed.TypedTerm (Maybe Syntax.ModuleDeclaration)
 programModule x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
         Core.projectionFieldName = (Core.Name "module")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the dialect field of hydra.lisp.syntax.Program
-programWithDialect :: Phantoms.TTerm Syntax.Program -> Phantoms.TTerm Syntax.Dialect -> Phantoms.TTerm Syntax.Program
+programWithDialect :: Typed.TypedTerm Syntax.Program -> Typed.TypedTerm Syntax.Dialect -> Typed.TypedTerm Syntax.Program
 programWithDialect original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.Program"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "dialect"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "module"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
               Core.projectionFieldName = (Core.Name "module")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "imports"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
               Core.projectionFieldName = (Core.Name "imports")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "exports"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
               Core.projectionFieldName = (Core.Name "exports")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "forms"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
               Core.projectionFieldName = (Core.Name "forms")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the exports field of hydra.lisp.syntax.Program
-programWithExports :: Phantoms.TTerm Syntax.Program -> Phantoms.TTerm [Syntax.ExportDeclaration] -> Phantoms.TTerm Syntax.Program
+programWithExports :: Typed.TypedTerm Syntax.Program -> Typed.TypedTerm [Syntax.ExportDeclaration] -> Typed.TypedTerm Syntax.Program
 programWithExports original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.Program"),
       Core.recordFields = [
         Core.Field {
@@ -3096,35 +3096,35 @@ programWithExports original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
               Core.projectionFieldName = (Core.Name "dialect")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "module"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
               Core.projectionFieldName = (Core.Name "module")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "imports"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
               Core.projectionFieldName = (Core.Name "imports")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "exports"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "forms"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
               Core.projectionFieldName = (Core.Name "forms")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the forms field of hydra.lisp.syntax.Program
-programWithForms :: Phantoms.TTerm Syntax.Program -> Phantoms.TTerm [Syntax.TopLevelFormWithComments] -> Phantoms.TTerm Syntax.Program
+programWithForms :: Typed.TypedTerm Syntax.Program -> Typed.TypedTerm [Syntax.TopLevelFormWithComments] -> Typed.TypedTerm Syntax.Program
 programWithForms original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.Program"),
       Core.recordFields = [
         Core.Field {
@@ -3133,35 +3133,35 @@ programWithForms original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
               Core.projectionFieldName = (Core.Name "dialect")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "module"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
               Core.projectionFieldName = (Core.Name "module")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "imports"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
               Core.projectionFieldName = (Core.Name "imports")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "exports"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
               Core.projectionFieldName = (Core.Name "exports")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "forms"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the imports field of hydra.lisp.syntax.Program
-programWithImports :: Phantoms.TTerm Syntax.Program -> Phantoms.TTerm [Syntax.ImportDeclaration] -> Phantoms.TTerm Syntax.Program
+programWithImports :: Typed.TypedTerm Syntax.Program -> Typed.TypedTerm [Syntax.ImportDeclaration] -> Typed.TypedTerm Syntax.Program
 programWithImports original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.Program"),
       Core.recordFields = [
         Core.Field {
@@ -3170,35 +3170,35 @@ programWithImports original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
               Core.projectionFieldName = (Core.Name "dialect")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "module"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
               Core.projectionFieldName = (Core.Name "module")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "imports"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "exports"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
               Core.projectionFieldName = (Core.Name "exports")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "forms"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
               Core.projectionFieldName = (Core.Name "forms")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the module field of hydra.lisp.syntax.Program
-programWithModule :: Phantoms.TTerm Syntax.Program -> Phantoms.TTerm (Maybe Syntax.ModuleDeclaration) -> Phantoms.TTerm Syntax.Program
+programWithModule :: Typed.TypedTerm Syntax.Program -> Typed.TypedTerm (Maybe Syntax.ModuleDeclaration) -> Typed.TypedTerm Syntax.Program
 programWithModule original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.Program"),
       Core.recordFields = [
         Core.Field {
@@ -3207,63 +3207,63 @@ programWithModule original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
               Core.projectionFieldName = (Core.Name "dialect")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "module"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "imports"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
               Core.projectionFieldName = (Core.Name "imports")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "exports"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
               Core.projectionFieldName = (Core.Name "exports")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "forms"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
               Core.projectionFieldName = (Core.Name "forms")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.lisp.syntax.QualifiedSymbol
-qualifiedSymbol :: Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.QualifiedSymbol
+qualifiedSymbol :: Typed.TypedTerm String -> Typed.TypedTerm String -> Typed.TypedTerm Syntax.QualifiedSymbol
 qualifiedSymbol namespace name =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.QualifiedSymbol"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "namespace"),
-          Core.fieldTerm = (Phantoms.unTTerm namespace)},
+          Core.fieldTerm = (Typed.unTypedTerm namespace)},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm name)}]}))
 -- | DSL accessor for the name field of hydra.lisp.syntax.QualifiedSymbol
-qualifiedSymbolName :: Phantoms.TTerm Syntax.QualifiedSymbol -> Phantoms.TTerm String
+qualifiedSymbolName :: Typed.TypedTerm Syntax.QualifiedSymbol -> Typed.TypedTerm String
 qualifiedSymbolName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.QualifiedSymbol"),
         Core.projectionFieldName = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the namespace field of hydra.lisp.syntax.QualifiedSymbol
-qualifiedSymbolNamespace :: Phantoms.TTerm Syntax.QualifiedSymbol -> Phantoms.TTerm String
+qualifiedSymbolNamespace :: Typed.TypedTerm Syntax.QualifiedSymbol -> Typed.TypedTerm String
 qualifiedSymbolNamespace x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.QualifiedSymbol"),
         Core.projectionFieldName = (Core.Name "namespace")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the name field of hydra.lisp.syntax.QualifiedSymbol
-qualifiedSymbolWithName :: Phantoms.TTerm Syntax.QualifiedSymbol -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.QualifiedSymbol
+qualifiedSymbolWithName :: Typed.TypedTerm Syntax.QualifiedSymbol -> Typed.TypedTerm String -> Typed.TypedTerm Syntax.QualifiedSymbol
 qualifiedSymbolWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.QualifiedSymbol"),
       Core.recordFields = [
         Core.Field {
@@ -3272,121 +3272,121 @@ qualifiedSymbolWithName original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.QualifiedSymbol"),
               Core.projectionFieldName = (Core.Name "namespace")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the namespace field of hydra.lisp.syntax.QualifiedSymbol
-qualifiedSymbolWithNamespace :: Phantoms.TTerm Syntax.QualifiedSymbol -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.QualifiedSymbol
+qualifiedSymbolWithNamespace :: Typed.TypedTerm Syntax.QualifiedSymbol -> Typed.TypedTerm String -> Typed.TypedTerm Syntax.QualifiedSymbol
 qualifiedSymbolWithNamespace original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.QualifiedSymbol"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "namespace"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.QualifiedSymbol"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.lisp.syntax.QuasiquoteExpression
-quasiquoteExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.QuasiquoteExpression
+quasiquoteExpression :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.QuasiquoteExpression
 quasiquoteExpression body =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.QuasiquoteExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm body)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm body)}]}))
 -- | DSL accessor for the body field of hydra.lisp.syntax.QuasiquoteExpression
-quasiquoteExpressionBody :: Phantoms.TTerm Syntax.QuasiquoteExpression -> Phantoms.TTerm Syntax.Expression
+quasiquoteExpressionBody :: Typed.TypedTerm Syntax.QuasiquoteExpression -> Typed.TypedTerm Syntax.Expression
 quasiquoteExpressionBody x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.QuasiquoteExpression"),
         Core.projectionFieldName = (Core.Name "body")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the body field of hydra.lisp.syntax.QuasiquoteExpression
-quasiquoteExpressionWithBody :: Phantoms.TTerm Syntax.QuasiquoteExpression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.QuasiquoteExpression
+quasiquoteExpressionWithBody :: Typed.TypedTerm Syntax.QuasiquoteExpression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.QuasiquoteExpression
 quasiquoteExpressionWithBody original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.QuasiquoteExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.lisp.syntax.QuoteExpression
-quoteExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.QuoteExpression
+quoteExpression :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.QuoteExpression
 quoteExpression body =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.QuoteExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm body)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm body)}]}))
 -- | DSL accessor for the body field of hydra.lisp.syntax.QuoteExpression
-quoteExpressionBody :: Phantoms.TTerm Syntax.QuoteExpression -> Phantoms.TTerm Syntax.Expression
+quoteExpressionBody :: Typed.TypedTerm Syntax.QuoteExpression -> Typed.TypedTerm Syntax.Expression
 quoteExpressionBody x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.QuoteExpression"),
         Core.projectionFieldName = (Core.Name "body")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the body field of hydra.lisp.syntax.QuoteExpression
-quoteExpressionWithBody :: Phantoms.TTerm Syntax.QuoteExpression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.QuoteExpression
+quoteExpressionWithBody :: Typed.TypedTerm Syntax.QuoteExpression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.QuoteExpression
 quoteExpressionWithBody original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.QuoteExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.lisp.syntax.RecordTypeDefinition
-recordTypeDefinition :: Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm [Syntax.FieldDefinition] -> Phantoms.TTerm (Maybe Syntax.Docstring) -> Phantoms.TTerm Syntax.RecordTypeDefinition
+recordTypeDefinition :: Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm [Syntax.FieldDefinition] -> Typed.TypedTerm (Maybe Syntax.Docstring) -> Typed.TypedTerm Syntax.RecordTypeDefinition
 recordTypeDefinition name fields doc =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.RecordTypeDefinition"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
+          Core.fieldTerm = (Typed.unTypedTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "fields"),
-          Core.fieldTerm = (Phantoms.unTTerm fields)},
+          Core.fieldTerm = (Typed.unTypedTerm fields)},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
-          Core.fieldTerm = (Phantoms.unTTerm doc)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm doc)}]}))
 -- | DSL accessor for the doc field of hydra.lisp.syntax.RecordTypeDefinition
-recordTypeDefinitionDoc :: Phantoms.TTerm Syntax.RecordTypeDefinition -> Phantoms.TTerm (Maybe Syntax.Docstring)
+recordTypeDefinitionDoc :: Typed.TypedTerm Syntax.RecordTypeDefinition -> Typed.TypedTerm (Maybe Syntax.Docstring)
 recordTypeDefinitionDoc x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.RecordTypeDefinition"),
         Core.projectionFieldName = (Core.Name "doc")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the fields field of hydra.lisp.syntax.RecordTypeDefinition
-recordTypeDefinitionFields :: Phantoms.TTerm Syntax.RecordTypeDefinition -> Phantoms.TTerm [Syntax.FieldDefinition]
+recordTypeDefinitionFields :: Typed.TypedTerm Syntax.RecordTypeDefinition -> Typed.TypedTerm [Syntax.FieldDefinition]
 recordTypeDefinitionFields x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.RecordTypeDefinition"),
         Core.projectionFieldName = (Core.Name "fields")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the name field of hydra.lisp.syntax.RecordTypeDefinition
-recordTypeDefinitionName :: Phantoms.TTerm Syntax.RecordTypeDefinition -> Phantoms.TTerm Syntax.Symbol
+recordTypeDefinitionName :: Typed.TypedTerm Syntax.RecordTypeDefinition -> Typed.TypedTerm Syntax.Symbol
 recordTypeDefinitionName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.RecordTypeDefinition"),
         Core.projectionFieldName = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the doc field of hydra.lisp.syntax.RecordTypeDefinition
-recordTypeDefinitionWithDoc :: Phantoms.TTerm Syntax.RecordTypeDefinition -> Phantoms.TTerm (Maybe Syntax.Docstring) -> Phantoms.TTerm Syntax.RecordTypeDefinition
+recordTypeDefinitionWithDoc :: Typed.TypedTerm Syntax.RecordTypeDefinition -> Typed.TypedTerm (Maybe Syntax.Docstring) -> Typed.TypedTerm Syntax.RecordTypeDefinition
 recordTypeDefinitionWithDoc original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.RecordTypeDefinition"),
       Core.recordFields = [
         Core.Field {
@@ -3395,21 +3395,21 @@ recordTypeDefinitionWithDoc original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.RecordTypeDefinition"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "fields"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.RecordTypeDefinition"),
               Core.projectionFieldName = (Core.Name "fields")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the fields field of hydra.lisp.syntax.RecordTypeDefinition
-recordTypeDefinitionWithFields :: Phantoms.TTerm Syntax.RecordTypeDefinition -> Phantoms.TTerm [Syntax.FieldDefinition] -> Phantoms.TTerm Syntax.RecordTypeDefinition
+recordTypeDefinitionWithFields :: Typed.TypedTerm Syntax.RecordTypeDefinition -> Typed.TypedTerm [Syntax.FieldDefinition] -> Typed.TypedTerm Syntax.RecordTypeDefinition
 recordTypeDefinitionWithFields original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.RecordTypeDefinition"),
       Core.recordFields = [
         Core.Field {
@@ -3418,130 +3418,130 @@ recordTypeDefinitionWithFields original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.RecordTypeDefinition"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "fields"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.RecordTypeDefinition"),
               Core.projectionFieldName = (Core.Name "doc")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.lisp.syntax.RecordTypeDefinition
-recordTypeDefinitionWithName :: Phantoms.TTerm Syntax.RecordTypeDefinition -> Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.RecordTypeDefinition
+recordTypeDefinitionWithName :: Typed.TypedTerm Syntax.RecordTypeDefinition -> Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.RecordTypeDefinition
 recordTypeDefinitionWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.RecordTypeDefinition"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "fields"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.RecordTypeDefinition"),
               Core.projectionFieldName = (Core.Name "fields")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.RecordTypeDefinition"),
               Core.projectionFieldName = (Core.Name "doc")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL injection for the atom variant of hydra.lisp.syntax.SExpression
-sExpressionAtom :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.SExpression
+sExpressionAtom :: Typed.TypedTerm String -> Typed.TypedTerm Syntax.SExpression
 sExpressionAtom x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.SExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "atom"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the list variant of hydra.lisp.syntax.SExpression
-sExpressionList :: Phantoms.TTerm [Syntax.SExpression] -> Phantoms.TTerm Syntax.SExpression
+sExpressionList :: Typed.TypedTerm [Syntax.SExpression] -> Typed.TypedTerm Syntax.SExpression
 sExpressionList x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.SExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL constructor for hydra.lisp.syntax.SetLiteral
-setLiteral :: Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.SetLiteral
+setLiteral :: Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.SetLiteral
 setLiteral elements =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.SetLiteral"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "elements"),
-          Core.fieldTerm = (Phantoms.unTTerm elements)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm elements)}]}))
 -- | DSL accessor for the elements field of hydra.lisp.syntax.SetLiteral
-setLiteralElements :: Phantoms.TTerm Syntax.SetLiteral -> Phantoms.TTerm [Syntax.Expression]
+setLiteralElements :: Typed.TypedTerm Syntax.SetLiteral -> Typed.TypedTerm [Syntax.Expression]
 setLiteralElements x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.SetLiteral"),
         Core.projectionFieldName = (Core.Name "elements")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the elements field of hydra.lisp.syntax.SetLiteral
-setLiteralWithElements :: Phantoms.TTerm Syntax.SetLiteral -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.SetLiteral
+setLiteralWithElements :: Typed.TypedTerm Syntax.SetLiteral -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.SetLiteral
 setLiteralWithElements original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.SetLiteral"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "elements"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.lisp.syntax.SimpleBinding
-simpleBinding :: Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.SimpleBinding
+simpleBinding :: Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.SimpleBinding
 simpleBinding name value =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.SimpleBinding"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
+          Core.fieldTerm = (Typed.unTypedTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm value)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm value)}]}))
 -- | DSL accessor for the name field of hydra.lisp.syntax.SimpleBinding
-simpleBindingName :: Phantoms.TTerm Syntax.SimpleBinding -> Phantoms.TTerm Syntax.Symbol
+simpleBindingName :: Typed.TypedTerm Syntax.SimpleBinding -> Typed.TypedTerm Syntax.Symbol
 simpleBindingName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.SimpleBinding"),
         Core.projectionFieldName = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the value field of hydra.lisp.syntax.SimpleBinding
-simpleBindingValue :: Phantoms.TTerm Syntax.SimpleBinding -> Phantoms.TTerm Syntax.Expression
+simpleBindingValue :: Typed.TypedTerm Syntax.SimpleBinding -> Typed.TypedTerm Syntax.Expression
 simpleBindingValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.SimpleBinding"),
         Core.projectionFieldName = (Core.Name "value")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the name field of hydra.lisp.syntax.SimpleBinding
-simpleBindingWithName :: Phantoms.TTerm Syntax.SimpleBinding -> Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.SimpleBinding
+simpleBindingWithName :: Typed.TypedTerm Syntax.SimpleBinding -> Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.SimpleBinding
 simpleBindingWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.SimpleBinding"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.SimpleBinding"),
               Core.projectionFieldName = (Core.Name "value")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the value field of hydra.lisp.syntax.SimpleBinding
-simpleBindingWithValue :: Phantoms.TTerm Syntax.SimpleBinding -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.SimpleBinding
+simpleBindingWithValue :: Typed.TypedTerm Syntax.SimpleBinding -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.SimpleBinding
 simpleBindingWithValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.SimpleBinding"),
       Core.recordFields = [
         Core.Field {
@@ -3550,133 +3550,133 @@ simpleBindingWithValue original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.SimpleBinding"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.lisp.syntax.SplicingUnquoteExpression
-splicingUnquoteExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.SplicingUnquoteExpression
+splicingUnquoteExpression :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.SplicingUnquoteExpression
 splicingUnquoteExpression body =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.SplicingUnquoteExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm body)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm body)}]}))
 -- | DSL accessor for the body field of hydra.lisp.syntax.SplicingUnquoteExpression
-splicingUnquoteExpressionBody :: Phantoms.TTerm Syntax.SplicingUnquoteExpression -> Phantoms.TTerm Syntax.Expression
+splicingUnquoteExpressionBody :: Typed.TypedTerm Syntax.SplicingUnquoteExpression -> Typed.TypedTerm Syntax.Expression
 splicingUnquoteExpressionBody x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.SplicingUnquoteExpression"),
         Core.projectionFieldName = (Core.Name "body")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the body field of hydra.lisp.syntax.SplicingUnquoteExpression
-splicingUnquoteExpressionWithBody :: Phantoms.TTerm Syntax.SplicingUnquoteExpression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.SplicingUnquoteExpression
+splicingUnquoteExpressionWithBody :: Typed.TypedTerm Syntax.SplicingUnquoteExpression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.SplicingUnquoteExpression
 splicingUnquoteExpressionWithBody original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.SplicingUnquoteExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for the hydra.lisp.syntax.Symbol wrapper
-symbol :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.Symbol
+symbol :: Typed.TypedTerm String -> Typed.TypedTerm Syntax.Symbol
 symbol x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.lisp.syntax.Symbol"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 -- | DSL injection for the constant variant of hydra.lisp.syntax.TopLevelForm
-topLevelFormConstant :: Phantoms.TTerm Syntax.ConstantDefinition -> Phantoms.TTerm Syntax.TopLevelForm
+topLevelFormConstant :: Typed.TypedTerm Syntax.ConstantDefinition -> Typed.TypedTerm Syntax.TopLevelForm
 topLevelFormConstant x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelForm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "constant"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the expression variant of hydra.lisp.syntax.TopLevelForm
-topLevelFormExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.TopLevelForm
+topLevelFormExpression :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.TopLevelForm
 topLevelFormExpression x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelForm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "expression"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the function variant of hydra.lisp.syntax.TopLevelForm
-topLevelFormFunction :: Phantoms.TTerm Syntax.FunctionDefinition -> Phantoms.TTerm Syntax.TopLevelForm
+topLevelFormFunction :: Typed.TypedTerm Syntax.FunctionDefinition -> Typed.TypedTerm Syntax.TopLevelForm
 topLevelFormFunction x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelForm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "function"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the macro variant of hydra.lisp.syntax.TopLevelForm
-topLevelFormMacro :: Phantoms.TTerm Syntax.MacroDefinition -> Phantoms.TTerm Syntax.TopLevelForm
+topLevelFormMacro :: Typed.TypedTerm Syntax.MacroDefinition -> Typed.TypedTerm Syntax.TopLevelForm
 topLevelFormMacro x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelForm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "macro"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the recordType variant of hydra.lisp.syntax.TopLevelForm
-topLevelFormRecordType :: Phantoms.TTerm Syntax.RecordTypeDefinition -> Phantoms.TTerm Syntax.TopLevelForm
+topLevelFormRecordType :: Typed.TypedTerm Syntax.RecordTypeDefinition -> Typed.TypedTerm Syntax.TopLevelForm
 topLevelFormRecordType x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelForm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "recordType"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the variable variant of hydra.lisp.syntax.TopLevelForm
-topLevelFormVariable :: Phantoms.TTerm Syntax.VariableDefinition -> Phantoms.TTerm Syntax.TopLevelForm
+topLevelFormVariable :: Typed.TypedTerm Syntax.VariableDefinition -> Typed.TypedTerm Syntax.TopLevelForm
 topLevelFormVariable x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelForm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL constructor for hydra.lisp.syntax.TopLevelFormWithComments
-topLevelFormWithComments :: Phantoms.TTerm (Maybe Syntax.Docstring) -> Phantoms.TTerm (Maybe Syntax.Comment) -> Phantoms.TTerm Syntax.TopLevelForm -> Phantoms.TTerm Syntax.TopLevelFormWithComments
+topLevelFormWithComments :: Typed.TypedTerm (Maybe Syntax.Docstring) -> Typed.TypedTerm (Maybe Syntax.Comment) -> Typed.TypedTerm Syntax.TopLevelForm -> Typed.TypedTerm Syntax.TopLevelFormWithComments
 topLevelFormWithComments doc comment form =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.TopLevelFormWithComments"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
-          Core.fieldTerm = (Phantoms.unTTerm doc)},
+          Core.fieldTerm = (Typed.unTypedTerm doc)},
         Core.Field {
           Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Phantoms.unTTerm comment)},
+          Core.fieldTerm = (Typed.unTypedTerm comment)},
         Core.Field {
           Core.fieldName = (Core.Name "form"),
-          Core.fieldTerm = (Phantoms.unTTerm form)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm form)}]}))
 -- | DSL accessor for the comment field of hydra.lisp.syntax.TopLevelFormWithComments
-topLevelFormWithCommentsComment :: Phantoms.TTerm Syntax.TopLevelFormWithComments -> Phantoms.TTerm (Maybe Syntax.Comment)
+topLevelFormWithCommentsComment :: Typed.TypedTerm Syntax.TopLevelFormWithComments -> Typed.TypedTerm (Maybe Syntax.Comment)
 topLevelFormWithCommentsComment x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelFormWithComments"),
         Core.projectionFieldName = (Core.Name "comment")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the doc field of hydra.lisp.syntax.TopLevelFormWithComments
-topLevelFormWithCommentsDoc :: Phantoms.TTerm Syntax.TopLevelFormWithComments -> Phantoms.TTerm (Maybe Syntax.Docstring)
+topLevelFormWithCommentsDoc :: Typed.TypedTerm Syntax.TopLevelFormWithComments -> Typed.TypedTerm (Maybe Syntax.Docstring)
 topLevelFormWithCommentsDoc x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelFormWithComments"),
         Core.projectionFieldName = (Core.Name "doc")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the form field of hydra.lisp.syntax.TopLevelFormWithComments
-topLevelFormWithCommentsForm :: Phantoms.TTerm Syntax.TopLevelFormWithComments -> Phantoms.TTerm Syntax.TopLevelForm
+topLevelFormWithCommentsForm :: Typed.TypedTerm Syntax.TopLevelFormWithComments -> Typed.TypedTerm Syntax.TopLevelForm
 topLevelFormWithCommentsForm x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelFormWithComments"),
         Core.projectionFieldName = (Core.Name "form")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the comment field of hydra.lisp.syntax.TopLevelFormWithComments
-topLevelFormWithCommentsWithComment :: Phantoms.TTerm Syntax.TopLevelFormWithComments -> Phantoms.TTerm (Maybe Syntax.Comment) -> Phantoms.TTerm Syntax.TopLevelFormWithComments
+topLevelFormWithCommentsWithComment :: Typed.TypedTerm Syntax.TopLevelFormWithComments -> Typed.TypedTerm (Maybe Syntax.Comment) -> Typed.TypedTerm Syntax.TopLevelFormWithComments
 topLevelFormWithCommentsWithComment original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.TopLevelFormWithComments"),
       Core.recordFields = [
         Core.Field {
@@ -3685,44 +3685,44 @@ topLevelFormWithCommentsWithComment original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelFormWithComments"),
               Core.projectionFieldName = (Core.Name "doc")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "comment"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "form"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelFormWithComments"),
               Core.projectionFieldName = (Core.Name "form")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the doc field of hydra.lisp.syntax.TopLevelFormWithComments
-topLevelFormWithCommentsWithDoc :: Phantoms.TTerm Syntax.TopLevelFormWithComments -> Phantoms.TTerm (Maybe Syntax.Docstring) -> Phantoms.TTerm Syntax.TopLevelFormWithComments
+topLevelFormWithCommentsWithDoc :: Typed.TypedTerm Syntax.TopLevelFormWithComments -> Typed.TypedTerm (Maybe Syntax.Docstring) -> Typed.TypedTerm Syntax.TopLevelFormWithComments
 topLevelFormWithCommentsWithDoc original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.TopLevelFormWithComments"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "comment"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelFormWithComments"),
               Core.projectionFieldName = (Core.Name "comment")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "form"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelFormWithComments"),
               Core.projectionFieldName = (Core.Name "form")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the form field of hydra.lisp.syntax.TopLevelFormWithComments
-topLevelFormWithCommentsWithForm :: Phantoms.TTerm Syntax.TopLevelFormWithComments -> Phantoms.TTerm Syntax.TopLevelForm -> Phantoms.TTerm Syntax.TopLevelFormWithComments
+topLevelFormWithCommentsWithForm :: Typed.TypedTerm Syntax.TopLevelFormWithComments -> Typed.TypedTerm Syntax.TopLevelForm -> Typed.TypedTerm Syntax.TopLevelFormWithComments
 topLevelFormWithCommentsWithForm original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.TopLevelFormWithComments"),
       Core.recordFields = [
         Core.Field {
@@ -3731,65 +3731,65 @@ topLevelFormWithCommentsWithForm original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelFormWithComments"),
               Core.projectionFieldName = (Core.Name "doc")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "comment"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelFormWithComments"),
               Core.projectionFieldName = (Core.Name "comment")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "form"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.lisp.syntax.TypeAnnotation
-typeAnnotation :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.TypeSpecifier -> Phantoms.TTerm Syntax.TypeAnnotation
+typeAnnotation :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.TypeSpecifier -> Typed.TypedTerm Syntax.TypeAnnotation
 typeAnnotation expression type_ =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.TypeAnnotation"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm expression)},
+          Core.fieldTerm = (Typed.unTypedTerm expression)},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm type_)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm type_)}]}))
 -- | DSL accessor for the expression field of hydra.lisp.syntax.TypeAnnotation
-typeAnnotationExpression :: Phantoms.TTerm Syntax.TypeAnnotation -> Phantoms.TTerm Syntax.Expression
+typeAnnotationExpression :: Typed.TypedTerm Syntax.TypeAnnotation -> Typed.TypedTerm Syntax.Expression
 typeAnnotationExpression x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.TypeAnnotation"),
         Core.projectionFieldName = (Core.Name "expression")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the type field of hydra.lisp.syntax.TypeAnnotation
-typeAnnotationType :: Phantoms.TTerm Syntax.TypeAnnotation -> Phantoms.TTerm Syntax.TypeSpecifier
+typeAnnotationType :: Typed.TypedTerm Syntax.TypeAnnotation -> Typed.TypedTerm Syntax.TypeSpecifier
 typeAnnotationType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.TypeAnnotation"),
         Core.projectionFieldName = (Core.Name "type")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the expression field of hydra.lisp.syntax.TypeAnnotation
-typeAnnotationWithExpression :: Phantoms.TTerm Syntax.TypeAnnotation -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.TypeAnnotation
+typeAnnotationWithExpression :: Typed.TypedTerm Syntax.TypeAnnotation -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.TypeAnnotation
 typeAnnotationWithExpression original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.TypeAnnotation"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.TypeAnnotation"),
               Core.projectionFieldName = (Core.Name "type")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.lisp.syntax.TypeAnnotation
-typeAnnotationWithType :: Phantoms.TTerm Syntax.TypeAnnotation -> Phantoms.TTerm Syntax.TypeSpecifier -> Phantoms.TTerm Syntax.TypeAnnotation
+typeAnnotationWithType :: Typed.TypedTerm Syntax.TypeAnnotation -> Typed.TypedTerm Syntax.TypeSpecifier -> Typed.TypedTerm Syntax.TypeAnnotation
 typeAnnotationWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.TypeAnnotation"),
       Core.recordFields = [
         Core.Field {
@@ -3798,58 +3798,58 @@ typeAnnotationWithType original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.TypeAnnotation"),
               Core.projectionFieldName = (Core.Name "expression")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.lisp.syntax.TypeHint
-typeHint :: Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.TypeSpecifier -> Phantoms.TTerm Syntax.TypeHint
+typeHint :: Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.TypeSpecifier -> Typed.TypedTerm Syntax.TypeHint
 typeHint name type_ =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.TypeHint"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
+          Core.fieldTerm = (Typed.unTypedTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm type_)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm type_)}]}))
 -- | DSL accessor for the name field of hydra.lisp.syntax.TypeHint
-typeHintName :: Phantoms.TTerm Syntax.TypeHint -> Phantoms.TTerm Syntax.Symbol
+typeHintName :: Typed.TypedTerm Syntax.TypeHint -> Typed.TypedTerm Syntax.Symbol
 typeHintName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.TypeHint"),
         Core.projectionFieldName = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the type field of hydra.lisp.syntax.TypeHint
-typeHintType :: Phantoms.TTerm Syntax.TypeHint -> Phantoms.TTerm Syntax.TypeSpecifier
+typeHintType :: Typed.TypedTerm Syntax.TypeHint -> Typed.TypedTerm Syntax.TypeSpecifier
 typeHintType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.TypeHint"),
         Core.projectionFieldName = (Core.Name "type")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the name field of hydra.lisp.syntax.TypeHint
-typeHintWithName :: Phantoms.TTerm Syntax.TypeHint -> Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.TypeHint
+typeHintWithName :: Typed.TypedTerm Syntax.TypeHint -> Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.TypeHint
 typeHintWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.TypeHint"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.TypeHint"),
               Core.projectionFieldName = (Core.Name "type")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.lisp.syntax.TypeHint
-typeHintWithType :: Phantoms.TTerm Syntax.TypeHint -> Phantoms.TTerm Syntax.TypeSpecifier -> Phantoms.TTerm Syntax.TypeHint
+typeHintWithType :: Typed.TypedTerm Syntax.TypeHint -> Typed.TypedTerm Syntax.TypeSpecifier -> Typed.TypedTerm Syntax.TypeHint
 typeHintWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.TypeHint"),
       Core.recordFields = [
         Core.Field {
@@ -3858,169 +3858,169 @@ typeHintWithType original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.TypeHint"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL injection for the either variant of hydra.lisp.syntax.TypeSpecifier
-typeSpecifierEither :: Phantoms.TTerm [Syntax.TypeSpecifier] -> Phantoms.TTerm Syntax.TypeSpecifier
+typeSpecifierEither :: Typed.TypedTerm [Syntax.TypeSpecifier] -> Typed.TypedTerm Syntax.TypeSpecifier
 typeSpecifierEither x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TypeSpecifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "either"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the function variant of hydra.lisp.syntax.TypeSpecifier
-typeSpecifierFunction :: Phantoms.TTerm [Syntax.TypeSpecifier] -> Phantoms.TTerm Syntax.TypeSpecifier
+typeSpecifierFunction :: Typed.TypedTerm [Syntax.TypeSpecifier] -> Typed.TypedTerm Syntax.TypeSpecifier
 typeSpecifierFunction x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TypeSpecifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "function"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the list variant of hydra.lisp.syntax.TypeSpecifier
-typeSpecifierList :: Phantoms.TTerm Syntax.TypeSpecifier -> Phantoms.TTerm Syntax.TypeSpecifier
+typeSpecifierList :: Typed.TypedTerm Syntax.TypeSpecifier -> Typed.TypedTerm Syntax.TypeSpecifier
 typeSpecifierList x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TypeSpecifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the map variant of hydra.lisp.syntax.TypeSpecifier
-typeSpecifierMap :: Phantoms.TTerm [Syntax.TypeSpecifier] -> Phantoms.TTerm Syntax.TypeSpecifier
+typeSpecifierMap :: Typed.TypedTerm [Syntax.TypeSpecifier] -> Typed.TypedTerm Syntax.TypeSpecifier
 typeSpecifierMap x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TypeSpecifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the maybe variant of hydra.lisp.syntax.TypeSpecifier
-typeSpecifierMaybe :: Phantoms.TTerm Syntax.TypeSpecifier -> Phantoms.TTerm Syntax.TypeSpecifier
+typeSpecifierMaybe :: Typed.TypedTerm Syntax.TypeSpecifier -> Typed.TypedTerm Syntax.TypeSpecifier
 typeSpecifierMaybe x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TypeSpecifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "maybe"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the named variant of hydra.lisp.syntax.TypeSpecifier
-typeSpecifierNamed :: Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.TypeSpecifier
+typeSpecifierNamed :: Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.TypeSpecifier
 typeSpecifierNamed x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TypeSpecifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "named"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the pair variant of hydra.lisp.syntax.TypeSpecifier
-typeSpecifierPair :: Phantoms.TTerm [Syntax.TypeSpecifier] -> Phantoms.TTerm Syntax.TypeSpecifier
+typeSpecifierPair :: Typed.TypedTerm [Syntax.TypeSpecifier] -> Typed.TypedTerm Syntax.TypeSpecifier
 typeSpecifierPair x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TypeSpecifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pair"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the set variant of hydra.lisp.syntax.TypeSpecifier
-typeSpecifierSet :: Phantoms.TTerm Syntax.TypeSpecifier -> Phantoms.TTerm Syntax.TypeSpecifier
+typeSpecifierSet :: Typed.TypedTerm Syntax.TypeSpecifier -> Typed.TypedTerm Syntax.TypeSpecifier
 typeSpecifierSet x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TypeSpecifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the unit variant of hydra.lisp.syntax.TypeSpecifier
-typeSpecifierUnit :: Phantoms.TTerm Syntax.TypeSpecifier
+typeSpecifierUnit :: Typed.TypedTerm Syntax.TypeSpecifier
 typeSpecifierUnit =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TypeSpecifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unit"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL accessor for the body of hydra.lisp.syntax.Docstring
-unDocstring :: Phantoms.TTerm Syntax.Docstring -> Phantoms.TTerm String
+unDocstring :: Typed.TypedTerm Syntax.Docstring -> Typed.TypedTerm String
 unDocstring x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.lisp.syntax.Docstring")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the body of hydra.lisp.syntax.NamespaceName
-unNamespaceName :: Phantoms.TTerm Syntax.NamespaceName -> Phantoms.TTerm String
+unNamespaceName :: Typed.TypedTerm Syntax.NamespaceName -> Typed.TypedTerm String
 unNamespaceName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.lisp.syntax.NamespaceName")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the body of hydra.lisp.syntax.Symbol
-unSymbol :: Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm String
+unSymbol :: Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm String
 unSymbol x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.lisp.syntax.Symbol")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL constructor for hydra.lisp.syntax.UnquoteExpression
-unquoteExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.UnquoteExpression
+unquoteExpression :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.UnquoteExpression
 unquoteExpression body =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.UnquoteExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm body)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm body)}]}))
 -- | DSL accessor for the body field of hydra.lisp.syntax.UnquoteExpression
-unquoteExpressionBody :: Phantoms.TTerm Syntax.UnquoteExpression -> Phantoms.TTerm Syntax.Expression
+unquoteExpressionBody :: Typed.TypedTerm Syntax.UnquoteExpression -> Typed.TypedTerm Syntax.Expression
 unquoteExpressionBody x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.UnquoteExpression"),
         Core.projectionFieldName = (Core.Name "body")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the body field of hydra.lisp.syntax.UnquoteExpression
-unquoteExpressionWithBody :: Phantoms.TTerm Syntax.UnquoteExpression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.UnquoteExpression
+unquoteExpressionWithBody :: Typed.TypedTerm Syntax.UnquoteExpression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.UnquoteExpression
 unquoteExpressionWithBody original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.UnquoteExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.lisp.syntax.VariableDefinition
-variableDefinition :: Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm (Maybe Syntax.Docstring) -> Phantoms.TTerm Syntax.VariableDefinition
+variableDefinition :: Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm (Maybe Syntax.Docstring) -> Typed.TypedTerm Syntax.VariableDefinition
 variableDefinition name value doc =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.VariableDefinition"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
+          Core.fieldTerm = (Typed.unTypedTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm value)},
+          Core.fieldTerm = (Typed.unTypedTerm value)},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
-          Core.fieldTerm = (Phantoms.unTTerm doc)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm doc)}]}))
 -- | DSL accessor for the doc field of hydra.lisp.syntax.VariableDefinition
-variableDefinitionDoc :: Phantoms.TTerm Syntax.VariableDefinition -> Phantoms.TTerm (Maybe Syntax.Docstring)
+variableDefinitionDoc :: Typed.TypedTerm Syntax.VariableDefinition -> Typed.TypedTerm (Maybe Syntax.Docstring)
 variableDefinitionDoc x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.VariableDefinition"),
         Core.projectionFieldName = (Core.Name "doc")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the name field of hydra.lisp.syntax.VariableDefinition
-variableDefinitionName :: Phantoms.TTerm Syntax.VariableDefinition -> Phantoms.TTerm Syntax.Symbol
+variableDefinitionName :: Typed.TypedTerm Syntax.VariableDefinition -> Typed.TypedTerm Syntax.Symbol
 variableDefinitionName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.VariableDefinition"),
         Core.projectionFieldName = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the value field of hydra.lisp.syntax.VariableDefinition
-variableDefinitionValue :: Phantoms.TTerm Syntax.VariableDefinition -> Phantoms.TTerm Syntax.Expression
+variableDefinitionValue :: Typed.TypedTerm Syntax.VariableDefinition -> Typed.TypedTerm Syntax.Expression
 variableDefinitionValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.VariableDefinition"),
         Core.projectionFieldName = (Core.Name "value")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the doc field of hydra.lisp.syntax.VariableDefinition
-variableDefinitionWithDoc :: Phantoms.TTerm Syntax.VariableDefinition -> Phantoms.TTerm (Maybe Syntax.Docstring) -> Phantoms.TTerm Syntax.VariableDefinition
+variableDefinitionWithDoc :: Typed.TypedTerm Syntax.VariableDefinition -> Typed.TypedTerm (Maybe Syntax.Docstring) -> Typed.TypedTerm Syntax.VariableDefinition
 variableDefinitionWithDoc original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.VariableDefinition"),
       Core.recordFields = [
         Core.Field {
@@ -4029,44 +4029,44 @@ variableDefinitionWithDoc original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.VariableDefinition"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.VariableDefinition"),
               Core.projectionFieldName = (Core.Name "value")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the name field of hydra.lisp.syntax.VariableDefinition
-variableDefinitionWithName :: Phantoms.TTerm Syntax.VariableDefinition -> Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.VariableDefinition
+variableDefinitionWithName :: Typed.TypedTerm Syntax.VariableDefinition -> Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.VariableDefinition
 variableDefinitionWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.VariableDefinition"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.VariableDefinition"),
               Core.projectionFieldName = (Core.Name "value")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.VariableDefinition"),
               Core.projectionFieldName = (Core.Name "doc")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the value field of hydra.lisp.syntax.VariableDefinition
-variableDefinitionWithValue :: Phantoms.TTerm Syntax.VariableDefinition -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.VariableDefinition
+variableDefinitionWithValue :: Typed.TypedTerm Syntax.VariableDefinition -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.VariableDefinition
 variableDefinitionWithValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.VariableDefinition"),
       Core.recordFields = [
         Core.Field {
@@ -4075,49 +4075,49 @@ variableDefinitionWithValue original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.VariableDefinition"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.VariableDefinition"),
               Core.projectionFieldName = (Core.Name "doc")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.lisp.syntax.VariableReference
-variableReference :: Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.VariableReference
+variableReference :: Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Bool -> Typed.TypedTerm Syntax.VariableReference
 variableReference name functionNamespace =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.VariableReference"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
+          Core.fieldTerm = (Typed.unTypedTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "functionNamespace"),
-          Core.fieldTerm = (Phantoms.unTTerm functionNamespace)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm functionNamespace)}]}))
 -- | DSL accessor for the functionNamespace field of hydra.lisp.syntax.VariableReference
-variableReferenceFunctionNamespace :: Phantoms.TTerm Syntax.VariableReference -> Phantoms.TTerm Bool
+variableReferenceFunctionNamespace :: Typed.TypedTerm Syntax.VariableReference -> Typed.TypedTerm Bool
 variableReferenceFunctionNamespace x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.VariableReference"),
         Core.projectionFieldName = (Core.Name "functionNamespace")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the name field of hydra.lisp.syntax.VariableReference
-variableReferenceName :: Phantoms.TTerm Syntax.VariableReference -> Phantoms.TTerm Syntax.Symbol
+variableReferenceName :: Typed.TypedTerm Syntax.VariableReference -> Typed.TypedTerm Syntax.Symbol
 variableReferenceName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.VariableReference"),
         Core.projectionFieldName = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the functionNamespace field of hydra.lisp.syntax.VariableReference
-variableReferenceWithFunctionNamespace :: Phantoms.TTerm Syntax.VariableReference -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.VariableReference
+variableReferenceWithFunctionNamespace :: Typed.TypedTerm Syntax.VariableReference -> Typed.TypedTerm Bool -> Typed.TypedTerm Syntax.VariableReference
 variableReferenceWithFunctionNamespace original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.VariableReference"),
       Core.recordFields = [
         Core.Field {
@@ -4126,55 +4126,55 @@ variableReferenceWithFunctionNamespace original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.VariableReference"),
               Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "functionNamespace"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the name field of hydra.lisp.syntax.VariableReference
-variableReferenceWithName :: Phantoms.TTerm Syntax.VariableReference -> Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.VariableReference
+variableReferenceWithName :: Typed.TypedTerm Syntax.VariableReference -> Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.VariableReference
 variableReferenceWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.VariableReference"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "functionNamespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.VariableReference"),
               Core.projectionFieldName = (Core.Name "functionNamespace")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.lisp.syntax.VectorLiteral
-vectorLiteral :: Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.VectorLiteral
+vectorLiteral :: Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.VectorLiteral
 vectorLiteral elements =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.VectorLiteral"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "elements"),
-          Core.fieldTerm = (Phantoms.unTTerm elements)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm elements)}]}))
 -- | DSL accessor for the elements field of hydra.lisp.syntax.VectorLiteral
-vectorLiteralElements :: Phantoms.TTerm Syntax.VectorLiteral -> Phantoms.TTerm [Syntax.Expression]
+vectorLiteralElements :: Typed.TypedTerm Syntax.VectorLiteral -> Typed.TypedTerm [Syntax.Expression]
 vectorLiteralElements x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.VectorLiteral"),
         Core.projectionFieldName = (Core.Name "elements")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the elements field of hydra.lisp.syntax.VectorLiteral
-vectorLiteralWithElements :: Phantoms.TTerm Syntax.VectorLiteral -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.VectorLiteral
+vectorLiteralWithElements :: Typed.TypedTerm Syntax.VectorLiteral -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.VectorLiteral
 vectorLiteralWithElements original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.VectorLiteral"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "elements"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.lisp.syntax.WildcardPattern
-wildcardPattern :: Phantoms.TTerm Syntax.WildcardPattern
+wildcardPattern :: Typed.TypedTerm Syntax.WildcardPattern
 wildcardPattern =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.WildcardPattern"),
       Core.recordFields = []}))

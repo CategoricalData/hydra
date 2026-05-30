@@ -125,13 +125,13 @@ the descriptions below cover the main ones:
 
 #### Core foundation
 
-**Core.hs** - `hydra.core` namespace (largest type module)
+**Core.hs** - `hydra.core` module name (largest type module)
 - Central hub defining fundamental types: `Term`, `Type`, `Literal`, `Function`, `Application`, `Lambda`, `Let`,
   `Record`, `Union`, etc.
 - All other modules depend on Core directly or transitively
 - Special property: imports itself as a dependency
 
-**Variants.hs** - `hydra.variants` namespace
+**Variants.hs** - `hydra.variants` module name
 - Supplements Core with metadata types NOT referenced by Core
 - Defines variant enums: `TermVariant`, `TypeVariant`, `LiteralVariant`, etc.
 - Provides introspection capabilities: `Precision`, `Comparison`
@@ -144,23 +144,23 @@ the descriptions below cover the main ones:
 
 #### Transformation framework
 
-**Coders.hs** - `hydra.coders` namespace
+**Coders.hs** - `hydra.coders` module name
 - Defines `Coder`, `Adapter`, `Bicoder`, `Language`, `LanguageConstraints`, `AdapterContext`, `TraversalOrder`
 - The framework is Either-based; the former `Flow` monad was removed in #245
 
 #### Graph and query
 
-**Graph.hs** - `hydra.graph` namespace
+**Graph.hs** - `hydra.graph` module name
 - Extends core with graph operations
 - Defines: `Graph`, `Primitive`, `TermCoder`
 
-**Query.hs** - `hydra.query` namespace
+**Query.hs** - `hydra.query` module name
 - Language-agnostic graph pattern queries
 - Triple patterns and path expressions
 
 #### Type system support
 
-**Typing.hs** - `hydra.typing` namespace
+**Typing.hs** - `hydra.typing` module name
 - Type inference and reconstruction
 - Type constraints and substitutions
 - `TypeClass` record (used by `hydra.classes` term bindings)
@@ -171,13 +171,13 @@ the descriptions below cover the main ones:
 
 #### Error model
 
-**Errors.hs** - `hydra.errors` namespace and the `Error/` subdirectory
+**Errors.hs** - `hydra.errors` module name and the `Error/` subdirectory
 - Structured error types used by inference, checking, and coders
 
 #### Parsing and path resolution
 
-**Parsing.hs** - `hydra.parsing` namespace
-**Paths.hs** - `hydra.paths` namespace
+**Parsing.hs** - `hydra.parsing` module name
+**Paths.hs** - `hydra.paths` module name
 
 #### Data model helpers
 
@@ -187,7 +187,7 @@ the descriptions below cover the main ones:
 #### Utility and specialized
 
 **Testing.hs** - `hydra.testing` — unit testing framework
-**Phantoms.hs** - `hydra.phantoms` — phantom types for DSL use
+**Typed.hs** - `hydra.typed` — typed (phantom) wrappers for DSL use
 **Relational.hs** - `hydra.relational` — Codd's Relational Model
 **Topology.hs** - `hydra.topology` — graph algorithms (Tarjan SCC)
 **Util.hs** - `hydra.util` — misc utilities
@@ -364,12 +364,12 @@ type3 = list (optional boolean)
 Compile-time type safety via phantom types:
 
 ```haskell
--- Phantoms.hs - TTerm a where 'a' is a phantom type
-goodFunc :: TTerm (Int -> String)
+-- Phantoms.hs - TypedTerm a where 'a' is a phantom type
+goodFunc :: TypedTerm (Int -> String)
 goodFunc = lambda "x" (Strings.toUpper (var "x"))
 
 -- Type error at Haskell compile time!
-badFunc :: TTerm (Int -> String)
+badFunc :: TypedTerm (Int -> String)
 badFunc = lambda "x" (int32 42)  -- Expected String, got Int
 ```
 
@@ -381,7 +381,7 @@ Write programs that build programs (meta-programming):
 
 ```haskell
 -- Meta/Terms.hs - terms that construct terms
-buildAddFunction :: TTerm (Int -> Int -> Int)
+buildAddFunction :: TypedTerm (Int -> Int -> Int)
 buildAddFunction =
   lambda "x" $ lambda "y" $
     primitive _math_add @@ var "x" @@ var "y"
@@ -397,7 +397,7 @@ The `hydra.dsls` module (`Sources/Kernel/Terms/Dsls.hs`) automatically generates
 phantom-typed DSL functions from any Hydra type module. For each type definition, it
 produces:
 
-- **Record constructors** — one function taking all fields as `TTerm` arguments
+- **Record constructors** — one function taking all fields as `TypedTerm` arguments
 - **Field accessors** — one function per field, returning the field value
 - **Field updaters** — `withXxx` functions that return a modified copy of the record
 - **Union injectors** — one function per variant (unit variants produce nullary values)
@@ -427,7 +427,7 @@ compatibility shims.
 - **Meta/Core.hs** - Wraps `Hydra.Dsl.Core`; adds `AsTerm` overrides for `binding`, `injection`,
   `typeVariable`; helpers like `equalName_`, `false`
 - **Meta/Graph.hs** - Wraps `Hydra.Dsl.Graph`; adds graph construction helpers
-- **Meta/Phantoms.hs** - Phantom-typed term construction (`TTerm a`), operators (`@@`, `~>`, `<~`)
+- **Meta/Phantoms.hs** - Phantom-typed term construction (`TypedTerm a`), operators (`@@`, `~>`, `<~`)
 - **Meta/Terms.hs** - Phantom-typed term-encoded terms
 - **Meta/Types.hs** - Phantom-typed term-encoded types
 - **Meta/Variants.hs** - Wraps `Hydra.Dsl.Variants`; metadata variants and introspection
@@ -469,9 +469,9 @@ The DSL provides convenient operators for readable code:
 (>:) :: String -> a -> Field           -- Field definition
 
 -- Phantom-typed construction
-(~>) :: String -> TTerm a -> TTerm (x -> b)     -- Lambda
-(<~) :: String -> TTerm a -> TTerm b -> TTerm b  -- Let binding
-(<<~) :: String -> TTerm (Either e a) -> TTerm (Either e b) -> TTerm (Either e b)  -- Either bind
+(~>) :: String -> TypedTerm a -> TypedTerm (x -> b)     -- Lambda
+(<~) :: String -> TypedTerm a -> TypedTerm b -> TypedTerm b  -- Let binding
+(<<~) :: String -> TypedTerm (Either e a) -> TypedTerm (Either e b) -> TypedTerm (Either e b)  -- Either bind
 
 -- Examples
 intToString = int32 --> string                -- Type
@@ -488,7 +488,7 @@ Here's a complete example showing DSL usage in type inference:
 
 ```haskell
 -- From Hydra.Sources.Kernel.Terms.Inference
-inferTypeOfEither :: TTermDefinition (InferenceContext -> Graph -> Either Term Term -> Either Error InferenceResult)
+inferTypeOfEither :: TypedTermDefinition (InferenceContext -> Graph -> Either Term Term -> Either Error InferenceResult)
 inferTypeOfEitherDef = define "inferTypeOfEither" $
   doc "Infer the type of an Either term" $
   "cx" ~> "e" ~>
@@ -551,7 +551,7 @@ Primitive functions are the standard library of Hydra, providing built-in operat
 
 Primitives are organized into **13 library modules** by category. Each module
 lives in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs`
-and is **the** canonical registry for its namespace:
+and is **the** canonical registry for its module name:
 
 | Library | Count | Examples |
 |---------|-------|----------|
@@ -644,10 +644,10 @@ module_ = Module {
 andSig :: TermSignature
 andSig = sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) Nothing
 
-and_ :: TTermDefinition (Bool -> Bool -> Bool)
+and_ :: TypedTermDefinition (Bool -> Bool -> Bool)
 and_ = define "and" $
   doc "Logical AND, defined in terms of ifElse." $
-  "a" ~> "b" ~> Logic.ifElse (var "a") (var "b" :: TTerm Bool) false
+  "a" ~> "b" ~> Logic.ifElse (var "a") (var "b" :: TypedTerm Bool) false
 ```
 
 The metadata flows through to JSON in `dist/json/hydra-kernel/src/main/json/hydra/lib/<sub>.json`,
@@ -883,7 +883,7 @@ When `reduceTerm` encounters a `TermVariable`, it resolves the name in this orde
 
 This means module bindings shadow primitives, and primitives shadow lambda-bound variables.
 In practice, names don't collide: module definitions use qualified names like `hydra.core.Term`,
-while primitives use the `hydra.lib.*` namespace.
+while primitives use the `hydra.lib.*` module name.
 
 ### Construction-time shadowing
 
@@ -1401,7 +1401,7 @@ full payload* (which is what the original `[Module]` accumulator
 retained). A `TypeScheme` is typically 1-3 orders of magnitude smaller
 than the term body it types, so this is what keeps Phase 1 within the
 `-M6G` CI heap cap on a wholly dirty universe (e.g. after a kernel-wide
-rename invalidates every namespace's digest). See
+rename invalidates every module name's digest). See
 [#381](https://github.com/CategoricalData/hydra/issues/381) and
 [Phase 1's memory envelope](build-system.md#phase-1s-memory-envelope)
 in the build-system doc for the wall-time trade-off and the dead-end
@@ -1453,7 +1453,7 @@ def "Term" $
 
 Add DSL operations in `Phantoms.hs`:
 ```haskell
-either_ :: TTerm (a -> c) -> TTerm (b -> c) -> TTerm (Either a b) -> TTerm c
+either_ :: TypedTerm (a -> c) -> TypedTerm (b -> c) -> TypedTerm (Either a b) -> TypedTerm c
 ```
 
 #### Step 2: Build (Will Fail)
@@ -1518,7 +1518,7 @@ packages/hydra-kernel/src/main/haskell/Hydra/
 └── Sources/                # Kernel DSL-based specifications (manual)
     ├── Kernel/Types/       # Type modules (data shapes)
     ├── Kernel/Terms/       # Term modules (kernel functions)
-    ├── Kernel/Lib/         # Primitive registry: PrimitiveDefinition per hydra.lib.<sub> namespace
+    ├── Kernel/Lib/         # Primitive registry: PrimitiveDefinition per hydra.lib.<sub> module name
     └── Test/               # Common test suite
 
 packages/hydra-<lang>/src/main/haskell/Hydra/
@@ -1604,7 +1604,7 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 
 ### Primitive functions
 
-[`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib) — Canonical primitive registry (one `PrimitiveDefinition`-emitting module per `hydra.lib.<sub>` namespace)
+[`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib) — Canonical primitive registry (one `PrimitiveDefinition`-emitting module per `hydra.lib.<sub>` module name)
 
 [`heads/haskell/src/main/haskell/Hydra/Lib/`](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Lib) — Native Haskell implementations
 

@@ -30,7 +30,6 @@ import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
-import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Query as Query
 import qualified Hydra.Relational as Relational
 import qualified Hydra.Rewriting as Rewriting
@@ -44,6 +43,7 @@ import qualified Hydra.Topology as Topology
 import qualified Hydra.TypeScript.Language as Language
 import qualified Hydra.TypeScript.Serde as Serde
 import qualified Hydra.TypeScript.Syntax as Syntax
+import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
 import qualified Hydra.Validation as Validation

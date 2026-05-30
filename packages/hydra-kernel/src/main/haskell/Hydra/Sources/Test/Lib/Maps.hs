@@ -45,39 +45,39 @@ module_ = Module {
 
 
 -- Phantom-typed map helper
-pMap :: [(Int, String)] -> TTerm (M.Map Int String)
+pMap :: [(Int, String)] -> TypedTerm (M.Map Int String)
 pMap pairs = Phantoms.map $ M.fromList $ fmap (\(k, v) -> (Phantoms.int32 k, Phantoms.string v)) pairs
 
-pPairList :: [(Int, String)] -> TTerm [(Int, String)]
+pPairList :: [(Int, String)] -> TypedTerm [(Int, String)]
 pPairList pairs = Phantoms.list $ fmap (\(k, v) -> Phantoms.pair (Phantoms.int32 k) (Phantoms.string v)) pairs
 
-showBool :: TTerm (Bool -> String)
+showBool :: TypedTerm (Bool -> String)
 showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
 
-showInt32 :: TTerm (Int -> String)
+showInt32 :: TypedTerm (Int -> String)
 showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
 
-showIntList :: TTerm ([Int] -> String)
+showIntList :: TypedTerm ([Int] -> String)
 showIntList = Phantoms.lambda "xs" $ ShowCore.list_ @@ showInt32 @@ Phantoms.var "xs"
 
-showIntStringMap :: TTerm (M.Map Int String -> String)
+showIntStringMap :: TypedTerm (M.Map Int String -> String)
 showIntStringMap = Phantoms.lambda "m" $ ShowCore.map_ @@ showInt32 @@ showString' @@ Phantoms.var "m"
 
-showMaybeString :: TTerm (Maybe String -> String)
+showMaybeString :: TypedTerm (Maybe String -> String)
 showMaybeString = Phantoms.lambda "mx" $ ShowCore.maybe_ @@ showString' @@ Phantoms.var "mx"
 
-showPairList :: TTerm ([(Int, String)] -> String)
+showPairList :: TypedTerm ([(Int, String)] -> String)
 showPairList = Phantoms.lambda "xs" $ ShowCore.list_ @@ (Phantoms.lambda "p" $ ShowCore.pair_ @@ showInt32 @@ showString' @@ Phantoms.var "p") @@ Phantoms.var "xs"
 
-showString' :: TTerm (String -> String)
+showString' :: TypedTerm (String -> String)
 showString' = Phantoms.lambda "s" $ Literals.showString (Phantoms.var "s")
 
-showStringList :: TTerm ([String] -> String)
+showStringList :: TypedTerm ([String] -> String)
 showStringList = Phantoms.lambda "xs" $ ShowCore.list_ @@ showString' @@ Phantoms.var "xs"
 
 -- Test groups
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.maps primitives" $
     supergroup "hydra.lib.maps primitives" [
@@ -102,7 +102,7 @@ allTests = definitionInModule module_ "allTests" $
       mapsToList,
       mapsUnion]
 
-mapsAlter :: TTerm TestGroup
+mapsAlter :: TypedTerm TestGroup
 mapsAlter = subgroup "alter" [
   testInsert "insert new key" 3 [(1, "a"), (2, "b")] [(1, "a"), (2, "b"), (3, "new")],
   testUpdate "update existing key" 2 [(1, "a"), (2, "b")] [(1, "a"), (2, "updated")],
@@ -115,10 +115,10 @@ mapsAlter = subgroup "alter" [
       (Maps.alter (Phantoms.lambda "_" $ Phantoms.just (Phantoms.string "updated")) (Phantoms.int32 k) (pMap m))
       (pMap result)
     testDelete name k m result = evalPair name showIntStringMap
-      (Maps.alter (Phantoms.lambda "_" $ (Phantoms.nothing :: TTerm (Maybe String))) (Phantoms.int32 k) (pMap m))
+      (Maps.alter (Phantoms.lambda "_" $ (Phantoms.nothing :: TypedTerm (Maybe String))) (Phantoms.int32 k) (pMap m))
       (pMap result)
 
-mapsBimap :: TTerm TestGroup
+mapsBimap :: TypedTerm TestGroup
 mapsBimap = subgroup "bimap" [
   test "transform both" [(1, "a"), (2, "b")] [(2, "A"), (4, "B")],
   test "empty map" [] []]
@@ -130,7 +130,7 @@ mapsBimap = subgroup "bimap" [
         (pMap m))
       (pMap result)
 
-mapsElems :: TTerm TestGroup
+mapsElems :: TypedTerm TestGroup
 mapsElems = subgroup "elems" [
   test "get all elements" [(1, "a"), (2, "b")] ["a", "b"],
   test "unsorted keys" [(3, "c"), (1, "a"), (2, "b")] ["a", "b", "c"],
@@ -140,15 +140,15 @@ mapsElems = subgroup "elems" [
       (Maps.elems (pMap m))
       (Phantoms.list $ Phantoms.string <$> result)
 
-mapsEmpty :: TTerm TestGroup
+mapsEmpty :: TypedTerm TestGroup
 mapsEmpty = subgroup "empty" [
   test "empty map"]
   where
     test name = evalPair name showIntStringMap
-      (Maps.empty :: TTerm (M.Map Int String))
+      (Maps.empty :: TypedTerm (M.Map Int String))
       (pMap [])
 
-mapsFilter :: TTerm TestGroup
+mapsFilter :: TypedTerm TestGroup
 mapsFilter = subgroup "filter" [
   test "filter values starting with a" [(1, "a"), (2, "b"), (3, "ab")] [(1, "a"), (3, "ab")],
   test "filter all" [(1, "b"), (2, "c")] [],
@@ -164,7 +164,7 @@ mapsFilter = subgroup "filter" [
         (pMap m))
       (pMap result)
 
-mapsFilterWithKey :: TTerm TestGroup
+mapsFilterWithKey :: TypedTerm TestGroup
 mapsFilterWithKey = subgroup "filterWithKey" [
   test "filter by key > 1" [(1, "a"), (2, "b"), (3, "c")] [(2, "b"), (3, "c")],
   test "filter all" [(1, "a")] [],
@@ -174,7 +174,7 @@ mapsFilterWithKey = subgroup "filterWithKey" [
       (Maps.filterWithKey (Phantoms.lambda "k" $ Phantoms.lambda "v" $ Equality.gt (Phantoms.var "k") (Phantoms.int32 1)) (pMap m))
       (pMap result)
 
-mapsFindWithDefault :: TTerm TestGroup
+mapsFindWithDefault :: TypedTerm TestGroup
 mapsFindWithDefault = subgroup "findWithDefault" [
   test "find existing" "default" 2 [(1, "a"), (2, "b")] "b",
   test "use default" "default" 3 [(1, "a"), (2, "b")] "default"]
@@ -183,7 +183,7 @@ mapsFindWithDefault = subgroup "findWithDefault" [
       (Maps.findWithDefault (Phantoms.string def) (Phantoms.int32 k) (pMap m))
       (Phantoms.string result)
 
-mapsFromList :: TTerm TestGroup
+mapsFromList :: TypedTerm TestGroup
 mapsFromList = subgroup "fromList" [
   test "create from pairs" [(1, "a"), (2, "b")] [(1, "a"), (2, "b")],
   test "duplicate keys" [(1, "a"), (1, "b")] [(1, "b")],
@@ -193,7 +193,7 @@ mapsFromList = subgroup "fromList" [
       (Maps.fromList (pPairList input))
       (pMap expected)
 
-mapsInsert :: TTerm TestGroup
+mapsInsert :: TypedTerm TestGroup
 mapsInsert = subgroup "insert" [
   test "insert new key" 3 "c" [(1, "a"), (2, "b")] [(1, "a"), (2, "b"), (3, "c")],
   test "update existing" 2 "updated" [(1, "a"), (2, "b")] [(1, "a"), (2, "updated")],
@@ -203,7 +203,7 @@ mapsInsert = subgroup "insert" [
       (Maps.insert (Phantoms.int32 k) (Phantoms.string v) (pMap m))
       (pMap result)
 
-mapsKeys :: TTerm TestGroup
+mapsKeys :: TypedTerm TestGroup
 mapsKeys = subgroup "keys" [
   test "get all keys" [(1, "a"), (2, "b"), (3, "c")] [1, 2, 3],
   test "unsorted keys" [(3, "c"), (1, "a"), (2, "b")] [1, 2, 3],
@@ -213,7 +213,7 @@ mapsKeys = subgroup "keys" [
       (Maps.keys (pMap m))
       (Phantoms.list $ Phantoms.int32 <$> result)
 
-mapsLookup :: TTerm TestGroup
+mapsLookup :: TypedTerm TestGroup
 mapsLookup = subgroup "lookup" [
   test "find existing key" 2 [(1, "a"), (2, "b")] (Just "b"),
   test "key not found" 3 [(1, "a"), (2, "b")] Nothing,
@@ -223,7 +223,7 @@ mapsLookup = subgroup "lookup" [
       (Maps.lookup (Phantoms.int32 k) (pMap m))
       (maybe Phantoms.nothing (Phantoms.just . Phantoms.string) result)
 
-mapsMap :: TTerm TestGroup
+mapsMap :: TypedTerm TestGroup
 mapsMap = subgroup "map" [
   test "map over values" [(1, "a"), (2, "b")] [(1, "A"), (2, "B")],
   test "map empty" [] []]
@@ -232,7 +232,7 @@ mapsMap = subgroup "map" [
       (Maps.map (Phantoms.lambda "s" $ Strings.toUpper (Phantoms.var "s")) (pMap m))
       (pMap result)
 
-mapsMapKeys :: TTerm TestGroup
+mapsMapKeys :: TypedTerm TestGroup
 mapsMapKeys = subgroup "mapKeys" [
   test "double keys" [(1, "a"), (2, "b")] [(2, "a"), (4, "b")],
   test "empty map" [] []]
@@ -241,7 +241,7 @@ mapsMapKeys = subgroup "mapKeys" [
       (Maps.mapKeys (Phantoms.lambda "k" $ Math.mul (Phantoms.var "k") (Phantoms.int32 2)) (pMap m))
       (pMap result)
 
-mapsMember :: TTerm TestGroup
+mapsMember :: TypedTerm TestGroup
 mapsMember = subgroup "member" [
   test "key exists" 2 [(1, "a"), (2, "b")] True,
   test "key missing" 3 [(1, "a"), (2, "b")] False,
@@ -251,7 +251,7 @@ mapsMember = subgroup "member" [
       (Maps.member (Phantoms.int32 k) (pMap m))
       (Phantoms.boolean result)
 
-mapsNull :: TTerm TestGroup
+mapsNull :: TypedTerm TestGroup
 mapsNull = subgroup "null" [
   test "empty map" [] True,
   test "non-empty map" [(1, "a")] False]
@@ -260,7 +260,7 @@ mapsNull = subgroup "null" [
       (Maps.null (pMap m))
       (Phantoms.boolean result)
 
-mapsRemove :: TTerm TestGroup
+mapsRemove :: TypedTerm TestGroup
 mapsRemove = subgroup "remove" [
   test "remove existing" 2 [(1, "a"), (2, "b"), (3, "c")] [(1, "a"), (3, "c")],
   test "remove non-existing" 4 [(1, "a"), (2, "b")] [(1, "a"), (2, "b")],
@@ -270,7 +270,7 @@ mapsRemove = subgroup "remove" [
       (Maps.delete (Phantoms.int32 k) (pMap m))
       (pMap result)
 
-mapsSingleton :: TTerm TestGroup
+mapsSingleton :: TypedTerm TestGroup
 mapsSingleton = subgroup "singleton" [
   test "single entry" 42 "hello" [(42, "hello")]]
   where
@@ -278,7 +278,7 @@ mapsSingleton = subgroup "singleton" [
       (Maps.singleton (Phantoms.int32 k) (Phantoms.string v))
       (pMap result)
 
-mapsSize :: TTerm TestGroup
+mapsSize :: TypedTerm TestGroup
 mapsSize = subgroup "size" [
   test "three entries" [(1, "a"), (2, "b"), (3, "c")] 3,
   test "single entry" [(42, "test")] 1,
@@ -288,7 +288,7 @@ mapsSize = subgroup "size" [
       (Maps.size (pMap m))
       (Phantoms.int32 result)
 
-mapsToList :: TTerm TestGroup
+mapsToList :: TypedTerm TestGroup
 mapsToList = subgroup "toList" [
   test "convert to pairs" [(1, "a"), (2, "b")] [(1, "a"), (2, "b")],
   test "unsorted keys" [(3, "c"), (1, "a"), (2, "b")] [(1, "a"), (2, "b"), (3, "c")],
@@ -298,7 +298,7 @@ mapsToList = subgroup "toList" [
       (Maps.toList (pMap input))
       (pPairList expected)
 
-mapsUnion :: TTerm TestGroup
+mapsUnion :: TypedTerm TestGroup
 mapsUnion = subgroup "union" [
   test "union two maps" [(1, "a"), (2, "b")] [(2, "x"), (3, "c")] [(1, "a"), (2, "b"), (3, "c")],
   test "union with empty" [(1, "a")] [] [(1, "a")],

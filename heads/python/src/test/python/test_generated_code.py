@@ -82,7 +82,7 @@ pyright src/gen-main/python/hydra/graph.py
 pyright src/gen-main/python/hydra/json.py
 pyright src/gen-main/python/hydra/mantle.py
 pyright src/gen-main/python/hydra/module.py
-pyright src/gen-main/python/hydra/phantoms.py
+pyright src/gen-main/python/hydra/typed.py
 pyright src/gen-main/python/hydra/query.py
 pyright src/gen-main/python/hydra/relational.py
 pyright src/gen-main/python/hydra/tabular.py
@@ -137,7 +137,7 @@ from hydra.core import *
 from hydra.graph import *
 from hydra.util import *
 from hydra.packaging import *
-from hydra.phantoms import *
+from hydra.typed import *
 from hydra.query import *
 from hydra.relational import *
 from hydra.tabular import *

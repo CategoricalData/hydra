@@ -119,11 +119,11 @@ module_ = Module {
       toDefinition isDecodableBinding,
       toDefinition prependForallDecoders]
 
-define :: String -> TTerm x -> TTermDefinition x
+define :: String -> TypedTerm x -> TypedTermDefinition x
 define = definitionInModule module_
 
 -- | Format a DecodingError as a string
-formatDecodingError :: TTerm (DecodingError -> String)
+formatDecodingError :: TypedTerm (DecodingError -> String)
 formatDecodingError = "e" ~> unwrap _DecodingError @@ var "e"
 
 --------------------------------------------------------------------------------
@@ -134,7 +134,7 @@ formatDecodingError = "e" ~> unwrap _DecodingError @@ var "e"
 -- The result is: \cx -> \raw -> either (\err -> Left (DecodingError err)) (\stripped -> case stripped of ...) (stripAndDereferenceTermEither cx raw)
 -- Note: We use the original inline style - the Python coder should handle this pattern by recognizing
 -- when a lambda body is a case application and generating a proper function with match statement.
-deannotateAndMatch :: TTerm (Maybe Term) -> [TTerm Field] -> TTerm Term
+deannotateAndMatch :: TypedTerm (Maybe Term) -> [TypedTerm Field] -> TypedTerm Term
 deannotateAndMatch dflt cses = DeepCore.lambda "cx" $ DeepCore.lambda "raw" $
   DeepCore.primitive _eithers_either
     -- If Left (decoding error), propagate it
@@ -146,16 +146,16 @@ deannotateAndMatch dflt cses = DeepCore.lambda "cx" $ DeepCore.lambda "raw" $
 
 -- | Helper to create a decoding error term from a message (object-level)
 -- Returns: Term.wrap (WrappedTerm "hydra.util.DecodingError" (Term.literal (Literal.string msg)))
-decodingErrorTerm :: TTerm String -> TTerm Term
+decodingErrorTerm :: TypedTerm String -> TypedTerm Term
 decodingErrorTerm msg = DeepCore.wrap _DecodingError $ DeepCore.string msg
 
 -- | Helper to create a Left (error) result term
 -- Returns: Term.either (Left (decodingErrorTerm msg))
-leftError :: TTerm String -> TTerm Term
+leftError :: TypedTerm String -> TypedTerm Term
 leftError msg = DeepCore.left $ decodingErrorTerm msg
 
 -- | Helper to strip and dereference with DecodingError — delegates to the module-level definition
-stripWithDecodingError :: TTerm Graph -> TTerm Term -> TTerm (Either DecodingError Term)
+stripWithDecodingError :: TypedTerm Graph -> TypedTerm Term -> TypedTerm (Either DecodingError Term)
 stripWithDecodingError g term = ExtractCore.stripWithDecodingError @@ g @@ term
 
 --------------------------------------------------------------------------------
@@ -164,11 +164,11 @@ stripWithDecodingError g term = ExtractCore.stripWithDecodingError @@ g @@ term
 
 -- | Collect just the forall type variables from a type
 -- Note: Uses 'cases' instead of 'match' to avoid variable shadowing from eta expansion
-collectForallVariables :: TTermDefinition (Type -> [Name])
+collectForallVariables :: TypedTermDefinition (Type -> [Name])
 collectForallVariables = define "collectForallVariables" $
   doc "Collect forall type variable names from a type" $
   "typ" ~>
-  cases _Type (var "typ") (Just $ list ([] :: [TTerm Name])) [
+  cases _Type (var "typ") (Just $ list ([] :: [TypedTerm Name])) [
     _Type_annotated>>: "at" ~>
       collectForallVariables @@ (Core.annotatedTypeBody (var "at")),
     _Type_forall>>: "ft" ~>
@@ -183,11 +183,11 @@ collectForallVariables = define "collectForallVariables" $
 -- This is a pure function that traverses the type structure without dereferencing type names.
 -- The collected variables use their original names; normalization will rename them later.
 -- Note: Uses 'cases' instead of 'match' to avoid variable shadowing from eta expansion
-collectOrdConstrainedVariables :: TTermDefinition (Type -> [Name])
+collectOrdConstrainedVariables :: TypedTermDefinition (Type -> [Name])
 collectOrdConstrainedVariables = define "collectOrdConstrainedVariables" $
   doc "Collect type variables needing Ord constraints (from Map key and Set element types)" $
   "typ" ~>
-  cases _Type (var "typ") (Just $ list ([] :: [TTerm Name])) [
+  cases _Type (var "typ") (Just $ list ([] :: [TypedTerm Name])) [
     _Type_annotated>>: "at" ~>
       collectOrdConstrainedVariables @@ (Core.annotatedTypeBody (var "at")),
     _Type_application>>: "appType" ~>
@@ -236,7 +236,7 @@ collectOrdConstrainedVariables = define "collectOrdConstrainedVariables" $
 -- Note: Uses 'cases' instead of 'match' to avoid variable shadowing from eta expansion
 -- | Collect type variables from forall types
 -- Note: Graph is NOT included as a type variable - it's a concrete type
-collectTypeVariables :: TTermDefinition (Type -> [Name])
+collectTypeVariables :: TypedTermDefinition (Type -> [Name])
 collectTypeVariables = define "collectTypeVariables" $
   doc "Collect type variable names from a type (forall parameters only)" $
   "typ" ~> collectForallVariables @@ var "typ"
@@ -245,11 +245,11 @@ collectTypeVariables = define "collectTypeVariables" $
 -- Note: Uses 'cases' instead of 'match' to avoid variable shadowing from eta expansion
 -- | Collect all type variables from a type expression (for use in Set element types)
 -- Note: Uses 'cases' instead of 'match' to avoid variable shadowing from eta expansion
-collectTypeVariablesFromType :: TTermDefinition (Type -> [Name])
+collectTypeVariablesFromType :: TypedTermDefinition (Type -> [Name])
 collectTypeVariablesFromType = define "collectTypeVariablesFromType" $
   doc "Collect all type variable names from a type expression" $
   "typ" ~>
-  cases _Type (var "typ") (Just $ list ([] :: [TTerm Name])) [
+  cases _Type (var "typ") (Just $ list ([] :: [TypedTerm Name])) [
     _Type_annotated>>: "at" ~>
       collectTypeVariablesFromType @@ (Core.annotatedTypeBody (var "at")),
     _Type_application>>: "appType" ~>
@@ -295,7 +295,7 @@ collectTypeVariablesFromType = define "collectTypeVariablesFromType" $
 -- The 'Graph' parameter is used for dereferencing term variables
 -- | Decode a single type binding into a decoder binding
 -- Decodes the Type from the binding's term, then generates decoder
-decodeBinding :: TTermDefinition (InferenceContext -> Graph -> Binding -> Either DecodingError Binding)
+decodeBinding :: TypedTermDefinition (InferenceContext -> Graph -> Binding -> Either DecodingError Binding)
 decodeBinding = define "decodeBinding" $
   doc "Transform a type binding into a decoder binding" $
   "cx" ~> "graph" ~> "b" ~>
@@ -314,7 +314,7 @@ decodeBinding = define "decodeBinding" $
 -- For example, "hydra.util.CaseConvention" -> "hydra.decode.util.caseConvention"
 -- | Generate a fully qualified binding name for a decoder function from a type name
 -- For example, "hydra.util.CaseConvention" -> "hydra.decode.util.caseConvention"
-decodeBindingName :: TTermDefinition (Name -> Name)
+decodeBindingName :: TypedTermDefinition (Name -> Name)
 decodeBindingName = define "decodeBindingName" $
   doc "Generate a binding name for a decoder function from a type name" $
   "n" ~>
@@ -340,7 +340,7 @@ decodeBindingName = define "decodeBindingName" $
 -- Match on the LiteralType to generate type-specific decoders
 -- Note: Uses 'cases' instead of 'match' to avoid variable shadowing from eta expansion
 -- | Generate a decoder for an Either type
-decodeEitherType :: TTermDefinition (EitherType -> Term)
+decodeEitherType :: TypedTermDefinition (EitherType -> Term)
 decodeEitherType = define "decodeEitherType" $
   doc "Generate a decoder for an Either type" $
   "et" ~>
@@ -352,7 +352,7 @@ decodeEitherType = define "decodeEitherType" $
 -- | Generate a decoder for a polymorphic (forall) type
 -- For a type like `forall a. T[a]`, generates a lambda that takes a decoder for `a`
 -- and returns a decoder for the body type `T[a]`
-decodeForallType :: TTermDefinition (ForallType -> Term)
+decodeForallType :: TypedTermDefinition (ForallType -> Term)
 decodeForallType = define "decodeForallType" $
   doc "Generate a decoder for a polymorphic (forall) type" $
   "ft" ~>
@@ -364,7 +364,7 @@ decodeForallType = define "decodeForallType" $
 
 -- | Generate a decoder for an Either type
 -- | Generate a decoder for a list type
-decodeListType :: TTermDefinition (Type -> Term)
+decodeListType :: TypedTermDefinition (Type -> Term)
 decodeListType = define "decodeListType" $
   doc "Generate a decoder for a list type" $
   "elemType" ~>
@@ -375,7 +375,7 @@ decodeListType = define "decodeListType" $
 -- | Generate a decoder for a literal type
 -- Match on the LiteralType to generate type-specific decoders
 -- Note: Uses 'cases' instead of 'match' to avoid variable shadowing from eta expansion
-decodeLiteralType :: TTermDefinition (LiteralType -> Term)
+decodeLiteralType :: TypedTermDefinition (LiteralType -> Term)
 decodeLiteralType = define "decodeLiteralType" $
   doc "Generate a decoder for a literal type" $
   "lt" ~>
@@ -446,7 +446,7 @@ decodeLiteralType = define "decodeLiteralType" $
 -- | Transform a type module into a decoder module
 -- Returns Nothing if the module has no decodable type definitions
 -- | Generate a decoder for a map type
-decodeMapType :: TTermDefinition (MapType -> Term)
+decodeMapType :: TypedTermDefinition (MapType -> Term)
 decodeMapType = define "decodeMapType" $
   doc "Generate a decoder for a map type" $
   "mt" ~>
@@ -456,7 +456,7 @@ decodeMapType = define "decodeMapType" $
 
 -- | Generate a decoder for an optional/maybe type
 -- | Generate a decoder for an optional/maybe type
-decodeMaybeType :: TTermDefinition (Type -> Term)
+decodeMaybeType :: TypedTermDefinition (Type -> Term)
 decodeMaybeType = define "decodeMaybeType" $
   doc "Generate a decoder for an optional type" $
   "elemType" ~>
@@ -466,7 +466,7 @@ decodeMaybeType = define "decodeMaybeType" $
 -- | Generate a decoder for a pair type
 -- | Transform a type module into a decoder module
 -- Returns Nothing if the module has no decodable type definitions
-decodeModule :: TTermDefinition (InferenceContext -> Graph -> Module -> Prelude.Either Error (Maybe Module))
+decodeModule :: TypedTermDefinition (InferenceContext -> Graph -> Module -> Prelude.Either Error (Maybe Module))
 decodeModule = define "decodeModule" $
   doc "Transform a type module into a decoder module" $
   "cx" ~> "graph" ~> "mod" ~>
@@ -511,7 +511,7 @@ decodeModule = define "decodeModule" $
 -- For example, "hydra.util" -> "hydra.decode.util"
 -- | Generate a decoder module namespace from a source module namespace
 -- For example, "hydra.util" -> "hydra.decode.util"
-decodeNamespace :: TTermDefinition (ModuleName -> ModuleName)
+decodeNamespace :: TypedTermDefinition (ModuleName -> ModuleName)
 decodeNamespace = define "decodeNamespace" $
   doc "Generate a decoder module namespace from a source module namespace" $
   "ns" ~>
@@ -528,7 +528,7 @@ decodeNamespace = define "decodeNamespace" $
 
 -- | Generate a decoder for a record type with element name
 -- | Generate a decoder for a pair type
-decodePairType :: TTermDefinition (PairType -> Term)
+decodePairType :: TypedTermDefinition (PairType -> Term)
 decodePairType = define "decodePairType" $
   doc "Generate a decoder for a pair type" $
   "pt" ~>
@@ -538,14 +538,14 @@ decodePairType = define "decodePairType" $
 
 -- | Generate a decoder for a set type
 -- | Generate a decoder for a record type (no element name)
-decodeRecordType :: TTermDefinition ([FieldType] -> Term)
+decodeRecordType :: TypedTermDefinition ([FieldType] -> Term)
 decodeRecordType = define "decodeRecordType" $
   doc "Generate a decoder for a record type" $
   "rt" ~> decodeRecordTypeImpl @@ Core.name (string "unknown") @@ var "rt"
 
 -- | Generate a decoder for a record type (implementation with name parameter)
 -- | Generate a decoder for a record type (implementation with name parameter)
-decodeRecordTypeImpl :: TTermDefinition (Name -> [FieldType] -> Term)
+decodeRecordTypeImpl :: TypedTermDefinition (Name -> [FieldType] -> Term)
 decodeRecordTypeImpl = define "decodeRecordTypeImpl" $
   doc "Generate a decoder for a record type with a type name" $
   "tname" ~> "rt" ~>
@@ -587,14 +587,14 @@ decodeRecordTypeImpl = define "decodeRecordTypeImpl" $
 -- For a type like `forall a. T[a]`, generates a lambda that takes a decoder for `a`
 -- and returns a decoder for the body type `T[a]`
 -- | Generate a decoder for a record type with element name
-decodeRecordTypeNamed :: TTermDefinition (Name -> [FieldType] -> Term)
+decodeRecordTypeNamed :: TypedTermDefinition (Name -> [FieldType] -> Term)
 decodeRecordTypeNamed = define "decodeRecordTypeNamed" $
   doc "Generate a decoder for a record type with element name" $
   "ename" ~> "rt" ~> decodeRecordTypeImpl @@ var "ename" @@ var "rt"
 
 -- | Generate a decoder for a record type (no element name)
 -- | Generate a decoder for a set type
-decodeSetType :: TTermDefinition (Type -> Term)
+decodeSetType :: TypedTermDefinition (Type -> Term)
 decodeSetType = define "decodeSetType" $
   doc "Generate a decoder for a set type" $
   "elemType" ~>
@@ -603,7 +603,7 @@ decodeSetType = define "decodeSetType" $
 
 -- | Generate a decoder term for a given Type with element name context
 -- | Generate a decoder term for a given Type (without element name context)
-decodeType :: TTermDefinition (Type -> Term)
+decodeType :: TypedTermDefinition (Type -> Term)
 decodeType = define "decodeType" $
   doc "Generate a decoder term for a Type" $
   "typ" ~>
@@ -630,7 +630,7 @@ decodeType = define "decodeType" $
 
 -- | Generate a decoder for the unit type
 -- | Generate a decoder term for a given Type with element name context
-decodeTypeNamed :: TTermDefinition (Name -> Type -> Term)
+decodeTypeNamed :: TypedTermDefinition (Name -> Type -> Term)
 decodeTypeNamed = define "decodeTypeNamed" $
   doc "Generate a decoder term for a Type, with element name for nominal types" $
   "ename" ~> "typ" ~>
@@ -659,14 +659,14 @@ decodeTypeNamed = define "decodeTypeNamed" $
 
 -- | Generate a decoder term for a given Type (without element name context)
 -- | Generate a decoder for a union type (without element name)
-decodeUnionType :: TTermDefinition ([FieldType] -> Term)
+decodeUnionType :: TypedTermDefinition ([FieldType] -> Term)
 decodeUnionType = define "decodeUnionType" $
   doc "Generate a decoder for a union type" $
   "rt" ~> decodeUnionTypeNamed @@ Core.name (string "unknown") @@ var "rt"
 
 -- | Generate a decoder for a wrapped type with element name
 -- | Generate a decoder for a union type with element name
-decodeUnionTypeNamed :: TTermDefinition (Name -> [FieldType] -> Term)
+decodeUnionTypeNamed :: TypedTermDefinition (Name -> [FieldType] -> Term)
 decodeUnionTypeNamed = define "decodeUnionTypeNamed" $
   doc "Generate a decoder for a union type with the given element name" $
   "ename" ~> "rt" ~>
@@ -697,21 +697,21 @@ decodeUnionTypeNamed = define "decodeUnionTypeNamed" $
 
 -- | Generate a decoder for a union type (without element name)
 -- | Generate a decoder for the unit type
-decodeUnitType :: TTermDefinition Term
+decodeUnitType :: TypedTermDefinition Term
 decodeUnitType = define "decodeUnitType" $
   doc "Generate a decoder for the unit type" $
   DeepCore.lambda "cx" $ DeepCore.lambda "t" $ DeepCore.ref ExtractCore.decodeUnit @@@ DeepCore.var "cx" @@@ DeepCore.var "t"
 
 -- | Generate a decoder for a union type with element name
 -- | Generate a decoder for a wrapped type (without element name)
-decodeWrappedType :: TTermDefinition (Type -> Term)
+decodeWrappedType :: TypedTermDefinition (Type -> Term)
 decodeWrappedType = define "decodeWrappedType" $
   doc "Generate a decoder for a wrapped type" $
   "wt" ~> decodeWrappedTypeNamed @@ Core.name (string "unknown") @@ var "wt"
 
 -- | Filter bindings to only decodable type definitions
 -- | Generate a decoder for a wrapped type with element name
-decodeWrappedTypeNamed :: TTermDefinition (Name -> Type -> Term)
+decodeWrappedTypeNamed :: TypedTermDefinition (Name -> Type -> Term)
 decodeWrappedTypeNamed = define "decodeWrappedTypeNamed" $
   doc "Generate a decoder for a wrapped type with the given element name" $
   "ename" ~> "wt" ~>
@@ -728,7 +728,7 @@ decodeWrappedTypeNamed = define "decodeWrappedTypeNamed" $
 -- | Get the full result type for a decoder, preserving type applications
 -- For forall t. ColumnSchema<t>, returns ColumnSchema<t> (as a Type, not just a Name)
 -- Note: Uses 'cases' instead of 'match' to avoid variable shadowing from eta expansion
-decoderFullResultType :: TTermDefinition (Type -> Type)
+decoderFullResultType :: TypedTermDefinition (Type -> Type)
 decoderFullResultType = define "decoderFullResultType" $
   doc "Get full result type for decoder" $
   "typ" ~>
@@ -783,7 +783,7 @@ decoderFullResultType = define "decoderFullResultType" $
 -- | Decode a single type binding into a decoder binding
 -- Decodes the Type from the binding's term, then generates decoder
 -- | Get full result type for decoder with element name
-decoderFullResultTypeNamed :: TTermDefinition (Name -> Type -> Type)
+decoderFullResultTypeNamed :: TypedTermDefinition (Name -> Type -> Type)
 decoderFullResultTypeNamed = define "decoderFullResultTypeNamed" $
   doc "Get full result type for decoder with element name" $
   "ename" ~> "typ" ~>
@@ -831,7 +831,7 @@ decoderFullResultTypeNamed = define "decoderFullResultTypeNamed" $
 -- | Compute the result type for a decoder based on the input type
 -- Returns the domain type name for the decoded value
 -- Note: Uses 'cases' instead of 'match' to avoid variable shadowing from eta expansion
-decoderResultType :: TTermDefinition (Type -> Name)
+decoderResultType :: TypedTermDefinition (Type -> Name)
 decoderResultType = define "decoderResultType" $
   doc "Compute the result type name for a decoder" $
   "typ" ~>
@@ -856,7 +856,7 @@ decoderResultType = define "decoderResultType" $
 -- For monomorphic types: Graph -> Term -> Either DecodingError ResultType
 -- For polymorphic types: (Graph -> Term -> Either DecodingError a) -> ... -> Graph -> Term -> Either DecodingError ResultType<a>
 -- The 'Graph' parameter is used for dereferencing term variables
-decoderType :: TTermDefinition (Type -> Type)
+decoderType :: TypedTermDefinition (Type -> Type)
 decoderType = define "decoderType" $
   doc "Build decoder function type" $
   "typ" ~>
@@ -878,7 +878,7 @@ decoderType = define "decoderType" $
 -- For forall a. forall b. T: prepends (Graph -> Term -> E a) -> (Graph -> Term -> E b) -> to the base type
 -- Note: Uses 'cases' instead of 'match' to avoid variable shadowing from eta expansion
 -- | Build decoder function type with element name
-decoderTypeNamed :: TTermDefinition (Name -> Type -> Type)
+decoderTypeNamed :: TypedTermDefinition (Name -> Type -> Type)
 decoderTypeNamed = define "decoderTypeNamed" $
   doc "Build decoder function type with element name" $
   "ename" ~> "typ" ~>
@@ -896,7 +896,7 @@ decoderTypeNamed = define "decoderTypeNamed" $
 -- | Build a decoder type scheme: Term -> Either DecodingError ResultType
 -- For polymorphic types, adds extra arguments for the decoders of type parameters
 -- Includes Ord constraints for type variables that appear in Set element positions
-decoderTypeScheme :: TTermDefinition (Type -> TypeScheme)
+decoderTypeScheme :: TypedTermDefinition (Type -> TypeScheme)
 decoderTypeScheme = define "decoderTypeScheme" $
   doc "Build type scheme for a decoder function" $
   "typ" ~>
@@ -905,7 +905,7 @@ decoderTypeScheme = define "decoderTypeScheme" $
     -- Filter to only include actual forall-bound type variables
     -- (collectOrdConstrainedVariables may return nominal type references like "hydra.relational.ColumnName")
     "ordVars" <~ Lists.filter
-      ("v" ~> Lists.elem (var "v" :: TTerm Name) (var "typeVars" :: TTerm [Name]))
+      ("v" ~> Lists.elem (var "v" :: TypedTerm Name) (var "typeVars" :: TypedTerm [Name]))
       (var "allOrdVars") $
     -- Build constraints: for each ordVar, add Ord constraint (uses original var names, normalization renames them)
     "constraints" <~ (
@@ -921,14 +921,14 @@ decoderTypeScheme = define "decoderTypeScheme" $
 
 -- | Build a decoder type scheme with element name for nominal types
 -- | Build a decoder type scheme with element name for nominal types
-decoderTypeSchemeNamed :: TTermDefinition (Name -> Type -> TypeScheme)
+decoderTypeSchemeNamed :: TypedTermDefinition (Name -> Type -> TypeScheme)
 decoderTypeSchemeNamed = define "decoderTypeSchemeNamed" $
   doc "Build type scheme for a decoder function with element name" $
   "ename" ~> "typ" ~>
     "typeVars" <~ collectTypeVariables @@ var "typ" $
     "allOrdVars" <~ collectOrdConstrainedVariables @@ var "typ" $
     "ordVars" <~ Lists.filter
-      ("v" ~> Lists.elem (var "v" :: TTerm Name) (var "typeVars" :: TTerm [Name]))
+      ("v" ~> Lists.elem (var "v" :: TypedTerm Name) (var "typeVars" :: TypedTerm [Name]))
       (var "allOrdVars") $
     "constraints" <~ (
       Logic.ifElse (Lists.null (var "ordVars"))
@@ -943,7 +943,7 @@ decoderTypeSchemeNamed = define "decoderTypeSchemeNamed" $
 
 -- | Build decoder function type with element name
 -- | Filter bindings to only decodable type definitions
-filterTypeBindings :: TTermDefinition (InferenceContext -> Graph -> [Binding] -> Prelude.Either Error [Binding])
+filterTypeBindings :: TypedTermDefinition (InferenceContext -> Graph -> [Binding] -> Prelude.Either Error [Binding])
 filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only decodable type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
@@ -953,7 +953,7 @@ filterTypeBindings = define "filterTypeBindings" $
 
 -- | Check if a binding is decodable and return Just binding if so, Nothing otherwise
 -- | Check if a binding is decodable and return Just binding if so, Nothing otherwise
-isDecodableBinding :: TTermDefinition (InferenceContext -> Graph -> Binding -> Prelude.Either Error (Maybe Binding))
+isDecodableBinding :: TypedTermDefinition (InferenceContext -> Graph -> Binding -> Prelude.Either Error (Maybe Binding))
 isDecodableBinding = define "isDecodableBinding" $
   doc "Check if a binding is decodable (serializable type)" $
   "cx" ~> "graph" ~> "b" ~>
@@ -962,7 +962,7 @@ isDecodableBinding = define "isDecodableBinding" $
 -- | Helper to prepend decoder types for forall parameters
 -- For forall a. forall b. T: prepends (Graph -> Term -> E a) -> (Graph -> Term -> E b) -> to the base type
 -- Note: Uses 'cases' instead of 'match' to avoid variable shadowing from eta expansion
-prependForallDecoders :: TTermDefinition (Type -> Type -> Type)
+prependForallDecoders :: TypedTermDefinition (Type -> Type -> Type)
 prependForallDecoders = define "prependForallDecoders" $
   doc "Prepend decoder types for forall parameters to base type" $
   "baseType" ~> "typ" ~> cases _Type (var "typ") (Just $ var "baseType") [

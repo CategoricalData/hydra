@@ -61,7 +61,7 @@ import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 ns :: ModuleName
 ns = ModuleName "hydra.differentiation"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -82,7 +82,7 @@ module_ = Module {
 --   bfname is the primitive name, a and b are the two arguments,
 --   da and db are their derivatives with respect to x.
 --   Returns d/dx(bfname(a, b)).
-differentiateBinary :: TTermDefinition (Name -> Term -> Term -> Term -> Term -> Term)
+differentiateBinary :: TypedTermDefinition (Name -> Term -> Term -> Term -> Term -> Term)
 differentiateBinary = define "differentiateBinary" $
   doc "Differentiate a binary primitive application given both arguments and their derivatives" $
   "bfname" ~> "a" ~> "b" ~> "da" ~> "db" ~>
@@ -140,7 +140,7 @@ differentiateBinary = define "differentiateBinary" $
 
 -- | Differentiate a function term (Float64 -> Float64) with respect to its parameter.
 --   Given a lambda \x -> body, returns a lambda \x -> d(body)/dx.
-differentiateFunction :: TTermDefinition (Term -> Term)
+differentiateFunction :: TypedTermDefinition (Term -> Term)
 differentiateFunction = define "differentiateFunction" $
   doc "Differentiate a function term (Float64 -> Float64) with respect to its parameter" $
   "term" ~>
@@ -159,7 +159,7 @@ differentiateFunction = define "differentiateFunction" $
 -- | Differentiate a term with respect to a named variable.
 --   Implements the standard rules of differential calculus as a source-to-source
 --   transformation on Hydra terms.
-differentiateTerm :: TTermDefinition (Name -> Term -> Term)
+differentiateTerm :: TypedTermDefinition (Name -> Term -> Term)
 differentiateTerm = define "differentiateTerm" $
   doc "Differentiate a term with respect to a named variable" $
   "dx" ~> "term" ~>
@@ -282,14 +282,14 @@ differentiateTerm = define "differentiateTerm" $
     _Term_wrap>>: constant $ f64 0.0]
 
 -- Helper: construct a float64 literal term from a Haskell Double
-f64 :: Double -> TTerm Term
+f64 :: Double -> TypedTerm Term
 f64 = MetaTerms.float64
 
 
 -- | Compute the gradient of a term with respect to a list of named variables.
 --   Returns a record term where each field is the partial derivative of the term
 --   with respect to the corresponding variable.
-gradient :: TTermDefinition (Name -> [Name] -> Term -> Term)
+gradient :: TypedTermDefinition (Name -> [Name] -> Term -> Term)
 gradient = define "gradient" $
   doc "Compute the gradient of a term as a record of partial derivatives" $
   "typeName" ~> "vars" ~> "term" ~>
@@ -304,7 +304,7 @@ gradient = define "gradient" $
 -- | Look up the derivative of a unary Float64 primitive by name.
 --   Returns Just a term representing the derivative function (a lambda),
 --   or Nothing if the primitive is not differentiable.
-primitiveDerivative :: TTermDefinition (Name -> Maybe Term)
+primitiveDerivative :: TypedTermDefinition (Name -> Maybe Term)
 primitiveDerivative = define "primitiveDerivative" $
   doc "Look up the derivative of a unary Float64 primitive" $
   "name" ~>

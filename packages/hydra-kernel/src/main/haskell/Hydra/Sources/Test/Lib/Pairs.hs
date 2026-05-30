@@ -38,11 +38,11 @@ module_ = Module {
   where
     definitions = [Phantoms.toDefinition allTests]
 
-showInt32 :: TTerm (Int -> String)
+showInt32 :: TypedTerm (Int -> String)
 showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
 
 -- Show a (Int, Int) pair as "(<int>, <int>)"
-showIntIntPair :: TTerm ((Int, Int) -> String)
+showIntIntPair :: TypedTerm ((Int, Int) -> String)
 showIntIntPair = Phantoms.lambda "p" $ Strings.cat (Phantoms.list [
   Phantoms.string "(",
   Literals.showInt32 (Pairs.first (Phantoms.var "p")),
@@ -52,7 +52,7 @@ showIntIntPair = Phantoms.lambda "p" $ Strings.cat (Phantoms.list [
 
 -- Test groups for hydra.lib.pairs primitives
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.pairs primitives" $
     supergroup "hydra.lib.pairs primitives" [
@@ -60,7 +60,7 @@ allTests = definitionInModule module_ "allTests" $
       pairsFirst,
       pairsSecond]
 
-pairsBimap :: TTerm TestGroup
+pairsBimap :: TypedTerm TestGroup
 pairsBimap = subgroup "bimap" [
   test "transform both elements" 5 "ab" 10 2,
   test "with zero" 0 "hello" 0 5]
@@ -72,7 +72,7 @@ pairsBimap = subgroup "bimap" [
         (Phantoms.pair (Phantoms.int32 fst) (Phantoms.string snd)))
       (Phantoms.pair (Phantoms.int32 resultFst) (Phantoms.int32 resultSnd))
 
-pairsFirst :: TTerm TestGroup
+pairsFirst :: TypedTerm TestGroup
 pairsFirst = subgroup "first" [
   test "extract first element" 42 "hello" 42,
   test "with zero" 0 "world" 0,
@@ -82,7 +82,7 @@ pairsFirst = subgroup "first" [
       (Pairs.first (Phantoms.pair (Phantoms.int32 fst) (Phantoms.string snd)))
       (Phantoms.int32 result)
 
-pairsSecond :: TTerm TestGroup
+pairsSecond :: TypedTerm TestGroup
 pairsSecond = subgroup "second" [
   test "extract second element" 42 "hello" "hello",
   test "empty string" 0 "" "",

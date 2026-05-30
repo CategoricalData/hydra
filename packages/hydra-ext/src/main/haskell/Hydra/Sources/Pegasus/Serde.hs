@@ -83,7 +83,7 @@ import qualified Hydra.Pegasus.Pdl as PDL
 import qualified Hydra.Sources.Pegasus.Pdl as PdlSyntax
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 ns :: ModuleName
@@ -110,14 +110,14 @@ module_ = Module {
       toDefinition withAnnotations]
 
 
-annotationsToExpr :: TTermDefinition (PDL.Annotations -> Maybe Expr)
+annotationsToExpr :: TypedTermDefinition (PDL.Annotations -> Maybe Expr)
 annotationsToExpr = define "annotationsToExpr" $
   doc "Convert PDL annotations to an optional expression (doc comment)" $
   lambda "anns" $ lets [
     "d">: project PDL._Annotations PDL._Annotations_doc @@ var "anns"] $
     Maybes.map (lambda "s" $ Serialization.cst @@ (Formatting.javaStyleComment @@ var "s")) (var "d")
 
-enumFieldToExpr :: TTermDefinition (PDL.EnumField -> Expr)
+enumFieldToExpr :: TypedTermDefinition (PDL.EnumField -> Expr)
 enumFieldToExpr = define "enumFieldToExpr" $
   doc "Convert a PDL enum field to an expression" $
   lambda "ef" $ lets [
@@ -125,14 +125,14 @@ enumFieldToExpr = define "enumFieldToExpr" $
     "anns">: project PDL._EnumField PDL._EnumField_annotations @@ var "ef"] $
     withAnnotations @@ var "anns" @@ (Serialization.cst @@ var "name")
 
-importToExpr :: TTermDefinition (PDL.QualifiedName -> Expr)
+importToExpr :: TypedTermDefinition (PDL.QualifiedName -> Expr)
 importToExpr = define "importToExpr" $
   doc "Convert a qualified name to an import expression" $
   lambda "qn" $ Serialization.spaceSep @@ list [
     Serialization.cst @@ string "import",
     qualifiedNameToExpr @@ var "qn"]
 
-namedSchemaToExpr :: TTermDefinition (PDL.NamedSchema -> Expr)
+namedSchemaToExpr :: TypedTermDefinition (PDL.NamedSchema -> Expr)
 namedSchemaToExpr = define "namedSchemaToExpr" $
   doc "Convert a named schema to an expression" $
   lambda "ns" $ lets [
@@ -162,7 +162,7 @@ namedSchemaToExpr = define "namedSchemaToExpr" $
             Serialization.cst @@ string "=",
             schemaToExpr @@ var "schema"]])
 
-primitiveTypeToExpr :: TTermDefinition (PDL.PrimitiveType -> Expr)
+primitiveTypeToExpr :: TypedTermDefinition (PDL.PrimitiveType -> Expr)
 primitiveTypeToExpr = define "primitiveTypeToExpr" $
   doc "Convert a primitive type to an expression" $
   lambda "pt" $ Serialization.cst @@
@@ -175,7 +175,7 @@ primitiveTypeToExpr = define "primitiveTypeToExpr" $
       PDL._PrimitiveType_long>>: constant $ string "long",
       PDL._PrimitiveType_string>>: constant $ string "string"])
 
-qualifiedNameToExpr :: TTermDefinition (PDL.QualifiedName -> Expr)
+qualifiedNameToExpr :: TypedTermDefinition (PDL.QualifiedName -> Expr)
 qualifiedNameToExpr = define "qualifiedNameToExpr" $
   doc "Convert a qualified name to an expression" $
   lambda "qn" $ lets [
@@ -186,7 +186,7 @@ qualifiedNameToExpr = define "qualifiedNameToExpr" $
       Maybes.pure (var "name")]] $
     Serialization.cst @@ (Strings.intercalate (string ".") (var "parts"))
 
-recordFieldToExpr :: TTermDefinition (PDL.RecordField -> Expr)
+recordFieldToExpr :: TypedTermDefinition (PDL.RecordField -> Expr)
 recordFieldToExpr = define "recordFieldToExpr" $
   doc "Convert a record field to an expression" $
   lambda "rf" $ lets [
@@ -202,7 +202,7 @@ recordFieldToExpr = define "recordFieldToExpr" $
           nothing,
         Maybes.pure (schemaToExpr @@ var "schema")]))
 
-schemaFileToExpr :: TTermDefinition (PDL.SchemaFile -> Expr)
+schemaFileToExpr :: TypedTermDefinition (PDL.SchemaFile -> Expr)
 schemaFileToExpr = define "schemaFileToExpr" $
   doc "Convert a schema file to an expression" $
   lambda "sf" $ lets [
@@ -227,7 +227,7 @@ schemaFileToExpr = define "schemaFileToExpr" $
         list [var "namespaceSec", var "packageSec", var "importsSec"],
         var "schemaSecs"])
 
-schemaToExpr :: TTermDefinition (PDL.Schema -> Expr)
+schemaToExpr :: TypedTermDefinition (PDL.Schema -> Expr)
 schemaToExpr = define "schemaToExpr" $
   doc "Convert a schema to an expression" $
   lambda "schema" $
@@ -249,7 +249,7 @@ schemaToExpr = define "schemaToExpr" $
           Serialization.bracketList @@ Serialization.fullBlockStyle @@
             (Lists.map unionMemberToExpr (unwrap PDL._UnionSchema @@ var "us"))]]
 
-unionMemberToExpr :: TTermDefinition (PDL.UnionMember -> Expr)
+unionMemberToExpr :: TypedTermDefinition (PDL.UnionMember -> Expr)
 unionMemberToExpr = define "unionMemberToExpr" $
   doc "Convert a union member to an expression" $
   lambda "um" $ lets [
@@ -263,7 +263,7 @@ unionMemberToExpr = define "unionMemberToExpr" $
           (var "alias"),
         Maybes.pure (schemaToExpr @@ var "schema")]))
 
-withAnnotations :: TTermDefinition (PDL.Annotations -> Expr -> Expr)
+withAnnotations :: TypedTermDefinition (PDL.Annotations -> Expr -> Expr)
 withAnnotations = define "withAnnotations" $
   doc "Prepend annotations (doc comment) to an expression" $
   lambda "anns" $ lambda "expr" $

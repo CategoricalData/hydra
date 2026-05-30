@@ -1,5 +1,5 @@
 ---
-description: Run bin/sync-python.sh — Python-host Python sync.
+description: Run bin/sync-python.sh — Python-host Python sync. Does NOT run target tests — use /test python for that.
 allowed-tools:
   - Bash(bin/sync-python.sh*)
   - Read

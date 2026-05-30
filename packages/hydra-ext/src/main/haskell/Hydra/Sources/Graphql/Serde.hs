@@ -83,7 +83,7 @@ import qualified Hydra.Graphql.Syntax as G
 import qualified Hydra.Sources.Graphql.Syntax as GraphqlSyntax
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 ns :: ModuleName
@@ -116,7 +116,7 @@ module_ = Module {
       toDefinition withDescription]
 
 
-definitionToExpr :: TTermDefinition (G.Definition -> Expr)
+definitionToExpr :: TypedTermDefinition (G.Definition -> Expr)
 definitionToExpr = define "definitionToExpr" $
   doc "Convert a GraphQL definition to an expression" $
   lambda "def" $
@@ -126,7 +126,7 @@ definitionToExpr = define "definitionToExpr" $
       G._Definition_typeSystem>>: lambda "de" $
         typeSystemDefinitionOrExtensionToExpr @@ var "de"]
 
-descriptionToExpr :: TTermDefinition (G.Description -> Expr)
+descriptionToExpr :: TypedTermDefinition (G.Description -> Expr)
 descriptionToExpr = define "descriptionToExpr" $
   doc "Convert a GraphQL description to a triple-quoted comment" $
   lambda "desc" $ lets [
@@ -134,13 +134,13 @@ descriptionToExpr = define "descriptionToExpr" $
     "text">: unwrap G._StringValue @@ (unwrap G._Description @@ var "desc")] $
     Serialization.newlineSep @@ list [var "delim", Serialization.cst @@ var "text", var "delim"]
 
-documentToExpr :: TTermDefinition (G.Document -> Expr)
+documentToExpr :: TypedTermDefinition (G.Document -> Expr)
 documentToExpr = define "documentToExpr" $
   doc "Convert a GraphQL document to an expression" $
   lambda "d" $ Serialization.doubleNewlineSep @@
     (Lists.map definitionToExpr (unwrap G._Document @@ var "d"))
 
-enumTypeDefinitionToExpr :: TTermDefinition (G.EnumTypeDefinition -> Expr)
+enumTypeDefinitionToExpr :: TypedTermDefinition (G.EnumTypeDefinition -> Expr)
 enumTypeDefinitionToExpr = define "enumTypeDefinitionToExpr" $
   doc "Convert a GraphQL enum type definition to an expression" $
   lambda "def" $ lets [
@@ -148,7 +148,7 @@ enumTypeDefinitionToExpr = define "enumTypeDefinitionToExpr" $
     "name">: project G._EnumTypeDefinition G._EnumTypeDefinition_Name @@ var "def",
     "values">: project G._EnumTypeDefinition G._EnumTypeDefinition_EnumValuesDefinition @@ var "def",
     "valuesExpr">: Maybes.maybe
-      (list ([] :: [TTerm Expr]))
+      (list ([] :: [TypedTerm Expr]))
       (lambda "vs" $ Lists.map enumValueDefinitionToExpr (unwrap G._EnumValuesDefinition @@ var "vs"))
       (var "values")] $
     withDescription @@ var "desc" @@
@@ -157,7 +157,7 @@ enumTypeDefinitionToExpr = define "enumTypeDefinitionToExpr" $
         nameToExpr @@ var "name",
         Serialization.curlyBracesList @@ nothing @@ Serialization.fullBlockStyle @@ var "valuesExpr"])
 
-enumValueDefinitionToExpr :: TTermDefinition (G.EnumValueDefinition -> Expr)
+enumValueDefinitionToExpr :: TypedTermDefinition (G.EnumValueDefinition -> Expr)
 enumValueDefinitionToExpr = define "enumValueDefinitionToExpr" $
   doc "Convert a GraphQL enum value definition to an expression" $
   lambda "def" $ lets [
@@ -165,12 +165,12 @@ enumValueDefinitionToExpr = define "enumValueDefinitionToExpr" $
     "ev">: project G._EnumValueDefinition G._EnumValueDefinition_EnumValue @@ var "def"] $
     withDescription @@ var "desc" @@ (enumValueToExpr @@ var "ev")
 
-enumValueToExpr :: TTermDefinition (G.EnumValue -> Expr)
+enumValueToExpr :: TypedTermDefinition (G.EnumValue -> Expr)
 enumValueToExpr = define "enumValueToExpr" $
   doc "Convert a GraphQL enum value to an expression" $
   lambda "ev" $ nameToExpr @@ (unwrap G._EnumValue @@ var "ev")
 
-fieldDefinitionToExpr :: TTermDefinition (G.FieldDefinition -> Expr)
+fieldDefinitionToExpr :: TypedTermDefinition (G.FieldDefinition -> Expr)
 fieldDefinitionToExpr = define "fieldDefinitionToExpr" $
   doc "Convert a GraphQL field definition to an expression" $
   lambda "def" $ lets [
@@ -182,7 +182,7 @@ fieldDefinitionToExpr = define "fieldDefinitionToExpr" $
     withDescription @@ var "desc" @@
       (Serialization.spaceSep @@ list [var "namePart", var "typePart"])
 
-listTypeToExpr :: TTermDefinition (G.ListType -> Expr)
+listTypeToExpr :: TypedTermDefinition (G.ListType -> Expr)
 listTypeToExpr = define "listTypeToExpr" $
   doc "Convert a GraphQL list type to an expression" $
   lambda "lt" $ Serialization.noSep @@ list [
@@ -190,17 +190,17 @@ listTypeToExpr = define "listTypeToExpr" $
     typeToExpr @@ (unwrap G._ListType @@ var "lt"),
     Serialization.cst @@ string "]"]
 
-nameToExpr :: TTermDefinition (G.Name -> Expr)
+nameToExpr :: TypedTermDefinition (G.Name -> Expr)
 nameToExpr = define "nameToExpr" $
   doc "Convert a GraphQL name to an expression" $
   lambda "n" $ Serialization.cst @@ (unwrap G._Name @@ var "n")
 
-namedTypeToExpr :: TTermDefinition (G.NamedType -> Expr)
+namedTypeToExpr :: TypedTermDefinition (G.NamedType -> Expr)
 namedTypeToExpr = define "namedTypeToExpr" $
   doc "Convert a GraphQL named type to an expression" $
   lambda "nt" $ nameToExpr @@ (unwrap G._NamedType @@ var "nt")
 
-nonNullTypeToExpr :: TTermDefinition (G.NonNullType -> Expr)
+nonNullTypeToExpr :: TypedTermDefinition (G.NonNullType -> Expr)
 nonNullTypeToExpr = define "nonNullTypeToExpr" $
   doc "Convert a GraphQL non-null type to an expression" $
   lambda "nnt" $ lets [
@@ -209,7 +209,7 @@ nonNullTypeToExpr = define "nonNullTypeToExpr" $
       G._NonNullType_list>>: lambda "lt" $ listTypeToExpr @@ var "lt"]] $
     Serialization.noSep @@ list [var "typeExpr", Serialization.cst @@ string "!"]
 
-objectTypeDefinitionToExpr :: TTermDefinition (G.ObjectTypeDefinition -> Expr)
+objectTypeDefinitionToExpr :: TypedTermDefinition (G.ObjectTypeDefinition -> Expr)
 objectTypeDefinitionToExpr = define "objectTypeDefinitionToExpr" $
   doc "Convert a GraphQL object type definition to an expression" $
   lambda "def" $ lets [
@@ -217,7 +217,7 @@ objectTypeDefinitionToExpr = define "objectTypeDefinitionToExpr" $
     "name">: project G._ObjectTypeDefinition G._ObjectTypeDefinition_Name @@ var "def",
     "fields">: project G._ObjectTypeDefinition G._ObjectTypeDefinition_FieldsDefinition @@ var "def",
     "fieldsExpr">: Maybes.maybe
-      (list ([] :: [TTerm Expr]))
+      (list ([] :: [TypedTerm Expr]))
       (lambda "fs" $ Lists.map fieldDefinitionToExpr (unwrap G._FieldsDefinition @@ var "fs"))
       (var "fields")] $
     withDescription @@ var "desc" @@
@@ -226,7 +226,7 @@ objectTypeDefinitionToExpr = define "objectTypeDefinitionToExpr" $
         nameToExpr @@ var "name",
         Serialization.curlyBracesList @@ nothing @@ Serialization.fullBlockStyle @@ var "fieldsExpr"])
 
-typeDefinitionToExpr :: TTermDefinition (G.TypeDefinition -> Expr)
+typeDefinitionToExpr :: TypedTermDefinition (G.TypeDefinition -> Expr)
 typeDefinitionToExpr = define "typeDefinitionToExpr" $
   doc "Convert a GraphQL type definition to an expression" $
   lambda "def" $
@@ -242,7 +242,7 @@ typeDefinitionToExpr = define "typeDefinitionToExpr" $
       G._TypeDefinition_inputObject>>: constant $
         Serialization.cst @@ string "Unsupported: input object type definition"]
 
-typeSystemDefinitionOrExtensionToExpr :: TTermDefinition (G.TypeSystemDefinitionOrExtension -> Expr)
+typeSystemDefinitionOrExtensionToExpr :: TypedTermDefinition (G.TypeSystemDefinitionOrExtension -> Expr)
 typeSystemDefinitionOrExtensionToExpr = define "typeSystemDefinitionOrExtensionToExpr" $
   doc "Convert a GraphQL type system definition or extension to an expression" $
   lambda "de" $
@@ -252,7 +252,7 @@ typeSystemDefinitionOrExtensionToExpr = define "typeSystemDefinitionOrExtensionT
       G._TypeSystemDefinitionOrExtension_extension>>: constant $
         Serialization.cst @@ string "Unsupported: type system extension"]
 
-typeSystemDefinitionToExpr :: TTermDefinition (G.TypeSystemDefinition -> Expr)
+typeSystemDefinitionToExpr :: TypedTermDefinition (G.TypeSystemDefinition -> Expr)
 typeSystemDefinitionToExpr = define "typeSystemDefinitionToExpr" $
   doc "Convert a GraphQL type system definition to an expression" $
   lambda "def" $
@@ -263,7 +263,7 @@ typeSystemDefinitionToExpr = define "typeSystemDefinitionToExpr" $
       G._TypeSystemDefinition_directive>>: constant $
         Serialization.cst @@ string "Unsupported: directive definition"]
 
-typeToExpr :: TTermDefinition (G.Type -> Expr)
+typeToExpr :: TypedTermDefinition (G.Type -> Expr)
 typeToExpr = define "typeToExpr" $
   doc "Convert a GraphQL type to an expression" $
   lambda "typ" $
@@ -272,7 +272,7 @@ typeToExpr = define "typeToExpr" $
       G._Type_list>>: lambda "lt" $ listTypeToExpr @@ var "lt",
       G._Type_nonNull>>: lambda "nnt" $ nonNullTypeToExpr @@ var "nnt"]
 
-withDescription :: TTermDefinition (Maybe G.Description -> Expr -> Expr)
+withDescription :: TypedTermDefinition (Maybe G.Description -> Expr -> Expr)
 withDescription = define "withDescription" $
   doc "Prepend an optional description to an expression" $
   lambda "mdesc" $ lambda "expr" $

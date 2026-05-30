@@ -53,10 +53,10 @@ module_ = Module {
       Phantoms.toDefinition nestedOptionalsTests,
       Phantoms.toDefinition optionalsWithComplexTypesTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
   supergroup "Algebraic types" [
   unitTests,
@@ -68,7 +68,7 @@ allTests = define "allTests" $
 
 ------ Unit ------
 
-unitTermInPolymorphicContextTests :: TTermDefinition TestGroup
+unitTermInPolymorphicContextTests :: TypedTermDefinition TestGroup
 unitTermInPolymorphicContextTests = define "unitTermInPolymorphicContextTests" $
   subgroup "Unit term in polymorphic context" [
   checkTest "unit from lambda" []
@@ -76,14 +76,14 @@ unitTermInPolymorphicContextTests = define "unitTermInPolymorphicContextTests" $
     (tylam "t0" $ lambdaTyped "x" (T.var "t0") unit)
     (T.forAlls ["t0"] $ T.function (T.var "t0") T.unit)]
 
-unitTermTests :: TTermDefinition TestGroup
+unitTermTests :: TypedTermDefinition TestGroup
 unitTermTests = define "unitTermTests" $
   subgroup "Unit term" [
   noChange "unit literal"
     unit
     T.unit]
 
-unitTests :: TTermDefinition TestGroup
+unitTests :: TypedTermDefinition TestGroup
 unitTests = define "unitTests" $
   supergroup "Unit" [
   unitTermTests,
@@ -91,7 +91,7 @@ unitTests = define "unitTests" $
 
 ------ Pairs ------
 
-basicPairsTests :: TTermDefinition TestGroup
+basicPairsTests :: TypedTermDefinition TestGroup
 basicPairsTests = define "basicPairsTests" $
   subgroup "Basic pairs" [
   checkTest "pair of int and string" []
@@ -107,7 +107,7 @@ basicPairsTests = define "basicPairsTests" $
     (tyapps (pair (boolean False) (int32 100)) [T.boolean, T.int32])
     (T.pair T.boolean T.int32)]
 
-nestedPairsTests :: TTermDefinition TestGroup
+nestedPairsTests :: TypedTermDefinition TestGroup
 nestedPairsTests = define "nestedPairsTests" $
   subgroup "Nested pairs" [
   checkTest "pair of pairs" []
@@ -123,7 +123,7 @@ nestedPairsTests = define "nestedPairsTests" $
     (list [tyapps (pair (int32 1) (string "a")) [T.int32, T.string], tyapps (pair (int32 2) (string "b")) [T.int32, T.string]])
     (T.list $ T.pair T.int32 T.string)]
 
-pairsInComplexContextsTests :: TTermDefinition TestGroup
+pairsInComplexContextsTests :: TypedTermDefinition TestGroup
 pairsInComplexContextsTests = define "pairsInComplexContextsTests" $
   subgroup "Pairs in complex contexts" [
   checkTest "pair in list" []
@@ -137,7 +137,7 @@ pairsInComplexContextsTests = define "pairsInComplexContextsTests" $
       var "result")
     (T.pair T.int32 T.string)]
 
-pairsTests :: TTermDefinition TestGroup
+pairsTests :: TypedTermDefinition TestGroup
 pairsTests = define "pairsTests" $
   supergroup "Pairs" [
   basicPairsTests,
@@ -146,7 +146,7 @@ pairsTests = define "pairsTests" $
   nestedPairsTests,
   pairsWithComplexTypesTests]
 
-pairsWithComplexTypesTests :: TTermDefinition TestGroup
+pairsWithComplexTypesTests :: TypedTermDefinition TestGroup
 pairsWithComplexTypesTests = define "pairsWithComplexTypesTests" $
   subgroup "Pairs with complex types" [
   checkTest "pair with record on first" []
@@ -158,14 +158,14 @@ pairsWithComplexTypesTests = define "pairsWithComplexTypesTests" $
     (tyapps (pair (string "name") (personRecord "Bob" "Jones" 25)) [T.string, T.var "Person"])
     (T.pair T.string (T.var "Person"))]
 
-personRecord :: String -> String -> Int -> TTerm Term
+personRecord :: String -> String -> Int -> TypedTerm Term
 personRecord fName lName age' =
   record (name "Person") [
     "firstName" >: string fName,
     "lastName" >: string lName,
     "age" >: int32 age']
 
-polymorphicPairsTests :: TTermDefinition TestGroup
+polymorphicPairsTests :: TypedTermDefinition TestGroup
 polymorphicPairsTests = define "polymorphicPairsTests" $
   subgroup "Polymorphic pairs" [
   checkTest "pair from lambda (first element)" []
@@ -187,7 +187,7 @@ polymorphicPairsTests = define "polymorphicPairsTests" $
 
 ------ Eithers ------
 
-eithersInComplexContextsTests :: TTermDefinition TestGroup
+eithersInComplexContextsTests :: TypedTermDefinition TestGroup
 eithersInComplexContextsTests = define "eithersInComplexContextsTests" $
   subgroup "Eithers in complex contexts" [
   checkTest "either in list" []
@@ -201,7 +201,7 @@ eithersInComplexContextsTests = define "eithersInComplexContextsTests" $
       tyapp (var "result") (T.var "t0"))
     (T.forAlls ["t0"] $ T.either_ (T.var "t0") T.int32)]
 
-eithersTests :: TTermDefinition TestGroup
+eithersTests :: TypedTermDefinition TestGroup
 eithersTests = define "eithersTests" $
   supergroup "Eithers" [
   leftValuesTests,
@@ -211,7 +211,7 @@ eithersTests = define "eithersTests" $
   nestedEithersTests,
   eithersWithComplexTypesTests]
 
-eithersWithComplexTypesTests :: TTermDefinition TestGroup
+eithersWithComplexTypesTests :: TypedTermDefinition TestGroup
 eithersWithComplexTypesTests = define "eithersWithComplexTypesTests" $
   subgroup "Eithers with complex types" [
   checkTest "either with record on left" []
@@ -235,7 +235,7 @@ eithersWithComplexTypesTests = define "eithersWithComplexTypesTests" $
       "age">: int32 25]) [T.var "t0", Core.typeVariable TestTypes.testTypePersonName])
     (T.forAlls ["t0"] $ T.either_ (T.var "t0") (Core.typeVariable TestTypes.testTypePersonName))]
 
-leftValuesTests :: TTermDefinition TestGroup
+leftValuesTests :: TypedTermDefinition TestGroup
 leftValuesTests = define "leftValuesTests" $
   subgroup "Left values" [
   checkTest "left int" []
@@ -251,7 +251,7 @@ leftValuesTests = define "leftValuesTests" $
     (tylam "t0" $ tyapps (left $ boolean False) [T.boolean, T.var "t0"])
     (T.forAlls ["t0"] $ T.either_ T.boolean (T.var "t0"))]
 
-nestedEithersTests :: TTermDefinition TestGroup
+nestedEithersTests :: TypedTermDefinition TestGroup
 nestedEithersTests = define "nestedEithersTests" $
   subgroup "Nested eithers" [
   checkTest "either of either (left left)" []
@@ -275,7 +275,7 @@ nestedEithersTests = define "nestedEithersTests" $
     (list [tyapps (left $ string "a") [T.string, T.int32], tyapps (right $ int32 1) [T.string, T.int32], tyapps (left $ string "b") [T.string, T.int32]])
     (T.list $ T.either_ T.string T.int32)]
 
-polymorphicEithersTests :: TTermDefinition TestGroup
+polymorphicEithersTests :: TypedTermDefinition TestGroup
 polymorphicEithersTests = define "polymorphicEithersTests" $
   subgroup "Polymorphic eithers" [
   checkTest "left from lambda" []
@@ -297,7 +297,7 @@ polymorphicEithersTests = define "polymorphicEithersTests" $
         tyapps (right $ var "x") [T.var "t0", T.var "t0"])
     (T.forAlls ["t0"] $ T.function T.boolean (T.function (T.var "t0") (T.either_ (T.var "t0") (T.var "t0"))))]
 
-rightValuesTests :: TTermDefinition TestGroup
+rightValuesTests :: TypedTermDefinition TestGroup
 rightValuesTests = define "rightValuesTests" $
   subgroup "Right values" [
   checkTest "right int" []
@@ -315,7 +315,7 @@ rightValuesTests = define "rightValuesTests" $
 
 ------ Optionals ------
 
-monomorphicOptionalsTests :: TTermDefinition TestGroup
+monomorphicOptionalsTests :: TypedTermDefinition TestGroup
 monomorphicOptionalsTests = define "monomorphicOptionalsTests" $
   subgroup "Monomorphic optionals" [
   checkTest "nothing" []
@@ -332,7 +332,7 @@ monomorphicOptionalsTests = define "monomorphicOptionalsTests" $
     (optional $ just $ boolean True)
     (T.optional T.boolean)]
 
-nestedOptionalsTests :: TTermDefinition TestGroup
+nestedOptionalsTests :: TypedTermDefinition TestGroup
 nestedOptionalsTests = define "nestedOptionalsTests" $
   subgroup "Nested optionals" [
   noChange "optional of optional"
@@ -346,7 +346,7 @@ nestedOptionalsTests = define "nestedOptionalsTests" $
     (list [optional $ just $ string "a", tyapp (optional nothing) T.string, optional $ just $ string "b"])
     (T.list $ T.optional T.string)]
 
-optionalsInComplexContextsTests :: TTermDefinition TestGroup
+optionalsInComplexContextsTests :: TypedTermDefinition TestGroup
 optionalsInComplexContextsTests = define "optionalsInComplexContextsTests" $
   subgroup "Optionals in complex contexts" [
   checkTest "optional in record" []
@@ -368,7 +368,7 @@ optionalsInComplexContextsTests = define "optionalsInComplexContextsTests" $
       var "maybeValue")
     (T.optional T.int32)]
 
-optionalsTests :: TTermDefinition TestGroup
+optionalsTests :: TypedTermDefinition TestGroup
 optionalsTests = define "optionalsTests" $
   supergroup "Optionals" [
   monomorphicOptionalsTests,
@@ -377,14 +377,14 @@ optionalsTests = define "optionalsTests" $
   nestedOptionalsTests,
   optionalsWithComplexTypesTests]
 
-optionalsWithComplexTypesTests :: TTermDefinition TestGroup
+optionalsWithComplexTypesTests :: TypedTermDefinition TestGroup
 optionalsWithComplexTypesTests = define "optionalsWithComplexTypesTests" $
   subgroup "Optionals with complex types" [
   noChange "optional map"
     (optional $ just $ mapTerm [(string "key", int32 42)])
     (T.optional $ T.map T.string T.int32)]
 
-polymorphicOptionalsTests :: TTermDefinition TestGroup
+polymorphicOptionalsTests :: TypedTermDefinition TestGroup
 polymorphicOptionalsTests = define "polymorphicOptionalsTests" $
   subgroup "Polymorphic optionals" [
   checkTest "optional from lambda" []
